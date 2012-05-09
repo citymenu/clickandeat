@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:context="http://www.springframework.org/schema/context"
+          xmlns:security="http://www.springframework.org/schema/security"
+          xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+          xsi:schemaLocation=
+          "http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/security
+          http://www.springframework.org/schema/security/spring-security-3.0.3.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<!-- Placeholder for annotated configuration classes -->
+	<context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
+
+	<!-- Read annotation based configuration classes -->
+	<context:component-scan base-package="com.ezar"/>	
+
+	<!-- Enable annotation-based method security -->
+	<security:global-method-security secured-annotations="enabled" />
+
+	<!-- Disable HTTP request caching -->
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="cacheSeconds" value="0" />
+    </bean>
+
+	<!--  HTTP security config -->
+	<security:http auto-config="true" disable-url-rewriting="true">
+		<security:intercept-url pattern="/index.jsp" filters="none"/>
+    	<security:intercept-url pattern="/secure/login.html*" filters="none"/>
+    	<security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_FULLY"/>
+        <security:intercept-url pattern="/**" filters="none"/>
+
+    	<security:form-login login-page="/secure/login.html"
+    						 login-processing-url="/secure/j_security_check"
+    						 default-target-url="/home.html"
+    						 always-use-default-target="true"
+    						 authentication-failure-url="/secure/login.html?error=true"/>
+		<security:logout logout-url="/j_security_logout" logout-success-url="/home.html" />
+  	</security:http>
+
+  	<!-- Authentication manager -->
+  	<security:authentication-manager>
+  		<security:authentication-provider user-service-ref="userService"/>
+	</security:authentication-manager>
+
+	<!-- Load the MONGO HQ url -->
+	<bean class="java.net.URI" id="dbUrl">
+    	<constructor-arg value="${MONGOHQ_URL}"/>
+	</bean>
+
+	<!-- Default bean name is 'mongo' -->
+  	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}"/>
+
+	<!-- Mongo db factory -->
+  	<mongo:db-factory dbname="#{@dbUrl.getPath().substring(1)}" mongo-ref="mongo" username="#{@dbUrl.getUserInfo().split(':')[0]}" password="#{@dbUrl.getUserInfo().split(':')[1]}"/>
+
+	<!-- set the mapping converter to be used by the MongoTemplate -->
+  	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+    	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    	<property name="writeResultChecking" value="EXCEPTION"/>
+		<property name="writeConcern" value="FSYNC_SAFE"/>
+  	</bean>
+
+  	<!--  Quartz Scheduler -->
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="configLocation" value="classpath:quartz.properties"/>
+		<property name="schedulerContextAsMap">
+			<map>
+				<entry key="runAsRole" value="ADMIN"/>
+			</map>
+		</property>
+  		<property name="triggers">
+    		<list></list>
+  		</property>
+	</bean>
+  	
+</beans>
