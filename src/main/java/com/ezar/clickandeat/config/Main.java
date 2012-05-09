@@ -60,7 +60,7 @@ public class Main {
      */
     
     private static MongoTemplate getMongoTemplate(Properties props) throws Exception {
-    	String mongoUrl = props.getProperty("MONGOHQ_URL");
+    	String mongoUrl = System.getenv("MONGOHQ_URL") == null? props.getProperty("MONGOHQ_URL"): System.getenv("MONGOHQ_URL");
     	String hostname = mongoUrl.split("@")[1].split(":")[0];
     	int port = Integer.valueOf(mongoUrl.split("@")[1].split(":")[1].split("/")[0]);
     	String database = mongoUrl.substring(mongoUrl.lastIndexOf("/")+1);

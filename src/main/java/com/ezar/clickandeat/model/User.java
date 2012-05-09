@@ -19,16 +19,13 @@ public class User extends BaseObject implements UserDetails {
 
 	private String password;
 
-	private List<String> roles;
-
 	public User() {
 	}
 	
 	@PersistenceConstructor
-	public User(String username, String password, List<String> roles) {
+	public User(String username, String password) {
 		this.username = username;
 		this.password = password;
-		this.roles = roles;
 	}
 
 	
@@ -39,7 +36,6 @@ public class User extends BaseObject implements UserDetails {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result
 				+ ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((roles == null) ? 0 : roles.hashCode());
 		result = prime * result
 				+ ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -65,11 +61,6 @@ public class User extends BaseObject implements UserDetails {
 				return false;
 		} else if (!password.equals(other.password))
 			return false;
-		if (roles == null) {
-			if (other.roles != null)
-				return false;
-		} else if (!roles.equals(other.roles))
-			return false;
 		if (username == null) {
 			if (other.username != null)
 				return false;
@@ -84,13 +75,7 @@ public class User extends BaseObject implements UserDetails {
 	 */
 
 	public Collection<GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-		if( roles != null ) {
-			for( String role: roles) {
-				authorities.add(new GrantedAuthorityImpl(role));
-			}
-		}
-		return authorities;
+        return new ArrayList<GrantedAuthority>();
 	}
 
 	public String getUsername() {
@@ -121,34 +106,14 @@ public class User extends BaseObject implements UserDetails {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("User:{");
 		sb.append("username: '").append(username).append("',");
-		sb.append("password: '").append("********").append("',");
-		sb.append("roles:[");
-		if( roles != null) {
-			String delim = "";
-			for( String role: roles) {
-				sb.append(delim).append(role);
-				delim = ",";
-			}
-		}
+		sb.append("password: '").append("********").append("'");
 		sb.append("]}");
 		return sb.toString();
 	}
 
-
-	public List<String> getRoles() {
-		return roles;
-	}
-
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 
 	public void setPassword(String password) {
 		this.password = password;

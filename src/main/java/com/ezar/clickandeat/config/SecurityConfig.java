@@ -38,11 +38,6 @@ public class SecurityConfig implements UserDetailsService {
 		this.adminPassword = adminPassword;
 	}
 
-	@Value(value="${admin.roles}")
-	public void setAdminRoles(String adminRoles) {
-		this.adminRoles = adminRoles;
-	}
-
 
 	private @Autowired MongoOperations mongoTemplate;
 
@@ -70,8 +65,7 @@ public class SecurityConfig implements UserDetailsService {
 	public void prepare() throws Exception {
 		User admin = mongoTemplate.findOne(query(where("username").is(adminUsername)), User.class);
 		if( admin == null ) {
-			String[] roles = StringUtils.commaDelimitedListToStringArray(adminRoles);
-			admin = new User(adminUsername, adminPassword,Arrays.asList(roles));
+			admin = new User(adminUsername, adminPassword );
 			mongoTemplate.save(admin);
 		}
 	}
