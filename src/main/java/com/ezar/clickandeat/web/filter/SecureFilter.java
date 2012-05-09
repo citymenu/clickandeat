@@ -27,7 +27,9 @@ public class SecureFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
-        if(req.isSecure() || "https".equals(req.getHeader("X-Forwarded-Proto"))) {
+        String protocolHeader = req.getHeader("X-Forwarded-Proto");
+        
+        if(req.isSecure() || protocolHeader == null || "https".equals(protocolHeader)) {
             chain.doFilter(req,res);
         }
         else {

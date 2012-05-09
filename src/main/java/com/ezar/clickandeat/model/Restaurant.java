@@ -1,11 +1,15 @@
 package com.ezar.clickandeat.model;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Joe Pugh
- * Date: 09/05/12
- * Time: 22:05
- * To change this template use File | Settings | File Templates.
- */
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection="restaurants")
 public class Restaurant {
+
+    @Indexed(unique=true)
+    private String restaurantId;
+
+    private String name;
+    
+    
 }
