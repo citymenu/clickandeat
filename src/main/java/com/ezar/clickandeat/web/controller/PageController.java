@@ -18,4 +18,9 @@ public class PageController {
         return "login";
     }
 
+    @RequestMapping(value="/secure/register.html", method = RequestMethod.GET)
+    public String register() {
+        return "register";
+    }
+    
 }

@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.config;
 
 import com.ezar.clickandeat.model.User;
+import com.ezar.clickandeat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -35,11 +36,14 @@ public class SecurityConfig implements UserDetailsService {
 		this.adminPassword = adminPassword;
 	}
 
-	private @Autowired MongoOperations mongoTemplate;
+	@Autowired
+    private UserRepository repository;
     
-    private @Autowired PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
-    private @Autowired SaltSource saltSource;
+    @Autowired
+    private SaltSource saltSource;
 
 	@Bean(name="userService")
 	public UserDetailsService getUserDetailsService() {
@@ -52,7 +56,7 @@ public class SecurityConfig implements UserDetailsService {
 	 */
 	
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-		User user = mongoTemplate.findOne(query(where("username").is(username)), User.class);
+        User user = repository.findByUsername(username);
 		if( user == null ) {
 			throw new UsernameNotFoundException(username);
 		}
@@ -62,14 +66,15 @@ public class SecurityConfig implements UserDetailsService {
 	
 	@PostConstruct
 	public void prepare() throws Exception {
-		User admin = mongoTemplate.findOne(query(where("username").is(adminUsername)), User.class);
-		if( admin == null ) {
-			admin = new User();
-            admin.setUsername(adminUsername);
-            admin.setSalt(User.makeSalt());
-            admin.setPassword(passwordEncoder.encodePassword(adminPassword,admin.getSalt()));
-			mongoTemplate.save(admin);
-		}
+		User admin = repository.findByUsername(adminUsername);
+        if( admin != null ) {
+            repository.delete(admin);
+        }
+    	admin = new User();
+        admin.setUsername(adminUsername);
+        admin.setSalt(admin.makeSalt());
+        admin.setPassword(passwordEncoder.encodePassword(adminPassword,admin.getSalt()));
+		repository.save(admin);
 	}
 	
 }

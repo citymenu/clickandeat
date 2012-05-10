@@ -78,6 +78,9 @@
 		<property name="writeConcern" value="FSYNC_SAFE"/>
   	</bean>
 
+    <!-- Proxy mongo repositories -->
+    <mongo:repositories base-package="com.ezar.clickandeat.repository" />
+
   	<!--  Quartz Scheduler -->
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation" value="classpath:quartz.properties"/>

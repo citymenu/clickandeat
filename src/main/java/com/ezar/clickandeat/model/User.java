@@ -34,7 +34,7 @@ public class User extends BaseObject implements UserDetails {
 	public User() {
 	}
 
-    public static String makeSalt() {
+    public String makeSalt() {
         return "" + Math.round((new Date().getTime() * Math.random()));
     }
 
