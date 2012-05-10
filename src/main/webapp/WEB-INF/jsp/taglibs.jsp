@@ -3,6 +3,7 @@
 <%@ taglib uri="http://www.springframework.org/security/tags" prefix="security" %>
 <%@ taglib uri="http://www.opensymphony.com/sitemesh/decorator" prefix="decorator" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <script type="text/javascript">var ctx = "${ctx}";</script>

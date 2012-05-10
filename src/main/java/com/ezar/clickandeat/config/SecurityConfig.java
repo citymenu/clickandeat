@@ -42,9 +42,6 @@ public class SecurityConfig implements UserDetailsService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-    @Autowired
-    private SaltSource saltSource;
-
 	@Bean(name="userService")
 	public UserDetailsService getUserDetailsService() {
 		return this;

@@ -9,8 +9,6 @@ public class Person extends BaseObject {
 
     private String lastName;
 
-    private String email;
-
     private String telephone;
 
     private String mobile;
@@ -32,14 +30,6 @@ public class Person extends BaseObject {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getTelephone() {
