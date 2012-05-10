@@ -17,7 +17,7 @@ public class UserValidator implements Validator {
 
     private static final String POST_CODE_VALIDATOR = "^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) {0,1}[0-9][A-Za-z]{2})$";
 
-    private static final String EMAIL_VALIDATOR = "\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b";
+    private static final String EMAIL_VALIDATOR = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$";
 
     private final Pattern postCodePattern;
     private final Pattern emailPattern;
@@ -61,7 +61,7 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "email.required", "Required field");
         if( !errors.hasFieldErrors("username")) {
-            Matcher matcher = postCodePattern.matcher(user.getUsername());
+            Matcher matcher = emailPattern.matcher(user.getUsername());
             if( !matcher.matches()) {
                 errors.rejectValue("username","email.invalid","Invalid Email Address");
             }

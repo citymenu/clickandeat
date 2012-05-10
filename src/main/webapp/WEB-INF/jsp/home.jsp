@@ -7,9 +7,15 @@
 
 <body>
 <h1>Current user: <%= request.getRemoteUser() %></h1>
-<p><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></p>
-<p><a href="${ctx}/j_security_logout"><spring:message code="label.logout"/></a></p>
-<p><a href="${ctx}/secure/register.html"><spring:message code="label.register"/></a></p>
+
+<c:if test="${pageContext.request.remoteUser == null}">
+    <p><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></p>
+    <p><a href="${ctx}/secure/register.html"><spring:message code="label.register"/></a></p>
+</c:if>
+
+<c:if test="${pageContext.request.remoteUser != null}">
+    <p><a href="${ctx}/j_security_logout"><spring:message code="label.logout"/></a></p>
+</c:if>
 
 <div>
     <p><spring:message code="label.change-language"/></p>
