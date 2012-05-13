@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:element name="Menu">
+        <xs:annotation>
+            <xs:documentation>ClickAndEat Menu</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="MenuCategory" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="menuId" type="xs:string" use="optional"/>
+            <xs:attribute name="updated" type="xs:dateTime" use="optional"/>
+        </xs:complexType>
+
+        <xs:unique name="uniqueCategoryName">
+            <xs:selector xpath="categories"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+
+    </xs:element>
+
+    <xs:element name="MenuCategory">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="MenuItem" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+        </xs:complexType>
+
+        <xs:unique name="uniqueMenuItemName">
+            <xs:selector xpath="items"/>
+            <xs:field xpath="@name"/>
+        </xs:unique>
+
+    </xs:element>
+
+    <xs:element name="MenuItem">
+        <xs:complexType>
+            <xs:attribute name="name" type="xs:string" use="required"/>
+            <xs:attribute name="price" type="xs:double" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings
+  	xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+  	xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+  	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  	xmlns:annox="http://annox.dev.java.net"
+  	jaxb:extensionBindingPrefixes="xjc annox"
+  	version="2.1">
+
+  	<jaxb:globalBindings>
+  		<xjc:superClass name="com.ezar.clickandeat.model.RestaurantMenu"/>
+    	<jaxb:javaType name="java.util.Date" xmlType="xs:dateTime"
+        	parseMethod="com.ezar.clickandeat.data.converter.DateConverter.parseDate"
+        	printMethod="com.ezar.clickandeat.data.converter.DateConverter.printDate"/>
+  	</jaxb:globalBindings>
+
+    <jaxb:bindings schemaLocation="../xsd/Menu.xsd" node="/xs:schema">
+        <jaxb:bindings node="//xs:element[@name='Menu']">
+            <annox:annotate target="class">
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlType" name="Foo" namespace = "example.com"/>
+            </annox:annotate>
+        </jaxb:bindings>
+    </jaxb:bindings>
+
+</jaxb:bindings>
