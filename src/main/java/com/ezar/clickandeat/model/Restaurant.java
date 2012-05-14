@@ -27,6 +27,8 @@ public class Restaurant {
     private Menu menu;
 
     private DeliveryOptions deliveryOptions;
+    
+    private OpeningTimes openingTimes;
 
     @Override
     public String toString() {
@@ -40,6 +42,7 @@ public class Restaurant {
                 ", address=" + address +
                 ", menu=" + menu +
                 ", deliveryOptions=" + deliveryOptions +
+                ", openingTimes=" + openingTimes +
                 '}';
     }
 
@@ -116,5 +119,13 @@ public class Restaurant {
 
     public void setDeliveryOptions(DeliveryOptions deliveryOptions) {
         this.deliveryOptions = deliveryOptions;
+    }
+
+    public OpeningTimes getOpeningTimes() {
+        return openingTimes;
+    }
+
+    public void setOpeningTimes(OpeningTimes openingTimes) {
+        this.openingTimes = openingTimes;
     }
 }
