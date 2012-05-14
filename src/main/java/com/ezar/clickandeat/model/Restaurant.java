@@ -18,6 +18,8 @@ public class Restaurant {
 
     private String website;
 
+    private Cuisine cuisine;
+    
     @DBRef
     private Person mainContact;
 
@@ -87,6 +89,14 @@ public class Restaurant {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public Cuisine getCuisine() {
+        return cuisine;
+    }
+
+    public void setCuisine(Cuisine cuisine) {
+        this.cuisine = cuisine;
     }
 
     public Person getMainContact() {
