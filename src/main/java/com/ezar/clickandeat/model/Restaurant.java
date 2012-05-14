@@ -24,6 +24,25 @@ public class Restaurant {
     @DBRef
     private Address address;
 
+    private Menu menu;
+
+    private DeliveryOptions deliveryOptions;
+
+    @Override
+    public String toString() {
+        return "Restaurant{" +
+                "restaurantId='" + restaurantId + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", website='" + website + '\'' +
+                ", mainContact=" + mainContact +
+                ", address=" + address +
+                ", menu=" + menu +
+                ", deliveryOptions=" + deliveryOptions +
+                '}';
+    }
+
     public Restaurant() {
     }
 
@@ -81,5 +100,21 @@ public class Restaurant {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
+    }
+
+    public DeliveryOptions getDeliveryOptions() {
+        return deliveryOptions;
+    }
+
+    public void setDeliveryOptions(DeliveryOptions deliveryOptions) {
+        this.deliveryOptions = deliveryOptions;
     }
 }

@@ -9,6 +9,14 @@ public class MenuCategory {
     
     List<MenuItem> menuItems = new ArrayList<MenuItem>();
 
+    @Override
+    public String toString() {
+        return "MenuCategory{" +
+                "name='" + name + '\'' +
+                ", menuItems=" + menuItems +
+                '}';
+    }
+
     public String getName() {
         return name;
     }
