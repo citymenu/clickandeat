@@ -161,56 +161,6 @@
                 </configuration>
             </plugin>
 
-            <!-- JAXB code generation -->
-            <plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.0</version>
-                <configuration>
-                    <forceRegenerate>true</forceRegenerate>
-                    <generateDirectory>${basedir}/src/main/java</generateDirectory>
-                    <generatePackage>com.ezar.clickandeat.data</generatePackage>
-                    <bindingDirectory>${basedir}/src/main/resources/binding</bindingDirectory>
-                    <extension>true</extension>
-                    <args>
-                        <arg>-Xinheritance</arg>
-                        <arg>-Xannotate</arg>
-                    </args>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics</artifactId>
-                            <version>0.6.3</version>
-                        </plugin>
-                        <plugin>
-                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                            <artifactId>jaxb2-basics-annotate</artifactId>
-                            <version>0.6.3</version>
-                        </plugin>
-                    </plugins>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>1</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <schemas>
-                                <schema>
-                                    <fileset>
-                                        <directory>${basedir}/src/main/resources/xsd</directory>
-                                        <includes>
-                                            <include>Menu.xsd</include>
-                                        </includes>
-                                    </fileset>
-                                </schema>
-                            </schemas>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- The maven app assembler plugin will generate a script that sets up the classpath and runs your project -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

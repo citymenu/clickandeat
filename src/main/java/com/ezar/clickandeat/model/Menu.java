@@ -8,16 +8,16 @@ import java.util.List;
 @Document(collection="menus")
 public class Menu extends BaseObject {
 
-    List<MenuItem> menuItems = new ArrayList<MenuItem>();
+    List<MenuCategory> menuCategories = new ArrayList<MenuCategory>();
 
     public Menu() {
     }
 
-    public List<MenuItem> getMenuItems() {
-        return menuItems;
+    public List<MenuCategory> getMenuCategories() {
+        return menuCategories;
     }
 
-    public void setMenuItems(List<MenuItem> menuItems) {
-        this.menuItems = menuItems;
+    public void setMenuCategories(List<MenuCategory> menuCategories) {
+        this.menuCategories = menuCategories;
     }
 }
