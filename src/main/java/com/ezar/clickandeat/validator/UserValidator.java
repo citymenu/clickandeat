@@ -42,7 +42,7 @@ public class UserValidator implements Validator {
 
         if( StringUtils.hasText(user.getUsername())) {
             User existing = repository.findByUsername(user.getUsername());
-            if( existing != null ) {
+            if( existing != null && !existing.getId().equals(user.getId())) {
                 errors.rejectValue("username","email.alreadyRegistered","Email Address already registered");
             }
         }
