@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="restaurants")
-public class Restaurant {
+public class Restaurant extends BaseObject {
 
     @Indexed(unique=true)
     private String restaurantId;

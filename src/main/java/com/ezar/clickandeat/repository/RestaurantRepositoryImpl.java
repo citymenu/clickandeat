@@ -1,23 +1,26 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
-import com.ezar.clickandeat.model.DeliveryOption;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.*;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
+import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
+public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(RestaurantRepositoryImpl.class);
     
@@ -28,16 +31,40 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
     
     @Autowired
     private LocationService locationService;
-    
+
+    @Autowired
+    private AddressRepository addressRepository;
+
+    @Autowired
+    private PersonRepository personRepository;
+
     private String region;
 
     private double maxDistance;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        operations.ensureIndex(new GeospatialIndex("address.location"),Restaurant.class);
+    }
+
+    @Override
+    public Restaurant findByRestaurantId(String restaurantId) {
+        return operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
+    }
+
+    @Override
+    public Restaurant saveRestaurant(Restaurant restaurant) {
+        restaurant.setMainContact(personRepository.save(restaurant.getMainContact()));
+        restaurant.setAddress(addressRepository.saveWithLocationLookup(restaurant.getAddress()));
+        operations.save(restaurant);
+        return restaurant;
+    }
 
 
     @Override
     public List<Restaurant> findRestaurantsServingPostCode(String postCode) {
 
-        String lookupPostCode = postCode.toUpperCase();
+        String lookupPostCode = postCode.toUpperCase().replace(" ","");
         
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving postCode: " + postCode);
@@ -67,7 +94,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
                     }
                 }
                 for( String deliveryLocation: deliveryOption.getAreasDeliveredTo()) {
-                    if(deliveryLocation.toUpperCase().startsWith(lookupPostCode)) {
+                    if(deliveryLocation.toUpperCase().replace(" ", "").startsWith(lookupPostCode)) {
                         availableRestaurants.add(restaurant);
                         break;
                     }
@@ -82,7 +109,17 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
         return availableRestaurants;
     }
 
-    
+
+    @Override
+    public void deleteRestaurant(Restaurant restaurant) {
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Deleting restaurant id: " + restaurant.getRestaurantId());
+        }
+        operations.remove(query(where("id").is(restaurant.getMainContact().getId())),Person.class);
+        operations.remove(query(where("id").is(restaurant.getAddress().getId())),Address.class);
+        operations.remove(query(where("id").is(restaurant.getId())),Restaurant.class);
+    }
+
     /**
      * Returns the distance in kilometres between two locations 
      * @param location1

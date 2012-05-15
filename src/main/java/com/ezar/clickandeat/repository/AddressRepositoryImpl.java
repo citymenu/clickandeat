@@ -2,13 +2,11 @@ package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.Address;
-import com.ezar.clickandeat.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 public class AddressRepositoryImpl implements AddressRepositoryCustom {

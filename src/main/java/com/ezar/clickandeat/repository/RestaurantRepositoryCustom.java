@@ -1,12 +1,18 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.Restaurant;
-import org.springframework.data.repository.CrudRepository;
+import com.ezar.clickandeat.model.User;
 
 import java.util.List;
 
 public interface RestaurantRepositoryCustom {
 
+    Restaurant findByRestaurantId(String restaurantId);
+
+    Restaurant saveRestaurant(Restaurant restaurant);
+    
     List<Restaurant> findRestaurantsServingPostCode(String postCode);
+
+    void deleteRestaurant(Restaurant restaurant);
 
 }
