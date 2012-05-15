@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface RestaurantRepositoryCustom {
 
-    List<Restaurant> findRestaurantsServingLocation(double[] location);
+    List<Restaurant> findRestaurantsServingPostCode(String postCode);
 
 }
