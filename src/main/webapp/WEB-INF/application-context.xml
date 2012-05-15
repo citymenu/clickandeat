@@ -84,12 +84,6 @@
     <!-- Proxy mongo repositories -->
     <mongo:repositories base-package="com.ezar.clickandeat.repository" />
 
-    <!-- Custom restaurant repository -->
-    <bean id="restaurantRepositoryImpl" class="com.ezar.clickandeat.repository.RestaurantRepositoryImpl">
-        <property name="region" value="${location.region}"/>
-        <property name="maxDistance" value="${location.maxDistance}"/>
-    </bean>
-    
   	<!--  Quartz Scheduler -->
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation" value="classpath:quartz.properties"/>

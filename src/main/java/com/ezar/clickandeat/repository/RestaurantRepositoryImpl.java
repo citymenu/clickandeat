@@ -6,11 +6,13 @@ import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,14 +96,16 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
         double z = Math.sqrt((x * x ) + (y * y));
         return z * DIVISOR;
     }
-    
+
 
     @Required
+    @Value(value="${location.maxDistance}")
     public void setMaxDistance(double maxDistance) {
         this.maxDistance = maxDistance;
     }
 
     @Required
+    @Value(value="${location.region}")
     public void setRegion(String region) {
         this.region = region;
     }

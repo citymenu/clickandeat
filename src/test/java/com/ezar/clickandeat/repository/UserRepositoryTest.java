@@ -3,14 +3,12 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.model.User;
 import com.ezar.clickandeat.validator.UserValidator;
 import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.validation.BindException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
@@ -45,10 +43,16 @@ public class UserRepositoryTest {
     
     
     @Test
-    public void testCreateAndDeleteUser() throws Exception {
+    public void testValidateValidUser() throws Exception {
         
+        User user = new User();
+        user.setUsername(testUserId);
 
-        
+        BindException errors = new BindException(user,"user");
+        userValidator.validate(user,errors);
+
+        Assert.assertTrue("No validation errors should occur",!errors.hasErrors());
+
     }
     
 }

@@ -27,23 +27,8 @@ public class UserRegistrationController {
     private UserRepository userRepository;
 
     @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
     private UserValidator userValidator;
 
-    @Autowired
-    private LocationService locationService;
-    
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private SaltSource saltSource;
-    
     @RequestMapping(value="/secure/doRegister.html", method = RequestMethod.POST)
     public String register( @ModelAttribute("user") User user, BindingResult result ) {
 
@@ -53,18 +38,8 @@ public class UserRegistrationController {
         }
         else {
 
-            // Get geolocation of user from password
-            double[] location = locationService.getLocation(user.getAddress().getPostCode(),"en");
-            user.getAddress().setLocation(location);
-
-            // Pre-save person and address
-            user.setPerson(personRepository.save(user.getPerson()));
-            user.setAddress(addressRepository.save(user.getAddress()));
-
-            // Encrypt user password and save user record
-            user.setSalt(user.makeSalt());
-            user.setPassword(passwordEncoder.encodePassword(user.getPassword(),user.getSalt()));
-            userRepository.save(user);
+            // Save the user and update the password
+            userRepository.saveUser(user);
 
             // Auto-authenticate user
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword(),new ArrayList<GrantedAuthority>());
