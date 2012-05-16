@@ -5,8 +5,6 @@ import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.util.StringUtils;
@@ -28,8 +26,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Autowired
     private LocationService locationService;
 
-    private String region;
-
 
     @Override
     public User findByUsername(String username) {
@@ -41,7 +37,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public User saveUser(User user) {
 
         if( user.getAddress() != null && StringUtils.hasText(user.getAddress().getPostCode())) {
-            double[] location = locationService.getLocation(user.getAddress().getPostCode(),region);
+            double[] location = locationService.getLocation(user.getAddress().getPostCode());
             user.getAddress().setLocation(location);
         }
 
@@ -73,10 +69,4 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         operations.updateFirst(query(where("id").is(user.getId())),update("password",encodedPassword),User.class);
     }
 
-
-    @Required
-    @Value(value="${location.region}")
-    public void setRegion(String region) {
-        this.region = region;
-    }
 }

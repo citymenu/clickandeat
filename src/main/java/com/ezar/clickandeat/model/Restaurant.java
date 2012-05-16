@@ -1,8 +1,15 @@
 package com.ezar.clickandeat.model;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection="restaurants")
 public class Restaurant extends BaseObject {
@@ -18,7 +25,7 @@ public class Restaurant extends BaseObject {
 
     private String website;
 
-    private Cuisine cuisine;
+    private List<String> cuisines = new ArrayList<String>();
     
     private Person mainContact;
 
@@ -38,6 +45,7 @@ public class Restaurant extends BaseObject {
                 ", email='" + email + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", website='" + website + '\'' +
+                ", cuisines='" + cuisines + '\'' +
                 ", mainContact=" + mainContact +
                 ", address=" + address +
                 ", menu=" + menu +
@@ -46,6 +54,46 @@ public class Restaurant extends BaseObject {
                 '}';
     }
 
+
+    /**
+     * Returns true if this restaurant is currently open based on the given date and time
+     * @param date
+     * @param time
+     * @return
+     */
+    
+    public boolean isOpen(LocalDate date, LocalTime time) {
+        
+        Assert.notNull(date, "date must not be null");
+        Assert.notNull(time, "time must not be null");
+
+        if( openingTimes == null ) {
+            return false;
+        }
+
+        // Check if the restaurant is closed on this date
+        if( openingTimes.getClosedDates() != null ) {
+            for( LocalDate closedDate: openingTimes.getClosedDates()) {
+                if( closedDate.equals(date)) {
+                    return false;
+                }
+            }
+        }
+
+        // Check if the restaurant is open at this time today
+        if( openingTimes.getOpeningTimes() != null ) {
+            for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+                if( openingTime.getDayOfWeek() == date.getDayOfWeek()) {
+                    return !time.isBefore(openingTime.getOpeningTime()) &&
+                            !time.isAfter(openingTime.getClosingTime());
+                }
+            }
+        }
+
+        return false;
+    }
+    
+    
     public Restaurant() {
     }
 
@@ -89,12 +137,12 @@ public class Restaurant extends BaseObject {
         this.website = website;
     }
 
-    public Cuisine getCuisine() {
-        return cuisine;
+    public List<String> getCuisines() {
+        return cuisines;
     }
 
-    public void setCuisine(Cuisine cuisine) {
-        this.cuisine = cuisine;
+    public void setCuisines(List<String> cuisines) {
+        this.cuisines = cuisines;
     }
 
     public Person getMainContact() {

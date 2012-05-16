@@ -3,6 +3,7 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.model.User;
 import com.ezar.clickandeat.repository.UserRepository;
 import com.ezar.clickandeat.validator.UserValidator;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,15 +19,22 @@ import java.util.ArrayList;
 @Controller
 public class UserRegistrationController {
 
+    private static final Logger LOGGER = Logger.getLogger(UserRegistrationController.class);
+    
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserValidator userValidator;
 
+
     @RequestMapping(value="/secure/doRegister.html", method = RequestMethod.POST)
     public String register( @ModelAttribute("user") User user, BindingResult result ) {
 
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Registering user");
+        }
+        
         userValidator.validate(user, result);
         if (result.hasErrors()) {
             return "register";

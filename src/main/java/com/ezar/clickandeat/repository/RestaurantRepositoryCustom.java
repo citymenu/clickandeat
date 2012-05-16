@@ -11,6 +11,6 @@ public interface RestaurantRepositoryCustom {
 
     Restaurant saveRestaurant(Restaurant restaurant);
     
-    List<Restaurant> findRestaurantsServingPostCode(String postCode);
+    List<Restaurant> search(String location, String cuisine, String sort, String direction);
 
 }

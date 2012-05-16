@@ -2,6 +2,8 @@ package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.*;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,6 +33,7 @@ public class RestaurantSearchTest {
         
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(restaurantId);
+        restaurant.setName("Test Restaurant");
         
         Person mainContact = new Person();
         mainContact.setFirstName("test");
@@ -41,6 +44,9 @@ public class RestaurantSearchTest {
         address.setPostCode("E18 2LG");
         restaurant.setAddress(address);
 
+        restaurant.getCuisines().add("Mexican");
+        restaurant.getCuisines().add("Chinese");
+        
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         DeliveryOption deliveryOption = new DeliveryOption();
         deliveryOption.setDeliveryRadius(3d);
@@ -71,10 +77,12 @@ public class RestaurantSearchTest {
     @Test
     public void testFindRestaurantsServingLocation() throws Exception {
         
-        // Check for restaurants serving E18
+        // Check for restaurants serving Mexican food in E18 ordered by name
         try {
-            List<Restaurant> restaurants = repository.findRestaurantsServingPostCode("E6");
+            List<Restaurant> restaurants = repository.search("E18", "Mexican", "name", "asc");
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
+            Restaurant restaurant = restaurants.get(0);
+            Assert.assertTrue("Restaurant should be closed", !restaurant.isOpen(new LocalDate(), new LocalTime()));
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
