@@ -20,10 +20,8 @@ public class Restaurant extends BaseObject {
 
     private Cuisine cuisine;
     
-    @DBRef
     private Person mainContact;
 
-    @DBRef
     private Address address;
 
     private Menu menu;

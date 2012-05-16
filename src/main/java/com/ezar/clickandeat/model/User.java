@@ -29,10 +29,8 @@ public class User extends BaseObject implements UserDetails {
 
     private String salt;
     
-    @DBRef
     private Person person;
 
-    @DBRef
     private Address address;
     
 	public User() {

@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Autowired
     private LocationService locationService;
 
-    @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
     private String region;
 
     private double maxDistance;
@@ -54,8 +49,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        restaurant.setMainContact(personRepository.save(restaurant.getMainContact()));
-        restaurant.setAddress(addressRepository.saveWithLocationLookup(restaurant.getAddress()));
+        if( restaurant.getAddress() != null && StringUtils.hasText(restaurant.getAddress().getPostCode())) {
+            double[] location = locationService.getLocation(restaurant.getAddress().getPostCode(),region);
+            restaurant.getAddress().setLocation(location);
+        }
         operations.save(restaurant);
         return restaurant;
     }
@@ -110,16 +107,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
 
-    @Override
-    public void deleteRestaurant(Restaurant restaurant) {
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Deleting restaurant id: " + restaurant.getRestaurantId());
-        }
-        operations.remove(query(where("id").is(restaurant.getMainContact().getId())),Person.class);
-        operations.remove(query(where("id").is(restaurant.getAddress().getId())),Address.class);
-        operations.remove(query(where("id").is(restaurant.getId())),Restaurant.class);
-    }
-
     /**
      * Returns the distance in kilometres between two locations 
      * @param location1
@@ -128,10 +115,19 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
      */
     
     private double getDistance(double[] location1, double[] location2) {
-        double x = Math.abs(location1[0] - location2[0]);
-        double y = Math.abs(location1[1] - location2[1]);
-        double z = Math.sqrt((x * x ) + (y * y));
-        return z * DIVISOR;
+
+        double dLat = Math.toRadians(location1[0]-location2[0]);
+        double dLon = Math.toRadians(location1[1]-location2[1]);
+
+        double lat1 = Math.toRadians(location1[0]);
+        double lat2 = Math.toRadians(location2[0]);
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        double d = DIVISOR * c;
+    
+        return d;
     }
 
 

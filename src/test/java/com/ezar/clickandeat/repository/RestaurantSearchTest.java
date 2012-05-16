@@ -63,7 +63,7 @@ public class RestaurantSearchTest {
     private void removeRestaurant(String restaurantId) throws Exception {
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         if( restaurant != null ) {
-            repository.deleteRestaurant(restaurant);
+            repository.delete(restaurant);
         }
     }
 
@@ -73,7 +73,7 @@ public class RestaurantSearchTest {
         
         // Check for restaurants serving E18
         try {
-            List<Restaurant> restaurants = repository.findRestaurantsServingPostCode("E18");
+            List<Restaurant> restaurants = repository.findRestaurantsServingPostCode("E6");
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
         }
         catch( Exception ex ) {

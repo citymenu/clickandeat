@@ -13,6 +13,4 @@ public interface RestaurantRepositoryCustom {
     
     List<Restaurant> findRestaurantsServingPostCode(String postCode);
 
-    void deleteRestaurant(Restaurant restaurant);
-
 }

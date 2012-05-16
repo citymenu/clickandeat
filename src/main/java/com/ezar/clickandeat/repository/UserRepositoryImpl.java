@@ -1,12 +1,15 @@
 
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -20,13 +23,12 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private MongoOperations operations;
 
     @Autowired
-    private AddressRepository addressRepository;
-
-    @Autowired
-    private PersonRepository personRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private LocationService locationService;
+
+    private String region;
 
 
     @Override
@@ -38,8 +40,10 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public User saveUser(User user) {
 
-        user.setPerson(personRepository.save(user.getPerson()));
-        user.setAddress(addressRepository.saveWithLocationLookup(user.getAddress()));
+        if( user.getAddress() != null && StringUtils.hasText(user.getAddress().getPostCode())) {
+            double[] location = locationService.getLocation(user.getAddress().getPostCode(),region);
+            user.getAddress().setLocation(location);
+        }
 
         if( user.getId() == null ) {
             user.setSalt(user.makeSalt());
@@ -68,5 +72,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
         String encodedPassword = passwordEncoder.encodePassword(password,user.getSalt());
         operations.updateFirst(query(where("id").is(user.getId())),update("password",encodedPassword),User.class);
     }
-    
+
+
+    @Required
+    @Value(value="${location.region}")
+    public void setRegion(String region) {
+        this.region = region;
+    }
 }

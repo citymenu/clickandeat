@@ -1,15 +1,10 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.User;
-import com.ezar.clickandeat.repository.AddressRepository;
-import com.ezar.clickandeat.repository.PersonRepository;
 import com.ezar.clickandeat.repository.UserRepository;
 import com.ezar.clickandeat.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.authentication.dao.SaltSource;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
