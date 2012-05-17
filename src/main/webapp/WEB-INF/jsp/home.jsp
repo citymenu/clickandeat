@@ -22,5 +22,12 @@
     <p><a href="?lang=en">en</a> | <a href="?lang=es">es</a></p>
 </div>
 
+<div>
+    <p><spring message code="label.search"/></p>
+    <form method="get" action="${ctx}/search.html">
+        <input type="text" name="loc" id="loc"/> <input type="submit" value="<spring:message code="label.search"/>"/>
+    </form>
+</div>
+
 </body>
 </html>

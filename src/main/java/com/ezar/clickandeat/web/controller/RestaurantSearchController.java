@@ -25,9 +25,10 @@ public class RestaurantSearchController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+
     @RequestMapping(value="/search.html", method = RequestMethod.GET)
-    public ModelAndView search(@RequestParam("loc") String location, @RequestParam("c") String cuisine,
-                                        @RequestParam("s") String sort, @RequestParam("d") String dir ) {
+    public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
+                                        @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants serving location: " + location);

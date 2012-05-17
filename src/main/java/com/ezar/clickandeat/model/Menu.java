@@ -10,6 +10,10 @@ public class Menu extends BaseObject {
 
     String name;
 
+    boolean collection;
+
+    boolean delivery;
+
     List<MenuCategory> menuCategories = new ArrayList<MenuCategory>();
 
     public Menu() {
@@ -17,6 +21,22 @@ public class Menu extends BaseObject {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isCollection() {
+        return collection;
+    }
+
+    public void setCollection(boolean collection) {
+        this.collection = collection;
+    }
+
+    public boolean isDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(boolean delivery) {
+        this.delivery = delivery;
     }
 
     public void setName(String name) {

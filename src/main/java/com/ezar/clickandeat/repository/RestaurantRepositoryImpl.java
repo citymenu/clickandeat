@@ -59,14 +59,24 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     public List<Restaurant> search(String location, String cuisine, String sort, String dir ) {
 
-        String lookupLocation = location.toUpperCase().replace(" ","");
-        
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving location: " + location);
         }
+
+        if( !StringUtils.hasText(location)) {
+            LOGGER.warn("Empty location value passed to 'search' method");
+            return new ArrayList<Restaurant>();
+        }
+        
+        String lookupLocation = location.toUpperCase().replace(" ","");
         
         // Build geolocation query
         double[] geoLocation = locationService.getLocation(lookupLocation);
+        if( geoLocation == null ) {
+            LOGGER.warn("No geolocation found for location " + location);
+            return new ArrayList<Restaurant>();
+        }
+        
         Query query = new Query(where("address.location").nearSphere(new Point(geoLocation[0], geoLocation[1]))
                 .maxDistance(maxDistance / DIVISOR));
 
@@ -85,6 +95,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         
         // Execute the query
         List<Restaurant> restaurants = operations.find(query,Restaurant.class);
+        if( restaurants.size() == 0 ) {
+            return restaurants;
+        }
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Returned " + restaurants.size() + " restaurants, now checking delivery options");

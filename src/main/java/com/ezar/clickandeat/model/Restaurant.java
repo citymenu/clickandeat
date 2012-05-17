@@ -29,7 +29,7 @@ public class Restaurant extends BaseObject {
 
     private Address address;
 
-    private Menu menu;
+    private List<Menu> menus = new ArrayList<Menu>();
 
     private DeliveryOptions deliveryOptions;
     
@@ -46,7 +46,7 @@ public class Restaurant extends BaseObject {
                 ", cuisines='" + cuisines + '\'' +
                 ", mainContact=" + mainContact +
                 ", address=" + address +
-                ", menu=" + menu +
+                ", menus=" + menus +
                 ", deliveryOptions=" + deliveryOptions +
                 ", openingTimes=" + openingTimes +
                 '}';
@@ -183,12 +183,12 @@ public class Restaurant extends BaseObject {
         this.address = address;
     }
 
-    public Menu getMenu() {
-        return menu;
+    public List<Menu> getMenus() {
+        return menus;
     }
 
-    public void setMenu(Menu menu) {
-        this.menu = menu;
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus;
     }
 
     public DeliveryOptions getDeliveryOptions() {
