@@ -1,10 +1,8 @@
 package com.ezar.clickandeat.model;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
 
@@ -56,41 +54,65 @@ public class Restaurant extends BaseObject {
 
 
     /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
+        return isOpen(date,time)[0];
+    }
+
+
+    /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
+        return isOpen(date,time)[1];
+    }
+    
+    
+    /**
      * Returns true if this restaurant is currently open based on the given date and time
      * @param date
      * @param time
      * @return
      */
     
-    public boolean isOpen(LocalDate date, LocalTime time) {
+    public boolean[] isOpen(LocalDate date, LocalTime time) {
         
         Assert.notNull(date, "date must not be null");
         Assert.notNull(time, "time must not be null");
 
         if( openingTimes == null ) {
-            return false;
+            return new boolean[]{false,false};
         }
 
         // Check if the restaurant is closed on this date
         if( openingTimes.getClosedDates() != null ) {
             for( LocalDate closedDate: openingTimes.getClosedDates()) {
                 if( closedDate.equals(date)) {
-                    return false;
+                    return new boolean[]{false,false};
                 }
             }
         }
 
-        // Check if the restaurant is open at this time today
+        // Check if the restaurant is open for collection or delivery at this time today
         if( openingTimes.getOpeningTimes() != null ) {
             for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
                 if( openingTime.getDayOfWeek() == date.getDayOfWeek()) {
-                    return !time.isBefore(openingTime.getOpeningTime()) &&
-                            !time.isAfter(openingTime.getClosingTime());
+                    boolean[] isOpen = new boolean[2];
+                    isOpen[0] = !time.isBefore(openingTime.getCollectionOpeningTime()) && !time.isAfter(openingTime.getCollectionClosingTime());
+                    isOpen[1] = !time.isBefore(openingTime.getDeliveryOpeningTime()) && !time.isAfter(openingTime.getDeliveryClosingTime());
+                    return isOpen;
                 }
             }
         }
 
-        return false;
+        return new boolean[]{false,false};
     }
     
     
