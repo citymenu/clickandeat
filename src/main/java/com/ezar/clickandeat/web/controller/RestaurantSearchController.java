@@ -35,7 +35,10 @@ public class RestaurantSearchController {
         }
         
         Map<String,Object> model = new HashMap<String,Object>();
-        model.put("results",restaurantRepository.search(location, cuisine, sort, dir ));
+        List<Restaurant> restaurants = restaurantRepository.search(location, cuisine, sort, dir ); 
+        model.put("results",restaurants);
+        model.put("count",restaurants.size());
+        
         return new ModelAndView("results",model);
     }
 
