@@ -26,34 +26,15 @@ public class RestaurantSearchController {
     private RestaurantRepository restaurantRepository;
 
     @RequestMapping(value="/search.html", method = RequestMethod.GET)
-    public ModelAndView search(@RequestParam("location") String location, @RequestParam("cuisine") String cuisine,
-                                        @RequestParam("sort") String sort, @RequestParam("dir") String dir ) {
+    public ModelAndView search(@RequestParam("loc") String location, @RequestParam("c") String cuisine,
+                                        @RequestParam("s") String sort, @RequestParam("d") String dir ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants serving location: " + location);
         }
         
         Map<String,Object> model = new HashMap<String,Object>();
-
-        List<Restaurant> restaurants = restaurantRepository.search(location, cuisine, sort, dir );
-        List<Restaurant> openRestaurants = new ArrayList<Restaurant>();
-        List<Restaurant> closedRestaurants = new ArrayList<Restaurant>();
-
-        LocalDate today = new LocalDate();
-        LocalTime now = new LocalTime();
-        
-        for( Restaurant restaurant: restaurants ) {
-            if( restaurant.isOpen(today,now)) {
-                openRestaurants.add(restaurant);
-            }
-            else {
-                closedRestaurants.add(restaurant);
-            }
-        }
-
-        model.put("openRestaurants",openRestaurants);
-        model.put("closedRestaurants",closedRestaurants);
-        
+        model.put("results",restaurantRepository.search(location, cuisine, sort, dir ));
         return new ModelAndView("results",model);
     }
 
