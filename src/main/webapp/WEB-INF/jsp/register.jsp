@@ -22,9 +22,10 @@
         <div><form:input path="person.mobile"/></div>
     </fieldset>
     <fieldset id="addressDetails">
-        <legend><spring:message code="label.buildingNumber"/></legend>
+        <legend><spring:message code="label.address-details"/></legend>
+        <div><spring:message code="label.building-number"/></div>
         <div><input type="text" id="address.buildingNumber"/></div>
-        <legend><spring:message code="label.postcode"/></legend>
+        <div><spring:message code="label.postcode"/></div>
         <div><form:input path="address.postCode"/>
 
         <input type="button" value="<spring:message code="label.lookup-address"/>"
