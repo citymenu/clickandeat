@@ -1,6 +1,8 @@
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.User;
+import com.ezar.clickandeat.model.Person;
 import com.ezar.clickandeat.validator.UserValidator;
 import org.apache.log4j.Logger;
 import org.junit.*;
@@ -47,9 +49,24 @@ public class UserRepositoryTest {
         
         User user = new User();
         user.setUsername(testUserId);
+        user.setPassword("password");
+        user.setConfirmPassword("password");
+        
+        Person person = new Person();
+        person.setFirstName("Test");
+        person.setLastName("User");
+        user.setPerson(person);
+        
+        Address address = new Address();
+        address.setAddress1("80 Peel Road");
+        address.setPostCode("E18 2LG");
+        user.setAddress(address);
 
         BindException errors = new BindException(user,"user");
         userValidator.validate(user,errors);
+        if( errors.hasErrors()) {
+            LOGGER.info(errors.getLocalizedMessage());
+        }
 
         Assert.assertTrue("No validation errors should occur",!errors.hasErrors());
 

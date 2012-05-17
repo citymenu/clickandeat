@@ -6,6 +6,7 @@
     <meta name="robots" content="all" />
 	<link rel="shortcut icon" href="${ctx}/resources/images/favico.png">
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
+	<decorator:head/>
     <title><decorator:title default="Click and Eat"/></title>
 </head>
 <body>

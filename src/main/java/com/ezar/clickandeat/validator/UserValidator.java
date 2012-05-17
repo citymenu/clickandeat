@@ -2,7 +2,10 @@ package com.ezar.clickandeat.validator;
 
 import com.ezar.clickandeat.model.User;
 import com.ezar.clickandeat.repository.UserRepository;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -13,23 +16,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component("userValidator")
-public class UserValidator implements Validator {
-
-    private static final String POST_CODE_VALIDATOR = "^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9]?[A-Za-z])))) {0,1}[0-9][A-Za-z]{2})$";
+public class UserValidator implements Validator, InitializingBean {
 
     private static final String EMAIL_VALIDATOR = "^([0-9a-zA-Z]([-.\\w]*[0-9a-zA-Z])*@(([0-9a-zA-Z])+([-\\w]*[0-9a-zA-Z])*\\.)+[a-zA-Z]{2,9})$";
 
-    private final Pattern postCodePattern;
-    private final Pattern emailPattern;
+    private Pattern postCodePattern;
+    private Pattern emailPattern;
 
     @Autowired
     private UserRepository repository;
+    
+    private String postCodeValidationRegexp;
 
-    public UserValidator() {
-        postCodePattern = Pattern.compile(POST_CODE_VALIDATOR);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        postCodePattern = Pattern.compile(postCodeValidationRegexp);
         emailPattern = Pattern.compile(EMAIL_VALIDATOR);
     }
-    
+
     @Override
     public boolean supports(Class<?> clazz) {
         return User.class.equals(clazz);
@@ -50,7 +54,7 @@ public class UserValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "person.firstName", "firstName.required", "Required field");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "person.lastName", "lastName.required", "Required field");
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.streetAddress", "streetAddress.required", "Required field");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.address1", "address1.required", "Required field");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address.postCode", "postCode.required", "Required field");
         if( !errors.hasFieldErrors("address.postCode")) {
             Matcher matcher = postCodePattern.matcher(user.getAddress().getPostCode());
@@ -77,5 +81,12 @@ public class UserValidator implements Validator {
             }
         }
     }
+
+    @Required
+    @Value(value="${validation.postCodeValidationRegexp}")
+    public void setPostCodeValidationRegexp(String postCodeValidationRegexp ) {
+        this.postCodeValidationRegexp = postCodeValidationRegexp;
+    }
+
 
 }

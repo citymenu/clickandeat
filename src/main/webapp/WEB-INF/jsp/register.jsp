@@ -3,6 +3,7 @@
 
 <head>
     <title><spring:message code="label.register"/></title>
+    <script type="text/javascript" src="${ctx}/resources/script/postcodeLookup.js"></script>
 </head>
 
 <body>
@@ -21,15 +22,21 @@
         <div><form:input path="person.mobile"/></div>
     </fieldset>
     <fieldset id="addressDetails">
-        <legend><spring:message code="label.address-details"/></legend>
-        <div><spring:message code="label.streetaddress"/></div>
-        <div><form:input path="address.streetAddress"/></div>
-        <div><spring:message code="label.town"/></div>
+        <legend><spring:message code="label.buildingNumber"/></legend>
+        <div><input type="text" id="address.buildingNumber"/></div>
+        <legend><spring:message code="label.postcode"/></legend>
+        <div><form:input path="address.postCode"/>
+
+        <input type="button" value="<spring:message code="label.lookup-address"/>"
+            onclick="Javascript: PostcodeAnywhere_Interactive_RetrieveByPostcodeAndBuilding_v1_10Begin(
+                document.getElementById('address.postCode').value,document.getElementById('address.buildingNumber').value);"/>
+        </div>
+        <div><spring:message code="label.address1"/></div>
+        <div><form:input path="address.address1"/></div>
+        <div><form:input path="address.address2"/></div>
+        <div><form:input path="address.address3"/></div>
         <div><form:input path="address.town"/></div>
-        <div><spring:message code="label.region"/></div>
         <div><form:input path="address.region"/></div>
-        <div><spring:message code="label.postcode"/></div>
-        <div><form:input path="address.postCode"/></div>
     </fieldset>
     <fieldset id="loginDetails">
         <legend><spring:message code="label.login-details"/></legend>
