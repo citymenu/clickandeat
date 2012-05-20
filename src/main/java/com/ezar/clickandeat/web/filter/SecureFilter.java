@@ -10,7 +10,7 @@ public class SecureFilter implements Filter {
     private boolean enabled = false;
 
     public void init(FilterConfig config) throws ServletException {
-        String environment = System.getProperty("ENVIRONMENT");
+        String environment = System.getenv("ENVIRONMENT");
         enabled = "production".equals(environment);
     }
 
