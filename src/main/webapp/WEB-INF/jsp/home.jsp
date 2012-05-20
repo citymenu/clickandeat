@@ -8,6 +8,7 @@
 
 <body>
 <h1>Current user: <%= request.getRemoteUser() %></h1>
+<h1>Current locale: <%= response.getLocale() %></h1>
 
 <c:if test="${pageContext.request.remoteUser == null}">
     <p><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></p>

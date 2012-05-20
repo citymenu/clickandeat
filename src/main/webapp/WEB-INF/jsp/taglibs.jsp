@@ -6,4 +6,5 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<script type="text/javascript">var ctx = "${ctx}";</script>
+<c:set var="locale" value="${pageContext.response.locale}"/>
+<script type="text/javascript">var ctx = "${ctx}"; var locale = "${locale}";</script>
