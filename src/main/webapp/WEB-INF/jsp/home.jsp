@@ -3,6 +3,7 @@
 
 <head>
     <title><spring:message code="label.home"/></title>
+    <script type="text/javascript" src="${ctx}/resources/script/home.js"></script>
 </head>
 
 <body>

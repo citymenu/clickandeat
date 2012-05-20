@@ -3,6 +3,7 @@
 
 <head>
     <title><spring:message code="label.login"/></title>
+    <script type="text/javascript" src="${ctx}/resources/script/login.js"></script>
 </head>
 
 <body>

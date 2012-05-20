@@ -3,6 +3,7 @@
 
 <head>
     <title><spring:message code="label.register"/></title>
+    <script type="text/javascript" src="${ctx}/resources/script/register.js"></script>
     <script type="text/javascript" src="${ctx}/resources/script/postcodeLookup.js"></script>
 </head>
 
@@ -48,7 +49,7 @@
         <div><spring:message code="label.confirm-password"/></div>
         <div><form:password path="confirmPassword"/></div>
     </fieldset>
-    <div><input type="submit" value="<spring:message code="label.register"/>"/></div>
+    <div><input type="submit" class="button" value="<spring:message code="label.register"/>"/></div>
 </form:form>
 
 </body>
