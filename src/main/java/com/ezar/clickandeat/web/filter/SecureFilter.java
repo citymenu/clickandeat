@@ -7,7 +7,11 @@ import java.io.IOException;
 
 public class SecureFilter implements Filter {
 
+    private boolean enabled = false;
+
     public void init(FilterConfig config) throws ServletException {
+        String environment = System.getProperty("ENVIRONMENT");
+        enabled = "production".equals(environment);
     }
 
     public void destroy() {
@@ -27,9 +31,14 @@ public class SecureFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
 
+        if( !enabled ) {
+            chain.doFilter(req,res);
+            return;
+        }
+
         String protocolHeader = req.getHeader("X-Forwarded-Proto");
         
-        if(req.isSecure() || protocolHeader == null || "https".equals(protocolHeader)) {
+        if(req.isSecure() || "https".equals(protocolHeader)) {
             chain.doFilter(req,res);
         }
         else {
