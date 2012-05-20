@@ -30,9 +30,9 @@
 
 	<!--  HTTP security config -->
 	<security:http auto-config="true" disable-url-rewriting="true">
-		<security:intercept-url pattern="/index.jsp" filters="none"/>
-    	<security:intercept-url pattern="/secure/login.html*" filters="none"/>
-        <security:intercept-url pattern="/secure/register.html*" filters="none"/>
+		<security:intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+    	<security:intercept-url pattern="/secure/login.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/secure/register.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/secure/doRegister.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
     	<security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_FULLY"/>
         <security:intercept-url pattern="*.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
