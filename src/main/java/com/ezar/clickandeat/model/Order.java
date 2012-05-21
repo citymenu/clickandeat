@@ -37,7 +37,9 @@ public class Order extends BaseObject {
     private DateTime expectedTime;
 
     private Double orderItemCost;
-    
+
+    private List<Discount> discounts = new ArrayList<Discount>();
+
     private Double deliveryCost;
     
     private Double cardTransactionCost;
@@ -61,6 +63,14 @@ public class Order extends BaseObject {
 
     public void setOrderItems(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
+    }
+
+    public List<Discount> getDiscounts() {
+        return discounts;
+    }
+
+    public void setDiscounts(List<Discount> discounts) {
+        this.discounts = discounts;
     }
 
     public User getUser() {
