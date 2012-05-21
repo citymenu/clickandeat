@@ -226,9 +226,9 @@
             <url>http://maven.springframework.org/milestone</url>
         </repository>
         <repository>
-            <id>jboss</id>
-            <name>JBoss repository</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+            <id>atlassian</id>
+            <name>Atlassian repository</name>
+            <url>https://repository.atlassian.com/maven2</url>
         </repository>
     </repositories>
 
