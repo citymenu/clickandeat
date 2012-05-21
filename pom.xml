@@ -228,7 +228,7 @@
         <repository>
             <id>jboss</id>
             <name>JBoss repository</name>
-            <url>https://repository.jboss.org</url>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
         </repository>
     </repositories>
 
