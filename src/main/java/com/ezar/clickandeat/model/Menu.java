@@ -14,8 +14,6 @@ public class Menu extends BaseObject {
 
     boolean delivery;
 
-
-
     List<MenuCategory> menuCategories = new ArrayList<MenuCategory>();
 
     public Menu() {
@@ -52,4 +50,5 @@ public class Menu extends BaseObject {
     public void setMenuCategories(List<MenuCategory> menuCategories) {
         this.menuCategories = menuCategories;
     }
+
 }
