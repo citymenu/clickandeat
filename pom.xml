@@ -225,6 +225,11 @@
             <name>Spring Maven MILESTONE Repository</name>
             <url>http://maven.springframework.org/milestone</url>
         </repository>
+        <repository>
+            <id>jboss</id>
+            <name>JBoss repository</name>
+            <url>https://repository.jboss.org</url>
+        </repository>
     </repositories>
 
 </project>
