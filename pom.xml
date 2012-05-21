@@ -101,7 +101,7 @@
         <!-- Drools -->
         <dependency>
             <groupId>org.drools</groupId>
-            <artifactId>drools-core</artifactId>
+            <artifactId>drools-jsr94</artifactId>
             <version>4.0.7</version>
         </dependency>
         <dependency>
@@ -109,7 +109,6 @@
             <artifactId>drools-compiler</artifactId>
             <version>4.0.7</version>
         </dependency>
-
 
         <!-- Logging/Testing -->
         <dependency>
