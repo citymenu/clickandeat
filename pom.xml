@@ -101,13 +101,9 @@
         <!-- Drools -->
         <dependency>
             <groupId>org.drools</groupId>
-            <artifactId>drools-core</artifactId>
+            <artifactId>drools</artifactId>
             <version>4.0.7</version>
-        </dependency>
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools-compiler</artifactId>
-            <version>4.0.7</version>
+            <type>pom</type>
         </dependency>
 
         <!-- Logging/Testing -->
