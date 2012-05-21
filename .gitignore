@@ -1,6 +1,7 @@
 .idea/
 .idea/**/*
 target/
+target/*.jar
 target/**/*
 *.ipr
 *.iml
