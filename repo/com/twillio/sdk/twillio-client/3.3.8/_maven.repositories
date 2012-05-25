@@ -1,7 +1,0 @@
-#NOTE: This is an internal implementation file, its format can be changed without prior notice.
-#Fri May 25 22:35:08 BST 2012
-twilio-client-3.3.8.jar>=
-twilio-client-3.3.8-jar-with-dependencies.jar>=
-twilio-client-3.3.8.pom>=
-twilio-client-3.3.8-sources.jar>=
-twilio-client-3.3.8-javadoc.jar>=
