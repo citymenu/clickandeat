@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="addresses")
-public class Address extends BaseObject {
+public class Address extends PersistentObject {
 
     private String address1;
 

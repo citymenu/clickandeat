@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="restaurants")
-public class Restaurant extends BaseObject {
+public class Restaurant extends PersistentObject {
 
     @Indexed(unique=true)
     private String restaurantId;
@@ -35,6 +35,8 @@ public class Restaurant extends BaseObject {
     
     private OpeningTimes openingTimes;
 
+    private String imageId;
+    
     @Override
     public String toString() {
         return "Restaurant{" +
@@ -54,48 +56,26 @@ public class Restaurant extends BaseObject {
 
 
     /**
-     * @param date
-     * @param time
-     * @return
-     */
-
-    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
-        return isOpen(date,time)[0];
-    }
-
-
-    /**
-     * @param date
-     * @param time
-     * @return
-     */
-
-    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
-        return isOpen(date,time)[1];
-    }
-    
-    
-    /**
      * Returns true if this restaurant is currently open based on the given date and time
      * @param date
      * @param time
      * @return
      */
     
-    public boolean[] isOpen(LocalDate date, LocalTime time) {
+    public RestaurantOpenStatus isOpen(LocalDate date, LocalTime time) {
         
         Assert.notNull(date, "date must not be null");
         Assert.notNull(time, "time must not be null");
 
         if( openingTimes == null ) {
-            return new boolean[]{false,false};
+            return RestaurantOpenStatus.CLOSED;
         }
 
         // Check if the restaurant is closed on this date
         if( openingTimes.getClosedDates() != null ) {
             for( LocalDate closedDate: openingTimes.getClosedDates()) {
                 if( closedDate.equals(date)) {
-                    return new boolean[]{false,false};
+                    return RestaurantOpenStatus.CLOSED;
                 }
             }
         }
@@ -107,12 +87,20 @@ public class Restaurant extends BaseObject {
                     boolean[] isOpen = new boolean[2];
                     isOpen[0] = !time.isBefore(openingTime.getCollectionOpeningTime()) && !time.isAfter(openingTime.getCollectionClosingTime());
                     isOpen[1] = !time.isBefore(openingTime.getDeliveryOpeningTime()) && !time.isAfter(openingTime.getDeliveryClosingTime());
-                    return isOpen;
+                    if( isOpen[0] && isOpen[1]) {
+                        return RestaurantOpenStatus.FULLY_OPEN;
+                    }
+                    else if( isOpen[0]) {
+                        return RestaurantOpenStatus.OPEN_FOR_COLLECTION;
+                    }
+                    else {
+                        return RestaurantOpenStatus.CLOSED;
+                    }
                 }
             }
         }
 
-        return new boolean[]{false,false};
+        return RestaurantOpenStatus.CLOSED;
     }
     
     
@@ -205,5 +193,13 @@ public class Restaurant extends BaseObject {
 
     public void setOpeningTimes(OpeningTimes openingTimes) {
         this.openingTimes = openingTimes;
+    }
+
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
     }
 }

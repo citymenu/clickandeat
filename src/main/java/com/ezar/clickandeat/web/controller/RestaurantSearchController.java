@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.RestaurantOpenStatus;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
@@ -33,11 +34,34 @@ public class RestaurantSearchController {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants serving location: " + location);
         }
-        
+
         Map<String,Object> model = new HashMap<String,Object>();
-        List<Restaurant> restaurants = restaurantRepository.search(location, cuisine, sort, dir ); 
-        model.put("results",restaurants);
-        model.put("count",restaurants.size());
+
+        List<Restaurant> fullyOpen = new ArrayList<Restaurant>();
+        List<Restaurant> openForCollection = new ArrayList<Restaurant>();
+        List<Restaurant> closed = new ArrayList<Restaurant>();
+
+        LocalDate today = new LocalDate();
+        LocalTime now = new LocalTime();
+        
+        for( Restaurant restaurant: restaurantRepository.search(location, cuisine, sort, dir )) {
+
+            // Confirm if the restaurant is open for delivery or collection
+            RestaurantOpenStatus isOpen = restaurant.isOpen(today,now);
+            if( isOpen.equals(RestaurantOpenStatus.FULLY_OPEN)) {
+                fullyOpen.add(restaurant);
+            }
+            else if( isOpen.equals(RestaurantOpenStatus.OPEN_FOR_COLLECTION)) {
+                openForCollection.add(restaurant);
+            }
+            else {
+                closed.add(restaurant);
+            }
+        }
+
+        model.put("fullyOpen",fullyOpen);
+        model.put("openForCollection",openForCollection);
+        model.put("closed",closed);
         
         return new ModelAndView("results",model);
     }

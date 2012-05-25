@@ -3,7 +3,7 @@ package com.ezar.clickandeat.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="persons")
-public class Person extends BaseObject {
+public class Person extends PersistentObject {
 
     private String firstName;
 

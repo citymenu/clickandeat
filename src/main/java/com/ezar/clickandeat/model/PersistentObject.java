@@ -3,7 +3,7 @@ package com.ezar.clickandeat.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="data")
-public class BaseObject {
+public class PersistentObject {
 
 	protected String id;
 

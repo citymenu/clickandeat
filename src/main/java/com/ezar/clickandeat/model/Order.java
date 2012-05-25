@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "orders")
-public class Order extends BaseObject {
+public class Order extends PersistentObject {
     
     private String orderId;
 

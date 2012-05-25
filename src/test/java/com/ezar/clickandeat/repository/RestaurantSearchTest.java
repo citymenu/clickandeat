@@ -82,7 +82,7 @@ public class RestaurantSearchTest {
             List<Restaurant> restaurants = repository.search("E18", "Mexican", "name", "asc");
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
             Restaurant restaurant = restaurants.get(0);
-            Assert.assertTrue("Restaurant should be closed for delivery", !restaurant.isOpenForDelivery(new LocalDate(), new LocalTime()));
+            Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new LocalDate(), new LocalTime()) );
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);

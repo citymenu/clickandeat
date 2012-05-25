@@ -1,10 +1,34 @@
 package com.ezar.clickandeat.model;
 
-public interface MenuItem {
+public class MenuItem {
+
+    private String name;
     
-    String getName();
+    private String description;
     
-    String getDescription();
-    
-    Double getPrice();
+    private String price;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
 }

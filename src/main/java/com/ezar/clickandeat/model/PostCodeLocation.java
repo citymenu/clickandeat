@@ -3,7 +3,7 @@ package com.ezar.clickandeat.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="postCodeLocations")
-public class PostCodeLocation extends BaseObject {
+public class PostCodeLocation extends PersistentObject {
     
     private String postCode;
 

@@ -7,6 +7,10 @@
 
 <body>
 <h1>Current user: <%= request.getRemoteUser() %></h1>
-<p>Results: ${count}</p>
+<p>Results:</p>
+<c:forEach var="restaurant" items="${results}">
+    <div>${restaurant.name}</div>
+</c:forEach>
+
 </body>
 </html>

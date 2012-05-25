@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection="menus")
-public class Menu extends BaseObject {
+public class Menu extends PersistentObject {
 
     String name;
 
