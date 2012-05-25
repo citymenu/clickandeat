@@ -91,6 +91,13 @@
             <version>1.5.2</version>
         </dependency>
 
+        <!-- Twillio -->
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio-client</artifactId>
+            <version>3.3.8</version>
+        </dependency>
+
         <!-- JSON -->
         <dependency>
             <groupId>net.sf.flexjson</groupId>
@@ -225,6 +232,11 @@
             <id>atlassian</id>
             <name>Atlassian repository</name>
             <url>https://repository.atlassian.com/maven2</url>
+        </repository>
+        <repository>
+            <id>project.local</id>
+            <name>project</name>
+            <url>file:${project.basedir}/repo</url>
         </repository>
     </repositories>
 
