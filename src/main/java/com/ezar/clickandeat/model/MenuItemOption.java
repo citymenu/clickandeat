@@ -1,24 +1,12 @@
 package com.ezar.clickandeat.model;
 
-import java.util.List;
-
-public class MenuItem {
-
+public class MenuItemOption {
+    
     private String name;
     
     private String description;
     
     private Double price;
-
-    private List<MenuItemSubType> subTypes;
-
-    private List<MenuItemOption> options;
-    
-    private boolean allowMultipleOptions;
-    
-    private Double optionPrice;
-
-    private MenuItemRestriction restriction;
 
     public String getName() {
         return name;
