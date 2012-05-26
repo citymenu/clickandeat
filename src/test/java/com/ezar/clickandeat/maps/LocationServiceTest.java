@@ -1,6 +1,5 @@
-package com.ezar.clickandeat.repository;
+package com.ezar.clickandeat.maps;
 
-import com.ezar.clickandeat.maps.LocationService;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
