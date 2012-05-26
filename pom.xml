@@ -98,6 +98,13 @@
             <version>3.3.8</version>
         </dependency>
 
+        <!-- Authorize.net -->
+        <dependency>
+            <groupId>net.authorize</groupId>
+            <artifactId>anet-java-sdk</artifactId>
+            <version>1.4.6</version>
+        </dependency>
+
         <!-- JSON -->
         <dependency>
             <groupId>net.sf.flexjson</groupId>
