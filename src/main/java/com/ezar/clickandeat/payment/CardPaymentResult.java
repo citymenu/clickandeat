@@ -1,6 +1,6 @@
 package com.ezar.clickandeat.payment;
 
-public class PaymentResult {
+public class CardPaymentResult {
     
     private String transactionId;
 
@@ -144,7 +144,7 @@ public class PaymentResult {
 
     @Override
     public String toString() {
-        return "PaymentResult{" +
+        return "CardPaymentResult{" +
                 "transactionId='" + transactionId + '\'' +
                 ", authorizationCode='" + authorizationCode + '\'' +
                 ", approved=" + approved +

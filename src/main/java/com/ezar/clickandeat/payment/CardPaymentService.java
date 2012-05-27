@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Component(value = "paymentService")
-public class PaymentService implements InitializingBean {
+@Component(value = "cardPaymentService")
+public class CardPaymentService implements InitializingBean {
 
-    private static final Logger LOGGER = Logger.getLogger(PaymentService.class);
+    private static final Logger LOGGER = Logger.getLogger(CardPaymentService.class);
 
     private String apiLoginId;
     
@@ -40,7 +40,7 @@ public class PaymentService implements InitializingBean {
      * @return
      */
 
-    public PaymentResult authorizeAndCapturePayment(CreditCard creditCard, Double amount ) {
+    public CardPaymentResult authorizeAndCapturePayment(Customer customer, CreditCard creditCard, Double amount ) {
         
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Authorizing and capturing payment " + amount + " on card [" + creditCard + "]");
@@ -48,6 +48,7 @@ public class PaymentService implements InitializingBean {
 
         // Create transaction
         Transaction transaction = merchant.createAIMTransaction(TransactionType.AUTH_CAPTURE, new BigDecimal(amount));
+        transaction.setCustomer(customer);
         transaction.setCreditCard(creditCard);
 
         // Get processing result
@@ -64,7 +65,7 @@ public class PaymentService implements InitializingBean {
      * @return
      */
 
-    public PaymentResult voidTransaction(String transactionId, Double amount ) {
+    public CardPaymentResult voidTransaction(String transactionId, Double amount ) {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Voiding transaction " + transactionId);
         }
@@ -85,38 +86,38 @@ public class PaymentService implements InitializingBean {
      * @param result
      * @return
      */
-    private PaymentResult buildPaymentResult(Result<Transaction> result) {
+    private CardPaymentResult buildPaymentResult(Result<Transaction> result) {
         
-        PaymentResult paymentResult = new PaymentResult();
+        CardPaymentResult cardPaymentResult = new CardPaymentResult();
 
         if( result.getTarget() != null ) {
-            paymentResult.setTransactionId(result.getTarget().getTransactionId());
-            paymentResult.setAuthorizationCode(result.getTarget().getAuthorizationCode());
+            cardPaymentResult.setTransactionId(result.getTarget().getTransactionId());
+            cardPaymentResult.setAuthorizationCode(result.getTarget().getAuthorizationCode());
         }
 
-        paymentResult.setApproved(result.isApproved());
-        paymentResult.setDeclined(result.isDeclined());
-        paymentResult.setError(result.isError());
-        paymentResult.setReview(result.isReview());
-        paymentResult.setResponseText(result.getResponseText());
+        cardPaymentResult.setApproved(result.isApproved());
+        cardPaymentResult.setDeclined(result.isDeclined());
+        cardPaymentResult.setError(result.isError());
+        cardPaymentResult.setReview(result.isReview());
+        cardPaymentResult.setResponseText(result.getResponseText());
 
         if( result.getResponseCode() != null ) {
-            paymentResult.setResponseCode(result.getResponseCode().getCode());
-            paymentResult.setResponseDescription(result.getResponseCode().getDescription());
+            cardPaymentResult.setResponseCode(result.getResponseCode().getCode());
+            cardPaymentResult.setResponseDescription(result.getResponseCode().getDescription());
         }
         
         if( result.getReasonResponseCode() != null ) {
-            paymentResult.setReasonResponseCode(result.getReasonResponseCode().getResponseReasonCode());
-            paymentResult.setReasonResponseText(result.getReasonResponseCode().getReasonText());
+            cardPaymentResult.setReasonResponseCode(result.getReasonResponseCode().getResponseReasonCode());
+            cardPaymentResult.setReasonResponseText(result.getReasonResponseCode().getReasonText());
 
             if( result.getReasonResponseCode().getResponseCode() != null ) {
-                paymentResult.setReasonResponseNotes(result.getReasonResponseCode().getNotes());
-                paymentResult.setReasonResponseResponseCode(result.getReasonResponseCode().getResponseReasonCode());
-                paymentResult.setReasonResponseResponseDescription(result.getReasonResponseCode().getReasonText());
+                cardPaymentResult.setReasonResponseNotes(result.getReasonResponseCode().getNotes());
+                cardPaymentResult.setReasonResponseResponseCode(result.getReasonResponseCode().getResponseReasonCode());
+                cardPaymentResult.setReasonResponseResponseDescription(result.getReasonResponseCode().getReasonText());
             }
         }
 
-        return paymentResult;
+        return cardPaymentResult;
     }
     
     
