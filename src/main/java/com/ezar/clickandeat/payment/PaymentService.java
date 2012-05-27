@@ -39,30 +39,7 @@ public class PaymentService implements InitializingBean {
      * @param amount
      * @return
      */
-    public PaymentResult authorizePayment(CreditCard creditCard, Double amount) {
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Authorizing payment " + amount + " on card [" + creditCard + "]");
-        }
-
-        // Create transaction
-        Transaction transaction = merchant.createAIMTransaction(TransactionType.AUTH_ONLY, new BigDecimal(amount));
-        transaction.setCreditCard(creditCard);
-
-        // Get processing result
-        Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
-
-        // Convert to payment result
-        return buildPaymentResult(result);
-    }
-
-
-    /**
-     * @param creditCard
-     * @param amount
-     * @return
-
-     */
     public PaymentResult authorizeAndCapturePayment(CreditCard creditCard, Double amount ) {
         
         if( LOGGER.isDebugEnabled()) {
@@ -76,30 +53,6 @@ public class PaymentService implements InitializingBean {
         // Get processing result
         Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
         
-        // Convert to payment result
-        return buildPaymentResult(result);
-    }
-
-
-    /**
-     * @param transactionId
-     * @param amount
-     * @return
-     */
-
-    public PaymentResult captureAuthorizedTransaction(String transactionId, Double amount) {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Capturing authorized payment on transaction id " + transactionId);
-        }
-
-        // Create transaction
-        Transaction transaction = merchant.createAIMTransaction(TransactionType.PRIOR_AUTH_CAPTURE, new BigDecimal(amount));
-        transaction.setTransactionId(transactionId);
-
-        // Get processing result
-        Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
-
         // Convert to payment result
         return buildPaymentResult(result);
     }

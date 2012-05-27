@@ -3,7 +3,6 @@ package com.ezar.clickandeat.payment;
 import net.authorize.data.creditcard.CreditCard;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,38 +31,15 @@ public class PaymentServiceTest {
 
     }
 
-    
-    @Test
-    public void testAuthorizeThenCapturePayment() throws Exception {
-
-        CreditCard creditCard = buildCreditCard();
-        Double amount = 75d;
-
-        // Authorize payment
-        PaymentResult result = paymentService.authorizePayment(creditCard, amount);
-        LOGGER.info(result);
-        Assert.assertTrue("Payment should be approved", result.isApproved());
-        
-        String transactionId = result.getTransactionId();
-        LOGGER.info("Got transaction id: " + transactionId);
-        Assert.assertTrue("Transaction id should not be null", transactionId != null );
-
-        // Capture payment
-        PaymentResult captureResult = paymentService.captureAuthorizedTransaction(transactionId,amount);
-        LOGGER.info(captureResult);
-        Assert.assertTrue("Payment should be approved", captureResult.isApproved());
-
-    }
-
 
     @Test
-    public void testAuthorizeThenVoidTransaction() throws Exception {
+    public void testAuthorizeAndCaptureThenVoidTransaction() throws Exception {
 
         CreditCard creditCard = buildCreditCard();
         Double amount = 5d;
 
         // Authorize payment
-        PaymentResult result = paymentService.authorizePayment(creditCard, amount);
+        PaymentResult result = paymentService.authorizeAndCapturePayment(creditCard, amount);
         LOGGER.info(result);
         Assert.assertTrue("Payment should be approved", result.isApproved());
 
