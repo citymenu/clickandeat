@@ -50,6 +50,7 @@ public class CardPaymentService implements InitializingBean {
         Transaction transaction = merchant.createAIMTransaction(TransactionType.AUTH_CAPTURE, new BigDecimal(amount));
         transaction.setCustomer(customer);
         transaction.setCreditCard(creditCard);
+        transaction.setCurrencyCode(currencyCode);
 
         // Get processing result
         Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
@@ -73,6 +74,7 @@ public class CardPaymentService implements InitializingBean {
         // Create transaction
         Transaction transaction = merchant.createAIMTransaction(TransactionType.VOID, new BigDecimal(amount));
         transaction.setTransactionId(transactionId);
+        transaction.setCurrencyCode(currencyCode);
 
         // Get processing result
         Result<Transaction> result = (Result<Transaction>)merchant.postTransaction(transaction);
