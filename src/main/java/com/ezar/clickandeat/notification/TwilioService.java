@@ -53,11 +53,11 @@ public class TwilioService {
             callParams.put("To", phoneNumber);
             callParams.put("From", callerId);
             callParams.put("Url", url);
+            callParams.put("Method", "GET");
 
             // Add the callback urls
             //callParams.put("FallbackUrl");
             //callParams.put("StatusCallback");
-
 
             // Place the call
             Call call = callFactory.create(callParams);

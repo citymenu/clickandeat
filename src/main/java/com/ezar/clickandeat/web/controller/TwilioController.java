@@ -29,7 +29,7 @@ public class TwilioController {
         final HttpHeaders headers = new HttpHeaders();
         final byte[] bytes = xml.getBytes("utf-8");
         headers.setContentType(MediaType.TEXT_XML);
-        return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.CREATED);
+        return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
 
     }
 
