@@ -67,10 +67,8 @@ public class TwilioService {
     
             // Add the callback urls
             callParams.put("FallbackUrl", fallbackUrl);
-            callParams.put("FallbackMethod", "GET");
             callParams.put("StatusCallback", statusCallbackUrl);
-            callParams.put("StatusCallbackMethod", "GET");
-    
+
             // Place the call
             Call call = callFactory.create(callParams);
             callSid = call.getSid();

@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class TwilioController {
@@ -41,7 +38,8 @@ public class TwilioController {
 
 
     @ResponseBody
-    @RequestMapping(value="/twilioCallback.html", method = RequestMethod.GET )
+    @RequestMapping(value="/twilioCallback.html", method = RequestMethod.POST )
+    @ResponseStatus( HttpStatus.OK )
     public void callback(@RequestParam(value = "CallSid", required = false) String callSid, @RequestParam(value = "Digits", required = false) String digits ) {
 
         if( LOGGER.isDebugEnabled()) {
@@ -54,7 +52,8 @@ public class TwilioController {
 
 
     @ResponseBody
-    @RequestMapping(value="/twilioError.html", method = RequestMethod.GET )
+    @RequestMapping(value="/twilioError.html", method = RequestMethod.POST )
+    @ResponseStatus( HttpStatus.OK )
     public void error(@RequestParam(value = "CallSid", required = false) String callSid ) {
 
         if( LOGGER.isDebugEnabled()) {
