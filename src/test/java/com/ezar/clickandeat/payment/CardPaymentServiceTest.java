@@ -61,6 +61,7 @@ public class CardPaymentServiceTest {
         creditCard.setCreditCardNumber("4012888888881881");
         creditCard.setExpirationMonth("10");
         creditCard.setExpirationYear("2014");
+        creditCard.setCardCode("333");
         return creditCard;
     }
 

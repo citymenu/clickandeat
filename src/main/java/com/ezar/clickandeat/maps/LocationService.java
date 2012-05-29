@@ -105,6 +105,7 @@ public class LocationService {
         return DIVISOR * c;
     }
 
+
     @Required
     @Value(value="${location.region}")
     public void setRegion(String region) {
