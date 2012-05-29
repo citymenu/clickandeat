@@ -40,8 +40,9 @@ public class TwilioController {
     }
 
 
-    @RequestMapping(value="/twilioCallback.html", method = RequestMethod.POST )
-    public void callback(@RequestParam(value = "CallSid", required = true) String callSid, @RequestParam(value = "Digits", required = false) String digits ) {
+    @ResponseBody
+    @RequestMapping(value="/twilioCallback.html", method = RequestMethod.GET )
+    public void callback(@RequestParam(value = "CallSid", required = false) String callSid, @RequestParam(value = "Digits", required = false) String digits ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received callback from twilio for callSid: " + callSid);
@@ -52,8 +53,9 @@ public class TwilioController {
     }
 
 
-    @RequestMapping(value="/twilioError.html", method = RequestMethod.POST )
-    public void error(@RequestParam(value = "CallSid", required = true) String callSid ) {
+    @ResponseBody
+    @RequestMapping(value="/twilioError.html", method = RequestMethod.GET )
+    public void error(@RequestParam(value = "CallSid", required = false) String callSid ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received error from twilio for callSid: " + callSid);

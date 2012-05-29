@@ -67,7 +67,9 @@ public class TwilioService {
     
             // Add the callback urls
             callParams.put("FallbackUrl", fallbackUrl);
+            callParams.put("FallbackMethod", "GET");
             callParams.put("StatusCallback", statusCallbackUrl);
+            callParams.put("StatusCallbackMethod", "GET");
     
             // Place the call
             Call call = callFactory.create(callParams);
@@ -102,11 +104,12 @@ public class TwilioService {
      */
 
     public void onResult(String callSid, String digits) {
-        
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received status callback on callSid: " + callSid);
+
+        if( callSid == null ) {
+            LOGGER.error("Null callSid passed");
+            return;
         }
-        
+
         TwilioCallback callback = callbacks.get(callSid);
         if( callback == null ) {
             LOGGER.error("No callback found for callSid: " + callSid);
@@ -124,8 +127,9 @@ public class TwilioService {
 
     public void onError(String callSid, Exception ex ) {
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received exception for callSid: " + callSid);
+        if( callSid == null ) {
+            LOGGER.error("Null callSid passed");
+            return;
         }
 
         TwilioCallback callback = callbacks.get(callSid);
