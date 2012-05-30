@@ -11,7 +11,7 @@
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/i18n/jquery.ui.datepicker-${locale}.js"></script>
 	<decorator:head/>
-    <title><decorator:title default="Click and Eat"/></title>
+    <title><decorator:title/></title>
 </head>
 <body>
 <decorator:body/>

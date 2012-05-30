@@ -23,11 +23,24 @@ public class PageController {
         return "login";
     }
 
+
     @RequestMapping(value="/secure/register.html", method = RequestMethod.GET)
     public ModelAndView register() {
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("user",new User());
         return new ModelAndView("register",map);
     }
-    
+
+
+    @RequestMapping(value="/admin/dashboard.html", method = RequestMethod.GET)
+    public String dashboard() {
+        return "admin/dashboard";
+    }
+
+
+    @RequestMapping(value="/admin/restaurants.html", method = RequestMethod.GET)
+    public String restaurants() {
+        return "admin/restaurants";
+    }
+
 }
