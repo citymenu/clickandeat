@@ -84,6 +84,23 @@
     <!-- Proxy mongo repositories -->
     <mongo:repositories base-package="com.ezar.clickandeat.repository" />
 
+    <!-- Load the REDISTOGO HQ url -->
+    <bean class="java.net.URI" id="redisUrl">
+        <constructor-arg value="${REDISTOGO_URL}"/>
+    </bean>
+
+    <!-- Jedis connection factory -->
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="#{@redisUrl.getHost()}"/>
+        <property name="port" value="#{@redisUrl.getPort()}"/>
+        <property name="password" value="#{@redisUrl.getUserInfo().split(':')[1]}"/>
+    </bean>
+
+    <!-- Redis template -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
+    </bean>
+
   	<!--  Quartz Scheduler -->
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation" value="classpath:quartz.properties"/>
