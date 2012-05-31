@@ -35,6 +35,7 @@ public class Main {
 		context.setDescriptor("src/main/webapp/WEB-INF/web.xml");
 		context.setResourceBase("src/main/webapp");
 		context.setParentLoaderPriority(true);
+        context.setDistributable(true);
 		
 		// Configure mongo session manager
 		MongoTemplate mongoTemplate = getMongoTemplate(props);
@@ -42,11 +43,15 @@ public class Main {
 		mongoSessionIdManager.setWorkerName("sessionManager");
 		MongoSessionManager mongoSessionManager = new MongoSessionManager();
 		mongoSessionManager.setSessionIdManager(mongoSessionIdManager);
+        mongoSessionManager.setSaveAllAttributes(true);
+        mongoSessionManager.setSavePeriod(-2); // Store attributes on login
 		SessionHandler sessionHandler = new SessionHandler();
 		sessionHandler.setSessionManager(mongoSessionManager);
 		context.setSessionHandler(sessionHandler);
 		server.setHandler(context);
-		
+
+
+
 		// Start the server
 		LOGGER.info("Jetty server starting");
 		server.start();

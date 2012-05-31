@@ -32,7 +32,9 @@ public class Restaurant extends PersistentObject {
     private List<Menu> menus = new ArrayList<Menu>();
 
     private DeliveryOptions deliveryOptions;
-    
+
+    private NotificationOptions notificationOptions;
+
     private OpeningTimes openingTimes;
 
     private String imageId;
@@ -193,6 +195,14 @@ public class Restaurant extends PersistentObject {
 
     public void setOpeningTimes(OpeningTimes openingTimes) {
         this.openingTimes = openingTimes;
+    }
+
+    public NotificationOptions getNotificationOptions() {
+        return notificationOptions;
+    }
+
+    public void setNotificationOptions(NotificationOptions notificationOptions) {
+        this.notificationOptions = notificationOptions;
     }
 
     public String getImageId() {

@@ -5,20 +5,73 @@ import java.util.List;
 
 public class DeliveryOptions {
 
-    private List<DeliveryOption> deliveryOptions = new ArrayList<DeliveryOption>();
+    private String summary;
 
-    @Override
-    public String toString() {
-        return "DeliveryOptions{" +
-                "deliveryOptions=" + deliveryOptions +
-                '}';
+    private Double minimumOrderForFreeDelivery;
+
+    private Double deliveryCharge;
+
+    private Double collectionDiscount;
+    
+    private Double minimumOrderForCollectionDiscount;
+
+    private Double deliveryRadiusInKilometres;
+
+    private List<String> areasDeliveredTo = new ArrayList<String>();
+
+    public String getSummary() {
+        return summary;
     }
 
-    public List<DeliveryOption> getDeliveryOptions() {
-        return deliveryOptions;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
-    public void setDeliveryOptions(List<DeliveryOption> deliveryOptions) {
-        this.deliveryOptions = deliveryOptions;
+    public Double getMinimumOrderForFreeDelivery() {
+        return minimumOrderForFreeDelivery;
+    }
+
+    public void setMinimumOrderForFreeDelivery(Double minimumOrderForFreeDelivery) {
+        this.minimumOrderForFreeDelivery = minimumOrderForFreeDelivery;
+    }
+
+    public Double getDeliveryCharge() {
+        return deliveryCharge;
+    }
+
+    public void setDeliveryCharge(Double deliveryCharge) {
+        this.deliveryCharge = deliveryCharge;
+    }
+
+    public Double getCollectionDiscount() {
+        return collectionDiscount;
+    }
+
+    public void setCollectionDiscount(Double collectionDiscount) {
+        this.collectionDiscount = collectionDiscount;
+    }
+
+    public Double getMinimumOrderForCollectionDiscount() {
+        return minimumOrderForCollectionDiscount;
+    }
+
+    public void setMinimumOrderForCollectionDiscount(Double minimumOrderForCollectionDiscount) {
+        this.minimumOrderForCollectionDiscount = minimumOrderForCollectionDiscount;
+    }
+
+    public Double getDeliveryRadiusInKilometres() {
+        return deliveryRadiusInKilometres;
+    }
+
+    public void setDeliveryRadiusInKilometres(Double deliveryRadiusInKilometres) {
+        this.deliveryRadiusInKilometres = deliveryRadiusInKilometres;
+    }
+
+    public List<String> getAreasDeliveredTo() {
+        return areasDeliveredTo;
+    }
+
+    public void setAreasDeliveredTo(List<String> areasDeliveredTo) {
+        this.areasDeliveredTo = areasDeliveredTo;
     }
 }

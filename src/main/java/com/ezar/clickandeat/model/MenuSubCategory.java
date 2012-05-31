@@ -3,26 +3,18 @@ package com.ezar.clickandeat.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuCategory {
-    
+public class MenuSubCategory {
+
     String name;
-    
-    String type;
-    
+
     String summary;
 
     String iconClass;
 
     List<MenuItem> menuItems;
-    
-    List<MenuSubCategory> subCategories;
-    
-    List<String> itemTypes;
 
-    public MenuCategory() {
+    public MenuSubCategory() {
         this.menuItems = new ArrayList<MenuItem>();
-        this.subCategories = new ArrayList<MenuSubCategory>();
-        this.itemTypes = new ArrayList<String>();
     }
 
     public String getName() {
@@ -31,14 +23,6 @@ public class MenuCategory {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getSummary() {
@@ -63,13 +47,5 @@ public class MenuCategory {
 
     public void setMenuItems(List<MenuItem> menuItems) {
         this.menuItems = menuItems;
-    }
-
-    public List<String> getItemTypes() {
-        return itemTypes;
-    }
-
-    public void setItemTypes(List<String> itemTypes) {
-        this.itemTypes = itemTypes;
     }
 }

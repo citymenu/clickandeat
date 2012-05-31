@@ -14,9 +14,10 @@ public class Menu extends PersistentObject {
 
     boolean delivery;
 
-    List<MenuCategory> menuCategories = new ArrayList<MenuCategory>();
+    List<MenuCategory> menuCategories;
 
     public Menu() {
+        this.menuCategories = new ArrayList<MenuCategory>();
     }
 
     public String getName() {

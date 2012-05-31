@@ -7,6 +7,8 @@ import java.util.List;
 
 public class OpeningTimes {
     
+    private String summary;
+    
     private List<OpeningTime> openingTimes = new ArrayList<OpeningTime>();
     
     private List<LocalDate> closedDates = new ArrayList<LocalDate>();
@@ -17,6 +19,14 @@ public class OpeningTimes {
                 "openingTimes=" + openingTimes +
                 ", closedDates=" + closedDates +
                 '}';
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public List<OpeningTime> getOpeningTimes() {

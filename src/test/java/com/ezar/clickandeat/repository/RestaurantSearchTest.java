@@ -48,11 +48,9 @@ public class RestaurantSearchTest {
         restaurant.getCuisines().add("Chinese");
         
         DeliveryOptions deliveryOptions = new DeliveryOptions();
-        DeliveryOption deliveryOption = new DeliveryOption();
-        deliveryOption.setDeliveryRadius(3d);
-        deliveryOption.getAreasDeliveredTo().add("E17");
-        deliveryOption.getAreasDeliveredTo().add("E6");
-        deliveryOptions.getDeliveryOptions().add(deliveryOption);
+        deliveryOptions.setDeliveryRadiusInKilometres(3d) ;
+        deliveryOptions.getAreasDeliveredTo().add("E17");
+        deliveryOptions.getAreasDeliveredTo().add("E6");
         restaurant.setDeliveryOptions(deliveryOptions);
 
         repository.saveRestaurant(restaurant);

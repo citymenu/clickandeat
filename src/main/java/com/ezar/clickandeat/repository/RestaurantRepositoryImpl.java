@@ -7,7 +7,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
@@ -56,6 +55,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return restaurant;
     }
 
+
+    public RestaurantRepositoryImpl() {
+        super();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 
     @Override
     public List<Restaurant> search(String location, String cuisine, String sort, String dir ) {
@@ -108,15 +111,14 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();
         for( Restaurant restaurant: restaurants ) {
             double[] restaurantLocation = restaurant.getAddress().getLocation();
-            for( DeliveryOption deliveryOption: restaurant.getDeliveryOptions().getDeliveryOptions()) {
-                if( deliveryOption.getDeliveryRadius() != null ) {
-                    double distance = locationService.getDistance(geoLocation,restaurantLocation);
-                    if( distance <= deliveryOption.getDeliveryRadius()) {
-                        availableRestaurants.add(restaurant);
-                        break;
-                    }
+            DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
+            if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
+                double distance = locationService.getDistance(geoLocation,restaurantLocation);
+                if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
+                    availableRestaurants.add(restaurant);
+                    break;
                 }
-                for( String deliveryLocation: deliveryOption.getAreasDeliveredTo()) {
+                for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
                     if(deliveryLocation.toUpperCase().replace(" ", "").startsWith(lookupLocation)) {
                         availableRestaurants.add(restaurant);
                         break;

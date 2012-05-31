@@ -1,31 +1,50 @@
 package com.ezar.clickandeat.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuItem {
 
-    private String name;
+    private int number;
+    
+    private String title;
+    
+    private String subtitle;
     
     private String description;
     
-    private Double price;
+    private String iconClass;
 
-    private List<MenuItemSubType> subTypes;
+    private Double cost;
 
-    private List<MenuItemOption> options;
-    
-    private boolean allowMultipleOptions;
-    
-    private Double optionPrice;
+    private List<MenuItemTypeCost> menuItemTypeCosts;
 
-    private MenuItemRestriction restriction;
-
-    public String getName() {
-        return name;
+    public MenuItem() {
+        this.menuItemTypeCosts = new ArrayList<MenuItemTypeCost>();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
     }
 
     public String getDescription() {
@@ -36,11 +55,27 @@ public class MenuItem {
         this.description = description;
     }
 
-    public Double getPrice() {
-        return price;
+    public String getIconClass() {
+        return iconClass;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setIconClass(String iconClass) {
+        this.iconClass = iconClass;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public List<MenuItemTypeCost> getMenuItemTypeCosts() {
+        return menuItemTypeCosts;
+    }
+
+    public void setMenuItemTypeCosts(List<MenuItemTypeCost> menuItemTypeCosts) {
+        this.menuItemTypeCosts = menuItemTypeCosts;
     }
 }

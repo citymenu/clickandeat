@@ -6,14 +6,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller 
 public class PageController {
 	
+    private int counter = 0;
+    
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
-	public String home() {
+	public String home(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
 		return "home";
 	}
 
