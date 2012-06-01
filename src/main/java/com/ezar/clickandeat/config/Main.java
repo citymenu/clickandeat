@@ -36,7 +36,8 @@ public class Main {
 		context.setResourceBase("src/main/webapp");
 		context.setParentLoaderPriority(true);
         context.setDistributable(true);
-		
+        context.setShutdown(true);
+
 		// Configure mongo session manager
 		MongoTemplate mongoTemplate = getMongoTemplate(props);
 		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
@@ -49,8 +50,8 @@ public class Main {
 		sessionHandler.setSessionManager(mongoSessionManager);
 		context.setSessionHandler(sessionHandler);
 		server.setHandler(context);
-
-
+        server.setStopAtShutdown(true);
+        server.setGracefulShutdown(5000);
 
 		// Start the server
 		LOGGER.info("Jetty server starting");
