@@ -18,7 +18,6 @@ public class PageController {
     
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
 	public String home(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
 		return "home";
 	}
 

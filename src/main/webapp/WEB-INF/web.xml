@@ -74,7 +74,7 @@
 
     <filter-mapping>
         <filter-name>SecureFilter</filter-name>
-        <url-pattern>/secure/*</url-pattern>
+        <url-pattern>*.html</url-pattern>
     </filter-mapping>
 
 	<session-config>

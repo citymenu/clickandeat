@@ -36,16 +36,20 @@ public class Main {
 		context.setResourceBase("src/main/webapp");
 		context.setParentLoaderPriority(true);
         context.setDistributable(true);
-        context.setShutdown(true);
 
-		// Configure mongo session manager
+		// Configure mongo session id manager
 		MongoTemplate mongoTemplate = getMongoTemplate(props);
 		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
 		mongoSessionIdManager.setWorkerName("sessionManager");
+        mongoSessionIdManager.setPurge(true);
+        mongoSessionIdManager.setPurgeValidAge(24 * 60 * 60 * 1000); // Keep valid sessions for 1 day
+
+        // Configure mongo session manager
 		MongoSessionManager mongoSessionManager = new MongoSessionManager();
 		mongoSessionManager.setSessionIdManager(mongoSessionIdManager);
         mongoSessionManager.setSaveAllAttributes(true);
         mongoSessionManager.setSavePeriod(-2); // Store attributes on login
+
 		SessionHandler sessionHandler = new SessionHandler();
 		sessionHandler.setSessionManager(mongoSessionManager);
 		context.setSessionHandler(sessionHandler);

@@ -30,7 +30,7 @@
     </logger>
 
     <logger name="org.eclipse.jetty">
-        <level value="INFO"/>
+        <level value="DEBUG"/>
     </logger>
 
     <logger name="com.mongodb">
