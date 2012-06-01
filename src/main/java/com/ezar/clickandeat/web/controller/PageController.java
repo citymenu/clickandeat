@@ -29,7 +29,8 @@ public class PageController {
 
 
     @RequestMapping(value="/secure/register.html", method = RequestMethod.GET)
-    public ModelAndView register() {
+    public ModelAndView register(HttpServletRequest request) {
+        request.getSession().setAttribute("TEST","I HAVE SET A PARAM");
         Map<String,Object> map = new HashMap<String, Object>();
         map.put("user",new User());
         return new ModelAndView("register",map);
