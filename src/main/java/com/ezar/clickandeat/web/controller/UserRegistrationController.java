@@ -41,6 +41,9 @@ public class UserRegistrationController {
         }
         else {
 
+            // Add the 'USER' role to this user
+            user.addRole(User.ROLE_USER);
+            
             // Save the user and update the password
             userRepository.saveUser(user);
 

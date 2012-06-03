@@ -1,18 +1,20 @@
 package com.ezar.clickandeat.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
 @Document(collection="users")
 public class User extends PersistentObject implements UserDetails {
 
+    public static final String ROLE_USER = "USER";
+    
 	private static final long serialVersionUID = 1L;
 
     @Indexed(unique=true)
@@ -29,7 +31,10 @@ public class User extends PersistentObject implements UserDetails {
 
     private Address address;
     
+    private Set<String> roles;
+    
 	public User() {
+        roles = new HashSet<String>();
 	}
 
     public String makeSalt() {
@@ -85,7 +90,11 @@ public class User extends PersistentObject implements UserDetails {
     }
 
     public Collection<GrantedAuthority> getAuthorities() {
-        return new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(roles.size());
+        for( String role: roles ) {
+            authorities.add(new GrantedAuthorityImpl(role));
+        }
+        return authorities;
 	}
 
 	public boolean isEnabled() {
@@ -104,4 +113,23 @@ public class User extends PersistentObject implements UserDetails {
 		return true;
 	}
 
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+    
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                "roles=[" + StringUtils.collectionToCommaDelimitedString(roles) + "]" +
+                "}";
+    }
 }
