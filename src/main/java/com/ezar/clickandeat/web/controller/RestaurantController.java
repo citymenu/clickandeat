@@ -11,11 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.data.domain.Page;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +49,26 @@ public class RestaurantController {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/admin/restaurants/create.html", method = RequestMethod.GET )
+    public ModelAndView create() {
+        Map<String,Object> model = new HashMap<String, Object>();
+        Restaurant restaurant = new Restaurant();
+        model.put("restaurant",restaurant);
+        model.put("json",Restaurant.toJSON(restaurant));
+        return new ModelAndView("admin/editRestaurant",model);
+    }
+
+
+    @RequestMapping(value="/admin/restaurants/edit.html", method = RequestMethod.GET )
+    public ModelAndView edit(@RequestParam(value = "restaurantId") String restaurantId) {
+        Map<String,Object> model = new HashMap<String, Object>();
+        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        model.put("restaurant",restaurant);
+        model.put("json",Restaurant.toJSON(restaurant));
+        return new ModelAndView("admin/editRestaurant",model);
     }
 
 

@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import flexjson.JSONDeserializer;
+import flexjson.JSONSerializer;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,6 +13,10 @@ import java.util.List;
 
 @Document(collection="restaurants")
 public class Restaurant extends PersistentObject {
+
+    private static final JSONSerializer SERIALIZER = new JSONSerializer();
+
+    private static final JSONDeserializer<Restaurant> DESERIALIZER = new JSONDeserializer<Restaurant>();
 
     @Indexed(unique=true)
     private String restaurantId;
@@ -38,7 +44,10 @@ public class Restaurant extends PersistentObject {
     private OpeningTimes openingTimes;
 
     private String imageId;
-    
+
+    public Restaurant() {
+    }
+
     @Override
     public String toString() {
         return "Restaurant{" +
@@ -104,11 +113,26 @@ public class Restaurant extends PersistentObject {
 
         return RestaurantOpenStatus.CLOSED;
     }
-    
-    
-    public Restaurant() {
+
+
+    /**
+     * @param restaurant
+     * @return
+     */
+
+    public static String toJSON(Restaurant restaurant) {
+        return SERIALIZER.deepSerialize(restaurant);
     }
 
+    /**
+     * @param json
+     * @return
+     */
+
+    public static Restaurant fromJSON(String json) {
+        return DESERIALIZER.deserialize(json);
+    }
+    
     public String getRestaurantId() {
         return restaurantId;
     }
@@ -212,4 +236,5 @@ public class Restaurant extends PersistentObject {
     public void setImageId(String imageId) {
         this.imageId = imageId;
     }
+    
 }
