@@ -1,4 +1,4 @@
-Ext.define('AD.controller.Restaurants', {
+Ext.define('AD.controller.RestaurantList', {
     extend: 'Ext.app.Controller',
     stores:['Restaurants'],
     models: ['Restaurant'],
@@ -32,6 +32,10 @@ Ext.define('AD.controller.Restaurants', {
 
     refresh: function(button) {
     	reloadListStore('restaurantlist');
+    },
+
+    create: function(button) {
+        location.href = ctx + '/admin/restaurants/create.html';
     },
 
 	onGridRendered: function(grid) {

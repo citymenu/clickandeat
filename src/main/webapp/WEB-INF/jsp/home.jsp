@@ -17,6 +17,10 @@
     <p><a href="${ctx}/secure/register.html"><spring:message code="label.register"/></a></p>
 </c:if>
 
+<div>
+    <p><a href="${ctx}/admin/restaurants.html"><spring:message code="label.restaurants"/></a></p>
+</div>
+
 <c:if test="${pageContext.request.remoteUser != null}">
     <p><a href="${ctx}/j_security_logout"><spring:message code="label.logout"/></a></p>
 </c:if>

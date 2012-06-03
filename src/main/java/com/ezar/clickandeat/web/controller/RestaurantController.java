@@ -64,6 +64,11 @@ public class RestaurantController {
 
     @RequestMapping(value="/admin/restaurants/edit.html", method = RequestMethod.GET )
     public ModelAndView edit(@RequestParam(value = "restaurantId") String restaurantId) {
+        
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Editing restaurant with id [" + restaurantId + "]");
+        }
+        
         Map<String,Object> model = new HashMap<String, Object>();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);

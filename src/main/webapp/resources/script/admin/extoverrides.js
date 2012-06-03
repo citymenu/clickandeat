@@ -1,5 +1,5 @@
 // Default Ext blank image override
-Ext.BLANK_IMAGE_URL = 'resources/images/s.gif';
+Ext.BLANK_IMAGE_URL = ctx + '/resources/images/s.gif';
 
 // Extend Ajax timeout
 Ext.Ajax.timeout = 1000 * 60 * 2;

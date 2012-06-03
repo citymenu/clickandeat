@@ -23,6 +23,8 @@ public class Restaurant extends PersistentObject {
 
     private String name;
 
+    private String description;
+    
     private String email;
 
     private String telephone;
@@ -35,7 +37,7 @@ public class Restaurant extends PersistentObject {
 
     private Address address;
 
-    private List<Menu> menus = new ArrayList<Menu>();
+    private Menu menu;
 
     private DeliveryOptions deliveryOptions;
 
@@ -46,6 +48,7 @@ public class Restaurant extends PersistentObject {
     private String imageId;
 
     public Restaurant() {
+        this.cuisines = new ArrayList<String>();
     }
 
     @Override
@@ -59,7 +62,7 @@ public class Restaurant extends PersistentObject {
                 ", cuisines='" + cuisines + '\'' +
                 ", mainContact=" + mainContact +
                 ", address=" + address +
-                ", menus=" + menus +
+                ", menu=" + menu +
                 ", deliveryOptions=" + deliveryOptions +
                 ", openingTimes=" + openingTimes +
                 '}';
@@ -149,6 +152,14 @@ public class Restaurant extends PersistentObject {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -197,12 +208,12 @@ public class Restaurant extends PersistentObject {
         this.address = address;
     }
 
-    public List<Menu> getMenus() {
-        return menus;
+    public Menu getMenu() {
+        return menu;
     }
 
-    public void setMenus(List<Menu> menus) {
-        this.menus = menus;
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
     public DeliveryOptions getDeliveryOptions() {
