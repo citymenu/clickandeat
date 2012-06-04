@@ -1,5 +1,5 @@
 Ext.define('AD.view.restaurant.Edit' ,{
-    extend:'Ext.form.Panel',
+    extend:'Ext.panel.Panel',
     alias:'widget.restaurantedit',
     layout:'fit',
 
@@ -28,6 +28,8 @@ Ext.define('AD.view.restaurant.Edit' ,{
         frame:false,
         items:[{
             xtype:'restaurantmaindetails'
+        },{
+            xtype:'restaurantdeliverydetails'
         }]
     }]
 

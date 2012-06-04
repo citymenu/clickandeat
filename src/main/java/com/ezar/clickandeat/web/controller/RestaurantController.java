@@ -1,7 +1,10 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.model.Address;
+import com.ezar.clickandeat.model.Person;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import com.ezar.clickandeat.util.CuisineProvider;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class RestaurantController {
@@ -31,6 +36,9 @@ public class RestaurantController {
     @Autowired
     private RestaurantRepository repository;
 
+    @Autowired
+    private CuisineProvider cuisineProvider;
+    
     private final JSONSerializer serializer = new JSONSerializer();
     
     @ResponseBody
@@ -54,9 +62,24 @@ public class RestaurantController {
 
     @RequestMapping(value="/admin/restaurants/create.html", method = RequestMethod.GET )
     public ModelAndView create() {
-        Map<String,Object> model = new HashMap<String, Object>();
+        Map<String,Object> model = getModel();
         Restaurant restaurant = new Restaurant();
-        model.put("restaurant",restaurant);
+        restaurant.setId("DUMMY");
+        restaurant.setName("Test Restaurant");
+        restaurant.getCuisines().add("Italian");
+        restaurant.getCuisines().add("Pizza");
+        
+        Address address = new Address();
+        address.setAddress1("80 Peel Road");
+        address.setPostCode("E18");
+        restaurant.setAddress(address);
+
+        Person mainContact = new Person();
+        mainContact.setFirstName("Joe");
+        mainContact.setLastName("Pugh");
+        restaurant.setMainContact(mainContact);
+        
+        model.put("restaurant", restaurant);
         model.put("json",Restaurant.toJSON(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
@@ -69,7 +92,7 @@ public class RestaurantController {
             LOGGER.debug("Editing restaurant with id [" + restaurantId + "]");
         }
         
-        Map<String,Object> model = new HashMap<String, Object>();
+        Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
         model.put("json",Restaurant.toJSON(restaurant));
@@ -77,4 +100,12 @@ public class RestaurantController {
     }
 
 
+    private Map<String,Object> getModel() {
+        Map<String,Object> model = new HashMap<String, Object>();
+        Set<String> cuisines = cuisineProvider.getCuisineList();
+        String cuisineArrayList = StringUtils.collectionToDelimitedString(cuisines,"','");
+        model.put("cuisinesArray","'" + cuisineArrayList + "'");
+        return model;
+    }
+    
 }

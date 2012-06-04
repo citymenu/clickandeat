@@ -25,13 +25,15 @@ public class Restaurant extends PersistentObject {
 
     private String description;
     
-    private String email;
+    private String contactEmail;
 
-    private String telephone;
+    private String contactTelephone;
+
+    private String contactMobile;
 
     private String website;
 
-    private List<String> cuisines = new ArrayList<String>();
+    private List<String> cuisines;
     
     private Person mainContact;
 
@@ -50,24 +52,6 @@ public class Restaurant extends PersistentObject {
     public Restaurant() {
         this.cuisines = new ArrayList<String>();
     }
-
-    @Override
-    public String toString() {
-        return "Restaurant{" +
-                "restaurantId='" + restaurantId + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", website='" + website + '\'' +
-                ", cuisines='" + cuisines + '\'' +
-                ", mainContact=" + mainContact +
-                ", address=" + address +
-                ", menu=" + menu +
-                ", deliveryOptions=" + deliveryOptions +
-                ", openingTimes=" + openingTimes +
-                '}';
-    }
-
 
     /**
      * Returns true if this restaurant is currently open based on the given date and time
@@ -160,20 +144,28 @@ public class Restaurant extends PersistentObject {
         this.description = description;
     }
 
-    public String getEmail() {
-        return email;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
     }
 
-    public String getTelephone() {
-        return telephone;
+    public String getContactTelephone() {
+        return contactTelephone;
     }
 
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
+    public void setContactTelephone(String contactTelephone) {
+        this.contactTelephone = contactTelephone;
+    }
+
+    public String getContactMobile() {
+        return contactMobile;
+    }
+
+    public void setContactMobile(String contactMobile) {
+        this.contactMobile = contactMobile;
     }
 
     public String getWebsite() {

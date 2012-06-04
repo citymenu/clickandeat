@@ -5,7 +5,9 @@ import org.joda.time.LocalTime;
 public class OpeningTime {
     
     private int dayOfWeek;
-    
+
+    private boolean open;
+
     private LocalTime collectionOpeningTime;
     
     private LocalTime collectionClosingTime;
@@ -20,6 +22,14 @@ public class OpeningTime {
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 
     public LocalTime getCollectionOpeningTime() {

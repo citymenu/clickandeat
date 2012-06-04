@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-	<script type="text/javascript" src="${ctx}/resources/admin/app/listrestaurants.js"></script>
+	<script type="text/javascript" src="${ctx}/resources/admin/app/ListRestaurants.js"></script>
     <title>ClickAndEat - Restaurants</title>
 </head>
 
