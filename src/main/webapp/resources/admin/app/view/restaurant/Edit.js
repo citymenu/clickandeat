@@ -30,6 +30,8 @@ Ext.define('AD.view.restaurant.Edit' ,{
             xtype:'restaurantmaindetails'
         },{
             xtype:'restaurantdeliverydetails'
+        },{
+            xtype:'restaurantmenu'
         }]
     }]
 

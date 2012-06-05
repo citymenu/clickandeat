@@ -8,40 +8,10 @@ import java.util.List;
 @Document(collection="menus")
 public class Menu extends PersistentObject {
 
-    String name;
-
-    boolean collection;
-
-    boolean delivery;
-
     List<MenuCategory> menuCategories;
 
     public Menu() {
         this.menuCategories = new ArrayList<MenuCategory>();
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public boolean isCollection() {
-        return collection;
-    }
-
-    public void setCollection(boolean collection) {
-        this.collection = collection;
-    }
-
-    public boolean isDelivery() {
-        return delivery;
-    }
-
-    public void setDelivery(boolean delivery) {
-        this.delivery = delivery;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public List<MenuCategory> getMenuCategories() {

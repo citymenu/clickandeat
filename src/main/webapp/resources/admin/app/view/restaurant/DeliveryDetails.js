@@ -38,7 +38,8 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
 
             fieldDefaults: {
                 msgTarget: 'under',
-                labelAlign: 'top'
+                labelAlign: 'top',
+                format:'H:i'
             },
 
             items:[{
@@ -74,7 +75,8 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
 
             fieldDefaults: {
                 msgTarget: 'under',
-                labelAlign: 'top'
+                labelAlign: 'top',
+                format:'H:i'
             },
 
             items:[{
@@ -105,7 +107,8 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
 
             fieldDefaults: {
                 msgTarget: 'under',
-                 labelAlign: 'top'
+                labelAlign: 'top',
+                format:'H:i'
             },
 
             items:[{
@@ -135,8 +138,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             },
 
             fieldDefaults: {
-                msgTarget: 'under',
-                 labelAlign: 'top'
+                msgTarget:'under',
+                labelAlign:'top',
+                format:'H:i'
             },
 
             items:[{
@@ -166,8 +170,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             },
 
             fieldDefaults: {
-                msgTarget: 'under',
-                 labelAlign: 'top'
+                msgTarget:'under',
+                labelAlign:'top',
+                format:'H:i'
             },
 
             items:[{
@@ -197,8 +202,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             },
 
             fieldDefaults: {
-                msgTarget: 'under',
-                labelAlign: 'top'
+                msgTarget:'under',
+                labelAlign:'top',
+                format:'H:i'
             },
 
             items:[{
@@ -228,8 +234,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             },
 
             fieldDefaults: {
-                msgTarget: 'under',
-                 labelAlign: 'top'
+                msgTarget:'under',
+                labelAlign:'top',
+                format:'H:i'
             },
 
             items:[{
