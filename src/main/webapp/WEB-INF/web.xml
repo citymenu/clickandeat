@@ -35,7 +35,7 @@
 
     <filter-mapping>
         <filter-name>SecureFilter</filter-name>
-        <url-pattern>*.html</url-pattern>
+        <url-pattern>/secure/*</url-pattern>
     </filter-mapping>
 
 	<filter>
