@@ -11,12 +11,23 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
         xtype:'fieldset',
         title:'Opening Times',
         defaults:{
-            allowBlank:false
+            allowBlank:true,
+            anchor:'100%'
         },
         defaultType: 'textfield',
         items:[{
+            fieldLabel:'Summary',
+            name:'summary',
+            xtype: 'htmleditor',
+            fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
+            defaultFont:'Segoe UI',
+            enableColors: false,
+            enableLinks:false,
+            enableLists:false,
+            enableAlignments: false
+        },{
             xtype:'fieldcontainer',
-            fieldLabel:'Sunday',
+            fieldLabel:'Monday',
             labelStyle:'padding-top:25px;',
             layout:'hbox',
 
@@ -32,88 +43,227 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             items:[{
                 xtype:'checkbox',
                 fieldLabel:'Open',
-                name:'open_0',
+                name:'open_1',
                 width:60
             },{
                 xtype:'timefield',
                 fieldLabel:'Collection open',
-                name:'collectionOpeningTime_0'
+                name:'collectionOpeningTime_1'
             },{
                 xtype:'timefield',
                 fieldLabel:'Collection close',
-                name:'collectionClosingTime_0'
+                name:'collectionClosingTime_1'
             },{
                 xtype:'timefield',
                 fieldLabel:'Delivery open',
-                name:'deliveryOpeningTime_0'
+                name:'deliveryOpeningTime_1'
              },{
                 xtype:'timefield',
                 fieldLabel:'Delivery close',
-                name:'deliveryClosingTime_0'
+                name:'deliveryClosingTime_1'
              }]
         },{
-              xtype:'fieldcontainer',
-              fieldLabel:'Monday',
-              layout:'hbox',
+            xtype:'fieldcontainer',
+            fieldLabel:'Tuesday',
+            layout:'hbox',
 
-              defaults:{
-                  padding:'0 15 0 0'
-              },
+            defaults:{
+                padding:'0 15 0 0'
+            },
 
-              fieldDefaults: {
-                  msgTarget: 'under',
-                  labelAlign: 'top'
-              },
+            fieldDefaults: {
+                msgTarget: 'under',
+                labelAlign: 'top'
+            },
 
-              items:[{
-                  xtype:'checkbox',
-                  name:'open_1',
-                  width:60
-              },{
-                  xtype:'timefield',
-                  name:'collectionOpeningTime_1'
-              },{
-                  xtype:'timefield',
-                  name:'collectionClosingTime_1'
-              },{
-                  xtype:'timefield',
-                  name:'deliveryOpeningTime_1'
-               },{
-                  xtype:'timefield',
-                  name:'deliveryClosingTime_1'
-               }]
+            items:[{
+                xtype:'checkbox',
+                name:'open_2',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_2'
+            },{
+                xtype:'timefield',
+                name:'collectionClosingTime_2'
+            },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_2'
+             },{
+                xtype:'timefield',
+                name:'deliveryClosingTime_2'
+             }]
         },{
-               xtype:'fieldcontainer',
-               fieldLabel:'Tuesday',
-               layout:'hbox',
+            xtype:'fieldcontainer',
+            fieldLabel:'Wednesday',
+            layout:'hbox',
 
-               defaults:{
-                   padding:'0 15 0 0'
-               },
+            defaults:{
+                padding:'0 15 0 0'
+            },
 
-               fieldDefaults: {
-                   msgTarget: 'under',
-                   labelAlign: 'top'
-               },
+            fieldDefaults: {
+                msgTarget: 'under',
+                 labelAlign: 'top'
+            },
 
-               items:[{
-                   xtype:'checkbox',
-                   name:'open_2',
-                   width:60
-               },{
-                   xtype:'timefield',
-                   name:'collectionOpeningTime_2'
-               },{
-                   xtype:'timefield',
-                   name:'collectionClosingTime_2'
-               },{
-                   xtype:'timefield',
-                   name:'deliveryOpeningTime_2'
-                },{
-                   xtype:'timefield',
-                   name:'deliveryClosingTime_2'
-                }]
-         }]
+            items:[{
+                xtype:'checkbox',
+                name:'open_3',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_3'
+           },{
+                xtype:'timefield',
+                name:'collectionClosingTime_3'
+           },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_3'
+            },{
+               xtype:'timefield',
+               name:'deliveryClosingTime_3'
+            }]
+         },{
+            xtype:'fieldcontainer',
+            fieldLabel:'Thursday',
+            layout:'hbox',
+
+            defaults:{
+                padding:'0 15 0 0'
+            },
+
+            fieldDefaults: {
+                msgTarget: 'under',
+                 labelAlign: 'top'
+            },
+
+            items:[{
+                xtype:'checkbox',
+                name:'open_4',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_4'
+            },{
+                xtype:'timefield',
+                name:'collectionClosingTime_4'
+            },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_4'
+            },{
+                xtype:'timefield',
+                name:'deliveryClosingTime_4'
+            }]
+        },{
+            xtype:'fieldcontainer',
+            fieldLabel:'Friday',
+            layout:'hbox',
+
+            defaults:{
+                padding:'0 15 0 0'
+            },
+
+            fieldDefaults: {
+                msgTarget: 'under',
+                 labelAlign: 'top'
+            },
+
+            items:[{
+                xtype:'checkbox',
+                name:'open_5',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_5'
+            },{
+                xtype:'timefield',
+                name:'collectionClosingTime_5'
+            },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_5'
+            },{
+                xtype:'timefield',
+                name:'deliveryClosingTime_5'
+            }]
+        },{
+            xtype:'fieldcontainer',
+            fieldLabel:'Saturday',
+            layout:'hbox',
+
+            defaults:{
+                padding:'0 15 0 0'
+            },
+
+            fieldDefaults: {
+                msgTarget: 'under',
+                labelAlign: 'top'
+            },
+
+            items:[{
+                xtype:'checkbox',
+                name:'open_6',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_6'
+            },{
+                xtype:'timefield',
+                name:'collectionClosingTime_6'
+            },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_6'
+            },{
+                xtype:'timefield',
+                name:'deliveryClosingTime_6'
+            }]
+        },{
+            xtype:'fieldcontainer',
+            fieldLabel:'Sunday',
+            layout:'hbox',
+
+            defaults:{
+                padding:'0 15 0 0'
+            },
+
+            fieldDefaults: {
+                msgTarget: 'under',
+                 labelAlign: 'top'
+            },
+
+            items:[{
+                xtype:'checkbox',
+                name:'open_7',
+                width:60
+            },{
+                xtype:'timefield',
+                name:'collectionOpeningTime_7'
+            },{
+                xtype:'timefield',
+                name:'collectionClosingTime_7'
+            },{
+                xtype:'timefield',
+                name:'deliveryOpeningTime_7'
+            },{
+                xtype:'timefield',
+                name:'deliveryClosingTime_7'
+            }]
+        },{
+            xtype:'textareafield',
+            fieldLabel:'Closed Dates',
+            height:75
+        }]
+    },{
+        xtype:'fieldset',
+        title:'Delivery Details',
+        defaults:{
+            allowBlank:true,
+            anchor:'100%'
+        },
+        defaultType: 'textfield',
+        items:[{
+
+        }]
     }]
 
 });
