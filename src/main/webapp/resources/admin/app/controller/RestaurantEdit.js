@@ -2,12 +2,13 @@
 var restaurant;
 var address;
 var mainContact;
+var deliveryOptions;
 var menu;
 
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
     stores:['Restaurants'],
-    models: ['Restaurant','Person','Address'],
+    models: ['Restaurant','Person','Address','DeliveryOptions'],
     views:[
     	'restaurant.Edit',
     	'restaurant.MainDetails',
@@ -23,6 +24,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 render:this.mainDetailsRendered
             },
 
+            'restaurantdeliverydetails': {
+                render:this.deliveryDetailsRendered
+            },
+
             'restaurantedit button[action=close]': {
                 click:this.close
             },
@@ -32,6 +37,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 	    restaurant = new AD.model.Restaurant(restaurantObj);
 	    address = new AD.model.Address(restaurantObj.address);
 	    mainContact = new AD.model.Person(restaurantObj.mainContact);
+	    deliveryOptions = new AD.model.DeliveryOptions(restaurantObj.deliveryOptions);
 
     },
 
@@ -56,6 +62,26 @@ Ext.define('AD.controller.RestaurantEdit', {
         formPanel.loadRecord(restaurant);
         formPanel.loadRecord(address);
         formPanel.loadRecord(mainContact);
+    },
+
+    deliveryDetailsRendered: function(formPanel) {
+
+
+        // Get the opening times from the restaurant
+        var openingTimes = restaurantObj.openingTimes;
+
+        // Build opening times onto form
+        var form = formPanel.getForm();
+        form.findField('openingTimesSummary').setValue(openingTimes.openingTimesSummary);
+
+        // Populate individual opening times
+        openingTimes.openingTimes.forEach(function(openingTime){
+
+        });
+
+        // Populate form values from delivery options record
+        formPanel.loadRecord(deliveryOptions);
+
     }
 
 });

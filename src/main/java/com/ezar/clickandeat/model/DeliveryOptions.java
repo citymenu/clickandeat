@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DeliveryOptions {
 
-    private String summary;
+    private String deliveryOptionsSummary;
 
     private Double minimumOrderForFreeDelivery;
 
@@ -17,14 +17,19 @@ public class DeliveryOptions {
 
     private Double deliveryRadiusInKilometres;
 
-    private List<String> areasDeliveredTo = new ArrayList<String>();
+    private List<String> areasDeliveredTo;
 
-    public String getSummary() {
-        return summary;
+    public DeliveryOptions() {
+        this.areasDeliveredTo = new ArrayList<String>();
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+
+    public String getDeliveryOptionsSummary() {
+        return deliveryOptionsSummary;
+    }
+
+    public void setDeliveryOptionsSummary(String deliveryOptionsSummary) {
+        this.deliveryOptionsSummary = deliveryOptionsSummary;
     }
 
     public Double getMinimumOrderForFreeDelivery() {

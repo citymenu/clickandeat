@@ -1,12 +1,12 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.model.Address;
-import com.ezar.clickandeat.model.Person;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
@@ -78,7 +78,30 @@ public class RestaurantController {
         mainContact.setFirstName("Joe");
         mainContact.setLastName("Pugh");
         restaurant.setMainContact(mainContact);
+
+        DeliveryOptions deliveryOptions = new DeliveryOptions();
+        deliveryOptions.setDeliveryOptionsSummary("Summary");
+        deliveryOptions.setMinimumOrderForCollectionDiscount(10d);
+        deliveryOptions.setDeliveryCharge(5.5);
+        deliveryOptions.setDeliveryRadiusInKilometres(2d);
+        deliveryOptions.getAreasDeliveredTo().add("E18");
+        deliveryOptions.getAreasDeliveredTo().add("E17");
+        restaurant.setDeliveryOptions(deliveryOptions);
+
+        OpeningTimes openingTimes = new OpeningTimes();
+        openingTimes.setOpeningTimesSummary("Opening summary");
+        openingTimes.getClosedDates().add(new LocalDate(2012,12,24));
+        openingTimes.getClosedDates().add(new LocalDate(2013,12,24));
         
+        OpeningTime openingTime1 = new OpeningTime();
+        openingTime1.setDayOfWeek(1);
+        openingTime1.setCollectionOpeningTime(new LocalTime(15,0));
+        openingTime1.setCollectionClosingTime(new LocalTime(23,30));
+        openingTime1.setDeliveryOpeningTime(new LocalTime(18,0));
+        openingTime1.setDeliveryClosingTime(new LocalTime(23,0));
+        openingTimes.getOpeningTimes().add(openingTime1);
+        restaurant.setOpeningTimes(openingTimes);
+
         model.put("restaurant", restaurant);
         model.put("json",Restaurant.toJSON(restaurant));
         return new ModelAndView("admin/editRestaurant",model);

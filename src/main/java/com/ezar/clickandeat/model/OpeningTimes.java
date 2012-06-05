@@ -7,11 +7,16 @@ import java.util.List;
 
 public class OpeningTimes {
     
-    private String summary;
+    private String openingTimesSummary;
     
-    private List<OpeningTime> openingTimes = new ArrayList<OpeningTime>();
+    private List<OpeningTime> openingTimes;
     
-    private List<LocalDate> closedDates = new ArrayList<LocalDate>();
+    private List<LocalDate> closedDates;
+
+    public OpeningTimes() {
+        this.openingTimes = new ArrayList<OpeningTime>();
+        this.closedDates = new ArrayList<LocalDate>();
+    }
 
     @Override
     public String toString() {
@@ -21,12 +26,12 @@ public class OpeningTimes {
                 '}';
     }
 
-    public String getSummary() {
-        return summary;
+    public String getOpeningTimesSummary() {
+        return openingTimesSummary;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setOpeningTimesSummary(String openingTimesSummary) {
+        this.openingTimesSummary = openingTimesSummary;
     }
 
     public List<OpeningTime> getOpeningTimes() {

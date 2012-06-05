@@ -17,8 +17,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
         defaultType: 'textfield',
         items:[{
             fieldLabel:'Summary',
-            name:'summary',
+            name:'openingTimesSummary',
             xtype: 'htmleditor',
+            labelAlign:'top',
             fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
             defaultFont:'Segoe UI',
             enableColors: false,
@@ -249,20 +250,56 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 name:'deliveryClosingTime_7'
             }]
         },{
+            name:'closedDates',
+            fieldLabel:'Closed dates (enter one per line in format dd/mm/yyyy)',
             xtype:'textareafield',
-            fieldLabel:'Closed Dates',
-            height:75
+            labelAlign:'top',
+            height:90
         }]
     },{
         xtype:'fieldset',
         title:'Delivery Details',
         defaults:{
             allowBlank:true,
-            anchor:'100%'
+            anchor:'100%',
+            labelAlign:'top'
         },
         defaultType: 'textfield',
         items:[{
-
+            fieldLabel:'Summary',
+            name:'deliveryOptionsSummary',
+            xtype: 'htmleditor',
+            fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
+            defaultFont:'Segoe UI',
+            enableColors: false,
+            enableLinks:false,
+            enableLists:false,
+            enableAlignments: false
+        },{
+            fieldLabel:'Minimum order value for free delivery',
+            name:'minimumOrderForFreeDelivery',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Delivery charge for orders under minimum value',
+            name:'deliveryCharge',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Discount for orders collected by customer',
+            name:'collectionDiscount',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Minimum order value for collection discount',
+            name:'minimumOrderForCollectionDiscount',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Delivery radius (kilometres)',
+            name:'deliveryRadiusInKilometres',
+            xtype:'numberfield'
+        },{
+            name:'areasDeliveredTo',
+            fieldLabel:'Areas delivered to (enter one per line)',
+            xtype:'textareafield',
+            height:90
         }]
     }]
 
