@@ -12,7 +12,7 @@ Ext.define('AD.view.restaurant.Menu' ,{
 
     items: [{
         xtype:'panel',
-        height:200,
+        height:275,
         width:'100%',
         layout:'hbox',
 
@@ -29,6 +29,20 @@ Ext.define('AD.view.restaurant.Menu' ,{
             id:'menucategoriesgrid',
             store:'MenuCategories',
 
+            dockedItems:[{
+                xtype:'toolbar',
+                dock:'top',
+                items:[{
+                    xtype:'button',
+                    text:'Create',
+                    action:'create'
+                },{
+                    xtype:'button',
+                    text:'Remove',
+                    action:'remove'
+                }]
+            }],
+
             viewConfig: {
                 plugins: {
                     ptype:'gridviewdragdrop',
@@ -39,7 +53,7 @@ Ext.define('AD.view.restaurant.Menu' ,{
 
             layout:'fit',
             width:250,
-            height:200,
+            height:275,
             columns:[
                 {text:'Category Name',dataIndex:'name',sortable:false,hideable:false,draggable:false,flex:1}
             ]
@@ -48,6 +62,20 @@ Ext.define('AD.view.restaurant.Menu' ,{
             title:'Menu Items',
             id:'menuitemsgrid',
             store:'MenuItems',
+
+            dockedItems:[{
+                xtype:'toolbar',
+                dock:'top',
+                items:[{
+                    xtype:'button',
+                    text:'Create',
+                    action:'create'
+                },{
+                    xtype:'button',
+                    text:'Remove',
+                    action:'remove'
+                }]
+            }],
 
             viewConfig: {
                 plugins: {
@@ -59,7 +87,7 @@ Ext.define('AD.view.restaurant.Menu' ,{
 
             layout:'fit',
             width:880,
-            height:200,
+            height:275,
             columns:[
                 {text:'Title',dataIndex:'title',sortable:false,hideable:false,draggable:false,flex:.7},
                 {text:'Cost',dataIndex:'cost',sortable:false,hideable:false,draggable:false,flex:.3}
