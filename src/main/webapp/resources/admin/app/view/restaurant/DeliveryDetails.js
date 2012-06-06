@@ -29,11 +29,11 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
         },{
             xtype:'fieldcontainer',
             fieldLabel:'Monday',
-            labelStyle:'padding-top:25px;',
+            labelStyle:'padding-top:23px;',
             layout:'hbox',
 
             defaults:{
-                padding:'0 15 0 0'
+                padding:'0 15 0 0',
             },
 
             fieldDefaults: {

@@ -108,7 +108,7 @@ public class RestaurantController {
         MenuCategory category1 = new MenuCategory();
         category1.setName("Starters");
         category1.setSummary("Enjoy these starters");
-        category1.setType("Standard");
+        category1.setType(MenuCategory.TYPE_STANDARD);
         
         MenuItem item1 = new MenuItem();
         item1.setNumber(1);

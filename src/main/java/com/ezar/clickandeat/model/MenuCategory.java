@@ -5,6 +5,9 @@ import java.util.List;
 
 public class MenuCategory {
     
+    public static final String TYPE_STANDARD = "STANDARD";
+    public static final String TYPE_GRID = "GRID";
+    
     String name;
     
     String type;

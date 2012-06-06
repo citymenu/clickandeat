@@ -7,8 +7,8 @@ Ext.application({
     
     launch: function() {
         Ext.create('AD.view.restaurant.List', {
-            width:1080,
-            height:650,
+            width:880,
+            height:600,
             renderTo:'main-content'
         });
     }

@@ -3,7 +3,7 @@ Ext.define('AD.view.restaurant.Edit' ,{
     alias:'widget.restaurantedit',
     layout:'fit',
 
-     dockedItems:[{
+    dockedItems:[{
         xtype:'toolbar',
         dock:'top',
         items:[{
@@ -24,8 +24,6 @@ Ext.define('AD.view.restaurant.Edit' ,{
     items:[{
         xtype:'tabpanel',
         layout:'fit',
-        border:false,
-        frame:false,
         items:[{
             xtype:'restaurantmaindetails'
         },{

@@ -3,7 +3,10 @@ Ext.define('AD.view.restaurant.Menu' ,{
     alias:'widget.restaurantmenu',
     title:'Menu',
 
-    layout:'vbox',
+    layout:{
+        type:'vbox',
+        align:'stretch'
+    },
 
     defaults:{
         border:false,
@@ -12,18 +15,21 @@ Ext.define('AD.view.restaurant.Menu' ,{
 
     items: [{
         xtype:'panel',
-        height:275,
-        width:'100%',
-        layout:'hbox',
+        flex:0.4,
+
+        layout:{
+            type:'hbox',
+            align:'stretch'
+        },
 
         defaults:{
-            layout:'fit',
             border:true,
             frame:false,
             autoScroll:true
         },
 
         items:[{
+            flex:0.25,
             xtype:'gridpanel',
             title:'Menu Categories',
             id:'menucategoriesgrid',
@@ -34,12 +40,8 @@ Ext.define('AD.view.restaurant.Menu' ,{
                 dock:'top',
                 items:[{
                     xtype:'button',
-                    text:'Create',
+                    text:'Add',
                     action:'create'
-                },{
-                    xtype:'button',
-                    text:'Remove',
-                    action:'remove'
                 }]
             }],
 
@@ -51,13 +53,13 @@ Ext.define('AD.view.restaurant.Menu' ,{
                 }
             },
 
-            layout:'fit',
-            width:250,
-            height:275,
             columns:[
                 {text:'Category Name',dataIndex:'name',sortable:false,hideable:false,draggable:false,flex:1}
             ]
         },{
+            xtype:'splitter'
+        },{
+            flex:0.75,
             xtype:'gridpanel',
             title:'Menu Items',
             id:'menuitemsgrid',
@@ -68,12 +70,8 @@ Ext.define('AD.view.restaurant.Menu' ,{
                 dock:'top',
                 items:[{
                     xtype:'button',
-                    text:'Create',
+                    text:'Add',
                     action:'create'
-                },{
-                    xtype:'button',
-                    text:'Remove',
-                    action:'remove'
                 }]
             }],
 
@@ -85,14 +83,20 @@ Ext.define('AD.view.restaurant.Menu' ,{
                 }
             },
 
-            layout:'fit',
-            width:880,
-            height:275,
             columns:[
                 {text:'Title',dataIndex:'title',sortable:false,hideable:false,draggable:false,flex:.7},
                 {text:'Cost',dataIndex:'cost',sortable:false,hideable:false,draggable:false,flex:.3}
             ]
         }]
+    },{
+        xtype:'splitter'
+    },{
+        xtype:'panel',
+        id:'menueditform',
+        layout:'fit',
+        flex:0.6,
+        border:true,
+        items:[]
     }]
 
 });
