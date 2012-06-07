@@ -8,10 +8,20 @@ var menu;
 // Global menu category edit form variable
 var menuCategoryEditForm;
 
+// Global menu item edit form variable
+var menuItemEditForm;
+
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
     stores:['Restaurants','MenuCategories','MenuItems'],
-    models: ['Restaurant','Person','Address','DeliveryOptions','Menu'],
+    models: [
+        'Restaurant',
+        'Person',
+        'Address',
+        'DeliveryOptions',
+        'Menu',
+        'MenuItemTypeCost'
+    ],
     views:[
     	'restaurant.Edit',
     	'restaurant.MainDetails',
@@ -22,6 +32,9 @@ Ext.define('AD.controller.RestaurantEdit', {
     refs: [{
         ref:'menuCategoriesGrid',
         selector:'#menucategoriesgrid'
+    },{
+        ref:'menuItemsGrid',
+        selector:'#menuitemsgrid'
     },{
         ref:'menuEditForm',
         selector:'#menueditform'
@@ -45,7 +58,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
 
             '#menucategoriesgrid': {
-                select:this.menuCategoriesGridSelected
+                itemclick:this.menuCategoriesGridSelected
             },
 
             '#menucategoriesgrid button[action=create]': {
@@ -66,6 +79,30 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantmenucategoryedit': {
                 render:this.menuCategoryEditRendered
+            },
+
+            '#menuitemsgrid': {
+                itemclick:this.menuItemsGridSelected
+            },
+
+            '#menuitemsgrid button[action=create]': {
+                click:this.createMenuItem
+            },
+
+            'restaurantmenuitemedit button[action=save]': {
+                click:this.updateMenuItem
+            },
+
+            'restaurantmenuitemedit button[action=revert]': {
+                click:this.revertMenuItem
+            },
+
+            'restaurantmenuitemedit button[action=remove]': {
+                click:this.removeMenuItem
+            },
+
+            'restaurantmenuitemedit': {
+                render:this.menuItemEditRendered
             },
 
             'restaurantedit button[action=close]': {
@@ -151,20 +188,38 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     // Fires when the remove button is clicked on the menu category grid
     removeMenuCategory: function(button) {
-         Ext.MessageBox.confirm('Delete Category','Are you sure you want to remove this menu category?',function(result) {
-            if(result == 'yes') {
-                this.getMenuCategoriesStore().remove(menuCategoryEditForm.getRecord());
-                this.getMenuItemsStore().removeAll(false);
-                this.getMenuEditForm().removeAll(true);
-                menuCategoryEditForm = null;
-            }
-         }, this );
+        Ext.MessageBox.show({
+            title:'Delete Menu Category',
+            msg:'Are you sure you want to remove this menu category?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.getMenuCategoriesStore().remove(menuCategoryEditForm.getRecord());
+                    this.getMenuItemsStore().removeAll(false);
+                    this.getMenuEditForm().removeAll(true);
+                    menuCategoryEditForm = null;
+                }
+            },
+            scope:this
+        });
     },
 
     // Fires when the save button is clicked on the menu category edit form
     updateMenuCategory: function(button) {
-        var index = this.getMenuCategoriesStore().indexOf(menuCategoryEditForm.getRecord());
-        this.getMenuCategoriesStore().getAt(index).set(menuCategoryEditForm.getValues());
+        if(!menuCategoryEditForm.getForm().isValid()) {
+            Ext.MessageBox.show({
+                title:'Invalid Menu Category',
+                msg:'Please check all required fields have been entered correctly',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+        } else {
+            var index = this.getMenuCategoriesStore().indexOf(menuCategoryEditForm.getRecord());
+            this.getMenuCategoriesStore().getAt(index).set(menuCategoryEditForm.getValues());
+        }
     },
 
     // Fires when the revert button is clicked on the menu category edit form
@@ -174,12 +229,20 @@ Ext.define('AD.controller.RestaurantEdit', {
     },
 
     // Fires when a record is selected in the menu categories grid
-    menuCategoriesGridSelected: function(rowmodel,record,index,options) {
+    menuCategoriesGridSelected: function(rowmodel,record,item,index,evt,options) {
+
+        // If the item is already selected, do nothing
+        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
+        if( menuCategoryEditForm && menuCategoryEditForm.getRecord() == selectedMenuCategory ) {
+            return; // Do nothing on purpose
+        }
+
         this.getMenuItemsStore().removeAll(false);
         this.getMenuItemsStore().loadData(record.get('menuItems'));
 
         var form = Ext.create('AD.view.restaurant.MenuCategoryEdit');
         menuCategoryEditForm = form; // Update global variable
+        menuItemEditForm = null; // Update global variable
         this.getMenuEditForm().removeAll(true);
         this.getMenuEditForm().add(form);
     },
@@ -193,16 +256,174 @@ Ext.define('AD.controller.RestaurantEdit', {
         this.getMenuItemsStore().insert((dropPosition == 'after'? index+1: index), data.records[0]);
 
         // Update menu items on menu category
-        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
-        var index = this.getMenuCategoriesStore().indexOf(selectedMenuCategory);
-        this.getMenuCategoriesStore().getAt(index).set('menuItems',this.getMenuItemsStore().getRange());
-
+        this.updateMenuCategoryItems();
     },
 
     // Loads the selected menu category into the edit form
     menuCategoryEditRendered: function(formPanel) {
         var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
         menuCategoryEditForm.loadRecord(selectedMenuCategory);
+    },
+
+    // Fires when a record is selected in the menu items grid
+    menuItemsGridSelected: function(rowmodel,record,item,index,evt,options) {
+
+        // If the item is already selected, do nothing
+        var selectedMenuItem = this.getMenuItemsGrid().getSelectionModel().getLastSelected();
+        if( menuItemEditForm && menuItemEditForm.getRecord() == selectedMenuItem ) {
+            return; // Do nothing on purpose
+        }
+
+        var form = Ext.create('AD.view.restaurant.MenuItemEdit');
+        menuItemEditForm = form; // Update global variable
+        menuCategoryEditForm = null; // Update global variable
+        this.getMenuEditForm().removeAll(true);
+        this.getMenuEditForm().add(form);
+    },
+
+    // Fires when the add button is clicked on the menu item grid
+    createMenuItem: function(button) {
+
+        // Get the selected menu category
+        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
+        if( !selectedMenuCategory ) {
+            return; // No category selected, no nothing
+        }
+
+        // Create new menu item and add to the store
+        var menuItem = new AD.model.MenuItem({
+            title:'New Item',
+            menuItemTypeCosts:[]
+        });
+        this.getMenuItemsStore().add(menuItem);
+
+        // Push new menu item into menu categories store
+        var index = this.getMenuCategoriesStore().indexOf(selectedMenuCategory);
+        this.getMenuCategoriesStore().getAt(index).set('menuItems',this.getMenuItemsStore().getRange());
+    },
+
+    // Fires when the remove button is clicked on the menu item grid
+    removeMenuItem: function(button) {
+        Ext.MessageBox.show({
+            title:'Delete Menu Item',
+            msg:'Are you sure you want to remove this menu item?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.getMenuItemsStore().remove(menuItemEditForm.getRecord());
+                    this.getMenuEditForm().removeAll(true);
+                    menuItemEditForm = null;
+                    // Update menu items on menu category
+                    this.updateMenuCategoryItems();
+                }
+            },
+            scope:this
+        });
+    },
+
+    // Fires when the save button is clicked on the menu item edit form
+    updateMenuItem: function(button) {
+
+        if(!menuItemEditForm.getForm().isValid()) {
+            Ext.MessageBox.show({
+                title:'Invalid Menu Item',
+                msg:'Please check all required fields have been entered correctly',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+
+        } else {
+            var index = this.getMenuItemsStore().indexOf(menuItemEditForm.getRecord());
+            var record = this.getMenuItemsStore().getAt(index);
+            record.set(menuItemEditForm.getValues());
+
+            // Populate menu item type costs if present
+            var menuItemTypeCosts = [];
+            menuItemEditForm.getForm().getFields().each(function(field){
+                var fieldName = field.getName();
+                if(fieldName.indexOf('cost_') != -1 ) {
+                    var fieldValue = field.getValue();
+                    if( fieldValue && fieldValue != 0 ) {
+                        var menuItemTypeCost = new AD.model.MenuItemTypeCost({
+                            type:fieldName.substring(5).replace('_',' '),
+                            cost:fieldValue
+                        });
+                        menuItemTypeCosts.push(menuItemTypeCost);
+                    }
+                }
+            });
+            record.set('menuItemTypeCosts',menuItemTypeCosts);
+
+            // Update menu items on menu category
+            this.updateMenuCategoryItems();
+        }
+    },
+
+    // Fires when the revert button is clicked on the menu item edit form
+    revertMenuItem: function(button) {
+        menuItemEditForm.getForm().reset();
+        menuItemEditForm.loadRecord(menuItemEditForm.getRecord());
+        menuItemEditForm.getRecord().get('menuItemTypeCosts').forEach(function(menuItemTypeCost){
+            var field = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( field ) {
+                field.setValue(menuItemTypeCost.get('cost'));
+            }
+        });
+    },
+
+    // Loads the selected menu item into the edit form
+    menuItemEditRendered: function(formPanel) {
+        var selectedMenuItem = this.getMenuItemsGrid().getSelectionModel().getLastSelected();
+        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
+        if( selectedMenuCategory.get('type') == 'GRID') {
+            var itemTypes = selectedMenuCategory.get('itemTypes');
+            if( itemTypes ) {
+
+                // Create field container for item type costs
+                var itemTypesContainer = Ext.create('Ext.form.FieldContainer', {
+                    fieldLabel:'Item type costs',
+                    labelAlign:'top',
+                    defaults:{
+                        layout:'anchor',
+                        anchor:'100%'
+                    }
+                });
+
+                // Generate an entry field for the item type cost
+                itemTypes.split('\n').forEach(function(itemType){
+                    var field = Ext.create('Ext.form.field.Number', {
+                        fieldLabel:itemType,
+                        name:'cost_' + itemType.replace(' ','_')
+                    });
+                    itemTypesContainer.add(field);
+                });
+
+                // Add the field container to the form
+                menuItemEditForm.add(itemTypesContainer);
+            }
+        }
+
+        // Load the record onto the form
+        menuItemEditForm.loadRecord(selectedMenuItem);
+
+        // Populate menuItemTypeCosts if set
+        selectedMenuItem.get('menuItemTypeCosts').forEach(function(menuItemTypeCost){
+            var field = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( field ) {
+                field.setValue(menuItemTypeCost.get('cost'));
+            }
+        });
+
+    },
+
+    // Updates menu items store into selected menu category menuItems attribute
+    updateMenuCategoryItems:function() {
+       var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
+       var categoryIndex = this.getMenuCategoriesStore().indexOf(selectedMenuCategory);
+       this.getMenuCategoriesStore().getAt(categoryIndex).set('menuItems',this.getMenuItemsStore().getRange());
     }
 
 });

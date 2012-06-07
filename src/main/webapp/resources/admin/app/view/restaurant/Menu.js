@@ -46,6 +46,7 @@ Ext.define('AD.view.restaurant.Menu' ,{
             }],
 
             viewConfig: {
+                markDirty:false,
                 plugins: {
                     ptype:'gridviewdragdrop',
                     dragGroup:'menuCategoriesGridDDGroup',
@@ -76,6 +77,7 @@ Ext.define('AD.view.restaurant.Menu' ,{
             }],
 
             viewConfig: {
+                markDirty:false,
                 plugins: {
                     ptype:'gridviewdragdrop',
                     dragGroup:'menuItemsGridDDGroup',

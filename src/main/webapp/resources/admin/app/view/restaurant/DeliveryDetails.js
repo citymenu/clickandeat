@@ -1,7 +1,7 @@
 Ext.define('AD.view.restaurant.DeliveryDetails' ,{
     extend:'Ext.form.Panel',
     alias:'widget.restaurantdeliverydetails',
-    title:'Delivery/Opening Times',
+    title:'Opening Times/Delivery',
 
     bodyPadding: 15,
     layout:'anchor',

@@ -1,7 +1,7 @@
-Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
+Ext.define('AD.view.restaurant.MenuItemEdit' ,{
     extend:'Ext.form.Panel',
-    alias:'widget.restaurantmenucategoryedit',
-    title:'Edit Menu Category',
+    alias:'widget.restaurantmenuitemedit',
+    title:'Edit Menu Item',
 
     bodyPadding: 15,
     layout:'anchor',
@@ -34,31 +34,19 @@ Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
     defaultType: 'textfield',
 
     items: [{
-        fieldLabel:'Name',
-        name:'name',
+        fieldLabel:'Number',
+        xtype:'numberfield',
+        name:'number'
+    },{
+        fieldLabel:'Title',
+        name:'title',
         allowBlank:false
     },{
-        xtype:'fieldcontainer',
-        fieldLabel:'Type',
-        defaultType:'radiofield',
-        layout:'hbox',
-
-        defaults:{
-            width:85
-        },
-
-        items:[{
-            boxLabel:'Standard',
-            name:'type',
-            inputValue:'STANDARD'
-        },{
-            boxLabel:'Grid Layout',
-            name:'type',
-            inputValue:'GRID'
-        }]
+        fieldLabel:'Subtitle',
+        name:'subtitle'
     },{
-        fieldLabel:'Summary',
-        name:'summary',
+        fieldLabel:'Description',
+        name:'description',
         xtype: 'htmleditor',
         labelAlign:'top',
         fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
@@ -68,14 +56,12 @@ Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
         enableLists:false,
         enableAlignments: false
     },{
+        fieldLabel:'Cost',
+        xtype:'numberfield',
+        name:'cost'
+    },{
         fieldLabel:'Icon class',
         name:'iconClass'
-    },{
-        fieldLabel:'Grid type values (enter one per line)',
-        labelAlign:'top',
-        name:'itemTypes',
-        xtype:'textareafield',
-        height:90
     }]
 
 });

@@ -8,12 +8,12 @@ Ext.define('AD.view.restaurant.Edit' ,{
         dock:'top',
         items:[{
             xtype:'button',
-            text:'Close',
-            action:'close'
+            text:'Save Changes',
+            action:'save'
         },{
             xtype:'button',
-            text:'Save',
-            action:'save'
+            text:'Close',
+            action:'close'
         },{
             xtype:'button',
             text:'Preview',
