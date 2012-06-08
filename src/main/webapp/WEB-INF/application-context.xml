@@ -43,11 +43,15 @@
     						 default-target-url="/home.html"
     						 always-use-default-target="true"
     						 authentication-failure-url="/secure/login.html?error=true"/>
-		<security:logout logout-url="/j_security_logout" logout-success-url="/home.html" />
+		<security:logout logout-url="/j_security_logout"
+                         success-handler-ref="securityLogoutSuccessHandler"/>
   	</security:http>
 
     <!-- Simple security context repository -->
     <bean id="simpleSecurityContextRepository" class="com.ezar.clickandeat.web.security.SimpleSecurityContextRepository"/>
+
+    <!-- Security logout success handler -->
+    <bean id="securityLogoutSuccessHandler" class="com.ezar.clickandeat.web.security.SecurityLogoutSuccessHandler"/>
 
     <!-- Password salt source -->
     <bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
