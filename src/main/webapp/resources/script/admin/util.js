@@ -9,3 +9,16 @@ function reloadListStore(listWidgetName) {
 function formatDate(value){
 	return value? Ext.Date.format(new Date(value),'d/m/Y'): '';
 }
+
+/* Converts a newline delimited string into an array */
+function delimitedStringToArray(str,delim) {
+    var arr = [];
+    if( !str || str == '' ) {
+        return arr;
+    } else {
+        str.split(delim).forEach(function(val){
+            arr.push(val);
+        });
+        return arr;
+    }
+}

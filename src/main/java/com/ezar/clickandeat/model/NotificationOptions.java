@@ -8,11 +8,11 @@ public class NotificationOptions {
 
     boolean receiveSMSNotification;
     
-    String phoneNotificationNumber;
+    String notificationPhoneNumber;
     
-    String smsNotificationNumber;
+    String notificationSMSNumber;
     
-    String emailAddress;
+    String notificationEmailAddress;
 
     public boolean isReceiveNotificationCall() {
         return receiveNotificationCall;
@@ -38,27 +38,27 @@ public class NotificationOptions {
         this.receiveSMSNotification = receiveSMSNotification;
     }
 
-    public String getPhoneNotificationNumber() {
-        return phoneNotificationNumber;
+    public String getNotificationPhoneNumber() {
+        return notificationPhoneNumber;
     }
 
-    public void setPhoneNotificationNumber(String phoneNotificationNumber) {
-        this.phoneNotificationNumber = phoneNotificationNumber;
+    public void setNotificationPhoneNumber(String notificationPhoneNumber) {
+        this.notificationPhoneNumber = notificationPhoneNumber;
     }
 
-    public String getSmsNotificationNumber() {
-        return smsNotificationNumber;
+    public String getNotificationSMSNumber() {
+        return notificationSMSNumber;
     }
 
-    public void setSmsNotificationNumber(String smsNotificationNumber) {
-        this.smsNotificationNumber = smsNotificationNumber;
+    public void setNotificationSMSNumber(String notificationSMSNumber) {
+        this.notificationSMSNumber = notificationSMSNumber;
     }
 
-    public String getEmailAddress() {
-        return emailAddress;
+    public String getNotificationEmailAddress() {
+        return notificationEmailAddress;
     }
 
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
+    public void setNotificationEmailAddress(String notificationEmailAddress) {
+        this.notificationEmailAddress = notificationEmailAddress;
     }
 }

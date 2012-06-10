@@ -283,6 +283,11 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             enableLists:false,
             enableAlignments: false
         },{
+            fieldLabel:'Delivery time (minutes)',
+            name:'deliveryTimeMinutes',
+            xtype:'numberfield',
+            allowBlank:false
+        },{
             fieldLabel:'Minimum order value for free delivery',
             name:'minimumOrderForFreeDelivery',
             xtype:'numberfield'

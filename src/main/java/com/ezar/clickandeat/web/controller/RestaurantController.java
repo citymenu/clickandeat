@@ -144,6 +144,15 @@ public class RestaurantController {
 
         restaurant.setMenu(menu);
         
+        NotificationOptions notificationOptions = new NotificationOptions();
+        notificationOptions.setReceiveNotificationCall(true);
+        notificationOptions.setReceiveSMSNotification(true);
+        notificationOptions.setTakeOrderOverTelephone(true);
+        notificationOptions.setNotificationEmailAddress("joe.pugh@db.com");
+        notificationOptions.setNotificationPhoneNumber("888");
+        notificationOptions.setNotificationSMSNumber("777");
+        restaurant.setNotificationOptions(notificationOptions);
+        
         model.put("restaurant", restaurant);
         model.put("json",Restaurant.toJSON(restaurant));
         return new ModelAndView("admin/editRestaurant",model);

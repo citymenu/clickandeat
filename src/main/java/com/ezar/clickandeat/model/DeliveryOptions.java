@@ -7,6 +7,8 @@ public class DeliveryOptions {
 
     private String deliveryOptionsSummary;
 
+    private Double deliveryTimeMinutes;
+    
     private Double minimumOrderForFreeDelivery;
 
     private Double deliveryCharge;
@@ -30,6 +32,14 @@ public class DeliveryOptions {
 
     public void setDeliveryOptionsSummary(String deliveryOptionsSummary) {
         this.deliveryOptionsSummary = deliveryOptionsSummary;
+    }
+
+    public Double getDeliveryTimeMinutes() {
+        return deliveryTimeMinutes;
+    }
+
+    public void setDeliveryTimeMinutes(Double deliveryTimeMinutes) {
+        this.deliveryTimeMinutes = deliveryTimeMinutes;
     }
 
     public Double getMinimumOrderForFreeDelivery() {

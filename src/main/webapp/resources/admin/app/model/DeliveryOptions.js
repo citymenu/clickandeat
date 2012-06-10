@@ -6,6 +6,7 @@ Ext.define('AD.model.DeliveryOptions', {
     extend: 'Ext.data.Model',
     fields: [
         {name:'deliveryOptionsSummary', type:'string'},
+        {name:'deliveryTimeMinutes', type:'number'},
         {name:'minimumOrderForFreeDelivery', type:'number'},
         {name:'deliveryCharge', type:'number'},
         {name:'collectionDiscount', type:'number'},
@@ -15,7 +16,11 @@ Ext.define('AD.model.DeliveryOptions', {
             name:'areasDeliveredTo',
             type:'auto',
             convert: function(value, record) {
-                return value.join('\n');
+                if( value && (value instanceof Array)) {
+                    return value.join('\n');
+                } else {
+                    return value;
+                }
             }
         }
     ]

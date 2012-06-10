@@ -2,6 +2,7 @@
 var restaurant;
 var address;
 var mainContact;
+var notificationOptions;
 var deliveryOptions;
 var menu;
 
@@ -18,6 +19,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         'Restaurant',
         'Person',
         'Address',
+        'NotificationOptions',
         'DeliveryOptions',
         'Menu',
         'MenuItemTypeCost'
@@ -38,12 +40,29 @@ Ext.define('AD.controller.RestaurantEdit', {
     },{
         ref:'menuEditForm',
         selector:'#menueditform'
+    },{
+        ref:'restaurantTabPanel',
+        selector:'#restauranttabpanel'
+    },{
+        ref:'mainDetailsForm',
+        selector:'restaurantmaindetails'
+    },{
+        ref:'deliveryDetailsForm',
+        selector:'restaurantdeliverydetails'
     }],
 
 	init: function() {
 
         // Set up event handlers
         this.control({
+
+            'restaurantedit button[action=close]': {
+                click:this.close
+            },
+
+            'restaurantedit button[action=saverestaurant]': {
+                click:this.saveRestaurant
+            },
 
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
@@ -103,10 +122,6 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantmenuitemedit': {
                 render:this.menuItemEditRendered
-            },
-
-            'restaurantedit button[action=close]': {
-                click:this.close
             }
 
         });
@@ -115,6 +130,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 	    restaurant = new AD.model.Restaurant(restaurantObj);
 	    address = new AD.model.Address(restaurantObj.address);
 	    mainContact = new AD.model.Person(restaurantObj.mainContact);
+	    notificationOptions = new AD.model.NotificationOptions(restaurantObj.notificationOptions);
 	    deliveryOptions = new AD.model.DeliveryOptions(restaurantObj.deliveryOptions);
 	    menu = new AD.model.Menu(restaurantObj.menu);
 
@@ -123,6 +139,136 @@ Ext.define('AD.controller.RestaurantEdit', {
 	close: function(button) {
 	    location.href = ctx + '/admin/restaurants.html';
 	},
+
+    saveRestaurant: function(button) {
+
+        // Check if the main details form is invalid`
+        if(!this.getMainDetailsForm().getForm().isValid()) {
+            this.getRestaurantTabPanel().setActiveTab(0);
+            this.showInvalidFormWarning();
+            return;
+        }
+
+        // Check if the delivery details form is invalid`
+        if(!this.getDeliveryDetailsForm().getForm().isValid()) {
+            this.getRestaurantTabPanel().setActiveTab(1);
+            this.showInvalidFormWarning();
+            return;
+        }
+
+        // Get the input values from the main details form
+        var mainDetailValues = this.getMainDetailsForm().getForm().getValues();
+
+        // Update the restaurant object details from the main details form
+        restaurantObj.id = mainDetailValues['id'];
+        restaurantObj.name = mainDetailValues['name'];
+        restaurantObj.description = mainDetailValues['description'];
+        restaurantObj.contactEmail = mainDetailValues['contactEmail'];
+        restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
+        restaurantObj.contactMobile = mainDetailValues['contactMobile'];
+        restaurantObj.website = mainDetailValues['website'];
+
+        // Build cuisines array onto restaurant object
+        var cuisines = [];
+        this.getMainDetailsForm().down('checkboxgroup').items.each(function(checkBoxItem) {
+            if(checkBoxItem.getValue()) {
+                cuisines.push(checkBoxItem.inputValue);
+            }
+        });
+        restaurantObj.cuisines = cuisines;
+
+        // Update address details for the restaurant
+        restaurantObj.address = new Object();
+        restaurantObj.address.address1 = mainDetailValues['address1'];
+        restaurantObj.address.address2 = mainDetailValues['address1'];
+        restaurantObj.address.address3 = mainDetailValues['address1'];
+        restaurantObj.address.town = mainDetailValues['town'];
+        restaurantObj.address.region = mainDetailValues['region'];
+        restaurantObj.address.postCode = mainDetailValues['postCode'];
+
+        // Update main contact details for the restaurant
+        restaurantObj.mainContact = new Object();
+        restaurantObj.mainContact.firstName = mainDetailValues['firstName'];
+        restaurantObj.mainContact.lastName = mainDetailValues['lastName'];
+        restaurantObj.mainContact.telephone = mainDetailValues['telephone'];
+        restaurantObj.mainContact.mobile = mainDetailValues['mobile'];
+        restaurantObj.mainContact.email = mainDetailValues['email'];
+
+        // Update notification options for the restuarant
+        restaurantObj.notificationOptions = new Object();
+        restaurantObj.notificationOptions.receiveNotificationCall = mainDetailValues['receiveNotificationCall'];
+        restaurantObj.notificationOptions.takeOrderOverTelephone = mainDetailValues['takeOrderOverTelephone'];
+        restaurantObj.notificationOptions.receiveSMSNotification = mainDetailValues['receiveSMSNotification'];
+        restaurantObj.notificationOptions.notificationPhoneNumber = mainDetailValues['notificationPhoneNumber'];
+        restaurantObj.notificationOptions.notificationSMSNumber = mainDetailValues['notificationSMSNumber'];
+        restaurantObj.notificationOptions.notificationEmailAddress = mainDetailValues['notificationEmailAddress'];
+
+        // Get the input values from the delivery details form
+        var deliveryDetailValues = this.getDeliveryDetailsForm().getForm().getValues();
+
+        // Update opening times for the restaurant
+        restaurantObj.openingTimes = new Object();
+        restaurantObj.openingTimes.openingTimesSummary = deliveryDetailValues['openingTimesSummary'];
+
+        // Build daily opening times summary
+        var openingTimes = [];
+        for( i = 1; i < 8; i++ ) {
+            var openingTime = new Object();
+            openingTime.dayOfWeek = i;
+            openingTime.open = deliveryDetailValues['open_' + i];
+            openingTime.collectionOpeningTime = deliveryDetailValues['collectionOpeningTime_' + i];
+            openingTime.collectionClosingTime = deliveryDetailValues['collectionClosingTime_' + i];
+            openingTime.deliveryOpeningTime = deliveryDetailValues['deliveryOpeningTime_' + i];
+            openingTime.deliveryClosingTime = deliveryDetailValues['deliveryClosingTime_' + i];
+            openingTimes.push(openingTime);
+        }
+        restaurantObj.openingTimes.openingTimes = openingTimes;
+        restaurantObj.openingTimes.closedDates = delimitedStringToArray(deliveryDetailValues['closedDates'],'\n');
+
+        // Build delivery options details
+        restaurantObj.deliveryOptions = new Object();
+        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'];
+        restaurantObj.deliveryOptions.deliveryTimeMinutes = deliveryDetailValues['deliveryTimeMinutes'];
+        restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
+        restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
+        restaurantObj.deliveryOptions.collectionDiscount = deliveryDetailValues['collectionDiscount'];
+        restaurantObj.deliveryOptions.minimumOrderForCollectionDiscount = deliveryDetailValues['minimumOrderForCollectionDiscount'];
+        restaurantObj.deliveryOptions.deliveryRadiusInKilometres = deliveryDetailValues['deliveryRadiusInKilometres'];
+        restaurantObj.deliveryOptions.areasDeliveredTo = delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n');
+
+        // Build restaurant menu
+        restaurantObj.menu = new Object();
+        var menuCategories = [];
+        this.getMenuCategoriesStore().getRange().forEach(function(category){
+            var menuCategory = new Object();
+            menuCategory.name = category.get('name');
+            menuCategory.type = category.get('type');
+            menuCategory.summary = category.get('summary');
+            menuCategory.iconClass = category.get('iconClass');
+            var menuItems = [];
+            category.get('menuItems').forEach(function(item){
+                var menuItem = new Object();
+                menuItem.number = item.number;
+                menuItem.title = item.title;
+                menuItem.subtitle = item.subtitle;
+                menuItem.description = item.description;
+                menuItem.iconClass = item.iconClass;
+                menuItem.cost = item.cost;
+                var menuItemTypeCosts = [];
+                item.get('menuItemTypeCosts').forEach(function(itemTypeCost){
+                    var menuItemTypeCost = new Object();
+                    menuItemTypeCost.type = itemTypeCost.type;
+                    menuItemTypeCost.cost = itemTypeCost.cost;
+                    menuItemTypeCosts.push(menuItemTypeCost);
+                });
+                menuItem.menuItemTypeCosts = menuItemTypeCosts;
+            });
+            menuCategory.menuItems = menuItems;
+            menuCategories.push(menuCategory);
+        });
+        restaurant.menu.menuCategories = menuCategories;
+
+    },
 
     // Populate main details form
     mainDetailsRendered: function(formPanel) {
@@ -142,6 +288,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         formPanel.loadRecord(restaurant);
         formPanel.loadRecord(address);
         formPanel.loadRecord(mainContact);
+        formPanel.loadRecord(notificationOptions);
     },
 
     // Populate delivery details form
@@ -209,13 +356,7 @@ Ext.define('AD.controller.RestaurantEdit', {
     // Fires when the save button is clicked on the menu category edit form
     updateMenuCategory: function(button) {
         if(!menuCategoryEditForm.getForm().isValid()) {
-            Ext.MessageBox.show({
-                title:'Invalid Menu Category',
-                msg:'Please check all required fields have been entered correctly',
-                buttons:Ext.MessageBox.OK,
-                icon:Ext.MessageBox.WARNING,
-                closable:false
-            });
+            this.showInvalidFormWarning();
         } else {
             var index = this.getMenuCategoriesStore().indexOf(menuCategoryEditForm.getRecord());
             this.getMenuCategoriesStore().getAt(index).set(menuCategoryEditForm.getValues());
@@ -327,14 +468,7 @@ Ext.define('AD.controller.RestaurantEdit', {
     updateMenuItem: function(button) {
 
         if(!menuItemEditForm.getForm().isValid()) {
-            Ext.MessageBox.show({
-                title:'Invalid Menu Item',
-                msg:'Please check all required fields have been entered correctly',
-                buttons:Ext.MessageBox.OK,
-                icon:Ext.MessageBox.WARNING,
-                closable:false
-            });
-
+            this.showInvalidFormWarning();
         } else {
             var index = this.getMenuItemsStore().indexOf(menuItemEditForm.getRecord());
             var record = this.getMenuItemsStore().getAt(index);
@@ -424,6 +558,17 @@ Ext.define('AD.controller.RestaurantEdit', {
        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
        var categoryIndex = this.getMenuCategoriesStore().indexOf(selectedMenuCategory);
        this.getMenuCategoriesStore().getAt(categoryIndex).set('menuItems',this.getMenuItemsStore().getRange());
+    },
+
+    // Shows a warning alert box
+    showInvalidFormWarning: function() {
+        Ext.MessageBox.show({
+            title:'Input Values Not Valid',
+            msg:'Please check all required fields have been entered correctly',
+            buttons:Ext.MessageBox.OK,
+            icon:Ext.MessageBox.WARNING,
+            closable:false
+        });
     }
 
 });

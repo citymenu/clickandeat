@@ -9,7 +9,7 @@ Ext.define('AD.view.restaurant.Edit' ,{
         items:[{
             xtype:'button',
             text:'Save Changes',
-            action:'save'
+            action:'saverestaurant'
         },{
             xtype:'button',
             text:'Close',
@@ -23,7 +23,9 @@ Ext.define('AD.view.restaurant.Edit' ,{
 
     items:[{
         xtype:'tabpanel',
+        id:'restauranttabpanel',
         layout:'fit',
+        deferredRender:false,
         items:[{
             xtype:'restaurantmaindetails'
         },{

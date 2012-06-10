@@ -19,9 +19,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             name:'id',
             xtype:'hidden'
         },{
-            fieldLabel:'Restaurant Id',
             name:'restaurantId',
-            allowBlank:false
+            xtype:'hidden'
         },{
             fieldLabel:'Name',
             name:'name',
@@ -91,7 +90,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             vtype:'email'
         },{
             fieldLabel:'Website',
-            name:'website'
+            name:'website',
+            vtype:'url'
         }]
     },{
         xtype:'fieldset',
@@ -117,6 +117,50 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
              fieldLabel:'Email',
              name:'email',
              vtype:'email'
+        }]
+    },{
+        xtype:'fieldset',
+        title:'Notification options',
+        defaults:{
+            anchor: '100%',
+            allowBlank:true,
+            labelWidth:125
+        },
+        defaultType:'textfield',
+        items:[{
+            xtype:'fieldcontainer',
+            fieldLabel:'Notification method',
+            layout:'hbox',
+
+            defaults:{
+                labelAlign:'top',
+                labelWidth:150,
+                width:165
+            },
+
+            items:[{
+                xtype:'checkbox',
+                fieldLabel:'Receive call',
+                name:'receiveNotificationCall'
+            },{
+                xtype:'checkbox',
+                fieldLabel:'Receive order on call',
+                name:'takeOrderOverTelephone'
+            },{
+                xtype:'checkbox',
+                fieldLabel:'Receive SMS',
+                name:'receiveSMSNotification'
+            }]
+        },{
+            fieldLabel:'Telephone Number',
+            name:'notificationPhoneNumber'
+        },{
+            fieldLabel:'SMS Number',
+            name:'notificationSMSNumber'
+        },{
+            fieldLabel:'Email Address',
+            name:'notificationEmailAddress',
+            vtype:'email'
         }]
     }]
 
