@@ -174,6 +174,27 @@ public class RestaurantController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/save.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> save(@RequestParam(value = "restaurant") String json) {
+        
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Updating restaurant");
+        }
+        
+        Map<String,Object> model = new HashMap<String, Object>();
+        
+        return null;
+        
+    }
+ 
+    
+    
+    /**
+     * Returns standard model
+     * @return
+     */
+    
     private Map<String,Object> getModel() {
         Map<String,Object> model = new HashMap<String, Object>();
         Set<String> cuisines = cuisineProvider.getCuisineList();
