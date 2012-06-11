@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/ext/resources/css/ext-all.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/overrides.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/messagebox.css"/>
 	<!-- ExtJS -->
 	<script type="text/javascript" src="${ctx}/resources/ext/ext-all-debug.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/ext/bootstrap.js"></script>

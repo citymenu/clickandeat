@@ -53,7 +53,12 @@ public class RestaurantSearchTest {
         deliveryOptions.getAreasDeliveredTo().add("E6");
         restaurant.setDeliveryOptions(deliveryOptions);
 
+        OpeningTimes openingTimes = new OpeningTimes();
+        openingTimes.getClosedDates().add(new LocalDate(2012,12,1));
+        restaurant.setOpeningTimes(openingTimes);
+        
         repository.saveRestaurant(restaurant);
+        LOGGER.debug("Saved restaurant");
         
     }
 

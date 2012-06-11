@@ -1,0 +1,25 @@
+#msg-div {
+    position:absolute;
+    z-index:20000;
+}
+
+.msg-box-title-error {
+	font-weight:bold;
+	background:transparent url(../images/icons-shadowless/exclamation-red.png) 0px -1px no-repeat;
+	min-height:16px;
+	padding-left: 22px;
+}
+
+.msg-box-title-info {
+	font-weight:bold;
+	background:transparent url(../images/icons-shadowless/tick-circle.png) 0px -1px no-repeat;
+	min-height:16px;
+	padding-left: 22px;
+}
+
+.msg-box-title-warning {
+	font-weight:bold;
+	background:transparent url(../images/icons-shadowless/exclamation-octagon.png) 0px -1px no-repeat;
+	min-height:16px;
+	padding-left: 22px;
+}

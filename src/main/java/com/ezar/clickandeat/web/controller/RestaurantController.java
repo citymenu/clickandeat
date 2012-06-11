@@ -176,20 +176,32 @@ public class RestaurantController {
 
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/save.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> save(@RequestParam(value = "restaurant") String json) {
+    public ResponseEntity<byte[]> save(@RequestParam(value = "body") String body) throws Exception {
         
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Updating restaurant");
         }
         
         Map<String,Object> model = new HashMap<String, Object>();
-        
-        return null;
-        
+        try {
+            Restaurant restaurant = Restaurant.fromJSON(body);
+            restaurant = repository.saveRestaurant(restaurant);
+            model.put("success",true);
+            model.put("id",restaurant.getId());
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+
+        String json = serializer.deepSerialize(model);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
     }
  
-    
-    
+
     /**
      * Returns standard model
      * @return

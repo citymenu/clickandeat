@@ -77,6 +77,21 @@
     	<constructor-arg value="${MONGOHQ_URL}"/>
 	</bean>
 
+    <!-- Mongo read/write converters -->
+    <bean id="localDateReadConverter" class="com.ezar.clickandeat.converter.LocalDateReadConverter"/>
+    <bean id="localDateWriteConverter" class="com.ezar.clickandeat.converter.LocalDateWriteConverter"/>
+    <bean id="localTimeReadConverter" class="com.ezar.clickandeat.converter.LocalTimeReadConverter"/>
+    <bean id="localTimeWriteConverter" class="com.ezar.clickandeat.converter.LocalTimeWriteConverter"/>
+
+    <mongo:mapping-converter id="mappingConverter">
+        <mongo:custom-converters>
+            <mongo:converter ref="localDateReadConverter" />
+            <mongo:converter ref="localDateWriteConverter" />
+            <mongo:converter ref="localTimeReadConverter" />
+            <mongo:converter ref="localTimeWriteConverter" />
+        </mongo:custom-converters>
+    </mongo:mapping-converter>
+
 	<!-- Default bean name is 'mongo' -->
   	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}"/>
 
@@ -86,6 +101,7 @@
 	<!-- set the mapping converter to be used by the MongoTemplate -->
   	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
     	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+        <constructor-arg name="mongoConverter" ref="mappingConverter"/>
     	<property name="writeResultChecking" value="EXCEPTION"/>
 		<property name="writeConcern" value="FSYNC_SAFE"/>
   	</bean>

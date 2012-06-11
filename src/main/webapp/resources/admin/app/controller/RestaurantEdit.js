@@ -64,6 +64,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click:this.saveRestaurant
             },
 
+            'restaurantedit button[action=preview]': {
+                click:this.previewRestaurant
+            },
+
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -180,8 +184,8 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update address details for the restaurant
         restaurantObj.address = new Object();
         restaurantObj.address.address1 = mainDetailValues['address1'];
-        restaurantObj.address.address2 = mainDetailValues['address1'];
-        restaurantObj.address.address3 = mainDetailValues['address1'];
+        restaurantObj.address.address2 = mainDetailValues['address2'];
+        restaurantObj.address.address3 = mainDetailValues['address3'];
         restaurantObj.address.town = mainDetailValues['town'];
         restaurantObj.address.region = mainDetailValues['region'];
         restaurantObj.address.postCode = mainDetailValues['postCode'];
@@ -196,9 +200,9 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Update notification options for the restuarant
         restaurantObj.notificationOptions = new Object();
-        restaurantObj.notificationOptions.receiveNotificationCall = mainDetailValues['receiveNotificationCall'];
-        restaurantObj.notificationOptions.takeOrderOverTelephone = mainDetailValues['takeOrderOverTelephone'];
-        restaurantObj.notificationOptions.receiveSMSNotification = mainDetailValues['receiveSMSNotification'];
+        restaurantObj.notificationOptions.receiveNotificationCall = mainDetailValues['receiveNotificationCall'] == 'on';
+        restaurantObj.notificationOptions.takeOrderOverTelephone = mainDetailValues['takeOrderOverTelephone'] == 'on';
+        restaurantObj.notificationOptions.receiveSMSNotification = mainDetailValues['receiveSMSNotification'] == 'on';
         restaurantObj.notificationOptions.notificationPhoneNumber = mainDetailValues['notificationPhoneNumber'];
         restaurantObj.notificationOptions.notificationSMSNumber = mainDetailValues['notificationSMSNumber'];
         restaurantObj.notificationOptions.notificationEmailAddress = mainDetailValues['notificationEmailAddress'];
@@ -215,7 +219,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         for( i = 1; i < 8; i++ ) {
             var openingTime = new Object();
             openingTime.dayOfWeek = i;
-            openingTime.open = deliveryDetailValues['open_' + i];
+            openingTime.open = deliveryDetailValues['open_' + i] == 'on';
             openingTime.collectionOpeningTime = deliveryDetailValues['collectionOpeningTime_' + i];
             openingTime.collectionClosingTime = deliveryDetailValues['collectionClosingTime_' + i];
             openingTime.deliveryOpeningTime = deliveryDetailValues['deliveryOpeningTime_' + i];
@@ -255,7 +259,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 menuItem.iconClass = item.iconClass;
                 menuItem.cost = item.cost;
                 var menuItemTypeCosts = [];
-                item.get('menuItemTypeCosts').forEach(function(itemTypeCost){
+                item.menuItemTypeCosts.forEach(function(itemTypeCost){
                     var menuItemTypeCost = new Object();
                     menuItemTypeCost.type = itemTypeCost.type;
                     menuItemTypeCost.cost = itemTypeCost.cost;
@@ -266,7 +270,26 @@ Ext.define('AD.controller.RestaurantEdit', {
             menuCategory.menuItems = menuItems;
             menuCategories.push(menuCategory);
         });
-        restaurant.menu.menuCategories = menuCategories;
+        restaurantObj.menu.menuCategories = menuCategories;
+
+        // Submit the restaurant to the server
+        Ext.Ajax.request({
+            url: ctx + '/admin/restaurants/save.ajax',
+            method:'POST',
+            params: {
+                body: JSON.stringify(restaurantObj)
+            },
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+                this.getMainDetailsForm().getForm().findField('id').setValue(obj.id);
+                showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
+            },
+            failure: function(response) {
+                var obj = Ext.decode(response.responseText);
+                showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+            },
+            scope:this
+        });
 
     },
 
