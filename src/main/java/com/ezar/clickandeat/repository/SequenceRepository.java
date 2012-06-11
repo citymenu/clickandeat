@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,9 @@ public class SequenceRepository {
     
     @Autowired
     private MongoOperations operations;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * @param name
