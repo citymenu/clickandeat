@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface RestaurantRepositoryCustom {
 
+    Restaurant create();
+    
     Restaurant findByRestaurantId(String restaurantId);
 
     Restaurant saveRestaurant(Restaurant restaurant);

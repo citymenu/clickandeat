@@ -1,7 +1,8 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
-import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.model.DeliveryOptions;
+import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,8 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -38,6 +39,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     public void afterPropertiesSet() throws Exception {
         operations.ensureIndex(new GeospatialIndex("address.location"),Restaurant.class);
+    }
+
+    @Override
+    public Restaurant create() {
+        Restaurant restaurant = new Restaurant();
+        return restaurant;
     }
 
     @Override
