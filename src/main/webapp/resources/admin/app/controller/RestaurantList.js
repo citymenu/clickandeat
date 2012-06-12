@@ -5,11 +5,17 @@ Ext.define('AD.controller.RestaurantList', {
     views:[
     	'restaurant.List'
     ],
-    
+
+    refs: [{
+        ref:'restaurantList',
+        selector:'restaurantlist'
+    }],
+
 	init: function() {
 		this.control({
 		    'restaurantlist': {
-                render:this.onGridRendered
+                render:this.onGridRendered,
+                itemdblclick:this.onGridDblClick
             },
 
             'restaurantlist button[action=refresh]': {
@@ -38,8 +44,21 @@ Ext.define('AD.controller.RestaurantList', {
         location.href = ctx + '/admin/restaurants/create.html';
     },
 
+    editSelected: function() {
+        var record = this.getSelectedRecord();
+        if( record ) {
+            var restaurantId = record.get('restaurantId');
+            location.href = ctx + '/admin/restaurants/edit.html?restaurantId=' + restaurantId;
+        }
+    },
+
 	onGridRendered: function(grid) {
 		this.getRestaurantsStore().loadPage(1);
+	},
+
+	onGridDblClick: function(view,record,item,index,eventObj,options) {
+        var restaurantId = record.get('restaurantId');
+        location.href = ctx + '/admin/restaurants/edit.html?restaurantId=' + restaurantId;
 	}
-    
+
 });

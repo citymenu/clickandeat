@@ -42,10 +42,10 @@ Ext.message = function(){
 			msgCt = Ext.DomHelper.insertFirst(document.body, {id: 'msg-div'}, true);
 			msgCt.setWidth(250);
            	msgCt.alignTo(target, 'tr-tr',[-15,15]);
-           	var s = Ext.String.format.apply(String, Array.prototype.slice.call(arguments, 2));
+           	var s = Ext.String.format.apply(String, Array.prototype.slice.call(arguments, 3));
        		var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s, cls)}, true);
        		var d = delay? delay: 4;
-       		m.slideIn('t',{easing:'easeOut'}).fadeOut({opacity:1,duration:2000,remove:false}).fadeOut({duration:250,remove:true});
+       		m.slideIn('t',{easing:'easeOut'}).fadeOut({opacity:1,duration:1500,remove:false}).fadeOut({duration:250,remove:true});
         },
 
         init : function(){

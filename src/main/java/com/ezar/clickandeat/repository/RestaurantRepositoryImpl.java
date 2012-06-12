@@ -3,6 +3,7 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.DeliveryOptions;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Autowired
     private LocationService locationService;
 
+    @Autowired
+    private SequenceGenerator sequenceGenerator;
+    
     private double maxDistance;
 
     @Override
@@ -44,6 +48,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     public Restaurant create() {
         Restaurant restaurant = new Restaurant();
+        restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
         return restaurant;
     }
 

@@ -3,30 +3,34 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
+import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.data.domain.Page;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Controller
 public class RestaurantController {
@@ -40,13 +44,28 @@ public class RestaurantController {
     private CuisineProvider cuisineProvider;
     
     private final JSONSerializer serializer = new JSONSerializer();
+    private final JSONDeserializer deserializer = new JSONDeserializer();
     
+    
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )
     public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
-                                       @RequestParam(value = "limit") int limit ) throws Exception {
+                                       @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort ) throws Exception {
 
-        PageRequest request = new PageRequest(page - 1, limit - start );
+        PageRequest request;
+        
+        if( StringUtils.hasText(sort)) {
+            List<Map<String,String>> sortParams = (List<Map<String,String>>)deserializer.deserialize(sort);
+            Map<String,String> sortProperties = sortParams.get(0);
+            String direction = sortProperties.get("direction");
+            String property = sortProperties.get("property");
+            request = new PageRequest(page - 1, limit - start, ( "ASC".equals(direction)? ASC : DESC ), property );
+        }
+        else {
+            request = new PageRequest(page - 1, limit - start );
+        }
+        
         Page<Restaurant> restaurants = repository.findAll(request);
 
         Map<String,Object> model = new HashMap<String,Object>();
@@ -63,7 +82,7 @@ public class RestaurantController {
     @RequestMapping(value="/admin/restaurants/create.html", method = RequestMethod.GET )
     public ModelAndView create() {
         Map<String,Object> model = getModel();
-        Restaurant restaurant = new Restaurant();
+        Restaurant restaurant = repository.create();
         restaurant.setId("DUMMY");
         restaurant.setName("Test Restaurant");
         restaurant.getCuisines().add("Italian");

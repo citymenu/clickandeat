@@ -4,9 +4,7 @@
 
 Ext.define('AD.model.Restaurant', {
     extend: 'Ext.data.Model',
-    idProperty:'id',
     fields: [
-        {name:'id', type:'string'},
         {name:'restaurantId', type:'string'},
         {name:'name', type:'string'},
         {name:'description',type: 'string'},

@@ -16,12 +16,6 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
         },
         defaultType: 'textfield',
         items:[{
-            name:'id',
-            xtype:'hidden'
-        },{
-            name:'restaurantId',
-            xtype:'hidden'
-        },{
             fieldLabel:'Name',
             name:'name',
             allowBlank: false

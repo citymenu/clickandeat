@@ -164,7 +164,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         var mainDetailValues = this.getMainDetailsForm().getForm().getValues();
 
         // Update the restaurant object details from the main details form
-        restaurantObj.id = mainDetailValues['id'];
         restaurantObj.name = mainDetailValues['name'];
         restaurantObj.description = mainDetailValues['description'];
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
@@ -281,7 +280,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
             success: function(response) {
                 var obj = Ext.decode(response.responseText);
-                this.getMainDetailsForm().getForm().findField('id').setValue(obj.id);
+                restaurantObj.id = obj.id;
                 showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
             },
             failure: function(response) {
@@ -312,6 +311,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         formPanel.loadRecord(address);
         formPanel.loadRecord(mainContact);
         formPanel.loadRecord(notificationOptions);
+
     },
 
     // Populate delivery details form
@@ -370,6 +370,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                     this.getMenuItemsStore().removeAll(false);
                     this.getMenuEditForm().removeAll(true);
                     menuCategoryEditForm = null;
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Deleted','Menu category has been deleted');
                 }
             },
             scope:this
@@ -383,6 +384,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         } else {
             var index = this.getMenuCategoriesStore().indexOf(menuCategoryEditForm.getRecord());
             this.getMenuCategoriesStore().getAt(index).set(menuCategoryEditForm.getValues());
+            showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Menu category details have been updated');
         }
     },
 
@@ -390,6 +392,7 @@ Ext.define('AD.controller.RestaurantEdit', {
     revertMenuCategory: function(button) {
         menuCategoryEditForm.getForm().reset();
         menuCategoryEditForm.loadRecord(menuCategoryEditForm.getRecord());
+        showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Menu category details have been reverted');
     },
 
     // Fires when a record is selected in the menu categories grid
@@ -481,6 +484,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                     menuItemEditForm = null;
                     // Update menu items on menu category
                     this.updateMenuCategoryItems();
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Deleted','Menu item has been deleted');
                 }
             },
             scope:this
@@ -516,6 +520,9 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             // Update menu items on menu category
             this.updateMenuCategoryItems();
+
+            // Show success message
+            showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Menu item details have been updated');
         }
     },
 
@@ -529,6 +536,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 field.setValue(menuItemTypeCost.get('cost'));
             }
         });
+        showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Menu item details have been reverted');
     },
 
     // Loads the selected menu item into the edit form
