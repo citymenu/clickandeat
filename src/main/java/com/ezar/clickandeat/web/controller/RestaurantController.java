@@ -83,7 +83,6 @@ public class RestaurantController {
     public ModelAndView create() {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.create();
-        restaurant.setId("DUMMY");
         restaurant.setName("Test Restaurant");
         restaurant.getCuisines().add("Italian");
         restaurant.getCuisines().add("Pizza");
@@ -204,6 +203,9 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String, Object>();
         try {
             Restaurant restaurant = Restaurant.fromJSON(body);
+            if( LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Received restaurant with id: " + restaurant.getId());
+            }
             restaurant = repository.saveRestaurant(restaurant);
             model.put("success",true);
             model.put("id",restaurant.getId());
