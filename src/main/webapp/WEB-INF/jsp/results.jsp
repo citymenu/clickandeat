@@ -9,17 +9,17 @@
 
 <h2>Fully Open:</h2>
 <c:forEach var="restaurant" items="${fullyOpen}">
-    <div>${restaurant.name}</div>
+    <div><a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}">${restaurant.name}</a></div>
 </c:forEach>
 
 <h2>Open For Collection Only:</h2>
 <c:forEach var="restaurant" items="${openForCollection}">
-    <div>${restaurant.name}</div>
+    <div><a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}">${restaurant.name}</a></div>
 </c:forEach>
 
 <h2>Closed:</h2>
 <c:forEach var="restaurant" items="${closed}">
-    <div>${restaurant.name}</div>
+    <div><a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}">${restaurant.name}</a></div>
 </c:forEach>
 
 </body>
