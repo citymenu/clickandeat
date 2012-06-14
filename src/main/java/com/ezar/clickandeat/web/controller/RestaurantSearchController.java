@@ -4,9 +4,12 @@ import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.RestaurantOpenStatus;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +29,7 @@ public class RestaurantSearchController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    private String timeZone;
 
     @RequestMapping(value="/search.html", method = RequestMethod.GET)
     public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
@@ -41,8 +45,12 @@ public class RestaurantSearchController {
         List<Restaurant> openForCollection = new ArrayList<Restaurant>();
         List<Restaurant> closed = new ArrayList<Restaurant>();
 
-        LocalDate today = new LocalDate();
-        LocalTime now = new LocalTime();
+        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
+        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+        
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Checking if restaurants are open on [" + today + "] at [" + now + "]");
+        }
         
         for( Restaurant restaurant: restaurantRepository.search(location, cuisine, sort, dir )) {
 
@@ -66,4 +74,11 @@ public class RestaurantSearchController {
         return new ModelAndView("results",model);
     }
 
+    
+    @Required
+    @Value(value="${timezone}")
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+    
 }
