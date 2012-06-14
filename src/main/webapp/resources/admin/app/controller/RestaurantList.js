@@ -52,6 +52,33 @@ Ext.define('AD.controller.RestaurantList', {
         }
     },
 
+    deleteSelected: function(button) {
+        var record = this.getSelectedRecord();
+        if( record ) {
+            Ext.Ajax.request({
+                url: ctx + '/admin/restaurants/delete.ajax',
+                method:'GET',
+                params: {
+                    restaurantId: record.get('restaurantId')
+                },
+                success: function(response) {
+                    var obj = Ext.decode(response.responseText);
+                    if( obj.success ) {
+                        showSuccessMessage(Ext.get('restaurantlist'),'Deleted','Restaurant deleted successfully');
+                        this.getRestaurantsStore().loadPage(1);
+                    } else {
+                        showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+                    }
+                },
+                failure: function(response) {
+                    var obj = Ext.decode(response.responseText);
+                    showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+                },
+                scope:this
+            });
+        }
+    },
+
 	onGridRendered: function(grid) {
 		this.getRestaurantsStore().loadPage(1);
 	},

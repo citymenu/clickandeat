@@ -71,11 +71,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return restaurant;
     }
 
-
-    public RestaurantRepositoryImpl() {
-        super();    //To change body of overridden methods use File | Settings | File Templates.
-    }
-
     @Override
     public List<Restaurant> search(String location, String cuisine, String sort, String dir ) {
 

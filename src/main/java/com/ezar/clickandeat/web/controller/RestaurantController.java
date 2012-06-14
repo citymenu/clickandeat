@@ -127,10 +127,11 @@ public class RestaurantController {
 
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/delete.ajax", method = RequestMethod.GET )
-    public ResponseEntity<byte[]> delete(@RequestParam(value = "id") String id) throws Exception {
+    public ResponseEntity<byte[]> delete(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
         Map<String,Object> model = new HashMap<String, Object>();
         try {
-            repository.delete(id);
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            repository.delete(restaurant);
             model.put("success",true);
         }
         catch( Exception ex ) {

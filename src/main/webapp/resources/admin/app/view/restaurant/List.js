@@ -2,6 +2,7 @@ Ext.define('AD.view.restaurant.List' ,{
     extend:'Ext.grid.Panel',
     alias:'widget.restaurantlist',
     store:'Restaurants',
+    id:'restaurantlist',
     layout:'fit',
     loadMask:true,
     
