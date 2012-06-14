@@ -91,9 +91,25 @@ public class Restaurant extends PersistentObject {
         if( openingTimes.getOpeningTimes() != null ) {
             for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
                 if( openingTime.getDayOfWeek() == date.getDayOfWeek()) {
+                    if( !openingTime.isOpen()) {
+                        return RestaurantOpenStatus.CLOSED;
+                    }
                     boolean[] isOpen = new boolean[2];
-                    isOpen[0] = !time.isBefore(openingTime.getCollectionOpeningTime()) && !time.isAfter(openingTime.getCollectionClosingTime());
-                    isOpen[1] = !time.isBefore(openingTime.getDeliveryOpeningTime()) && !time.isAfter(openingTime.getDeliveryClosingTime());
+                    
+                    if( openingTime.getCollectionOpeningTime() == null || openingTime.getCollectionOpeningTime() == null ) {
+                        isOpen[0] = false;
+                    } 
+                    else { 
+                        isOpen[0] = !time.isBefore(openingTime.getCollectionOpeningTime()) && !time.isAfter(openingTime.getCollectionClosingTime());
+                    }
+                    
+                    if( openingTime.getDeliveryOpeningTime() == null || openingTime.getDeliveryClosingTime() == null ) {
+                        isOpen[1] = false;
+                    }
+                    else {
+                        isOpen[1] = !time.isBefore(openingTime.getDeliveryOpeningTime()) && !time.isAfter(openingTime.getDeliveryClosingTime());
+                    }
+
                     if( isOpen[0] && isOpen[1]) {
                         return RestaurantOpenStatus.FULLY_OPEN;
                     }
