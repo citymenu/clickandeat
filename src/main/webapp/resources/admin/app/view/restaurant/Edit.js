@@ -15,10 +15,6 @@ Ext.define('AD.view.restaurant.Edit' ,{
             xtype:'button',
             text:'Close',
             action:'close'
-        },{
-            xtype:'button',
-            text:'Preview',
-            action:'preview'
         }]
     }],
 

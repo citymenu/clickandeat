@@ -86,8 +86,9 @@ Ext.define('AD.view.restaurant.Menu' ,{
             },
 
             columns:[
+                {text:'Number',dataIndex:'number',sortable:false,hideable:false,draggable:false,flex:.1},
                 {text:'Title',dataIndex:'title',sortable:false,hideable:false,draggable:false,flex:.7},
-                {text:'Cost',dataIndex:'cost',sortable:false,hideable:false,draggable:false,flex:.3}
+                {text:'Cost',dataIndex:'cost',sortable:false,hideable:false,draggable:false,flex:.2}
             ]
         }]
     },{

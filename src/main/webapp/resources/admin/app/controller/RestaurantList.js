@@ -59,6 +59,10 @@ Ext.define('AD.controller.RestaurantList', {
 	onGridDblClick: function(view,record,item,index,eventObj,options) {
         var restaurantId = record.get('restaurantId');
         location.href = ctx + '/admin/restaurants/edit.html?restaurantId=' + restaurantId;
+	},
+
+	getSelectedRecord: function() {
+	    return this.getRestaurantList().getSelectionModel().getLastSelected();
 	}
 
 });

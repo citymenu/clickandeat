@@ -1,8 +1,6 @@
 package com.ezar.clickandeat.model;
 
-import com.ezar.clickandeat.converter.LocalDateTransformer;
-import com.ezar.clickandeat.converter.LocalTimeTransformer;
-import com.ezar.clickandeat.converter.NullIdStringTransformer;
+import com.ezar.clickandeat.converter.*;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
 import org.joda.time.LocalDate;
@@ -25,7 +23,9 @@ public class Restaurant extends PersistentObject {
     private static final JSONDeserializer<Restaurant> DESERIALIZER = new JSONDeserializer<Restaurant>()
             .use(LocalDate.class, new LocalDateTransformer())
             .use(LocalTime.class, new LocalTimeTransformer())
-            .use(String.class, new NullIdStringTransformer());
+            .use(String.class, new NullIdStringTransformer())
+            .use(Double.class, new DoubleTransformer())
+            .use(Integer.class, new IntegerTransformer());
 
     @Indexed(unique=true)
     private String restaurantId;

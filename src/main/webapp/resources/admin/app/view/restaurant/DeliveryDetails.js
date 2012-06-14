@@ -296,7 +296,7 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             name:'deliveryCharge',
             xtype:'numberfield'
         },{
-            fieldLabel:'Discount for orders collected by customer',
+            fieldLabel:'Discount (%) for orders collected by customer',
             name:'collectionDiscount',
             xtype:'numberfield'
         },{

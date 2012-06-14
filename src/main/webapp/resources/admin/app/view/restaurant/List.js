@@ -34,12 +34,8 @@ Ext.define('AD.view.restaurant.List' ,{
 
     initComponent: function() {
         this.columns = [
-            {header:'ID', dataIndex:'restaurantId',flex:1},
-            {header:'Name', dataIndex:'name',flex:1},
-            {header:'ServiceId',dataIndex:'serviceId',flex:1},
-            {header:'Main Contact',dataIndex:'mainContactName',flex:1},
-            {header:'Phone',dataIndex:'phone',flex:1},
-            {header:'Email',dataIndex:'email',flex:1}
+            {header:'ID', dataIndex:'restaurantId',flex:.1},
+            {header:'Name', dataIndex:'name',flex:.9}
         ];
 
         this.callParent(arguments);

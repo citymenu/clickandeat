@@ -1,8 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
-import com.ezar.clickandeat.model.DeliveryOptions;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -49,6 +48,11 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public Restaurant create() {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
+        restaurant.setOpeningTimes(new OpeningTimes());
+        restaurant.setDeliveryOptions(new DeliveryOptions());
+        restaurant.setMainContact(new Person());
+        restaurant.setNotificationOptions(new NotificationOptions());
+        restaurant.setMenu(new Menu());
         return restaurant;
     }
 

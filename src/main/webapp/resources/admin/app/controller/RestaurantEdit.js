@@ -64,10 +64,6 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click:this.saveRestaurant
             },
 
-            'restaurantedit button[action=preview]': {
-                click:this.previewRestaurant
-            },
-
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -136,7 +132,28 @@ Ext.define('AD.controller.RestaurantEdit', {
 	    mainContact = new AD.model.Person(restaurantObj.mainContact);
 	    notificationOptions = new AD.model.NotificationOptions(restaurantObj.notificationOptions);
 	    deliveryOptions = new AD.model.DeliveryOptions(restaurantObj.deliveryOptions);
+
+	    // Initialize the menu object using fully qualified model records
+	    var menuCategories = [];
+	    restaurantObj.menu.menuCategories.forEach(function(category) {
+	        var menuCategory = new AD.model.MenuCategory(category);
+	        var menuItems = [];
+	        category.menuItems.forEach(function(item) {
+	            var menuItem = new AD.model.MenuItem(item);
+	            var menuItemTypeCosts = [];
+	            item.menuItemTypeCosts.forEach(function(itemType){
+	                var menuItemTypeCost = new AD.model.MenuItemTypeCost(itemType);
+	                menuItemTypeCosts.push(menuItemTypeCost);
+	            });
+	            menuItem.set('menuItemTypeCosts',menuItemTypeCosts);
+	            menuItems.push(menuItem);
+	        });
+	        menuCategory.set('menuItems',menuItems);
+	        menuCategories.push(menuCategory);
+	    });
+
 	    menu = new AD.model.Menu(restaurantObj.menu);
+	    menu.set('menuCategories',menuCategories);
 
     },
 
@@ -165,7 +182,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Update the restaurant object details from the main details form
         restaurantObj.name = mainDetailValues['name'];
-        restaurantObj.description = mainDetailValues['description'];
+        restaurantObj.description = mainDetailValues['description'].replace('&#8203;','');
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
         restaurantObj.contactMobile = mainDetailValues['contactMobile'];
@@ -211,7 +228,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Update opening times for the restaurant
         restaurantObj.openingTimes = new Object();
-        restaurantObj.openingTimes.openingTimesSummary = deliveryDetailValues['openingTimesSummary'];
+        restaurantObj.openingTimes.openingTimesSummary = deliveryDetailValues['openingTimesSummary'].replace('&#8203;','');
 
         // Build daily opening times summary
         var openingTimes = [];
@@ -230,7 +247,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object();
-        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'];
+        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'].replace('&#8203;','');
         restaurantObj.deliveryOptions.deliveryTimeMinutes = deliveryDetailValues['deliveryTimeMinutes'];
         restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
         restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
@@ -248,23 +265,25 @@ Ext.define('AD.controller.RestaurantEdit', {
             menuCategory.type = category.get('type');
             menuCategory.summary = category.get('summary');
             menuCategory.iconClass = category.get('iconClass');
+            menuCategory.itemTypes = delimitedStringToArray(category.get('itemTypes'),'\n');
             var menuItems = [];
             category.get('menuItems').forEach(function(item){
                 var menuItem = new Object();
-                menuItem.number = item.number;
-                menuItem.title = item.title;
-                menuItem.subtitle = item.subtitle;
-                menuItem.description = item.description;
-                menuItem.iconClass = item.iconClass;
-                menuItem.cost = item.cost;
+                menuItem.number = item.get('number');
+                menuItem.title = item.get('title');
+                menuItem.subtitle = item.get('subtitle');
+                menuItem.description = item.get('description');
+                menuItem.iconClass = item.get('iconClass');
+                menuItem.cost = item.get('cost');
                 var menuItemTypeCosts = [];
-                item.menuItemTypeCosts.forEach(function(itemTypeCost){
+                item.get('menuItemTypeCosts').forEach(function(itemTypeCost){
                     var menuItemTypeCost = new Object();
-                    menuItemTypeCost.type = itemTypeCost.type;
-                    menuItemTypeCost.cost = itemTypeCost.cost;
+                    menuItemTypeCost.type = itemTypeCost.get('type');
+                    menuItemTypeCost.cost = itemTypeCost.get('cost');
                     menuItemTypeCosts.push(menuItemTypeCost);
                 });
                 menuItem.menuItemTypeCosts = menuItemTypeCosts;
+                menuItems.push(menuItem);
             });
             menuCategory.menuItems = menuItems;
             menuCategories.push(menuCategory);
@@ -280,8 +299,12 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
             success: function(response) {
                 var obj = Ext.decode(response.responseText);
-                restaurantObj.id = obj.id;
-                showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
+                if( obj.success ) {
+                    restaurantObj.id = obj.id;
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
+                } else {
+                    showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+                }
             },
             failure: function(response) {
                 var obj = Ext.decode(response.responseText);
@@ -311,7 +334,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         formPanel.loadRecord(address);
         formPanel.loadRecord(mainContact);
         formPanel.loadRecord(notificationOptions);
-
     },
 
     // Populate delivery details form
