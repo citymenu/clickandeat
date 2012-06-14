@@ -130,6 +130,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
             if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
                 double distance = locationService.getDistance(geoLocation,restaurantLocation);
+                if( LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Distance from location " + location + " to restaurant " + restaurant.getName() + " is " + distance);
+                }
                 if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
                     availableRestaurants.add(restaurant);
                     break;
