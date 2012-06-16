@@ -4,6 +4,9 @@ import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -38,6 +41,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private SequenceGenerator sequenceGenerator;
     
     private double maxDistance;
+
+    private String timeZone;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -118,6 +123,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             LOGGER.debug("Returned " + restaurants.size() + " restaurants, now checking delivery options");
         }
 
+        // Get the current time and date to determine if restaurants are open
+        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
+        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+        
         // Iterate over the results to determine which restaurants will serve the location
         List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();
         for( Restaurant restaurant: restaurants ) {
@@ -128,12 +137,19 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 if( LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Distance from location " + location + " to restaurant " + restaurant.getName() + " is " + distance);
                 }
+                // Set transient distance to location property for search result ordering
+                restaurant.setDistanceToSearchLocation(distance);
+
                 if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
+                    // Set transient open for delivery property for search result ordering
+                    restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(today,now));
                     availableRestaurants.add(restaurant);
-                    break;
+                    continue;
                 }
                 for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
                     if(deliveryLocation.toUpperCase().replace(" ", "").startsWith(lookupLocation)) {
+                        // Set transient open for delivery property for search result ordering
+                        restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(today,now));
                         availableRestaurants.add(restaurant);
                         break;
                     }
@@ -153,6 +169,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Value(value="${location.maxDistance}")
     public void setMaxDistance(double maxDistance) {
         this.maxDistance = maxDistance;
+    }
+
+    
+    @Required
+    @Value(value="${timezone}")
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 
 }

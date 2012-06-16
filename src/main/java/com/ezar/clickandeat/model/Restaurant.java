@@ -3,6 +3,7 @@ package com.ezar.clickandeat.model;
 import com.ezar.clickandeat.converter.*;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -58,9 +59,26 @@ public class Restaurant extends PersistentObject {
 
     private String imageId;
 
+    // Transient properties
+    private Double distanceToSearchLocation;
+
+    private boolean openForDelivery;
+    
     public Restaurant() {
         this.cuisines = new ArrayList<String>();
     }
+
+
+    /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
+        return isOpen(date,time).equals(RestaurantOpenStatus.FULLY_OPEN);
+    }
+
 
     /**
      * Returns true if this restaurant is currently open based on the given date and time
@@ -264,5 +282,20 @@ public class Restaurant extends PersistentObject {
     public void setImageId(String imageId) {
         this.imageId = imageId;
     }
-    
+
+    public Double getDistanceToSearchLocation() {
+        return distanceToSearchLocation;
+    }
+
+    public void setDistanceToSearchLocation(Double distanceToSearchLocation) {
+        this.distanceToSearchLocation = distanceToSearchLocation;
+    }
+
+    public boolean isOpenForDelivery() {
+        return openForDelivery;
+    }
+
+    public void setOpenForDelivery(boolean openForDelivery) {
+        this.openForDelivery = openForDelivery;
+    }
 }

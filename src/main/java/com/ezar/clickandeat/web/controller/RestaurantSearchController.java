@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class RestaurantSearchController {
@@ -29,7 +26,6 @@ public class RestaurantSearchController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    private String timeZone;
 
     @RequestMapping(value="/search.html", method = RequestMethod.GET)
     public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
@@ -41,44 +37,42 @@ public class RestaurantSearchController {
 
         Map<String,Object> model = new HashMap<String,Object>();
 
-        List<Restaurant> fullyOpen = new ArrayList<Restaurant>();
-        List<Restaurant> openForCollection = new ArrayList<Restaurant>();
-        List<Restaurant> closed = new ArrayList<Restaurant>();
+        SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
+        results.addAll(restaurantRepository.search(location, cuisine, sort, dir ));
+        model.put("results",results);
+        model.put("count",results.size());
 
-        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
-        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
-        
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Checking if restaurants are open on [" + today + "] at [" + now + "]");
-        }
-        
-        for( Restaurant restaurant: restaurantRepository.search(location, cuisine, sort, dir )) {
-
-            // Confirm if the restaurant is open for delivery or collection
-            RestaurantOpenStatus isOpen = restaurant.isOpen(today,now);
-            if( isOpen.equals(RestaurantOpenStatus.FULLY_OPEN)) {
-                fullyOpen.add(restaurant);
-            }
-            else if( isOpen.equals(RestaurantOpenStatus.OPEN_FOR_COLLECTION)) {
-                openForCollection.add(restaurant);
-            }
-            else {
-                closed.add(restaurant);
-            }
-        }
-
-        model.put("fullyOpen",fullyOpen);
-        model.put("openForCollection",openForCollection);
-        model.put("closed",closed);
-        
         return new ModelAndView("results",model);
     }
 
     
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
+    /**
+     * Custom ordering for restaurant search results 
+     */
+    
+    private static final class RestaurantSearchComparator implements Comparator<Restaurant> {
+
+        @Override
+        public int compare(Restaurant restaurant1, Restaurant restaurant2) {
+            if( restaurant1.isOpenForDelivery() && !restaurant2.isOpenForDelivery()) {
+                return -1;                
+            }
+            else if( !restaurant1.isOpenForDelivery() && restaurant2.isOpenForDelivery()) {
+                return 1;
+            }
+            else {
+                double distanceDiff = restaurant1.getDistanceToSearchLocation() - restaurant2.getDistanceToSearchLocation();
+                if( distanceDiff == 0 ) {
+                    return restaurant1.getName().compareTo(restaurant2.getName());
+                }
+                else if( distanceDiff < 0 ) {
+                    return -1;
+                }
+                else {
+                    return 1;
+                }
+            }
+        }
     }
     
 }

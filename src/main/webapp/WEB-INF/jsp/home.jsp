@@ -7,23 +7,6 @@
 </head>
 
 <body>
-<h1>Current user: <%= request.getRemoteUser() %></h1>
-<h1>Current locale: <%= response.getLocale() %></h1>
-<h1>Session id: <%= request.getSession().getId() %></h1>
-<h1>Security context: <%= request.getSession().getAttribute("SPRING_SECURITY_CONTEXT") %></h1>
-
-<c:if test="${pageContext.request.remoteUser == null}">
-    <p><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></p>
-    <p><a href="${ctx}/secure/register.html"><spring:message code="label.register"/></a></p>
-</c:if>
-
-<div>
-    <p><a href="${ctx}/admin/restaurants.html"><spring:message code="label.restaurants"/></a></p>
-</div>
-
-<c:if test="${pageContext.request.remoteUser != null}">
-    <p><a href="${ctx}/j_security_logout"><spring:message code="label.logout"/></a></p>
-</c:if>
 
 <div>
     <p><spring:message code="label.change-language"/></p>

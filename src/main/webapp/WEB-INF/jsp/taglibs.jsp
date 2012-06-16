@@ -7,6 +7,7 @@
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
+<c:set var="user" value="${pageContext.request.remoteUser}"/>
 
 <script type="text/javascript">var ctx = "${ctx}"; var locale = "${locale}";</script>
 

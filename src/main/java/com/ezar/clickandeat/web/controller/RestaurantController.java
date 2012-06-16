@@ -42,8 +42,22 @@ public class RestaurantController {
     
     private final JSONSerializer serializer = new JSONSerializer();
     private final JSONDeserializer deserializer = new JSONDeserializer();
-    
-    
+
+
+    @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
+    public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId) {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Retrieving restaurant with id [" + restaurantId + "]");
+        }
+
+        Map<String,Object> model = getModel();
+        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        model.put("restaurant",restaurant);
+        return new ModelAndView("restaurant",model);
+    }
+
+
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )
