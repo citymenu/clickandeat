@@ -18,18 +18,18 @@ h1, h2 {
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
     color:#444;
-    font-family: myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
+    font-family: "Myriad Pro Cond", myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
     font-weight: bold;
 }
 
 h1 {
-    font-size: 18px;
-    line-height: 30px;
+    font-size: 38px;
+    line-height: 42px;
 }
 
 h2 {
-    font-size:16px;
-    line-height:20px;
+    font-size:20px;
+    line-height:24px;
 }
 
 a, a:hover, a:visited, a:active {
@@ -41,6 +41,8 @@ a:hover, a:active {
 }
 
 #titlenav ul {
+    font-family: "Myriad Pro Cond", myriad-pro-condensed-1,myriad-pro-condensed-2,'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:20px;
     list-style:none outside none;
     margin:0;
     padding:0;
@@ -83,7 +85,6 @@ a:hover, a:active {
 }
 
 #titlenav a, #titlenav a:visited, #titlenav a:active, #titlenav a:hover {
-    font: 16px/18px ff-tisa-web-pro-1,ff-tisa-web-pro-2,Georgia,"Times New Roman",serif;
     color:#F7F7F7;
     text-decoration:none;
     display:block;
