@@ -8,10 +8,20 @@ import java.util.List;
 @Document(collection="menus")
 public class Menu extends PersistentObject {
 
+    boolean numberItems;
+
     List<MenuCategory> menuCategories;
 
     public Menu() {
         this.menuCategories = new ArrayList<MenuCategory>();
+    }
+
+    public boolean isNumberItems() {
+        return numberItems;
+    }
+
+    public void setNumberItems(boolean numberItems) {
+        this.numberItems = numberItems;
     }
 
     public List<MenuCategory> getMenuCategories() {

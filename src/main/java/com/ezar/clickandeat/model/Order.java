@@ -12,13 +12,9 @@ public class Order extends PersistentObject {
     
     private String orderId;
 
-    private List<OrderItem> orderItems = new ArrayList<OrderItem>();
+    private String userId;
 
-    @DBRef
-    private User user;
-
-    @DBRef
-    private Restaurant restaurant;
+    private String restaurantId;
 
     private Person customer;
 
@@ -27,6 +23,8 @@ public class Order extends PersistentObject {
     private String paymentType;
     
     private Address deliveryAddress;
+
+    private Address billingAddress;
     
     private String orderStatus;
 
@@ -38,16 +36,21 @@ public class Order extends PersistentObject {
 
     private Double orderItemCost;
 
-    private List<Discount> discounts = new ArrayList<Discount>();
-
     private Double deliveryCost;
     
     private Double cardTransactionCost;
     
     private Double totalCost;
-    
-    private List<String> orderUpdates = new ArrayList<String>();
 
+    private List<OrderItem> orderItems;
+
+    private List<String> orderUpdates;
+
+    public Order() {
+        this.orderItems = new ArrayList<OrderItem>();
+        this.orderUpdates = new ArrayList<String>();
+    }
+    
 
     public String getOrderId() {
         return orderId;
@@ -65,28 +68,20 @@ public class Order extends PersistentObject {
         this.orderItems = orderItems;
     }
 
-    public List<Discount> getDiscounts() {
-        return discounts;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setDiscounts(List<Discount> discounts) {
-        this.discounts = discounts;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public User getUser() {
-        return user;
+    public String getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
     public Person getCustomer() {
@@ -119,6 +114,14 @@ public class Order extends PersistentObject {
 
     public void setDeliveryAddress(Address deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
+    }
+
+    public Address getBillingAddress() {
+        return billingAddress;
+    }
+
+    public void setBillingAddress(Address billingAddress) {
+        this.billingAddress = billingAddress;
     }
 
     public String getOrderStatus() {
