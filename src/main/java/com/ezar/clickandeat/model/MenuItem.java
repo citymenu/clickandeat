@@ -7,6 +7,8 @@ public class MenuItem {
 
     private int number;
     
+    private String itemId;
+    
     private String title;
     
     private String subtitle;
@@ -25,6 +27,14 @@ public class MenuItem {
 
     public int getNumber() {
         return number;
+    }
+
+    public String getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(String itemId) {
+        this.itemId = itemId;
     }
 
     public void setNumber(int number) {

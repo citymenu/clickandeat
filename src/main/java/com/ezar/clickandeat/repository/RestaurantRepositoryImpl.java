@@ -72,6 +72,21 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             double[] location = locationService.getLocation(restaurant.getAddress().getPostCode());
             restaurant.getAddress().setLocation(location);
         }
+
+        // Update category and menu item identifiers
+        if( restaurant.getMenu() != null ) {
+            for( MenuCategory menuCategory: restaurant.getMenu().getMenuCategories()) {
+                if( !StringUtils.hasText(menuCategory.getCategoryId())) {
+                    menuCategory.setCategoryId(sequenceGenerator.getNextSequence());
+                }
+                for(MenuItem menuItem: menuCategory.getMenuItems()) {
+                    if(!StringUtils.hasText(menuItem.getItemId())) {
+                        menuItem.setItemId(sequenceGenerator.getNextSequence());
+                    }
+                }
+            }
+        }
+        
         operations.save(restaurant);
         return restaurant;
     }

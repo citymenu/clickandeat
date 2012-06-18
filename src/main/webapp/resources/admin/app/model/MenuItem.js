@@ -6,6 +6,7 @@ Ext.define('AD.model.MenuItem', {
     extend: 'Ext.data.Model',
     fields: [
         {name:'number', type:'number'},
+        {name:'itemId', type:'string'},
         {name:'title', type:'string'},
         {name:'subtitle', type:'string'},
         {name:'description', type:'string'},

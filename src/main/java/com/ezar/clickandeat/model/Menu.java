@@ -8,9 +8,9 @@ import java.util.List;
 @Document(collection="menus")
 public class Menu extends PersistentObject {
 
-    boolean numberItems;
+    private boolean numberItems;
 
-    List<MenuCategory> menuCategories;
+    private List<MenuCategory> menuCategories;
 
     public Menu() {
         this.menuCategories = new ArrayList<MenuCategory>();

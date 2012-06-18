@@ -7,25 +7,35 @@ public class MenuCategory {
     
     public static final String TYPE_STANDARD = "STANDARD";
     public static final String TYPE_GRID = "GRID";
-    
-    String name;
-    
-    String type;
-    
-    String summary;
 
-    String iconClass;
+    private String categoryId;
 
-    List<MenuItem> menuItems;
-    
-    List<MenuSubCategory> subCategories;
-    
-    List<String> itemTypes;
+    private String name;
+
+    private String type;
+
+    private String summary;
+
+    private String iconClass;
+
+    private List<MenuItem> menuItems;
+
+    private List<MenuSubCategory> subCategories;
+
+    private List<String> itemTypes;
 
     public MenuCategory() {
         this.menuItems = new ArrayList<MenuItem>();
         this.subCategories = new ArrayList<MenuSubCategory>();
         this.itemTypes = new ArrayList<String>();
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getName() {

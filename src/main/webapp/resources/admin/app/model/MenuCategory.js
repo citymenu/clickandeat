@@ -7,6 +7,7 @@ Ext.define('AD.model.MenuCategory', {
     extend: 'Ext.data.Model',
     fields: [
         {name:'name', type:'string'},
+        {name:'categoryId', type:'string'},
         {name:'type', type:'string'},
         {name:'summary', type:'string'},
         {name:'iconClass', type:'string'},

@@ -262,6 +262,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         this.getMenuCategoriesStore().getRange().forEach(function(category){
             var menuCategory = new Object();
             menuCategory.name = category.get('name');
+            menuCategory.categoryId = category.get('categoryId');
             menuCategory.type = category.get('type');
             menuCategory.summary = category.get('summary');
             menuCategory.iconClass = category.get('iconClass');
@@ -270,6 +271,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             category.get('menuItems').forEach(function(item){
                 var menuItem = new Object();
                 menuItem.number = item.get('number');
+                menuItem.itemId = item.get('itemId');
                 menuItem.title = item.get('title');
                 menuItem.subtitle = item.get('subtitle');
                 menuItem.description = item.get('description');

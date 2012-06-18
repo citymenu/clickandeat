@@ -34,6 +34,9 @@ Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
     defaultType: 'textfield',
 
     items: [{
+        xtype:'hidden',
+        name:'categoryId'
+    },{
         fieldLabel:'Name',
         name:'name',
         allowBlank:false
