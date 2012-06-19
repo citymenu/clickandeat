@@ -74,8 +74,8 @@ public class OrderController {
                     order = buildAndRegister(session,restaurantId);
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
-                    repository.delete(order);
-                    order = buildAndRegister(session,restaurantId);
+                    order.setRestaurantId(restaurantId);
+                    order.getOrderItems().clear();
                 }
             }
             
