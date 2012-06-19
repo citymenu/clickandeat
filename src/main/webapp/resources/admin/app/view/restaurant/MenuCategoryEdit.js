@@ -62,14 +62,9 @@ Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
     },{
         fieldLabel:'Summary',
         name:'summary',
-        xtype: 'htmleditor',
         labelAlign:'top',
-        fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
-        defaultFont:'Segoe UI',
-        enableColors: false,
-        enableLinks:false,
-        enableLists:false,
-        enableAlignments: false
+        xtype:'textareafield',
+        height:90
     },{
         fieldLabel:'Icon class',
         name:'iconClass'

@@ -22,14 +22,9 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
         },{
             fieldLabel:'Description',
             name:'description',
-            xtype:'htmleditor',
             labelAlign:'top',
-            fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
-            defaultFont:'Segoe UI',
-            enableColors: false,
-            enableLinks:false,
-            enableLists:false,
-            enableAlignments: false
+            xtype:'textareafield',
+            height:90
         },{
             fieldLabel:'Cuisines',
             xtype:'checkboxgroup',

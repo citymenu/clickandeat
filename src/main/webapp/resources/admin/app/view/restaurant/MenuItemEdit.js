@@ -50,14 +50,9 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
     },{
         fieldLabel:'Description',
         name:'description',
-        xtype: 'htmleditor',
         labelAlign:'top',
-        fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
-        defaultFont:'Segoe UI',
-        enableColors: false,
-        enableLinks:false,
-        enableLists:false,
-        enableAlignments: false
+        xtype:'textarea',
+        height:90
     },{
         fieldLabel:'Cost',
         xtype:'numberfield',
