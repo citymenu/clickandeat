@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import org.joda.time.DateTime;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -9,7 +9,8 @@ import java.util.List;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
-    
+
+    @Indexed(unique=true)
     private String orderId;
 
     private String userId;
@@ -50,8 +51,37 @@ public class Order extends PersistentObject {
         this.orderItems = new ArrayList<OrderItem>();
         this.orderUpdates = new ArrayList<String>();
     }
-    
 
+    
+    /**
+     * @param orderItem
+     */
+    
+    public void addOrderItem(OrderItem orderItem) {
+        OrderItem existingOrderItem = findByMenuItemId(orderItem.getMenuItemId());
+        if( existingOrderItem == null ) {
+            orderItems.add(orderItem);
+        }
+        else {
+            existingOrderItem.setQuantity(existingOrderItem.getQuantity() + orderItem.getQuantity());
+        }
+    }
+
+    
+    /**
+     * @param menuItemId
+     * @return
+     */
+    
+    private OrderItem findByMenuItemId(String menuItemId) {
+        for( OrderItem orderItem: orderItems) {
+            if( menuItemId.equals(orderItem.getMenuItemId())) {
+                return orderItem;
+            }
+        }
+        return null;
+    }
+    
     public String getOrderId() {
         return orderId;
     }

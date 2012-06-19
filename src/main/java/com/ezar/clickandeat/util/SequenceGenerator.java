@@ -7,12 +7,17 @@ import com.mongodb.MongoException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -22,10 +27,16 @@ public class SequenceGenerator implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(SequenceGenerator.class);
 
+    private static final int DEFAULT_BATCH_SIZE = 10;
+    
     private static final String COLLECTION_NAME = "sequence";
 
     private static final String SEQUENCE_PATTERN = "00000000";
     
+    private int batchSize = DEFAULT_BATCH_SIZE;
+    
+    private final Queue<Integer> sequenceQueue = new ConcurrentLinkedQueue<Integer>();
+     
     
     @Autowired
     private MongoOperations operations;
@@ -63,20 +74,46 @@ public class SequenceGenerator implements InitializingBean {
     
     public String getNextSequence() {
 
-        final Query query = query(where("name").is("sequence"));
-        final Update update = new Update().inc("counter",1);
+        Integer nextSequence;
+        
+        if( sequenceQueue.size() > 0 ) {
+            nextSequence = sequenceQueue.remove();
+        }
+        else {
+            synchronized (sequenceQueue ) {
+                
+                if( LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Getting next batch of " + batchSize + " sequence ids");
+                }
+                
+                final Query query = query(where("name").is("sequence"));
+                final Update update = new Update().inc("counter",batchSize);
 
-        // Get updated object
-        Integer nextSequence = operations.execute(COLLECTION_NAME,new CollectionCallback<Integer>() {
-            public Integer doInCollection(DBCollection collection) throws MongoException, DataAccessException {
-                DBObject result = collection.findAndModify(query.getQueryObject(),null,null,false,update.getUpdateObject(),true,false);
-                return (Integer)result.get("counter");
+                // Get updated object
+                Integer nextBatchSequence = operations.execute(COLLECTION_NAME,new CollectionCallback<Integer>() {
+                    public Integer doInCollection(DBCollection collection) throws MongoException, DataAccessException {
+                        DBObject result = collection.findAndModify(query.getQueryObject(),null,null,false,update.getUpdateObject(),true,false);
+                        return (Integer)result.get("counter");
+                    }
+                });
+
+                for( int i = nextBatchSequence - batchSize + 1; i <= nextBatchSequence; i++ ) {
+                    sequenceQueue.add(i);
+                }
             }
-        });
+            return getNextSequence();
+        }
 
         // Return prefixed zeros with sequence id appended
         String prefix = SEQUENCE_PATTERN.substring(0,SEQUENCE_PATTERN.length() - nextSequence.toString().length());
         return prefix + nextSequence.toString();
+    }
+
+
+    @Required
+    @Value(value="${sequence.batchsize}")
+    public void setBatchSize(Integer batchSize) {
+        this.batchSize = batchSize;
     }
 
 }

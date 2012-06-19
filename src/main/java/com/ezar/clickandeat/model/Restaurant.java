@@ -16,18 +16,6 @@ import java.util.List;
 @Document(collection="restaurants")
 public class Restaurant extends PersistentObject {
 
-    private static final JSONSerializer SERIALIZER = new JSONSerializer()
-            .transform(new LocalDateTransformer(), LocalDate.class)
-            .transform(new LocalTimeTransformer(), LocalTime.class)
-            .transform(new NullIdStringTransformer(), String.class);
-
-    private static final JSONDeserializer<Restaurant> DESERIALIZER = new JSONDeserializer<Restaurant>()
-            .use(LocalDate.class, new LocalDateTransformer())
-            .use(LocalTime.class, new LocalTimeTransformer())
-            .use(String.class, new NullIdStringTransformer())
-            .use(Double.class, new DoubleTransformer())
-            .use(Integer.class, new IntegerTransformer());
-
     @Indexed(unique=true)
     private String restaurantId;
 
@@ -145,24 +133,6 @@ public class Restaurant extends PersistentObject {
     }
 
 
-    /**
-     * @param restaurant
-     * @return
-     */
-
-    public static String toJSON(Restaurant restaurant) {
-        return SERIALIZER.deepSerialize(restaurant);
-    }
-
-    /**
-     * @param json
-     * @return
-     */
-
-    public static Restaurant fromJSON(String json) {
-        return DESERIALIZER.deserialize(json);
-    }
-    
     public String getRestaurantId() {
         return restaurantId;
     }

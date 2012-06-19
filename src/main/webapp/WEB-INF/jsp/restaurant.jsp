@@ -3,6 +3,7 @@
 
 <head>
     <title>${restaurant.name}</title>
+    <script type="text/javascript" src="${ctx}/resources/script/orders.js"></script>
 </head>
 
 <body>
@@ -19,7 +20,7 @@
             <div class="menuitems">
                 <c:forEach var="menuItem" items="${menuCategory.menuItems}">
                     <div class="menuItem">
-                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle}</div>
+                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}','${menuItem.itemId}','${menuItem.title}',${menuItem.cost})">Add</a></span></div>
                         <div>${menuItem.description}</div>
                     </div>
                 </c:forEach>

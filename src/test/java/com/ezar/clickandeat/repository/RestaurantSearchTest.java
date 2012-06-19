@@ -31,7 +31,7 @@ public class RestaurantSearchTest {
 
         removeRestaurant(restaurantId);
         
-        Restaurant restaurant = new Restaurant();
+        Restaurant restaurant = repository.create();
         restaurant.setRestaurantId(restaurantId);
         restaurant.setName("Test Restaurant");
         
