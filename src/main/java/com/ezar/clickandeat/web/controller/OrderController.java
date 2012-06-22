@@ -63,7 +63,7 @@ public class OrderController {
             
             // Get the order out of the session            
             HttpSession session = request.getSession(true);
-            String orderId = (String)session.getAttribute("ORDERID");
+            String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
                 order = buildAndRegister(session,restaurantId);
@@ -81,7 +81,7 @@ public class OrderController {
             
             // Add new order item to order and update
             order.addOrderItem(orderItem);
-            order = repository.save(order);
+            order = repository.saveOrder(order);
 
             // Return success
             model.put("success",true);
@@ -99,6 +99,45 @@ public class OrderController {
     }
 
 
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/removeItem.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> removeFromOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
+            String itemId = (String)params.get("itemId");
+            Integer quantity = (Integer)params.get("quantity");
+
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order = null;
+            if( orderId != null ) {
+                order = repository.findByOrderId(orderId);
+                if( order != null ) {
+                    order.removeOrderItem(itemId,quantity);
+                    order = repository.saveOrder(order);
+                }
+            }
+            model.put("success",true);
+            model.put("order",order);
+        }
+        catch(Exception ex ) {
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+
+        String json = JSONUtils.serialize(model);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+
+    }
+
+
     /**
      * @param session
      * @param restaurantId
@@ -109,7 +148,7 @@ public class OrderController {
         Order order = repository.create();
         order.setRestaurantId(restaurantId);
         order = repository.save(order);
-        session.setAttribute("ORDERID",order.getOrderId());
+        session.setAttribute("orderid",order.getOrderId());
         return order;
     } 
     

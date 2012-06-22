@@ -1,15 +1,9 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.RestaurantOpenStatus;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

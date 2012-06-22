@@ -52,6 +52,19 @@ public class Order extends PersistentObject {
         this.orderUpdates = new ArrayList<String>();
     }
 
+
+    /**
+     * Updates order item costs
+     */
+
+    public void updateCosts() {
+        double orderItemCost = 0.0;
+        for( OrderItem item: orderItems ) {
+            orderItemCost += item.getCost() * item.getQuantity();
+        }
+        this.orderItemCost = orderItemCost;
+    }
+    
     
     /**
      * @param orderItem
@@ -67,6 +80,25 @@ public class Order extends PersistentObject {
         }
     }
 
+
+    /**
+     * 
+     * @param itemId
+     * @param quantity
+     */
+    public void removeOrderItem(String itemId, Integer quantity ) {
+        OrderItem orderItem = findByMenuItemId(itemId);
+        if( orderItem != null ) {
+            int newQuantity = orderItem.getQuantity() - quantity;
+            if( newQuantity < 1 ) {
+                getOrderItems().remove(orderItem);
+            }
+            else {
+                orderItem.setQuantity(newQuantity);
+            }
+        }
+    }
+    
     
     /**
      * @param menuItemId

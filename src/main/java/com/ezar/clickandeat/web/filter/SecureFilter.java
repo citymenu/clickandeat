@@ -14,8 +14,6 @@ public class SecureFilter implements Filter {
         enabled = "production".equals(environment);
     }
 
-    public void destroy() {
-    }
 
     /**
      * @param request
@@ -44,5 +42,9 @@ public class SecureFilter implements Filter {
         else {
             res.sendRedirect("https://" + req.getHeader("Host") + req.getRequestURI() + (req.getQueryString()!=null? "?" + req.getQueryString(): ""));
         }
+    }
+
+
+    public void destroy() {
     }
 }

@@ -23,6 +23,25 @@ function delimitedStringToArray(str,delim) {
     }
 }
 
+/* Converts <br> into newline on model init */
+function replaceLineBreaks(value) {
+    return value? value.replace('<br>','\n'): null;
+}
+
+/* Converts <br> into newline on model init */
+function replaceNewLines(value) {
+    return value? value.replace('\n','<br>'): null;
+}
+
+/* Converts array into newline delimited string */
+function arrayToString(value, record) {
+    if( value && (value instanceof Array)) {
+        return value.join('\n');
+    } else {
+        return value;
+    }
+}
+
 //Messaging
 Ext.message = function(){
 

@@ -182,7 +182,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Update the restaurant object details from the main details form
         restaurantObj.name = mainDetailValues['name'];
-        restaurantObj.description = mainDetailValues['description'].replace('&#8203;','');
+        restaurantObj.description = replaceNewLines(mainDetailValues['description']);
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
         restaurantObj.contactMobile = mainDetailValues['contactMobile'];
@@ -228,7 +228,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Update opening times for the restaurant
         restaurantObj.openingTimes = new Object();
-        restaurantObj.openingTimes.openingTimesSummary = deliveryDetailValues['openingTimesSummary'].replace('&#8203;','');
+        restaurantObj.openingTimes.openingTimesSummary = replaceNewLines(deliveryDetailValues['openingTimesSummary']);
 
         // Build daily opening times summary
         var openingTimes = [];
@@ -247,7 +247,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object();
-        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'].replace('&#8203;','');
+        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'].replace('\n','<br>');
         restaurantObj.deliveryOptions.deliveryTimeMinutes = deliveryDetailValues['deliveryTimeMinutes'];
         restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
         restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
@@ -264,7 +264,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             menuCategory.name = category.get('name');
             menuCategory.categoryId = category.get('categoryId');
             menuCategory.type = category.get('type');
-            menuCategory.summary = category.get('summary');
+            menuCategory.summary = replaceNewLines(category.get('summary'));
             menuCategory.iconClass = category.get('iconClass');
             menuCategory.itemTypes = delimitedStringToArray(category.get('itemTypes'),'\n');
             var menuItems = [];
@@ -274,7 +274,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 menuItem.itemId = item.get('itemId');
                 menuItem.title = item.get('title');
                 menuItem.subtitle = item.get('subtitle');
-                menuItem.description = item.get('description');
+                menuItem.description = replaceNewLines(item.get('description'));
                 menuItem.iconClass = item.get('iconClass');
                 menuItem.cost = item.get('cost');
                 var menuItemTypeCosts = [];

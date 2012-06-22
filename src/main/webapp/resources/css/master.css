@@ -9,7 +9,7 @@ body,input,select,textarea {
 
 body {
     margin: 0;
-    background: #F7F7F7 url(/resources/images/background.jpg) repeat scroll 0 0;
+    background-color: #F7F7F7;
 }
 
 h1, h2 {
@@ -17,8 +17,9 @@ h1, h2 {
     box-shadow: none;
     -moz-box-shadow: none;
     -webkit-box-shadow: none;
-    color:#444;
-    font-family: "Myriad Pro Cond", myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
+    color:#333;
+    font-weight:700;
+    font-family: 'Myriad Pro Cond', myriad-pro-condensed-1, myriad-pro-condensed-2, 'Helvetica Neue', Arial, 'Lucida Grande', sans-serif;
     font-weight: bold;
 }
 
@@ -28,8 +29,8 @@ h1 {
 }
 
 h2 {
-    font-size:20px;
-    line-height:24px;
+    font-size:28px;
+    line-height:32px;
 }
 
 a, a:hover, a:visited, a:active {

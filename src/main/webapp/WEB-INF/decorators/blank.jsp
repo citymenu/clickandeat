@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" href="${ctx}/resources/images/favico.png">
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/jquery/css/sunny/jquery-ui-1.8.20.custom.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
+	<script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/i18n/jquery.ui.datepicker-${locale}.js"></script>

@@ -29,5 +29,7 @@
     </c:forEach>
 </div>
 
+<%@ include file="/WEB-INF/jsp/order.jsp" %>
+
 </body>
 </html>

@@ -4,8 +4,6 @@ import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -93,7 +91,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.create();
         model.put("restaurant", restaurant);
-        model.put("json",JSONUtils.escapeQuotes(JSONUtils.serialize(restaurant)));
+        model.put("json",JSONUtils.serialize(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 
@@ -108,7 +106,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        model.put("json",JSONUtils.escapeQuotes(JSONUtils.serialize(restaurant)));
+        model.put("json",JSONUtils.serialize(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 

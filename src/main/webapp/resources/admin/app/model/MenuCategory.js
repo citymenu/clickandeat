@@ -9,19 +9,9 @@ Ext.define('AD.model.MenuCategory', {
         {name:'name', type:'string'},
         {name:'categoryId', type:'string'},
         {name:'type', type:'string'},
-        {name:'summary', type:'string'},
+        {name:'summary', type:'string', convert: replaceLineBreaks},
         {name:'iconClass', type:'string'},
-        {
-            name:'itemTypes',
-            type:'auto',
-            convert: function(value, record) {
-                if( value && (value instanceof Array)) {
-                    return value.join('\n');
-                } else {
-                    return value;
-                }
-            }
-        }
+        {name:'itemTypes',type:'auto',convert: arrayToString}
     ],
     hasMany:{
         model:'AD.model.MenuItem',

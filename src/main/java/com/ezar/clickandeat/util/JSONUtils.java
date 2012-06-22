@@ -36,7 +36,7 @@ public class JSONUtils {
      */
     
     public static String serialize(Object obj) {
-        return SERIALIZER.deepSerialize(obj);
+        return escapeQuotes(SERIALIZER.deepSerialize(obj));
     }
 
     
@@ -76,7 +76,7 @@ public class JSONUtils {
      * @return
      */
     
-    public static String escapeQuotes(String json) {
+    private static String escapeQuotes(String json) {
         for(Map.Entry<String,String> entry: ESCAPE_MAP.entrySet()) {
             json = json.replaceAll(entry.getKey(),entry.getValue());
         }

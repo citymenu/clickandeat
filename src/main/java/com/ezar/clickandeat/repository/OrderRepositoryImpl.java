@@ -38,6 +38,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public Order saveOrder(Order order) {
+        order.updateCosts();
         operations.save(order);
         return order;
     }

@@ -9,7 +9,7 @@ Ext.define('AD.model.MenuItem', {
         {name:'itemId', type:'string'},
         {name:'title', type:'string'},
         {name:'subtitle', type:'string'},
-        {name:'description', type:'string'},
+        {name:'description',type: 'string',convert: replaceLineBreaks},
         {name:'iconClass', type:'string'},
         {name:'cost', type:'double'}
     ],
