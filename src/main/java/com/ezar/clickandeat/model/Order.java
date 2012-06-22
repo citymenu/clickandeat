@@ -40,16 +40,21 @@ public class Order extends PersistentObject {
     private Double deliveryCost;
     
     private Double cardTransactionCost;
-    
+
+    private Double totalDiscount;
+
     private Double totalCost;
 
     private List<OrderItem> orderItems;
+    
+    private List<OrderDiscount> orderDiscounts;
 
     private List<String> orderUpdates;
 
     public Order() {
         this.orderItems = new ArrayList<OrderItem>();
         this.orderUpdates = new ArrayList<String>();
+        this.orderDiscounts = new ArrayList<OrderDiscount>();
     }
 
 
@@ -58,11 +63,23 @@ public class Order extends PersistentObject {
      */
 
     public void updateCosts() {
-        double orderItemCost = 0.0;
+
+        // Update order item costs
+        double orderItemCost = 0d;
         for( OrderItem item: orderItems ) {
             orderItemCost += item.getCost() * item.getQuantity();
         }
         this.orderItemCost = orderItemCost;
+
+        // Update all discount costs
+        double totalDiscount = 0d;
+        for( OrderDiscount discount: orderDiscounts ) {
+            totalDiscount += discount.getDiscount();
+        }
+        this.totalDiscount = totalDiscount;
+
+        // Set the total cost
+        this.totalCost = this.orderItemCost - this.totalDiscount;
     }
     
     
@@ -256,5 +273,13 @@ public class Order extends PersistentObject {
 
     public void setOrderUpdates(List<String> orderUpdates) {
         this.orderUpdates = orderUpdates;
+    }
+
+    public List<OrderDiscount> getOrderDiscounts() {
+        return orderDiscounts;
+    }
+
+    public void setOrderDiscounts(List<OrderDiscount> orderDiscounts) {
+        this.orderDiscounts = orderDiscounts;
     }
 }

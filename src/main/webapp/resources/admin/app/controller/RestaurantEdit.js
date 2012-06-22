@@ -247,9 +247,10 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object();
-        restaurantObj.deliveryOptions.deliveryOptionsSummary = deliveryDetailValues['deliveryOptionsSummary'].replace('\n','<br>');
+        restaurantObj.deliveryOptions.deliveryOptionsSummary = replaceNewLines(deliveryDetailValues['deliveryOptionsSummary']);
         restaurantObj.deliveryOptions.deliveryTimeMinutes = deliveryDetailValues['deliveryTimeMinutes'];
         restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
+        restaurantObj.deliveryOptions.allowDeliveryOrdersBelowMinimum = deliveryDetailValues['allowDeliveryOrdersBelowMinimum'] == 'on';
         restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
         restaurantObj.deliveryOptions.collectionDiscount = deliveryDetailValues['collectionDiscount'];
         restaurantObj.deliveryOptions.minimumOrderForCollectionDiscount = deliveryDetailValues['minimumOrderForCollectionDiscount'];

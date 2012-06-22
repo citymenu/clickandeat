@@ -11,6 +11,8 @@ public class DeliveryOptions {
     
     private Double minimumOrderForFreeDelivery;
 
+    private Boolean allowDeliveryOrdersBelowMinimum;
+    
     private Double deliveryCharge;
 
     private Double collectionDiscount;
@@ -48,6 +50,14 @@ public class DeliveryOptions {
 
     public void setMinimumOrderForFreeDelivery(Double minimumOrderForFreeDelivery) {
         this.minimumOrderForFreeDelivery = minimumOrderForFreeDelivery;
+    }
+
+    public Boolean getAllowDeliveryOrdersBelowMinimum() {
+        return allowDeliveryOrdersBelowMinimum;
+    }
+
+    public void setAllowDeliveryOrdersBelowMinimum(Boolean allowDeliveryOrdersBelowMinimum) {
+        this.allowDeliveryOrdersBelowMinimum = allowDeliveryOrdersBelowMinimum;
     }
 
     public Double getDeliveryCharge() {

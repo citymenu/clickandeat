@@ -287,6 +287,10 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             name:'minimumOrderForFreeDelivery',
             xtype:'numberfield'
         },{
+            fieldLabel:'Allow delivery orders below minumum order value',
+            name:'allowDeliveryOrdersBelowMinimum',
+            xtype:'checkbox'
+        },{
             fieldLabel:'Delivery charge for orders under minimum value',
             name:'deliveryCharge',
             xtype:'numberfield'
