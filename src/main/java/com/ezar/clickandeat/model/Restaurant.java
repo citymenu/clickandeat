@@ -64,7 +64,45 @@ public class Restaurant extends PersistentObject {
      */
 
     public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
-        return isOpen(date,time).equals(RestaurantOpenStatus.FULLY_OPEN);
+        Assert.notNull(date, "date must not be null");
+        Assert.notNull(time, "time must not be null");
+
+        if( openingTimes == null ) {
+            return false;
+        }
+
+        // Check if the restaurant is closed on this date
+        if( openingTimes.getClosedDates() != null ) {
+            for( LocalDate closedDate: openingTimes.getClosedDates()) {
+                if( closedDate.equals(date)) {
+                    return false;
+                }
+            }
+        }
+
+        int currentDayOfWeek = date.getDayOfWeek();
+
+        // Iterate through open dates
+        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+
+            int dayOfWeek = openingTime.getDayOfWeek();
+            LocalTime open = openingTime.getDeliveryOpeningTime();
+            LocalTime close = openingTime.getDeliveryClosingTime();
+
+            // Check from day before for delivery closing times after midnight
+            if( currentDayOfWeek - 1 == dayOfWeek % 7 && close.isBefore(open)) {
+                if(!close.isBefore(time)) {
+                    return true;
+                }
+            }
+            else if( currentDayOfWeek == dayOfWeek ) {
+                if(!time.isBefore(open) && !time.isAfter(close)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 
