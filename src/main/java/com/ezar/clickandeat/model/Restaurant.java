@@ -89,6 +89,11 @@ public class Restaurant extends PersistentObject {
             LocalTime open = openingTime.getDeliveryOpeningTime();
             LocalTime close = openingTime.getDeliveryClosingTime();
 
+            // Do not test if either open or close time is null
+            if( open == null || close == null ) {
+                continue;
+            }
+
             // Check from day before for delivery closing times after midnight
             if( currentDayOfWeek - 1 == dayOfWeek % 7 && close.isBefore(open)) {
                 if(!close.isBefore(time)) {
