@@ -115,9 +115,15 @@ a:hover, a:active {
 	 -moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	clear: all;
-	width: 350px;
+	width: 400px;
 	padding: 9px;
+	overflow: hidden;
 	margin:20px 0 20px 0;
+}
+
+.checkout {
+    float:right;
+    margin:10px 0;
 }
 
 /* Set jquery widget size */

@@ -7,15 +7,21 @@ $(document).ready(function(){
 function buildOrder(order) {
     $('.orderitemrow').remove();
     $('.totalitemcost').remove();
+    $('.checkoutbutton').remove();
     if( order ) {
-        order.orderItems.forEach(function(orderItem) {
-            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}</td><td align=\'center\'><a href=\'#\' onclick=\"removeFromOrder(\'{3}\')\">Remove</a></td></tr>'
-                .format(orderItem.menuItemTitle,orderItem.quantity,orderItem.cost * orderItem.quantity,orderItem.menuItemId);
-            $('.orderbody').append(row);
-        });
-        $('.totalcost').append('<span class=\'totalitemcost\'>{0}</span>'.format(order.orderItemCost));
+        for (var i = order.orderItems.length - 1; i >= 0; i--) {
+            var orderItem = order.orderItems[i];
+            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}{3}</td><td align=\'center\'><a href=\'#\' onclick=\"removeFromOrder(\'{4}\')\">Remove</a></td></tr>'
+                .format(orderItem.menuItemTitle,orderItem.quantity,ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
+            $('.orderbody').prepend(row);
+        };
+        $('.totalcost').append('<span class=\'totalitemcost\'>{0}{1}</span>'.format(ccy,order.orderItemCost.toFixed(2)));
+        if( order.orderItems.length > 0 ) {
+            $('.checkout').append('<input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'>');
+            $('.checkoutbutton').button();
+        }
     } else {
-        $('.totalcost').append('<span class=\'totalitemcost\'>0.00</span>');
+        $('.totalcost').append('<span class=\'totalitemcost\'>' + ccy + '0.00</span>');
     }
 }
 

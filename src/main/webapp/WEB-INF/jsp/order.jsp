@@ -17,11 +17,13 @@
                 </tr>
             </thead>
             <tbody class="orderbody">
+                <tr class='ordertotal' valign='top'>
+                    <td colspan=2 width="75%"><spring:message code="label.totalprice"/></td>
+                    <td width="15%" align="center"><div class="totalcost"><span class="totalitemcost"></span></div></td>
+                    <td width="10%"></td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <div class="ordertotal">
-        <div class="ordertotaltext"><spring:message code="label.totalprice"/></div>
-        <div class="totalcost"><span class='totalitemcost'></span></div>
-    </div>
+    <div class="checkout"></div>
 </div>
