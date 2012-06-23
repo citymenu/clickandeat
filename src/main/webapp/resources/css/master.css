@@ -108,9 +108,22 @@ a:hover, a:active {
 	margin-bottom:10px;
 }
 
+.order {
+    background-color:#EEE;
+    border: 1px solid #CCC;
+	border-radius: 4px;
+	 -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	clear: all;
+	width: 350px;
+	padding: 9px;
+	margin:20px 0 20px 0;
+}
+
 /* Set jquery widget size */
 .ui-widget{
     font-family: Segoe UI,Tahoma,Arial,Verdana,sans-serif;
     font-size: 11px;
 }
+
 

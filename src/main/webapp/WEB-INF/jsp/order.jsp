@@ -7,13 +7,13 @@
 
 <div class="order">
     <div class="orderitems">
-        <table>
+        <table width="100%">
             <thead>
                 <tr>
-                    <th><spring:message code="label.item"/></th>
-                    <th><spring:message code="label.quantity"/></th>
-                    <th><spring:message code="label.price"/></th>
-                    <th></th>
+                    <th width="65%" align="left"><spring:message code="label.item"/></th>
+                    <th width="10%" align="center"><spring:message code="label.quantity"/></th>
+                    <th width="15%" align="center"><spring:message code="label.price"/></th>
+                    <th width="10%"></th>
                 </tr>
             </thead>
             <tbody class="orderbody">

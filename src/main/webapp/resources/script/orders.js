@@ -9,7 +9,7 @@ function buildOrder(order) {
     $('.totalitemcost').remove();
     if( order ) {
         order.orderItems.forEach(function(orderItem) {
-            var row = '<tr class=\'orderitemrow\'><td>{0}</td><td>{1}</td><td>{2}</td><td><a href=\'#\' onclick=\"removeFromOrder(\'{3}\')\">Remove</a></td></tr>'
+            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}</td><td align=\'center\'><a href=\'#\' onclick=\"removeFromOrder(\'{3}\')\">Remove</a></td></tr>'
                 .format(orderItem.menuItemTitle,orderItem.quantity,orderItem.cost * orderItem.quantity,orderItem.menuItemId);
             $('.orderbody').append(row);
         });
