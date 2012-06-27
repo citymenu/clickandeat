@@ -10,6 +10,10 @@ import java.util.List;
 @Document(collection = "orders")
 public class Order extends PersistentObject {
 
+    public static final String STATUS_BASKET = "BASKET";
+    public static final String STATUS_ERROR = "ERROR";
+    public static final String STATUS_COMPLETE = "COMPLETE";
+    
     @Indexed(unique=true)
     private String orderId;
 

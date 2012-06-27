@@ -1,7 +1,8 @@
 package com.ezar.clickandeat.notification;
 
+import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.twilio.sdk.TwilioRestClient;
-import com.twilio.sdk.TwilioRestException;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.instance.Account;
 import com.twilio.sdk.resource.instance.Call;
@@ -25,118 +26,109 @@ public class TwilioService {
 
     private String callerId;
 
-    private String fallbackUrl;
-    
-    private String statusCallbackUrl;
+    private String orderNotificationSMSUrl;
+    private String orderNotificationSMSFallbackUrl;
+    private String orderNotificationSMSStatusCallbackUrl;
 
-    private final Map<String,TwilioCallback> callbacks = new ConcurrentHashMap<String,TwilioCallback>();
+    private String orderNotificationCallUrl;
+    private String orderNotificationCallFallbackUrl;
+    private String orderNotificationCallStatusCallbackUrl;
+
+    private String fullOrderCallUrl;
+    private String fullOrderCallFallbackUrl;
+    private String fullOrderCallStatusCallbackUrl;
+
+
+    /**
+     * @param order
+     * @param restaurant
+     * @throws Exception
+     */
+
+    public void sendOrderNotificationSMS(Order order, Restaurant restaurant ) throws Exception {
+
+    }
+
+
+    /**
+     * @param order
+     * @param restaurant
+     * @return
+     * @throws Exception
+     */
+
+    public void makeFullOrderCall(Order order, Restaurant restaurant) throws Exception {
+
+        String phoneNumber = restaurant.getNotificationOptions().getNotificationPhoneNumber();
+        String orderId = order.getOrderId();
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calling " + phoneNumber + " to read details of order " + orderId);
+        }
+
+        placeOrderCall(orderId, phoneNumber, fullOrderCallUrl, fullOrderCallFallbackUrl, fullOrderCallStatusCallbackUrl);
+    }
+
+
+    /**
+     * @param order
+     * @param restaurant
+     * @return
+     * @throws Exception
+     */
     
+    public void makeOrderNotificationCall(Order order, Restaurant restaurant) throws Exception {
+
+        String phoneNumber = restaurant.getNotificationOptions().getNotificationPhoneNumber();
+        String orderId = order.getOrderId();
+        
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calling " + phoneNumber + " to notify about order " + orderId);
+        }
+        
+        placeOrderCall(orderId, phoneNumber, orderNotificationCallUrl, orderNotificationCallFallbackUrl, orderNotificationCallStatusCallbackUrl);
+    }
+
+
+
+
+
+
     /**
      * @param phoneNumber
      * @param url
+     * @param fallbackUrl
+     * @param statusCallbackUrl
+     * @throws Exception
      */
-
-    public String makeOrderNotification(String orderId, String phoneNumber, String url ) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calling " + phoneNumber + " about order " + orderId + " with callback url " + url);
-        }
-
-        String callSid = null;
-        
-        try {
-            // Create a rest client
-            TwilioRestClient client = new TwilioRestClient(accountSid, authToken);
     
-            // Get the main account (The one we used to authenticate the client
-            Account mainAccount = client.getAccount();
-    
-            // Append the order id to the url
-            if( url.endsWith("/")) {
-                url = url.substring(0,url.lastIndexOf("/"));
-            }
-            url += "?orderId=" + orderId;
-            
-            // Build the call
-            CallFactory callFactory = mainAccount.getCallFactory();
-            Map<String, String> callParams = new HashMap<String, String>();
-            callParams.put("To", phoneNumber);
-            callParams.put("From", callerId);
-            callParams.put("Url", url);
-            callParams.put("Method", "GET");
-    
-            // Add the callback urls
-            callParams.put("FallbackUrl", fallbackUrl);
-            callParams.put("StatusCallback", statusCallbackUrl);
+    private void placeOrderCall(String orderId, String phoneNumber, String url, String fallbackUrl, String statusCallbackUrl ) throws Exception {
 
-            // Place the call
-            Call call = callFactory.create(callParams);
-            callSid = call.getSid();
-    
-            // Register callback and wait for response
-            TwilioCallback callback = new TwilioCallback();
-            callbacks.put(callSid,callback);
-            String result = callback.getResult();
-            
-            if( LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Received callback result: " + result);
-            }
-            return result;
+        // Create a rest client
+        TwilioRestClient client = new TwilioRestClient(accountSid, authToken);
 
-        }
-        catch( Exception ex ) {
-            LOGGER.error("Exception occurred processing twilio request",ex);
-            throw ex;
-        }
-        finally {
-            if( callSid != null ) {
-                callbacks.remove(callSid);
-            }
-        }
-    }
+        // Get the main account (The one we used to authenticate the client
+        Account mainAccount = client.getAccount();
 
+        // Append the order id to the urls
+        url += "?orderId=" + orderId;
+        fallbackUrl += "?orderId=" + orderId;
+        statusCallbackUrl += "?orderId=" + orderId; 
 
-    /**
-     * @param callSid
-     * @param digits
-     */
+        // Build the call
+        CallFactory callFactory = mainAccount.getCallFactory();
+        Map<String, String> callParams = new HashMap<String, String>();
+        callParams.put("To", phoneNumber);
+        callParams.put("From", callerId);
+        callParams.put("Url", url);
+        callParams.put("Method", "GET");
 
-    public void onResult(String callSid, String digits) {
+        // Add the callback urls
+        callParams.put("FallbackUrl", fallbackUrl);
+        callParams.put("StatusCallback", statusCallbackUrl);
 
-        if( callSid == null ) {
-            LOGGER.error("Null callSid passed");
-            return;
-        }
-
-        TwilioCallback callback = callbacks.get(callSid);
-        if( callback == null ) {
-            LOGGER.error("No callback found for callSid: " + callSid);
-        }
-        else {
-            callback.onResult(digits);
-        }
-    }
-
-
-    /**
-     * @param callSid
-     * @param ex
-     */
-
-    public void onError(String callSid, Exception ex ) {
-
-        if( callSid == null ) {
-            LOGGER.error("Null callSid passed");
-            return;
-        }
-
-        TwilioCallback callback = callbacks.get(callSid);
-        if( callback == null ) {
-            LOGGER.error("No callback found for callSid: " + callSid);
-        }
-        else {
-            callback.onError(ex);
-        }
+        // Place the call
+        callFactory.create(callParams);
     }
 
 
@@ -159,84 +151,58 @@ public class TwilioService {
     }
 
     @Required
-    @Value(value="${twilio.fallbackUrl}")
-    public void setFallbackUrl(String fallbackUrl) {
-        this.fallbackUrl = fallbackUrl;
+    @Value(value="${twilio.orderNotificationSMSUrl}")
+    public void setOrderNotificationSMSUrl(String orderNotificationSMSUrl) {
+        this.orderNotificationSMSUrl = orderNotificationSMSUrl;
     }
 
     @Required
-    @Value(value="${twilio.statusCallbackUrl}")
-    public void setStatusCallbackUrl(String statusCallbackUrl) {
-        this.statusCallbackUrl = statusCallbackUrl;
+    @Value(value="${twilio.orderNotificationSMSFallbackUrl}")
+    public void setOrderNotificationSMSFallbackUrl(String orderNotificationSMSFallbackUrl) {
+        this.orderNotificationSMSFallbackUrl = orderNotificationSMSFallbackUrl;
     }
 
-
-    /**
-     * Callback class which waits for a result from the twilio server
-     */
-    private class TwilioCallback {
-
-        private String digits;
-
-        private Exception exception;
-
-        private boolean responded = false;
-
-        private final Object lock = new Object();
-
-
-        /**
-         * Waits for result or exception
-         * @return
-         * @throws Exception
-         */
-
-        private String getResult() throws Exception {
-            while( !responded ) {
-                try {
-                    synchronized (lock) {
-                        lock.wait();
-                    }
-                }
-                catch( InterruptedException ex ) {
-                    responded = true;
-                    this.exception = ex;
-                }
-            }
-
-            if( exception != null ) {
-                throw(exception);
-            }
-            return digits;
-        }
-
-
-        /**
-         * @param digits
-         */
-
-        public void onResult(String digits) {
-            this.digits = digits;
-            this.responded = true;
-            synchronized (lock) {
-                lock.notifyAll();
-            }
-        }
-
-
-        /**
-         * @param ex
-         */
-
-        public void onError(Exception ex) {
-            this.exception = ex;
-            this.responded = true;
-            synchronized (lock) {
-                lock.notifyAll();
-            }
-        }
+    @Required
+    @Value(value="${twilio.orderNotificationSMSStatusCallbackUrl}")
+    public void setOrderNotificationSMSStatusCallbackUrl(String orderNotificationSMSStatusCallbackUrl) {
+        this.orderNotificationSMSStatusCallbackUrl = orderNotificationSMSStatusCallbackUrl;
     }
 
+    @Required
+    @Value(value="${twilio.fullOrderCallUrl}")
+    public void setFullOrderCallUrl(String fullOrderCallUrl) {
+        this.fullOrderCallUrl = fullOrderCallUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.fullOrderCallFallbackUrl}")
+    public void setFullOrderCallFallbackUrl(String fullOrderCallFallbackUrl) {
+        this.fullOrderCallFallbackUrl = fullOrderCallFallbackUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.fullOrderCallStatusCallbackUrl}")
+    public void setFullOrderCallStatusCallbackUrl(String fullOrderCallStatusCallbackUrl) {
+        this.fullOrderCallStatusCallbackUrl = fullOrderCallStatusCallbackUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.orderNotificationCallUrl}")
+    public void setOrderNotificationCallUrl(String orderNotificationCallUrl) {
+        this.orderNotificationCallUrl = orderNotificationCallUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.orderNotificationCallFallbackUrl}")
+    public void setOrderNotificationCallFallbackUrl(String orderNotificationCallFallbackUrl) {
+        this.orderNotificationCallFallbackUrl = orderNotificationCallFallbackUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.orderNotificationCallStatusCallbackUrl}")
+    public void setOrderNotificationCallStatusCallbackUrl(String orderNotificationCallStatusCallbackUrl) {
+        this.orderNotificationCallStatusCallbackUrl = orderNotificationCallStatusCallbackUrl;
+    }
 }
 
 

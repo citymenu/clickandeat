@@ -11,5 +11,8 @@ public interface OrderRepositoryCustom {
 
     Order saveOrder(Order order);
 
-
+    void addOrderUpdate(String orderId, String orderUpdate);
+    
+    void updateOrderStatus(String orderId, String status);
+    
 }
