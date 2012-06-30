@@ -19,12 +19,6 @@ public class TwilioServiceTest {
 
     @Test
     public void testMakeCall() throws Exception {
-        String phoneNumber = "+442085057191";
-        String url = "http://clickandeat.herokuapp.com/twilioRequest.html";
-        String orderId = "12345";
-        String callSid = twilioService.makeOrderNotification(orderId,phoneNumber,url);
-        LOGGER.info("Received callSid " + callSid );
-        Assert.assertNotNull("callSid should not be null",callSid);
     }
     
     

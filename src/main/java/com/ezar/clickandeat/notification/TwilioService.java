@@ -5,7 +5,6 @@ import com.ezar.clickandeat.model.Restaurant;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.instance.Account;
-import com.twilio.sdk.resource.instance.Call;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component(value="twilioService")
 public class TwilioService {
@@ -25,6 +23,10 @@ public class TwilioService {
     private String authToken;
 
     private String callerId;
+    
+    private String baseUrl;
+    
+    private String authKey;
 
     private String orderNotificationSMSUrl;
     private String orderNotificationSMSFallbackUrl;
@@ -120,18 +122,33 @@ public class TwilioService {
         Map<String, String> callParams = new HashMap<String, String>();
         callParams.put("To", phoneNumber);
         callParams.put("From", callerId);
-        callParams.put("Url", url);
+        callParams.put("Url", buildTwilioUrl(url,orderId));
         callParams.put("Method", "GET");
 
         // Add the callback urls
-        callParams.put("FallbackUrl", fallbackUrl);
-        callParams.put("StatusCallback", statusCallbackUrl);
+        callParams.put("FallbackUrl", buildTwilioUrl(fallbackUrl,orderId));
+        callParams.put("StatusCallback", buildTwilioUrl(statusCallbackUrl,orderId));
 
         // Place the call
         callFactory.create(callParams);
     }
 
 
+    /**
+     * @param requestUrl
+     * @param orderId
+     * @return
+     */
+
+    private String buildTwilioUrl(String requestUrl,String orderId) {
+        StringBuilder sb = new StringBuilder(baseUrl);
+        sb.append(requestUrl);
+        sb.append("?authKey=").append(authKey);
+        sb.append("&orderId=").append(orderId);
+        return sb.toString();
+    }
+    
+    
     @Required
     @Value(value="${twilio.sid}")
     public void setAccountSid(String accountSid) {
@@ -139,7 +156,7 @@ public class TwilioService {
     }
 
     @Required
-    @Value(value="${twilio.authKey}")
+    @Value(value="${twilio.authToken}")
     public void setAuthToken(String authToken) {
         this.authToken = authToken;
     }
@@ -148,6 +165,18 @@ public class TwilioService {
     @Value(value="${twilio.callerId}")
     public void setCallerId(String callerId) {
         this.callerId = callerId;
+    }
+
+    @Required
+    @Value(value="${twilio.baseUrl}")
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+    @Required
+    @Value(value="${twilio.authKey}")
+    public void setAuthKey(String authKey) {
+        this.authKey = authKey;
     }
 
     @Required

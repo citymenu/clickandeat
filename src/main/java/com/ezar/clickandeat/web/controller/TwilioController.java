@@ -47,7 +47,6 @@ public class TwilioController {
         }
 
         LOGGER.debug("Received digits from call as: " + digits);
-        twilioService.onResult(callSid,digits);
     }
 
 
@@ -59,8 +58,6 @@ public class TwilioController {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received error from twilio for callSid: " + callSid);
         }
-
-        twilioService.onError(callSid, new Exception("Exception occurred"));
     }
 
 }
