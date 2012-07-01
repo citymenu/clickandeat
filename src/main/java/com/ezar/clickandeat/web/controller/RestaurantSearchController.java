@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller
@@ -23,7 +24,8 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/search.html", method = RequestMethod.GET)
     public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
-                                        @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir ) {
+                                        @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
+                                        HttpServletRequest request) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants serving location: " + location);
@@ -35,6 +37,9 @@ public class RestaurantSearchController {
         results.addAll(restaurantRepository.search(location, cuisine, sort, dir ));
         model.put("results",results);
         model.put("count",results.size());
+
+        // Store search location in session
+        request.getSession(true).setAttribute("searchlocation",location);
 
         return new ModelAndView("results",model);
     }

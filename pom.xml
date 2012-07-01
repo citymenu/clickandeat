@@ -155,6 +155,13 @@
             <type>pom</type>
         </dependency>
 
+        <!-- Velocity -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.6.2</version>
+        </dependency>
+
         <!-- Logging/Testing -->
         <dependency>
             <groupId>org.slf4j</groupId>

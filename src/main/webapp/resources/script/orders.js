@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     buildOrder(order);
 });
@@ -8,6 +7,7 @@ function buildOrder(order) {
     $('.orderitemrow').remove();
     $('.totalitemcost').remove();
     $('.checkoutbutton').remove();
+    $('.deliverywarning').remove();
     if( order ) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
@@ -17,7 +17,18 @@ function buildOrder(order) {
         };
         $('.totalcost').append('<span class=\'totalitemcost\'>{0}{1}</span>'.format(ccy,order.orderItemCost.toFixed(2)));
         if( order.orderItems.length > 0 ) {
-            $('.checkout').append('<input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'>');
+            if(order.orderItemCost < minimumOrderForFreeDelivery ) {
+                if(allowDeliveryOrdersBelowMinimum && deliveryCharge > 0 ) {
+                    var warning = '<div class=\'deliverywarning\'>A charge of {0}{1} will be applied for delivery of this order.</div>'.format(ccy,deliveryCharge.toFixed(2));
+                    $('.deliverycheck').append(warning);
+                } else {
+                    var additionalSpend = minimumOrderForFreeDelivery - order.orderItemCost;
+                    var warning = '<div class=\'deliverywarning\'>You need to spend an additional {0}{1} to place this order for delivery.</div>'.format(ccy,additionalSpend.toFixed(2));
+                    $('.deliverycheck').append(warning);
+                }
+            }
+
+            $('.checkout').append('<input type=\'button\' value=\'Proceed With Order\' class=\'checkoutbutton\'>');
             $('.checkoutbutton').button();
         }
     } else {

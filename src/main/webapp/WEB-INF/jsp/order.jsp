@@ -25,5 +25,6 @@
             </tbody>
         </table>
     </div>
+    <div class="deliverycheck"></div>
     <div class="checkout"></div>
 </div>

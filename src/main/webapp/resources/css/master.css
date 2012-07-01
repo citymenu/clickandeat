@@ -121,6 +121,17 @@ a:hover, a:active {
 	margin:20px 0 20px 0;
 }
 
+.deliverywarning {
+    background-color:#E7E7E7;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+	 -moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	display:block;
+	padding: 9px;
+	margin:10px 0 10px 0;
+}
+
 .checkout {
     float:right;
     margin:10px 0;

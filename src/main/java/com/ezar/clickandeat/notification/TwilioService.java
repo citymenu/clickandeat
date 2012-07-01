@@ -17,7 +17,19 @@ import java.util.Map;
 public class TwilioService {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioService.class);
-    
+
+    public static final String ORDER_NOTIFICATION_SMS_URL = "/twilio/orderNotificationSMS";
+    public static final String ORDER_NOTIFICATION_SMS_FALLBACK_URL = "/twilio/orderNotificationSMSFallback";
+    public static final String ORDER_NOTIFICATION_SMS_STATUS_CALLBACK_URL = "/twilio/orderNotificationSMSStatusCallback";
+
+    public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderNotificationCall";
+    public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderNotificationCallFallback";
+    public static final String ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL = "/twilio/orderNotificationCallStatusCallback";
+
+    public static final String FULL_ORDER_CALL_URL = "/twilio/fullOrderCall";
+    public static final String FULL_ORDER_CALL_FALLBACK_URL = "/twilio/fullOrderCallFallback";
+    public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback";
+
     private String accountSid;
     
     private String authToken;
@@ -27,18 +39,6 @@ public class TwilioService {
     private String baseUrl;
     
     private String authKey;
-
-    private String orderNotificationSMSUrl;
-    private String orderNotificationSMSFallbackUrl;
-    private String orderNotificationSMSStatusCallbackUrl;
-
-    private String orderNotificationCallUrl;
-    private String orderNotificationCallFallbackUrl;
-    private String orderNotificationCallStatusCallbackUrl;
-
-    private String fullOrderCallUrl;
-    private String fullOrderCallFallbackUrl;
-    private String fullOrderCallStatusCallbackUrl;
 
 
     /**
@@ -68,7 +68,7 @@ public class TwilioService {
             LOGGER.debug("Calling " + phoneNumber + " to read details of order " + orderId);
         }
 
-        placeOrderCall(orderId, phoneNumber, fullOrderCallUrl, fullOrderCallFallbackUrl, fullOrderCallStatusCallbackUrl);
+        placeOrderCall(orderId, phoneNumber, FULL_ORDER_CALL_URL, FULL_ORDER_CALL_FALLBACK_URL, FULL_ORDER_CALL_STATUS_CALLBACK_URL);
     }
 
 
@@ -88,7 +88,7 @@ public class TwilioService {
             LOGGER.debug("Calling " + phoneNumber + " to notify about order " + orderId);
         }
         
-        placeOrderCall(orderId, phoneNumber, orderNotificationCallUrl, orderNotificationCallFallbackUrl, orderNotificationCallStatusCallbackUrl);
+        placeOrderCall(orderId, phoneNumber, ORDER_NOTIFICATION_CALL_URL, ORDER_NOTIFICATION_CALL_FALLBACK_URL, ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL);
     }
 
 
@@ -170,6 +170,9 @@ public class TwilioService {
     @Required
     @Value(value="${twilio.baseUrl}")
     public void setBaseUrl(String baseUrl) {
+        if(baseUrl.endsWith("/")) {
+            baseUrl = baseUrl.substring(baseUrl.length());
+        }
         this.baseUrl = baseUrl;
     }
 
@@ -179,59 +182,6 @@ public class TwilioService {
         this.authKey = authKey;
     }
 
-    @Required
-    @Value(value="${twilio.orderNotificationSMSUrl}")
-    public void setOrderNotificationSMSUrl(String orderNotificationSMSUrl) {
-        this.orderNotificationSMSUrl = orderNotificationSMSUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.orderNotificationSMSFallbackUrl}")
-    public void setOrderNotificationSMSFallbackUrl(String orderNotificationSMSFallbackUrl) {
-        this.orderNotificationSMSFallbackUrl = orderNotificationSMSFallbackUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.orderNotificationSMSStatusCallbackUrl}")
-    public void setOrderNotificationSMSStatusCallbackUrl(String orderNotificationSMSStatusCallbackUrl) {
-        this.orderNotificationSMSStatusCallbackUrl = orderNotificationSMSStatusCallbackUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.fullOrderCallUrl}")
-    public void setFullOrderCallUrl(String fullOrderCallUrl) {
-        this.fullOrderCallUrl = fullOrderCallUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.fullOrderCallFallbackUrl}")
-    public void setFullOrderCallFallbackUrl(String fullOrderCallFallbackUrl) {
-        this.fullOrderCallFallbackUrl = fullOrderCallFallbackUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.fullOrderCallStatusCallbackUrl}")
-    public void setFullOrderCallStatusCallbackUrl(String fullOrderCallStatusCallbackUrl) {
-        this.fullOrderCallStatusCallbackUrl = fullOrderCallStatusCallbackUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.orderNotificationCallUrl}")
-    public void setOrderNotificationCallUrl(String orderNotificationCallUrl) {
-        this.orderNotificationCallUrl = orderNotificationCallUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.orderNotificationCallFallbackUrl}")
-    public void setOrderNotificationCallFallbackUrl(String orderNotificationCallFallbackUrl) {
-        this.orderNotificationCallFallbackUrl = orderNotificationCallFallbackUrl;
-    }
-
-    @Required
-    @Value(value="${twilio.orderNotificationCallStatusCallbackUrl}")
-    public void setOrderNotificationCallStatusCallbackUrl(String orderNotificationCallStatusCallbackUrl) {
-        this.orderNotificationCallStatusCallbackUrl = orderNotificationCallStatusCallbackUrl;
-    }
 }
 
 

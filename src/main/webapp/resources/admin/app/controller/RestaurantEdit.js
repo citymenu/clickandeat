@@ -347,7 +347,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Build opening times onto form
         var form = formPanel.getForm();
-        form.findField('openingTimesSummary').setValue(openingTimes.openingTimesSummary);
+        form.findField('openingTimesSummary').setValue(replaceLineBreaks(openingTimes.openingTimesSummary));
         form.findField('closedDates').setValue(openingTimes.closedDates.join('\n'));
 
         // Populate individual opening times

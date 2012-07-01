@@ -175,7 +175,6 @@ public class Restaurant extends PersistentObject {
         return RestaurantOpenStatus.CLOSED;
     }
 
-
     public String getRestaurantId() {
         return restaurantId;
     }
