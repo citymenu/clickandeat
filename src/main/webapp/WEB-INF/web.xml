@@ -87,6 +87,16 @@
         <url-pattern>*.html</url-pattern>
     </filter-mapping>
 
+    <filter>
+        <filter-name>SearchFilter</filter-name>
+        <filter-class>com.ezar.clickandeat.web.filter.SearchFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>SearchFilter</filter-name>
+        <url-pattern>*.html</url-pattern>
+    </filter-mapping>
+
 	<session-config>
   		<session-timeout>30</session-timeout>
 	</session-config>

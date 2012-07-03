@@ -2,9 +2,9 @@
 /* CSS Document */
 
 body,input,select,textarea {
-    font: 16px/18px ff-tisa-web-pro-1,ff-tisa-web-pro-2,Georgia,"Times New Roman",serif;
+    color: #3F454F;
+    font: 16px/18px 'Proxima Nova Regular','Helvetica Neue',Helvetica,Arial,sans-serif;
     vertical-align:baseline;
-    color:#333;
 }
 
 body {
@@ -33,36 +33,19 @@ h2 {
     line-height:32px;
 }
 
+h3 {
+    margin:0 0 6px 0;
+    padding:0;
+    color: #3F454F;
+    font:20px/24px Verdana,Arial,Helvetica,sans-serif;
+}
+
 a, a:hover, a:visited, a:active {
     color: #006595;
 }
 
 a:hover, a:active {
     color: #44A6CC;
-}
-
-#titlenav ul {
-    font-family: "Myriad Pro Cond", myriad-pro-condensed-1,myriad-pro-condensed-2,'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size:20px;
-    list-style:none outside none;
-    margin:0;
-    padding:0;
-    overflow:hidden;
-}
-
-#titlenav li {
-    display:inline;
-    float:left;
-}
-
-.shadow {
-    -moz-box-shadow: 0px 2px 3px #444;
-    -webkit-box-shadow: 0px 2px 3px #444;
-    box-shadow: 0px 2px 3px #444;
-    /* For IE 8 */
-    -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#444444')";
-    /* For IE 5.5 - 7 */
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=180, Color='#444444');
 }
 
 #header {
@@ -81,18 +64,77 @@ a:hover, a:active {
 
 #container {
     margin: 0 auto;
-    width:940px;
+    width:970px;
     text-align: left;
+    overflow:hidden;
 }
 
-#titlenav a, #titlenav a:visited, #titlenav a:active, #titlenav a:hover {
+#titlenav ul, #ordernav ul {
+    font-family: 'Open Sans',sans-serif;
+    font-weight:bold;
+    color:#FFF;
+    font-size:12px;
+    word-spacing: 0.1em;
+    list-style:none outside none;
+    margin:0;
+    padding:10px 20px 5px 20px;
+    overflow:hidden;
+}
+
+#titlenav li, #ordernav li {
+    display:inline;
+    float:left;
+    padding-right:30px;
+}
+
+#titlenav a, #titlenav a:visited, #titlenav a:active, #titlenav a:hover, #ordernav a, #ordernav a:visited, #ordernav a:active, #ordernav a:hover {
     color:#F7F7F7;
     text-decoration:none;
-    display:block;
-    -moz-box-sizing:border-box;
-    width:100px;
-    text-align:center;
-    padding:12px;
+}
+
+#ordernav a:hover {
+    color:red;
+}
+
+#ordernav {
+    background:#555;
+    margin:0 auto;
+    width:970px;
+    text-align:left;
+}
+
+#search {
+    margin:20px 10px 0 0;
+    width:170px;
+    float:left;
+}
+
+#searchresults {
+    margin:20px 0 0 0;
+    border:0;
+    width:770px;
+    float:right;
+}
+
+#search .search {
+    margin:5px 0 5px 0;
+    border: 1px solid #B5B8C8;
+    border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    color: #131313;
+    padding: 5px !important;
+    width: 90%;
+}
+
+.boxcontainer {
+    background: #FFF;
+    border: 1px solid #BBB;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+    padding:9px;
+    margin-bottom:10px;
 }
 
 .result-wrapper {
@@ -101,9 +143,7 @@ a:hover, a:active {
 	border-radius: 4px;
 	 -moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
-	float: left;
-	clear: all;
-	width: 700px;
+	width: 600px;
 	padding: 9px;
 	margin-bottom:10px;
 }

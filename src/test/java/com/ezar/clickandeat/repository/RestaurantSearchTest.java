@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -82,7 +83,8 @@ public class RestaurantSearchTest {
         
         // Check for restaurants serving Mexican food in E18 ordered by name
         try {
-            List<Restaurant> restaurants = repository.search("E18", "Mexican", "name", "asc");
+            Search search = new Search("E18", Arrays.asList("Mexican", "Italian"),"name","asc");
+            List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
             Restaurant restaurant = restaurants.get(0);
             Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new LocalDate(), new LocalTime()) );

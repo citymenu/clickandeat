@@ -31,6 +31,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         Order order = new Order();
         order.setOrderId(sequenceGenerator.getNextSequence());
         order.setCustomer(new Person());
+        order.setDeliveryType(Order.DELIVERY);
         order.setDeliveryAddress(new Address());
         order.setBillingAddress(new Address());
         return order;

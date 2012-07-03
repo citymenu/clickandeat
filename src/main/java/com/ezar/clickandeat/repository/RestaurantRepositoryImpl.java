@@ -92,8 +92,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
-    public List<Restaurant> search(String location, String cuisine, String sort, String dir ) {
+    public List<Restaurant> search(Search search) {
 
+        String location = search.getLocation();
+        
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving location: " + location);
         }
@@ -115,12 +117,15 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         Query query = new Query(where("address.location").nearSphere(new Point(geoLocation[0], geoLocation[1]))
                 .maxDistance(maxDistance / DIVISOR));
 
-        // Specify cuisine if required
-        if( StringUtils.hasText(cuisine)) {
-            query.addCriteria(where("cuisines").all(cuisine));
+        // Specify cuisines if required
+        List<String> cuisines = search.getCuisines();
+        if( cuisines != null && cuisines.size() > 0 ) {
+            query.addCriteria(where("cuisines").in(cuisines));
         }
         
         // Specify sort order if specified
+        String sort = search.getSort();
+        String dir = search.getDir();
         if( StringUtils.hasText(sort) && StringUtils.hasLength(dir)) {
             query.sort().on(sort, "asc".equals(dir)?Order.ASCENDING: Order.DESCENDING );
         }

@@ -1,3 +1,3 @@
 $(document).ready(function(){
-    buildBreadcrumbs();
+    $("input:submit").button();
 });

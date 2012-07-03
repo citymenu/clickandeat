@@ -32,7 +32,6 @@
     </div>
 </div>
 <div id="container">
-    <div id="breadcrumb"></div>
     <decorator:body/>
 </div>
 </body>

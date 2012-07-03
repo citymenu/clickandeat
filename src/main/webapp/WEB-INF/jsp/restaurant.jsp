@@ -10,16 +10,18 @@
 <body>
 
 <script type="text/javascript">
-
-var breadcrumbs = new HashTable();
-breadcrumbs.setItem('<spring:message code="label.search"/>','/home.html');
-breadcrumbs.setItem('${searchlocation}','');
-breadcrumbs.setItem("${restaurant.name}",'');
-
 var minimumOrderForFreeDelivery=${restaurant.deliveryOptions.minimumOrderForFreeDelivery};
 var allowDeliveryOrdersBelowMinimum=${restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum};
 var deliveryCharge=${restaurant.deliveryOptions.deliveryCharge};
 </script>
+
+<div id="ordernav">
+    <ul>
+        <li><a href="${ctx}/search.html${search.queryString}">1) Find a Restaurant</a></li>
+        <li><a href="${ctx}/search.html">2) Build Order</a></li>
+        <li><a href="${ctx}/search.html">3) Checkout</a></li>
+    </ul>
+</div>
 
 <h1>${restaurant.name}</h1>
 <div>${restaurant.description}</div>

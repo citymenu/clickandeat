@@ -14,7 +14,7 @@ public class CuisineProvider {
     
     private SortedSet<String> cuisineList;
 
-    public Set<String> getCuisineList() {
+    public SortedSet<String> getCuisineList() {
         return cuisineList;
     }
     

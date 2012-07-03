@@ -14,6 +14,10 @@ public class Order extends PersistentObject {
     public static final String STATUS_ERROR = "ERROR";
     public static final String STATUS_COMPLETE = "COMPLETE";
     
+    public static final String DELIVERY = "delivery";
+    public static final String COLLECTION = "collection";
+
+    
     @Indexed(unique=true)
     private String orderId;
 
