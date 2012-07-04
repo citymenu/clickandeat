@@ -22,7 +22,7 @@ public class SimpleSecurityContextRepository implements SecurityContextRepositor
     
     private final Map<String,Integer> securityContextHashCodeMap = new ConcurrentHashMap<String, Integer>();
     
-
+    
     @Override
     public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
 
@@ -35,17 +35,13 @@ public class SimpleSecurityContextRepository implements SecurityContextRepositor
             return SecurityContextHolder.createEmptyContext();
         }
 
-        SecurityContext securityContext;
         String sessionId = session.getId();
-        Object securitySessionObject = session.getAttribute(SECURITY_CONTEXT_KEY);
-        if( securitySessionObject == null || !(securitySessionObject instanceof SecurityContext)) {
+        SecurityContext securityContext = (SecurityContext)session.getAttribute(SECURITY_CONTEXT_KEY);
+        if( securityContext == null ) {
             if( LOGGER.isDebugEnabled()) {
                 LOGGER.debug("No security context found for session attribute " + SECURITY_CONTEXT_KEY + " returning new empty context");
             }
             securityContext = SecurityContextHolder.createEmptyContext();
-        }
-        else {
-            securityContext = (SecurityContext)securitySessionObject;
         }
         
         if( LOGGER.isDebugEnabled()) {

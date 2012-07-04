@@ -1,9 +1,12 @@
 package com.ezar.clickandeat.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Search {
+public class Search implements Serializable {
+
+    private static final long serialVersionUID = 1234L;
 
     private String location;
     
@@ -34,6 +37,25 @@ public class Search {
         this.sort = sort;
         this.dir = dir;
     }
+
+
+    public String getQueryString() {
+        StringBuilder sb = new StringBuilder("?loc=").append(location);
+        if(cuisines != null) {
+            for( String cuisine: cuisines) {
+                sb.append("&c=").append(cuisine);
+            }
+        }
+        if( sort != null ) {
+            sb.append("&s=").append(sort);
+        }
+        if( dir != null ) {
+            sb.append("&d=").append(dir);
+        }
+        return sb.toString();
+    }
+
+
 
     public String getLocation() {
         return location;

@@ -179,12 +179,12 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
-            <version>8.0.4.v20111024</version>
+            <version>8.1.4.v20120524</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-nosql</artifactId>
-            <version>8.0.4.v20111024</version>
+            <version>8.1.4.v20120524</version>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
