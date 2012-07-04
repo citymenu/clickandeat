@@ -3,7 +3,6 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.RestaurantRepository;
-import com.ezar.clickandeat.repository.SearchRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -24,9 +22,6 @@ public class RestaurantSearchController {
     
     @Autowired
     private RestaurantRepository restaurantRepository;
-
-    @Autowired
-    private SearchRepository searchRepository;
 
     @Autowired
     private CuisineProvider cuisineProvider;
@@ -42,50 +37,19 @@ public class RestaurantSearchController {
         }
 
         Map<String,Object> model = new HashMap<String,Object>();
-                                                            
-        Search search = buildSearch(request, location, cuisines, sort, dir);
-        
+        Search search = new Search(location,cuisines,sort,dir);
         SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
         results.addAll(restaurantRepository.search(search));
         model.put("results",results);
         model.put("count",results.size());
         model.put("cuisines",cuisineProvider.getCuisineList());
-        model.put("search",search);
+
+        // Store search in session
+        request.getSession(true).setAttribute("search",search);
 
         return new ModelAndView("results",model);
     }
 
-
-    /**
-     * @param request
-     * @return
-     */
-
-    private Search buildSearch(HttpServletRequest request, String location, List<String> cuisines, String sort, String dir ) {
-        HttpSession session = request.getSession(true);
-        String searchId = (String)session.getAttribute("searchid");
-        Search search;
-        if( searchId == null ) {
-            search = searchRepository.create(location,cuisines,sort,dir);
-            session.setAttribute("searchid",search.getSearchId());
-        }
-        else {
-            search = searchRepository.findBySearchId(searchId);
-            if( search == null ) {
-                search = searchRepository.create(location,cuisines,sort,dir);
-                session.setAttribute("searchid",search.getSearchId());
-            }
-            else {
-                search.setLocation(location);
-                search.setCuisines(cuisines);
-                search.setSort(sort);
-                search.setDir(dir);
-            }
-        }
-        searchRepository.save(search);
-        return search;
-    }
-    
     
     /**
      * Custom ordering for restaurant search results 

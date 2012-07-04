@@ -1,19 +1,10 @@
 package com.ezar.clickandeat.model;
 
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "searches")
-public class Search extends PersistentObject {
+public class Search {
 
-    private static final long serialVersionUID = -10l;
-
-    @Indexed(unique=true)
-    private String searchId;
-    
     private String location;
     
     private List<String> cuisines;
@@ -39,35 +30,9 @@ public class Search extends PersistentObject {
 
     public Search(String location, List<String> cuisines, String sort, String dir) {
         this.location = location;
-        this.cuisines = cuisines == null? new ArrayList<String>(): cuisines;
+        this.cuisines = cuisines;
         this.sort = sort;
         this.dir = dir;
-    }
-
-    
-    public String getQueryString() {
-        StringBuilder sb = new StringBuilder("?loc=").append(location);
-        if(cuisines != null) {
-            for( String cuisine: cuisines) {
-                sb.append("&c=").append(cuisine);
-            }
-        }
-        if( sort != null ) {
-            sb.append("&s=").append(sort);
-        }
-        if( dir != null ) {
-            sb.append("&d=").append(dir);
-        }
-        return sb.toString();
-    }
-
-
-    public String getSearchId() {
-        return searchId;
-    }
-
-    public void setSearchId(String searchId) {
-        this.searchId = searchId;
     }
 
     public String getLocation() {
