@@ -4,10 +4,27 @@ $(document).ready(function(){
 
 // Build the order display component
 function buildOrder(order) {
+
+    // Reset all previous order details
+    $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
     $('.totalitemcost').remove();
     $('.checkoutbutton').remove();
     $('.deliverywarning').remove();
+
+    // Add the delivery options to the order
+    var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
+    var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
+    var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
+    var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
+    $('.orderdelivery').append(deliveryRadio + collectionRadio);
+
+    // Onchange event to reload
+    $('#deliveryType').change(function(element){
+
+    });
+
+    // Build order details if an order exists
     if( order ) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];

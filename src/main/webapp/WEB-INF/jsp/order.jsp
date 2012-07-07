@@ -6,6 +6,7 @@
 </script>
 
 <div class="order">
+    <div class="orderdelivery"></div>
     <div class="orderitems">
         <table width="100%">
             <thead>

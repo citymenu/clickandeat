@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 3.2//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite3.2.dtd">
+
+<urlrewrite>
+
+    <outbound-rule encodefirst="true">
+        <note>Remove jsessionid from embedded urls - for urls WITH query parameters</note>
+        <from>^/(.*);jsessionid=.*[?](.*)$</from>
+        <to encode="false">/$1?$2</to>
+    </outbound-rule>
+
+    <outbound-rule encodefirst="true">
+        <note>Remove jsessionid from embedded urls - for urls WITHOUT query parameters</note>
+        <from>^/(.*);jsessionid=.*[^?]$</from>
+        <to encode="false">/$1</to>
+    </outbound-rule>
+
+</urlrewrite>
