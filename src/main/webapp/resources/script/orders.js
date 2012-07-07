@@ -16,22 +16,30 @@ $(document).ready(function(){
 function buildOrder(order) {
 
     // Reset all previous order details
+    $('.ordertitle').remove();
     $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
     $('.totalitemcost').remove();
     $('.checkoutbutton').remove();
     $('.deliverywarning').remove();
 
-    // Add the delivery options to the order
-    var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
-    var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
-    var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
-    var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
-    $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
+    // Add the order with the restaurant name if it exists and at least one item is added
+    if( order && order.orderItems.length > 0 ) {
+        $('.orderheader').append('<span class=\'ordertitle\'> with {0}</span>'.format(order.restaurantName.replace("#","'")));
+    }
 
-    // Event handlers to update delivery type
-    $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
-    $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
+    // Add the delivery options to the order if at least one item is added
+    if( order && order.orderItems.length > 0 ) {
+        var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
+        var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
+        var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
+        var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
+        $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
+
+        // Event handlers to update delivery type
+        $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
+        $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
+    }
 
     // Build order details if an order exists
     if( order ) {
@@ -63,10 +71,11 @@ function buildOrder(order) {
 }
 
 // Add item to order update result on display
-function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
+function addToOrder(restaurantId, restaurantName, itemId, itemName, itemCost, quantity ) {
 
     var update = new Object({
         restaurantId: restaurantId,
+        restaurantName: restaurantName,
         itemId: itemId,
         itemName: itemName,
         itemCost: itemCost,

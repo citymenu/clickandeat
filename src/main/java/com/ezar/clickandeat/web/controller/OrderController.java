@@ -78,6 +78,7 @@ public class OrderController {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
+            String restaurantName = (String)params.get("restaurantName");
             String itemId = (String)params.get("itemId");
             String itemName = (String)params.get("itemName");
             Double itemCost = Double.valueOf(params.get("itemCost").toString());
@@ -95,15 +96,16 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
-                order = buildAndRegister(session,restaurantId);
+                order = buildAndRegister(session,restaurantId,restaurantName);
             }
             else {
                 order = repository.findByOrderId(orderId);
                 if( order == null ) {
-                    order = buildAndRegister(session,restaurantId);
+                    order = buildAndRegister(session,restaurantId,restaurantName);
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
                     order.setRestaurantId(restaurantId);
+                    order.setRestaurantName(restaurantName);
                     order.getOrderItems().clear();
                 }
             }
@@ -205,9 +207,10 @@ public class OrderController {
      * @return
      */
     
-    private Order buildAndRegister(HttpSession session, String restaurantId ) {
+    private Order buildAndRegister(HttpSession session, String restaurantId, String restaurantName ) {
         Order order = repository.create();
         order.setRestaurantId(restaurantId);
+        order.setRestaurantName(restaurantName);
         order = repository.save(order);
         session.setAttribute("orderid",order.getOrderId());
         return order;
@@ -225,7 +228,6 @@ public class OrderController {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
-
     }
     
 }

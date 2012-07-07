@@ -24,6 +24,8 @@ public class Order extends PersistentObject {
     private String userId;
 
     private String restaurantId;
+    
+    private String restaurantName;
 
     private Person customer;
 
@@ -171,6 +173,14 @@ public class Order extends PersistentObject {
         this.restaurantId = restaurantId;
     }
 
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
     public Person getCustomer() {
         return customer;
     }
@@ -273,6 +283,14 @@ public class Order extends PersistentObject {
 
     public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Double getTotalDiscount() {
+        return totalDiscount;
+    }
+
+    public void setTotalDiscount(Double totalDiscount) {
+        this.totalDiscount = totalDiscount;
     }
 
     public List<String> getOrderUpdates() {

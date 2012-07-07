@@ -30,12 +30,12 @@ var deliveryCharge=${restaurant.deliveryOptions.deliveryCharge};
 <div class="menu">
     <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
         <div class="menucategory">
-            <h2>${menuCategory.name}</h2>
+            <h3>${menuCategory.name}</h3>
             <div class="menucategorysummary">${menuCategory.summary}</div>
             <div class="menuitems">
                 <c:forEach var="menuItem" items="${menuCategory.menuItems}">
                     <div class="menuItem">
-                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}','${menuItem.itemId}','${menuItem.title}',${menuItem.cost})">Add</a></span></div>
+                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}', '${fn:replace(restaurant.name,"'","#")}', '${menuItem.itemId}','${menuItem.title}',${menuItem.cost})">Add</a></span></div>
                         <div>${menuItem.description}</div>
                     </div>
                 </c:forEach>
