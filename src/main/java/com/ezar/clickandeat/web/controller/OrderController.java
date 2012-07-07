@@ -35,6 +35,36 @@ public class OrderController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/order/getOrder.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> getOrder(HttpServletRequest request) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Retrieving order from session");
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order = null;
+            if( orderId != null ) {
+                order = repository.findByOrderId(orderId);
+            }
+            model.put("success",true);
+            model.put("order",order);
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/order/addItem.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> addToOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
@@ -137,19 +167,16 @@ public class OrderController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/order/updateDeliveryType.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+    public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "deliveryType") String deliveryType ) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Updating order delivery type: " + body);
+            LOGGER.debug("Updating order delivery type to: " + deliveryType);
         }
         
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
             // Extract request parameters
-            Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
-            String deliveryType = (String)params.get("deliveryType");
-
             HttpSession session = request.getSession(true);
             String orderId = (String)session.getAttribute("orderid");
             Order order = null;

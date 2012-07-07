@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <script type="text/javascript">
-    var order = jQuery.parseJSON('${orderjson}');
+    var orderid = '${orderid}';
 </script>
 
 <div class="order">

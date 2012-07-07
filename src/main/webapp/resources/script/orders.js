@@ -1,5 +1,15 @@
 $(document).ready(function(){
-    buildOrder(order);
+    if( orderid && orderid != '') {
+        $.post( ctx+'/order/getOrder.ajax',
+            function( data ) {
+                if( data.success ) {
+                    buildOrder(data.order);
+                } else {
+                    alert('success:' + data.success);
+                }
+            }
+        );
+    }
 });
 
 // Build the order display component
@@ -15,14 +25,13 @@ function buildOrder(order) {
     // Add the delivery options to the order
     var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
     var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
-    var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
-    var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
-    $('.orderdelivery').append(deliveryRadio + collectionRadio);
+    var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
+    var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
+    $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
-    // Onchange event to reload
-    $('#deliveryType').change(function(element){
-
-    });
+    // Event handlers to update delivery type
+    $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
+    $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
 
     // Build order details if an order exists
     if( order ) {
@@ -34,7 +43,7 @@ function buildOrder(order) {
         };
         $('.totalcost').append('<span class=\'totalitemcost\'>{0}{1}</span>'.format(ccy,order.orderItemCost.toFixed(2)));
         if( order.orderItems.length > 0 ) {
-            if(order.orderItemCost < minimumOrderForFreeDelivery ) {
+            if(order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery ) {
                 if(allowDeliveryOrdersBelowMinimum && deliveryCharge > 0 ) {
                     var warning = '<div class=\'deliverywarning\'>A charge of {0}{1} will be applied for delivery of this order.</div>'.format(ccy,deliveryCharge.toFixed(2));
                     $('.deliverycheck').append(warning);
@@ -92,4 +101,18 @@ function removeFromOrder(itemId, quantity ) {
             }
         }
     );
+}
+
+// Update delivery type
+function updateDeliveryType(deliveryType) {
+    $.post( ctx+'/order/updateDeliveryType.ajax', { deliveryType: deliveryType },
+        function( data ) {
+            if( data.success ) {
+                buildOrder(data.order);
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+
 }
