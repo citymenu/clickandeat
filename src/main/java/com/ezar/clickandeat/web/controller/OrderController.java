@@ -2,6 +2,8 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.OrderItem;
+import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -32,6 +35,40 @@ public class OrderController {
     
     @Autowired
     private SequenceGenerator sequenceGenerator;
+
+
+    @RequestMapping(value="/buildOrder.html", method = RequestMethod.GET )
+    public ModelAndView get(HttpServletRequest request) {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Redirecting to current order details page");
+        }
+
+        HttpSession session = request.getSession(true);
+        String orderid = (String)session.getAttribute("orderid");
+        String restaurantid = (String)session.getAttribute("restaurantid");
+        Search search = (Search)session.getAttribute("search");
+        
+        if( orderid != null ) {
+            Order order = repository.findByOrderId(orderid);
+            if( order != null ) {
+                restaurantid = order.getRestaurantId();
+            }
+        }
+        
+        if( restaurantid == null ) {
+            if( search == null ) {
+                return new ModelAndView("redirect:/home.html",null);
+            }
+            else {
+                return new ModelAndView("redirect:/search.html" + search.getQueryString());
+            }
+        }
+        else {
+            return new ModelAndView("redirect:/restaurant.html?restaurantId=" + restaurantid);
+        }
+    }
+
 
     @SuppressWarnings("unchecked")
     @ResponseBody

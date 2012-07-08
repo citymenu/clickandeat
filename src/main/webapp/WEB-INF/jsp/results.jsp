@@ -11,7 +11,7 @@
 <div id="ordernav">
     <ul>
         <li><a href="${ctx}/search.html${search.queryString}">1) Find a Restaurant</a></li>
-        <li><a href="${ctx}/search.html">2) Build Order</a></li>
+        <li><a href="${ctx}/buildOrder.html">2) Build Your Order</a></li>
         <li><a href="${ctx}/search.html">3) Checkout</a></li>
     </ul>
 </div>

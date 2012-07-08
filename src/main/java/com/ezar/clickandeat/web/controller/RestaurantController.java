@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class RestaurantController {
     
 
     @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
-    public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId) {
+    public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Retrieving restaurant with id [" + restaurantId + "]");
@@ -50,6 +51,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
+        request.getSession(true).setAttribute("restaurantid",restaurantId);
         return new ModelAndView("restaurant",model);
     }
 
