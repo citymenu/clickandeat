@@ -1,3 +1,5 @@
+var currentOrder;
+
 $(document).ready(function(){
     if( orderid && orderid != '') {
         $.post( ctx+'/order/getOrder.ajax',
@@ -14,6 +16,9 @@ $(document).ready(function(){
 
 // Build the order display component
 function buildOrder(order) {
+
+    // Update current order object
+    currentOrder = order;
 
     // Reset all previous order details
     $('.ordertitle').remove();
@@ -70,8 +75,31 @@ function buildOrder(order) {
     }
 }
 
-// Add item to order update result on display
+// Add item to order, check that restaurant has not changed
 function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
+    if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
+        $('<div></div>')
+            .html('<div>You already have an order with {0}. You cannot order from more than one restaurant at a time. If you add this item all of the items for your order with {0} will be removed.</div><div>Do you want to proceed?</div>'.format(unescapeQuotes(currentOrder.restaurantName)))
+        	.dialog({
+        	    modal:true,
+        		title:'Are you sure?',
+        		buttons: {
+                    "Add Item Anyway": function() {
+                	    $( this ).dialog( "close" );
+                	    doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
+                	},
+                	"Don't Add Item": function() {
+                	    $( this ).dialog( "close" );
+                    }
+                }
+            });
+    } else {
+        doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
+    }
+}
+
+// Add item to order update result on display
+function doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
 
     var update = {
         restaurantId: restaurantId,
