@@ -10,6 +10,15 @@ function formatDate(value){
 	return value? Ext.Date.format(new Date(value),'d/m/Y'): '';
 }
 
+/* Unescapes quotes */
+function unescapeQuotes(str) {
+    if( !str || str == '' ) {
+        return str;
+    } else {
+        return str.replace("###","'").replace("%%%",'"');
+    }
+}
+
 /* Converts a newline delimited string into an array */
 function delimitedStringToArray(str,delim) {
     var arr = [];
@@ -25,7 +34,7 @@ function delimitedStringToArray(str,delim) {
 
 /* Converts <br> into newline on model init */
 function replaceLineBreaks(value) {
-    return value? value.replace('<br>','\n'): null;
+    return value? unescapeQuotes(value.replace('<br>','\n')): null;
 }
 
 /* Converts <br> into newline on model init */
@@ -36,7 +45,7 @@ function replaceNewLines(value) {
 /* Converts array into newline delimited string */
 function arrayToString(value, record) {
     if( value && (value instanceof Array)) {
-        return value.join('\n');
+        return unescapeQuotes(value).join('\n');
     } else {
         return value;
     }

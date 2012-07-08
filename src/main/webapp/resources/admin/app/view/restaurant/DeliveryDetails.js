@@ -270,13 +270,9 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
         items:[{
             fieldLabel:'Summary',
             name:'deliveryOptionsSummary',
-            xtype: 'htmleditor',
-            fontFamilies:['Segoe UI','Tahoma','Arial','Verdana','sans-serif'],
-            defaultFont:'Segoe UI',
-            enableColors: false,
-            enableLinks:false,
-            enableLists:false,
-            enableAlignments: false
+            labelAlign:'top',
+            xtype:'textarea',
+            height:90
         },{
             fieldLabel:'Delivery time (minutes)',
             name:'deliveryTimeMinutes',

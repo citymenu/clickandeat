@@ -25,7 +25,7 @@ function buildOrder(order) {
 
     // Add the order with the restaurant name if it exists and at least one item is added
     if( order && order.orderItems.length > 0 ) {
-        $('.orderheader').append('<span class=\'ordertitle\'> with {0}</span>'.format(order.restaurantName.replace("#","'")));
+        $('.orderheader').append('<span class=\'ordertitle\'> with {0}</span>'.format(unescapeQuotes(order.restaurantName)));
     }
 
     // Add the delivery options to the order if at least one item is added
@@ -46,7 +46,7 @@ function buildOrder(order) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}{3}</td><td align=\'center\'><a href=\'#\' onclick=\"removeFromOrder(\'{4}\')\">Remove</a></td></tr>'
-                .format(orderItem.menuItemTitle,orderItem.quantity,ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
+                .format(unescapeQuotes(orderItem.menuItemTitle),orderItem.quantity,ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
             $('.orderbody').prepend(row);
         };
         $('.totalcost').append('<span class=\'totalitemcost\'>{0}{1}</span>'.format(ccy,order.orderItemCost.toFixed(2)));
@@ -71,18 +71,21 @@ function buildOrder(order) {
 }
 
 // Add item to order update result on display
-function addToOrder(restaurantId, restaurantName, itemId, itemName, itemCost, quantity ) {
+function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
 
-    var update = new Object({
+    var update = {
         restaurantId: restaurantId,
         restaurantName: restaurantName,
         itemId: itemId,
         itemName: itemName,
         itemCost: itemCost,
         quantity: quantity || 1
-    });
+    };
 
-    $.post( ctx+'/order/addItem.ajax', { body: JSON.stringify(update) },
+    $.post( ctx+'/order/addItem.ajax',
+        {
+            body: JSON.stringify(update)
+        },
         function( data ) {
             if( data.success ) {
                 buildOrder(data.order);
@@ -96,10 +99,10 @@ function addToOrder(restaurantId, restaurantName, itemId, itemName, itemCost, qu
 // Remove an item from the order
 function removeFromOrder(itemId, quantity ) {
 
-    var update = new Object({
+    var update = {
         itemId: itemId,
         quantity: quantity || 1
-    });
+    };
 
     $.post( ctx+'/order/removeItem.ajax', { body: JSON.stringify(update) },
         function( data ) {

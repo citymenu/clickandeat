@@ -4,6 +4,15 @@ String.prototype.format = function () {
   return this.replace(/\{(\d+)\}/g, function (m, n) { return args[n]; });
 };
 
+/* Unescapes quotes */
+function unescapeQuotes(str) {
+    if( !str || str == '' ) {
+        return str;
+    } else {
+        return str.replace("###","'").replace("%%%",'"');
+    }
+}
+
 /* Hashtable object */
 function HashTable(obj)
 {

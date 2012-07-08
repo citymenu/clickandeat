@@ -7,8 +7,8 @@ Ext.define('AD.model.MenuItem', {
     fields: [
         {name:'number', type:'number'},
         {name:'itemId', type:'string'},
-        {name:'title', type:'string'},
-        {name:'subtitle', type:'string'},
+        {name:'title', type:'string', convert: unescapeQuotes},
+        {name:'subtitle', type:'string', convert: unescapeQuotes},
         {name:'description',type: 'string',convert: replaceLineBreaks},
         {name:'iconClass', type:'string'},
         {name:'cost', type:'double'}

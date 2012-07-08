@@ -25,8 +25,7 @@ public class JSONUtils {
     private static final Map<String,String> ESCAPE_MAP = new HashMap<String,String>();
     
     static {
-        ESCAPE_MAP.put("'", "\\\\'");
-        ESCAPE_MAP.put("\"","\\\"");
+        ESCAPE_MAP.put("'", "###");
     }
     
 

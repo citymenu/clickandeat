@@ -3,6 +3,7 @@
 
 <head>
     <title>${restaurant.name}</title>
+    <script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
     <script type="text/javascript" src="${ctx}/resources/script/restaurant.js"></script>
     <script type="text/javascript" src="${ctx}/resources/script/orders.js"></script>
 </head>
@@ -10,6 +11,7 @@
 <body>
 
 <script type="text/javascript">
+var restaurantName='${fn:replace(restaurant.name,"'","###")}';
 var minimumOrderForFreeDelivery=${restaurant.deliveryOptions.minimumOrderForFreeDelivery};
 var allowDeliveryOrdersBelowMinimum=${restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum};
 var deliveryCharge=${restaurant.deliveryOptions.deliveryCharge};
@@ -35,7 +37,7 @@ var deliveryCharge=${restaurant.deliveryOptions.deliveryCharge};
             <div class="menuitems">
                 <c:forEach var="menuItem" items="${menuCategory.menuItems}">
                     <div class="menuItem">
-                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}', '${fn:replace(restaurant.name,"'","#")}', '${menuItem.itemId}','${menuItem.title}',${menuItem.cost})">Add</a></span></div>
+                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">Add</a></span></div>
                         <div>${menuItem.description}</div>
                     </div>
                 </c:forEach>
