@@ -10,13 +10,6 @@
 
 <body>
 
-<script type="text/javascript">
-var restaurantName='${fn:replace(restaurant.name,"'","###")}';
-var minimumOrderForFreeDelivery=${restaurant.deliveryOptions.minimumOrderForFreeDelivery};
-var allowDeliveryOrdersBelowMinimum=${restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum};
-var deliveryCharge=${restaurant.deliveryOptions.deliveryCharge};
-</script>
-
 <div id="ordernav">
     <ul>
         <li><a href="${ctx}/search.html${search.queryString}">1) Find a Restaurant</a></li>

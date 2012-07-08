@@ -5,6 +5,7 @@ import com.ezar.clickandeat.model.OrderItem;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
@@ -31,8 +32,11 @@ public class OrderController {
     private static final Logger LOGGER = Logger.getLogger(OrderController.class);
 
     @Autowired
-    private OrderRepository repository;
-    
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
     @Autowired
     private SequenceGenerator sequenceGenerator;
 
@@ -50,7 +54,7 @@ public class OrderController {
         Search search = (Search)session.getAttribute("search");
         
         if( orderid != null ) {
-            Order order = repository.findByOrderId(orderid);
+            Order order = orderRepository.findByOrderId(orderid);
             if( order != null ) {
                 restaurantid = order.getRestaurantId();
             }
@@ -86,7 +90,7 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order = null;
             if( orderId != null ) {
-                order = repository.findByOrderId(orderId);
+                order = orderRepository.findByOrderId(orderId);
             }
             model.put("success",true);
             model.put("order",order);
@@ -115,7 +119,6 @@ public class OrderController {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
-            String restaurantName = (String)params.get("restaurantName");
             String itemId = (String)params.get("itemId");
             String itemName = (String)params.get("itemName");
             Double itemCost = Double.valueOf(params.get("itemCost").toString());
@@ -133,23 +136,24 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
-                order = buildAndRegister(session,restaurantId,restaurantName);
+                order = buildAndRegister(session,restaurantId);
             }
             else {
-                order = repository.findByOrderId(orderId);
+                order = orderRepository.findByOrderId(orderId);
                 if( order == null ) {
-                    order = buildAndRegister(session,restaurantId,restaurantName);
+                    order = buildAndRegister(session,restaurantId);
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
+                    Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
                     order.setRestaurantId(restaurantId);
-                    order.setRestaurantName(restaurantName);
+                    order.setRestaurant(restaurant);
                     order.getOrderItems().clear();
                 }
             }
             
             // Add new order item to order and update
             order.addOrderItem(orderItem);
-            order = repository.saveOrder(order);
+            order = orderRepository.saveOrder(order);
 
             // Return success
             model.put("success",true);
@@ -185,10 +189,10 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order = null;
             if( orderId != null ) {
-                order = repository.findByOrderId(orderId);
+                order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
                     order.removeOrderItem(itemId,quantity);
-                    order = repository.saveOrder(order);
+                    order = orderRepository.saveOrder(order);
                 }
             }
             model.put("success",true);
@@ -220,10 +224,10 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order = null;
             if( orderId != null ) {
-                order = repository.findByOrderId(orderId);
+                order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
                     order.setDeliveryType(deliveryType);
-                    order = repository.saveOrder(order);
+                    order = orderRepository.saveOrder(order);
                 }
             }
             model.put("success",true);
@@ -244,11 +248,12 @@ public class OrderController {
      * @return
      */
     
-    private Order buildAndRegister(HttpSession session, String restaurantId, String restaurantName ) {
-        Order order = repository.create();
+    private Order buildAndRegister(HttpSession session, String restaurantId) {
+        Order order = orderRepository.create();
+        Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
         order.setRestaurantId(restaurantId);
-        order.setRestaurantName(restaurantName);
-        order = repository.save(order);
+        order.setRestaurant(restaurant);
+        order = orderRepository.save(order);
         session.setAttribute("orderid",order.getOrderId());
         return order;
     }

@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -39,7 +40,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public Order findByOrderId(String orderId) {
-        return operations.findOne(query(where("orderId").is(orderId)),Order.class);
+        Query query = query(where("orderId").is(orderId));
+        query.fields().exclude("order.restaurant.menu");
+        return operations.findOne(query,Order.class);
     }
 
     @Override

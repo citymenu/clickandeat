@@ -2,6 +2,7 @@ package com.ezar.clickandeat.model;
 
 import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -24,8 +25,9 @@ public class Order extends PersistentObject {
     private String userId;
 
     private String restaurantId;
-    
-    private String restaurantName;
+
+    @DBRef
+    private Restaurant restaurant;
 
     private Person customer;
 
@@ -173,12 +175,12 @@ public class Order extends PersistentObject {
         this.restaurantId = restaurantId;
     }
 
-    public String getRestaurantName() {
-        return restaurantName;
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
-    public void setRestaurantName(String restaurantName) {
-        this.restaurantName = restaurantName;
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public Person getCustomer() {
