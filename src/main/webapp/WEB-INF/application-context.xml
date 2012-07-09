@@ -34,7 +34,7 @@
     	<security:intercept-url pattern="/secure/login.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/secure/register.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/secure/doRegister.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    	<security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_FULLY"/>
+    	<security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="*.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" filters="none"/>
 

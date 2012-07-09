@@ -14,7 +14,7 @@
     <ul>
         <li><a href="${ctx}/search.html${search.queryString}">1) Find a Restaurant</a></li>
         <li><a href="${ctx}/buildOrder.html">2) Build Your Order</a></li>
-        <li><a href="${ctx}/search.html">3) Checkout</a></li>
+        <li><a href="${ctx}/secure/checkout.html">3) Checkout</a></li>
     </ul>
 </div>
 
@@ -30,7 +30,7 @@
             <div class="menuitems">
                 <c:forEach var="menuItem" items="${menuCategory.menuItems}">
                     <div class="menuItem">
-                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a href="#" onclick="addToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">Add</a></span></div>
+                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a onclick="addToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">Add</a></span></div>
                         <div>${menuItem.description}</div>
                     </div>
                 </c:forEach>

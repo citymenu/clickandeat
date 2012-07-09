@@ -48,6 +48,11 @@ a:hover, a:active {
     color: #44A6CC;
 }
 
+a:hover {
+    cursor:hand;
+    cursor:pointer;
+}
+
 #header {
     margin:0;
     width: 100%;

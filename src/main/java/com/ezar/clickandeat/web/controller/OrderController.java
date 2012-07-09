@@ -7,12 +7,10 @@ import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -100,7 +98,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return buildResponse(model);
+        return ResponseEntityUtils.buildResponse(model);
     }
 
 
@@ -164,7 +162,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return buildResponse(model);
+        return ResponseEntityUtils.buildResponse(model);
     }
 
 
@@ -203,7 +201,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return buildResponse(model);
+        return ResponseEntityUtils.buildResponse(model);
     }
 
 
@@ -238,7 +236,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return buildResponse(model);
+        return ResponseEntityUtils.buildResponse(model);
     }
 
 
@@ -258,18 +256,4 @@ public class OrderController {
         return order;
     }
 
-
-    /**
-     * @param model
-     * @return
-     * @throws Exception
-     */
-
-    private ResponseEntity<byte[]> buildResponse(Map<String,Object> model ) throws Exception {
-        String json = JSONUtils.serialize(model);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
-    }
-    
 }

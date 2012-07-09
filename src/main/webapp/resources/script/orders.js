@@ -1,4 +1,8 @@
+// Global order variables
 var currentOrder;
+var minimumOrderForFreeDelivery;
+var allowDeliveryOrdersBelowMinimum;
+var deliveryCharge;
 
 $(document).ready(function(){
     if( orderid && orderid != '') {
@@ -50,14 +54,14 @@ function buildOrder(order) {
     if( order ) {
 
         // Get delivery details for restaurant
-        var minimumOrderForFreeDelivery = order.restaurant.deliveryOptions.minimumOrderForFreeDelivery || 0;
-        var allowDeliveryOrdersBelowMinimum = order.restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum || false;
-        var deliveryCharge = order.restaurant.deliveryOptions.deliveryCharge || 0;
+        minimumOrderForFreeDelivery = order.restaurant.deliveryOptions.minimumOrderForFreeDelivery || 0;
+        allowDeliveryOrdersBelowMinimum = order.restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum || false;
+        deliveryCharge = order.restaurant.deliveryOptions.deliveryCharge || 0;
 
         // Generate order items
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
-            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}{3}</td><td align=\'center\'><a href=\'#\' onclick=\"removeFromOrder(\'{4}\')\">Remove</a></td></tr>'
+            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}{3}</td><td align=\'center\'><a onclick=\"removeFromOrder(\'{4}\')\">Remove</a></td></tr>'
                 .format(unescapeQuotes(orderItem.menuItemTitle),orderItem.quantity,ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
             $('.orderbody').prepend(row);
         };
@@ -76,8 +80,11 @@ function buildOrder(order) {
                 }
             }
 
-            $('.checkout').append('<input type=\'button\' value=\'Proceed With Order\' class=\'checkoutbutton\'>');
+            $('.checkout').append('<input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'>');
             $('.checkoutbutton').button();
+            $('.checkoutbutton').click(function(){
+                checkout();
+            });
         }
     } else {
         $('.totalcost').append('<span class=\'totalitemcost\'>' + ccy + '0.00</span>');
@@ -88,7 +95,7 @@ function buildOrder(order) {
 function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
         $('<div></div>')
-            .html('<div>You already have an order with {0}. You cannot order from more than one restaurant at a time. If you add this item all of the items for your order with {0} will be removed.</div><div>Do you want to proceed?</div>'.format(unescapeQuotes(currentOrder.restaurantName)))
+            .html('<div>You already have an order with {0}. You cannot order from more than one restaurant at a time. If you add this item all of the items for your order with {0} will be removed.</div><div>Do you want to proceed?</div>'.format(unescapeQuotes(currentOrder.restaurant.name)))
         	.dialog({
         	    modal:true,
         		title:'Are you sure?',
@@ -159,5 +166,26 @@ function updateDeliveryType(deliveryType) {
             }
         }
     );
+}
 
+// Proceed to checkout
+function checkout() {
+    if( currentOrder && currentOrder.orderItems.length > 0 ) {
+        if(currentOrder.deliveryType == 'DELIVERY' && !allowDeliveryOrdersBelowMinimum && currentOrder.orderItemCost < minimumOrderForFreeDelivery) {
+            var additionalSpend = minimumOrderForFreeDelivery - currentOrder.orderItemCost;
+            $('<div></div>')
+                .html('<div>Your order value is below the minimum amount for delivery, you need to spend an additional {0}{1} on this order.</div>'.format(ccy,additionalSpend.toFixed(2)))
+                .dialog({
+                    modal:true,
+                    title:'Order cost below minimum for delivery',
+                    buttons: {
+                        "OK": function() {
+                            $( this ).dialog( "close" );
+                        }
+                    }
+                });
+        } else {
+            location.href = ctx + '/secure/checkout.html';
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="persons")
@@ -10,11 +11,14 @@ public class Person extends PersistentObject {
     private String lastName;
 
     private String telephone;
-
+    
     private String mobile;
     
     private String email;
 
+    @Transient
+    private String confirmEmail;
+    
     public Person() {
     }
 
@@ -56,5 +60,13 @@ public class Person extends PersistentObject {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getConfirmEmail() {
+        return confirmEmail;
+    }
+
+    public void setConfirmEmail(String confirmEmail) {
+        this.confirmEmail = confirmEmail;
     }
 }
