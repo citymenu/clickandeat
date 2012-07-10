@@ -9,7 +9,7 @@ body,input,select,textarea {
 
 body {
     margin: 0;
-    background-color: #F7F7F7;
+    background-color: #FFF;
 }
 
 h1, h2 {
@@ -67,13 +67,6 @@ a:hover {
     text-align:left;
 }
 
-#container {
-    margin: 0 auto;
-    width:970px;
-    text-align: left;
-    overflow:hidden;
-}
-
 #titlenav ul, #ordernav ul {
     font-family: 'Open Sans',sans-serif;
     font-weight:bold;
@@ -108,19 +101,6 @@ a:hover {
     text-align:left;
 }
 
-#search {
-    margin:20px 10px 0 0;
-    width:170px;
-    float:left;
-}
-
-#searchresults {
-    margin:20px 0 0 0;
-    border:0;
-    width:770px;
-    float:right;
-}
-
 #search .search {
     margin:5px 0 5px 0;
     border: 1px solid #B5B8C8;
@@ -133,24 +113,11 @@ a:hover {
 }
 
 .boxcontainer {
-    background: #FFF;
     border: 1px solid #BBB;
 	border-radius: 5px;
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
     padding:9px;
-    margin-bottom:10px;
-}
-
-.result-wrapper {
-    background: transparent #DDD;
-    border: 1px solid #CCC;
-	border-radius: 4px;
-	 -moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	width: 600px;
-	padding: 9px;
-	margin-bottom:10px;
 }
 
 .order {
@@ -166,17 +133,6 @@ a:hover {
 	margin:20px 0 20px 0;
 }
 
-.deliverywarning {
-    background-color:#E7E7E7;
-    border: 1px solid #CCC;
-    border-radius: 4px;
-	 -moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	display:block;
-	padding: 9px;
-	margin:10px 0 10px 0;
-}
-
 .checkout {
     float:right;
     margin:10px 0;
@@ -189,3 +145,175 @@ a:hover {
 }
 
 
+/* new stuff */
+#container {
+    margin: 0 auto;
+    margin-top:10px;
+    width:970px;
+    text-align: left;
+    overflow:hidden;
+    clear:both;
+}
+
+#maincontent {
+    width: 720px;
+	margin:0 10px 0 0;
+	float:left;
+    border: 2px solid #CCC;
+    border-radius: 4px;
+     -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    display:block;
+    padding: 10px;
+}
+
+#rightbar {
+    width:216px;
+    margin:0;
+    float:right;
+    overflow:hidden;
+}
+
+#searchresultsleft {
+    width:165px;
+    margin:0 10px 0 0;
+    float:left;
+}
+
+#searchresultsright {
+    width:545px;
+    margin:0;
+    float:right;
+}
+
+#workflow ul {
+    font-family: 'Open Sans',sans-serif;
+    font-weight:bold;
+    font-size:18px;
+    word-spacing: 0.1em;
+    list-style:none outside none;
+    margin:0;
+    padding:10px 20px 10px 20px;
+    overflow:hidden;
+}
+
+#workflow li {
+    display:inline;
+    float:left;
+    padding-right:30px;
+}
+
+.searchresult {
+    margin-top:10px;
+}
+
+/* Order panel */
+#ordercontainer {
+    border: 2px solid #777;
+    border-radius: 4px;
+     -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    display:block;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+}
+
+.orderheader {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-weight:bold;
+    font-size:16px;
+    background-color:#777;
+    color:#FFF;
+    padding:12px 0 12px 0;
+    text-align:center;
+}
+
+.orderdeliverychoice {
+    background-color:#EEE;
+    font-size:11px;
+    text-align:center;
+    padding:3px;
+    margin:5px;
+    border: 1px solid #EEE;
+    border-radius: 3px;
+     -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.collectionradio {
+    padding-left:5px;
+}
+
+.orderitems {
+    padding:0;
+    margin: 5px 5px 0 5px;
+}
+
+.ordertable {
+    border-collapse:collapse;
+}
+
+th.ordertableheader {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:11px;
+    font-weight:bold;
+    border-bottom:1px solid #999;
+}
+
+.ordertableseparator {
+    border-right:1px dashed #999;
+}
+
+.orderitemprice {
+    padding-right:3px;
+}
+
+td.orderitem {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:11px;
+    padding:2px 0 0 0;
+}
+
+td.deliverycharge {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:11px;
+    font-weight:bold;
+    padding:6px 0 0 0;
+}
+
+#ordertotal {
+    background-color:#EEE;
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:12px;
+    font-weight:bold;
+    text-align:center;
+    padding:3px;
+    margin:10px 5px 5px 5px;
+    border: 1px solid #EEE;
+    border-radius: 3px;
+     -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+.totalcost {
+    padding:0 0 0 10px;
+}
+
+.deliverywarning {
+    background-color:#FFFF99;
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:11px;
+    text-align:center;
+    padding:3px;
+    margin:10px 5px 10px 5px;
+    border: 1px solid #CC6633;
+    border-radius: 3px;
+     -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+}
+
+#checkout {
+    margin:10px 5px 10px 5px;
+    text-align:center;
+}

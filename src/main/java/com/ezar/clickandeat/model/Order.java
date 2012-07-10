@@ -90,8 +90,21 @@ public class Order extends PersistentObject {
         }
         this.totalDiscount = totalDiscount;
 
+        // Reset and update delivery cost
+        this.deliveryCost = 0d;
+        if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
+            Double minimumOrderForFreeDelivery = this.restaurant.getDeliveryOptions().getMinimumOrderForFreeDelivery();
+            Double deliveryCharge = this.restaurant.getDeliveryOptions().getDeliveryCharge();
+            Boolean allowDeliveryOrdersBelowMinimum = this.restaurant.getDeliveryOptions().getAllowDeliveryOrdersBelowMinimum();
+            if( deliveryCharge != null && allowDeliveryOrdersBelowMinimum != null ) {
+                if(allowDeliveryOrdersBelowMinimum && this.orderItemCost < minimumOrderForFreeDelivery ) {
+                    this.deliveryCost = deliveryCharge;
+                }
+            }
+        }
+        
         // Set the total cost
-        this.totalCost = this.orderItemCost - this.totalDiscount;
+        this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
     }
     
     

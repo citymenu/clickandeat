@@ -28,14 +28,10 @@ function buildOrder(order) {
     $('.ordertitle').remove();
     $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
-    $('.totalitemcost').remove();
-    $('.checkoutbutton').remove();
+    $('.deliverychargerow').remove();
+    $('.totalcost').remove();
+    $('#checkout').remove();
     $('.deliverywarning').remove();
-
-    // Add the order with the restaurant name if it exists and at least one item is added
-    if( order && order.orderItems.length > 0 ) {
-        $('.orderheader').append('<span class=\'ordertitle\'> with {0}</span>'.format(unescapeQuotes(order.restaurant.name)));
-    }
 
     // Add the delivery options to the order if at least one item is added
     if( order && order.orderItems.length > 0 ) {
@@ -61,33 +57,37 @@ function buildOrder(order) {
         // Generate order items
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
-            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td>{0}</td><td align=\'center\'>{1}</td><td align=\'right\'>{2}{3}</td><td align=\'center\'><a onclick=\"removeFromOrder(\'{4}\')\">Remove</a></td></tr>'
-                .format(unescapeQuotes(orderItem.menuItemTitle),orderItem.quantity,ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
+            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\')\">-</a></td></tr>'
+                .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId);
             $('.orderbody').prepend(row);
         };
 
-        // Build total item cost and delivery warnings if applicable
-        $('.totalcost').append('<span class=\'totalitemcost\'>{0}{1}</span>'.format(ccy,order.orderItemCost.toFixed(2)));
-        if( order.orderItems.length > 0 ) {
-            if(order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery ) {
-                if(allowDeliveryOrdersBelowMinimum && deliveryCharge > 0 ) {
-                    var warning = '<div class=\'deliverywarning\'>A charge of {0}{1} will be applied for delivery of this order.</div>'.format(ccy,deliveryCharge.toFixed(2));
-                    $('.deliverycheck').append(warning);
-                } else {
-                    var additionalSpend = minimumOrderForFreeDelivery - order.orderItemCost;
-                    var warning = '<div class=\'deliverywarning\'>You need to spend an additional {0}{1} to place this order for delivery.</div>'.format(ccy,additionalSpend.toFixed(2));
-                    $('.deliverycheck').append(warning);
-                }
-            }
+        // Add delivery charge if applicable
+        if( order.orderItems.length > 0 && order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery && allowDeliveryOrdersBelowMinimum && deliveryCharge > 0 ) {
+            var row = '<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>Delivery charge</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td>'.format(ccy,deliveryCharge.toFixed(2));
+            $('.orderbody').append(row);
+        }
 
-            $('.checkout').append('<input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'>');
-            $('.checkoutbutton').button();
-            $('.checkoutbutton').click(function(){
-                checkout();
-            });
+        // Build total item cost
+        $('#ordertotal').append('<span class=\'totalcost\'>{0}{1}</span>'.format(ccy,order.totalCost.toFixed(2)));
+
+        // Build warning about delivery or show checkout
+        if( order.orderItems.length > 0 ) {
+
+            if(order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery && !allowDeliveryOrdersBelowMinimum) {
+                var additionalSpend = minimumOrderForFreeDelivery - order.orderItemCost;
+                var warning = '<div class=\'deliverywarning\'>You need to spend an additional {0}{1} to place this order for delivery.</div>'.format(ccy,additionalSpend.toFixed(2));
+                $('.deliverycheck').append(warning);
+            } else {
+                $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'></div>');
+                $('.checkoutbutton').button();
+                $('.checkoutbutton').click(function(){
+                    checkout();
+                });
+            }
         }
     } else {
-        $('.totalcost').append('<span class=\'totalitemcost\'>' + ccy + '0.00</span>');
+        $('#ordertotal').append('<span class=\'totalitemcost\'>' + ccy + ' 0.00</span>');
     }
 }
 

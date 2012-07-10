@@ -27,7 +27,7 @@ public class RestaurantSearchController {
     private CuisineProvider cuisineProvider;
     
     
-    @RequestMapping(value="/search.html", method = RequestMethod.GET)
+    @RequestMapping(value="/findRestaurant.html", method = RequestMethod.GET)
     public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) List<String> cuisines,
                                         @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
                                         HttpServletRequest request) {
@@ -47,7 +47,7 @@ public class RestaurantSearchController {
         // Store search in session
         request.getSession(true).setAttribute("search",search);
 
-        return new ModelAndView("results",model);
+        return new ModelAndView("findRestaurant",model);
     }
 
     

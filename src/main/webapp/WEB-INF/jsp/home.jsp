@@ -15,7 +15,7 @@
 
 <div>
     <p><spring message code="label.search"/></p>
-    <form method="get" action="${ctx}/search.html">
+    <form method="get" action="${ctx}/findRestaurant.html">
         <input type="text" name="loc" id="loc"/> <input type="submit" value="<spring:message code="label.search"/>"/>
     </form>
 </div>

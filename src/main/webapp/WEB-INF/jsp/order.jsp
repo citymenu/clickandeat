@@ -5,28 +5,25 @@
     var orderid = '${orderid}';
 </script>
 
-<div class="order">
-    <h3 class='orderheader'>Your Order</h3>
-    <div class="orderdelivery"></div>
-    <div class="orderitems">
-        <table width="100%">
-            <thead>
-                <tr>
-                    <th width="65%" align="left"><spring:message code="label.item"/></th>
-                    <th width="10%" align="center"><spring:message code="label.quantity"/></th>
-                    <th width="15%" align="center"><spring:message code="label.price"/></th>
-                    <th width="10%"></th>
-                </tr>
-            </thead>
-            <tbody class="orderbody">
-                <tr class='ordertotal' valign='top'>
-                    <td colspan=2 width="75%"><spring:message code="label.totalprice"/></td>
-                    <td width="15%" align="center"><div class="totalcost"><span class="totalitemcost"></span></div></td>
-                    <td width="10%"></td>
-                </tr>
-            </tbody>
-        </table>
+<div id="ordercontainer">
+    <div id="order">
+        <div class='orderheader'><spring:message code="label.your-order"/>:</div>
+        <div class="orderdelivery"></div>
+        <div class="orderitems">
+            <table width="100%" class="ordertable">
+                <thead>
+                    <tr>
+                        <th width="65%" align="left" class="ordertableheader ordertableseparator"><spring:message code="label.item"/></th>
+                        <th width="25%" align="center" class="ordertableheader ordertableseparator"><spring:message code="label.price"/></th>
+                        <th width="10%" class="ordertableheader"></th>
+                    </tr>
+                </thead>
+                <tbody class="orderbody">
+                </tbody>
+            </table>
+        </div>
+        <div id="ordertotal"><spring:message code="label.order-total"/>:</div>
+        <div class="deliverycheck"></div>
+        <div id="checkoutcontainer"></div>
     </div>
-    <div class="deliverycheck"></div>
-    <div class="checkout"></div>
 </div>

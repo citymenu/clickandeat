@@ -10,36 +10,33 @@
 
 <body>
 
-<div id="ordernav">
-    <ul>
-        <li><a href="${ctx}/search.html${search.queryString}">1) Find a Restaurant</a></li>
-        <li><a href="${ctx}/buildOrder.html">2) Build Your Order</a></li>
-        <li><a href="${ctx}/secure/checkout.html">3) Checkout</a></li>
-    </ul>
-</div>
+<div id="maincontent">
+    <%@ include file="/WEB-INF/jsp/workflow.jsp" %>
+    <h1>${restaurant.name}</h1>
+    <div>${restaurant.description}</div>
 
-<h1>${restaurant.name}</h1>
-<div>${restaurant.description}</div>
-
-<h1>Menu</h1>
-<div class="menu">
-    <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
-        <div class="menucategory">
-            <h3>${menuCategory.name}</h3>
-            <div class="menucategorysummary">${menuCategory.summary}</div>
-            <div class="menuitems">
-                <c:forEach var="menuItem" items="${menuCategory.menuItems}">
-                    <div class="menuItem">
-                        <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a onclick="addToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">Add</a></span></div>
-                        <div>${menuItem.description}</div>
-                    </div>
-                </c:forEach>
+    <h1>Menu</h1>
+    <div class="menu">
+        <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
+            <div class="menucategory">
+                <h3>${menuCategory.name}</h3>
+                <div class="menucategorysummary">${menuCategory.summary}</div>
+                <div class="menuitems">
+                    <c:forEach var="menuItem" items="${menuCategory.menuItems}">
+                        <div class="menuItem">
+                            <div>${menuItem.number}) ${menuItem.title} ${menuItem.subtitle} <span><a onclick="addToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">Add</a></span></div>
+                            <div>${menuItem.description}</div>
+                        </div>
+                    </c:forEach>
+                </div>
             </div>
-        </div>
-    </c:forEach>
+        </c:forEach>
+    </div>
 </div>
 
-<%@ include file="/WEB-INF/jsp/order.jsp" %>
+<div id="rightbar">
+    <%@ include file="/WEB-INF/jsp/order.jsp" %>
+</div>
 
 </body>
 </html>
