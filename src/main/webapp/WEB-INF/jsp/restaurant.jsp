@@ -32,7 +32,7 @@
                                     <td width="80%">
                                         <div class="menuItemDetails">
                                             <div class="menuItemNumber">${menuItem.number}</div>
-                                            <div class="menuItemTitle">${menuItem.title}<div class="menuItemSubtitle">${menuItem.subtitle}</div></div>
+                                            <div class="menuItemTitle">${menuItem.title} <div class="menuItemSubtitle">${menuItem.subtitle}</div></div>
                                             <div class="menuItemDescription">${menuItem.description}</div>
                                         </div>
                                     </td>
