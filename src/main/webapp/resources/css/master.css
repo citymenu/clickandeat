@@ -58,7 +58,8 @@ a:hover {
     width: 100%;
     height:50px;
     text-align:left;
-    background: #C92233;
+    background: #FFF;
+    border-bottom:2px solid #AAA;
 }
 
 #titlenav {
@@ -70,7 +71,7 @@ a:hover {
 #titlenav ul, #ordernav ul {
     font-family: 'Open Sans',sans-serif;
     font-weight:bold;
-    color:#FFF;
+    color:#333;
     font-size:12px;
     word-spacing: 0.1em;
     list-style:none outside none;
@@ -86,7 +87,7 @@ a:hover {
 }
 
 #titlenav a, #titlenav a:visited, #titlenav a:active, #titlenav a:hover, #ordernav a, #ordernav a:visited, #ordernav a:active, #ordernav a:hover {
-    color:#F7F7F7;
+    color:#333;
     text-decoration:none;
 }
 
@@ -148,7 +149,7 @@ a:hover {
 /* new stuff */
 #container {
     margin: 0 auto;
-    margin-top:10px;
+    margin-top:30px;
     width:970px;
     text-align: left;
     overflow:hidden;
@@ -156,22 +157,36 @@ a:hover {
 }
 
 #maincontent {
-    width: 720px;
+    width: 750px;
 	margin:0 10px 0 0;
 	float:left;
-    border: 2px solid #CCC;
-    border-radius: 4px;
-     -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
     display:block;
-    padding: 10px;
+    padding:0;
 }
 
 #rightbar {
-    width:216px;
+    width:210px;
     margin:0;
     float:right;
     overflow:hidden;
+}
+
+#contentbody {
+    border: 2px solid #900000;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomleft: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -webkit-border-radius-topleft: 0px;
+    -webkit-border-radius-topright: 0px;
+    -webkit-border-radius-bottomleft: 4px;
+    -webkit-border-radius-bottomright: 4px;
+    display:block;
+    padding: 15px;
 }
 
 #searchresultsleft {
@@ -186,21 +201,56 @@ a:hover {
     float:right;
 }
 
-#workflow ul {
-    font-family: 'Open Sans',sans-serif;
-    font-weight:bold;
-    font-size:18px;
-    word-spacing: 0.1em;
-    list-style:none outside none;
-    margin:0;
-    padding:10px 20px 10px 20px;
-    overflow:hidden;
+
+#workflow {
+	margin:0;
+    border:0;
+    padding:0;
+    background-color:#FFF;
 }
 
-#workflow li {
-    display:inline;
-    float:left;
-    padding-right:30px;
+.tabstable {
+    border-collapse:collapse;
+}
+
+.workflowtab {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-weight:bold;
+    font-size:14px;
+    background-color:#900000;
+    color:#CCC;
+    text-align:center;
+    padding:11px 0 11px 0;
+    margin:0 6px 0 6px;
+    border-top: 2px solid #900000;
+    border-left: 2px solid #900000;
+    border-right: 2px solid #900000;
+    border-bottom: 0px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    -moz-border-radius-topleft: 4px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomleft: 0px;
+    -moz-border-radius-bottomright: 0px;
+    -webkit-border-radius-topleft: 4px;
+    -webkit-border-radius-topright: 4px;
+    -webkit-border-radius-bottomleft: 0px;
+    -webkit-border-radius-bottomright: 0px;
+}
+
+.workflowtableft {
+    margin:0 6px 0 0;
+}
+
+.workflowtabright {
+    margin:0 0 0 6px;
+}
+
+.workflowtabactive {
+    background-color:#FFF;
+    color:#333;
 }
 
 .searchresult {
@@ -225,8 +275,8 @@ a:hover {
     font-size:16px;
     background-color:#777;
     color:#FFF;
-    padding:12px 0 12px 0;
     text-align:center;
+    padding:12px;
 }
 
 .orderdeliverychoice {
@@ -316,3 +366,83 @@ td.deliverycharge {
     margin:10px 5px 10px 5px;
     text-align:center;
 }
+
+.menu {
+    margin-top:20px;
+}
+
+.menucategory {
+    border-top: 1px solid #DDD;
+    padding-top:15px;
+    margin:25px 0 25px 0;
+}
+
+.menucategoryheader {
+    margin: 0;
+}
+
+.menucategoryname {
+    color: #555;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+    text-transform: uppercase;
+}
+
+.menuItemTable {
+    border-collapse:collapse;
+}
+
+.menuItemDetails {
+    margin:15px 15px 0 0;
+}
+
+.menuItemNumber {
+    color: Gray;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    width:30px;
+    float:left;
+    text-align:left;
+}
+
+.menuItemTitle {
+    color:#E3001B;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.menuItemDescription {
+    font: 11px/14px Verdana,Arial,Helvetica,sans-serif;
+}
+
+.menuItemActions {
+    margin-top:15px;
+    vertical-align:middle;
+    clear:both;
+}
+
+.menuItemCost {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    color: #555;
+    width:75px;
+    text-align:right;
+    display:inline;
+}
+
+.menuItemAction {
+    display:inline;
+}
+
+.menuItemQuantity {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+    margin-left:6px;
+}
+

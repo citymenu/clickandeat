@@ -4,9 +4,6 @@ var minimumOrderForFreeDelivery;
 var allowDeliveryOrdersBelowMinimum;
 var deliveryCharge;
 
-// Close image
-var closeImg = '<img src=\'' + ctx + '/resources/images/icons-shadowless/cross-script.png\'/>';
-
 $(document).ready(function(){
     if( orderid && orderid != '') {
         $.post( ctx+'/order/getOrder.ajax',
@@ -55,6 +52,7 @@ function buildOrder(order) {
         // Generate order items
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
+            var closeImg = '<img src=\'' + ctx + '/resources/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
             var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\')\">{5}</a></td></tr>'
                 .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,closeImg);
             $('.orderbody').prepend(row);
@@ -85,6 +83,12 @@ function buildOrder(order) {
     }
 }
 
+// Add multiple items based on the select value
+function addMultipleToOrder(restaurantId, itemId, itemName, itemCost ) {
+    var quantity = $('#select_' + itemId ).val();
+    addToOrder(restaurantId, itemId, itemName, itemCost, quantity);
+}
+
 // Add item to order, check that restaurant has not changed
 function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
@@ -97,7 +101,7 @@ function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
         		    text: labels['add-item-anyway'],
         		    click: function() {
                 	    $( this ).dialog( "close" );
-                	    doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
+                	    doAddToOrder(restaurantId, itemId, itemName, itemCost );
                 	}
                 },{
                     text: labels['dont-add-item'],

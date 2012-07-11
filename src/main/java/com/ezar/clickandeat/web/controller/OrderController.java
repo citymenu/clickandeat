@@ -120,7 +120,7 @@ public class OrderController {
             String itemId = (String)params.get("itemId");
             String itemName = (String)params.get("itemName");
             Double itemCost = Double.valueOf(params.get("itemCost").toString());
-            Integer quantity = (Integer)params.get("quantity");
+            Integer quantity = Integer.valueOf(params.get("quantity").toString());
             
             // Build new order item
             OrderItem orderItem = new OrderItem();
