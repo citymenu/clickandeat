@@ -1,8 +1,25 @@
-<%@ page language="java" %>
-<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 
 <script type="text/javascript">
+
+    // Current order
     var orderid = '${orderid}';
+
+    //Translations
+    var labels = ({
+        'delivery': "<spring:message code="label.delivery"/>",
+        'collection': "<spring:message code="label.collection"/>",
+        'delivery-charge': "<spring:message code="label.delivery-charge"/>",
+        'delivery-warning': "<spring:message code="label.delivery-warning"/>",
+        'checkout': "<spring:message code="label.checkout"/>",
+        'restaurant-warning': "<spring:message code="label.restaurant-warning"/>",
+        'are-you-sure': "<spring:message code="label.are-you-sure"/>",
+        'add-item-anyway': "<spring:message code="label.add-item-anyway"/>",
+        'dont-add-item': "<spring:message code="label.dont-add-item"/>"
+    });
+
 </script>
 
 <div id="ordercontainer">

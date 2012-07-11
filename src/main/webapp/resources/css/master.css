@@ -302,8 +302,7 @@ td.deliverycharge {
 
 .deliverywarning {
     background-color:#FFFF99;
-    font-family: Arial, 'Lucida Grande', sans-serif;
-    font-size:11px;
+    font: 11px/14px Arial, 'Lucida Grande', sans-serif;
     text-align:center;
     padding:3px;
     margin:10px 5px 10px 5px;

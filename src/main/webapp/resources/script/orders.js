@@ -40,8 +40,8 @@ function buildOrder(order) {
     if( order && order.orderItems.length > 0 ) {
         var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
         var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
-        var deliveryRadio = '<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> Delivery</span>'.format(deliveryChecked);
-        var collectionRadio = '<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> Collection</span>'.format(collectionChecked);
+        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> ' + labels['delivery'] + '</span>').format(deliveryChecked);
+        var collectionRadio = ('<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> ' + labels['collection'] + '</span>').format(collectionChecked);
         $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
         // Event handlers to update delivery type
@@ -52,11 +52,6 @@ function buildOrder(order) {
     // Build order details if an order exists
     if( order ) {
 
-        // Get delivery details for restaurant
-        minimumOrderForFreeDelivery = order.restaurant.deliveryOptions.minimumOrderForFreeDelivery || 0;
-        allowDeliveryOrdersBelowMinimum = order.restaurant.deliveryOptions.allowDeliveryOrdersBelowMinimum || false;
-        deliveryCharge = order.restaurant.deliveryOptions.deliveryCharge || 0;
-
         // Generate order items
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
@@ -66,28 +61,24 @@ function buildOrder(order) {
         };
 
         // Add delivery charge if applicable
-        if( order.orderItems.length > 0 && order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery && allowDeliveryOrdersBelowMinimum && deliveryCharge > 0 ) {
-            var row = '<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>Delivery charge</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td>'.format(ccy,deliveryCharge.toFixed(2));
+        if( order.deliveryCost && order.deliveryCost > 0 ) {
+            var row = ('<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>' + labels['delivery-charge'] + '</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.deliveryCost.toFixed(2));
             $('.orderbody').append(row);
         }
 
         // Build total item cost
         $('#ordertotal').append('<span class=\'totalcost\'>{0}{1}</span>'.format(ccy,order.totalCost.toFixed(2)));
 
-        // Build warning about delivery or show checkout
-        if( order.orderItems.length > 0 ) {
-
-            if(order.deliveryType == 'DELIVERY' && order.orderItemCost < minimumOrderForFreeDelivery && !allowDeliveryOrdersBelowMinimum) {
-                var additionalSpend = minimumOrderForFreeDelivery - order.orderItemCost;
-                var warning = '<div class=\'deliverywarning\'>You need to spend an additional {0}{1} to place this order for delivery.</div>'.format(ccy,additionalSpend.toFixed(2));
-                $('.deliverycheck').append(warning);
-            } else {
-                $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'Checkout\' class=\'checkoutbutton\'></div>');
-                $('.checkoutbutton').button();
-                $('.checkoutbutton').click(function(){
-                    checkout();
-                });
-            }
+        // Show warning if item cost is below minimum for delivery
+        if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
+            var warning = ('<div class=\'deliverywarning\'>' + labels['delivery-warning'] + '</div>' ).format(ccy,order.extraSpendNeededForDelivery.toFixed(2));
+            $('.deliverycheck').append(warning);
+        } else {
+            $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
+            $('.checkoutbutton').button();
+            $('.checkoutbutton').click(function(){
+                checkout();
+            });
         }
     } else {
         $('#ordertotal').append('<span class=\'totalitemcost\'>' + ccy + ' 0.00</span>');
@@ -98,19 +89,22 @@ function buildOrder(order) {
 function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
         $('<div></div>')
-            .html('<div>You already have an order with {0}. You cannot order from more than one restaurant at a time. If you add this item all of the items for your order with {0} will be removed.</div><div>Do you want to proceed?</div>'.format(unescapeQuotes(currentOrder.restaurant.name)))
+            .html(('<div>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name)))
         	.dialog({
         	    modal:true,
-        		title:'Are you sure?',
-        		buttons: {
-                    "Add Item Anyway": function() {
+        		title:labels['are-you-sure'],
+        		buttons: [{
+        		    text: labels['add-item-anyway'],
+        		    click: function() {
                 	    $( this ).dialog( "close" );
                 	    doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
-                	},
-                	"Don't Add Item": function() {
+                	}
+                },{
+                    text: labels['dont-add-item'],
+                    click: function() {
                 	    $( this ).dialog( "close" );
                     }
-                }
+                }]
             });
     } else {
         doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );

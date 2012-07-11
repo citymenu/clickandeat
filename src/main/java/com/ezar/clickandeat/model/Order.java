@@ -51,6 +51,8 @@ public class Order extends PersistentObject {
 
     private Double deliveryCost;
     
+    private Double extraSpendNeededForDelivery;
+    
     private Double cardTransactionCost;
 
     private Double totalDiscount;
@@ -92,13 +94,20 @@ public class Order extends PersistentObject {
 
         // Reset and update delivery cost
         this.deliveryCost = 0d;
+        this.extraSpendNeededForDelivery = 0d;
+
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
+
             Double minimumOrderForFreeDelivery = this.restaurant.getDeliveryOptions().getMinimumOrderForFreeDelivery();
             Double deliveryCharge = this.restaurant.getDeliveryOptions().getDeliveryCharge();
             Boolean allowDeliveryOrdersBelowMinimum = this.restaurant.getDeliveryOptions().getAllowDeliveryOrdersBelowMinimum();
-            if( deliveryCharge != null && allowDeliveryOrdersBelowMinimum != null ) {
-                if(allowDeliveryOrdersBelowMinimum && this.orderItemCost < minimumOrderForFreeDelivery ) {
+
+            if(minimumOrderForFreeDelivery != null && this.orderItemCost < minimumOrderForFreeDelivery ) {
+                if(allowDeliveryOrdersBelowMinimum != null && allowDeliveryOrdersBelowMinimum ) {
                     this.deliveryCost = deliveryCharge;
+                }
+                else {
+                    this.extraSpendNeededForDelivery = minimumOrderForFreeDelivery - this.orderItemCost;
                 }
             }
         }
@@ -282,6 +291,14 @@ public class Order extends PersistentObject {
 
     public void setDeliveryCost(Double deliveryCost) {
         this.deliveryCost = deliveryCost;
+    }
+
+    public Double getExtraSpendNeededForDelivery() {
+        return extraSpendNeededForDelivery;
+    }
+
+    public void setExtraSpendNeededForDelivery(Double extraSpendNeededForDelivery) {
+        this.extraSpendNeededForDelivery = extraSpendNeededForDelivery;
     }
 
     public Double getCardTransactionCost() {
