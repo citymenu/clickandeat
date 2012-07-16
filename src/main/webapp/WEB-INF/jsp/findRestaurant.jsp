@@ -17,7 +17,7 @@
 
         <div id="searchresultsleft">
             <div id="search" class="boxcontainer">
-                <form method="GET" action="${ctx}/search.html">
+                <form method="GET" action="${ctx}/findRestaurant.html">
                     <h3><spring:message code="label.search"/></h3>
                     <div>Location:</div>
                     <div><input name="loc" type="text" class="search" value="${search.location}"/></div>

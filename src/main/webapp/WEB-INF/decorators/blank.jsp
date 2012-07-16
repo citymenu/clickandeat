@@ -9,6 +9,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
 	<script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/script/breadcrumbs.js"></script>
+	<script type="text/javascript" src="${ctx}/resources/script/json2.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-validate.js"></script>

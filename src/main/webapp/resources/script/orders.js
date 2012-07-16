@@ -18,8 +18,23 @@ $(document).ready(function(){
     }
 });
 
-// Build the order display component
+// Event handler for before order is built, intended to be overriden
+function onBeforeBuildOrder(order) {
+}
+
+// Event handler for after order is built, intended to be overriden
+function onAfterBuildOrder(order) {
+}
+
+// Order build function
 function buildOrder(order) {
+    onBeforeBuildOrder(order);
+    doBuildOrder(order);
+    onAfterBuildOrder(order);
+}
+
+// Build the order display component
+function doBuildOrder(order) {
 
     // Update current order object
     currentOrder = order;

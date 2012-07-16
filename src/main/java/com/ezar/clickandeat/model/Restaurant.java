@@ -112,6 +112,60 @@ public class Restaurant extends PersistentObject {
 
 
     /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
+        Assert.notNull(date, "date must not be null");
+        Assert.notNull(time, "time must not be null");
+
+        if( openingTimes == null ) {
+            return false;
+        }
+
+        // Check if the restaurant is closed on this date
+        if( openingTimes.getClosedDates() != null ) {
+            for( LocalDate closedDate: openingTimes.getClosedDates()) {
+                if( closedDate.equals(date)) {
+                    return false;
+                }
+            }
+        }
+
+        int currentDayOfWeek = date.getDayOfWeek();
+
+        // Iterate through open dates
+        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+
+            int dayOfWeek = openingTime.getDayOfWeek();
+            LocalTime open = openingTime.getCollectionOpeningTime();
+            LocalTime close = openingTime.getCollectionClosingTime();
+
+            // Do not test if either open or close time is null
+            if( open == null || close == null ) {
+                continue;
+            }
+
+            // Check from day before for delivery closing times after midnight
+            if( currentDayOfWeek - 1 == dayOfWeek % 7 && close.isBefore(open)) {
+                if(!close.isBefore(time)) {
+                    return true;
+                }
+            }
+            else if( currentDayOfWeek == dayOfWeek ) {
+                if(!time.isBefore(open) && !time.isAfter(close)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
      * Returns true if this restaurant is currently open based on the given date and time
      * @param date
      * @param time
@@ -174,6 +228,24 @@ public class Restaurant extends PersistentObject {
 
         return RestaurantOpenStatus.CLOSED;
     }
+
+
+    /**
+     * @param date
+     * @return
+     */
+
+    public OpeningTime getOpeningTime(LocalDate date) {
+        OpeningTime ret = null;
+        for( OpeningTime openingTime: openingTimes.getOpeningTimes()) {
+            if( openingTime.getDayOfWeek() == date.getDayOfWeek()) {
+                ret = openingTime;
+                break;
+            }
+        }
+        return ret;
+    }
+    
 
     public String getRestaurantId() {
         return restaurantId;

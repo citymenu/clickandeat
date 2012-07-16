@@ -43,9 +43,13 @@ public class Order extends PersistentObject {
 
     private DateTime orderPlacedTime;
 
-    private DateTime requestedTime;
+    private DateTime requestedDeliveryTime;
 
-    private DateTime expectedTime;
+    private DateTime expectedDeliveryTime;
+
+    private DateTime requestedCollectionTime;
+
+    private DateTime expectedCollectionTime;
 
     private Double orderItemCost;
 
@@ -261,20 +265,36 @@ public class Order extends PersistentObject {
         this.orderPlacedTime = orderPlacedTime;
     }
 
-    public DateTime getRequestedTime() {
-        return requestedTime;
+    public DateTime getRequestedDeliveryTime() {
+        return requestedDeliveryTime;
     }
 
-    public void setRequestedTime(DateTime requestedTime) {
-        this.requestedTime = requestedTime;
+    public void setRequestedDeliveryTime(DateTime requestedDeliveryTime) {
+        this.requestedDeliveryTime = requestedDeliveryTime;
     }
 
-    public DateTime getExpectedTime() {
-        return expectedTime;
+    public DateTime getExpectedDeliveryTime() {
+        return expectedDeliveryTime;
     }
 
-    public void setExpectedTime(DateTime expectedTime) {
-        this.expectedTime = expectedTime;
+    public void setExpectedDeliveryTime(DateTime expectedDeliveryTime) {
+        this.expectedDeliveryTime = expectedDeliveryTime;
+    }
+
+    public DateTime getRequestedCollectionTime() {
+        return requestedCollectionTime;
+    }
+
+    public void setRequestedCollectionTime(DateTime requestedCollectionTime) {
+        this.requestedCollectionTime = requestedCollectionTime;
+    }
+
+    public DateTime getExpectedCollectionTime() {
+        return expectedCollectionTime;
+    }
+
+    public void setExpectedCollectionTime(DateTime expectedCollectionTime) {
+        this.expectedCollectionTime = expectedCollectionTime;
     }
 
     public Double getOrderItemCost() {

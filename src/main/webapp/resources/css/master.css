@@ -452,3 +452,36 @@ td.deliverycharge {
     margin-left:6px;
 }
 
+#checkoutbody {
+    text-align:left;
+}
+
+.checkoutheader {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 1em;
+    font-weight: bold;
+    color: #DB2B36;
+    margin:15px 0 15px 0;
+}
+
+.detailsitem {
+    clear:both;
+    margin:8px 0 8px 0;
+}
+
+.detailslabel {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 0.9em;
+    font-weight:500;
+    color: #000;
+    float:left;
+    width:130px;
+}
+
+input.checkoutfield {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 0.9em;
+    color: #000;
+    outline: medium none;
+    width:180px;
+}

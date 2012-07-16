@@ -16,10 +16,23 @@ public class Person extends PersistentObject {
     
     private String email;
 
-    @Transient
-    private String confirmEmail;
-    
+
     public Person() {
+    }
+
+
+    /**
+     * @param firstName
+     * @param lastName
+     * @param telephone
+     * @param email
+     */
+
+    public Person(String firstName,String lastName, String telephone, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.telephone = telephone;
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -60,13 +73,5 @@ public class Person extends PersistentObject {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getConfirmEmail() {
-        return confirmEmail;
-    }
-
-    public void setConfirmEmail(String confirmEmail) {
-        this.confirmEmail = confirmEmail;
     }
 }

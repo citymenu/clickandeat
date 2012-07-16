@@ -43,15 +43,7 @@ public class PersonValidator implements Validator, InitializingBean {
                 errors.rejectValue("email","email.invalid","Invalid Email Address");
             }
         }
-        if( !errors.hasFieldErrors("email")) {
-            if( !person.getEmail().equals(person.getConfirmEmail())) {
-                errors.rejectValue("email","confirmEmail.invalid","Email Addresses Do Not Match");
-            }
-        }
-        if( !StringUtils.hasText(person.getTelephone()) && !StringUtils.hasText(person.getMobile())) {
-            errors.rejectValue("telephone","contact.invalid","Enter A Telephone Or Mobile");
-            errors.rejectValue("mobile","contact.invalid","Enter A Telephone Or Mobile");
-        }
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "telephone", "telephone.required", "Required field");
     }
 
 }

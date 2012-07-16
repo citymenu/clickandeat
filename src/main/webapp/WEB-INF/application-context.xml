@@ -82,6 +82,8 @@
     <bean id="localDateWriteConverter" class="com.ezar.clickandeat.converter.LocalDateWriteConverter"/>
     <bean id="localTimeReadConverter" class="com.ezar.clickandeat.converter.LocalTimeReadConverter"/>
     <bean id="localTimeWriteConverter" class="com.ezar.clickandeat.converter.LocalTimeWriteConverter"/>
+    <bean id="dateTimeReadConverter" class="com.ezar.clickandeat.converter.DateTimeReadConverter"/>
+    <bean id="dateTimeWriteConverter" class="com.ezar.clickandeat.converter.DateTimeWriteConverter"/>
 
     <mongo:mapping-converter id="mappingConverter">
         <mongo:custom-converters>
@@ -89,6 +91,8 @@
             <mongo:converter ref="localDateWriteConverter" />
             <mongo:converter ref="localTimeReadConverter" />
             <mongo:converter ref="localTimeWriteConverter" />
+            <mongo:converter ref="dateTimeReadConverter" />
+            <mongo:converter ref="dateTimeWriteConverter" />
         </mongo:custom-converters>
     </mongo:mapping-converter>
 

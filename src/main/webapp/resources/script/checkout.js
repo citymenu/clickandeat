@@ -1,26 +1,58 @@
 $(document).ready(function(){
-    $('#signin').button();
-
-    $('#proceed').button().click(function(){
-        proceed();
+    displayDeliveryOptions(deliveryType);
+    $('#proceedbutton').button();
+    $('#proceedbutton').click(function(){
+        proceed('payment');
     });
-
 });
 
-function proceed() {
+// Override order behaviour
+function onBeforeBuildOrder(order) {
+    displayDeliveryOptions(order.deliveryType);
+}
 
-    var person = new Object({
-        firstName: $('#proceedForm input[name="firstName"]').val(),
-        lastName: $('#proceedForm input[name="lastName"]').val(),
-        email: $('#proceedForm input[name="email"]').val(),
-        confirmEmail: $('#proceedForm input[name="confirmEmail"]').val(),
-        telephone: $('#proceedForm input[name="telephone"]').val(),
-        mobile: $('#proceedForm input[name="mobile"]').val()
-    });
+// Updates display based on delivery type
+function displayDeliveryOptions(deliveryType) {
+    if(deliveryType == 'DELIVERY') {
+        $('#collectiontime').hide();
+        $('#deliverytime').show();
+    } else {
+        $('#deliverytime').hide();
+        $('#collectiontime').show();
+    }
+}
 
-    $.post( ctx + '/secure/setcustomerdetails.ajax', { body: JSON.stringify(person) },
+function proceed(nextPage) {
+
+    // Get person details
+    var person = {
+        firstName: $('input[name="firstName"]').val(),
+        lastName: $('input[name="lastName"]').val(),
+        email: $('input[name="email"]').val(),
+        telephone: $('input[name="telephone"]').val()
+    };
+
+    // Get delivery address details
+    var deliveryAddress = {
+        address1: $('input[name="address1"]').val(),
+        address2: $('input[name="address2"]').val(),
+        address3: $('input[name="address3"]').val(),
+        town: $('input[name="town"]').val(),
+        region: $('input[name="region"]').val(),
+        postCode: $('input[name="postCode"]').val()
+    }
+
+    // Build post object
+    var update = {
+        person: person,
+        deliveryAddress: deliveryAddress,
+        nextPage: nextPage
+    };
+
+    $.post( ctx + '/secure/checkout.ajax', { body: JSON.stringify(update) },
         function( data ) {
             if( data.success ) {
+                location.href = data.nextpage;
                 alert('success');
             } else {
                 alert('success:' + data.success);

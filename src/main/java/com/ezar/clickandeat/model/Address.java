@@ -21,7 +21,27 @@ public class Address extends PersistentObject {
     @GeoSpatialIndexed
     private double[] location;
 
+
     public Address() {
+    }
+
+
+    /**
+     * @param address1
+     * @param address2
+     * @param address3
+     * @param town
+     * @param region
+     * @param postCode
+     */
+
+    public Address(String address1, String address2, String address3, String town, String region, String postCode) {
+        this.address1 = address1;
+        this.address2 = address2;
+        this.address3 = address3;
+        this.town = town;
+        this.region = region;
+        this.postCode = postCode;
     }
 
     public String getPostCode() {
