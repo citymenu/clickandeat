@@ -225,6 +225,7 @@ public class OrderController {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
                     order.setDeliveryType(deliveryType);
+                    order.updateCosts();
                     order = orderRepository.saveOrder(order);
                 }
             }

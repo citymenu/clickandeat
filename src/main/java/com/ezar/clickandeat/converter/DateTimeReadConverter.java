@@ -2,6 +2,7 @@ package com.ezar.clickandeat.converter;
 
 import com.mongodb.DBObject;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.springframework.core.convert.converter.Converter;
 
 public class DateTimeReadConverter implements Converter<DBObject,DateTime> {
@@ -14,6 +15,7 @@ public class DateTimeReadConverter implements Converter<DBObject,DateTime> {
         int hour = (Integer)source.get("hour");
         int minute = (Integer)source.get("minute");
         int second = (Integer)source.get("second");
-        return new DateTime(year,month,day,hour,minute,second);
+        String timeZone = (String)source.get("timeZone");
+        return new DateTime(year,month,day,hour,minute,second, DateTimeZone.forID(timeZone));
     }
 }

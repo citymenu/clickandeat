@@ -18,23 +18,34 @@ $(document).ready(function(){
     }
 });
 
+// Returns the config for the order, can be overridden
+function getOrderPanelConfig() {
+    var config = {
+        showDeliveryOptions: true,
+        allowRemoveItems: true,
+        enableCheckoutButton: true
+    };
+    return config;
+}
+
 // Event handler for before order is built, intended to be overriden
-function onBeforeBuildOrder(order) {
+function onBeforeBuildOrder(order,config) {
 }
 
 // Event handler for after order is built, intended to be overriden
-function onAfterBuildOrder(order) {
+function onAfterBuildOrder(order,config) {
 }
 
 // Order build function
 function buildOrder(order) {
-    onBeforeBuildOrder(order);
-    doBuildOrder(order);
-    onAfterBuildOrder(order);
+    var config = getOrderPanelConfig();
+    onBeforeBuildOrder(order,config);
+    doBuildOrder(order,config);
+    onAfterBuildOrder(order,config);
 }
 
 // Build the order display component
-function doBuildOrder(order) {
+function doBuildOrder(order,config) {
 
     // Update current order object
     currentOrder = order;
@@ -44,21 +55,24 @@ function doBuildOrder(order) {
     $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
     $('.deliverychargerow').remove();
+    $('.collectiondiscountrow').remove();
     $('.totalcost').remove();
     $('#checkout').remove();
     $('.deliverywarning').remove();
 
-    // Add the delivery options to the order if at least one item is added
-    if( order && order.orderItems.length > 0 ) {
-        var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
-        var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
-        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> ' + labels['delivery'] + '</span>').format(deliveryChecked);
-        var collectionRadio = ('<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> ' + labels['collection'] + '</span>').format(collectionChecked);
-        $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
+    // Add the delivery options to the order if at least one item is added and it is enabled
+    if(config.showDeliveryOptions) {
+        if( order && order.orderItems.length > 0 ) {
+            var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
+            var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
+            var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> ' + labels['delivery'] + '</span>').format(deliveryChecked);
+            var collectionRadio = ('<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> ' + labels['collection'] + '</span>').format(collectionChecked);
+            $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
-        // Event handlers to update delivery type
-        $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
-        $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
+            // Event handlers to update delivery type
+            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
+            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
+        }
     }
 
     // Build order details if an order exists
@@ -67,15 +81,26 @@ function doBuildOrder(order) {
         // Generate order items
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
-            var closeImg = '<img src=\'' + ctx + '/resources/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
-            var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\')\">{5}</a></td></tr>'
-                .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,closeImg);
+            if(config.allowRemoveItems) {
+                var closeImg = '<img src=\'' + ctx + '/resources/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
+                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\')\">{5}</a></td></tr>'
+                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,closeImg);
+            } else {
+                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'></td></tr>'
+                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2));
+            }
             $('.orderbody').prepend(row);
         };
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
             var row = ('<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>' + labels['delivery-charge'] + '</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.deliveryCost.toFixed(2));
+            $('.orderbody').append(row);
+        }
+
+        // Add collection discount if applicable
+        if( order.collectionDiscount && order.collectionDiscount > 0 ) {
+            var row = ('<tr class=\'collectiondiscountrow\' valign=\'top\'><td width=\'65%\' class=\'collectiondiscount ordertableseparator\'>' + labels['collection-discount'] + '</td><td width=\'25%\' align=\'right\' class=\'collectiondiscount collectiondiscounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.collectionDiscount.toFixed(2));
             $('.orderbody').append(row);
         }
 
@@ -87,11 +112,14 @@ function doBuildOrder(order) {
             var warning = ('<div class=\'deliverywarning\'>' + labels['delivery-warning'] + '</div>' ).format(ccy,order.extraSpendNeededForDelivery.toFixed(2));
             $('.deliverycheck').append(warning);
         } else {
-            $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
-            $('.checkoutbutton').button();
-            $('.checkoutbutton').click(function(){
-                checkout();
-            });
+            // Show checkout button if enabled
+            if(config.enableCheckoutButton) {
+                $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
+                $('.checkoutbutton').button();
+                $('.checkoutbutton').click(function(){
+                    checkout();
+                });
+            }
         }
     } else {
         $('#ordertotal').append('<span class=\'totalitemcost\'>' + ccy + ' 0.00</span>');

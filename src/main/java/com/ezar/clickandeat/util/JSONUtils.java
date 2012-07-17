@@ -3,6 +3,7 @@ package com.ezar.clickandeat.util;
 import com.ezar.clickandeat.converter.*;
 import flexjson.JSONDeserializer;
 import flexjson.JSONSerializer;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
@@ -16,6 +17,7 @@ public class JSONUtils {
     private static final ConcurrentMap<Class,JSONDeserializer> DESERIALIZER_MAP = new ConcurrentHashMap<Class, JSONDeserializer>();
     
     private static final JSONSerializer SERIALIZER = new JSONSerializer()
+            .transform(new DateTimeTransformer(), DateTime.class)
             .transform(new LocalDateTransformer(), LocalDate.class)
             .transform(new LocalTimeTransformer(), LocalTime.class)
             .transform(new NullIdStringTransformer(), String.class);
@@ -50,6 +52,7 @@ public class JSONUtils {
         JSONDeserializer<T> deserializer = DESERIALIZER_MAP.get(klass);
         if( deserializer == null ) {
             deserializer = new JSONDeserializer<T>()
+                    .use(DateTime.class, new DateTimeTransformer())
                     .use(LocalDate.class, new LocalDateTransformer())
                     .use(LocalTime.class, new LocalTimeTransformer())
                     .use(String.class, new NullIdStringTransformer())

@@ -2,9 +2,24 @@ $(document).ready(function(){
     displayDeliveryOptions(deliveryType);
     $('#proceedbutton').button();
     $('#proceedbutton').click(function(){
-        proceed('payment');
+        proceed();
+    });
+    $('#updateorderbutton').button();
+    $('#updateorderbutton').click(function(){
+        updateOrder();
     });
 });
+
+// Override order config
+function getOrderPanelConfig() {
+    var config = {
+        showDeliveryOptions: true,
+        allowRemoveItems: false,
+        enableCheckoutButton: false
+    };
+    return config;
+}
+
 
 // Override order behaviour
 function onBeforeBuildOrder(order) {
@@ -22,17 +37,63 @@ function displayDeliveryOptions(deliveryType) {
     }
 }
 
-function proceed(nextPage) {
+// Update order
+function updateOrder() {
 
-    // Get person details
+    // Build post object
+    var update = {
+        person: getPersonDetails(),
+        deliveryAddress: getDeliveryAddress()
+    };
+
+    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(update) },
+        function( data ) {
+            if( data.success ) {
+                location.href = ctx + '/buildOrder.html';
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+
+}
+
+// Proceed to payment
+function proceed() {
+
+    var person = getPersonDetails();
+    var deliveryAddress = getDeliveryAddress();
+
+    // Build post object
+    var update = {
+        person: person,
+        deliveryAddress: deliveryAddress
+    };
+
+    $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(update) },
+        function( data ) {
+            if( data.success ) {
+                location.href = ctx + '/secure/payment.html';
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+}
+
+// Extract the person details from the form
+function getPersonDetails() {
     var person = {
         firstName: $('input[name="firstName"]').val(),
         lastName: $('input[name="lastName"]').val(),
-        email: $('input[name="email"]').val(),
-        telephone: $('input[name="telephone"]').val()
+        telephone: $('input[name="telephone"]').val(),
+        email: $('input[name="email"]').val()
     };
+    return person;
+}
 
-    // Get delivery address details
+// Extract the delivery address details from the form
+function getDeliveryAddress() {
     var deliveryAddress = {
         address1: $('input[name="address1"]').val(),
         address2: $('input[name="address2"]').val(),
@@ -41,23 +102,5 @@ function proceed(nextPage) {
         region: $('input[name="region"]').val(),
         postCode: $('input[name="postCode"]').val()
     }
-
-    // Build post object
-    var update = {
-        person: person,
-        deliveryAddress: deliveryAddress,
-        nextPage: nextPage
-    };
-
-    $.post( ctx + '/secure/checkout.ajax', { body: JSON.stringify(update) },
-        function( data ) {
-            if( data.success ) {
-                location.href = data.nextpage;
-                alert('success');
-            } else {
-                alert('success:' + data.success);
-            }
-        }
-    );
-
+    return deliveryAddress;
 }

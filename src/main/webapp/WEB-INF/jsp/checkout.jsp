@@ -93,7 +93,10 @@
 
             </div>
 
-            <div><input type="button" id="proceedbutton" value="<spring:message code="label.proceed"/>"/></div>
+            <div>
+                <input type="button" id="updateorderbutton" value="<spring:message code="label.update-order"/>"/>
+                <input type="button" id="proceedbutton" value="<spring:message code="label.proceed"/>"/>
+            </div>
 
         </div>
     </div>

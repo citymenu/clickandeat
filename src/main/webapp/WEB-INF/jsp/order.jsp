@@ -12,13 +12,15 @@
         'delivery': "<spring:message code="label.delivery"/>",
         'collection': "<spring:message code="label.collection"/>",
         'delivery-charge': "<spring:message code="label.delivery-charge"/>",
+        'collection-discount': "<spring:message code="label.collection-discount"/>",
         'delivery-warning': "<spring:message code="label.delivery-warning"/>",
         'checkout': "<spring:message code="label.checkout"/>",
         'restaurant-warning': "<spring:message code="label.restaurant-warning"/>",
         'are-you-sure': "<spring:message code="label.are-you-sure"/>",
         'add-item-anyway': "<spring:message code="label.add-item-anyway"/>",
         'dont-add-item': "<spring:message code="label.dont-add-item"/>",
-        'remove-from-order': "<spring:message code="label.remove-from-order"/>"
+        'remove-from-order': "<spring:message code="label.remove-from-order"/>",
+        'update-order': "<spring:message code="label.update-order"/>"
     });
 
 </script>

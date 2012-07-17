@@ -326,11 +326,15 @@ td.orderitem {
     padding:2px 0 0 0;
 }
 
-td.deliverycharge {
+td.deliverycharge, td.collectiondiscount {
     font-family: Arial, 'Lucida Grande', sans-serif;
     font-size:11px;
     font-weight:bold;
     padding:6px 0 0 0;
+}
+
+.collectiondiscounttotal {
+    color:#B00000;
 }
 
 #ordertotal {

@@ -59,6 +59,8 @@ public class Order extends PersistentObject {
     
     private Double cardTransactionCost;
 
+    private Double collectionDiscount;
+    
     private Double totalDiscount;
 
     private Double totalCost;
@@ -96,9 +98,10 @@ public class Order extends PersistentObject {
         }
         this.totalDiscount = totalDiscount;
 
-        // Reset and update delivery cost
+        // Reset and update delivery cost and collection discount
         this.deliveryCost = 0d;
         this.extraSpendNeededForDelivery = 0d;
+        this.collectionDiscount = 0d;
 
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
 
@@ -115,9 +118,19 @@ public class Order extends PersistentObject {
                 }
             }
         }
+        else if( COLLECTION.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
+            Double discountForCollection = this.restaurant.getDeliveryOptions().getCollectionDiscount();
+            Double minimumOrderForCollectionDiscount = this.restaurant.getDeliveryOptions().getMinimumOrderForCollectionDiscount();
+
+            if( discountForCollection != null && minimumOrderForCollectionDiscount != null ) {
+                if( this.orderItemCost >= minimumOrderForCollectionDiscount ) {
+                    this.collectionDiscount = ( this.orderItemCost * discountForCollection ) / 100d;
+                }
+            }
+        }
         
         // Set the total cost
-        this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        this.totalCost = this.orderItemCost + this.deliveryCost - this.collectionDiscount - this.totalDiscount;
     }
     
     
@@ -327,6 +340,14 @@ public class Order extends PersistentObject {
 
     public void setCardTransactionCost(Double cardTransactionCost) {
         this.cardTransactionCost = cardTransactionCost;
+    }
+
+    public Double getCollectionDiscount() {
+        return collectionDiscount;
+    }
+
+    public void setCollectionDiscount(Double collectionDiscount) {
+        this.collectionDiscount = collectionDiscount;
     }
 
     public Double getTotalCost() {
