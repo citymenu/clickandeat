@@ -41,6 +41,7 @@
                         <div class="detailslabel"><spring:message code="label.expiry-date"/></div>
                         <div class="detailsfield">
                             <select name="expiryMonth" class="checkoutfield">
+                                <option value=""><spring:message code="label.month-upper"/></option>
                                 <option value="1">01</option>
                                 <option value="2">02</option>
                                 <option value="3">03</option>
@@ -55,6 +56,7 @@
                                 <option value="12">12</option>
                             </select>
                             <select name="expiryYear" class="checkoutfield">
+                                <option value=""><spring:message code="label.year-upper"/></option>
                                 <option value="2012">2012</option>
                                 <option value="2013">2013</option>
                                 <option value="2014">2014</option>

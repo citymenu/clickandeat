@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 @Controller
 public class TwilioController {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioController.class);
 
-    private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><Response><Gather><Say>Please enter some digits</Say></Gather></Response>";
+    private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><Response><Gather timeout=\"10\" finishOnKey=\"#\"><Say>Please enter some digits followed by hash</Say></Gather></Response>";
 
     @Autowired
     private OrderRepository orderRepository;
@@ -36,8 +37,8 @@ public class TwilioController {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.GET )
-    public ResponseEntity<byte[]> fullOrderCall(@RequestParam(value = "orderId", required = true) String orderId, 
+    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.POST )
+    public ResponseEntity<byte[]> orderNotificationCall(@RequestParam(value = "orderId", required = true) String orderId, 
                                                 @RequestParam(value = "authKey", required = true) String authKey,
                                                 HttpServletResponse response) throws Exception {
         
@@ -59,7 +60,63 @@ public class TwilioController {
         final byte[] bytes = xml.getBytes("utf-8");
         headers.setContentType(MediaType.TEXT_XML);
         return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
+    }
 
+
+    /**
+     * Callback for order notification call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
+    public void orderNotificationCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
+                                                   @RequestParam(value = "authKey", required = true) String authKey,
+                                                   HttpServletResponse response, HttpServletRequest request) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received status callback for order notification call for order id: " + orderId);
+        }
+
+        Enumeration e = request.getParameterNames();
+        while(e.hasMoreElements()) {
+            String param = (String)e.nextElement();
+            String value = request.getParameter(param);
+            LOGGER.debug(param + " -> " + value);
+        }
+        
+        if(!this.authKey.equals(authKey)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
+        orderRepository.addOrderUpdate(orderId,"Received callback for successful order notification call");
+        response.sendError(HttpServletResponse.SC_OK);
+    }
+
+
+    /**
+     * Failure callback for order notification call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
+    public void orderNotificationCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
+                                                    @RequestParam(value = "authKey", required = true) String authKey,
+                                                    HttpServletResponse response) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received error fallback for order notification call for order id: " + orderId);
+        }
+
+        if(!this.authKey.equals(authKey)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
+        orderRepository.addOrderUpdate(orderId,"Received callback for error in order notification call");
+        response.sendError(HttpServletResponse.SC_OK);
     }
 
 

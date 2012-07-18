@@ -11,17 +11,26 @@ import java.util.List;
 @Document(collection = "orders")
 public class Order extends PersistentObject {
 
-    public static final String STATUS_BASKET = "BASKET";
+    public static final String BASKET = "BASKET";
+    public static final String AWAITING_RESTAURANT = "AWAITING RESTAURANT";
+    public static final String RESTAURANT_ACCEPTED = "RESTAURANT ACCEPTED";
+    public static final String RESTAURANT_DECLINED = "RESTAURANT DECLINED";
+    public static final String CUSTOMER_CANCELLED = "CUSTOMER CANCELLED";
+    public static final String COMPLETE = "COMPLETE";
     public static final String STATUS_ERROR = "ERROR";
-    public static final String STATUS_COMPLETE = "COMPLETE";
     
     public static final String DELIVERY = "DELIVERY";
     public static final String COLLECTION = "COLLECTION";
 
-    
+    public static final String CARD_TRANSACTION_AUTHORIZED = "TRANSACTION AUTHORIZED";
+    public static final String CARD_TRANSACTION_CAPTURED = "TRANSACTION CAPTURED";
+    public static final String CARD_TRANSACTION_CANCELLED = "TRANSACTION CANCELLED";
+
     @Indexed(unique=true)
     private String orderId;
 
+    private String uuid;
+    
     private String userId;
 
     private String restaurantId;
@@ -29,51 +38,44 @@ public class Order extends PersistentObject {
     @DBRef
     private Restaurant restaurant;
 
-    private Person customer;
-
-    private String deliveryType;
-
-    private String paymentType;
-    
-    private Address deliveryAddress;
-
-    private Address billingAddress;
-    
-    private String orderStatus;
-
-    private DateTime orderPlacedTime;
-
-    private DateTime requestedDeliveryTime;
-
-    private DateTime expectedDeliveryTime;
-
-    private DateTime requestedCollectionTime;
-
-    private DateTime expectedCollectionTime;
-
-    private Double orderItemCost;
-
-    private Double deliveryCost;
-    
-    private Double extraSpendNeededForDelivery;
-    
-    private Double cardTransactionCost;
-
-    private Double collectionDiscount;
-    
-    private Double totalDiscount;
-
-    private Double totalCost;
-
+    // Order components
     private List<OrderItem> orderItems;
-    
     private List<OrderDiscount> orderDiscounts;
 
-    private List<String> orderUpdates;
+    // Customer/delivery/billing details 
+    private Person customer;
+    private String deliveryType;
+    private String paymentType;
+    private Address deliveryAddress;
+    private Address billingAddress;
 
+    // Order timing details
+    private DateTime orderPlacedTime;
+    private DateTime requestedDeliveryTime;
+    private DateTime expectedDeliveryTime;
+    private DateTime requestedCollectionTime;
+    private DateTime expectedCollectionTime;
+
+    // Order cost details
+    private Double orderItemCost;
+    private Double deliveryCost;
+    private Double extraSpendNeededForDelivery;
+    private Double cardTransactionCost;
+    private Double collectionDiscount;
+    private Double totalDiscount;
+    private Double totalCost;
+
+    // Order tracking details
+    private String orderStatus;
+    private String cardTransactionId;
+    private String cardTransactionStatus;
+    private String restaurantDeclinedReason;
+    private List<OrderUpdate> orderUpdates;
+
+    
     public Order() {
         this.orderItems = new ArrayList<OrderItem>();
-        this.orderUpdates = new ArrayList<String>();
+        this.orderUpdates = new ArrayList<OrderUpdate>();
         this.orderDiscounts = new ArrayList<OrderDiscount>();
     }
 
@@ -188,6 +190,14 @@ public class Order extends PersistentObject {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public List<OrderItem> getOrderItems() {
@@ -346,12 +356,36 @@ public class Order extends PersistentObject {
         return collectionDiscount;
     }
 
+    public String getRestaurantDeclinedReason() {
+        return restaurantDeclinedReason;
+    }
+
+    public void setRestaurantDeclinedReason(String restaurantDeclinedReason) {
+        this.restaurantDeclinedReason = restaurantDeclinedReason;
+    }
+
     public void setCollectionDiscount(Double collectionDiscount) {
         this.collectionDiscount = collectionDiscount;
     }
 
     public Double getTotalCost() {
         return totalCost;
+    }
+
+    public String getCardTransactionId() {
+        return cardTransactionId;
+    }
+
+    public void setCardTransactionId(String cardTransactionId) {
+        this.cardTransactionId = cardTransactionId;
+    }
+
+    public String getCardTransactionStatus() {
+        return cardTransactionStatus;
+    }
+
+    public void setCardTransactionStatus(String cardTransactionStatus) {
+        this.cardTransactionStatus = cardTransactionStatus;
     }
 
     public void setTotalCost(Double totalCost) {
@@ -366,11 +400,11 @@ public class Order extends PersistentObject {
         this.totalDiscount = totalDiscount;
     }
 
-    public List<String> getOrderUpdates() {
+    public List<OrderUpdate> getOrderUpdates() {
         return orderUpdates;
     }
 
-    public void setOrderUpdates(List<String> orderUpdates) {
+    public void setOrderUpdates(List<OrderUpdate> orderUpdates) {
         this.orderUpdates = orderUpdates;
     }
 

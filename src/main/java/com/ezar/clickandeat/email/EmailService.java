@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.email;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +11,10 @@ public class EmailService {
 
     /**
      * @param order
-     * @param restaurant
      * @throws Exception
      */
     
-    public void sendOrderNotificationToRestaurant(Order order,Restaurant restaurant) throws Exception {
-        LOGGER.info("Sending order notification for orderId [" + order.getOrderId() + "] to restaurantId [" + restaurant.getRestaurantId() + "]");
+    public void sendOrderNotificationToRestaurant(Order order) throws Exception {
+        LOGGER.info("Sending order notification to restaurant for orderId [" + order.getOrderId() + "]");
     }
 }

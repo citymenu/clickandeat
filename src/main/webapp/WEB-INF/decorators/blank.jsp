@@ -13,6 +13,7 @@
 	<script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-ui-1.8.20.custom.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-validate.js"></script>
+    <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-override.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/i18n/jquery.ui.datepicker-${locale}.js"></script>
 	<decorator:head/>
     <title><decorator:title/></title>

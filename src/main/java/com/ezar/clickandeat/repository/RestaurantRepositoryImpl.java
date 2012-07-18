@@ -21,6 +21,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -53,6 +54,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public Restaurant create() {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
+        restaurant.setUuid(UUID.randomUUID().toString());
         restaurant.setOpeningTimes(new OpeningTimes());
         restaurant.setDeliveryOptions(new DeliveryOptions());
         restaurant.setMainContact(new Person());

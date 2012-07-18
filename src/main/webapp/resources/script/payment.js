@@ -24,6 +24,26 @@ function deliveryOptions() {
     location.href = ctx + '/secure/checkout.html';
 }
 
+// Place order
+function placeOrder() {
+
+    // Build post object
+    var update = {
+        creditCard: getCreditCard()
+    };
+
+    $.post( ctx + '/secure/processCardPayment.ajax', { body: JSON.stringify(update) },
+        function( data ) {
+            if( data.success ) {
+                //location.href = ctx + '/orderSummary.html';
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+
+}
+
 // Extract the credit card details from the form
 function getCreditCard() {
     var creditCard = {

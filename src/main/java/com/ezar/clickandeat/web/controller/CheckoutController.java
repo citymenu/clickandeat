@@ -9,12 +9,12 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.AddressValidator;
 import com.ezar.clickandeat.validator.PersonValidator;
+import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,13 +28,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class CheckoutController implements InitializingBean {
+public class CheckoutController {
     
     private static final Logger LOGGER = Logger.getLogger(CheckoutController.class);
 
@@ -47,21 +45,17 @@ public class CheckoutController implements InitializingBean {
     @Autowired
     private AddressValidator addressValidator;
 
-    private DateTimeZone dateTimeZone;
+    @Autowired
+    private RequestHelper requestHelper;
     
     private String timeZone;
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        dateTimeZone = DateTimeZone.forID(timeZone);
-    }
 
     @RequestMapping(value="/secure/checkout.html", method= RequestMethod.GET)
     public ModelAndView checkout(HttpServletRequest request) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
 
-        Order order = getOrderFromSession(request);
+        Order order = requestHelper.getOrderFromSession(request);
         model.put("order",order);
         
         // Set the standard delivery time onto the request
@@ -69,8 +63,8 @@ public class CheckoutController implements InitializingBean {
         Double deliveryTime = restaurant.getDeliveryOptions().getDeliveryTimeMinutes();
         model.put("deliveryTimeMinutes", deliveryTime == null? 0d: deliveryTime);
 
-        LocalDate today = new LocalDate(dateTimeZone);
-        LocalTime now = new LocalTime(dateTimeZone);
+        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
+        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
 
         // Set the current delivery type of the order
         model.put("deliveryType",order.getDeliveryType());
@@ -95,13 +89,13 @@ public class CheckoutController implements InitializingBean {
             Address deliveryAddress = buildDeliveryAddress(body);
 
             // Get the order out of the session
-            Order order = getOrderFromSession(request);
+            Order order = requestHelper.getOrderFromSession(request);
 
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime(dateTimeZone));
-            order.setRequestedCollectionTime(new DateTime(dateTimeZone));
+            order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
             orderRepository.save(order);
 
             // Mark order updated successfully
@@ -140,13 +134,13 @@ public class CheckoutController implements InitializingBean {
             addressValidator.validate(deliveryAddress,addressErrors);
 
             // Get the order out of the session
-            Order order = getOrderFromSession(request);
+            Order order = requestHelper.getOrderFromSession(request);
 
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime(dateTimeZone));
-            order.setRequestedCollectionTime(new DateTime(dateTimeZone));
+            order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
             orderRepository.save(order);
             
             // Mark order updated successfully
@@ -160,26 +154,6 @@ public class CheckoutController implements InitializingBean {
         }
 
         return ResponseEntityUtils.buildResponse(model);
-    }
-
-
-    /**
-     * @param request
-     * @return
-     * @throws Exception
-     */
-
-    private Order getOrderFromSession(HttpServletRequest request) throws Exception {
-        HttpSession session = request.getSession(true);
-        String orderid = (String)session.getAttribute("orderid");
-        if( orderid == null ) {
-            throw new Exception("No order associated with session");
-        }
-        Order order = orderRepository.findByOrderId(orderid);
-        if( order == null ) {
-            throw new Exception("No order found for orderId: " + orderid);
-        }
-        return order;
     }
 
     

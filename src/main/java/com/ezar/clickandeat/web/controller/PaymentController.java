@@ -1,14 +1,13 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.model.Address;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Person;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.AddressValidator;
 import com.ezar.clickandeat.validator.PersonValidator;
+import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -30,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -39,11 +39,57 @@ public class PaymentController {
 
     @Autowired
     private OrderRepository orderRepository;
+    
+    @Autowired
+    private NotificationService notificationService;
+    
 
+    @Autowired
+    private RequestHelper requestHelper;
 
     @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
         return "payment";
     }
+
+
+    @ResponseBody
+    @RequestMapping(value="/secure/processCardPayment.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> processCardPayment(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+        
+        Map<String,Object> model = new HashMap<String, Object>();
+        
+        try {
+            Order order = requestHelper.getOrderFromSession(request);
+
+            //TODO get credit card details and handle payment processing/result
+            order.setCardTransactionId("12345");
+            order.setCardTransactionStatus(Order.CARD_TRANSACTION_AUTHORIZED);
+            
+            // Send notification to restaurant
+            notificationService.sendOrderNotificationToRestaurant(order);
+
+            // Send confirmation email to customer
+            
+            // Update order status
+            order.setOrderStatus(Order.AWAITING_RESTAURANT);
+
+            // Save the order object
+            orderRepository.saveOrder(order);
+            
+            // Set status to success
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+
+        return ResponseEntityUtils.buildResponse(model);
+
+    }
+
+
 
 }

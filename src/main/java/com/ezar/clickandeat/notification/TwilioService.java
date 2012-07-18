@@ -18,17 +18,17 @@ public class TwilioService {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioService.class);
 
-    public static final String ORDER_NOTIFICATION_SMS_URL = "/twilio/orderNotificationSMS";
-    public static final String ORDER_NOTIFICATION_SMS_FALLBACK_URL = "/twilio/orderNotificationSMSFallback";
-    public static final String ORDER_NOTIFICATION_SMS_STATUS_CALLBACK_URL = "/twilio/orderNotificationSMSStatusCallback";
+    public static final String ORDER_NOTIFICATION_SMS_URL = "/twilio/orderNotificationSMS.html";
+    public static final String ORDER_NOTIFICATION_SMS_FALLBACK_URL = "/twilio/orderNotificationSMSFallback.html";
+    public static final String ORDER_NOTIFICATION_SMS_STATUS_CALLBACK_URL = "/twilio/orderNotificationSMSStatusCallback.html";
 
-    public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderNotificationCall";
-    public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderNotificationCallFallback";
-    public static final String ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL = "/twilio/orderNotificationCallStatusCallback";
+    public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderNotificationCall.html";
+    public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderNotificationCallFallback.html";
+    public static final String ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL = "/twilio/orderNotificationCallStatusCallback.html";
 
-    public static final String FULL_ORDER_CALL_URL = "/twilio/fullOrderCall";
-    public static final String FULL_ORDER_CALL_FALLBACK_URL = "/twilio/fullOrderCallFallback";
-    public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback";
+    public static final String FULL_ORDER_CALL_URL = "/twilio/fullOrderCall.html";
+    public static final String FULL_ORDER_CALL_FALLBACK_URL = "/twilio/fullOrderCallFallbackv";
+    public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback.html";
 
     private String accountSid;
     
@@ -43,25 +43,23 @@ public class TwilioService {
 
     /**
      * @param order
-     * @param restaurant
      * @throws Exception
      */
 
-    public void sendOrderNotificationSMS(Order order, Restaurant restaurant ) throws Exception {
+    public void sendOrderNotificationSMS(Order order) throws Exception {
 
     }
 
 
     /**
      * @param order
-     * @param restaurant
      * @return
      * @throws Exception
      */
 
-    public void makeFullOrderCall(Order order, Restaurant restaurant) throws Exception {
+    public void makeFullOrderCall(Order order) throws Exception {
 
-        String phoneNumber = restaurant.getNotificationOptions().getNotificationPhoneNumber();
+        String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationPhoneNumber();
         String orderId = order.getOrderId();
 
         if( LOGGER.isDebugEnabled()) {
@@ -74,14 +72,13 @@ public class TwilioService {
 
     /**
      * @param order
-     * @param restaurant
      * @return
      * @throws Exception
      */
     
-    public void makeOrderNotificationCall(Order order, Restaurant restaurant) throws Exception {
+    public void makeOrderNotificationCall(Order order) throws Exception {
 
-        String phoneNumber = restaurant.getNotificationOptions().getNotificationPhoneNumber();
+        String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationPhoneNumber();
         String orderId = order.getOrderId();
         
         if( LOGGER.isDebugEnabled()) {
@@ -112,18 +109,13 @@ public class TwilioService {
         // Get the main account (The one we used to authenticate the client
         Account mainAccount = client.getAccount();
 
-        // Append the order id to the urls
-        url += "?orderId=" + orderId;
-        fallbackUrl += "?orderId=" + orderId;
-        statusCallbackUrl += "?orderId=" + orderId; 
-
         // Build the call
         CallFactory callFactory = mainAccount.getCallFactory();
         Map<String, String> callParams = new HashMap<String, String>();
         callParams.put("To", phoneNumber);
         callParams.put("From", callerId);
         callParams.put("Url", buildTwilioUrl(url,orderId));
-        callParams.put("Method", "GET");
+        callParams.put("Method", "POST");
 
         // Add the callback urls
         callParams.put("FallbackUrl", buildTwilioUrl(fallbackUrl,orderId));
