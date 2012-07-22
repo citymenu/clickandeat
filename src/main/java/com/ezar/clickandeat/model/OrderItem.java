@@ -1,8 +1,10 @@
 package com.ezar.clickandeat.model;
 
 public class OrderItem {
-    
+
     private String menuItemId;
+    
+    private Integer menuItemNumber;
     
     private String menuItemTitle;
 
@@ -16,6 +18,14 @@ public class OrderItem {
 
     public void setMenuItemId(String menuItemId) {
         this.menuItemId = menuItemId;
+    }
+
+    public Integer getMenuItemNumber() {
+        return menuItemNumber;
+    }
+
+    public void setMenuItemNumber(Integer menuItemNumber) {
+        this.menuItemNumber = menuItemNumber;
     }
 
     public String getMenuItemTitle() {

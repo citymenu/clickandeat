@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Gather action="$url" finishOnKey="#">
-
-        <Say>Hello, this is a call from click and eat. You have received a new order for $delivery. Please check your email for details of the order.
-        Press any number on your key pad to hear the full order details over the phone, otherwise please hang up now.</Say>
+        #if($order.deliveryType == 'DELIVERY')
+            <Say>You have an order for delivery to $order.deliveryAddress.summary, to be delivered at $order.deliveryTimeSummary.</Say>
+        #else
+            <Say>You have an order for collection at $order.collectionTimeSummary</Say>
+        #end
+        <Say>The order items are as follows.</Say>
+        #foreach( $item in $order.orderItems )
+            <Say>$item.quantity of
+            #if( $item.menuItemNumber != null && $item.menuItemNumber != 0 )
+                number $item.menuItemNumber
+            #else
+                $item.menuItemTitle
+            #end
+            </Say>
+        #end
+        <Say>To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
+        order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key.</Say>
     </Gather>
 </Response>

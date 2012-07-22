@@ -44,6 +44,29 @@ public class Address extends PersistentObject {
         this.postCode = postCode;
     }
 
+    public String getSummary() {
+        StringBuilder sb = new StringBuilder();  
+        if( address1 != null ) {
+            sb.append(address1).append(", ");
+        }
+        if( address2 != null ) {
+            sb.append(address2).append(", ");
+        }
+        if( address3 != null ) {
+            sb.append(address3).append(", ");
+        }
+        if( town != null ) {
+            sb.append(town).append(", ");
+        }
+        if( region != null ) {
+            sb.append(region).append(", ");
+        }
+        if( postCode != null ) {
+            sb.append(postCode);
+        }
+        return sb.toString();
+    }
+
     public String getPostCode() {
         return postCode;
     }
