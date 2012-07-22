@@ -22,4 +22,17 @@ public class ResponseEntityUtils {
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 
+
+    /**
+     * @param xml
+     * @return
+     * @throws Exception
+     */
+
+    public static ResponseEntity<byte[]> buildXmlResponse(String xml) throws Exception {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_XML);
+        return new ResponseEntity<byte[]>(xml.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
 }

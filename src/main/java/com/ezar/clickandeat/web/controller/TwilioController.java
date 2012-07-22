@@ -3,6 +3,9 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.notification.TwilioService;
 import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.util.ResponseEntityUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -17,17 +20,25 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class TwilioController {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioController.class);
-
-    private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?><Response><Gather timeout=\"10\" finishOnKey=\"#\"><Say>Please enter some digits followed by hash</Say></Gather></Response>";
+    
+    private static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/orderNotificationCall.vm";
 
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private VelocityTemplatingService velocityTemplatingService;
+    
+    @Autowired
+    private TwilioService twilioService;
+    
     private String authKey;
     
     /**
@@ -54,12 +65,21 @@ public class TwilioController {
         if( order == null ) {
             LOGGER.error("Could not find order with orderId: " + orderId);
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            throw new IllegalArgumentException("No order found with orderId: " + orderId);
+        }
+
+        // Build template options to return 
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String url = twilioService.buildTwilioUrl(TwilioService.FULL_ORDER_CALL_URL, orderId);
+        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
+        templateModel.put("delivery",order.getDeliveryType().toLowerCase());
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, NOTIFICATION_CALL_TEMPLATE);
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Generated xml response [" + xml + "]");
         }
         
-        final HttpHeaders headers = new HttpHeaders();
-        final byte[] bytes = xml.getBytes("utf-8");
-        headers.setContentType(MediaType.TEXT_XML);
-        return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
+        return ResponseEntityUtils.buildXmlResponse(xml);
     }
 
 
@@ -79,15 +99,9 @@ public class TwilioController {
             LOGGER.debug("Received status callback for order notification call for order id: " + orderId);
         }
 
-        Enumeration e = request.getParameterNames();
-        while(e.hasMoreElements()) {
-            String param = (String)e.nextElement();
-            String value = request.getParameter(param);
-            LOGGER.debug(param + " -> " + value);
-        }
-        
         if(!this.authKey.equals(authKey)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            throw new IllegalArgumentException("Invalid authentication key passed");
         }
 
         orderRepository.addOrderUpdate(orderId,"Received callback for successful order notification call");
@@ -113,6 +127,7 @@ public class TwilioController {
 
         if(!this.authKey.equals(authKey)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            throw new IllegalArgumentException("Invalid authentication key passed");
         }
 
         orderRepository.addOrderUpdate(orderId,"Received callback for error in order notification call");
@@ -120,28 +135,6 @@ public class TwilioController {
     }
 
 
-    @ResponseBody
-    @RequestMapping(value="/twilioCallback.html", method = RequestMethod.POST )
-    @ResponseStatus( HttpStatus.OK )
-    public void callback(@RequestParam(value = "CallSid", required = false) String callSid, @RequestParam(value = "Digits", required = false) String digits ) {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received callback from twilio for callSid: " + callSid);
-        }
-
-        LOGGER.debug("Received digits from call as: " + digits);
-    }
-
-
-    @ResponseBody
-    @RequestMapping(value="/twilioError.html", method = RequestMethod.POST )
-    @ResponseStatus( HttpStatus.OK )
-    public void error(@RequestParam(value = "CallSid", required = false) String callSid ) {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received error from twilio for callSid: " + callSid);
-        }
-    }
 
 
     @Required

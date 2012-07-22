@@ -132,7 +132,7 @@ public class TwilioService {
      * @return
      */
 
-    private String buildTwilioUrl(String requestUrl,String orderId) {
+    public String buildTwilioUrl(String requestUrl,String orderId) {
         StringBuilder sb = new StringBuilder(baseUrl);
         sb.append(requestUrl);
         sb.append("?authKey=").append(authKey);
