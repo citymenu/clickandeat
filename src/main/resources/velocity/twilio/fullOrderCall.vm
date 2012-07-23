@@ -2,11 +2,11 @@
 <Response>
     <Gather action="$url" finishOnKey="#">
         #if($error)
-            <Say>I'm sorry, I didn't understand that response</Say>
+            <Say language="en-gb">I'm sorry, I didn't understand that response</Say>
         #end
 
         #if($order.deliveryType == 'DELIVERY')
-            <Say>You have an order for delivery to $order.deliveryAddress.summary, to be delivered
+            <Say language="en-gb">You have an order for delivery to $order.deliveryAddress.summary, to be delivered
             #if($order.expectedDeliveryTime)
                 at $order.expectedDeliveryTime.hourOfDay $order.expectedDeliveryTime.minuteOfHour
                 #if(!$order.expectedDeliveryTime.toLocalDate() == $today)
@@ -17,7 +17,7 @@
             #end
             </Say>
         #else
-            <Say>You have an order for collection
+            <Say language="en-gb">You have an order for collection
             #if($order.expectedCollectionTime)
                 at $order.expectedCollectionTime.hourOfDay $order.expectedCollectionTime.minuteOfHour.
                 #if(!$order.expectedCollectionTime.toLocalDate() == $today)
@@ -28,9 +28,9 @@
             #end
             </Say>
         #end
-        <Say>The order items are as follows.</Say>
+        <Say language="en-gb">The order items are as follows.</Say>
         #foreach( $item in $order.orderItems )
-            <Say>$item.quantity of
+            <Say language="en-gb">$item.quantity of
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 number $item.menuItemNumber
             #else
@@ -38,7 +38,7 @@
             #end
             </Say>
         #end
-        <Say>To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
+        <Say language="en-gb">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
         order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key. To repeat this message
         press 4 followed by the hash key.</Say>
     </Gather>

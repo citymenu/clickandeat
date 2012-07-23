@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say>Thank you for your response.</Say>
+    <Say language="en-gb">Thank you for your response.</Say>
 </Response>

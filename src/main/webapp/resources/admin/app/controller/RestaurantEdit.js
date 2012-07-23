@@ -217,7 +217,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update notification options for the restuarant
         restaurantObj.notificationOptions = new Object();
         restaurantObj.notificationOptions.receiveNotificationCall = mainDetailValues['receiveNotificationCall'] == 'on';
-        restaurantObj.notificationOptions.takeOrderOverTelephone = mainDetailValues['takeOrderOverTelephone'] == 'on';
         restaurantObj.notificationOptions.receiveSMSNotification = mainDetailValues['receiveSMSNotification'] == 'on';
         restaurantObj.notificationOptions.notificationPhoneNumber = mainDetailValues['notificationPhoneNumber'];
         restaurantObj.notificationOptions.notificationSMSNumber = mainDetailValues['notificationSMSNumber'];

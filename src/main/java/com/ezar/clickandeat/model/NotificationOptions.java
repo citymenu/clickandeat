@@ -4,8 +4,6 @@ public class NotificationOptions {
 
     boolean receiveNotificationCall;
     
-    boolean takeOrderOverTelephone;
-
     boolean receiveSMSNotification;
     
     String notificationPhoneNumber;
@@ -20,14 +18,6 @@ public class NotificationOptions {
 
     public void setReceiveNotificationCall(boolean receiveNotificationCall) {
         this.receiveNotificationCall = receiveNotificationCall;
-    }
-
-    public boolean isTakeOrderOverTelephone() {
-        return takeOrderOverTelephone;
-    }
-
-    public void setTakeOrderOverTelephone(boolean takeOrderOverTelephone) {
-        this.takeOrderOverTelephone = takeOrderOverTelephone;
     }
 
     public boolean isReceiveSMSNotification() {

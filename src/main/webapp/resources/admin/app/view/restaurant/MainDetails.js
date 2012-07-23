@@ -133,10 +133,6 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
                 name:'receiveNotificationCall'
             },{
                 xtype:'checkbox',
-                fieldLabel:'Receive order on call',
-                name:'takeOrderOverTelephone'
-            },{
-                xtype:'checkbox',
                 fieldLabel:'Receive SMS',
                 name:'receiveSMSNotification'
             }]

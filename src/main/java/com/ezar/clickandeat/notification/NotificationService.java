@@ -63,11 +63,7 @@ public class NotificationService {
         }
 
         // Either send full order details over telephone or just send notification
-        if( notificationOptions.isTakeOrderOverTelephone()) {
-            twilioService.makeFullOrderCall(order);
-            orderRepository.addOrderUpdate(orderId,"Made full order call to restauarant");
-        }
-        else if( notificationOptions.isReceiveNotificationCall()) {
+        if( notificationOptions.isReceiveNotificationCall()) {
             twilioService.makeOrderNotificationCall(order);
             orderRepository.addOrderUpdate(orderId,"Made order notification call to restauarant");
         }
