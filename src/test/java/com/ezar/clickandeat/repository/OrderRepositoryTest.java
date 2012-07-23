@@ -1,10 +1,6 @@
 package com.ezar.clickandeat.repository;
 
-import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Person;
-import com.ezar.clickandeat.model.User;
-import com.ezar.clickandeat.validator.UserValidator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -16,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.validation.BindException;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})

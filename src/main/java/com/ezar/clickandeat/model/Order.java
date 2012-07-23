@@ -1,12 +1,14 @@
 package com.ezar.clickandeat.model;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
@@ -183,7 +185,19 @@ public class Order extends PersistentObject {
         }
         return null;
     }
+
     
+    /**
+     * @param dateTime
+     * @return
+     */
+
+    public boolean isForCurrentDate(DateTime dateTime) {
+        LocalDate today = new LocalDate(dateTime.getZone());
+        LocalDate day = dateTime.toLocalDate();
+        return today.equals(day);
+    }
+
     public String getOrderId() {
         return orderId;
     }

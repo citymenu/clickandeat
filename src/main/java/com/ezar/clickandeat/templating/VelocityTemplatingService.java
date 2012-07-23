@@ -18,6 +18,11 @@ public class VelocityTemplatingService implements InitializingBean {
 
     private static final String VELOCITY_LOGGER_NAME = "VelocityLogger";
 
+    public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/orderNotificationCall.vm";
+    public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/fullOrderCall.vm";
+    public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/fullOrderCallResponse.vm";
+
+
     private VelocityEngine engine;
 
 

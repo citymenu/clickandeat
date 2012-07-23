@@ -2,6 +2,7 @@ package com.ezar.clickandeat.model;
 
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.StringUtils;
 
 @Document(collection="addresses")
 public class Address extends PersistentObject {
@@ -46,22 +47,22 @@ public class Address extends PersistentObject {
 
     public String getSummary() {
         StringBuilder sb = new StringBuilder();  
-        if( address1 != null ) {
+        if( StringUtils.hasText(address1)) {
             sb.append(address1).append(", ");
         }
-        if( address2 != null ) {
+        if( StringUtils.hasText(address2)) {
             sb.append(address2).append(", ");
         }
-        if( address3 != null ) {
+        if(StringUtils.hasText(address3)) {
             sb.append(address3).append(", ");
         }
-        if( town != null ) {
+        if(StringUtils.hasText(town)) {
             sb.append(town).append(", ");
         }
-        if( region != null ) {
+        if(StringUtils.hasText(region)) {
             sb.append(region).append(", ");
         }
-        if( postCode != null ) {
+        if(StringUtils.hasText(postCode)) {
             sb.append(postCode);
         }
         return sb.toString();
