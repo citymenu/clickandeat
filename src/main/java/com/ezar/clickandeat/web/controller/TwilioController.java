@@ -299,6 +299,10 @@ public class TwilioController implements InitializingBean {
             case '4':
                 return ResponseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
 
+            // No response at this time
+            case '5':
+                orderRepository.addOrderUpdate(orderId,"Restaurant has chosen not to accept or decline the order at this time");
+                return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
             // Invalid input
             default:
