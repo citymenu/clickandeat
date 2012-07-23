@@ -117,6 +117,7 @@ public class OrderController {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
+            Integer itemNumber = Integer.valueOf(params.get("itemNumber").toString());
             String itemId = (String)params.get("itemId");
             String itemName = (String)params.get("itemName");
             Double itemCost = Double.valueOf(params.get("itemCost").toString());
@@ -124,6 +125,7 @@ public class OrderController {
             
             // Build new order item
             OrderItem orderItem = new OrderItem();
+            orderItem.setMenuItemNumber(itemNumber);
             orderItem.setMenuItemId(itemId);
             orderItem.setMenuItemTitle(itemName);
             orderItem.setCost(itemCost);

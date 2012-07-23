@@ -4,6 +4,9 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection="addresses")
 public class Address extends PersistentObject {
 
@@ -46,26 +49,26 @@ public class Address extends PersistentObject {
     }
 
     public String getSummary() {
-        StringBuilder sb = new StringBuilder();  
+        List<String> items = new ArrayList<String>();  
         if( StringUtils.hasText(address1)) {
-            sb.append(address1).append(", ");
+            items.add(address1);
         }
         if( StringUtils.hasText(address2)) {
-            sb.append(address2).append(", ");
+            items.add(address2);
         }
         if(StringUtils.hasText(address3)) {
-            sb.append(address3).append(", ");
+            items.add(address3);
         }
         if(StringUtils.hasText(town)) {
-            sb.append(town).append(", ");
+            items.add(town);
         }
         if(StringUtils.hasText(region)) {
-            sb.append(region).append(", ");
+            items.add(region);
         }
         if(StringUtils.hasText(postCode)) {
-            sb.append(postCode);
+            items.add(postCode);
         }
-        return sb.toString();
+        return StringUtils.collectionToCommaDelimitedString(items);
     }
 
     public String getPostCode() {

@@ -47,7 +47,7 @@
                                                     <option value="4">4</option>
                                                     <option value="5">5</option>
                                                 </select>
-                                                <a onclick="addMultipleToOrder('${restaurant.restaurantId}', '${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">
+                                                <a onclick="addMultipleToOrder('${restaurant.restaurantId}',${menuItem.number},'${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">
                                                     <img title="<spring:message code="label.add-to-order"/>" src="${ctx}/resources/images/icons-shadowless/plus-button.png"/>
                                                 </a>
                                             </div>

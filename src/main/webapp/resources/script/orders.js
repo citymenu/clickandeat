@@ -127,13 +127,13 @@ function doBuildOrder(order,config) {
 }
 
 // Add multiple items based on the select value
-function addMultipleToOrder(restaurantId, itemId, itemName, itemCost ) {
+function addMultipleToOrder(restaurantId, itemNumber, itemId, itemName, itemCost ) {
     var quantity = $('#select_' + itemId ).val();
-    addToOrder(restaurantId, itemId, itemName, itemCost, quantity);
+    addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity);
 }
 
 // Add item to order, check that restaurant has not changed
-function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
+function addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
         $('<div></div>')
             .html(('<div>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name)))
@@ -154,15 +154,16 @@ function addToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
                 }]
             });
     } else {
-        doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
+        doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity );
     }
 }
 
 // Add item to order update result on display
-function doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity ) {
+function doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity ) {
 
     var update = {
         restaurantId: restaurantId,
+        itemNumber: itemNumber,
         itemId: itemId,
         itemName: itemName,
         itemCost: itemCost,
