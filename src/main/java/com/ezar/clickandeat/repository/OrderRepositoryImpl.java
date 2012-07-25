@@ -76,7 +76,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public void updateOrderStatus(String orderId, String status) {
-        operations.updateFirst(query(where("orderId").is(orderId)),update("status",status),Order.class);
+        operations.updateFirst(query(where("orderId").is(orderId)),update("orderStatus",status),Order.class);
     }
 
     

@@ -2,10 +2,14 @@ package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
+import com.twilio.sdk.resource.factory.SmsFactory;
 import com.twilio.sdk.resource.instance.Account;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,6 +35,12 @@ public class TwilioService {
     public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback.html";
     public static final String FULL_ORDER_CALL_PROCESS_URL = "/twilio/processFullOrderCall.html";
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private VelocityTemplatingService velocityTemplatingService;
+    
     private String accountSid;
     
     private String authToken;
@@ -48,26 +58,40 @@ public class TwilioService {
      */
 
     public void sendOrderNotificationSMS(Order order) throws Exception {
-
-    }
-
-
-    /**
-     * @param order
-     * @return
-     * @throws Exception
-     */
-
-    public void makeFullOrderCall(Order order) throws Exception {
-
-        String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationPhoneNumber();
+        
+        String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationSMSNumber();
         String orderId = order.getOrderId();
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calling " + phoneNumber + " to read details of order " + orderId);
+            LOGGER.debug("Sending SMS to " + phoneNumber + " to notify about order " + orderId);
         }
 
-        placeOrderCall(orderId, phoneNumber, FULL_ORDER_CALL_URL, FULL_ORDER_CALL_FALLBACK_URL, FULL_ORDER_CALL_STATUS_CALLBACK_URL);
+        // Create a rest client
+        TwilioRestClient client = new TwilioRestClient(accountSid, authToken);
+
+        // Get the main account (The one we used to authenticate the client
+        Account mainAccount = client.getAccount();
+
+        // Build the xml
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("delivery",order.getDeliveryType());
+        String body = velocityTemplatingService.mergeContentIntoTemplate(templateModel,VelocityTemplatingService.NOTIFICATION_SMS_TEMPLATE);
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Generated body [" + body + "]");
+        }
+        
+        // Build the SMS
+        SmsFactory smsFactory = mainAccount.getSmsFactory();
+        Map<String, String> callParams = new HashMap<String, String>();
+        callParams.put("From","+447881626584");
+        callParams.put("To",phoneNumber);
+        callParams.put("Body",body);
+
+        // Send the sms
+        smsFactory.create(callParams);
+
+        // Add order update
+        orderRepository.addOrderUpdate(orderId,"Initiated SMS notification to restaurant");
     }
 
 
@@ -87,6 +111,7 @@ public class TwilioService {
         }
         
         placeOrderCall(orderId, phoneNumber, ORDER_NOTIFICATION_CALL_URL, ORDER_NOTIFICATION_CALL_FALLBACK_URL, ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL);
+        orderRepository.addOrderUpdate(orderId,"Initiated notification call to restauarant");
     }
 
 
@@ -161,7 +186,7 @@ public class TwilioService {
     }
 
     @Required
-    @Value(value="${twilio.baseUrl}")
+    @Value(value="${baseUrl}")
     public void setBaseUrl(String baseUrl) {
         if(baseUrl.endsWith("/")) {
             baseUrl = baseUrl.substring(baseUrl.length());

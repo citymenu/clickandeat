@@ -1,5 +1,8 @@
 package com.ezar.clickandeat.notification;
 
+import com.ezar.clickandeat.model.NotificationOptions;
+import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
@@ -18,7 +21,15 @@ public class TwilioServiceTest {
     private TwilioService twilioService;
 
     @Test
-    public void testMakeCall() throws Exception {
+    public void testSendSms() throws Exception {
+        Restaurant restaurant = new Restaurant();
+        NotificationOptions options = new NotificationOptions();
+        options.setNotificationSMSNumber("+447881626584");
+        restaurant.setNotificationOptions(options);
+        Order order = new Order();
+        order.setDeliveryType(Order.DELIVERY);
+        order.setRestaurant(restaurant);
+        twilioService.sendOrderNotificationSMS(order);
     }
     
     

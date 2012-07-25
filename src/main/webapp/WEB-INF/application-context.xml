@@ -130,7 +130,21 @@
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
     </bean>
 
-  	<!--  Quartz Scheduler -->
+    <!-- SMTP mail sender -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${smtp.host}"/>
+        <property name="username" value="${smtp.username}"/>
+        <property name="password" value="${smtp.password}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.timeout">8500</prop>
+            </props>
+        </property>
+    </bean>
+
+        <!--  Quartz Scheduler -->
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation" value="classpath:quartz.properties"/>
 		<property name="schedulerContextAsMap">

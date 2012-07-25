@@ -2,6 +2,9 @@
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>
     </decorator>
+    <decorator name="workflow" page="workflow.jsp">
+        <pattern>**/workflow/*</pattern>
+    </decorator>
 	<decorator name="default" page="blank.jsp">
 		<pattern>/*</pattern> 
   	</decorator>

@@ -19,6 +19,7 @@ public class ResponseEntityUtils {
         String json = JSONUtils.serialize(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setCacheControl("no-cache");
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 
@@ -32,6 +33,7 @@ public class ResponseEntityUtils {
     public static ResponseEntity<byte[]> buildXmlResponse(String xml) throws Exception {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_XML);
+        headers.setCacheControl("no-cache");
         return new ResponseEntity<byte[]>(xml.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 

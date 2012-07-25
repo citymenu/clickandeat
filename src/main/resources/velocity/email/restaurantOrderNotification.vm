@@ -1,0 +1,37 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>You have a new order from ClickAndEat</h1>
+
+<h2>Order id: ${order.orderId}</h2>
+
+#if($order.deliveryType == 'DELIVERY')
+    <div>Order is for delivery</div>
+#else
+    <div>Order is for collection</div>
+#end
+
+<h3>Details of order</h3>
+
+#foreach( $item in $order.orderItems )
+    #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
+        <div>$item.quantity x ($item.menuItemNumber) $stringTool.unescape($item.menuItemTitle)</div>
+    #else
+        <div>$item.quantity x $stringTool.unescape($item.menuItemTitle)</div>
+    #end
+#end
+
+<h3>Item cost: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+
+<h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+
+<div>
+    <a href="${url}/secure/workflow/confirmOrder.html?orderId=${order.orderId}&uuid=${order.uuid}&action=accept">Accept</a>
+    <a href="${url}/secure/workflow/confirmOrder.html?orderId=${order.orderId}&uuid=${order.uuid}&action=decline">Decline</a>
+</body>
+
+</html>

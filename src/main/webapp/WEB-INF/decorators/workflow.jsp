@@ -9,7 +9,6 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/jquery/css/sunny/jquery-ui-1.8.20.custom.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
 	<script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
-	<script type="text/javascript" src="${ctx}/resources/script/breadcrumbs.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/script/json2.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-1.7.2.min.js"></script>
     <script type="text/javascript" src="${ctx}/resources/jquery/script/jquery-ui-1.8.20.custom.min.js"></script>
@@ -19,23 +18,6 @@
     <title><decorator:title/></title>
 </head>
 <body>
-<div id="header">
-    <div id="titlenav">
-        <ul>
-            <li><a href="${ctx}/home.html">Home</a></li>
-            <li><a href="${ctx}/admin/restaurants.html">Restaurants</a></li>
-            <c:if test="${user == null}">
-                <li><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></li>
-                <li><a href="${ctx}/secure/register.html"><spring:message code="label.register"/></a></li>
-            </c:if>
-            <c:if test="${user != null}">
-                <li><a href="${ctx}/j_security_logout"><spring:message code="label.logout"/></a></li>
-            </c:if>
-        </ul>
-    </div>
-</div>
-<div id="container">
-    <decorator:body/>
-</div>
+<decorator:body/>
 </body>
 </html>

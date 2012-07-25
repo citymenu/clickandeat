@@ -6,7 +6,7 @@ var deliveryCharge;
 
 $(document).ready(function(){
     if( orderid && orderid != '') {
-        $.post( ctx+'/order/getOrder.ajax',
+        $.post( ctx+'/order/getOrder.ajax?mgn=' + (Math.random() * 99999999),
             function( data ) {
                 if( data.success ) {
                     buildOrder(data.order);

@@ -1,9 +1,7 @@
 package com.ezar.clickandeat.templating;
 
 import com.ezar.clickandeat.converter.LocalDateReadConverter;
-import com.ezar.clickandeat.model.Address;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.OrderItem;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.TwilioService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -106,9 +104,50 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         templateModel.put("locale",systemLocale);
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
         Assert.assertNotNull(xml);
-        LOGGER.info("Generated xml [" + xml + "]");
+        LOGGER.info("Generated xml:\n" + xml );
     }
 
+    @Test
+    public void testBuildRestaurantOrderNotificationEmail() throws Exception {
+
+        Order order = orderRepository.create();
+        order.setDeliveryType(Order.DELIVERY);
+
+        // Add two items to the order
+        OrderItem item1 = new OrderItem();
+        item1.setMenuItemId("ITEM1");
+        item1.setMenuItemNumber(101);
+        item1.setMenuItemTitle("Spinach Pakora");
+        item1.setQuantity(2);
+        order.addOrderItem(item1);
+
+        OrderItem item2 = new OrderItem();
+        item2.setMenuItemId("ITEM2");
+        item2.setMenuItemNumber(0);
+        item2.setQuantity(1);
+        item2.setMenuItemTitle("Onion Bhajii###s");
+        order.addOrderItem(item2);
+
+        // Build a restaurant for the order
+        Restaurant restaurant = new Restaurant();
+        NotificationOptions notificationOptions = new NotificationOptions();
+        notificationOptions.setNotificationEmailAddress("mishimaltd@gmail.com");
+        restaurant.setNotificationOptions(notificationOptions);
+        
+        order.setRestaurant(restaurant);
+        
+        order.setOrderItemCost(1.355d);
+        order.setTotalCost(35.403);
+        
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("order",order);
+        String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
+        Assert.assertNotNull(text);
+        LOGGER.info("Generated text:\n" + text );
+    }
+
+
+    
     
     @Required
     @Value(value="${timezone}")

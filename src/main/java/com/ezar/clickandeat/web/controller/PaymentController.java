@@ -65,18 +65,17 @@ public class PaymentController {
             //TODO get credit card details and handle payment processing/result
             order.setCardTransactionId("12345");
             order.setCardTransactionStatus(Order.CARD_TRANSACTION_AUTHORIZED);
+            orderRepository.saveOrder(order);
             
             // Send notification to restaurant
             notificationService.sendOrderNotificationToRestaurant(order);
 
-            // Send confirmation email to customer
+            // Send notification email to customer
+            notificationService.sendOrderConfirmationToCustomer(order);
             
             // Update order status
-            order.setOrderStatus(Order.AWAITING_RESTAURANT);
+            orderRepository.updateOrderStatus(order.getOrderId(),Order.AWAITING_RESTAURANT);
 
-            // Save the order object
-            orderRepository.saveOrder(order);
-            
             // Set status to success
             model.put("success",true);
         }

@@ -1,0 +1,34 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>Confirmation of your order from ClickAndEat</h1>
+
+<h2>Order id: ${order.orderId}</h2>
+
+<div>Your order has been passed to $stringTool.unescape($order.restaurant.name). You will shortly receive an email confirming if $stringTool.unescape($order.restaurant.name)
+has accepted your order.</div>
+<div>In the unlikely event that the restaurant is not able to fulfil your order you will receive an email to let you know and you will not be charged for the order.
+If you have provided a mobile number with your order you will receive an SMS message if your order is declined.</div>
+
+<h3>Details of order</h3>
+
+#foreach( $item in $order.orderItems )
+    #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
+        <div>$item.quantity x ($item.menuItemNumber) $stringTool.unescape($item.menuItemTitle)</div>
+    #else
+        <div>$item.quantity x $stringTool.unescape($item.menuItemTitle)</div>
+    #end
+#end
+
+<h3>Item cost: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+
+<h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+
+</body>
+
+
+</html>
