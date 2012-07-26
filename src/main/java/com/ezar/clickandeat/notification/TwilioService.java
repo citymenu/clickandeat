@@ -142,6 +142,7 @@ public class TwilioService {
         callParams.put("From", callerId);
         callParams.put("Url", buildTwilioUrl(url,orderId));
         callParams.put("Method", "POST");
+        callParams.put("IfMachine","Hangup");
 
         // Add the callback urls
         callParams.put("FallbackUrl", buildTwilioUrl(fallbackUrl,orderId));

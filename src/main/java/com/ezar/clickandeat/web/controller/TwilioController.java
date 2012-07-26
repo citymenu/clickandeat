@@ -114,6 +114,9 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
+        
+        // Get call duration
+        String callDuration = request.getParameter("CallDuration");
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for successful order notification call");
@@ -195,6 +198,9 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
+
+        // Get call duration
+        String callDuration = request.getParameter("CallDuration");
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for successful full order call");
