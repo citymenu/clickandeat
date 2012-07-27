@@ -22,7 +22,7 @@
 <div id="header">
     <div id="titlenav">
         <ul>
-            <li><a href="${ctx}/home.html">Home</a></li>
+            <li><a href="${ctx}/home.html">Home - ${scheme}</a></li>
             <li><a href="${ctx}/admin/restaurants.html">Restaurants</a></li>
             <c:if test="${user == null}">
                 <li><a href="${ctx}/secure/login.html"><spring:message code="label.login"/></a></li>
