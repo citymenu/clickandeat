@@ -3,9 +3,9 @@
 
 <head>
     <title><spring:message code="label.checkout"/></title>
-    <script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/orders.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/checkout.js"></script>
+    <script type="text/javascript" src="${resources}/script/tools.js"></script>
+    <script type="text/javascript" src="${resources}/script/orders.js"></script>
+    <script type="text/javascript" src="${resources}/script/checkout.js"></script>
 </head>
 
 <body>

@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>3.0.6.RELEASE</spring.version>
         <spring.security.version>3.0.7.RELEASE</spring.security.version>
+        <aws.s3.bucket.name>clickandeat</aws.s3.bucket.name>
     </properties>
 
     <dependencies>
@@ -132,6 +133,18 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.3</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- AWS and sync -->
+        <dependency>
+            <groupId>net.java.dev.jets3t</groupId>
+            <artifactId>jets3t</artifactId>
+            <version>0.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jets3t</groupId>
+            <artifactId>synchronize</artifactId>
+            <version>0.9.0</version>
         </dependency>
 
         <!-- Authorize.net -->
@@ -294,6 +307,43 @@
         </plugins>
     </build>
 
+    <!-- Run this profile by including -Dsync=true when calling the install phase for maven -->
+    <profiles>
+        <profile>
+            <id>aws-deploy</id>
+            <activation>
+                <property>
+                    <name>sync</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- plugin for amazon ec2 mgmt -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>1.1</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <mainClass>com.ezar.clickandeat.util.AWSSync</mainClass>
+                            <arguments>
+                                <argument>${aws.s3.bucket.name}</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <repositories>
         <repository>
             <id>spring-milestone</id>
@@ -304,6 +354,11 @@
             <id>atlassian</id>
             <name>Atlassian repository</name>
             <url>https://repository.atlassian.com/maven2</url>
+        </repository>
+        <repository>
+            <id>maven</id>
+            <name>Maven repository</name>
+            <url>http://repo1.maven.org/maven2</url>
         </repository>
         <repository>
             <id>project.local</id>

@@ -5,8 +5,8 @@
 
 <head>
     <title><spring:message code="label.search"/></title>
-    <script type="text/javascript" src="${ctx}/resources/script/findRestaurant.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/orders.js"></script>
+    <script type="text/javascript" src="${resources}/script/findRestaurant.js"></script>
+    <script type="text/javascript" src="${resources}/script/orders.js"></script>
 </head>
 
 <body>

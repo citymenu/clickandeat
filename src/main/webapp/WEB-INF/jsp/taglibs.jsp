@@ -9,6 +9,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
 <c:set var="user" value="${pageContext.request.remoteUser}"/>
+<c:set var="resources" value="http://clickandeat.s3-external-3.amazonaws.com/resources"/>
 
 <script type="text/javascript">var ctx = "${ctx}"; var locale = "${locale}"; var ccy = "<spring:message code="label.currency"/>";</script>
 

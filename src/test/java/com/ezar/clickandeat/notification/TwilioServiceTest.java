@@ -5,6 +5,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class TwilioServiceTest {
     private TwilioService twilioService;
 
     @Test
+    @Ignore
     public void testSendSms() throws Exception {
         Restaurant restaurant = new Restaurant();
         NotificationOptions options = new NotificationOptions();

@@ -3,8 +3,8 @@
 
 <head>
     <title><spring:message code="label.register"/></title>
-    <script type="text/javascript" src="${ctx}/resources/script/register.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/postcodeLookup.js"></script>
+    <script type="text/javascript" src="${resources}/script/register.js"></script>
+    <script type="text/javascript" src="${resources}/script/postcodeLookup.js"></script>
 </head>
 
 <body>

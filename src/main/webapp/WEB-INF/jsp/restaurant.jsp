@@ -3,9 +3,9 @@
 
 <head>
     <title>${restaurant.name}</title>
-    <script type="text/javascript" src="${ctx}/resources/script/tools.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/restaurant.js"></script>
-    <script type="text/javascript" src="${ctx}/resources/script/orders.js"></script>
+    <script type="text/javascript" src="${resources}/script/tools.js"></script>
+    <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
+    <script type="text/javascript" src="${resources}/script/orders.js"></script>
 </head>
 
 <body>
@@ -48,7 +48,7 @@
                                                     <option value="5">5</option>
                                                 </select>
                                                 <a onclick="addMultipleToOrder('${restaurant.restaurantId}',${menuItem.number},'${menuItem.itemId}','${fn:replace(menuItem.title,"'","###")}',${menuItem.cost})">
-                                                    <img title="<spring:message code="label.add-to-order"/>" src="${ctx}/resources/images/icons-shadowless/plus-button.png"/>
+                                                    <img title="<spring:message code="label.add-to-order"/>" src="${resources}/images/icons-shadowless/plus-button.png"/>
                                                 </a>
                                             </div>
                                         </div>

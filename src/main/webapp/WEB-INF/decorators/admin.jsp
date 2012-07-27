@@ -4,16 +4,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
     <meta name="robots" content="all" />
-	<link rel="shortcut icon" href="${ctx}/resources/images/favico.png">
-	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/ext/resources/css/ext-all.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/overrides.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/messagebox.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/master.css"/>
+	<link rel="shortcut icon" href="${resources}/images/favico.png">
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/resources/css/overrides.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/resources/css/messagebox.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/resources/css/master.css"/>
 	<!-- ExtJS -->
-	<script type="text/javascript" src="${ctx}/resources/ext/ext-all-debug.js"></script>
-	<script type="text/javascript" src="${ctx}/resources/ext/bootstrap.js"></script>
-	<script type="text/javascript" src="${ctx}/resources/script/admin/extoverrides.js"></script>
-	<script type="text/javascript" src="${ctx}/resources/script/admin/util.js"></script>
+	<script type="text/javascript" src="${resources}/ext/ext-all-debug.js"></script>
+	<script type="text/javascript" src="${resources}/ext/bootstrap.js"></script>
+	<script type="text/javascript" src="${resources}/script/admin/extoverrides.js"></script>
+	<script type="text/javascript" src="${resources}/script/admin/util.js"></script>
     <decorator:head/>
     <title><decorator:title/></title>
 </head>
