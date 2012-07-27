@@ -142,17 +142,32 @@
         </property>
     </bean>
 
-        <!--  Quartz Scheduler -->
+    <!--  Quartz Scheduler -->
 	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="configLocation" value="classpath:quartz.properties"/>
-		<property name="schedulerContextAsMap">
-			<map>
-				<entry key="runAsRole" value="ADMIN"/>
-			</map>
-		</property>
   		<property name="triggers">
-    		<list></list>
+    		<list>
+                <ref bean="sessionClearingTaskTrigger"/>
+    		</list>
   		</property>
 	</bean>
   	
+    <!-- Scheduled task for removing expired Jetty sessions from db -->
+    <bean id="sessionClearingTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail">
+            <bean name="exampleJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+                <property name="jobClass" value="com.ezar.clickandeat.scheduling.SessionClearingTask"/>
+                <property name="jobDataAsMap">
+                    <map>
+                        <entry key="taskName" value="sessionClearingTask"/>
+                        <entry key="mongoOperations" value-ref="mongoTemplate"/>
+                        <entry key="redisTemplate" value-ref="redisTemplate"/>
+                    </map>
+                </property>
+            </bean>
+        </property>
+        <property name="cronExpression" value="0 0 23 * * ?"/>
+    </bean>
+
+    
 </beans>
