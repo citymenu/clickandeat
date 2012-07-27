@@ -37,6 +37,7 @@ public class SecureFilter implements Filter {
         String protocolHeader = req.getHeader("X-Forwarded-Proto");
         
         if(req.isSecure() || "https".equals(protocolHeader)) {
+            req.setAttribute("secure",true);
             chain.doFilter(req,res);
         }
         else {
