@@ -35,7 +35,7 @@ public class Main {
 
         // Set up thread pool for server
         QueuedThreadPool threadPool = new QueuedThreadPool();
-        threadPool.setName("_jettyWorkerPool");
+        threadPool.setName("Jetty");
         threadPool.setMinThreads(10);
         threadPool.setMaxThreads(100);
         threadPool.setDaemon(true);
