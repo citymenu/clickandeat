@@ -14,11 +14,11 @@
     </logger>
 
     <logger name="org.springframework">
-        <level value="INFO"/>
+        <level value="ERROR"/>
     </logger>
 
     <logger name="org.springframework.security">
-        <level value="DEBUG"/>
+        <level value="ERROR"/>
     </logger>
 
     <logger name="org.quartz">

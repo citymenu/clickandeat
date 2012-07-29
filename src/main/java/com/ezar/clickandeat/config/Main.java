@@ -1,12 +1,17 @@
 package com.ezar.clickandeat.config;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.*;
 
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionIdManager;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.eclipse.jetty.util.thread.ThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
@@ -28,6 +33,14 @@ public class Main {
     	String port = (String)(System.getenv("PORT") == null? props.get("PORT"): System.getenv("PORT"));
 		Server server = new Server(Integer.valueOf(port));
 
+        // Set up thread pool for server
+        QueuedThreadPool threadPool = new QueuedThreadPool();
+        threadPool.setName("_jettyWorkerPool");
+        threadPool.setMinThreads(10);
+        threadPool.setMaxThreads(100);
+        threadPool.setDaemon(true);
+        server.setThreadPool(threadPool);
+
 		// Build web app context 
 		WebAppContext context = new WebAppContext();
 		context.setContextPath("/");
@@ -40,9 +53,8 @@ public class Main {
 		// Configure mongo session id manager
 		MongoTemplate mongoTemplate = getMongoTemplate(props);
 		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
-		mongoSessionIdManager.setWorkerName("sessionManager");
-        mongoSessionIdManager.setPurge(true);
-        mongoSessionIdManager.setPurgeValidAge(24 * 60 * 60 * 1000); // Keep valid sessions for 1 day
+        mongoSessionIdManager.setScavengeDelay(0l);
+        mongoSessionIdManager.setPurge(false);
 
         // Configure mongo session manager
 		MongoSessionManager mongoSessionManager = new MongoSessionManager();
@@ -50,6 +62,7 @@ public class Main {
         mongoSessionManager.setSaveAllAttributes(true);
         mongoSessionManager.setSavePeriod(-2); // Store attributes on login
 
+        // Configure session handler
 		SessionHandler sessionHandler = new SessionHandler();
 		sessionHandler.setSessionManager(mongoSessionManager);
 		context.setSessionHandler(sessionHandler);
