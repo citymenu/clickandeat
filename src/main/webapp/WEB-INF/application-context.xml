@@ -123,6 +123,7 @@
         <property name="hostName" value="#{@redisUrl.getHost()}"/>
         <property name="port" value="#{@redisUrl.getPort()}"/>
         <property name="password" value="#{@redisUrl.getUserInfo().split(':')[1]}"/>
+        <property name="usePool" value="false"/>
     </bean>
 
     <!-- Redis template -->
