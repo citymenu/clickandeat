@@ -4,6 +4,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -36,7 +37,7 @@ public class TwilioService {
     public static final String FULL_ORDER_CALL_PROCESS_URL = "/twilio/processFullOrderCall.html";
 
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderWorkflowEngine orderWorkflowEngine;
 
     @Autowired
     private VelocityTemplatingService velocityTemplatingService;
@@ -90,8 +91,8 @@ public class TwilioService {
         // Send the sms
         smsFactory.create(callParams);
 
-        // Add order update
-        orderRepository.addOrderUpdate(orderId,"Initiated SMS notification to restaurant");
+        // Process order workflow update
+        orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SMS_SENT);
     }
 
 
@@ -111,7 +112,10 @@ public class TwilioService {
         }
         
         placeOrderCall(orderId, phoneNumber, ORDER_NOTIFICATION_CALL_URL, ORDER_NOTIFICATION_CALL_FALLBACK_URL, ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL);
-        orderRepository.addOrderUpdate(orderId,"Initiated notification call to restauarant");
+
+        // Process order workflow update
+        orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_PLACED);
+
     }
 
 

@@ -97,13 +97,6 @@
             <version>1.4.1</version>
         </dependency>
 
-        <!-- Quartz scheduling -->
-        <dependency>
-            <groupId>quartz</groupId>
-            <artifactId>quartz</artifactId>
-            <version>1.5.2</version>
-        </dependency>
-
         <!-- Twillio and dependencies -->
         <dependency>
             <groupId>com.twilio.sdk</groupId>

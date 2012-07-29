@@ -29,8 +29,6 @@ public class NotificationService {
 
     public void sendOrderNotificationToRestaurant(Order order) throws Exception {
 
-        String orderId = order.getOrderId();
-        
         LOGGER.info("Sending order notification to restauarant for orderId [" + order.getOrderId() + "]");
         
         NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
@@ -67,4 +65,33 @@ public class NotificationService {
 
     }
 
+
+    /**
+     * @param order
+     */
+    
+    public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
+
+        LOGGER.info("Sending restaurant accepted confirmation to customer for orderId [" + order.getOrderId() + "]");
+
+        // Send email notification to customer
+        if( StringUtils.hasText(order.getCustomer().getEmail())) {
+            emailService.sendRestaurantAcceptedConfirmationToCustomer(order);
+        }
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendRestaurantDeclinedConfirmationToCustomer(Order order) throws Exception {
+
+        LOGGER.info("Sending restaurant declined confirmation to customer for orderId [" + order.getOrderId() + "]");
+
+        // Send email notification to customer
+        if( StringUtils.hasText(order.getCustomer().getEmail())) {
+            emailService.sendRestaurantDeclinedConfirmationToCustomer(order);
+        }
+    }
 }

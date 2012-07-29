@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:context="http://www.springframework.org/schema/context"
-          xmlns:security="http://www.springframework.org/schema/security"
-          xmlns:mongo="http://www.springframework.org/schema/data/mongo"
-          xsi:schemaLocation=
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation=
           "http://www.springframework.org/schema/context
           http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.0.3.xsd
           http://www.springframework.org/schema/data/mongo
           http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/task
+          http://www.springframework.org/schema/task/spring-task-3.0.xsd
           http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
@@ -143,31 +146,16 @@
         </property>
     </bean>
 
-    <!--  Quartz Scheduler -->
-	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="configLocation" value="classpath:quartz.properties"/>
-  		<property name="triggers">
-    		<list>
-                <ref bean="sessionClearingTaskTrigger"/>
-    		</list>
-  		</property>
-	</bean>
-  	
+    <!-- Spring annotation based task scheduling -->
+    <task:scheduler id="scheduler" pool-size="1"/>
+    <task:annotation-driven scheduler="scheduler"/>
+
     <!-- Scheduled task for removing expired Jetty sessions from db -->
-    <bean id="sessionClearingTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail">
-            <bean name="exampleJob" class="org.springframework.scheduling.quartz.JobDetailBean">
-                <property name="jobClass" value="com.ezar.clickandeat.scheduling.SessionClearingTask"/>
-                <property name="jobDataAsMap">
-                    <map>
-                        <entry key="taskName" value="sessionClearingTask"/>
-                        <entry key="mongoOperations" value-ref="mongoTemplate"/>
-                        <entry key="redisTemplate" value-ref="redisTemplate"/>
-                    </map>
-                </property>
-            </bean>
-        </property>
-        <property name="cronExpression" value="0 0 23 * * ?"/>
+    <bean id="sessionClearingTask" class="com.ezar.clickandeat.scheduling.SessionClearingTask">
+        <property name="taskName" value="sessionClearingTask"/>
+        <property name="redisTemplate" ref="redisTemplate"/>
+        <property name="mongoOperations" ref="mongoTemplate"/>
+        <property name="purgeIntervalHours" value="24"/>
     </bean>
 
     

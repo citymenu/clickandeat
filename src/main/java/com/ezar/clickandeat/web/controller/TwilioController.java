@@ -5,6 +5,9 @@ import com.ezar.clickandeat.notification.TwilioService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
+import com.ezar.clickandeat.workflow.WorkflowException;
+import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
@@ -43,6 +46,9 @@ public class TwilioController implements InitializingBean {
     
     @Autowired
     private TwilioService twilioService;
+
+    @Autowired
+    private OrderWorkflowEngine orderWorkflowEngine;
     
     private String authKey;
 
@@ -114,12 +120,23 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
-        
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
         // Get call duration
-        String callDuration = request.getParameter("CallDuration");
+        Integer callDuration = Integer.valueOf(request.getParameter("CallDuration"));
+        String answeredBy = request.getParameter("AnsweredBy");
+
+        // If no answer or answered by is 'Machine' send NO_ANSWER upate
+        if( callDuration == 0 || "machine".equals(answeredBy)) {
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_NO_ANSWER);
+        }
+        else {
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+        }
 
         response.sendError(HttpServletResponse.SC_OK);
-        orderRepository.addOrderUpdate(orderId, "Received callback for successful order notification call");
     }
 
 
@@ -141,6 +158,12 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Process error update for call
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ERROR);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for error in order notification call");
@@ -199,8 +222,11 @@ public class TwilioController implements InitializingBean {
         // Check authentication key passed
         checkAuthKey(authKey, response);
 
-        // Get call duration
-        String callDuration = request.getParameter("CallDuration");
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Mark that the full order call was placed
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for successful full order call");
@@ -225,6 +251,12 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Process error update for call
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ERROR);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for error in full order call");
@@ -275,30 +307,43 @@ public class TwilioController implements InitializingBean {
             
             // Order accepted
             case '1':
-                orderRepository.addOrderUpdate(orderId,"Order accepted by restaurant");
-                orderRepository.updateOrderStatus(orderId,Order.RESTAURANT_ACCEPTED);
-                // TODO update expected delivery/collection time and send email notification to customer and restaurant and update
-                return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                }
+
             
             // Order rejected
             case '2':
-                orderRepository.addOrderUpdate(orderId,"Order rejected by restaurant");
-                orderRepository.updateOrderStatus(orderId,Order.RESTAURANT_DECLINED);
-                // TODO update expected delivery/collection time and send email notification to customer and restaurant and update
-                return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
-            
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINED);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                }
+
             // Order accepted with non-standard delivery time
             case '3':
                 String deliveryMinutes = digits.substring(1);
-                if(StringUtils.hasText(deliveryMinutes)) {
-                    orderRepository.addOrderUpdate(orderId,"Order accepted by restaurant for delivery in " + deliveryMinutes + " minutes");
+                Map<String,Object> context = new HashMap<String, Object>();
+                context.put("DeliveryMinutes",deliveryMinutes);
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL,context);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
-                else {
-                    orderRepository.addOrderUpdate(orderId,"Order accepted by restaurant, no delivery minutes were specified, using default");
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
-                orderRepository.updateOrderStatus(orderId,Order.RESTAURANT_ACCEPTED);
-                // TODO update expected delivery/collection time and send email notification to customer and restaurant and update
-                return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
 
             // Repeat the call
@@ -307,13 +352,12 @@ public class TwilioController implements InitializingBean {
 
             // No response at this time
             case '5':
-                orderRepository.addOrderUpdate(orderId,"Restaurant has chosen not to accept or decline the order at this time");
+                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
                 return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
             // Invalid input
             default:
                 LOGGER.error("Invalid response to full order call");
-                orderRepository.addOrderUpdate(orderId,"Received invalid response to full order call");
                 return ResponseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
         }
     }

@@ -70,8 +70,8 @@ function doBuildOrder(order,config) {
             $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
             // Event handlers to update delivery type
-            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY');});
-            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION');});
+            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY',order.restaurant.restaurantId);});
+            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION',order.restaurant.restaurantId);});
         }
     }
 
@@ -201,8 +201,8 @@ function removeFromOrder(itemId, quantity ) {
 }
 
 // Update delivery type
-function updateDeliveryType(deliveryType) {
-    $.post( ctx+'/order/updateDeliveryType.ajax', { deliveryType: deliveryType },
+function updateDeliveryType(deliveryType, restaurantId) {
+    $.post( ctx+'/order/updateDeliveryType.ajax', { deliveryType: deliveryType, restaurantId: restaurantId },
         function( data ) {
             if( data.success ) {
                 buildOrder(data.order);

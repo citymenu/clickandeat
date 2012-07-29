@@ -4,6 +4,7 @@ import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,30 +61,24 @@ public class EmailService implements InitializingBean {
      * @param order
      */
     
-    public void sendOrderNotificationToRestaurant(Order order) {
+    public void sendOrderNotificationToRestaurant(Order order) throws Exception {
     
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Sending order notification email to restaurant for order id: " + order.getOrderId());
         }
 
-        String orderId = order.getOrderId();
-        
-        try {
-            NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
-            String emailAddress = notificationOptions.getNotificationEmailAddress();
-            String subjectFormat = properties.getProperty("restaurant-order-notification-subject");
-            String subject = MessageFormat.format(subjectFormat,orderId);
-            Map<String,Object> templateMap = new HashMap<String, Object>();
-            templateMap.put("order",order);
-            templateMap.put("url",baseUrl);
-            String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
-            sendEmail(emailAddress, subject, emailContent);
-            orderRepository.addOrderUpdate(orderId,"Sent email notification to restaurant");
-        }
-        catch( Exception ex ) {
-            LOGGER.error("",ex);
-            orderRepository.addOrderUpdate(orderId,"Exception sending notification to restaurant: " + ex.getMessage());
-        }
+        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+        String emailAddress = notificationOptions.getNotificationEmailAddress();
+        String subjectFormat = properties.getProperty("restaurant-order-notification-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        templateMap.put("url",baseUrl);
+        templateMap.put("accept", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED);
+        templateMap.put("acceptWithDeliveryDetail", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL);
+        templateMap.put("decline", OrderWorkflowEngine.ACTION_RESTAURANT_DECLINED);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -91,28 +86,59 @@ public class EmailService implements InitializingBean {
      * @param order
      */
     
-    public void sendOrderConfirmationToCustomer(Order order) {
+    public void sendOrderConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Sending order confirmation email to customer for order id: " + order.getOrderId());
         }
 
-        String orderId = order.getOrderId();
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
 
-        try {
-            String emailAddress = order.getCustomer().getEmail();
-            String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
-            String subject = MessageFormat.format(subjectFormat,orderId);
-            Map<String,Object> templateMap = new HashMap<String, Object>();
-            templateMap.put("order",order);
-            String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
-            sendEmail(emailAddress, subject, emailContent);
-            orderRepository.addOrderUpdate(orderId,"Sent email confirmation to customer");
+
+    /**
+     * @param order
+     */
+
+    public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending restaurant accepted confirmation email to customer for order id: " + order.getOrderId());
         }
-        catch( Exception ex ) {
-            LOGGER.error("",ex);
-            orderRepository.addOrderUpdate(orderId,"Exception sending confirmation to customer: " + ex.getMessage());
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendRestaurantDeclinedConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending restaurant declined confirmation email to customer for order id: " + order.getOrderId());
         }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 

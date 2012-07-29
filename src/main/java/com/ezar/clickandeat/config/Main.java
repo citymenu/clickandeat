@@ -33,15 +33,7 @@ public class Main {
     	String port = (String)(System.getenv("PORT") == null? props.get("PORT"): System.getenv("PORT"));
 		Server server = new Server(Integer.valueOf(port));
 
-        // Set up thread pool for server
-        QueuedThreadPool threadPool = new QueuedThreadPool();
-        threadPool.setName("Jetty");
-        threadPool.setMinThreads(10);
-        threadPool.setMaxThreads(100);
-        threadPool.setDaemon(true);
-        server.setThreadPool(threadPool);
-
-		// Build web app context 
+		// Build web app context
 		WebAppContext context = new WebAppContext();
 		context.setContextPath("/");
 		context.setDefaultsDescriptor("src/main/webapp/WEB-INF/webdefault.xml");

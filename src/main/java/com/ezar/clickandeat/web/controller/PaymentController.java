@@ -8,6 +8,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.AddressValidator;
 import com.ezar.clickandeat.validator.PersonValidator;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -41,7 +42,7 @@ public class PaymentController {
     private OrderRepository orderRepository;
     
     @Autowired
-    private NotificationService notificationService;
+    private OrderWorkflowEngine orderWorkflowEngine;
     
 
     @Autowired
@@ -64,17 +65,10 @@ public class PaymentController {
 
             //TODO get credit card details and handle payment processing/result
             order.setCardTransactionId("12345");
-            order.setCardTransactionStatus(Order.CARD_TRANSACTION_AUTHORIZED);
-            orderRepository.saveOrder(order);
+            order = orderRepository.saveOrder(order);
             
             // Send notification to restaurant
-            notificationService.sendOrderNotificationToRestaurant(order);
-
-            // Send notification email to customer
-            notificationService.sendOrderConfirmationToCustomer(order);
-            
-            // Update order status
-            orderRepository.updateOrderStatus(order.getOrderId(),Order.AWAITING_RESTAURANT);
+            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_ORDER_PLACED);
 
             // Set status to success
             model.put("success",true);

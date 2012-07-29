@@ -210,7 +210,8 @@ public class OrderController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/order/updateDeliveryType.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "deliveryType") String deliveryType ) throws Exception {
+    public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "deliveryType") String deliveryType,
+                                                          @RequestParam(value = "restaurantId") String restaurantId) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Updating order delivery type to: " + deliveryType);
@@ -231,6 +232,12 @@ public class OrderController {
                     order = orderRepository.saveOrder(order);
                 }
             }
+            if( order == null ) {
+                order = buildAndRegister(session, restaurantId);
+                order.setDeliveryType(deliveryType);
+                order = orderRepository.saveOrder(order);
+            }
+            
             model.put("success",true);
             model.put("order",order);
         }

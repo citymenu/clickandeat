@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -8,33 +9,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
 
-    public static final String BASKET = "BASKET";
-    public static final String AWAITING_RESTAURANT = "AWAITING RESTAURANT";
-    public static final String RESTAURANT_ACCEPTED = "RESTAURANT ACCEPTED";
-    public static final String RESTAURANT_DECLINED = "RESTAURANT DECLINED";
-    public static final String CUSTOMER_CANCELLED = "CUSTOMER CANCELLED";
-    public static final String COMPLETE = "COMPLETE";
-    public static final String STATUS_ERROR = "ERROR";
-    
     public static final String DELIVERY = "DELIVERY";
     public static final String COLLECTION = "COLLECTION";
-
-    public static final String CARD_TRANSACTION_AUTHORIZED = "TRANSACTION AUTHORIZED";
-    public static final String CARD_TRANSACTION_CAPTURED = "TRANSACTION CAPTURED";
-    public static final String CARD_TRANSACTION_CANCELLED = "TRANSACTION CANCELLED";
 
     @Indexed(unique=true)
     private String orderId;
 
     private String uuid;
-    
     private String userId;
-
     private String restaurantId;
 
     @DBRef
@@ -69,6 +55,8 @@ public class Order extends PersistentObject {
 
     // Order tracking details
     private String orderStatus;
+    private String orderNotificationStatus;
+    private int orderNotificationCallCount;
     private String cardTransactionId;
     private String cardTransactionStatus;
     private String restaurantDeclinedReason;
@@ -198,6 +186,19 @@ public class Order extends PersistentObject {
         return today.equals(day);
     }
 
+
+    /**
+     * @param text
+     */
+
+    public void addOrderUpdate(String text) {
+        OrderUpdate orderUpdate = new OrderUpdate();
+        orderUpdate.setText(text);
+        orderUpdate.setUpdateTime(new DateTime());
+        orderUpdates.add(orderUpdate);
+    }
+
+    
     public String getOrderId() {
         return orderId;
     }
@@ -292,6 +293,22 @@ public class Order extends PersistentObject {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public String getOrderNotificationStatus() {
+        return orderNotificationStatus;
+    }
+
+    public void setOrderNotificationStatus(String orderNotificationStatus) {
+        this.orderNotificationStatus = orderNotificationStatus;
+    }
+
+    public int getOrderNotificationCallCount() {
+        return orderNotificationCallCount;
+    }
+
+    public void setOrderNotificationCallCount(int orderNotificationCallCount) {
+        this.orderNotificationCallCount = orderNotificationCallCount;
     }
 
     public DateTime getOrderPlacedTime() {
