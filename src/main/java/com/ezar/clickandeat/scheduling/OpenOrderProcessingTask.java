@@ -14,13 +14,10 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
-
 import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Component
 public class OpenOrderProcessingTask extends AbstractClusteredTask {

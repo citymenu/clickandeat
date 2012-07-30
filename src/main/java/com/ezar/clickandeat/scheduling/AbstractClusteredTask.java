@@ -1,13 +1,10 @@
 package com.ezar.clickandeat.scheduling;
 
 import org.apache.log4j.Logger;
-import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.UUID;
 
