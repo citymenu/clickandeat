@@ -37,9 +37,6 @@ public class TwilioService {
     public static final String FULL_ORDER_CALL_PROCESS_URL = "/twilio/processFullOrderCall.html";
 
     @Autowired
-    private OrderWorkflowEngine orderWorkflowEngine;
-
-    @Autowired
     private VelocityTemplatingService velocityTemplatingService;
     
     private String accountSid;
@@ -90,9 +87,6 @@ public class TwilioService {
 
         // Send the sms
         smsFactory.create(callParams);
-
-        // Process order workflow update
-        orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SMS_SENT);
     }
 
 
@@ -112,10 +106,6 @@ public class TwilioService {
         }
         
         placeOrderCall(orderId, phoneNumber, ORDER_NOTIFICATION_CALL_URL, ORDER_NOTIFICATION_CALL_FALLBACK_URL, ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL);
-
-        // Process order workflow update
-        orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_PLACED);
-
     }
 
 

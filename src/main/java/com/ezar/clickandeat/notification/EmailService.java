@@ -107,18 +107,6 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Sending restaurant accepted confirmation email to customer for order id: " + order.getOrderId());
-        }
-
-        String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
-        Map<String,Object> templateMap = new HashMap<String, Object>();
-        templateMap.put("order",order);
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
-        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -127,18 +115,46 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantDeclinedConfirmationToCustomer(Order order) throws Exception {
+    }
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Sending restaurant declined confirmation email to customer for order id: " + order.getOrderId());
-        }
 
-        String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
-        Map<String,Object> templateMap = new HashMap<String, Object>();
-        templateMap.put("order",order);
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
-        sendEmail(emailAddress, subject, emailContent);
+    /**
+     * @param order
+     */
+
+    public void sendCustomerCancelledConfirmationToRestaurant(Order order) throws Exception {
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendCustomerCancelledConfirmationToCustomer(Order order) throws Exception {
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception {
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendAutoCancelledConfirmationToCustomer(Order order) throws Exception {
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendAutoCancelledConfirmationToRestaurant(Order order) throws Exception {
     }
 
 

@@ -2,7 +2,6 @@ package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.notification.NotificationService;
-import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -10,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
 public class OrderPlacedHandler implements IWorkflowHandler {
@@ -21,7 +22,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {
-        return OrderWorkflowEngine.ACTION_ORDER_PLACED;
+        return ACTION_ORDER_PLACED;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
         }
 
         // Validate current status
-        if( !OrderWorkflowEngine.ORDER_STATUS_BASKET.equals(order.getOrderStatus())) {
+        if( !ORDER_STATUS_BASKET.equals(order.getOrderStatus())) {
             throw new WorkflowStatusException("Order must be in 'BASKET' status");
         }
         
@@ -49,7 +50,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
         }
 
         // Update Order status
-        order.setOrderStatus(OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT);
+        order.setOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
         return order;
     }
 

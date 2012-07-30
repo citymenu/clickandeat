@@ -13,37 +13,37 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantAcceptedHandler implements IWorkflowHandler {
+public class RestaurantCancelledHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptedHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaurantCancelledHandler.class);
 
     @Autowired
     private NotificationService notificationService;
 
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_ACCEPTED;
+        return ACTION_RESTAURANT_CANCELLED;
     }
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
-        if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order should be in awaiting restaurant state");
+        if( !ORDER_STATUS_RESTAURANT_ACCEPTED.equals(order.getOrderStatus())) {
+            throw new WorkflowStatusException("Order should be in accepted by restaurant state");
         }
 
-        order.addOrderUpdate("Restaurant accepted order");
+        order.addOrderUpdate("Customer cancelled order");
 
         try {
-            notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);
-            order.addOrderUpdate("Sent confirmation of restaurant acceptance to customer");
+            notificationService.sendRestaurantCancelledConfirmationToCustomer(order);
+            order.addOrderUpdate("Sent confirmation of restaurant cancelling order to customer");
         }
         catch (Exception ex ) {
-            LOGGER.error("Error sending confirmation of restaurant acceptance to customer",ex);
+            LOGGER.error("Error sending confirmation of restaurant cancelling order to customer",ex);
             throw new WorkflowException(ex);
         }
 
-        order.setOrderStatus(ORDER_STATUS_RESTAURANT_ACCEPTED);
+        order.setOrderStatus(ORDER_STATUS_RESTAURANT_CANCELLED);
         return order;
     }
 

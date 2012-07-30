@@ -13,16 +13,16 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantAcceptedHandler implements IWorkflowHandler {
+public class CustomerCancelledHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptedHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(CustomerCancelledHandler.class);
 
     @Autowired
     private NotificationService notificationService;
 
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_ACCEPTED;
+        return ACTION_CUSTOMER_CANCELLED;
     }
 
     @Override
@@ -32,18 +32,27 @@ public class RestaurantAcceptedHandler implements IWorkflowHandler {
             throw new WorkflowStatusException("Order should be in awaiting restaurant state");
         }
 
-        order.addOrderUpdate("Restaurant accepted order");
+        order.addOrderUpdate("Customer cancelled order");
 
         try {
-            notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);
-            order.addOrderUpdate("Sent confirmation of restaurant acceptance to customer");
+            notificationService.sendCustomerCancelledConfirmationToRestaurant(order);
+            order.addOrderUpdate("Sent confirmation of customer cancelling order to restaurant");
         }
         catch (Exception ex ) {
-            LOGGER.error("Error sending confirmation of restaurant acceptance to customer",ex);
+            LOGGER.error("Error sending confirmation of customer cancelling order to restaurant",ex);
             throw new WorkflowException(ex);
         }
 
-        order.setOrderStatus(ORDER_STATUS_RESTAURANT_ACCEPTED);
+        try {
+            notificationService.sendCustomerCancelledConfirmationToCustomer(order);
+            order.addOrderUpdate("Sent confirmation of customer cancelling order to customer");
+        }
+        catch (Exception ex ) {
+            LOGGER.error("Error sending confirmation of customer cancelling order to customer",ex);
+            throw new WorkflowException(ex);
+        }
+
+        order.setOrderStatus(ORDER_STATUS_CUSTOMER_CANCELLED);
         return order;
     }
 

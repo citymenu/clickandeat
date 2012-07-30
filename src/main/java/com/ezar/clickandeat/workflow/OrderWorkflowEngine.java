@@ -51,6 +51,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
 
     public static final String NOTIFICATION_CALL_STATUS_NO_CALL_MADE = "NO_CALL_MADE";
+    public static final String NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS = "NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS";
     public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_ANSWERED = "ANSWERED";
     public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
     public static final String NOTIFICATION_CALL_STATUS_ERROR = "ERROR";
@@ -74,7 +75,6 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
 
     private ApplicationContext applicationContext;
 
-    private String timeZone;
 
     @Override
     public void afterPropertiesSet() throws Exception {
