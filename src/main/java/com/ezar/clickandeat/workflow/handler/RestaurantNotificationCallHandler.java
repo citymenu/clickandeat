@@ -17,9 +17,9 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class OrderPlacedHandler implements IWorkflowHandler {
+public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(OrderPlacedHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaurantNotificationCallHandler.class);
 
     @Autowired
     private NotificationService notificationService;
@@ -28,38 +28,28 @@ public class OrderPlacedHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {
-        return ACTION_ORDER_PLACED;
+        return ACTION_CALL_RESTAURANT;
     }
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
         
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Processing placing of order id: " + order.getOrderId());
+            LOGGER.debug("Notifying restaurant of order id: " + order.getOrderId());
         }
 
-        // Validate current status
-        if( !ORDER_STATUS_BASKET.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order must be in 'BASKET' status");
-        }
-        
-        // Update order placed time
-        order.setOrderPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
-        
-        // Send notifications to restaurant and customer
         try {
-            notificationService.sendOrderNotificationToRestaurant(order);
-
-            // Send notification email to customer
-            notificationService.sendOrderConfirmationToCustomer(order);
+            notificationService.placeOrderNotificationCallToRestaurant(order);
+            order.addOrderUpdate("Placed order notification call to restaurant");
+            order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
+            order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setOrderNotificationStatus(NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS);
         }
         catch( Exception ex ) {
-            LOGGER.error("Error sending notifications to restaurant and customer");
+            LOGGER.error("Error placing order notification call to restaurant");
             throw new WorkflowException(ex);
         }
 
-        // Update Order status
-        order.setOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
         return order;
     }
 

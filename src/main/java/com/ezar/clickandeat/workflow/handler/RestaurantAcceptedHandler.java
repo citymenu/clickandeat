@@ -1,7 +1,9 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -19,7 +21,7 @@ public class RestaurantAcceptedHandler implements IWorkflowHandler {
 
     @Autowired
     private NotificationService notificationService;
-
+    
     @Override
     public String getWorkflowAction() {
         return ACTION_RESTAURANT_ACCEPTED;

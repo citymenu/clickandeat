@@ -3,6 +3,7 @@ package com.ezar.clickandeat.scheduling;
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -14,9 +15,8 @@ public abstract class AbstractClusteredTask implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractClusteredTask.class);
 
+    @Autowired
     private StringRedisTemplate redisTemplate;
-
-    private String taskName;
 
 
     @Override
@@ -27,30 +27,22 @@ public abstract class AbstractClusteredTask implements InitializingBean {
 
     protected boolean shouldExecute() {
         if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Checking if task name [" + taskName + "] should run on this instance");
+            LOGGER.debug("Checking if task name [" + getTaskName() + "] should run on this instance");
         }
         String uuid = UUID.randomUUID().toString();
-        BoundValueOperations<String,String> valueOperations = redisTemplate.boundValueOps(taskName);
+        BoundValueOperations<String,String> valueOperations = redisTemplate.boundValueOps(getTaskName());
         return valueOperations.setIfAbsent(uuid);
     }
 
 
     protected void cleanUp() {
         if(LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Cleaning up redis for task name [" + taskName + "]");
+            LOGGER.debug("Cleaning up redis for task name [" + getTaskName() + "]");
         }
-        redisTemplate.delete(taskName);
+        redisTemplate.delete(getTaskName());
     }
 
+    public abstract String getTaskName();
 
 
-    @Required
-    public void setRedisTemplate(StringRedisTemplate redisTemplate) {
-        this.redisTemplate = redisTemplate;
-    }
-
-    @Required
-    public void setTaskName(String taskName) {
-        this.taskName = taskName;
-    }
 }

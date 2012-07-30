@@ -23,7 +23,6 @@ public class NotificationService {
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
 
-
     @Autowired
     private ExceptionHandler exceptionHandler;
     
@@ -48,11 +47,22 @@ public class NotificationService {
             twilioService.sendOrderNotificationSMS(order);
             orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SMS_SENT);
         }
+    }
+
+
+    /**
+     * @param order
+     */
+    
+    public void placeOrderNotificationCallToRestaurant(Order order) throws Exception {
+
+        LOGGER.info("Sending order notification to restauarant for orderId [" + order.getOrderId() + "]");
+
+        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
 
         // Send notification call to restaurant
         if( notificationOptions.isReceiveNotificationCall()) {
             twilioService.makeOrderNotificationCall(order);
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_PLACED);
         }
     }
 
@@ -186,6 +196,26 @@ public class NotificationService {
         }
 
     }
+
+
+    /**
+     * @param order
+     * @throws Exception
+     */
+
+    public void sendDelistedConfirmationToRestaurant(Order order) throws Exception {
+
+        LOGGER.info("Sending customer cancelled confirmation to restaurant for orderId [" + order.getOrderId() + "]");
+
+        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+
+        // Send email notification to restaurant
+        if( StringUtils.hasText(notificationOptions.getNotificationEmailAddress())) {
+            emailService.sendDelistedConfirmationToRestaurant(order);
+        }
+
+    }
+
 
     
 }

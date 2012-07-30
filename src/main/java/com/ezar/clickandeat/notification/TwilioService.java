@@ -48,6 +48,8 @@ public class TwilioService {
     private String baseUrl;
     
     private String authKey;
+    
+    private String callTimeout;
 
 
     /**
@@ -137,6 +139,7 @@ public class TwilioService {
         callParams.put("Url", buildTwilioUrl(url,orderId));
         callParams.put("Method", "POST");
         callParams.put("IfMachine","Hangup");
+        callParams.put("Timeout", callTimeout);
 
         // Add the callback urls
         callParams.put("FallbackUrl", buildTwilioUrl(fallbackUrl,orderId));
@@ -195,6 +198,11 @@ public class TwilioService {
         this.authKey = authKey;
     }
 
+    @Required
+    @Value(value="${twilio.callTimeout}")
+    public void setCallTimeout(String callTimeout) {
+        this.callTimeout = callTimeout;
+    }
 }
 
 

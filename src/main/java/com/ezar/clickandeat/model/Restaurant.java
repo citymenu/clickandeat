@@ -25,6 +25,8 @@ public class Restaurant extends PersistentObject {
 
     private String description;
     
+    private Boolean listOnSite;
+    
     private String contactEmail;
 
     private String contactTelephone;
@@ -279,6 +281,14 @@ public class Restaurant extends PersistentObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean getListOnSite() {
+        return listOnSite;
+    }
+
+    public void setListOnSite(Boolean listOnSite) {
+        this.listOnSite = listOnSite;
     }
 
     public String getContactEmail() {

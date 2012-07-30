@@ -56,6 +56,7 @@ public class Order extends PersistentObject {
     // Order tracking details
     private String orderStatus;
     private String orderNotificationStatus;
+    private DateTime lastCallPlacedTime;
     private int orderNotificationCallCount;
     private String cardTransactionId;
     private String cardTransactionStatus;
@@ -301,6 +302,14 @@ public class Order extends PersistentObject {
 
     public void setOrderNotificationStatus(String orderNotificationStatus) {
         this.orderNotificationStatus = orderNotificationStatus;
+    }
+
+    public DateTime getLastCallPlacedTime() {
+        return lastCallPlacedTime;
+    }
+
+    public void setLastCallPlacedTime(DateTime lastCallPlacedTime) {
+        this.lastCallPlacedTime = lastCallPlacedTime;
     }
 
     public int getOrderNotificationCallCount() {

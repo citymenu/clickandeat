@@ -38,6 +38,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
     
     public static final String ACTION_ORDER_PLACED = "ORDER_PLACED";
+    public static final String ACTION_CALL_RESTAURANT = "CALL_RESTAURANT";
     public static final String ACTION_RESTAURANT_ACCEPTED = "RESTAURANT_ACCEPTED";
     public static final String ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL = "RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL";
     public static final String ACTION_RESTAURANT_DECLINED = "RESTAURANT_DECLINED";
@@ -54,6 +55,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS = "NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS";
     public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_ANSWERED = "ANSWERED";
     public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
+    public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_FAILED_TO_RESPOND = "FAILED_TO_RESPOND";
     public static final String NOTIFICATION_CALL_STATUS_ERROR = "ERROR";
 
 
@@ -62,7 +64,6 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
 
     public static final String ACTION_NOTIFICATION_SMS_SENT = "NOTIFICATION_SMS_SENT";
-    public static final String ACTION_NOTIFICATION_CALL_PLACED = "NOTIFICATION_CALL_PLACED";
     public static final String ACTION_NOTIFICATION_CALL_ANSWERED = "NOTIFICATION_CALL_PLACED";
     public static final String ACTION_NOTIFICATION_CALL_NO_ANSWER = "NOTIFICATION_CALL_NO_ANSWER";
     public static final String ACTION_NOTIFICATION_CALL_ERROR = "NOTIFICATION_CALL_ERROR";
@@ -134,6 +135,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
         order = orderRepository.saveOrder(order);
         return order;
     }
+
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

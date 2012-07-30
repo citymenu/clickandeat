@@ -159,6 +159,14 @@ public class EmailService implements InitializingBean {
 
 
     /**
+     * @param order
+     */
+
+    public void sendDelistedConfirmationToRestaurant(Order order) throws Exception {
+    }
+
+
+    /**
      * @param to
      * @param subject
      * @param text

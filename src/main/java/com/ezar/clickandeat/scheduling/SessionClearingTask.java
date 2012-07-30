@@ -10,6 +10,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
+@Component
 public class SessionClearingTask extends AbstractClusteredTask {
 
     private static final Logger LOGGER = Logger.getLogger(SessionClearingTask.class);
@@ -24,7 +26,7 @@ public class SessionClearingTask extends AbstractClusteredTask {
     @Autowired
     private MongoOperations mongoOperations;
 
-    private int purgeIntervalHours;
+    private int purgeIntervalHours = 24;
 
     @Scheduled(cron="0 0 14 * * ?")
     public void execute() {
@@ -80,13 +82,8 @@ public class SessionClearingTask extends AbstractClusteredTask {
         }
     }
 
-    @Required
-    public void setMongoOperations(MongoOperations mongoOperations) {
-        this.mongoOperations = mongoOperations;
-    }
-
-    @Required
-    public void setPurgeIntervalHours(int purgeIntervalHours) {
-        this.purgeIntervalHours = purgeIntervalHours;
+    @Override
+    public String getTaskName() {
+        return "sessionClearingTask";
     }
 }
