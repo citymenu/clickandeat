@@ -45,7 +45,7 @@ public class NotificationService {
         // Send SMS notification if setup
         if( notificationOptions.isReceiveSMSNotification()) {
             twilioService.sendOrderNotificationSMS(order);
-            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SMS_SENT);
+            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SEND_SMS);
         }
     }
 
@@ -213,8 +213,24 @@ public class NotificationService {
         if( StringUtils.hasText(notificationOptions.getNotificationEmailAddress())) {
             emailService.sendDelistedConfirmationToRestaurant(order);
         }
-
     }
+
+
+    /**
+     * @param order
+     * @throws Exception
+     */
+
+    public void sendOrderCancellationOfferToCustomer(Order order) throws Exception {
+
+        LOGGER.info("Sending offer to cancel order to customer for orderId [" + order.getOrderId() + "]");
+
+        // Send email notification to customer
+        if( StringUtils.hasText(order.getCustomer().getEmail())) {
+            emailService.sendOrderCancellationOfferToCustomer(order);
+        }
+    }
+
 
 
     

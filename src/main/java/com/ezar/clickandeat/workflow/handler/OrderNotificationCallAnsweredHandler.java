@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_CALL_STATUS_RESTAURANT_ANSWERED;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_RESTAURANT_ANSWERED;
 
 @Component
 public class OrderNotificationCallAnsweredHandler implements IWorkflowHandler {
@@ -20,7 +20,7 @@ public class OrderNotificationCallAnsweredHandler implements IWorkflowHandler {
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
         order.addOrderUpdate("Restaurant answered order notification call");
-        order.setOrderNotificationStatus(NOTIFICATION_CALL_STATUS_RESTAURANT_ANSWERED);
+        order.setOrderNotificationStatus(NOTIFICATION_STATUS_RESTAURANT_ANSWERED);
         return order;
     }
 

@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -56,8 +56,10 @@ public class Order extends PersistentObject {
     // Order tracking details
     private String orderStatus;
     private String orderNotificationStatus;
+    private String additionalRequestDetails;
     private DateTime lastCallPlacedTime;
     private int orderNotificationCallCount;
+    private Boolean cancellationOfferEmailSent;
     private String cardTransactionId;
     private String cardTransactionStatus;
     private String restaurantDeclinedReason;
@@ -65,6 +67,10 @@ public class Order extends PersistentObject {
 
     
     public Order() {
+        this.orderStatus = OrderWorkflowEngine.ORDER_STATUS_BASKET;
+        this.orderNotificationStatus = OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE;
+        this.cancellationOfferEmailSent = false;
+        
         this.orderItems = new ArrayList<OrderItem>();
         this.orderUpdates = new ArrayList<OrderUpdate>();
         this.orderDiscounts = new ArrayList<OrderDiscount>();
@@ -394,6 +400,22 @@ public class Order extends PersistentObject {
 
     public Double getCollectionDiscount() {
         return collectionDiscount;
+    }
+
+    public String getAdditionalRequestDetails() {
+        return additionalRequestDetails;
+    }
+
+    public void setAdditionalRequestDetails(String additionalRequestDetails) {
+        this.additionalRequestDetails = additionalRequestDetails;
+    }
+
+    public Boolean getCancellationOfferEmailSent() {
+        return cancellationOfferEmailSent;
+    }
+
+    public void setCancellationOfferEmailSent(Boolean cancellationOfferEmailSent) {
+        this.cancellationOfferEmailSent = cancellationOfferEmailSent;
     }
 
     public String getRestaurantDeclinedReason() {

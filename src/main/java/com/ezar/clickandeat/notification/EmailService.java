@@ -74,9 +74,9 @@ public class EmailService implements InitializingBean {
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         templateMap.put("url",baseUrl);
-        templateMap.put("accept", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED);
-        templateMap.put("acceptWithDeliveryDetail", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL);
-        templateMap.put("decline", OrderWorkflowEngine.ACTION_RESTAURANT_DECLINED);
+        templateMap.put("accept", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
+        templateMap.put("acceptWithDeliveryDetail", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL);
+        templateMap.put("decline", OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -163,6 +163,14 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendDelistedConfirmationToRestaurant(Order order) throws Exception {
+    }
+
+
+    /**
+     * @param order
+     */
+
+    public void sendOrderCancellationOfferToCustomer(Order order) throws Exception {
     }
 
 

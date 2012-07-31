@@ -37,7 +37,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         Order order = new Order();
         order.setOrderId(sequenceGenerator.getNextSequence());
         order.setOrderStatus(OrderWorkflowEngine.ORDER_STATUS_BASKET);
-        order.setOrderNotificationStatus(OrderWorkflowEngine.NOTIFICATION_CALL_STATUS_NO_CALL_MADE);
+        order.setOrderNotificationStatus(OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE);
         order.setUuid(UUID.randomUUID().toString());
         order.setCustomer(new Person());
         order.setDeliveryType(Order.DELIVERY);

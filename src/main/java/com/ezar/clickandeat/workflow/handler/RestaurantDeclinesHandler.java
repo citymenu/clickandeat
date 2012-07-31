@@ -13,23 +13,23 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantDeclinedHandler implements IWorkflowHandler {
+public class RestaurantDeclinesHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantDeclinedHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaurantDeclinesHandler.class);
 
     @Autowired
     private NotificationService notificationService;
 
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_DECLINED;
+        return ACTION_RESTAURANT_DECLINES;
     }
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order should be in awaiting restaurant state");
+            throw new WorkflowStatusException(order,"Order should be in awaiting restaurant state");
         }
 
         order.addOrderUpdate("Restaurant declined order");

@@ -13,7 +13,7 @@ public class ExceptionHandler {
      */
     
     public void handleException(Exception ex ) {
-        
+        LOGGER.error("Handling exception",ex);
     }
     
 }

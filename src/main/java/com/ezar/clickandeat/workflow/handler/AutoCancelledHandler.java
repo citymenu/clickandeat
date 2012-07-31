@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_AUTO_CANCELLED;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_AUTO_CANCEL;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AUTO_CANCELLED;
 
 @Component
@@ -27,7 +27,7 @@ public class AutoCancelledHandler implements IWorkflowHandler {
 
     @Override
     public String getWorkflowAction() {
-        return ACTION_AUTO_CANCELLED;
+        return ACTION_AUTO_CANCEL;
     }
 
     @Override
@@ -44,13 +44,11 @@ public class AutoCancelledHandler implements IWorkflowHandler {
                 notificationService.sendDelistedConfirmationToRestaurant(order);
                 LOGGER.info("Delisting restaurant until we get a response to notification email");
             }
-
         }
         catch( Exception ex ) {
             LOGGER.error("Error occurred delisting restaurant: " + ex.getMessage(),ex);
         }
-        
-        
+
         try {
             notificationService.sendAutoCancelledConfirmationToCustomer(order);
             order.addOrderUpdate("Sent confirmation of auto cancelling order to customer");

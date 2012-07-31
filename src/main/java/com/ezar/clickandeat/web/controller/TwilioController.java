@@ -6,7 +6,6 @@ import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
-import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -130,7 +128,7 @@ public class TwilioController implements InitializingBean {
 
         // If no answer or answered by is 'Machine' send NO_ANSWER upate
         if( callDuration == 0 || "machine".equals(answeredBy)) {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_NO_ANSWER);
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_NOT_ANSWERED);
         }
         else {
             orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
@@ -309,7 +307,7 @@ public class TwilioController implements InitializingBean {
             case '1':
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
@@ -322,7 +320,7 @@ public class TwilioController implements InitializingBean {
             case '2':
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
@@ -337,7 +335,7 @@ public class TwilioController implements InitializingBean {
                 context.put("DeliveryMinutes",deliveryMinutes);
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL,context);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {

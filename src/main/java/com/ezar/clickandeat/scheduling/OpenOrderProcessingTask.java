@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.scheduling;
 
 
+import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
@@ -29,6 +30,9 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
 
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
+    
+    @Autowired
+    private ExceptionHandler exceptionHandler;
     
     private int secondsBeforeRetryCall;
     
@@ -60,23 +64,32 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
             for(Order order: orders ) {
 
                 DateTime orderPlacedTime = order.getOrderPlacedTime();
+                DateTime lastCallTime = order.getLastCallPlacedTime();
+                
+                // Auto cancel orders which have been awaiting confirmation for too long
                 if(orderPlacedTime.plusMinutes(minutesBeforeAutoCancelOrder).isAfter(new DateTime(DateTimeZone.forID(timeZone)))) {
-                    orderWorkflowEngine.processAction(order,ACTION_AUTO_CANCELLED);
+                    try {
+                        LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
+                        orderWorkflowEngine.processAction(order, ACTION_AUTO_CANCEL);
+                    }
+                    catch( Exception ex ) {
+                        exceptionHandler.handleException(ex);
+                    }
                 }
 
-                
-            }
-            
-            // If the order has been placed before the autocancel threshold, auto-cancel the order
-            
-            
-            
-            
-            
-            // Iterate through orders and attempt to call again if enough time has elapsed since the last try
-            for( Order order: orders ) {
-                DateTime lastCallTime = order.getLastCallPlacedTime();
-                if(lastCallTime.plusSeconds(secondsBeforeRetryCall).isBefore(now)) {
+                // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
+                else if(!order.getCancellationOfferEmailSent() && orderPlacedTime.plusMinutes(minutesBeforeSendCancellationEmail).isAfter(new DateTime(DateTimeZone.forID(timeZone)))) {
+                    try {
+                        LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeSendCancellationEmail + " minutes, sending email");
+                        orderWorkflowEngine.processAction(order, ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER);
+                    }
+                    catch( Exception ex ) {
+                        exceptionHandler.handleException(ex);
+                    }
+                }
+
+                // Attempt to call restaurant again
+                else if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus()) && lastCallTime.plusSeconds(secondsBeforeRetryCall).isBefore(now)) {
                     LOGGER.info("Retrying order notification call for order id: " + order.getOrderId());
                     try {
                         orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
@@ -87,12 +100,9 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                     }
                 }
             }
-            
-             
-            
         }
         catch (Exception ex) {
-            LOGGER.error("Error retrying call notifications",ex);
+            LOGGER.error("Error occurred processing open orders: " + ex.getMessage(),ex);
         }
         finally {
             if( shouldRun ) {

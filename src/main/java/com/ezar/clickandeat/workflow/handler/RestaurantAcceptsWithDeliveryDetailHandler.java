@@ -1,9 +1,7 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
-import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -15,26 +13,27 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantAcceptedHandler implements IWorkflowHandler {
+public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptedHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptsWithDeliveryDetailHandler.class);
 
     @Autowired
     private NotificationService notificationService;
-    
+
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_ACCEPTED;
+        return ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL;
     }
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order should be in awaiting restaurant state");
+            throw new WorkflowStatusException(order,"Order should be in awaiting restaurant state");
         }
 
-        order.addOrderUpdate("Restaurant accepted order");
+        String deliveryMinutes = (String)context.get("DeliveryMinutes");
+        order.addOrderUpdate("Restaurant accepted order with modified delivery time of " + deliveryMinutes + " minutes");
 
         try {
             notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);

@@ -28,7 +28,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {
-        return ACTION_ORDER_PLACED;
+        return ACTION_PLACE_ORDER;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
 
         // Validate current status
         if( !ORDER_STATUS_BASKET.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order must be in 'BASKET' status");
+            throw new WorkflowStatusException(order,"Order must be in 'BASKET' status");
         }
         
         // Update order placed time

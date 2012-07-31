@@ -13,27 +13,26 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantAcceptedWithDeliveryDetailHandler implements IWorkflowHandler {
+public class RestaurantAcceptsHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptedWithDeliveryDetailHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(RestaurantAcceptsHandler.class);
 
     @Autowired
     private NotificationService notificationService;
-
+    
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL;
+        return ACTION_RESTAURANT_ACCEPTS;
     }
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException("Order should be in awaiting restaurant state");
+            throw new WorkflowStatusException(order,"Order should be in awaiting restaurant state");
         }
 
-        String deliveryMinutes = (String)context.get("DeliveryMinutes");
-        order.addOrderUpdate("Restaurant accepted order with modified delivery time of " + deliveryMinutes + " minutes");
+        order.addOrderUpdate("Restaurant accepted order");
 
         try {
             notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);

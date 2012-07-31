@@ -37,37 +37,38 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      * Action values relating to order status
      */
     
-    public static final String ACTION_ORDER_PLACED = "ORDER_PLACED";
+    public static final String ACTION_PLACE_ORDER = "PLACE_ORDER";
     public static final String ACTION_CALL_RESTAURANT = "CALL_RESTAURANT";
-    public static final String ACTION_RESTAURANT_ACCEPTED = "RESTAURANT_ACCEPTED";
-    public static final String ACTION_RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL = "RESTAURANT_ACCEPTED_WITH_DELIVERY_DETAIL";
-    public static final String ACTION_RESTAURANT_DECLINED = "RESTAURANT_DECLINED";
-    public static final String ACTION_RESTAURANT_CANCELLED = "RESTAURANT_CANCELLED";
-    public static final String ACTION_CUSTOMER_CANCELLED = "CUSTOMER_CANCELLED";
-    public static final String ACTION_AUTO_CANCELLED = "AUTO_CANCELLED";
+    public static final String ACTION_RESTAURANT_ACCEPTS = "RESTAURANT_ACCEPTS";
+    public static final String ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL = "RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL";
+    public static final String ACTION_RESTAURANT_DECLINES = "RESTAURANT_DECLINES";
+    public static final String ACTION_RESTAURANT_CANCELS = "RESTAURANT_CANCELS";
+    public static final String ACTION_CUSTOMER_CANCELS = "CUSTOMER_CANCELS";
+    public static final String ACTION_AUTO_CANCEL = "AUTO_CANCEL";
 
 
     /**
      * Order notification call status values
      */
 
-    public static final String NOTIFICATION_CALL_STATUS_NO_CALL_MADE = "NO_CALL_MADE";
-    public static final String NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS = "NOTIFICATION_CALL_STATUS_CALL_IN_PROGRESS";
-    public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_ANSWERED = "ANSWERED";
-    public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
-    public static final String NOTIFICATION_CALL_STATUS_RESTAURANT_FAILED_TO_RESPOND = "FAILED_TO_RESPOND";
-    public static final String NOTIFICATION_CALL_STATUS_ERROR = "ERROR";
+    public static final String NOTIFICATION_STATUS_NO_CALL_MADE = "NO_CALL_MADE";
+    public static final String NOTIFICATION_STATUS_CALL_IN_PROGRESS = "NOTIFICATION_STATUS_CALL_IN_PROGRESS";
+    public static final String NOTIFICATION_STATUS_RESTAURANT_ANSWERED = "ANSWERED";
+    public static final String NOTIFICATION_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
+    public static final String NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND = "FAILED_TO_RESPOND";
+    public static final String NOTIFICATION_STATUS_ERROR = "ERROR";
 
 
     /**
      * Action values relating to order notification status
      */
 
-    public static final String ACTION_NOTIFICATION_SMS_SENT = "NOTIFICATION_SMS_SENT";
+    public static final String ACTION_NOTIFICATION_SEND_SMS = "NOTIFICATION_SMS_SENT";
     public static final String ACTION_NOTIFICATION_CALL_ANSWERED = "NOTIFICATION_CALL_PLACED";
-    public static final String ACTION_NOTIFICATION_CALL_NO_ANSWER = "NOTIFICATION_CALL_NO_ANSWER";
+    public static final String ACTION_NOTIFICATION_CALL_NOT_ANSWERED = "NOTIFICATION_CALL_NO_ANSWER";
     public static final String ACTION_NOTIFICATION_CALL_ERROR = "NOTIFICATION_CALL_ERROR";
-        
+    public static final String ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER = "ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER";
+
 
     @Autowired
     private OrderRepository orderRepository;
