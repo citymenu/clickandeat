@@ -2,6 +2,7 @@ package com.ezar.clickandeat.scheduling;
 
 
 import com.ezar.clickandeat.exception.ExceptionHandler;
+import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
@@ -59,15 +60,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
             List<Order> orders = mongoOperations.find(new Query(where("orderStatus").is(ORDER_STATUS_AWAITING_RESTAURANT)),Order.class);
             LOGGER.info("Found " + orders.size() + " orders with status 'AWAITING_RESTAURANT'");
 
-            DateTime now = new DateTime(DateTimeZone.forID(timeZone));
-            
             for(Order order: orders ) {
 
                 DateTime orderPlacedTime = order.getOrderPlacedTime();
-                DateTime lastCallTime = order.getLastCallPlacedTime();
                 
                 // Auto cancel orders which have been awaiting confirmation for too long
-                if(orderPlacedTime.plusMinutes(minutesBeforeAutoCancelOrder).isAfter(new DateTime(DateTimeZone.forID(timeZone)))) {
+                if(orderPlacedTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeAutoCancelOrder))) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
                         orderWorkflowEngine.processAction(order, ACTION_AUTO_CANCEL);
@@ -78,7 +76,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
-                else if(!order.getCancellationOfferEmailSent() && orderPlacedTime.plusMinutes(minutesBeforeSendCancellationEmail).isAfter(new DateTime(DateTimeZone.forID(timeZone)))) {
+                else if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail))) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeSendCancellationEmail + " minutes, sending email");
                         orderWorkflowEngine.processAction(order, ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER);
@@ -89,14 +87,20 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Attempt to call restaurant again
-                else if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus()) && lastCallTime.plusSeconds(secondsBeforeRetryCall).isBefore(now)) {
-                    LOGGER.info("Retrying order notification call for order id: " + order.getOrderId());
-                    try {
-                        orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-                    }
-                    catch( Exception ex ) {
-                        LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
-                        orderWorkflowEngine.processAction(order,ACTION_NOTIFICATION_CALL_ERROR);
+                else if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus())) {
+                    NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+                    DateTime lastCallTime = order.getLastCallPlacedTime();
+                    if(notificationOptions.isReceiveNotificationCall()) {
+                        if(lastCallTime == null || lastCallTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall))) {
+                            LOGGER.info("Retrying order notification call for order id: " + order.getOrderId());
+                            try {
+                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                            }
+                            catch( Exception ex ) {
+                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
+                                orderWorkflowEngine.processAction(order, ACTION_NOTIFICATION_CALL_ERROR);
+                            }
+                        }
                     }
                 }
             }

@@ -57,6 +57,7 @@ public class Restaurant extends PersistentObject {
     private boolean openForDelivery;
     
     public Restaurant() {
+        this.listOnSite = true;
         this.cuisines = new ArrayList<String>();
     }
 

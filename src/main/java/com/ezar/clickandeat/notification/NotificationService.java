@@ -56,14 +56,9 @@ public class NotificationService {
     
     public void placeOrderNotificationCallToRestaurant(Order order) throws Exception {
 
-        LOGGER.info("Sending order notification to restauarant for orderId [" + order.getOrderId() + "]");
+        LOGGER.info("Placing order notification call to restauarant for orderId [" + order.getOrderId() + "]");
 
-        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
-
-        // Send notification call to restaurant
-        if( notificationOptions.isReceiveNotificationCall()) {
-            twilioService.makeOrderNotificationCall(order);
-        }
+        twilioService.makeOrderNotificationCall(order);
     }
 
 

@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.workflow.handler;
 
+import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
@@ -38,11 +39,17 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
         }
 
         try {
-            notificationService.placeOrderNotificationCallToRestaurant(order);
-            order.addOrderUpdate("Placed order notification call to restaurant");
-            order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
-            order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
-            order.setOrderNotificationStatus(NOTIFICATION_STATUS_CALL_IN_PROGRESS);
+            NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+            if( notificationOptions.isReceiveNotificationCall()) {
+                notificationService.placeOrderNotificationCallToRestaurant(order);
+                order.addOrderUpdate("Placed order notification call to restaurant");
+                order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
+                order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
+                order.setOrderNotificationStatus(NOTIFICATION_STATUS_CALL_IN_PROGRESS);
+            }
+            else {
+                order.addOrderUpdate("Not placing order notification call to restaurant as it is not selected");
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("Error placing order notification call to restaurant");
