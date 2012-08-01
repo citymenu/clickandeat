@@ -88,7 +88,7 @@ public class JSONUtils {
      * @return
      */
     
-    private static String escapeQuotes(String json) {
+    public static String escapeQuotes(String json) {
         for(Map.Entry<String,String> entry: ESCAPE_MAP.entrySet()) {
             json = json.replaceAll(entry.getKey(),entry.getValue());
         }

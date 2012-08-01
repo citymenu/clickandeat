@@ -70,8 +70,8 @@ function doBuildOrder(order,config) {
             $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
             // Event handlers to update delivery type
-            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY',order.restaurant.restaurantId);});
-            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION',order.restaurant.restaurantId);});
+            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY',order.restaurantId);});
+            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION',order.restaurantId);});
         }
     }
 

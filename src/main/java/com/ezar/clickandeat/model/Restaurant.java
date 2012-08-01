@@ -2,6 +2,7 @@ package com.ezar.clickandeat.model;
 
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
@@ -49,8 +50,10 @@ public class Restaurant extends PersistentObject {
     private String imageId;
 
     // Transient properties
+    @Transient
     private Double distanceToSearchLocation;
 
+    @Transient
     private boolean openForDelivery;
     
     public Restaurant() {

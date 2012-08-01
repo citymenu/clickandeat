@@ -1,16 +1,24 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.OrderItem;
-import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.Search;
+import com.ezar.clickandeat.converter.DateTimeTransformer;
+import com.ezar.clickandeat.converter.LocalDateTransformer;
+import com.ezar.clickandeat.converter.LocalTimeTransformer;
+import com.ezar.clickandeat.converter.NullIdStringTransformer;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,12 +30,22 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 public class OrderController {
     
     private static final Logger LOGGER = Logger.getLogger(OrderController.class);
+
+    private static final JSONSerializer SERIALIZER = new JSONSerializer()
+            .transform(new DateTimeTransformer(), DateTime.class)
+            .transform(new LocalDateTransformer(), LocalDate.class)
+            .transform(new LocalTimeTransformer(), LocalTime.class)
+            .transform(new NullIdStringTransformer(), String.class)
+            .include("order.restaurant.name")
+            .exclude("order.restaurant.*");
+
 
     @Autowired
     private OrderRepository orderRepository;
@@ -98,7 +116,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return ResponseEntityUtils.buildResponse(model);
+        return buildOrderResponse(model);
     }
 
 
@@ -164,7 +182,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return ResponseEntityUtils.buildResponse(model);
+        return buildOrderResponse(model);
     }
 
 
@@ -203,7 +221,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return ResponseEntityUtils.buildResponse(model);
+        return buildOrderResponse(model);
     }
 
 
@@ -246,7 +264,7 @@ public class OrderController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-        return ResponseEntityUtils.buildResponse(model);
+        return buildOrderResponse(model);
     }
 
 
@@ -266,4 +284,21 @@ public class OrderController {
         return order;
     }
 
+
+    /**
+     * @param model
+     * @return
+     * @throws Exception
+     */
+
+    private ResponseEntity<byte[]> buildOrderResponse(Map<String,Object> model ) throws Exception {
+        String json = SERIALIZER.deepSerialize(model);
+        String escaped = JSONUtils.escapeQuotes(json);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setCacheControl("no-cache");
+        return new ResponseEntity<byte[]>(escaped.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
+    
 }
