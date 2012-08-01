@@ -3,6 +3,8 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 
+import java.util.List;
+
 public interface OrderRepositoryCustom {
 
     Order create();
@@ -13,6 +15,6 @@ public interface OrderRepositoryCustom {
 
     void addOrderUpdate(String orderId, String orderUpdate);
     
-    void updateOrderStatus(String orderId, String status);
+    List<Order> findByOrderStatus(String orderStatus);
     
 }

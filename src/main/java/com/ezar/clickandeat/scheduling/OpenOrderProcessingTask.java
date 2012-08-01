@@ -4,6 +4,7 @@ package com.ezar.clickandeat.scheduling;
 import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -27,7 +28,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
     private static final Logger LOGGER = Logger.getLogger(SessionClearingTask.class);
 
     @Autowired
-    private MongoOperations mongoOperations;
+    private OrderRepository orderRepository;
 
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
@@ -57,7 +58,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
 
             LOGGER.info("Checking for any orders with status 'AWAITING_RESTAURANT'");
 
-            List<Order> orders = mongoOperations.find(new Query(where("orderStatus").is(ORDER_STATUS_AWAITING_RESTAURANT)),Order.class);
+            List<Order> orders = orderRepository.findByOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
             LOGGER.info("Found " + orders.size() + " orders with status 'AWAITING_RESTAURANT'");
 
             for(Order order: orders ) {

@@ -22,8 +22,10 @@ import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import java.util.List;
 import java.util.UUID;
 
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 import static org.springframework.data.mongodb.core.query.Update.update;
@@ -79,10 +81,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
 
     @Override
-    public void updateOrderStatus(String orderId, String status) {
-        operations.updateFirst(query(where("orderId").is(orderId)),update("orderStatus",status),Order.class);
+    public List<Order> findByOrderStatus(String orderStatus) {
+        List<Order> orders = operations.find(new Query(where("orderStatus").is(ORDER_STATUS_AWAITING_RESTAURANT)),Order.class);
+        for( Order order: orders ) {
+            if( order.getRestaurantId() != null ) {
+                order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+            }
+        }
+        return orders;
     }
-
-
-
 }
