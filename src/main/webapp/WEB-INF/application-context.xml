@@ -133,8 +133,13 @@
         <property name="usePool" value="false"/>
     </bean>
 
-    <!-- Redis template -->
-    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+    <!-- Redis default template -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFactory"/>
+    </bean>
+
+    <!-- Redis string template -->
+    <bean id="redisStringTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
         <property name="connectionFactory" ref="jedisConnectionFactory"/>
     </bean>
 

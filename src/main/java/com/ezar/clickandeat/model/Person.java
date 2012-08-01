@@ -1,6 +1,5 @@
 package com.ezar.clickandeat.model;
 
-import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="persons")

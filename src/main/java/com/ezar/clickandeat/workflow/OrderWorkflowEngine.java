@@ -38,13 +38,19 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
     
     public static final String ACTION_PLACE_ORDER = "PLACE_ORDER";
-    public static final String ACTION_CALL_RESTAURANT = "CALL_RESTAURANT";
     public static final String ACTION_RESTAURANT_ACCEPTS = "RESTAURANT_ACCEPTS";
     public static final String ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL = "RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL";
     public static final String ACTION_RESTAURANT_DECLINES = "RESTAURANT_DECLINES";
     public static final String ACTION_RESTAURANT_CANCELS = "RESTAURANT_CANCELS";
     public static final String ACTION_CUSTOMER_CANCELS = "CUSTOMER_CANCELS";
     public static final String ACTION_AUTO_CANCEL = "AUTO_CANCEL";
+
+    public static final String ACTION_CALL_RESTAURANT = "CALL_RESTAURANT";
+    public static final String ACTION_SEND_SMS = "ACTION_SEND_SMS";
+    public static final String ACTION_CALL_ANSWERED = "ACTION_CALL_ANSWERED";
+    public static final String ACTION_CALL_NOT_ANSWERED = "ACTION_CALL_NOT_ANSWERED";
+    public static final String ACTION_CALL_ERROR = "ACTION_CALL_ERROR";
+    public static final String ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER = "ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER";
 
 
     /**
@@ -57,17 +63,6 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String NOTIFICATION_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
     public static final String NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND = "FAILED_TO_RESPOND";
     public static final String NOTIFICATION_STATUS_ERROR = "ERROR";
-
-
-    /**
-     * Action values relating to order notification status
-     */
-
-    public static final String ACTION_NOTIFICATION_SEND_SMS = "NOTIFICATION_SMS_SENT";
-    public static final String ACTION_NOTIFICATION_CALL_ANSWERED = "NOTIFICATION_CALL_PLACED";
-    public static final String ACTION_NOTIFICATION_CALL_NOT_ANSWERED = "NOTIFICATION_CALL_NO_ANSWER";
-    public static final String ACTION_NOTIFICATION_CALL_ERROR = "NOTIFICATION_CALL_ERROR";
-    public static final String ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER = "ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER";
 
 
     @Autowired
@@ -131,7 +126,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
         catch( Exception ex ) {
             order.addOrderUpdate("Exception processing workflow update: " + ex.getMessage());
         }
-        
+
         order = orderRepository.saveOrder(order);
         return order;
     }

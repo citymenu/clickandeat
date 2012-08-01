@@ -45,7 +45,7 @@ public class NotificationService {
         // Send SMS notification if setup
         if( notificationOptions.isReceiveSMSNotification()) {
             twilioService.sendOrderNotificationSMS(order);
-            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_SEND_SMS);
+            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
         }
     }
 

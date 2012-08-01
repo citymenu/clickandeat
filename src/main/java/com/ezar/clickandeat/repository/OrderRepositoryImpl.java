@@ -31,26 +31,25 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Autowired
     private SequenceGenerator sequenceGenerator;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
 
     @Override
     public Order create() {
         Order order = new Order();
         order.setOrderId(sequenceGenerator.getNextSequence());
-        order.setOrderStatus(OrderWorkflowEngine.ORDER_STATUS_BASKET);
-        order.setOrderNotificationStatus(OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE);
-        order.setUuid(UUID.randomUUID().toString());
-        order.setCustomer(new Person());
-        order.setDeliveryType(Order.DELIVERY);
-        order.setDeliveryAddress(new Address());
-        order.setBillingAddress(new Address());
         return order;
     }
 
     @Override
     public Order findByOrderId(String orderId) {
         Query query = query(where("orderId").is(orderId));
-        query.fields().exclude("order.restaurant.menu");
-        return operations.findOne(query,Order.class);
+        Order order = operations.findOne(query,Order.class);
+        if( order != null && order.getRestaurantId() != null ) {
+            order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+        }
+        return order;
     }
 
     @Override

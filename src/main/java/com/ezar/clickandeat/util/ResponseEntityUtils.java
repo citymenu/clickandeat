@@ -16,7 +16,7 @@ public class ResponseEntityUtils {
      */
 
     public static ResponseEntity<byte[]> buildResponse(Map<String,Object> model ) throws Exception {
-        String json = JSONUtils.serialize(model);
+        String json = JSONUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setCacheControl("no-cache");

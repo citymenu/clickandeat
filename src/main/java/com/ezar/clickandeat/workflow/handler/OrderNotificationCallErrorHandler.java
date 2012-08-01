@@ -17,7 +17,7 @@ public class OrderNotificationCallErrorHandler implements IWorkflowHandler {
 
     @Override
     public String getWorkflowAction() {
-        return ACTION_NOTIFICATION_CALL_ERROR;
+        return ACTION_CALL_ERROR;
     }
 
     @Override

@@ -67,13 +67,15 @@ public class RestaurantSearchTest {
     @After
     public void tearDown() throws Exception {
         removeRestaurant(restaurantId);        
+        // Let message listener clean up
+        Thread.sleep(1000);
     }
     
     
     private void removeRestaurant(String restaurantId) throws Exception {
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         if( restaurant != null ) {
-            repository.delete(restaurant);
+            repository.deleteRestaurant(restaurant);
         }
     }
 

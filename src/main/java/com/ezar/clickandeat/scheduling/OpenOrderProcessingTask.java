@@ -79,7 +79,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 else if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail))) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeSendCancellationEmail + " minutes, sending email");
-                        orderWorkflowEngine.processAction(order, ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER);
+                        orderWorkflowEngine.processAction(order, ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER);
                     }
                     catch( Exception ex ) {
                         exceptionHandler.handleException(ex);
@@ -98,7 +98,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                             }
                             catch( Exception ex ) {
                                 LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
-                                orderWorkflowEngine.processAction(order, ACTION_NOTIFICATION_CALL_ERROR);
+                                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
                             }
                         }
                     }

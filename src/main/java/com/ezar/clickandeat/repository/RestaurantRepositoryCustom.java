@@ -13,7 +13,9 @@ public interface RestaurantRepositoryCustom {
     Restaurant findByRestaurantId(String restaurantId);
 
     Restaurant saveRestaurant(Restaurant restaurant);
-    
+
+    void deleteRestaurant(Restaurant restaurant);
+
     List<Restaurant> search(Search search);
     
 }

@@ -2,6 +2,7 @@ package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
@@ -17,11 +18,19 @@ import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 
+import javax.mail.search.ReceivedDateTerm;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -32,6 +41,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
+    private static final String TOPIC = "restaurant";
+    
     @Autowired
     private MongoOperations operations;
     
@@ -40,35 +51,53 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Autowired
     private SequenceGenerator sequenceGenerator;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+    
+    private ConcurrentMap<String,Restaurant> restaurantCache = new ConcurrentHashMap<String,Restaurant>();
     
     private double maxDistance;
 
     private String timeZone;
-
+    
     @Override
     public void afterPropertiesSet() throws Exception {
-        operations.ensureIndex(new GeospatialIndex("address.location"),Restaurant.class);
+        operations.ensureIndex(new GeospatialIndex("address.location"), Restaurant.class);
+        redisTemplate.setExposeConnection(true);
+        RestaurantUpdateSubscriber subscriber = new RestaurantUpdateSubscriber(redisTemplate,TOPIC);
+        Thread subscriberThread = new Thread(subscriber);
+        subscriberThread.setDaemon(true);
+        subscriberThread.start();
     }
+    
 
     @Override
     public Restaurant create() {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
-        restaurant.setUuid(UUID.randomUUID().toString());
-        restaurant.setOpeningTimes(new OpeningTimes());
-        restaurant.setDeliveryOptions(new DeliveryOptions());
-        restaurant.setMainContact(new Person());
-        restaurant.setNotificationOptions(new NotificationOptions());
-        restaurant.setMenu(new Menu());
         return restaurant;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Restaurant findByRestaurantId(String restaurantId) {
-        return operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
+        if( restaurantId == null ) {
+            throw new IllegalArgumentException("restaurantId must not be null");
+        }
+        Restaurant restaurant;
+        restaurant = restaurantCache.get(restaurantId);
+        if( restaurant == null ) {
+            restaurant = operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
+            if( restaurant != null ) {
+                restaurantCache.put(restaurantId,restaurant);
+            }
+        }
+        return restaurant;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public Restaurant saveRestaurant(Restaurant restaurant) {
         if( restaurant.getAddress() != null && StringUtils.hasText(restaurant.getAddress().getPostCode())) {
             double[] location = locationService.getLocation(restaurant.getAddress().getPostCode());
@@ -90,8 +119,30 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
         
         operations.save(restaurant);
+        restaurantCache.put(restaurant.getRestaurantId(),restaurant);
+
+        // Publish update message to restaurant topic
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("action","update");
+        map.put("restaurant",JSONUtils.serialize(restaurant));
+        redisTemplate.getConnectionFactory().getConnection().publish("restaurant".getBytes(), JSONUtils.serialize(map).getBytes());
+
         return restaurant;
     }
+
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void deleteRestaurant(Restaurant restaurant) {
+        operations.remove(query(where("restaurantId").is(restaurant.getRestaurantId())), Restaurant.class);
+
+        // Publish delete message to restaurant topic
+        Map<String,String> map = new HashMap<String, String>();
+        map.put("action","delete");
+        map.put("restaurantId", restaurant.getRestaurantId());
+        redisTemplate.getConnectionFactory().getConnection().publish("restaurant".getBytes(), JSONUtils.serialize(map).getBytes());
+    }
+
 
     @Override
     public List<Restaurant> search(Search search) {
@@ -184,6 +235,53 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
         
         return availableRestaurants;
+    }
+
+    
+    /**
+     * Listens to restaurant updates via Redis
+     */
+    
+    private final class RestaurantUpdateSubscriber implements Runnable, MessageListener {
+        
+        private final RedisConnection connection;
+        
+        private final byte[] channel;
+
+        /**
+         * @param template
+         * @param channel
+         */
+        
+        private RestaurantUpdateSubscriber(RedisTemplate template, String channel) {
+            this.connection = template.getConnectionFactory().getConnection();
+            this.channel = channel.getBytes();
+        }
+
+        @Override
+        public void run() {
+            connection.subscribe(this,channel);
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public void onMessage(Message message, byte[] pattern) {
+            if( LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Received message: " + message);
+            }
+            String content = new String(message.getBody());
+            Map map = (Map)JSONUtils.deserialize(content);
+            String action = (String)map.get("action");
+            if("delete".equals(action)) {
+                String restaurantId = (String)map.get("restaurantId");
+                restaurantCache.remove(restaurantId);
+            }
+            else {
+                String json = (String)map.get("restaurant");
+                Restaurant restaurant = JSONUtils.deserialize(Restaurant.class,json);
+                restaurantCache.put(restaurant.getRestaurantId(),restaurant);
+            }
+        }
     }
 
 

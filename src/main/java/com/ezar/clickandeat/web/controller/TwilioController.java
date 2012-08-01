@@ -128,10 +128,10 @@ public class TwilioController implements InitializingBean {
 
         // If no answer or answered by is 'Machine' send NO_ANSWER upate
         if( callDuration == 0 || "machine".equals(answeredBy)) {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_NOT_ANSWERED);
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
         }
         else {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
         }
 
         response.sendError(HttpServletResponse.SC_OK);
@@ -161,7 +161,7 @@ public class TwilioController implements InitializingBean {
         Order order = getOrder(orderId,response);
 
         // Process error update for call
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ERROR);
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for error in order notification call");
@@ -224,7 +224,7 @@ public class TwilioController implements InitializingBean {
         Order order = getOrder(orderId,response);
 
         // Mark that the full order call was placed
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for successful full order call");
@@ -254,7 +254,7 @@ public class TwilioController implements InitializingBean {
         Order order = getOrder(orderId,response);
 
         // Process error update for call
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ERROR);
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
 
         response.sendError(HttpServletResponse.SC_OK);
         orderRepository.addOrderUpdate(orderId, "Received callback for error in full order call");
@@ -306,7 +306,7 @@ public class TwilioController implements InitializingBean {
             // Order accepted
             case '1':
                 try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
@@ -319,7 +319,7 @@ public class TwilioController implements InitializingBean {
             // Order rejected
             case '2':
                 try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
@@ -334,7 +334,7 @@ public class TwilioController implements InitializingBean {
                 Map<String,Object> context = new HashMap<String, Object>();
                 context.put("DeliveryMinutes",deliveryMinutes);
                 try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
                     return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
@@ -350,7 +350,7 @@ public class TwilioController implements InitializingBean {
 
             // No response at this time
             case '5':
-                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED);
+                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                 return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
             // Invalid input

@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_RESTAURANT;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ERROR;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_ERROR;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_PLACE_ORDER;
 
 @Controller
@@ -64,7 +64,7 @@ public class PaymentController {
                 orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
             }
             catch( Exception ex ) {
-                orderWorkflowEngine.processAction(order,ACTION_NOTIFICATION_CALL_ERROR);
+                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             }
 
             // Set status to success

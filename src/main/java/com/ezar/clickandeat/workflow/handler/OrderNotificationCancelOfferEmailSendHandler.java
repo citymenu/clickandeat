@@ -9,8 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_SEND_SMS;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER;
 
 @Component
 public class OrderNotificationCancelOfferEmailSendHandler implements IWorkflowHandler {
@@ -22,7 +21,7 @@ public class OrderNotificationCancelOfferEmailSendHandler implements IWorkflowHa
     
     @Override
     public String getWorkflowAction() {
-        return ACTION_NOTIFICATION_SEND_CANCEL_OFFER_TO_CUSTOMER;
+        return ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER;
     }
 
     @Override

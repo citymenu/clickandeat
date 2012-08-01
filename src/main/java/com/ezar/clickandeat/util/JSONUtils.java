@@ -29,14 +29,24 @@ public class JSONUtils {
     static {
         ESCAPE_MAP.put("'", "###");
     }
-    
+
+
+    /**
+     * @param obj
+     * @return
+     */
+
+    public static String serialize(Object obj) {
+        return SERIALIZER.deepSerialize(obj);
+    }
+
 
     /**
      * @param obj
      * @return
      */
     
-    public static String serialize(Object obj) {
+    public static String serializeAndEscape(Object obj) {
         return escapeQuotes(SERIALIZER.deepSerialize(obj));
     }
 

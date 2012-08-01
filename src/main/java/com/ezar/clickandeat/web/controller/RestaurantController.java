@@ -80,7 +80,7 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants.getContent());
         model.put("count",repository.count());
-        String json = JSONUtils.serialize(model);
+        String json = JSONUtils.serializeAndEscape(model);
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -93,7 +93,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.create();
         model.put("restaurant", restaurant);
-        model.put("json",JSONUtils.serialize(restaurant));
+        model.put("json",JSONUtils.serializeAndEscape(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 
@@ -108,7 +108,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        model.put("json",JSONUtils.serialize(restaurant));
+        model.put("json",JSONUtils.serializeAndEscape(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 
@@ -130,7 +130,7 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
 
-        String json = JSONUtils.serialize(model);
+        String json = JSONUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
@@ -152,7 +152,7 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
 
-        String json = JSONUtils.serialize(model);
+        String json = JSONUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);

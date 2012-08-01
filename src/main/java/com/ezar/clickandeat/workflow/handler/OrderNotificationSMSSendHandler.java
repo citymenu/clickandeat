@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_SEND_SMS;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_SEND_SMS;
 
 @Component
 public class OrderNotificationSMSSendHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {
-        return ACTION_NOTIFICATION_SEND_SMS;
+        return ACTION_SEND_SMS;
     }
 
     @Override

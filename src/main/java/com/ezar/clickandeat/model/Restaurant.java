@@ -1,9 +1,5 @@
 package com.ezar.clickandeat.model;
 
-import com.ezar.clickandeat.converter.*;
-import flexjson.JSONDeserializer;
-import flexjson.JSONSerializer;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,6 +8,7 @@ import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection="restaurants")
 public class Restaurant extends PersistentObject {
@@ -57,8 +54,14 @@ public class Restaurant extends PersistentObject {
     private boolean openForDelivery;
     
     public Restaurant() {
-        this.listOnSite = true;
+        this.uuid = UUID.randomUUID().toString();
+        this.openingTimes = new OpeningTimes();
+        this.deliveryOptions = new DeliveryOptions();
+        this.mainContact = new Person();
+        this.notificationOptions = new NotificationOptions();
+        this.menu = new Menu();
         this.cuisines = new ArrayList<String>();
+        this.listOnSite = true;
     }
 
 

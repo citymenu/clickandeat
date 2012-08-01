@@ -3,12 +3,14 @@ package com.ezar.clickandeat.model;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
@@ -23,7 +25,7 @@ public class Order extends PersistentObject {
     private String userId;
     private String restaurantId;
 
-    @DBRef
+    @Transient
     private Restaurant restaurant;
 
     // Order components
@@ -58,7 +60,7 @@ public class Order extends PersistentObject {
     private String orderNotificationStatus;
     private String additionalRequestDetails;
     private DateTime lastCallPlacedTime;
-    private int orderNotificationCallCount;
+    private Integer orderNotificationCallCount;
     private Boolean cancellationOfferEmailSent;
     private String cardTransactionId;
     private String cardTransactionStatus;
@@ -67,9 +69,18 @@ public class Order extends PersistentObject {
 
     
     public Order() {
+
         this.orderStatus = OrderWorkflowEngine.ORDER_STATUS_BASKET;
         this.orderNotificationStatus = OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE;
+        this.uuid = UUID.randomUUID().toString();
+
+        this.customer = new Person();
+        this.deliveryType = DELIVERY;
+        this.deliveryAddress = new Address();
+        this.billingAddress = new Address();
+
         this.cancellationOfferEmailSent = false;
+        this.orderNotificationCallCount = 0;
         
         this.orderItems = new ArrayList<OrderItem>();
         this.orderUpdates = new ArrayList<OrderUpdate>();
@@ -318,11 +329,11 @@ public class Order extends PersistentObject {
         this.lastCallPlacedTime = lastCallPlacedTime;
     }
 
-    public int getOrderNotificationCallCount() {
+    public Integer getOrderNotificationCallCount() {
         return orderNotificationCallCount;
     }
 
-    public void setOrderNotificationCallCount(int orderNotificationCallCount) {
+    public void setOrderNotificationCallCount(Integer orderNotificationCallCount) {
         this.orderNotificationCallCount = orderNotificationCallCount;
     }
 

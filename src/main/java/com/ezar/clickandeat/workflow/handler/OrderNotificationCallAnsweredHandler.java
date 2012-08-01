@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_NOTIFICATION_CALL_ANSWERED;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_ANSWERED;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_RESTAURANT_ANSWERED;
 
 @Component
@@ -14,7 +14,7 @@ public class OrderNotificationCallAnsweredHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {
-        return ACTION_NOTIFICATION_CALL_ANSWERED;
+        return ACTION_CALL_ANSWERED;
     }
 
     @Override
