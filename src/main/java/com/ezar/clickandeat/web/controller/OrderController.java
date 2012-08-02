@@ -151,6 +151,7 @@ public class OrderController {
             
             // Get the order out of the session            
             HttpSession session = request.getSession(true);
+            LOGGER.info("Current session id is: " + session.getId());
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
