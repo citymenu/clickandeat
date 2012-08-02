@@ -36,7 +36,7 @@
     </bean>
 
 	<!--  HTTP security config -->
-	<security:http disable-url-rewriting="true" security-context-repository-ref="simpleSecurityContextRepository">
+	<security:http disable-url-rewriting="true" security-context-repository-ref="simpleSecurityContextRepository" create-session="always">
 		<security:intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
     	<security:intercept-url pattern="/secure/login.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/secure/register.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
