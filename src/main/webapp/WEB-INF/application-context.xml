@@ -114,7 +114,7 @@
     	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="mongoConverter" ref="mappingConverter"/>
     	<property name="writeResultChecking" value="EXCEPTION"/>
-		<property name="writeConcern" value="FSYNC_SAFE"/>
+		<property name="writeConcern" value="REPLICAS_SAFE"/>
   	</bean>
 
     <!-- Proxy mongo repositories -->

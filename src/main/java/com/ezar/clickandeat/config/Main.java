@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.*;
 
+import com.mongodb.WriteConcern;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionIdManager;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionManager;
@@ -16,6 +17,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 import com.mongodb.Mongo;
+import org.springframework.data.mongodb.core.WriteResultChecking;
 
 public class Main {
 
@@ -87,6 +89,8 @@ public class Main {
     	if( mongoTemplate.getCollection("sessions") == null ) {
     		mongoTemplate.createCollection("sessions");
     	}
+        mongoTemplate.setWriteConcern(WriteConcern.REPLICAS_SAFE);
+        mongoTemplate.setWriteResultChecking(WriteResultChecking.EXCEPTION);
         return mongoTemplate;
     }
     
