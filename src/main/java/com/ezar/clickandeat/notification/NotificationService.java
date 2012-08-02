@@ -181,7 +181,7 @@ public class NotificationService {
 
     public void sendAutoCancelledConfirmationToRestaurant(Order order) throws Exception {
 
-        LOGGER.info("Sending customer cancelled confirmation to restaurant for orderId [" + order.getOrderId() + "]");
+        LOGGER.info("Sending auto cancelled confirmation to restaurant for orderId [" + order.getOrderId() + "]");
 
         NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
 
