@@ -89,7 +89,7 @@ public class Main {
     	if( mongoTemplate.getCollection("sessions") == null ) {
     		mongoTemplate.createCollection("sessions");
     	}
-        mongoTemplate.setWriteConcern(WriteConcern.REPLICAS_SAFE);
+        mongoTemplate.setWriteConcern(WriteConcern.FSYNC_SAFE);
         mongoTemplate.setWriteResultChecking(WriteResultChecking.EXCEPTION);
         return mongoTemplate;
     }
