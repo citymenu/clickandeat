@@ -68,7 +68,7 @@ public class OrderController {
         String orderid = (String)session.getAttribute("orderid");
         String restaurantid = (String)session.getAttribute("restaurantid");
         Search search = (Search)session.getAttribute("search");
-        
+
         if( orderid != null ) {
             Order order = orderRepository.findByOrderId(orderid);
             if( order != null ) {
@@ -154,12 +154,19 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
+                if(LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Did not find existing order in session, creating new order");
+                }
                 order = buildAndRegister(session,restaurantId);
             }
             else {
+                if(LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Found existing order in session with id: " + orderId);
+                }
                 order = orderRepository.findByOrderId(orderId);
                 if( order == null ) {
                     order = buildAndRegister(session,restaurantId);
+                    session.setAttribute("orderid",order.getOrderId());
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
                     Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);

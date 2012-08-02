@@ -27,6 +27,10 @@ public class OrderNotificationCancelOfferEmailSendHandler implements IWorkflowHa
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending cancellation offer to customer for order id: " + order.getOrderId());
+        }
+
         try {
             notificationService.sendOrderCancellationOfferToCustomer(order);
             order.setCancellationOfferEmailSent(true);
