@@ -49,6 +49,8 @@ public class Main {
         SessionHandler sessionHandler = new SessionHandler();
         MongoSessionManager mongoSessionManager = new MongoSessionManager();
         mongoSessionManager.setSessionIdManager(server.getSessionIdManager());
+        mongoSessionManager.setSavePeriod(-2);
+        mongoSessionManager.setIdlePeriod(-1);
         sessionHandler.setSessionManager(mongoSessionManager);
 
         // Build web app context
