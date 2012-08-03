@@ -9,8 +9,12 @@ import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,9 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_RESTAURANT;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_ERROR;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_PLACE_ORDER;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Controller
 public class PaymentController {
@@ -36,11 +38,12 @@ public class PaymentController {
     
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
-    
 
     @Autowired
     private RequestHelper requestHelper;
 
+    private String timeZone;
+    
     @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
         return "payment";
@@ -65,11 +68,29 @@ public class PaymentController {
             
             // Place order notification call if restaurant is open
             Restaurant restaurant = order.getRestaurant();
-            try {
-                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+            LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
+            LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+
+            boolean shouldPlaceCall = false;
+            if( Order.DELIVERY.equals(order.getDeliveryType()) && restaurant.isOpenForDelivery(today,now)) {
+                shouldPlaceCall = true;
             }
-            catch( Exception ex ) {
-                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+            else if(Order.COLLECTION.equals(order.getDeliveryType()) && restaurant.isOpenForCollection(today,now)){
+                shouldPlaceCall = true;
+            }
+
+            // Place call if restaurant is open to receive it
+            if( shouldPlaceCall ) {
+                LOGGER.info("Going to place order notification call as restaurant is open");
+                try {
+                    orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                }
+                catch( Exception ex ) {
+                    orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+                }
+            }
+            else {
+                LOGGER.info("Not going to place order notification call as restaurant is not open");
             }
 
             // Set status to success
@@ -86,5 +107,10 @@ public class PaymentController {
     }
 
 
+    @Required
+    @Value(value="${timezone}")
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
 }

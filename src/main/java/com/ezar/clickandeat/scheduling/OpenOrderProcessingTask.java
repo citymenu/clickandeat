@@ -3,12 +3,16 @@ package com.ezar.clickandeat.scheduling;
 
 import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.NotificationOptions;
+import com.ezar.clickandeat.model.OpeningTime;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -63,9 +67,40 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
             for(Order order: orders ) {
 
                 DateTime orderPlacedTime = order.getOrderPlacedTime();
+
+                Restaurant restaurant = order.getRestaurant();
+                LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
+                LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
                 
-                // Auto cancel orders which have been awaiting confirmation for too long
-                if(orderPlacedTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeAutoCancelOrder))) {
+                // Do nothing if the restaurant is not open to receive calls
+                if( Order.DELIVERY.equals(order.getDeliveryType()) && !restaurant.isOpenForDelivery(today,now)) {
+                    LOGGER.info("Restaurant not currently open for delivery orders, not calling");
+                    continue;
+                }
+
+                if( Order.COLLECTION.equals(order.getDeliveryType()) && !restaurant.isOpenForCollection(today,now)) {
+                    LOGGER.info("Restaurant not currently open for collection orders, not calling");
+                    continue;
+                }
+
+                // Get the time the restaurant opened, taking into account possibility of restaurants that are open after midnight
+                OpeningTime openingTime = restaurant.getOpeningTime(today);
+                LocalTime openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
+                DateTime restaurantOpenedTime;
+                if( openedTime.isBefore(now)) {
+                    LocalDate yesterday = today.minusDays(1);
+                    openingTime = restaurant.getOpeningTime(yesterday);
+                    openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
+                    restaurantOpenedTime = yesterday.toDateTime(openedTime,DateTimeZone.forID(timeZone));
+                }
+                else {
+                    restaurantOpenedTime = today.toDateTime(openedTime,DateTimeZone.forID(timeZone));
+                }
+
+                // Auto cancel orders which have been awaiting confirmation for too long and the restaurant has been open long enough to respond
+                DateTime autoCancelCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeAutoCancelOrder);
+                
+                if(orderPlacedTime.isBefore(autoCancelCutoff) && restaurantOpenedTime.isBefore(autoCancelCutoff)) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
                         orderWorkflowEngine.processAction(order, ACTION_AUTO_CANCEL);
@@ -73,10 +108,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                     catch( Exception ex ) {
                         exceptionHandler.handleException(ex);
                     }
+                    continue;
                 }
 
                 // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
-                else if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail))) {
+                DateTime cancellationOfferCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail);
+                if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(cancellationOfferCutoff) && restaurantOpenedTime.isBefore(cancellationOfferCutoff)) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeSendCancellationEmail + " minutes, sending email");
                         orderWorkflowEngine.processAction(order, ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER);
@@ -87,11 +124,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Attempt to call restaurant again
-                else if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus())) {
+                if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus())) {
                     NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
                     DateTime lastCallTime = order.getLastCallPlacedTime();
+                    DateTime lastCallCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall);
                     if(notificationOptions.isReceiveNotificationCall()) {
-                        if(lastCallTime == null || lastCallTime.isBefore(new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall))) {
+                        if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
                             LOGGER.info("Retrying order notification call for order id: " + order.getOrderId());
                             try {
                                 orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
