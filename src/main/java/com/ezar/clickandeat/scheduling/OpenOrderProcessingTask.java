@@ -9,6 +9,7 @@ import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +24,7 @@ import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 @Component
-public class OpenOrderProcessingTask extends AbstractClusteredTask {
+public class OpenOrderProcessingTask extends AbstractClusteredTask implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(SessionClearingTask.class);
 
@@ -43,7 +44,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
     private int minutesBeforeAutoCancelOrder;
     
     private String timeZone;
-    
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        cleanUp();
+    }
+
     @Scheduled(cron="0 0/1 * * * ?")
     public void execute() {
 

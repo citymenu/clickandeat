@@ -1,11 +1,15 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.RestaurantOpenStatus;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,7 +63,8 @@ public class PaymentController {
             // Send notification to restaurant and customer
             orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
             
-            // Place order notification call
+            // Place order notification call if restaurant is open
+            Restaurant restaurant = order.getRestaurant();
             try {
                 orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
             }
