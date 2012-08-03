@@ -40,9 +40,7 @@ public class Main {
 		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
         mongoSessionIdManager.setScavengeDelay(0l);
         mongoSessionIdManager.setPurge(false);
-        Random rand = new Random((new Date()).getTime());
-        int workerNum = 1000 + rand.nextInt(8999);
-        mongoSessionIdManager.setWorkerName(String.valueOf(workerNum));
+        mongoSessionIdManager.setWorkerName(UUID.randomUUID().toString());
         server.setSessionIdManager(mongoSessionIdManager);
 
         // Configure mongo session manager

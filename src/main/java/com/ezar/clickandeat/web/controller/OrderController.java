@@ -29,6 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -151,7 +152,14 @@ public class OrderController {
             
             // Get the order out of the session            
             HttpSession session = request.getSession(true);
+            LOGGER.info("************************************************************");
             LOGGER.info("Current session id is: " + session.getId());
+            Enumeration e = session.getAttributeNames();
+            while(e.hasMoreElements()){
+                String attrName = (String)e.nextElement();
+                LOGGER.info(attrName + " -> " + session.getAttribute(attrName));
+            }
+            LOGGER.info("************************************************************");
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
