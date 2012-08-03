@@ -1,8 +1,6 @@
 package com.ezar.clickandeat.config;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.*;
 
 import com.mongodb.WriteConcern;
@@ -34,35 +32,35 @@ public class Main {
     	props.load(Main.class.getResourceAsStream("/clickandeat.properties"));
     	String port = (String)(System.getenv("PORT") == null? props.get("PORT"): System.getenv("PORT"));
 		Server server = new Server(Integer.valueOf(port));
-
-		// Build web app context
-		WebAppContext context = new WebAppContext();
-		context.setContextPath("/");
-		context.setDefaultsDescriptor("src/main/webapp/WEB-INF/webdefault.xml");
-		context.setDescriptor("src/main/webapp/WEB-INF/web.xml");
-		context.setResourceBase("src/main/webapp");
-		context.setParentLoaderPriority(true);
-        context.setDistributable(true);
+        server.setStopAtShutdown(true);
+        server.setGracefulShutdown(5000);
 
 		// Configure mongo session id manager
 		MongoTemplate mongoTemplate = getMongoTemplate(props);
 		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
         mongoSessionIdManager.setScavengeDelay(0l);
         mongoSessionIdManager.setPurge(false);
+        Random rand = new Random((new Date()).getTime());
+        int workerNum = 1000 + rand.nextInt(8999);
+        mongoSessionIdManager.setWorkerName(String.valueOf(workerNum));
+        server.setSessionIdManager(mongoSessionIdManager);
 
         // Configure mongo session manager
-		MongoSessionManager mongoSessionManager = new MongoSessionManager();
-		mongoSessionManager.setSessionIdManager(mongoSessionIdManager);
-        mongoSessionManager.setSaveAllAttributes(true);
-        mongoSessionManager.setSavePeriod(-2); // Store attributes on login
+        SessionHandler sessionHandler = new SessionHandler();
+        MongoSessionManager mongoSessionManager = new MongoSessionManager();
+        mongoSessionManager.setSessionIdManager(server.getSessionIdManager());
+        sessionHandler.setSessionManager(mongoSessionManager);
 
-        // Configure session handler
-		SessionHandler sessionHandler = new SessionHandler();
-		sessionHandler.setSessionManager(mongoSessionManager);
-		context.setSessionHandler(sessionHandler);
-		server.setHandler(context);
-        server.setStopAtShutdown(true);
-        server.setGracefulShutdown(5000);
+        // Build web app context
+        WebAppContext context = new WebAppContext();
+        context.setContextPath("/");
+        context.setDefaultsDescriptor("src/main/webapp/WEB-INF/webdefault.xml");
+        context.setDescriptor("src/main/webapp/WEB-INF/web.xml");
+        context.setResourceBase("src/main/webapp");
+        context.setParentLoaderPriority(true);
+        context.setDistributable(true);
+        context.setSessionHandler(sessionHandler);
+        server.setHandler(context);
 
 		// Start the server
 		LOGGER.info("Jetty server starting");
