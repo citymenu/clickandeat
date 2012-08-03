@@ -8,12 +8,17 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.UUID;
 
-public abstract class AbstractClusteredTask {
+public abstract class AbstractClusteredTask implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractClusteredTask.class);
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        cleanUp();
+    }
 
 
     protected boolean shouldExecute() {
@@ -27,6 +32,9 @@ public abstract class AbstractClusteredTask {
 
 
     protected void cleanUp() {
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Cleaning up task: " + getTaskName());
+        }
         redisTemplate.delete(getTaskName());
     }
 

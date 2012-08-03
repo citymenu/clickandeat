@@ -4,9 +4,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.mongodb.*;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.mongodb.core.CollectionCallback;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -20,7 +18,7 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Component
-public class SessionClearingTask extends AbstractClusteredTask implements InitializingBean {
+public class SessionClearingTask extends AbstractClusteredTask {
 
     private static final Logger LOGGER = Logger.getLogger(SessionClearingTask.class);
 
@@ -29,10 +27,6 @@ public class SessionClearingTask extends AbstractClusteredTask implements Initia
 
     private int purgeIntervalHours = 24;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        cleanUp();
-    }
 
     @Scheduled(cron="0 0 0/2 * * ?")
     public void execute() {
