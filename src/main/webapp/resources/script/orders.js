@@ -144,7 +144,7 @@ function addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quanti
         		    text: labels['add-item-anyway'],
         		    click: function() {
                 	    $( this ).dialog( "close" );
-                	    doAddToOrder(restaurantId, itemId, itemName, itemCost, quantity );
+                	    doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity );
                 	}
                 },{
                     text: labels['dont-add-item'],
