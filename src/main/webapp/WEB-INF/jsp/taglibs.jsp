@@ -19,4 +19,9 @@
     </c:otherwise>
 </c:choose>
 
-<script type="text/javascript">var ctx = "${ctx}"; var locale = "${locale}"; var ccy = "<spring:message code="label.currency"/>";</script>
+<script type="text/javascript">
+var ctx = "${ctx}";
+var locale = "${locale}";
+var ccy = "<spring:message code="label.currency"/>";
+var resources = "${resources}";
+</script>
