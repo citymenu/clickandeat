@@ -63,6 +63,9 @@ public class ClusteredCache implements InitializingBean {
      */
 
     public <T> void put(Class<T> klass, String key, T object ) {
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Putting object with key [" + key + "] into cache " + klass.getSimpleName());
+        }
         Map<String,String> map = new HashMap<String, String>();
         map.put("action","update");
         map.put("className",klass.getName());
@@ -79,6 +82,9 @@ public class ClusteredCache implements InitializingBean {
      */
 
     public <T> void remove(Class<T> klass, String key ) {
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Removing object with key [" + key + "] from cache " + klass.getSimpleName());
+        }
         Map<String,String> map = new HashMap<String, String>();
         map.put("action","delete");
         map.put("className",klass.getName());
@@ -147,9 +153,6 @@ public class ClusteredCache implements InitializingBean {
         @Override
         @SuppressWarnings("unchecked")
         public void onMessage(Message message, byte[] pattern) {
-            if( LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Received message: " + message);
-            }
             try {
                 String content = new String(message.getBody());
                 Map map = (Map) JSONUtils.deserialize(content);
