@@ -90,7 +90,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 OpeningTime openingTime = restaurant.getOpeningTime(today);
                 LocalTime openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
                 DateTime restaurantOpenedTime;
-                if( openedTime.isBefore(now)) {
+                if( openedTime.isAfter(now)) {
                     LocalDate yesterday = today.minusDays(1);
                     openingTime = restaurant.getOpeningTime(yesterday);
                     openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
