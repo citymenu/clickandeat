@@ -64,14 +64,20 @@ public class ClusteredCache implements InitializingBean {
 
     public <T> void put(Class<T> klass, String key, T object ) {
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Putting object with key [" + key + "] into cache " + klass.getSimpleName());
+            LOGGER.debug("Putting object with key [" + key + "] into cache [" + klass.getSimpleName() + "]");
         }
+
         Map<String,String> map = new HashMap<String, String>();
         map.put("action","update");
         map.put("className",klass.getName());
         map.put("key",key);
         map.put("json",JSONUtils.serialize(object));
-        redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+        try {
+            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+        }
+        catch(Exception ex) {
+            LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
+        }
     }
 
 
@@ -83,13 +89,18 @@ public class ClusteredCache implements InitializingBean {
 
     public <T> void remove(Class<T> klass, String key ) {
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Removing object with key [" + key + "] from cache " + klass.getSimpleName());
+            LOGGER.debug("Removing object with key [" + key + "] from cache [" + klass.getSimpleName() + "]");
         }
         Map<String,String> map = new HashMap<String, String>();
         map.put("action","delete");
         map.put("className",klass.getName());
         map.put("key",key);
-        redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+        try {
+            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+        }
+        catch(Exception ex) {
+            LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
+        }
     }
 
 

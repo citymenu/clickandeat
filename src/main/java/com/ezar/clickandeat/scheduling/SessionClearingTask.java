@@ -39,6 +39,8 @@ public class SessionClearingTask extends AbstractClusteredTask {
                 LOGGER.info("Not running clustered task");
                 return;
             }
+            
+            LOGGER.info("Checking for any expired sessions to remove from the database");
             final long now = System.currentTimeMillis();
             final long expiry = purgeIntervalHours * 60 * 60 * 1000l;
 
