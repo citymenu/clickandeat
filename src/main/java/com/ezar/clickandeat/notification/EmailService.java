@@ -115,7 +115,7 @@ public class EmailService implements InitializingBean {
 
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = properties.getProperty("restaurant-order-accepted-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
@@ -135,7 +135,7 @@ public class EmailService implements InitializingBean {
 
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = properties.getProperty("restaurant-order-declined-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE);
@@ -155,7 +155,7 @@ public class EmailService implements InitializingBean {
 
         String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
         String subjectFormat = properties.getProperty("customer-order-cancelled-restaurant-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE);
