@@ -27,10 +27,8 @@
 	<security:global-method-security secured-annotations="enabled" />
 
     <!-- Enable annotation-based task scheduling -->
-    <!--
     <task:scheduler id="scheduler" pool-size="1"/>
     <task:annotation-driven scheduler="scheduler"/>
-    -->
 
 	<!-- Disable HTTP request caching -->
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
