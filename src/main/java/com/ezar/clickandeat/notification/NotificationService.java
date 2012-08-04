@@ -3,6 +3,7 @@ package com.ezar.clickandeat.notification;
 import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -194,19 +195,33 @@ public class NotificationService {
 
 
     /**
-     * @param order
+     * @param restaurant
      * @throws Exception
      */
 
-    public void sendDelistedConfirmationToRestaurant(Order order) throws Exception {
+    public void sendDelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
 
-        LOGGER.info("Sending customer cancelled confirmation to restaurant for orderId [" + order.getOrderId() + "]");
-
-        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+        LOGGER.info("Sending delisted notification to restaurant id [" + restaurant.getRestaurantId() + "]");
 
         // Send email notification to restaurant
-        if( StringUtils.hasText(notificationOptions.getNotificationEmailAddress())) {
-            emailService.sendDelistedConfirmationToRestaurant(order);
+        if( StringUtils.hasText(restaurant.getNotificationOptions().getNotificationEmailAddress())) {
+            emailService.sendDelistedConfirmationToRestaurant(restaurant);
+        }
+    }
+
+
+    /**
+     * @param restaurant
+     * @throws Exception
+     */
+
+    public void sendRelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
+
+        LOGGER.info("Sending relisted notification to restaurant id [" + restaurant.getRestaurantId() + "]");
+
+        // Send email notification to restaurant
+        if( StringUtils.hasText(restaurant.getNotificationOptions().getNotificationEmailAddress())) {
+            emailService.sendRelistedConfirmationToRestaurant(restaurant);
         }
     }
 

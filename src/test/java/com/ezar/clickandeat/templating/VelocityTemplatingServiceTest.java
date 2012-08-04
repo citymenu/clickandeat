@@ -1,6 +1,5 @@
 package com.ezar.clickandeat.templating;
 
-import com.ezar.clickandeat.converter.LocalDateReadConverter;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.TwilioService;
 import com.ezar.clickandeat.repository.OrderRepository;
@@ -10,7 +9,6 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.InitializingBean;

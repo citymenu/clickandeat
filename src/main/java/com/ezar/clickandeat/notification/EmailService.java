@@ -2,6 +2,7 @@ package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
@@ -107,6 +108,7 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
+        
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Sending restaurant accepted confirmation email to customer for order id: " + order.getOrderId());
         }
@@ -116,7 +118,7 @@ public class EmailService implements InitializingBean {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
 
@@ -126,6 +128,18 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantDeclinedConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending restaurant declined confirmation email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("restaurant-order-declined-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -134,6 +148,18 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendCustomerCancelledConfirmationToRestaurant(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending customer cancelled confirmation email to restaurant for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
+        String subjectFormat = properties.getProperty("customer-order-cancelled-restaurant-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -142,6 +168,18 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendCustomerCancelledConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending customer cancelled confirmation email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-order-cancelled-customer-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -150,6 +188,18 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending restaurant cancelled confirmation email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("restaurant-order-cancelled-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -158,6 +208,18 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendAutoCancelledConfirmationToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending auto cancelled confirmation email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-auto-cancelled-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
@@ -166,22 +228,79 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendAutoCancelledConfirmationToRestaurant(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending auto cancelled confirmation email to restaurant for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
+        String subjectFormat = properties.getProperty("restaurant-auto-cancelled-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.AUTO_CANCELLED_RESTAURANT_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 
     /**
-     * @param order
+     * @param restaurant
      */
 
-    public void sendDelistedConfirmationToRestaurant(Order order) throws Exception {
+    public void sendDelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending delisted email to restaurant id: " + restaurant.getRestaurantId());
+        }
+
+        String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
+        String subjectFormat = properties.getProperty("restaurant-delisted-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,restaurant.getName());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("restaurant",restaurant);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DELISTED_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
+    
+    /**
+     * @param restaurant
+     */
 
+    public void sendRelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending relisted email to restaurant id: " + restaurant.getRestaurantId());
+        }
+
+        String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
+        String subjectFormat = properties.getProperty("restaurant-relisted-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,restaurant.getName());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("restaurant",restaurant);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_RELISTED_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
+
+    
     /**
      * @param order
      */
 
     public void sendOrderCancellationOfferToCustomer(Order order) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending cancelled offer email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("customer-cancellation-offer-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+
     }
 
 

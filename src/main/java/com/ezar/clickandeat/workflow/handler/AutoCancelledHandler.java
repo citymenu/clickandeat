@@ -41,7 +41,7 @@ public class AutoCancelledHandler implements IWorkflowHandler {
             if( restaurant.getListOnSite()) {
                 restaurant.setListOnSite(false);
                 restaurantRepository.saveRestaurant(restaurant);
-                notificationService.sendDelistedConfirmationToRestaurant(order);
+                notificationService.sendDelistedConfirmationToRestaurant(restaurant);
                 LOGGER.info("Delisting restaurant until we get a response to notification email");
             }
         }
