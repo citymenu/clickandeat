@@ -28,7 +28,7 @@ public class SessionClearingTask extends AbstractClusteredTask {
     private int purgeIntervalHours = 24;
 
 
-    @Scheduled(cron="0 0 0/2 * * ?")
+    @Scheduled(cron="0 0 * * * ?")
     public void execute() {
         
         boolean shouldRun = false;
