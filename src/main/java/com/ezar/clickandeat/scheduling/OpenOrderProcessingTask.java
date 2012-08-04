@@ -87,7 +87,8 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 else {
                     restaurantOpenedTime = today.toDateTime(openedTime,DateTimeZone.forID(timeZone));
                 }
-                
+
+                // Don't do anything if the restaurant has not opened yet today
                 LOGGER.info("Restaurant " + restaurant.getName() + " opened time today is: " + restaurantOpenedTime);
                 DateTime currentTime = new DateTime(DateTimeZone.forID(timeZone));
                 if( restaurantOpenedTime.isAfter(currentTime)) {
@@ -98,7 +99,6 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 // Auto cancel orders which have been awaiting confirmation for too long and the restaurant has been open long enough to respond
                 DateTime autoCancelCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeAutoCancelOrder);
                 LOGGER.info("Auo cancel cutoff time is: " + autoCancelCutoff);
-                
                 if(orderPlacedTime.isBefore(autoCancelCutoff) && restaurantOpenedTime.isBefore(autoCancelCutoff)) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
@@ -113,7 +113,6 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
                 DateTime cancellationOfferCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail);
                 LOGGER.info("Cancellation offer cutoff time is: " + cancellationOfferCutoff);
-
                 if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(cancellationOfferCutoff) && restaurantOpenedTime.isBefore(cancellationOfferCutoff)) {
                     try {
                         LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeSendCancellationEmail + " minutes, sending email");
