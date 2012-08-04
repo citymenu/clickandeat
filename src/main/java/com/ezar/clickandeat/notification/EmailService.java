@@ -107,6 +107,17 @@ public class EmailService implements InitializingBean {
      */
 
     public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending restaurant accepted confirmation email to customer for order id: " + order.getOrderId());
+        }
+
+        String emailAddress = order.getCustomer().getEmail();
+        String subjectFormat = properties.getProperty("restaurant-order-accepted-confirmation-subject");
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("order",order);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
     }
 
 

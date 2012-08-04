@@ -1,0 +1,13 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>The restaurant has cancelled your order $order.orderId</h1>
+
+</body>
+
+
+</html>
