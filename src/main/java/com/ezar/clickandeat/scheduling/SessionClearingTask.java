@@ -70,9 +70,12 @@ public class SessionClearingTask extends AbstractClusteredTask {
             }
 
             // Delete expired sessions
-            mongoOperations.remove(query(where("accessed").lt(now - expiry)), "sessions");
-            LOGGER.info("Finished removing expired sessions");
-
+            long expiredSessions = mongoOperations.count(query(where("accessed").lt(now - expiry)), "sessions");
+            LOGGER.info("Found " + expiredSessions + " expired sessions to remove");
+            if( expiredSessions > 0 ) {
+                mongoOperations.remove(query(where("accessed").lt(now - expiry)), "sessions");
+                LOGGER.info("Finished removing expired sessions");
+            }
         }
         catch (Exception ex) {
             LOGGER.error("Error clearing expired sessions",ex);
