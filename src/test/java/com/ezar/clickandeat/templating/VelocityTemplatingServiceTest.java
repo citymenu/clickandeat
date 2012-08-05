@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.templating;
 
 import com.ezar.clickandeat.model.*;
-import com.ezar.clickandeat.notification.TwilioService;
+import com.ezar.clickandeat.notification.TwilioServiceImpl;
 import com.ezar.clickandeat.repository.OrderRepository;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
@@ -35,7 +35,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     private OrderRepository orderRepository;
     
     @Autowired
-    private TwilioService twilioService;
+    private TwilioServiceImpl twilioService;
 
     private String timeZone;
     
@@ -56,7 +56,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioService.FULL_ORDER_CALL_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("delivery",order.getDeliveryType().toLowerCase());
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
@@ -95,7 +95,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.addOrderItem(item2);
 
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioService.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("order",order);
         templateModel.put("today",new LocalDate(DateTimeZone.forID(timeZone)));

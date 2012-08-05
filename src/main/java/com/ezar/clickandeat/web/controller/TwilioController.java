@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.notification.TwilioService;
+import com.ezar.clickandeat.notification.TwilioServiceImpl;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
@@ -43,7 +43,7 @@ public class TwilioController implements InitializingBean {
     private VelocityTemplatingService velocityTemplatingService;
     
     @Autowired
-    private TwilioService twilioService;
+    private TwilioServiceImpl twilioService;
 
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
@@ -70,7 +70,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> orderNotificationCall(@RequestParam(value = "orderId", required = true) String orderId, 
                                                 @RequestParam(value = "authKey", required = true) String authKey,
                                                 HttpServletResponse response) throws Exception {
@@ -87,7 +87,7 @@ public class TwilioController implements InitializingBean {
 
         // Build template options to return
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioService.FULL_ORDER_CALL_URL, orderId);
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, orderId);
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("delivery",order.getDeliveryType().toLowerCase());
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
@@ -107,7 +107,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
     public void orderNotificationCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
                                                    @RequestParam(value = "authKey", required = true) String authKey,
                                                    HttpServletResponse response, HttpServletRequest request) throws Exception {
@@ -145,7 +145,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
     public void orderNotificationCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
                                                     @RequestParam(value = "authKey", required = true) String authKey,
                                                     HttpServletResponse response) throws Exception {
@@ -175,7 +175,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.FULL_ORDER_CALL_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> fullOrderCall(@RequestParam(value = "orderId", required = true) String orderId,
                                                         @RequestParam(value = "authKey", required = true) String authKey,
                                                         HttpServletResponse response) throws Exception {
@@ -208,7 +208,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.FULL_ORDER_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
     public void fullOrderCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
                                                     @RequestParam(value = "authKey", required = true) String authKey,
                                                     HttpServletResponse response, HttpServletRequest request) throws Exception {
@@ -238,7 +238,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
     public void fullOrderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
                                               @RequestParam(value = "authKey", required = true) String authKey,
                                               HttpServletResponse response) throws Exception {
@@ -268,7 +268,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value=TwilioService.FULL_ORDER_CALL_PROCESS_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> fullOrderCallProcess(@RequestParam(value = "orderId", required = true) String orderId,
                                             @RequestParam(value = "authKey", required = true) String authKey,
                                             @RequestParam(value="Digits", required = true ) String digits,
@@ -402,7 +402,7 @@ public class TwilioController implements InitializingBean {
     
     private String buildFullOrderXml(Order order, boolean hasError) throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioService.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("locale",systemLocale);
         templateModel.put("today",new LocalDate(DateTimeZone.forID(timeZone)));

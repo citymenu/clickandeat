@@ -16,10 +16,10 @@ public class NotificationService {
     private static final Logger LOGGER = Logger.getLogger(NotificationService.class);
 
     @Autowired
-    private EmailService emailService;
+    private IEmailService emailService;
     
     @Autowired
-    private TwilioService twilioService;
+    private ITwilioService twilioService;
 
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;

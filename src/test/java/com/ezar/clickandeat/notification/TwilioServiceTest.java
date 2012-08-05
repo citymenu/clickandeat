@@ -18,7 +18,7 @@ public class TwilioServiceTest {
     private static final Logger LOGGER = Logger.getLogger(TwilioServiceTest.class);
     
     @Autowired
-    private TwilioService twilioService;
+    private ITwilioService twilioService;
 
     @Test
     @Ignore

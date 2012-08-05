@@ -25,9 +25,9 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component(value="emailService")
-public class EmailService implements InitializingBean {
+public class EmailServiceImpl implements IEmailService, InitializingBean {
     
-    private static final Logger LOGGER = Logger.getLogger(EmailService.class);
+    private static final Logger LOGGER = Logger.getLogger(EmailServiceImpl.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -62,6 +62,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
     
+    @Override
     public void sendOrderNotificationToRestaurant(Order order) throws Exception {
     
         if( LOGGER.isDebugEnabled()) {
@@ -87,6 +88,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
     
+    @Override
     public void sendOrderConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -107,6 +109,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
         
         if( LOGGER.isDebugEnabled()) {
@@ -127,6 +130,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendRestaurantDeclinedConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -147,6 +151,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendCustomerCancelledConfirmationToRestaurant(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -167,6 +172,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendCustomerCancelledConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -187,6 +193,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -207,6 +214,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendAutoCancelledConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -227,6 +235,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendAutoCancelledConfirmationToRestaurant(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -247,6 +256,7 @@ public class EmailService implements InitializingBean {
      * @param restaurant
      */
 
+    @Override
     public void sendDelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -267,6 +277,7 @@ public class EmailService implements InitializingBean {
      * @param restaurant
      */
 
+    @Override
     public void sendRelistedConfirmationToRestaurant(Restaurant restaurant) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
@@ -287,6 +298,7 @@ public class EmailService implements InitializingBean {
      * @param order
      */
 
+    @Override
     public void sendOrderCancellationOfferToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {

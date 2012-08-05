@@ -1,10 +1,7 @@
 package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
-import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -19,9 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component(value="twilioService")
-public class TwilioService {
+public class TwilioServiceImpl implements ITwilioService {
 
-    private static final Logger LOGGER = Logger.getLogger(TwilioService.class);
+    private static final Logger LOGGER = Logger.getLogger(TwilioServiceImpl.class);
 
     public static final String ORDER_NOTIFICATION_SMS_URL = "/twilio/orderNotificationSMS.html";
     public static final String ORDER_NOTIFICATION_SMS_FALLBACK_URL = "/twilio/orderNotificationSMSFallback.html";
@@ -57,6 +54,7 @@ public class TwilioService {
      * @throws Exception
      */
 
+    @Override
     public void sendOrderNotificationSMS(Order order) throws Exception {
         
         String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationSMSNumber();
@@ -98,6 +96,7 @@ public class TwilioService {
      * @throws Exception
      */
     
+    @Override
     public void makeOrderNotificationCall(Order order) throws Exception {
 
         String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationPhoneNumber();
