@@ -66,7 +66,12 @@ public class SessionClearingTask extends AbstractClusteredTask {
             // Delete expired orders where the status is 'BASKET'
             if( orderIds.size() > 0 ) {
                 LOGGER.info("Checking for unfulfilled orders from " + orderIds.size() + " expired sessions");
-                mongoOperations.remove(query(where("orderId").in(orderIds).and("orderStatus").is(OrderWorkflowEngine.ORDER_STATUS_BASKET)), Order.class);
+                long unfulfilledOrders = mongoOperations.count(query(where("orderId").in(orderIds).and("orderStatus").is(OrderWorkflowEngine.ORDER_STATUS_BASKET)), Order.class);
+                LOGGER.info("Found " + unfulfilledOrders + " unfulfilled orders to remove");
+                if( unfulfilledOrders > 0 ) {
+                    mongoOperations.remove(query(where("orderId").in(orderIds).and("orderStatus").is(OrderWorkflowEngine.ORDER_STATUS_BASKET)), Order.class);
+                    LOGGER.info("Finished removing unfulfilled orders");
+                }
             }
 
             // Delete expired sessions
