@@ -68,7 +68,7 @@ public class Address extends PersistentObject {
         if(StringUtils.hasText(postCode)) {
             items.add(postCode);
         }
-        return StringUtils.collectionToCommaDelimitedString(items);
+        return StringUtils.collectionToDelimitedString(items, " ");
     }
 
     public String getPostCode() {

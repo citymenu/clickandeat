@@ -49,7 +49,6 @@ public class Restaurant extends PersistentObject {
 
     private String imageId;
 
-    // Transient properties
     @Transient
     private Double distanceToSearchLocation;
 
@@ -69,114 +68,6 @@ public class Restaurant extends PersistentObject {
 
 
     /**
-     * @param date
-     * @param time
-     * @return
-     */
-
-    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
-        Assert.notNull(date, "date must not be null");
-        Assert.notNull(time, "time must not be null");
-
-        if( openingTimes == null ) {
-            return false;
-        }
-
-        // Check if the restaurant is closed on this date
-        if( openingTimes.getClosedDates() != null ) {
-            for( LocalDate closedDate: openingTimes.getClosedDates()) {
-                if( closedDate.equals(date)) {
-                    return false;
-                }
-            }
-        }
-
-        int currentDayOfWeek = date.getDayOfWeek();
-
-        // Iterate through open dates
-        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
-
-            int dayOfWeek = openingTime.getDayOfWeek();
-            LocalTime open = openingTime.getDeliveryOpeningTime();
-            LocalTime close = openingTime.getDeliveryClosingTime();
-
-            // Do not test if either open or close time is null
-            if( open == null || close == null ) {
-                continue;
-            }
-
-            // Check from day before for delivery closing times after midnight
-            if( currentDayOfWeek - 1 == dayOfWeek % 7 && close.isBefore(open)) {
-                if(!close.isBefore(time)) {
-                    return true;
-                }
-            }
-            else if( currentDayOfWeek == dayOfWeek ) {
-                if(!time.isBefore(open) && !time.isAfter(close)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
-     * @param date
-     * @param time
-     * @return
-     */
-
-    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
-        Assert.notNull(date, "date must not be null");
-        Assert.notNull(time, "time must not be null");
-
-        if( openingTimes == null ) {
-            return false;
-        }
-
-        // Check if the restaurant is closed on this date
-        if( openingTimes.getClosedDates() != null ) {
-            for( LocalDate closedDate: openingTimes.getClosedDates()) {
-                if( closedDate.equals(date)) {
-                    return false;
-                }
-            }
-        }
-
-        int currentDayOfWeek = date.getDayOfWeek();
-
-        // Iterate through open dates
-        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
-
-            int dayOfWeek = openingTime.getDayOfWeek();
-            LocalTime open = openingTime.getCollectionOpeningTime();
-            LocalTime close = openingTime.getCollectionClosingTime();
-
-            // Do not test if either open or close time is null
-            if( open == null || close == null ) {
-                continue;
-            }
-
-            // Check from day before for delivery closing times after midnight
-            if( currentDayOfWeek - 1 == dayOfWeek % 7 && close.isBefore(open)) {
-                if(!close.isBefore(time)) {
-                    return true;
-                }
-            }
-            else if( currentDayOfWeek == dayOfWeek ) {
-                if(!time.isBefore(open) && !time.isAfter(close)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-
-    /**
      * Returns true if this restaurant is currently open based on the given date and time
      * @param date
      * @param time
@@ -187,6 +78,9 @@ public class Restaurant extends PersistentObject {
         
         Assert.notNull(date, "date must not be null");
         Assert.notNull(time, "time must not be null");
+
+        boolean openForCollection = false;
+        boolean openForDelivery = false;
 
         if( openingTimes == null ) {
             return RestaurantOpenStatus.CLOSED;
@@ -201,43 +95,86 @@ public class Restaurant extends PersistentObject {
             }
         }
 
-        // Check if the restaurant is open for collection or delivery at this time today
-        if( openingTimes.getOpeningTimes() != null ) {
-            for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
-                if( openingTime.getDayOfWeek() == date.getDayOfWeek()) {
-                    if( !openingTime.isOpen()) {
-                        return RestaurantOpenStatus.CLOSED;
-                    }
-                    boolean[] isOpen = new boolean[2];
-                    
-                    if( openingTime.getCollectionOpeningTime() == null || openingTime.getCollectionOpeningTime() == null ) {
-                        isOpen[0] = false;
-                    } 
-                    else { 
-                        isOpen[0] = !time.isBefore(openingTime.getCollectionOpeningTime()) && !time.isAfter(openingTime.getCollectionClosingTime());
-                    }
-                    
-                    if( openingTime.getDeliveryOpeningTime() == null || openingTime.getDeliveryClosingTime() == null ) {
-                        isOpen[1] = false;
-                    }
-                    else {
-                        isOpen[1] = !time.isBefore(openingTime.getDeliveryOpeningTime()) && !time.isAfter(openingTime.getDeliveryClosingTime());
-                    }
+        int currentDayOfWeek = date.getDayOfWeek();
 
-                    if( isOpen[0] && isOpen[1]) {
-                        return RestaurantOpenStatus.FULLY_OPEN;
+        // Iterate through open dates
+        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+
+            int dayOfWeek = openingTime.getDayOfWeek();
+            LocalTime collectionOpen = openingTime.getCollectionOpeningTime();
+            LocalTime collectionClose = openingTime.getCollectionClosingTime();
+            LocalTime deliveryOpen = openingTime.getDeliveryOpeningTime();
+            LocalTime deliveryClose = openingTime.getDeliveryClosingTime();
+
+            // Test collection times if collection open and close are not null
+            if( collectionOpen != null && collectionClose != null ) {
+
+                // Check from day before for closing times after midnight
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && collectionClose.isBefore(collectionOpen)) {
+                    if(!collectionClose.isBefore(time)) {
+                        openForCollection = true;
                     }
-                    else if( isOpen[0]) {
-                        return RestaurantOpenStatus.OPEN_FOR_COLLECTION;
+                }
+                else if( currentDayOfWeek == dayOfWeek ) {
+                    if(!time.isBefore(collectionOpen) && !time.isAfter(collectionClose)) {
+                        openForCollection = true;
                     }
-                    else {
-                        return RestaurantOpenStatus.CLOSED;
+                }
+            }
+
+            // Test delivery times if delivery open and close are not null
+            if( deliveryOpen != null && deliveryClose != null ) {
+
+                // Check from day before for closing times after midnight
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && deliveryClose.isBefore(deliveryOpen)) {
+                    if(!deliveryClose.isBefore(time)) {
+                        openForDelivery = true;
+                    }
+                }
+                else if( currentDayOfWeek == dayOfWeek ) {
+                    if(!time.isBefore(deliveryOpen) && !time.isAfter(deliveryClose)) {
+                        openForDelivery = true;
                     }
                 }
             }
         }
 
-        return RestaurantOpenStatus.CLOSED;
+        if( openForCollection && openForDelivery ) {
+            return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY;
+        }
+        else if( openForDelivery ) {
+            return RestaurantOpenStatus.OPEN_FOR_DELIVERY_ONLY;
+        }
+        else if( openForCollection ) {
+            return RestaurantOpenStatus.OPEN_FOR_COLLECTION_ONLY;
+        }
+        else {
+            return RestaurantOpenStatus.CLOSED;
+        }
+    }
+
+
+    /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
+        RestaurantOpenStatus status = isOpen(date,time);
+        return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_DELIVERY_ONLY.equals(status);
+    }
+
+
+    /**
+     * @param date
+     * @param time
+     * @return
+     */
+
+    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
+        RestaurantOpenStatus status = isOpen(date,time);
+        return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_COLLECTION_ONLY.equals(status);
     }
 
 

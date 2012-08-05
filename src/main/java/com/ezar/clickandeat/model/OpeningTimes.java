@@ -41,6 +41,10 @@ public class OpeningTimes {
     public void setOpeningTimes(List<OpeningTime> openingTimes) {
         this.openingTimes = openingTimes;
     }
+    
+    public void addOpeningTime(OpeningTime openingTime) {
+        this.openingTimes.add(openingTime);
+    }
 
     public List<LocalDate> getClosedDates() {
         return closedDates;
@@ -48,5 +52,9 @@ public class OpeningTimes {
 
     public void setClosedDates(List<LocalDate> closedDates) {
         this.closedDates = closedDates;
+    }
+    
+    public void addClosedDate(LocalDate closedDate) {
+        this.closedDates.add(closedDate);
     }
 }
