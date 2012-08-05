@@ -3,7 +3,6 @@ package com.ezar.clickandeat.validator;
 import com.ezar.clickandeat.model.Person;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

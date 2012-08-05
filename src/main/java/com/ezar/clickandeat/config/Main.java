@@ -1,21 +1,18 @@
 package com.ezar.clickandeat.config;
 
-import java.util.*;
-import java.util.concurrent.*;
-
+import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionIdManager;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionManager;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.util.thread.ThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
-
-import com.mongodb.Mongo;
 import org.springframework.data.mongodb.core.WriteResultChecking;
+
+import java.util.Properties;
+import java.util.UUID;
 
 public class Main {
 

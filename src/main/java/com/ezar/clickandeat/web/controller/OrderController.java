@@ -4,11 +4,13 @@ import com.ezar.clickandeat.converter.DateTimeTransformer;
 import com.ezar.clickandeat.converter.LocalDateTransformer;
 import com.ezar.clickandeat.converter.LocalTimeTransformer;
 import com.ezar.clickandeat.converter.NullIdStringTransformer;
-import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.OrderItem;
+import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
-import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
@@ -31,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller

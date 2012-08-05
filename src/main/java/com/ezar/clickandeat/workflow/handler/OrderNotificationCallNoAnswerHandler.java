@@ -8,9 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_RESTAURANT_NO_ANSWER;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
 public class OrderNotificationCallNoAnswerHandler implements IWorkflowHandler {

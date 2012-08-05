@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_RESTAURANT;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_CALL_IN_PROGRESS;
 
 @Component
 public class RestaurantNotificationCallHandler implements IWorkflowHandler {

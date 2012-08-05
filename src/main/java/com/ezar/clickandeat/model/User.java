@@ -1,7 +1,5 @@
 package com.ezar.clickandeat.model;
 
-import java.util.*;
-
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +7,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
+
+import java.util.*;
 
 @Document(collection="users")
 public class User extends PersistentObject implements UserDetails {

@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
 
 import java.util.List;
 

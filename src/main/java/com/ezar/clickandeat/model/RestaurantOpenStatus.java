@@ -1,7 +1,5 @@
 package com.ezar.clickandeat.model;
 
-import com.sun.imageio.stream.CloseableDisposerRecord;
-
 public enum RestaurantOpenStatus {
 
     OPEN_FOR_COLLECTION_ONLY,
