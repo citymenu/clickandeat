@@ -68,14 +68,13 @@ public class PaymentController {
             
             // Place order notification call if restaurant is open
             Restaurant restaurant = order.getRestaurant();
-            LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
-            LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+            DateTime now = new DateTime(DateTimeZone.forID(timeZone));
 
             boolean shouldPlaceCall = false;
-            if( Order.DELIVERY.equals(order.getDeliveryType()) && restaurant.isOpenForDelivery(today,now)) {
+            if( Order.DELIVERY.equals(order.getDeliveryType()) && restaurant.isOpenForDelivery(now)) {
                 shouldPlaceCall = true;
             }
-            else if(Order.COLLECTION.equals(order.getDeliveryType()) && restaurant.isOpenForCollection(today,now)){
+            else if(Order.COLLECTION.equals(order.getDeliveryType()) && restaurant.isOpenForCollection(now)){
                 shouldPlaceCall = true;
             }
 

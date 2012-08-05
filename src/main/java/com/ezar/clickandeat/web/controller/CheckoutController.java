@@ -63,15 +63,14 @@ public class CheckoutController {
         Double deliveryTime = restaurant.getDeliveryOptions().getDeliveryTimeMinutes();
         model.put("deliveryTimeMinutes", deliveryTime == null? 0d: deliveryTime);
 
-        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
-        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
 
         // Set the current delivery type of the order
         model.put("deliveryType",order.getDeliveryType());
 
         // Confirm that the restaurant is open for delivery and collection
-        model.put("currentlyOpenForDelivery", restaurant.isOpenForDelivery(today,now));
-        model.put("currentlyOpenForCollection", restaurant.isOpenForCollection(today, now));
+        model.put("currentlyOpenForDelivery", restaurant.isOpenForDelivery(now));
+        model.put("currentlyOpenForCollection", restaurant.isOpenForCollection(now));
         
         return new ModelAndView("checkout",model);
     }

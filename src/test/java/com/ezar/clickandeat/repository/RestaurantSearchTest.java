@@ -2,6 +2,7 @@ package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.*;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.After;
@@ -89,7 +90,7 @@ public class RestaurantSearchTest {
             List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
             Restaurant restaurant = restaurants.get(0);
-            Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new LocalDate(), new LocalTime()) );
+            Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new DateTime()));
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);

@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.data.annotation.Transient;
@@ -69,76 +70,51 @@ public class Restaurant extends PersistentObject {
 
     /**
      * Returns true if this restaurant is currently open based on the given date and time
-     * @param date
-     * @param time
+     * @param now
      * @return
      */
     
-    public RestaurantOpenStatus isOpen(LocalDate date, LocalTime time) {
+    public RestaurantOpenStatus isOpen(DateTime now) {
         
-        Assert.notNull(date, "date must not be null");
-        Assert.notNull(time, "time must not be null");
+        DateTime[] dateTimes = getOpeningAndClosingTimes(now);
+        
+        DateTime collectionOpeningTime = dateTimes[0];
+        DateTime collectionClosingTime = dateTimes[1];
+        DateTime deliveryOpeningTime = dateTimes[2];
+        DateTime deliveryClosingTime = dateTimes[3];
 
-        boolean openForCollection = false;
-        boolean openForDelivery = false;
-
-        if( openingTimes == null ) {
+        if( collectionOpeningTime == null && collectionClosingTime == null && deliveryOpeningTime == null && deliveryClosingTime == null ) {
             return RestaurantOpenStatus.CLOSED;
         }
 
-        // Check if the restaurant is closed on this date
-        if( openingTimes.getClosedDates() != null ) {
-            for( LocalDate closedDate: openingTimes.getClosedDates()) {
-                if( closedDate.equals(date)) {
-                    return RestaurantOpenStatus.CLOSED;
+        boolean openForCollection = false;
+        boolean openForDelivery = false;
+        
+        // Check collection times status for T+1 closing first
+        if( collectionOpeningTime != null && collectionClosingTime != null ) {
+            if( collectionClosingTime.isBefore(collectionOpeningTime)) {
+                if( !now.isAfter(collectionClosingTime)) {
+                    openForCollection = true;
                 }
+            }
+            else if( !now.isBefore(collectionOpeningTime) && !now.isAfter(collectionClosingTime)) {
+                openForCollection = true;
             }
         }
 
-        int currentDayOfWeek = date.getDayOfWeek();
-
-        // Iterate through open dates
-        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
-
-            int dayOfWeek = openingTime.getDayOfWeek();
-            LocalTime collectionOpen = openingTime.getCollectionOpeningTime();
-            LocalTime collectionClose = openingTime.getCollectionClosingTime();
-            LocalTime deliveryOpen = openingTime.getDeliveryOpeningTime();
-            LocalTime deliveryClose = openingTime.getDeliveryClosingTime();
-
-            // Test collection times if collection open and close are not null
-            if( collectionOpen != null && collectionClose != null ) {
-
-                // Check from day before for closing times after midnight
-                if( currentDayOfWeek - 1 == dayOfWeek % 7 && collectionClose.isBefore(collectionOpen)) {
-                    if(!collectionClose.isBefore(time)) {
-                        openForCollection = true;
-                    }
-                }
-                else if( currentDayOfWeek == dayOfWeek ) {
-                    if(!time.isBefore(collectionOpen) && !time.isAfter(collectionClose)) {
-                        openForCollection = true;
-                    }
+        // Check delivery times status for T+1 closing first
+        if( deliveryOpeningTime != null && deliveryClosingTime != null ) {
+            if( deliveryClosingTime.isBefore(deliveryOpeningTime)) {
+                if( !now.isAfter(deliveryClosingTime)) {
+                    openForDelivery = true;
                 }
             }
-
-            // Test delivery times if delivery open and close are not null
-            if( deliveryOpen != null && deliveryClose != null ) {
-
-                // Check from day before for closing times after midnight
-                if( currentDayOfWeek - 1 == dayOfWeek % 7 && deliveryClose.isBefore(deliveryOpen)) {
-                    if(!deliveryClose.isBefore(time)) {
-                        openForDelivery = true;
-                    }
-                }
-                else if( currentDayOfWeek == dayOfWeek ) {
-                    if(!time.isBefore(deliveryOpen) && !time.isAfter(deliveryClose)) {
-                        openForDelivery = true;
-                    }
-                }
+            else if( !now.isBefore(deliveryOpeningTime) && !now.isAfter(deliveryClosingTime)) {
+                openForDelivery = true;
             }
         }
 
+        // Return status based on opening times
         if( openForCollection && openForDelivery ) {
             return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY;
         }
@@ -155,26 +131,142 @@ public class Restaurant extends PersistentObject {
 
 
     /**
-     * @param date
-     * @param time
+     * @param now
      * @return
      */
 
-    public boolean isOpenForDelivery(LocalDate date, LocalTime time) {
-        RestaurantOpenStatus status = isOpen(date,time);
+    public boolean isOpenForDelivery(DateTime now) {
+        RestaurantOpenStatus status = isOpen(now);
         return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_DELIVERY_ONLY.equals(status);
     }
 
 
     /**
-     * @param date
-     * @param time
+     * @param now
      * @return
      */
 
-    public boolean isOpenForCollection(LocalDate date, LocalTime time) {
-        RestaurantOpenStatus status = isOpen(date,time);
+    public boolean isOpenForCollection(DateTime now) {
+        RestaurantOpenStatus status = isOpen(now);
         return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_COLLECTION_ONLY.equals(status);
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getCollectionOpeningTime(DateTime now ) {
+        return getOpeningAndClosingTimes(now)[0];
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getCollectionClosingTime(DateTime now) {
+        return getOpeningAndClosingTimes(now)[1];
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getDeliveryOpeningTime(DateTime now ) {
+        return getOpeningAndClosingTimes(now)[2];
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getDeliveryClosingTime(DateTime now ) {
+        return getOpeningAndClosingTimes(now)[3];
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    private DateTime[] getOpeningAndClosingTimes(DateTime now) {
+
+        Assert.notNull(now, "now must not be null");
+
+        DateTime[] times = new DateTime[4];
+
+        if( openingTimes == null ) {
+            return times;
+        }
+
+        // Check if the restaurant is closed on this date
+        if( openingTimes.getClosedDates() != null ) {
+            for( LocalDate closedDate: openingTimes.getClosedDates()) {
+                if( closedDate.equals(now.toLocalDate())) {
+                    return times;
+                }
+            }
+        }
+
+        int currentDayOfWeek = now.getDayOfWeek();
+
+        // Iterate through open dates
+        for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+
+            int dayOfWeek = openingTime.getDayOfWeek();
+            LocalTime collectionOpen = openingTime.getCollectionOpeningTime();
+            LocalTime collectionClose = openingTime.getCollectionClosingTime();
+            LocalTime deliveryOpen = openingTime.getDeliveryOpeningTime();
+            LocalTime deliveryClose = openingTime.getDeliveryClosingTime();
+
+            // Test collection times if collection open and close are not null
+            if( collectionOpen != null && collectionClose != null ) {
+
+                // Check from day before for closing times after midnight
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && collectionClose.isBefore(collectionOpen)) {
+                    if(!now.toLocalTime().isAfter(collectionClose)) {
+                        times[0] = now.toLocalDate().minusDays(1).toDateTime(collectionOpen); // Collection open the day before
+                        times[1] = now.toLocalDate().toDateTime(collectionClose);
+                    }
+                }
+                else if( currentDayOfWeek == dayOfWeek ) {
+                    // Don't override previously set collection times
+                    if( times[0] == null && times[1] == null ) {
+                        times[0] = now.toLocalDate().toDateTime(collectionOpen);
+                        times[1] = now.toLocalDate().toDateTime(collectionClose);
+                    }
+                }
+            }
+
+            // Test delivery times if delivery open and close are not null
+            if( deliveryOpen != null && deliveryClose != null ) {
+
+                // Check from day before for closing times after midnight
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && deliveryClose.isBefore(deliveryOpen)) {
+                    if(!now.toLocalTime().isAfter(deliveryClose)) {
+                        times[2] = now.toLocalDate().minusDays(1).toDateTime(deliveryOpen); // Delivery open the day before
+                        times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                    }
+                }
+                else if( currentDayOfWeek == dayOfWeek ) {
+                    // Don't override previously set delivery times
+                    if( times[2] == null && times[3] == null ) {
+                        times[2] = now.toLocalDate().toDateTime(deliveryOpen);
+                        times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                    }
+                }
+            }
+        }
+
+        return times;
     }
 
 

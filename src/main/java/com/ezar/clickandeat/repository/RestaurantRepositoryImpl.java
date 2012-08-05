@@ -5,6 +5,7 @@ import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -167,8 +168,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
 
         // Get the current time and date to determine if restaurants are open
-        LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
-        LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
+        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
         
         // Iterate over the results to determine which restaurants will serve the location
         List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();
@@ -185,14 +185,14 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
                 if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
                     // Set transient open for delivery property for search result ordering
-                    restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(today,now));
+                    restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(now));
                     availableRestaurants.add(restaurant);
                     continue;
                 }
                 for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
                     if(deliveryLocation.toUpperCase().replace(" ", "").startsWith(lookupLocation)) {
                         // Set transient open for delivery property for search result ordering
-                        restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(today,now));
+                        restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(now));
                         availableRestaurants.add(restaurant);
                         break;
                     }

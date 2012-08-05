@@ -70,28 +70,15 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 LOGGER.info("Order id: " + order.getOrderId() + " was placed at: " + orderPlacedTime);
 
                 Restaurant restaurant = order.getRestaurant();
-                LocalDate today = new LocalDate(DateTimeZone.forID(timeZone));
-                LocalTime now = new LocalTime(DateTimeZone.forID(timeZone));
-                LOGGER.info("Current date/time is: " + today + " at " + now);
+                DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+                LOGGER.info("Current time is: " + now);
                 
-                // Get the time the restaurant opened, taking into account possibility of restaurants that are open after midnight
-                OpeningTime openingTime = restaurant.getOpeningTime(today);
-                LocalTime openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
-                DateTime restaurantOpenedTime;
-                if( openedTime.isAfter(now)) {
-                    LocalDate yesterday = today.minusDays(1);
-                    openingTime = restaurant.getOpeningTime(yesterday);
-                    openedTime = Order.DELIVERY.equals(order.getDeliveryType())? openingTime.getDeliveryOpeningTime(): openingTime.getCollectionOpeningTime();
-                    restaurantOpenedTime = yesterday.toDateTime(openedTime,DateTimeZone.forID(timeZone));
-                }
-                else {
-                    restaurantOpenedTime = today.toDateTime(openedTime,DateTimeZone.forID(timeZone));
-                }
+                // Get the time the restaurant opened
+                DateTime restaurantOpenedTime = Order.DELIVERY.equals(order.getDeliveryType())? restaurant.getDeliveryOpeningTime(now): restaurant.getCollectionOpeningTime(now);
 
                 // Don't do anything if the restaurant has not opened yet today
                 LOGGER.info("Restaurant " + restaurant.getName() + " opened time today is: " + restaurantOpenedTime);
-                DateTime currentTime = new DateTime(DateTimeZone.forID(timeZone));
-                if( restaurantOpenedTime.isAfter(currentTime)) {
+                if( restaurantOpenedTime.isAfter(now)) {
                     LOGGER.info("Restaurant " + restaurant.getName() + " has not opened yet, not doing any processing");
                     continue;
                 }
@@ -124,12 +111,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Do nothing if the restaurant is not open to receive calls
-                if( Order.DELIVERY.equals(order.getDeliveryType()) && !restaurant.isOpenForDelivery(today,now)) {
+                if( Order.DELIVERY.equals(order.getDeliveryType()) && !restaurant.isOpenForDelivery(now)) {
                     LOGGER.info("Restaurant not currently open for delivery orders, not calling");
                     continue;
                 }
 
-                if( Order.COLLECTION.equals(order.getDeliveryType()) && !restaurant.isOpenForCollection(today,now)) {
+                if( Order.COLLECTION.equals(order.getDeliveryType()) && !restaurant.isOpenForCollection(now)) {
                     LOGGER.info("Restaurant not currently open for collection orders, not calling");
                     continue;
                 }
