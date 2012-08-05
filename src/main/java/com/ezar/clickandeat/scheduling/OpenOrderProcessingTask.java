@@ -2,7 +2,6 @@ package com.ezar.clickandeat.scheduling;
 
 
 import com.ezar.clickandeat.exception.ExceptionHandler;
-import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
@@ -106,32 +105,16 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                     }
                 }
 
-                // Do nothing if the restaurant is not open to receive calls
-                if( Order.DELIVERY.equals(order.getDeliveryType()) && !restaurant.isOpenForDelivery(now)) {
-                    LOGGER.info("Restaurant not currently open for delivery orders, not calling");
-                    continue;
-                }
-
-                if( Order.COLLECTION.equals(order.getDeliveryType()) && !restaurant.isOpenForCollection(now)) {
-                    LOGGER.info("Restaurant not currently open for collection orders, not calling");
-                    continue;
-                }
-
-                // Attempt to call restaurant again if they are open to receive calls
+                // Attempt to call restaurant again
                 if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus())) {
-                    NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
                     DateTime lastCallTime = order.getLastCallPlacedTime();
                     DateTime lastCallCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall);
-                    if(notificationOptions.isReceiveNotificationCall()) {
-                        if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
-                            LOGGER.info("Retrying order notification call for order id: " + order.getOrderId());
-                            try {
-                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-                            }
-                            catch( Exception ex ) {
-                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
-                                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
-                            }
+                    if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
+                        try {
+                            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                        }
+                        catch( Exception ex ) {
+                            LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
                         }
                     }
                 }
