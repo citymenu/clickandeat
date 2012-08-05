@@ -2,6 +2,7 @@ package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
@@ -34,23 +35,40 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
+
+        Restaurant restaurant = order.getRestaurant();
         
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Notifying restaurant of order id: " + order.getOrderId());
+        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
+        if( !restaurant.getNotificationOptions().isReceiveNotificationCall()) {
+            if( LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Restaurant " + restaurant.getName() + " is not set to accept calls, not placing call");
+            }
+            return order;
+        }
+                        
+        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+        String deliveryType = order.getDeliveryType();
+
+        if( Order.DELIVERY.equals(deliveryType) && !restaurant.isOpenForDelivery(now)) {
+            if( LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open for delivery not placing call");
+            }
+            return order;
+        }
+
+        if( Order.COLLECTION.equals(deliveryType) && !restaurant.isOpenForCollection(now)) {
+            if( LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open for collection not placing call");
+            }
+            return order;
         }
 
         try {
-            NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
-            if( notificationOptions.isReceiveNotificationCall()) {
-                notificationService.placeOrderNotificationCallToRestaurant(order);
-                order.addOrderUpdate("Placed order notification call to restaurant");
-                order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
-                order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
-                order.setOrderNotificationStatus(NOTIFICATION_STATUS_CALL_IN_PROGRESS);
-            }
-            else {
-                order.addOrderUpdate("Not placing order notification call to restaurant as it is not selected");
-            }
+            notificationService.placeOrderNotificationCallToRestaurant(order);
+            order.addOrderUpdate("Placed order notification call to restaurant");
+            order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
+            order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setOrderNotificationStatus(NOTIFICATION_STATUS_CALL_IN_PROGRESS);
         }
         catch( Exception ex ) {
             LOGGER.error("Error placing order notification call to restaurant");

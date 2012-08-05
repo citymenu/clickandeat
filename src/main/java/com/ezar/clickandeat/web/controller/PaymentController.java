@@ -1,14 +1,11 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -63,30 +60,12 @@ public class PaymentController {
             // Send notification to restaurant and customer
             orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
             
-            // Place order notification call if restaurant is open
-            Restaurant restaurant = order.getRestaurant();
-            DateTime now = new DateTime(DateTimeZone.forID(timeZone));
-
-            boolean shouldPlaceCall = false;
-            if( Order.DELIVERY.equals(order.getDeliveryType()) && restaurant.isOpenForDelivery(now)) {
-                shouldPlaceCall = true;
+            // Place order notification call
+            try {
+                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
             }
-            else if(Order.COLLECTION.equals(order.getDeliveryType()) && restaurant.isOpenForCollection(now)){
-                shouldPlaceCall = true;
-            }
-
-            // Place call if restaurant is open to receive it
-            if( shouldPlaceCall ) {
-                LOGGER.info("Going to place order notification call as restaurant is open");
-                try {
-                    orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-                }
-                catch( Exception ex ) {
-                    orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
-                }
-            }
-            else {
-                LOGGER.info("Not going to place order notification call as restaurant is not open");
+            catch( Exception ex ) {
+                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             }
 
             // Set status to success
