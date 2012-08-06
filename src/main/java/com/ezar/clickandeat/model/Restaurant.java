@@ -241,7 +241,13 @@ public class Restaurant extends PersistentObject {
                     // Don't override previously set collection times
                     if( times[0] == null && times[1] == null ) {
                         times[0] = now.toLocalDate().toDateTime(collectionOpen);
-                        times[1] = now.toLocalDate().toDateTime(collectionClose);
+                        if( collectionClose.isBefore(collectionOpen)) {
+                            times[1] = now.toLocalDate().plusDays(1).toDateTime(collectionClose);
+                        }
+                        else {
+                            times[1] = now.toLocalDate().toDateTime(collectionClose);    
+                        }
+                        
                     }
                 }
             }
@@ -260,7 +266,12 @@ public class Restaurant extends PersistentObject {
                     // Don't override previously set delivery times
                     if( times[2] == null && times[3] == null ) {
                         times[2] = now.toLocalDate().toDateTime(deliveryOpen);
-                        times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                        if( deliveryClose.isBefore(deliveryOpen)) {
+                            times[3] = now.toLocalDate().plusDays(1).toDateTime(deliveryClose);
+                        }
+                        else {
+                            times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                        }
                     }
                 }
             }
