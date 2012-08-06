@@ -81,7 +81,7 @@
 
 	<!-- Load the MONGO HQ url -->
 	<bean class="java.net.URI" id="dbUrl">
-    	<constructor-arg value="${MONGOLAB_URI}"/>
+    	<constructor-arg value="${MONGOHQ_URL}"/>
 	</bean>
 
 	<!-- Default bean name is 'mongo' -->
@@ -154,7 +154,5 @@
             </props>
         </property>
     </bean>
-
-
 
 </beans>
