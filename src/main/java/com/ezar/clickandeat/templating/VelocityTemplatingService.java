@@ -53,6 +53,10 @@ public class VelocityTemplatingService implements InitializingBean {
         engine.setProperty("runtime.log.logsystem.log4j.logger",VELOCITY_LOGGER_NAME);
         engine.setProperty("resource.loader","class");
         engine.setProperty("class.resource.loader.class","org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        engine.setProperty("velocimacro.library.autoreload","false");
+        engine.setProperty("file.resource.loader.cache","true");
+        engine.setProperty("file.resource.loader.modificationCheckInterval","-1");
+        engine.setProperty("parser.pool.size","20");
         engine.init();
         
         // Add velocity tools to map
