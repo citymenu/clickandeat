@@ -106,7 +106,9 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Attempt to call restaurant again
-                if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(order.getOrderNotificationStatus())) {
+                String notificationStatus = order.getOrderNotificationStatus();
+                if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus) &&
+                        !NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus)) {
                     DateTime lastCallTime = order.getLastCallPlacedTime();
                     DateTime lastCallCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall);
                     if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {

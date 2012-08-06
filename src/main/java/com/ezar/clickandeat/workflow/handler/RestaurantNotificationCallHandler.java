@@ -38,7 +38,6 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
 
         Restaurant restaurant = order.getRestaurant();
         
-        NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
         if( !restaurant.getNotificationOptions().isReceiveNotificationCall()) {
             if( LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Restaurant " + restaurant.getName() + " is not set to accept calls, not placing call");

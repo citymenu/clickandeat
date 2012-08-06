@@ -123,7 +123,8 @@ public class TwilioController implements InitializingBean {
         Order order = getOrder(orderId,response);
 
         // Get call duration
-        Integer callDuration = Integer.valueOf(request.getParameter("CallDuration"));
+        String callDurationParameter = request.getParameter("CallDuration");
+        Integer callDuration = StringUtils.hasText(callDurationParameter)? Integer.valueOf(callDurationParameter): 0;
         String answeredBy = request.getParameter("AnsweredBy");
 
         // If no answer or answered by is 'Machine' send NO_ANSWER upate
