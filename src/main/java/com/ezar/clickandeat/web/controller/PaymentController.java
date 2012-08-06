@@ -74,6 +74,7 @@ public class PaymentController {
             
             // Wipe the order from the session
             request.getSession(true).removeAttribute("orderid");
+            request.getSession(true).removeAttribute("restaurantid");
             
             // Set status to success
             model.put("success",true);

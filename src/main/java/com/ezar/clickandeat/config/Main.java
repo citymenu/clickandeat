@@ -74,7 +74,7 @@ public class Main {
         String hostname = redisUrl.split("@")[1].split(":")[0];
         int port = Integer.valueOf(redisUrl.split("@")[1].split(":")[1].split("/")[0]);
         String password = redisUrl.split("//")[1].split("@")[0].split(":")[1];
-        int timeout = Integer.valueOf("redis.pool.timeout");
+        int timeout = Integer.valueOf(props.getProperty("redis.pool.timeout"));
 
         GenericObjectPool.Config config = new GenericObjectPool.Config();
         config.maxActive = Integer.valueOf(props.getProperty("redis.pool.maxActive"));
