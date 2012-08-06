@@ -14,7 +14,7 @@
     </logger>
 
     <logger name="com.ovea">
-        <level value="DEBUG"/>
+        <level value="INFO"/>
     </logger>
 
     <logger name="com.ezar.clickandeat.web.security.SimpleSecurityContextRepository">

@@ -97,10 +97,6 @@ public class OrderController {
     @RequestMapping(value="/order/getOrder.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> getOrder(HttpServletRequest request) throws Exception {
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Retrieving order from session");
-        }
-
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
@@ -156,15 +152,9 @@ public class OrderController {
             String orderId = (String)session.getAttribute("orderid");
             Order order;
             if( orderId == null ) {
-                if(LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Did not find existing order in session, creating new order");
-                }
                 order = buildAndRegister(session,restaurantId);
             }
             else {
-                if(LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Found existing order in session with id: " + orderId);
-                }
                 order = orderRepository.findByOrderId(orderId);
                 if( order == null ) {
                     order = buildAndRegister(session,restaurantId);
