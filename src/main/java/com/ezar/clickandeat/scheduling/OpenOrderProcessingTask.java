@@ -22,7 +22,7 @@ import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 @Component
 public class OpenOrderProcessingTask extends AbstractClusteredTask {
 
-    private static final Logger LOGGER = Logger.getLogger(SessionClearingTask.class);
+    private static final Logger LOGGER = Logger.getLogger(OpenOrderProcessingTask.class);
 
     @Autowired
     private OrderRepository orderRepository;
