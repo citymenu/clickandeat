@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +69,12 @@ public class PaymentController {
                 orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             }
 
+            // Put the order id into the model
+            model.put("orderId",order.getOrderId());
+            
+            // Wipe the order from the session
+            request.getSession(true).removeAttribute("orderid");
+            
             // Set status to success
             model.put("success",true);
         }
