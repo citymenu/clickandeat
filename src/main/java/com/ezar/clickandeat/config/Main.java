@@ -2,6 +2,12 @@ package com.ezar.clickandeat.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
+import com.ovea.jetty.session.Serializer;
+import com.ovea.jetty.session.redis.RedisSessionIdManager;
+import com.ovea.jetty.session.redis.RedisSessionManager;
+import com.ovea.jetty.session.serializer.JdkSerializer;
+import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionIdManager;
 import org.eclipse.jetty.nosql.mongodb.MongoSessionManager;
@@ -10,6 +16,7 @@ import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.WriteResultChecking;
+import redis.clients.jedis.JedisPool;
 
 import java.util.Properties;
 import java.util.UUID;
@@ -32,21 +39,18 @@ public class Main {
         server.setStopAtShutdown(true);
         server.setGracefulShutdown(5000);
 
-		// Configure mongo session id manager
-		MongoTemplate mongoTemplate = getMongoTemplate(props);
-		MongoSessionIdManager mongoSessionIdManager = new MongoSessionIdManager(server,mongoTemplate.getCollection("sessions"));
-        mongoSessionIdManager.setScavengeDelay(0l);
-        mongoSessionIdManager.setPurge(false);
-        mongoSessionIdManager.setWorkerName(UUID.randomUUID().toString());
-        server.setSessionIdManager(mongoSessionIdManager);
+		// Configure redis session id manager
+        JedisPool jedisPool = getJedisPool(props);
+        RedisSessionIdManager redisSessionIdManager = new RedisSessionIdManager(server,jedisPool);
+        redisSessionIdManager.setWorkerName(UUID.randomUUID().toString());
+        server.setSessionIdManager(redisSessionIdManager);
 
-        // Configure mongo session manager
+        // Configure redis session manager
         SessionHandler sessionHandler = new SessionHandler();
-        MongoSessionManager mongoSessionManager = new MongoSessionManager();
-        mongoSessionManager.setSessionIdManager(server.getSessionIdManager());
-        mongoSessionManager.setSavePeriod(-2);
-        mongoSessionManager.setIdlePeriod(-1);
-        sessionHandler.setSessionManager(mongoSessionManager);
+        Serializer serializer = new JdkSerializer();
+        RedisSessionManager redisSessionManager = new RedisSessionManager(jedisPool,serializer);
+        redisSessionManager.setSessionIdManager(redisSessionIdManager);
+        sessionHandler.setSessionManager(redisSessionManager);
 
         // Build web app context
         WebAppContext context = new WebAppContext();
@@ -88,6 +92,21 @@ public class Main {
         mongoTemplate.setWriteResultChecking(WriteResultChecking.EXCEPTION);
         return mongoTemplate;
     }
+
+
+    /**
+     * @param props
+     * @return
+     * @throws Exception
+     */
     
+    private static JedisPool getJedisPool(Properties props) throws Exception {
+        GenericObjectPool.Config config = new GenericObjectPool.Config();
+        String redisUrl = System.getenv("REDISTOGO_URL") == null? props.getProperty("REDISTOGO_URL"): System.getenv("REDISTOGO_URL");
+        String hostname = redisUrl.split("@")[1].split(":")[0];
+        int port = Integer.valueOf(redisUrl.split("@")[1].split(":")[1].split("/")[0]);
+        String password = redisUrl.split("//")[1].split("@")[0].split(":")[1];
+        return new JedisPool(config,hostname,port, 2000, password);
+    }
 
 }

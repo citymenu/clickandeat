@@ -67,13 +67,13 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 Restaurant restaurant = order.getRestaurant();
                 DateTime now = new DateTime(DateTimeZone.forID(timeZone));
                 LOGGER.info("Current time is: " + now);
-                
+
                 // Get the time the restaurant opened
                 DateTime restaurantOpenedTime = Order.DELIVERY.equals(order.getDeliveryType())? restaurant.getDeliveryOpeningTime(now): restaurant.getCollectionOpeningTime(now);
 
                 // Don't do anything if the restaurant has not opened yet today
                 LOGGER.info("Restaurant " + restaurant.getName() + " opened time today is: " + restaurantOpenedTime);
-                if( restaurantOpenedTime.isAfter(now)) {
+                if( restaurantOpenedTime == null || restaurantOpenedTime.isAfter(now)) {
                     LOGGER.info("Restaurant " + restaurant.getName() + " has not opened yet, not doing any processing");
                     continue;
                 }
