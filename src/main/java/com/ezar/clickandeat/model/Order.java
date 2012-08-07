@@ -40,6 +40,7 @@ public class Order extends PersistentObject {
     private String additionalInstructions;
 
     // Order timing details
+    private DateTime orderCreatedTime;
     private DateTime orderPlacedTime;
     private DateTime requestedDeliveryTime;
     private DateTime expectedDeliveryTime;
@@ -73,6 +74,8 @@ public class Order extends PersistentObject {
         this.orderStatus = OrderWorkflowEngine.ORDER_STATUS_BASKET;
         this.orderNotificationStatus = OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE;
 
+        this.orderCreatedTime = new DateTime();
+        
         this.customer = new Person();
         this.deliveryType = DELIVERY;
         this.deliveryAddress = new Address();
@@ -322,6 +325,14 @@ public class Order extends PersistentObject {
 
     public void setOrderNotificationStatus(String orderNotificationStatus) {
         this.orderNotificationStatus = orderNotificationStatus;
+    }
+
+    public DateTime getOrderCreatedTime() {
+        return orderCreatedTime;
+    }
+
+    public void setOrderCreatedTime(DateTime orderCreatedTime) {
+        this.orderCreatedTime = orderCreatedTime;
     }
 
     public DateTime getLastCallPlacedTime() {
