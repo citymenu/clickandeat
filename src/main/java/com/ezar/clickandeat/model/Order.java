@@ -36,6 +36,7 @@ public class Order extends PersistentObject {
     private String paymentType;
     private Address deliveryAddress;
     private Address billingAddress;
+    private String additionalInstructions;
 
     // Order timing details
     private DateTime orderPlacedTime;
@@ -292,6 +293,14 @@ public class Order extends PersistentObject {
 
     public void setBillingAddress(Address billingAddress) {
         this.billingAddress = billingAddress;
+    }
+
+    public String getAdditionalInstructions() {
+        return additionalInstructions;
+    }
+
+    public void setAdditionalInstructions(String additionalInstructions) {
+        this.additionalInstructions = additionalInstructions;
     }
 
     public String getOrderStatus() {

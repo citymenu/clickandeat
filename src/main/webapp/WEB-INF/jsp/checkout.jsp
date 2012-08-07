@@ -39,6 +39,16 @@
                     </div>
                 </div>
 
+                <div id="additionalinstructions">
+                    <div class="checkoutheader"><spring:message code="label.additionalinstructions"/></div>
+                    <div>
+                        <div class="checkoutsummary"><spring:message code="label.additional-instructions-text"/></div>
+                        <div class="additionalinstructionsfield">
+                            <textarea name="additionalInstructions" class="checkoutfield">${order.additionalInstructions}</textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="deliverytime">
                     <div class="checkoutheader"><spring:message code="label.delivery-time"/></div>
                     <div>

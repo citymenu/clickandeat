@@ -95,6 +95,7 @@ public class VelocityTemplatingService implements InitializingBean {
 
 
     public static final class StringTool {
+
         public String unescape(Object obj) {
             if( obj == null ) {
                 return null;
@@ -102,6 +103,10 @@ public class VelocityTemplatingService implements InitializingBean {
             String str = (String)obj;
             return StringUtils.hasText(str)? str.replace("###","'"): str;
         }
-    }
 
+        public boolean hasText(Object obj) {
+            return obj != null && StringUtils.hasText((String)obj);
+        }
+
+    }
 }

@@ -10,6 +10,9 @@
 
 <body>
 
+<script type="text/javascript">
+    var searchLocation="${search.location}";
+</script>
 
 <div id="maincontent">
     <%@ include file="/WEB-INF/jsp/workflow.jsp" %>
@@ -60,6 +63,11 @@
                 </div>
             </c:forEach>
         </div>
+
+        <div>
+            <input type="button" id="selectanotherbutton" value="<spring:message code="label.select-another-restaurant"/>"/>
+        </div>
+
     </div>
 </div>
 

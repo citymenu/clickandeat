@@ -84,6 +84,7 @@ public class CheckoutController {
             // Extract person and address from request
             Person person = buildPerson(body);
             Address deliveryAddress = buildDeliveryAddress(body);
+            String additionalInstructions = buildAdditionalInstructions(body);
 
             // Get the order out of the session
             Order order = requestHelper.getOrderFromSession(request);
@@ -93,6 +94,7 @@ public class CheckoutController {
             order.setDeliveryAddress(deliveryAddress);
             order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
             order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
 
             // Mark order updated successfully
@@ -121,6 +123,7 @@ public class CheckoutController {
             // Extract person and address from request
             Person person = buildPerson(body);
             Address deliveryAddress = buildDeliveryAddress(body);
+            String additionalInstructions = buildAdditionalInstructions(body); 
 
             // Validate the person object
             BindException personErrors = new BindException(person,"person");
@@ -138,6 +141,7 @@ public class CheckoutController {
             order.setDeliveryAddress(deliveryAddress);
             order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
             order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
             
             // Mark order updated successfully
@@ -193,8 +197,19 @@ public class CheckoutController {
 
         return new Address(address1,address2,address3,town,region,postCode);
     }
-    
 
+
+    /**
+     * @param json
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private String buildAdditionalInstructions(String json) {
+        Map<String,Object> params = (Map<String,Object>) JSONUtils.deserialize(json);
+        return (String)params.get("additionalInstructions");
+    }
+    
+    
     @Required
     @Value(value="${timezone}")
     public void setTimeZone(String timeZone) {

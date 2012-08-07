@@ -39,14 +39,7 @@ function displayDeliveryOptions(deliveryType) {
 
 // Update order
 function updateOrder() {
-
-    // Build post object
-    var update = {
-        person: getPersonDetails(),
-        deliveryAddress: getDeliveryAddress()
-    };
-
-    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(update) },
+    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()) },
         function( data ) {
             if( data.success ) {
                 location.href = ctx + '/buildOrder.html';
@@ -55,22 +48,11 @@ function updateOrder() {
             }
         }
     );
-
 }
 
 // Proceed to payment
 function proceed() {
-
-    var person = getPersonDetails();
-    var deliveryAddress = getDeliveryAddress();
-
-    // Build post object
-    var update = {
-        person: person,
-        deliveryAddress: deliveryAddress
-    };
-
-    $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(update) },
+    $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
         function( data ) {
             if( data.success ) {
                 location.href = ctx + '/secure/payment.html';
@@ -81,19 +63,16 @@ function proceed() {
     );
 }
 
-// Extract the person details from the form
-function getPersonDetails() {
+// Builds the update object
+function buildUpdate() {
+
     var person = {
         firstName: $('input[name="firstName"]').val(),
         lastName: $('input[name="lastName"]').val(),
         telephone: $('input[name="telephone"]').val(),
         email: $('input[name="email"]').val()
     };
-    return person;
-}
 
-// Extract the delivery address details from the form
-function getDeliveryAddress() {
     var deliveryAddress = {
         address1: $('input[name="address1"]').val(),
         address2: $('input[name="address2"]').val(),
@@ -102,5 +81,12 @@ function getDeliveryAddress() {
         region: $('input[name="region"]').val(),
         postCode: $('input[name="postCode"]').val()
     }
-    return deliveryAddress;
+
+    var additionalInstructions = $('textarea[name="additionalInstructions"]').val()
+
+    return {
+        person: person,
+        deliveryAddress: deliveryAddress,
+        additionalInstructions: additionalInstructions
+    };
 }
