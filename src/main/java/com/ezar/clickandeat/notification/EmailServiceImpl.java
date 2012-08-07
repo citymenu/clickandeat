@@ -83,8 +83,8 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         templateMap.put("baseUrl",baseUrl);
         String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
         String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
-        templateMap.put("acceptCurl", URLEncoder.encode(acceptCurl,"utf-8"));
-        templateMap.put("declineCurl", URLEncoder.encode(declineCurl,"utf-8"));
+        templateMap.put("acceptCurl", acceptCurl);
+        templateMap.put("declineCurl", declineCurl);
 
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);

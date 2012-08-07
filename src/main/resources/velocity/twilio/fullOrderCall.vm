@@ -40,7 +40,7 @@
         #end
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="en-gb">The customer has added the following instructions for this order.</Say>
-            <Say>$order.additionalInstructions</Say>
+            <Say>$order.escapedAdditionalInstructions</Say>
         #end
         <Say language="en-gb">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
         order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key. To repeat this message

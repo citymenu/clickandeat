@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Transient;
@@ -301,6 +302,10 @@ public class Order extends PersistentObject {
 
     public void setAdditionalInstructions(String additionalInstructions) {
         this.additionalInstructions = additionalInstructions;
+    }
+    
+    public String getEscapedAdditionalInstructions() {
+        return additionalInstructions == null? null: StringEscapeUtils.escapeHtml(additionalInstructions);
     }
 
     public String getOrderStatus() {

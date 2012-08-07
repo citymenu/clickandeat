@@ -3,6 +3,8 @@ package com.ezar.clickandeat.templating;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.TwilioServiceImpl;
 import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.util.SecurityUtils;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -37,12 +39,16 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     @Autowired
     private TwilioServiceImpl twilioService;
 
+    @Autowired
+    private SecurityUtils securityUtils;
+
     private String timeZone;
     
     private String locale;
 
     private Locale systemLocale;
 
+    private String baseUrl;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -71,6 +77,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
         order.setExpectedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
+        order.setAdditionalInstructions("Please can I have some extra cheese & onion");
         
         // Add a delivery address to the order
         Address deliveryAddress = new Address();
@@ -139,14 +146,17 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("order",order);
+        String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
+        String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+        templateModel.put("acceptCurl", acceptCurl);
+        templateModel.put("declineCurl", declineCurl);
+        
         String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
         Assert.assertNotNull(text);
         LOGGER.info("Generated text:\n" + text );
     }
 
 
-    
-    
     @Required
     @Value(value="${timezone}")
     public void setTimeZone(String timeZone) {
@@ -158,6 +168,12 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     @Value(value="${locale}")
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    @Required
+    @Value(value="${baseUrl}")
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
 }
