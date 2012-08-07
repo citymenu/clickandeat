@@ -5,6 +5,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
@@ -19,6 +20,7 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
+import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +39,10 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
     
     @Autowired
     private VelocityTemplatingService velocityTemplatingService;
-    
+
+    @Autowired
+    private SecurityUtils securityUtils;
+
     private String from;
 
     private String region;
@@ -75,10 +80,12 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        templateMap.put("url",baseUrl);
-        templateMap.put("accept", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
-        templateMap.put("acceptWithDeliveryDetail", OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL);
-        templateMap.put("decline", OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+        templateMap.put("baseUrl",baseUrl);
+        String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
+        String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+        templateMap.put("acceptCurl", URLEncoder.encode(acceptCurl,"utf-8"));
+        templateMap.put("declineCurl", URLEncoder.encode(declineCurl,"utf-8"));
+
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }

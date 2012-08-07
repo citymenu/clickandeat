@@ -30,8 +30,8 @@
 <h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 
 <div>
-    <a href="${url}/secure/workflow/confirmOrder.html?orderId=${order.orderId}&uuid=${order.uuid}&action=$accept">Accept</a>
-    <a href="${url}/secure/workflow/confirmOrder.html?orderId=${order.orderId}&uuid=${order.uuid}&action=$decline">Decline</a>
+    <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>
+    <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Decline</a>
 </body>
 
 </html>

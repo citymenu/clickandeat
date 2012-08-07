@@ -20,7 +20,6 @@ public class Order extends PersistentObject {
     @Indexed(unique=true)
     private String orderId;
 
-    private String uuid;
     private String userId;
     private String restaurantId;
 
@@ -71,7 +70,6 @@ public class Order extends PersistentObject {
 
         this.orderStatus = OrderWorkflowEngine.ORDER_STATUS_BASKET;
         this.orderNotificationStatus = OrderWorkflowEngine.NOTIFICATION_STATUS_NO_CALL_MADE;
-        this.uuid = UUID.randomUUID().toString();
 
         this.customer = new Person();
         this.deliveryType = DELIVERY;
@@ -222,14 +220,6 @@ public class Order extends PersistentObject {
 
     public void setOrderId(String orderId) {
         this.orderId = orderId;
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
     }
 
     public List<OrderItem> getOrderItems() {
