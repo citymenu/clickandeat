@@ -411,11 +411,7 @@ public class TwilioController implements InitializingBean {
         if(hasError) {
             templateModel.put("error",true);
         }
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
-        if(LOGGER.isDebugEnabled()){
-            LOGGER.debug("Generated xml [" + xml + "]");
-        }
-        return xml;
+        return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
     }
 
 
