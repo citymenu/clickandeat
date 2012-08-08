@@ -34,12 +34,12 @@ function delimitedStringToArray(str,delim) {
 
 /* Converts <br> into newline on model init */
 function replaceLineBreaks(value) {
-    return value? unescapeQuotes(value.replace('<br>','\n')): null;
+    return value? unescapeQuotes(value.replace(/<br>/g,'\n')): null;
 }
 
 /* Converts <br> into newline on model init */
 function replaceNewLines(value) {
-    return value? value.replace('\n','<br>'): null;
+    return value? value.replace(/\n/g,'<br>'): null;
 }
 
 /* Converts array into newline delimited string */
