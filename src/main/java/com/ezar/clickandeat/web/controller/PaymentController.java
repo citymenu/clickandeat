@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -41,6 +42,11 @@ public class PaymentController {
     
     @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
+
+        if( request.getSession(true).getAttribute("orderid") == null ) {
+            return "redirect:/home.html";
+        }
+
         return "payment";
     }
 
@@ -69,13 +75,11 @@ public class PaymentController {
                 orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             }
 
-            // Put the order id into the model
-            model.put("orderId",order.getOrderId());
-            
-            // Wipe the order from the session
+            // Add completed order id to the session
+            request.getSession(true).setAttribute("completedorderid",order.getOrderId());
             request.getSession(true).removeAttribute("orderid");
             request.getSession(true).removeAttribute("restaurantid");
-            
+
             // Set status to success
             model.put("success",true);
         }

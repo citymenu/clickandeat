@@ -32,10 +32,16 @@ public class OrderSummaryController {
     private OrderRepository orderRepository;
     
     @RequestMapping(value="/orderSummary.html", method= RequestMethod.GET)
-    public ModelAndView orderSummary(HttpServletRequest request, @RequestParam(value = "orderId") String orderId ) throws Exception {
+    public ModelAndView orderSummary(HttpServletRequest request ) throws Exception {
         Map<String,Object> model = new HashMap<String, Object>();
-        model.put("order",orderRepository.findByOrderId(orderId));
-        return new ModelAndView("orderSummary",model);
+        String completedOrderId = (String)request.getSession(true).getAttribute("completedorderid");
+        if( completedOrderId == null ) {
+            return new ModelAndView("redirect:/home.html",model);
+        }
+        else {
+            model.put("order",orderRepository.findByOrderId(completedOrderId));
+            return new ModelAndView("orderSummary",model);
+        }
     }
 
 }

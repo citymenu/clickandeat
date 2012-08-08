@@ -280,6 +280,7 @@ public class OrderController {
         order.setRestaurant(restaurant);
         order = orderRepository.save(order);
         session.setAttribute("orderid",order.getOrderId());
+        session.removeAttribute("completedorderid");
         return order;
     }
 

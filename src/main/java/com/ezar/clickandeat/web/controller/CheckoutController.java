@@ -53,6 +53,10 @@ public class CheckoutController {
         
         Map<String,Object> model = new HashMap<String, Object>();
 
+        if( request.getSession(true).getAttribute("orderid") == null ) {
+            return new ModelAndView("redirect:/home.html",model);
+        }
+        
         Order order = requestHelper.getOrderFromSession(request);
         model.put("order",order);
         
