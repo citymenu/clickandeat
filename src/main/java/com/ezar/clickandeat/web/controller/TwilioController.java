@@ -131,9 +131,6 @@ public class TwilioController implements InitializingBean {
         if( callDuration == 0 || "machine".equals(answeredBy)) {
             orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
         }
-        else {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-        }
 
         response.sendError(HttpServletResponse.SC_OK);
     }
@@ -163,9 +160,7 @@ public class TwilioController implements InitializingBean {
 
         // Process error update for call
         orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-
         response.sendError(HttpServletResponse.SC_OK);
-        orderRepository.addOrderUpdate(orderId, "Received callback for error in order notification call");
     }
 
 
@@ -220,15 +215,7 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Mark that the full order call was placed
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-
         response.sendError(HttpServletResponse.SC_OK);
-        orderRepository.addOrderUpdate(orderId, "Received callback for successful full order call");
     }
 
 
@@ -256,9 +243,7 @@ public class TwilioController implements InitializingBean {
 
         // Process error update for call
         orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-
         response.sendError(HttpServletResponse.SC_OK);
-        orderRepository.addOrderUpdate(orderId, "Received callback for error in full order call");
     }
 
 
