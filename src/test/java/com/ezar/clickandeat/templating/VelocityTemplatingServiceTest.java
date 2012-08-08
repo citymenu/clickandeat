@@ -64,7 +64,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         Map<String,Object> templateModel = new HashMap<String, Object>();
         String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
-        templateModel.put("delivery",order.getDeliveryType().toLowerCase());
+        templateModel.put("order",order);
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
         Assert.assertNotNull(xml);
         LOGGER.info("Generated xml [" + xml + "]");
@@ -76,7 +76,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
 
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
-        order.setExpectedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
+        order.setExpectedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)).minusDays(2).minusHours(3));
         order.setAdditionalInstructions("Please can I have some extra cheese & onion");
         
         // Add a delivery address to the order
@@ -162,7 +162,6 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
-    
 
     @Required
     @Value(value="${locale}")

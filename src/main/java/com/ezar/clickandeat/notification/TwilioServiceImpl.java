@@ -48,7 +48,6 @@ public class TwilioServiceImpl implements ITwilioService {
     
     private String callTimeout;
 
-
     /**
      * @param order
      * @throws Exception
@@ -72,7 +71,7 @@ public class TwilioServiceImpl implements ITwilioService {
 
         // Build the xml
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        templateModel.put("delivery",order.getDeliveryType());
+        templateModel.put("order",order);
         String body = velocityTemplatingService.mergeContentIntoTemplate(templateModel,VelocityTemplatingService.NOTIFICATION_SMS_TEMPLATE);
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Generated body [" + body + "]");

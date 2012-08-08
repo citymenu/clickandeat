@@ -6,6 +6,8 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.tools.generic.NumberTool;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -21,10 +23,10 @@ public class VelocityTemplatingService implements InitializingBean {
     private static final String VELOCITY_LOGGER_NAME = "VelocityLogger";
 
     // Twilio call velocity template locations
-    public static final String NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/orderNotificationSMS.vm";
-    public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/orderNotificationCall.vm";
-    public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/fullOrderCall.vm";
-    public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/fullOrderCallResponse.vm";
+    public static final String NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationSMS.vm";
+    public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationCall.vm";
+    public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCall.vm";
+    public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCallResponse.vm";
 
     // Email velocity template locations
     public static final String CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/customerOrderConfirmation.vm";
@@ -45,7 +47,8 @@ public class VelocityTemplatingService implements InitializingBean {
     
     private VelocityEngine engine;
 
-
+    private String locale;
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         engine = new VelocityEngine();
@@ -89,8 +92,25 @@ public class VelocityTemplatingService implements InitializingBean {
         }
 
         StringWriter sw = new StringWriter();
-        engine.mergeTemplate(templateLocation,"utf-8",context,sw);
+        engine.mergeTemplate(getLocaleTemplate(templateLocation),"utf-8",context,sw);
         return sw.toString();
+    }
+
+
+    /**
+     * @param templateLocation
+     * @return
+     */
+
+    private String getLocaleTemplate( String templateLocation ) {
+        return templateLocation.replace("{locale}",locale);
+    }
+
+
+    @Required
+    @Value(value="${locale}")
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
 
@@ -107,6 +127,5 @@ public class VelocityTemplatingService implements InitializingBean {
         public boolean hasText(Object obj) {
             return obj != null && StringUtils.hasText((String)obj);
         }
-
     }
 }

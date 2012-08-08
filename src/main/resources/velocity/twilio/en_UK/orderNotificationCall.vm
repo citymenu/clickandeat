@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Gather action="$url" timeout="30" numDigits="1">
+        <Say language="en-gb">Hello, this is a call from click and eat. You have received a new order for
+         #if($order.deliveryType == 'DELIVERY')
+            delivery
+        #else
+            collection
+        #end
+        Please check your email for details of the order.
+        Press any number on your key pad to hear the full order details over the phone, otherwise please hang up now.</Say>
+    </Gather>
+</Response>

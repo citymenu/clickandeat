@@ -9,8 +9,8 @@
             <Say language="en-gb">You have an order for delivery to $order.deliveryAddress.summary, to be delivered
             #if($order.expectedDeliveryTime)
                 at $order.expectedDeliveryTime.hourOfDay $order.expectedDeliveryTime.minuteOfHour
-                #if(!$order.expectedDeliveryTime.toLocalDate() == $today)
-                    on $order.expectedDeliveryTime.dayOfMonth of $order.expectedDeliveryTime.monthOfYear().getAsText($locale)
+                #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+                    on $order.expectedDeliveryTime.monthOfYear().getAsText($locale) $order.expectedDeliveryTime.dayOfMonth
                 #end
             #else
                 as soon as possible
