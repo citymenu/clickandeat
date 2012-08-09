@@ -10,7 +10,7 @@
 
 <div>
     <p><spring:message code="label.change-language"/></p>
-    <p><a href="?lang=en">en</a> | <a href="?lang=es">es</a></p>
+    <p><a href="?lang=en">en</a> | <a href="?lang=es_ES">es</a></p>
 </div>
 
 <div>

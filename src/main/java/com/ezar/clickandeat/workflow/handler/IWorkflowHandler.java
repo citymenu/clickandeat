@@ -9,5 +9,7 @@ public interface IWorkflowHandler {
     
     String getWorkflowAction();
     
+    boolean isActionValidForOrder(Order order);
+    
     Order handle(Order order,Map<String,Object> context) throws WorkflowException;
 }

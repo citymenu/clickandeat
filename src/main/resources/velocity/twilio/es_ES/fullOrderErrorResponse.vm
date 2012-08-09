@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say language="es">$error</Say>
+    <Say language="es">Please check your email for more information.</Say>
+</Response>

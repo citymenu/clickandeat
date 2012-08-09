@@ -17,6 +17,7 @@ import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_RESTAURANT;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_CALL_IN_PROGRESS;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
 
 @Component
 public class RestaurantNotificationCallHandler implements IWorkflowHandler {
@@ -31,6 +32,11 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     @Override
     public String getWorkflowAction() {
         return ACTION_CALL_RESTAURANT;
+    }
+
+    @Override
+    public boolean isActionValidForOrder(Order order) {
+        return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
     }
 
     @Override

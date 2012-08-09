@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_AUTO_CANCEL;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AUTO_CANCELLED;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
 
 @Component
 public class AutoCancelledHandler implements IWorkflowHandler {
@@ -28,6 +29,11 @@ public class AutoCancelledHandler implements IWorkflowHandler {
     @Override
     public String getWorkflowAction() {
         return ACTION_AUTO_CANCEL;
+    }
+
+    @Override
+    public boolean isActionValidForOrder(Order order) {
+        return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
     }
 
     @Override

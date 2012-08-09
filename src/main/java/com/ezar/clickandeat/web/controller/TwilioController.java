@@ -7,6 +7,7 @@ import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
+import com.ezar.clickandeat.workflow.WorkflowStatusExceptionMessageResolver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTimeZone;
@@ -47,6 +48,9 @@ public class TwilioController implements InitializingBean {
 
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
+
+    @Autowired
+    private WorkflowStatusExceptionMessageResolver resolver;
     
     private String authKey;
 
@@ -269,7 +273,7 @@ public class TwilioController implements InitializingBean {
 
         // Get order from the request
         Order order = getOrder(orderId,response);
-        
+
         // Examine the digits returned from the call
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received digits " + digits + " as response to full order call");
@@ -291,6 +295,7 @@ public class TwilioController implements InitializingBean {
             
             // Order accepted
             case '1':
+
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
@@ -298,10 +303,10 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
-            
             // Order rejected
             case '2':
                 try {
@@ -311,7 +316,8 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
             // Order accepted with non-standard delivery time
@@ -326,7 +332,8 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
 
@@ -412,7 +419,23 @@ public class TwilioController implements InitializingBean {
         }
         return xml;
     }
-    
+
+
+    /**
+     * @return
+     * @throws Exception
+     */
+
+    private String buildErrorResponseXml(String error) throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("error",error);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Generated xml [" + xml + "]");
+        }
+        return xml;
+    }
+
 
     @Required
     @Value(value="${twilio.authKey}")

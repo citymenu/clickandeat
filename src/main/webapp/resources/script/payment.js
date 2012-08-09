@@ -35,7 +35,7 @@ function placeOrder() {
     $.post( ctx + '/secure/processCardPayment.ajax', { body: JSON.stringify(update) },
         function( data ) {
             if( data.success ) {
-                location.href = ctx + '/orderSummary.html;
+                location.href = ctx + '/orderSummary.html';
             } else {
                 alert('success:' + data.success);
             }

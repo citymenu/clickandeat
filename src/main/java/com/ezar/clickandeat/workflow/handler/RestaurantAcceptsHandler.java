@@ -26,11 +26,13 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
     }
 
     @Override
-    public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
+    public boolean isActionValidForOrder(Order order) {
+        return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
+    }
 
-        if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException(order,"Order should be in awaiting restaurant state");
-        }
+
+    @Override
+    public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Restaurant accepted order");
 
@@ -40,7 +42,7 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
         }
         catch (Exception ex ) {
             LOGGER.error("Error sending confirmation of restaurant acceptance to customer",ex);
-            throw new WorkflowException(ex);
+            order.addOrderUpdate("Error sending confirmation of restaurant acceptance to customer: " + ex.getMessage());
         }
 
         order.setOrderStatus(ORDER_STATUS_RESTAURANT_ACCEPTED);

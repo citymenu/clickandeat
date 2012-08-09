@@ -24,6 +24,11 @@ public class OrderNotificationCallNoAnswerHandler implements IWorkflowHandler {
     }
 
     @Override
+    public boolean isActionValidForOrder(Order order) {
+        return true;
+    }
+
+    @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
         order.addOrderUpdate("No answer for order notification call to restaurant");
         if( order.getOrderNotificationCallCount() >= maximumCallAttempts ) {

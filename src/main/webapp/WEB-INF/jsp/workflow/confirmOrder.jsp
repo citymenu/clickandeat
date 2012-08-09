@@ -7,7 +7,6 @@
 
 <body>
 
-<h1>Thank you for your reponse</h1>
-<h3>Order ${order.orderId} has status ${order.orderStatus}</h3>
+<h2>${message}</h2>
 
 </body>

@@ -32,17 +32,19 @@ public class OrderPlacedHandler implements IWorkflowHandler {
     }
 
     @Override
+    public boolean isActionValidForOrder(Order order) {
+        return ORDER_STATUS_BASKET.equals(order.getOrderStatus());
+    }
+
+
+
+    @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
         
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Processing placing of order id: " + order.getOrderId());
         }
 
-        // Validate current status
-        if( !ORDER_STATUS_BASKET.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException(order,"Order must be in 'BASKET' status");
-        }
-        
         // Update order placed time
         order.setOrderPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
         

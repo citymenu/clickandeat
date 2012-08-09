@@ -26,11 +26,12 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
     }
 
     @Override
-    public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
+    public boolean isActionValidForOrder(Order order) {
+        return(ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus()));
+    }
 
-        if( !ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
-            throw new WorkflowStatusException(order,"Order should be in awaiting restaurant state");
-        }
+    @Override
+    public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Customer cancelled order");
 
@@ -40,7 +41,7 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
         }
         catch (Exception ex ) {
             LOGGER.error("Error sending confirmation of customer cancelling order to restaurant",ex);
-            throw new WorkflowException(ex);
+            order.addOrderUpdate("Error sending confirmation of customer cancelling order to restaurant: " + ex.getMessage());
         }
 
         try {
@@ -49,7 +50,7 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
         }
         catch (Exception ex ) {
             LOGGER.error("Error sending confirmation of customer cancelling order to customer",ex);
-            throw new WorkflowException(ex);
+            order.addOrderUpdate("Error sending confirmation of customer cancelling order to customer: " + ex.getMessage());
         }
 
         order.setOrderStatus(ORDER_STATUS_CUSTOMER_CANCELLED);

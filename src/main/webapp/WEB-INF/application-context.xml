@@ -123,6 +123,11 @@
     <!-- Proxy mongo repositories -->
     <mongo:repositories base-package="com.ezar.clickandeat.repository" />
 
+    <!-- Message resolver -->
+    <bean id="messageResolver" class="org.springframework.context.support.ResourceBundleMessageSource">
+        <property name="basename" value="messages"/>
+    </bean>
+    
     <!-- Load the REDISTOGO HQ url -->
     <bean class="java.net.URI" id="redisUrl">
         <constructor-arg value="${REDISTOGO_URL}"/>

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
 
 @Component
 public class OrderNotificationCancelOfferEmailSendHandler implements IWorkflowHandler {
@@ -23,6 +24,13 @@ public class OrderNotificationCancelOfferEmailSendHandler implements IWorkflowHa
     public String getWorkflowAction() {
         return ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER;
     }
+
+
+    @Override
+    public boolean isActionValidForOrder(Order order) {
+        return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
+    }
+
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {

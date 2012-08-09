@@ -45,7 +45,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
     private String from;
 
-    private String region;
+    private String locale;
 
     private String baseUrl;
     
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        String path = "/messages_" + region + ".properties";        
+        String path = "/messages_" + locale.split("_")[0] + ".properties";
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Loading properties from file: " + path);
         }
@@ -359,9 +359,9 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
     }
 
     @Required
-    @Value(value="${location.region}")
-    public void setRegion(String region) {
-        this.region = region;
+    @Value(value="${locale}")
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
 }

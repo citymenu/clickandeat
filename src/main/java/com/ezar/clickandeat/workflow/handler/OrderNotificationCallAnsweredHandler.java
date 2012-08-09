@@ -18,6 +18,11 @@ public class OrderNotificationCallAnsweredHandler implements IWorkflowHandler {
     }
 
     @Override
+    public boolean isActionValidForOrder(Order order) {
+        return true;
+    }
+
+    @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
         order.addOrderUpdate("Restaurant answered order notification call");
         order.setOrderNotificationStatus(NOTIFICATION_STATUS_RESTAURANT_ANSWERED);

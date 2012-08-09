@@ -20,6 +20,13 @@ public class OrderNotificationCallErrorHandler implements IWorkflowHandler {
         return ACTION_CALL_ERROR;
     }
 
+
+    @Override
+    public boolean isActionValidForOrder(Order order) {
+        return true;
+    }
+
+
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 

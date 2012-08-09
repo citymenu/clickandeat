@@ -24,28 +24,28 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      * Order status values
      */
     
-    public static final String ORDER_STATUS_BASKET = "BASKET";
-    public static final String ORDER_STATUS_AWAITING_RESTAURANT = "AWAITING_RESTAURANT";
-    public static final String ORDER_STATUS_RESTAURANT_ACCEPTED = "RESTAURANT_ACCEPTED";
-    public static final String ORDER_STATUS_RESTAURANT_DECLINED = "RESTAURANT_DECLINED";
-    public static final String ORDER_STATUS_RESTAURANT_CANCELLED = "RESTAURANT_CANCELLED";
-    public static final String ORDER_STATUS_CUSTOMER_CANCELLED = "CUSTOMER_CANCELLED";
-    public static final String ORDER_STATUS_AUTO_CANCELLED = "AUTO_CANCELLED";
+    public static final String ORDER_STATUS_BASKET = "ORDER_STATUS_BASKET";
+    public static final String ORDER_STATUS_AWAITING_RESTAURANT = "ORDER_STATUS_AWAITING_RESTAURANT";
+    public static final String ORDER_STATUS_RESTAURANT_ACCEPTED = "ORDER_STATUS_RESTAURANT_ACCEPTED";
+    public static final String ORDER_STATUS_RESTAURANT_DECLINED = "ORDER_STATUS_RESTAURANT_DECLINED";
+    public static final String ORDER_STATUS_RESTAURANT_CANCELLED = "ORDER_STATUS_RESTAURANT_CANCELLED";
+    public static final String ORDER_STATUS_CUSTOMER_CANCELLED = "ORDER_STATUS_CUSTOMER_CANCELLED";
+    public static final String ORDER_STATUS_AUTO_CANCELLED = "ORDER_STATUS_AUTO_CANCELLED";
 
 
     /**
      * Action values relating to order status
      */
     
-    public static final String ACTION_PLACE_ORDER = "PLACE_ORDER";
-    public static final String ACTION_RESTAURANT_ACCEPTS = "RESTAURANT_ACCEPTS";
-    public static final String ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL = "RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL";
-    public static final String ACTION_RESTAURANT_DECLINES = "RESTAURANT_DECLINES";
-    public static final String ACTION_RESTAURANT_CANCELS = "RESTAURANT_CANCELS";
-    public static final String ACTION_CUSTOMER_CANCELS = "CUSTOMER_CANCELS";
-    public static final String ACTION_AUTO_CANCEL = "AUTO_CANCEL";
+    public static final String ACTION_PLACE_ORDER = "ACTION_PLACE_ORDER";
+    public static final String ACTION_RESTAURANT_ACCEPTS = "ACTION_RESTAURANT_ACCEPTS";
+    public static final String ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL = "ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL";
+    public static final String ACTION_RESTAURANT_DECLINES = "ACTION_RESTAURANT_DECLINES";
+    public static final String ACTION_RESTAURANT_CANCELS = "ACTION_RESTAURANT_CANCELS";
+    public static final String ACTION_CUSTOMER_CANCELS = "ACTION_CUSTOMER_CANCELS";
+    public static final String ACTION_AUTO_CANCEL = "ACTION_AUTO_CANCEL";
 
-    public static final String ACTION_CALL_RESTAURANT = "CALL_RESTAURANT";
+    public static final String ACTION_CALL_RESTAURANT = "ACTION_CALL_RESTAURANT";
     public static final String ACTION_SEND_SMS = "ACTION_SEND_SMS";
     public static final String ACTION_CALL_ANSWERED = "ACTION_CALL_ANSWERED";
     public static final String ACTION_CALL_NOT_ANSWERED = "ACTION_CALL_NOT_ANSWERED";
@@ -110,7 +110,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
         if( !StringUtils.hasText(action)) {
             throw new IllegalArgumentException("action must not be null");
         }
-        
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Processing action [" + action + "] for order id [" + order.getOrderId() + "]");
         }
@@ -120,14 +120,21 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
             throw new WorkflowException("errors.workflow.no-handler-mapped");
         }
 
+        if(!handler.isActionValidForOrder(order)) {
+            throw new WorkflowStatusException(order,action);
+        }
+
         try {
             order = handler.handle(order,context);
         }
         catch( Exception ex ) {
             order.addOrderUpdate("Exception processing workflow update: " + ex.getMessage());
+            throw new WorkflowException(ex);
+        }
+        finally {
+            order = orderRepository.saveOrder(order);
         }
 
-        order = orderRepository.saveOrder(order);
         return order;
     }
 

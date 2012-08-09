@@ -4,30 +4,25 @@ import com.ezar.clickandeat.model.Order;
 
 public class WorkflowStatusException extends WorkflowException {
 
-    private final String currentStatus;
+    private final Order order;
+
+    private final String attemptedAction;
+
+    public WorkflowStatusException(Order order, String attemptedAction) {
+        this.order = order;
+        this.attemptedAction = attemptedAction;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public String getAttemptedAction() {
+        return attemptedAction;
+    }
     
-    public WorkflowStatusException(Order order) {
-        this.currentStatus = order.getOrderStatus();
-    }
-
-    public WorkflowStatusException(Order order, String message) {
-        super(message);
-        this.currentStatus = order.getOrderStatus();
-        
-    }
-
-    public WorkflowStatusException(Order order, String message, Throwable ex) {
-        super(message,ex);
-        this.currentStatus = order.getOrderStatus();
-    }
-
-    public WorkflowStatusException(Order order, Throwable ex) {
-        super(ex);
-        this.currentStatus = order.getOrderStatus();
-    }
-
-    public String getCurrentStatus() {
-        return currentStatus;
+    public String getMessage() {
+        return "Attempted action: " + attemptedAction + ", order status: " + order.getOrderStatus();
     }
 }
 
