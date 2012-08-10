@@ -166,7 +166,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
 
         // Get the current time and date to determine if restaurants are open
-        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+        DateTime now = new DateTime();
         
         // Iterate over the results to determine which restaurants will serve the location
         List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();

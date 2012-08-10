@@ -51,7 +51,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             return order;
         }
                         
-        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+        DateTime now = new DateTime();
         String deliveryType = order.getDeliveryType();
 
         if( Order.DELIVERY.equals(deliveryType) && !restaurant.isOpenForDelivery(now)) {
@@ -72,7 +72,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             notificationService.placeOrderNotificationCallToRestaurant(order);
             order.addOrderUpdate("Placed order notification call to restaurant");
             order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
-            order.setLastCallPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setLastCallPlacedTime(new DateTime());
             order.setOrderNotificationStatus(NOTIFICATION_STATUS_CALL_IN_PROGRESS);
         }
         catch( Exception ex ) {

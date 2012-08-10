@@ -107,9 +107,7 @@
     <bean id="localTimeReadConverter" class="com.ezar.clickandeat.converter.LocalTimeReadConverter"/>
     <bean id="localTimeWriteConverter" class="com.ezar.clickandeat.converter.LocalTimeWriteConverter"/>
     <bean id="dateTimeReadConverter" class="com.ezar.clickandeat.converter.DateTimeReadConverter"/>
-    <bean id="dateTimeWriteConverter" class="com.ezar.clickandeat.converter.DateTimeWriteConverter">
-        <constructor-arg index="0" value="${timezone}"/>
-    </bean>
+    <bean id="dateTimeWriteConverter" class="com.ezar.clickandeat.converter.DateTimeWriteConverter"/>
 
     <mongo:mapping-converter id="mappingConverter">
         <mongo:custom-converters>

@@ -71,7 +71,7 @@ public class CheckoutController {
         Double deliveryTime = restaurant.getDeliveryOptions().getDeliveryTimeMinutes();
         model.put("deliveryTimeMinutes", deliveryTime == null? 0d: deliveryTime);
 
-        DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+        DateTime now = new DateTime();
 
         // Set the current delivery type of the order
         model.put("deliveryType",order.getDeliveryType());
@@ -102,8 +102,8 @@ public class CheckoutController {
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
-            order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setRequestedDeliveryTime(new DateTime());
+            order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
 
@@ -149,8 +149,8 @@ public class CheckoutController {
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)));
-            order.setRequestedCollectionTime(new DateTime(DateTimeZone.forID(timeZone)));
+            order.setRequestedDeliveryTime(new DateTime());
+            order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
             

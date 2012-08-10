@@ -46,7 +46,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
         }
 
         // Update order placed time
-        order.setOrderPlacedTime(new DateTime(DateTimeZone.forID(timeZone)));
+        order.setOrderPlacedTime(new DateTime());
         
         // Send notifications to restaurant and customer
         try {

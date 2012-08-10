@@ -76,7 +76,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
 
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
-        order.setExpectedDeliveryTime(new DateTime(DateTimeZone.forID(timeZone)).minusDays(2).minusHours(3));
+        order.setExpectedDeliveryTime(new DateTime().minusDays(2).minusHours(3));
         order.setAdditionalInstructions("Please can I have some extra cheese & onion");
         
         // Add a delivery address to the order
@@ -105,7 +105,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("order",order);
-        templateModel.put("today",new LocalDate(DateTimeZone.forID(timeZone)));
+        templateModel.put("today",new LocalDate());
         templateModel.put("locale",systemLocale);
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
         Assert.assertNotNull(xml);

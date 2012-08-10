@@ -15,7 +15,6 @@ public class DateTimeReadConverter implements Converter<DBObject,DateTime> {
         int hour = (Integer)source.get("hour");
         int minute = (Integer)source.get("minute");
         int second = (Integer)source.get("second");
-        String timeZone = (String)source.get("timeZone");
-        return new DateTime(year,month,day,hour,minute,second, DateTimeZone.forID(timeZone));
+        return new DateTime(year,month,day,hour,minute,second);
     }
 }

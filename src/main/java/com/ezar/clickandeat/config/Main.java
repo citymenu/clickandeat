@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.joda.time.DateTimeZone;
 import redis.clients.jedis.JedisPool;
 
 import java.util.Properties;
@@ -32,6 +33,11 @@ public class Main {
         server.setStopAtShutdown(true);
         server.setGracefulShutdown(5000);
 
+        // Set the default time zone for the whole system
+        String timezone = props.getProperty("timezone");
+        DateTimeZone.setDefault(DateTimeZone.forID(timezone));
+        LOGGER.info("Set default time zone for application to: " + DateTimeZone.getDefault().getID());
+        
 		// Configure redis session id manager
         JedisPool jedisPool = getJedisPool(props);
         RedisSessionIdManager redisSessionIdManager = new RedisSessionIdManager(server,jedisPool);

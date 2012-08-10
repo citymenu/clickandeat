@@ -401,7 +401,7 @@ public class TwilioController implements InitializingBean {
         String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("locale",systemLocale);
-        templateModel.put("today",new LocalDate(DateTimeZone.forID(timeZone)));
+        templateModel.put("today",new LocalDate());
         templateModel.put("order",order);
         if(hasError) {
             templateModel.put("error",true);

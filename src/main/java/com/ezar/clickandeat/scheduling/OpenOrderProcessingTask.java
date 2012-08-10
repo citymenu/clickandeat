@@ -65,11 +65,12 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 LOGGER.info("Order id: " + order.getOrderId() + " was placed at: " + orderPlacedTime);
 
                 Restaurant restaurant = order.getRestaurant();
-                DateTime now = new DateTime(DateTimeZone.forID(timeZone));
+                DateTime now = new DateTime();
                 LOGGER.info("Current time is: " + now);
 
                 // Get the time the restaurant opened
-                DateTime restaurantOpenedTime = Order.DELIVERY.equals(order.getDeliveryType())? restaurant.getDeliveryOpeningTime(now): restaurant.getCollectionOpeningTime(now);
+                DateTime restaurantOpenedTime = Order.DELIVERY.equals(order.getDeliveryType())?
+                        restaurant.getDeliveryOpeningTime(now): restaurant.getCollectionOpeningTime(now);
 
                 // Don't do anything if the restaurant has not opened yet today
                 LOGGER.info("Restaurant " + restaurant.getName() + " opened time today is: " + restaurantOpenedTime);
@@ -79,7 +80,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Auto cancel orders which have been awaiting confirmation for too long and the restaurant has been open long enough to respond
-                DateTime autoCancelCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeAutoCancelOrder);
+                DateTime autoCancelCutoff = new DateTime().minusMinutes(minutesBeforeAutoCancelOrder);
                 LOGGER.info("Auo cancel cutoff time is: " + autoCancelCutoff);
                 if(orderPlacedTime.isBefore(autoCancelCutoff) && restaurantOpenedTime.isBefore(autoCancelCutoff)) {
                     try {
@@ -93,7 +94,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 }
 
                 // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
-                DateTime cancellationOfferCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusMinutes(minutesBeforeSendCancellationEmail);
+                DateTime cancellationOfferCutoff = new DateTime().minusMinutes(minutesBeforeSendCancellationEmail);
                 LOGGER.info("Cancellation offer cutoff time is: " + cancellationOfferCutoff);
                 if(!order.getCancellationOfferEmailSent() && orderPlacedTime.isBefore(cancellationOfferCutoff) && restaurantOpenedTime.isBefore(cancellationOfferCutoff)) {
                     try {
@@ -109,7 +110,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
                 String notificationStatus = order.getOrderNotificationStatus();
                 if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus) && !NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus)) {
                     DateTime lastCallTime = order.getLastCallPlacedTime();
-                    DateTime lastCallCutoff = new DateTime(DateTimeZone.forID(timeZone)).minusSeconds(secondsBeforeRetryCall);
+                    DateTime lastCallCutoff = new DateTime().minusSeconds(secondsBeforeRetryCall);
                     if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
                         try {
                             orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
