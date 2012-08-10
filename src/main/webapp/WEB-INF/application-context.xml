@@ -103,11 +103,17 @@
 
     <!-- Mongo read/write converters -->
     <bean id="localDateReadConverter" class="com.ezar.clickandeat.converter.LocalDateReadConverter"/>
-    <bean id="localDateWriteConverter" class="com.ezar.clickandeat.converter.LocalDateWriteConverter"/>
+    <bean id="localDateWriteConverter" class="com.ezar.clickandeat.converter.LocalDateWriteConverter">
+        <constructor-arg index="0" value="${timezone}"/>
+    </bean>
     <bean id="localTimeReadConverter" class="com.ezar.clickandeat.converter.LocalTimeReadConverter"/>
-    <bean id="localTimeWriteConverter" class="com.ezar.clickandeat.converter.LocalTimeWriteConverter"/>
+    <bean id="localTimeWriteConverter" class="com.ezar.clickandeat.converter.LocalTimeWriteConverter">
+        <constructor-arg index="0" value="${timezone}"/>
+    </bean>
     <bean id="dateTimeReadConverter" class="com.ezar.clickandeat.converter.DateTimeReadConverter"/>
-    <bean id="dateTimeWriteConverter" class="com.ezar.clickandeat.converter.DateTimeWriteConverter"/>
+    <bean id="dateTimeWriteConverter" class="com.ezar.clickandeat.converter.DateTimeWriteConverter">
+        <constructor-arg index="0" value="${timezone}"/>
+    </bean>
 
     <mongo:mapping-converter id="mappingConverter">
         <mongo:custom-converters>

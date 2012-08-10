@@ -47,7 +47,7 @@ public class OrderRepositoryTest {
         
         Order order = new Order();
         order.setOrderId(testOrderId);
-        order.setRequestedDeliveryTime(new DateTime(DateTimeZone.forID("UTC")));
+        order.setRequestedDeliveryTime(new DateTime());
         repository.save(order);
         
         Order retrievedOrder = repository.findByOrderId(testOrderId);

@@ -3,7 +3,7 @@ package com.ezar.clickandeat.converter;
 import flexjson.ObjectBinder;
 import flexjson.ObjectFactory;
 import flexjson.transformer.AbstractTransformer;
-import org.joda.time.DateTimeZone;
+import org.apache.log4j.Logger;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -13,12 +13,10 @@ import java.lang.reflect.Type;
 
 public class LocalTimeTransformer extends AbstractTransformer implements ObjectFactory {
 
-    private final DateTimeFormatter formatter;
-
-    public LocalTimeTransformer( String timeZone ) {
-        this.formatter = DateTimeFormat.forPattern("HH:mm").withZone(DateTimeZone.forID(timeZone));
-    }
+    private static final Logger LOGGER = Logger.getLogger(LocalTimeTransformer.class);
     
+    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+
     @Override
     public void transform(Object object) {
         if( object == null ) {

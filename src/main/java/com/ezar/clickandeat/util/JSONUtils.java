@@ -34,7 +34,7 @@ public class JSONUtils implements InitializingBean {
         this.serializer = new JSONSerializer()
                 .transform(new DateTimeTransformer(), DateTime.class)
                 .transform(new LocalDateTransformer(), LocalDate.class)
-                .transform(new LocalTimeTransformer(timeZone), LocalTime.class)
+                .transform(new LocalTimeTransformer(), LocalTime.class)
                 .transform(new NullIdStringTransformer(), String.class);
         escapeMap.put("'","###");
     }
@@ -73,7 +73,7 @@ public class JSONUtils implements InitializingBean {
             deserializer = new JSONDeserializer<T>()
                     .use(DateTime.class, new DateTimeTransformer())
                     .use(LocalDate.class, new LocalDateTransformer())
-                    .use(LocalTime.class, new LocalTimeTransformer(timeZone))
+                    .use(LocalTime.class, new LocalTimeTransformer())
                     .use(String.class, new NullIdStringTransformer())
                     .use(Double.class, new DoubleTransformer())
                     .use(Integer.class, new IntegerTransformer());

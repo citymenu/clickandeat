@@ -7,6 +7,12 @@ import org.springframework.core.convert.converter.Converter;
 
 public class DateTimeWriteConverter implements Converter<DateTime, DBObject> {
 
+    private final String timeZone;
+
+    public DateTimeWriteConverter( String timeZone ) {
+        this.timeZone = timeZone;
+    }
+    
     @Override
     public DBObject convert(DateTime source) {
         DBObject dbo = new BasicDBObject();
@@ -16,7 +22,7 @@ public class DateTimeWriteConverter implements Converter<DateTime, DBObject> {
         dbo.put("hour", source.getHourOfDay());
         dbo.put("minute", source.getMinuteOfHour());
         dbo.put("second", source.getSecondOfMinute());
-        dbo.put("timeZone", source.getZone().getID());
+        dbo.put("timeZone", timeZone);
         return dbo;
     }
 }

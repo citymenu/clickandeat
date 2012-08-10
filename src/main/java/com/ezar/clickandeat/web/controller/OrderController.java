@@ -64,7 +64,7 @@ public class OrderController implements InitializingBean {
         this.serializer = new JSONSerializer()
                 .transform(new DateTimeTransformer(), DateTime.class)
                 .transform(new LocalDateTransformer(), LocalDate.class)
-                .transform(new LocalTimeTransformer(timeZone), LocalTime.class)
+                .transform(new LocalTimeTransformer(), LocalTime.class)
                 .transform(new NullIdStringTransformer(), String.class)
                 .include("order.restaurant.name")
                 .exclude("order.restaurant.*");
