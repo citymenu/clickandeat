@@ -39,7 +39,9 @@ public class RestaurantController {
 
     @Autowired
     private CuisineProvider cuisineProvider;
-    
+
+    @Autowired
+    private JSONUtils jsonUtils;
 
     @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
     public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
@@ -65,7 +67,7 @@ public class RestaurantController {
         PageRequest request;
         
         if( StringUtils.hasText(sort)) {
-            List<Map<String,String>> sortParams = (List<Map<String,String>>)JSONUtils.deserialize(sort);
+            List<Map<String,String>> sortParams = (List<Map<String,String>>)jsonUtils.deserialize(sort);
             Map<String,String> sortProperties = sortParams.get(0);
             String direction = sortProperties.get("direction");
             String property = sortProperties.get("property");
@@ -80,7 +82,7 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants.getContent());
         model.put("count",repository.count());
-        String json = JSONUtils.serializeAndEscape(model);
+        String json = jsonUtils.serializeAndEscape(model);
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -93,7 +95,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.create();
         model.put("restaurant", restaurant);
-        model.put("json",JSONUtils.serializeAndEscape(restaurant));
+        model.put("json",jsonUtils.serializeAndEscape(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 
@@ -108,7 +110,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        model.put("json",JSONUtils.serializeAndEscape(restaurant));
+        model.put("json",jsonUtils.serializeAndEscape(restaurant));
         return new ModelAndView("admin/editRestaurant",model);
     }
 
@@ -119,7 +121,7 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
-            Restaurant restaurant = JSONUtils.deserialize(Restaurant.class,body);
+            Restaurant restaurant = jsonUtils.deserialize(Restaurant.class,body);
             restaurant = repository.saveRestaurant(restaurant);
             model.put("success",true);
             model.put("id",restaurant.getId());
@@ -130,7 +132,7 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
 
-        String json = JSONUtils.serializeAndEscape(model);
+        String json = jsonUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
@@ -152,7 +154,7 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
 
-        String json = JSONUtils.serializeAndEscape(model);
+        String json = jsonUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);

@@ -1,13 +1,19 @@
 package com.ezar.clickandeat.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class ResponseEntityUtils {
+
+    @Autowired
+    private JSONUtils jsonUtils;
 
     /**
      * @param model
@@ -15,8 +21,8 @@ public class ResponseEntityUtils {
      * @throws Exception
      */
 
-    public static ResponseEntity<byte[]> buildResponse(Map<String,Object> model ) throws Exception {
-        String json = JSONUtils.serializeAndEscape(model);
+    public ResponseEntity<byte[]> buildResponse(Map<String,Object> model ) throws Exception {
+        String json = jsonUtils.serializeAndEscape(model);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setCacheControl("no-cache");
@@ -30,7 +36,7 @@ public class ResponseEntityUtils {
      * @throws Exception
      */
 
-    public static ResponseEntity<byte[]> buildXmlResponse(String xml) throws Exception {
+    public ResponseEntity<byte[]> buildXmlResponse(String xml) throws Exception {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_XML);
         headers.setCacheControl("no-cache");

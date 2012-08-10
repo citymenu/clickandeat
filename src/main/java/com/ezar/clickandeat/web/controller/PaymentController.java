@@ -38,6 +38,9 @@ public class PaymentController {
     @Autowired
     private RequestHelper requestHelper;
 
+    @Autowired
+    private ResponseEntityUtils responseEntityUtils;
+
     private String timeZone;
     
     @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
@@ -89,7 +92,7 @@ public class PaymentController {
             model.put("message",ex.getMessage());
         }
 
-        return ResponseEntityUtils.buildResponse(model);
+        return responseEntityUtils.buildResponse(model);
 
     }
 

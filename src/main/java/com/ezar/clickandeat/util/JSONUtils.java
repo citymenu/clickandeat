@@ -6,28 +6,37 @@ import flexjson.JSONSerializer;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class JSONUtils {
+@Component
+public class JSONUtils implements InitializingBean {
     
-    private static final ConcurrentMap<Class,JSONDeserializer> DESERIALIZER_MAP = new ConcurrentHashMap<Class, JSONDeserializer>();
+    private final ConcurrentMap<Class,JSONDeserializer> deserializerMap = new ConcurrentHashMap<Class, JSONDeserializer>();
     
-    private static final JSONSerializer SERIALIZER = new JSONSerializer()
-            .transform(new DateTimeTransformer(), DateTime.class)
-            .transform(new LocalDateTransformer(), LocalDate.class)
-            .transform(new LocalTimeTransformer(), LocalTime.class)
-            .transform(new NullIdStringTransformer(), String.class);
+    private JSONSerializer serializer;
 
-    private static final JSONDeserializer DESERIALIZER = new JSONDeserializer();
+    private JSONDeserializer deserializer = new JSONDeserializer();
 
-    private static final Map<String,String> ESCAPE_MAP = new HashMap<String,String>();
+    private final Map<String,String> escapeMap = new HashMap<String,String>();
     
-    static {
-        ESCAPE_MAP.put("'", "###");
+    private String timeZone;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.serializer = new JSONSerializer()
+                .transform(new DateTimeTransformer(), DateTime.class)
+                .transform(new LocalDateTransformer(), LocalDate.class)
+                .transform(new LocalTimeTransformer(timeZone), LocalTime.class)
+                .transform(new NullIdStringTransformer(), String.class);
+        escapeMap.put("'","###");
     }
 
 
@@ -36,8 +45,8 @@ public class JSONUtils {
      * @return
      */
 
-    public static String serialize(Object obj) {
-        return SERIALIZER.deepSerialize(obj);
+    public String serialize(Object obj) {
+        return serializer.deepSerialize(obj);
     }
 
 
@@ -46,8 +55,8 @@ public class JSONUtils {
      * @return
      */
     
-    public static String serializeAndEscape(Object obj) {
-        return escapeQuotes(SERIALIZER.deepSerialize(obj));
+    public String serializeAndEscape(Object obj) {
+        return escapeQuotes(serializer.deepSerialize(obj));
     }
 
     
@@ -58,17 +67,17 @@ public class JSONUtils {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <T> T deserialize(Class<T> klass, String json) {
-        JSONDeserializer<T> deserializer = DESERIALIZER_MAP.get(klass);
+    public <T> T deserialize(Class<T> klass, String json) {
+        JSONDeserializer<T> deserializer = deserializerMap.get(klass);
         if( deserializer == null ) {
             deserializer = new JSONDeserializer<T>()
                     .use(DateTime.class, new DateTimeTransformer())
                     .use(LocalDate.class, new LocalDateTransformer())
-                    .use(LocalTime.class, new LocalTimeTransformer())
+                    .use(LocalTime.class, new LocalTimeTransformer(timeZone))
                     .use(String.class, new NullIdStringTransformer())
                     .use(Double.class, new DoubleTransformer())
                     .use(Integer.class, new IntegerTransformer());
-            DESERIALIZER_MAP.put(klass,deserializer);
+            deserializerMap.put(klass,deserializer);
         }
         return deserializer.deserialize(json);        
     }
@@ -79,8 +88,8 @@ public class JSONUtils {
      * @return
      */
 
-    public static Object deserialize(String json) {
-        return DESERIALIZER.deserialize(json);
+    public Object deserialize(String json) {
+        return deserializer.deserialize(json);
     }
     
     /**
@@ -88,11 +97,18 @@ public class JSONUtils {
      * @return
      */
     
-    public static String escapeQuotes(String json) {
-        for(Map.Entry<String,String> entry: ESCAPE_MAP.entrySet()) {
+    public String escapeQuotes(String json) {
+        for(Map.Entry<String,String> entry: escapeMap.entrySet()) {
             json = json.replaceAll(entry.getKey(),entry.getValue());
         }
         return json;
     }
-    
+
+
+    @Required
+    @Value(value="${timezone}")
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
 }

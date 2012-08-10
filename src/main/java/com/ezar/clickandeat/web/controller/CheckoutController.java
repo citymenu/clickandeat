@@ -45,7 +45,13 @@ public class CheckoutController {
 
     @Autowired
     private RequestHelper requestHelper;
-    
+
+    @Autowired
+    private JSONUtils jsonUtils;
+
+    @Autowired
+    private ResponseEntityUtils responseEntityUtils;
+
     private String timeZone;
 
     @RequestMapping(value="/secure/checkout.html", method= RequestMethod.GET)
@@ -111,7 +117,7 @@ public class CheckoutController {
         }
 
         // Return success status
-        return ResponseEntityUtils.buildResponse(model);
+        return responseEntityUtils.buildResponse(model);
     }
     
     
@@ -158,7 +164,7 @@ public class CheckoutController {
             model.put("message",ex.getMessage());
         }
 
-        return ResponseEntityUtils.buildResponse(model);
+        return responseEntityUtils.buildResponse(model);
     }
 
     
@@ -169,7 +175,7 @@ public class CheckoutController {
     @SuppressWarnings("unchecked")    
     private Person buildPerson(String json) {
 
-        Map<String,Object> params = (Map<String,Object>) JSONUtils.deserialize(json);
+        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         Map<String,Object> personParams = (Map<String,Object>) params.get("person");
 
         // Extract person details
@@ -189,7 +195,7 @@ public class CheckoutController {
     @SuppressWarnings("unchecked")
     private Address buildDeliveryAddress(String json) {
 
-        Map<String,Object> params = (Map<String,Object>) JSONUtils.deserialize(json);
+        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         Map<String,Object> deliveryAddressParams = (Map<String,Object>) params.get("deliveryAddress");
 
         String address1 = (String)deliveryAddressParams.get("address1");
@@ -209,7 +215,7 @@ public class CheckoutController {
      */
     @SuppressWarnings("unchecked")
     private String buildAdditionalInstructions(String json) {
-        Map<String,Object> params = (Map<String,Object>) JSONUtils.deserialize(json);
+        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         return (String)params.get("additionalInstructions");
     }
     

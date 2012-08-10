@@ -12,6 +12,7 @@ public class LocalTimeWriteConverter implements Converter<LocalTime, DBObject> {
         DBObject dbo = new BasicDBObject();
         dbo.put("hour", source.getHourOfDay());
         dbo.put("minute", source.getMinuteOfHour());
+        dbo.put("timeZone", source.getChronology().getZone().getID());
         return dbo;
     }
 }

@@ -17,7 +17,10 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,23 +34,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class OrderController {
+public class OrderController implements InitializingBean {
     
     private static final Logger LOGGER = Logger.getLogger(OrderController.class);
-
-    private static final JSONSerializer SERIALIZER = new JSONSerializer()
-            .transform(new DateTimeTransformer(), DateTime.class)
-            .transform(new LocalDateTransformer(), LocalDate.class)
-            .transform(new LocalTimeTransformer(), LocalTime.class)
-            .transform(new NullIdStringTransformer(), String.class)
-            .include("order.restaurant.name")
-            .exclude("order.restaurant.*");
-
 
     @Autowired
     private OrderRepository orderRepository;
@@ -57,6 +50,26 @@ public class OrderController {
 
     @Autowired
     private SequenceGenerator sequenceGenerator;
+
+    @Autowired
+    private JSONUtils jsonUtils;
+
+    private JSONSerializer serializer;
+
+    private String timeZone;
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.serializer = new JSONSerializer()
+                .transform(new DateTimeTransformer(), DateTime.class)
+                .transform(new LocalDateTransformer(), LocalDate.class)
+                .transform(new LocalTimeTransformer(timeZone), LocalTime.class)
+                .transform(new NullIdStringTransformer(), String.class)
+                .include("order.restaurant.name")
+                .exclude("order.restaurant.*");
+    }
+
 
 
     @RequestMapping(value="/buildOrder.html", method = RequestMethod.GET )
@@ -131,7 +144,7 @@ public class OrderController {
 
         try {
             // Extract request parameters
-            Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
             Integer itemNumber = Integer.valueOf(params.get("itemNumber").toString());
             String itemId = (String)params.get("itemId");
@@ -198,7 +211,7 @@ public class OrderController {
 
         try {
             // Extract request parameters
-            Map<String,Object> params = (Map<String,Object>)JSONUtils.deserialize(body);
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String itemId = (String)params.get("itemId");
             Integer quantity = (Integer)params.get("quantity");
 
@@ -292,13 +305,19 @@ public class OrderController {
      */
 
     private ResponseEntity<byte[]> buildOrderResponse(Map<String,Object> model ) throws Exception {
-        String json = SERIALIZER.deepSerialize(model);
-        String escaped = JSONUtils.escapeQuotes(json);
+        String json = serializer.deepSerialize(model);
+        String escaped = jsonUtils.escapeQuotes(json);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setCacheControl("no-cache");
         return new ResponseEntity<byte[]>(escaped.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 
+
+    @Required
+    @Value(value="${timezone}")
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
     
 }

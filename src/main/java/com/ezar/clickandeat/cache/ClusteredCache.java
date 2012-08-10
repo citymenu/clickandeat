@@ -27,6 +27,8 @@ public class ClusteredCache implements InitializingBean {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private JSONUtils jsonUtils;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -71,9 +73,9 @@ public class ClusteredCache implements InitializingBean {
         map.put("action","update");
         map.put("className",klass.getName());
         map.put("key",key);
-        map.put("json",JSONUtils.serialize(object));
+        map.put("json",jsonUtils.serialize(object));
         try {
-            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), jsonUtils.serialize(map).getBytes());
         }
         catch(Exception ex) {
             LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
@@ -96,7 +98,7 @@ public class ClusteredCache implements InitializingBean {
         map.put("className",klass.getName());
         map.put("key",key);
         try {
-            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), JSONUtils.serialize(map).getBytes());
+            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), jsonUtils.serialize(map).getBytes());
         }
         catch(Exception ex) {
             LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
@@ -166,7 +168,7 @@ public class ClusteredCache implements InitializingBean {
         public void onMessage(Message message, byte[] pattern) {
             try {
                 String content = new String(message.getBody());
-                Map map = (Map) JSONUtils.deserialize(content);
+                Map map = (Map) jsonUtils.deserialize(content);
                 String action = (String)map.get("action");
                 String className = (String)map.get("className");
                 String key = (String)map.get("key");
@@ -174,7 +176,7 @@ public class ClusteredCache implements InitializingBean {
                 Class klass = Class.forName(className);
 
                 if("update".equals(action)) {
-                    Object obj = JSONUtils.deserialize(klass, json);
+                    Object obj = jsonUtils.deserialize(klass, json);
                     putInternal(klass, key, obj);
                 }
                 else {

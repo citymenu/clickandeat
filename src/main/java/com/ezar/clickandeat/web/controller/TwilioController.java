@@ -51,7 +51,10 @@ public class TwilioController implements InitializingBean {
 
     @Autowired
     private WorkflowStatusExceptionMessageResolver resolver;
-    
+
+    @Autowired
+    private ResponseEntityUtils responseEntityUtils;
+
     private String authKey;
 
     private String timeZone;
@@ -100,7 +103,7 @@ public class TwilioController implements InitializingBean {
             LOGGER.debug("Generated xml response [" + xml + "]");
         }
         
-        return ResponseEntityUtils.buildXmlResponse(xml);
+        return responseEntityUtils.buildXmlResponse(xml);
     }
 
 
@@ -197,7 +200,7 @@ public class TwilioController implements InitializingBean {
             LOGGER.debug("Generated xml response [" + xml + "]");
         }
 
-        return ResponseEntityUtils.buildXmlResponse(xml);
+        return responseEntityUtils.buildXmlResponse(xml);
     }
 
 
@@ -286,7 +289,7 @@ public class TwilioController implements InitializingBean {
             
             // Generate the order call with an error
             String xml = buildFullOrderXml(order, true);
-            return ResponseEntityUtils.buildXmlResponse(xml);
+            return responseEntityUtils.buildXmlResponse(xml);
         }
         
         // Process response
@@ -299,12 +302,12 @@ public class TwilioController implements InitializingBean {
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
                     String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
-                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
             // Order rejected
@@ -312,12 +315,12 @@ public class TwilioController implements InitializingBean {
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
                     String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
-                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
             // Order accepted with non-standard delivery time
@@ -328,28 +331,28 @@ public class TwilioController implements InitializingBean {
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
-                    return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
                     String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
-                    return ResponseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
 
             // Repeat the call
             case '4':
-                return ResponseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
+                return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
 
             // No response at this time
             case '5':
                 orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                return ResponseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
             // Invalid input
             default:
                 LOGGER.error("Invalid response to full order call");
-                return ResponseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
+                return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
         }
     }
 
