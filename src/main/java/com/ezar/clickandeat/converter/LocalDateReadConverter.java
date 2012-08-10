@@ -13,7 +13,6 @@ public class LocalDateReadConverter implements Converter<DBObject,LocalDate> {
         int year = (Integer)source.get("year");
         int month = (Integer)source.get("month");
         int day = (Integer)source.get("day");
-        String timeZone = (String)source.get("timeZone");
-        return new LocalDate(year,month,day, ISOChronology.getInstance(DateTimeZone.forID(timeZone)));
+        return new LocalDate(year,month,day);
     }
 }

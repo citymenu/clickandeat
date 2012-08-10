@@ -14,7 +14,6 @@ public class LocalTimeReadConverter implements Converter<DBObject,LocalTime> {
     public LocalTime convert(DBObject source) {
         int hour = (Integer)source.get("hour");
         int minute = (Integer)source.get("minute");
-        String timeZone = (String)source.get("timeZone");
-        return new LocalTime(hour, minute, 0, 0, ISOChronology.getInstance(DateTimeZone.forID(timeZone)));
+        return new LocalTime(hour, minute);
     }
 }
