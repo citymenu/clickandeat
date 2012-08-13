@@ -498,3 +498,36 @@ textarea.checkoutfield {
     width:425px;
     height:60px;
 }
+
+.homesearch {
+    vertical-align:baseline;
+    text-align:center;
+    width:100%;
+    background-color:#BB0000;
+}
+
+.postCodeInput {
+    -moz-transition: all 0.25s ease-in-out 0s;
+    background-color:#FFF;
+    border: 0 none;
+    border-radius: 8px 8px 8px 8px;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 40px;
+    font-weight: 300;
+    height: 62px;
+    letter-spacing: -2px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 237px;
+}
+
+.findButton {
+    background: url("../images/findButton.png") no-repeat scroll 0 0 transparent;
+    border: 0 none;
+    color: #FFFFFF;
+    font-size: 0 !important;
+    height: 100px;
+    line-height: 0 !important;
+    width: 250px;
+    outline: medium none;
+}
