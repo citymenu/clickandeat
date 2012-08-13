@@ -2,7 +2,7 @@ Ext.Loader.setConfig({enabled:true});
 
 Ext.application({
     name: 'AD',
-    appFolder: '/resources/admin/app',
+    appFolder: resources + '/admin/app',
     controllers:['RestaurantEdit'],
 
     launch: function() {
