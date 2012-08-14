@@ -2,18 +2,20 @@ package com.ezar.clickandeat.model;
 
 public class OrderDiscount {
     
-    private String title;
+    private String discountId;
     
     private String description;
     
-    private Double discount;
+    private String freeItem;
+    
+    private Double discountAmount;
 
-    public String getTitle() {
-        return title;
+    public String getDiscountId() {
+        return discountId;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDiscountId(String discountId) {
+        this.discountId = discountId;
     }
 
     public String getDescription() {
@@ -24,11 +26,19 @@ public class OrderDiscount {
         this.description = description;
     }
 
-    public Double getDiscount() {
-        return discount;
+    public String getFreeItem() {
+        return freeItem;
     }
 
-    public void setDiscount(Double discount) {
-        this.discount = discount;
+    public void setFreeItem(String freeItem) {
+        this.freeItem = freeItem;
+    }
+
+    public Double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(Double discountAmount) {
+        this.discountAmount = discountAmount;
     }
 }

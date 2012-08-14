@@ -29,6 +29,8 @@ Ext.define('AD.view.restaurant.Edit' ,{
             xtype:'restaurantdeliverydetails'
         },{
             xtype:'restaurantmenu'
+        },{
+            xtype:'restaurantdiscounts'
         }]
     }]
 

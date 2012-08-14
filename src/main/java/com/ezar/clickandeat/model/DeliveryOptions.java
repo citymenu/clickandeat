@@ -15,10 +15,6 @@ public class DeliveryOptions {
     
     private Double deliveryCharge;
 
-    private Double collectionDiscount;
-    
-    private Double minimumOrderForCollectionDiscount;
-
     private Double deliveryRadiusInKilometres;
 
     private List<String> areasDeliveredTo;
@@ -26,7 +22,6 @@ public class DeliveryOptions {
     public DeliveryOptions() {
         this.areasDeliveredTo = new ArrayList<String>();
     }
-
 
     public String getDeliveryOptionsSummary() {
         return deliveryOptionsSummary;
@@ -66,22 +61,6 @@ public class DeliveryOptions {
 
     public void setDeliveryCharge(Double deliveryCharge) {
         this.deliveryCharge = deliveryCharge;
-    }
-
-    public Double getCollectionDiscount() {
-        return collectionDiscount;
-    }
-
-    public void setCollectionDiscount(Double collectionDiscount) {
-        this.collectionDiscount = collectionDiscount;
-    }
-
-    public Double getMinimumOrderForCollectionDiscount() {
-        return minimumOrderForCollectionDiscount;
-    }
-
-    public void setMinimumOrderForCollectionDiscount(Double minimumOrderForCollectionDiscount) {
-        this.minimumOrderForCollectionDiscount = minimumOrderForCollectionDiscount;
     }
 
     public Double getDeliveryRadiusInKilometres() {

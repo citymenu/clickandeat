@@ -291,14 +291,6 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             name:'deliveryCharge',
             xtype:'numberfield'
         },{
-            fieldLabel:'Discount (%) for orders collected by customer',
-            name:'collectionDiscount',
-            xtype:'numberfield'
-        },{
-            fieldLabel:'Minimum order value for collection discount',
-            name:'minimumOrderForCollectionDiscount',
-            xtype:'numberfield'
-        },{
             fieldLabel:'Delivery radius (kilometres)',
             name:'deliveryRadiusInKilometres',
             xtype:'numberfield'

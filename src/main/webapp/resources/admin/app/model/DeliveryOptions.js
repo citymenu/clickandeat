@@ -10,8 +10,6 @@ Ext.define('AD.model.DeliveryOptions', {
         {name:'minimumOrderForFreeDelivery', type:'number'},
         {name:'allowDeliveryOrdersBelowMinimum', type:'boolean'},
         {name:'deliveryCharge', type:'number'},
-        {name:'collectionDiscount', type:'number'},
-        {name:'minimumOrderForCollectionDiscount', type:'number'},
         {name:'deliveryRadiusInKilometres', type:'number'},
         {
             name:'areasDeliveredTo',

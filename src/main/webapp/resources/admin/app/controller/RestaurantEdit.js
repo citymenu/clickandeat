@@ -5,6 +5,7 @@ var mainContact;
 var notificationOptions;
 var deliveryOptions;
 var menu;
+var discounts = [];
 
 // Global menu category edit form variable
 var menuCategoryEditForm;
@@ -12,9 +13,12 @@ var menuCategoryEditForm;
 // Global menu item edit form variable
 var menuItemEditForm;
 
+// Global discount edit form variable
+var discountEditForm;
+
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
-    stores:['Restaurants','MenuCategories','MenuItems'],
+    stores:['Restaurants','MenuCategories','MenuItems','Discounts'],
     models: [
         'Restaurant',
         'Person',
@@ -22,13 +26,16 @@ Ext.define('AD.controller.RestaurantEdit', {
         'NotificationOptions',
         'DeliveryOptions',
         'Menu',
-        'MenuItemTypeCost'
+        'MenuItemTypeCost',
+        'Discount',
+        'DiscountApplicableTime'
     ],
     views:[
     	'restaurant.Edit',
     	'restaurant.MainDetails',
     	'restaurant.DeliveryDetails',
-    	'restaurant.Menu'
+    	'restaurant.Menu',
+    	'restaurant.Discounts'
     ],
 
     refs: [{
@@ -49,6 +56,12 @@ Ext.define('AD.controller.RestaurantEdit', {
     },{
         ref:'deliveryDetailsForm',
         selector:'restaurantdeliverydetails'
+    },{
+        ref:'discountsGrid',
+        selector:'#discountsgrid'
+    },{
+        ref:'discountEditForm',
+        selector:'#discounteditform'
     }],
 
 	init: function() {
@@ -74,6 +87,10 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantmenu': {
                 render:this.menuRendered
+            },
+
+            'restaurantdiscount': {
+                render:this.discountsRendered
             },
 
             '#menucategoriesgrid': {
@@ -122,6 +139,30 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantmenuitemedit': {
                 render:this.menuItemEditRendered
+            },
+
+            '#discountsgrid': {
+                itemclick:this.discountsGridSelected
+            },
+
+            '#discountsgrid button[action=create]': {
+                click:this.createDiscount
+            },
+
+            'restaurantdiscountedit': {
+                render:this.discountEditRendered
+            },
+
+            'restaurantdiscountedit button[action=save]': {
+                click:this.updateDiscount
+            },
+
+            'restaurantdiscountedit button[action=revert]': {
+                click:this.revertDiscount
+            },
+
+            'restaurantdiscountedit button[action=remove]': {
+                click:this.removeDiscount
             }
 
         });
@@ -155,6 +196,11 @@ Ext.define('AD.controller.RestaurantEdit', {
 	    menu = new AD.model.Menu(restaurantObj.menu);
 	    menu.set('menuCategories',menuCategories);
 
+        // Initialize the discounts for the restaurant
+        restaurantObj.discounts.forEach(function(discount){
+            var discount = new AD.model.Discount(discount);
+            discounts.push(discount);
+        });
     },
 
 	close: function(button) {
@@ -251,8 +297,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
         restaurantObj.deliveryOptions.allowDeliveryOrdersBelowMinimum = deliveryDetailValues['allowDeliveryOrdersBelowMinimum'] == 'on';
         restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
-        restaurantObj.deliveryOptions.collectionDiscount = deliveryDetailValues['collectionDiscount'];
-        restaurantObj.deliveryOptions.minimumOrderForCollectionDiscount = deliveryDetailValues['minimumOrderForCollectionDiscount'];
         restaurantObj.deliveryOptions.deliveryRadiusInKilometres = deliveryDetailValues['deliveryRadiusInKilometres'];
         restaurantObj.deliveryOptions.areasDeliveredTo = delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n');
 
@@ -613,6 +657,82 @@ Ext.define('AD.controller.RestaurantEdit', {
        var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
        var categoryIndex = this.getMenuCategoriesStore().indexOf(selectedMenuCategory);
        this.getMenuCategoriesStore().getAt(categoryIndex).set('menuItems',this.getMenuItemsStore().getRange());
+    },
+
+    // Fires when the discounts grid is rendered
+    discountsRendered: function(panel) {
+        this.getDiscountsStore().loadData(discounts);
+    },
+
+    // Fires when a record is selected in the discounts grid
+    discountsGridSelected: function(rowmodel,record,item,index,evt,options) {
+
+        // If the item is already selected, do nothing
+        var selectedDiscount = this.getDiscountsGrid().getSelectionModel().getLastSelected();
+        if( discountEditForm && discountEditForm.getRecord() == selectedDiscount ) {
+            return; // Do nothing on purpose
+        }
+
+        var form = Ext.create('AD.view.restaurant.DiscountEdit');
+        discountEditForm = form; // Update global variable
+        this.getDiscountEditForm().removeAll(true);
+        this.getDiscountEditForm().add(form);
+    },
+
+    // Fires when the add button is clicked on the discounts grid
+    createDiscount: function(button) {
+        var discount = new AD.model.Discount({
+            title:'New Discount',
+            discountType:'DISCOUNT_CASH',
+            collection:true,
+            delivery:true,
+            discountApplicableTimes:[]
+        });
+        this.getDiscountsStore().add(discount);
+    },
+
+    // Loads the selected discount into the edit form
+    discountEditRendered: function(formPanel) {
+        var selectedDiscount = this.getDiscountsGrid().getSelectionModel().getLastSelected();
+        discountEditForm.loadRecord(selectedDiscount);
+
+        // Populate individual applicability dates
+        selectedDiscount.get('discountApplicableTimes').forEach(function(discountApplicableTime){
+            var day = discountApplicableTime.get('dayOfWeek');
+            discountEditForm.getForm().findField('applicable_' + day).setValue(discountApplicableTime.get('applicable'));
+            discountEditForm.getForm().findField('applicableFrom_' + day).setValue(discountApplicableTime.get('applicableFrom'));
+            discountEditForm.getForm().findField('applicableTo_' + day).setValue(discountApplicableTime.get('applicableTo'));
+        });
+    },
+
+    // Fires when the save button is clicked on the discount edit form
+    updateDiscount: function(button) {
+        if(!discountEditForm.getForm().isValid()) {
+            this.showInvalidFormWarning();
+        } else {
+            var formValues = discountEditForm.getValues();
+            var discountApplicableTimes = [];
+            for( day = 1; day < 8; day++ ) {
+                var applicable = formValues['applicable_' + day] == 'on';
+                var applicableFrom = formValues['applicableFrom_' + day];
+                var applicableTo = formValues['applicableTo_' + day];
+                var discountApplicableTime = new AD.model.DiscountApplicableTime({
+                    dayOfWeek: day,
+                    applicable: applicable,
+                    applicableFrom: applicableFrom,
+                    applicableTo: applicableTo,
+                });
+                discountApplicableTimes.push(discountApplicableTime);
+            }
+
+            var index = this.getDiscountsStore().indexOf(discountEditForm.getRecord());
+            var record = this.getDiscountsStore().getAt(index);
+            record.set(formValues);
+            record.set('discountApplicableTimes',discountApplicableTimes);
+            record.set('delivery',formValues['delivery'] == 'on');
+            record.set('collection',formValues['collection'] == 'on');
+            showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Discount details have been updated');
+        }
     },
 
     // Shows a warning alert box

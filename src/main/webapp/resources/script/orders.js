@@ -55,7 +55,6 @@ function doBuildOrder(order,config) {
     $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
     $('.deliverychargerow').remove();
-    $('.collectiondiscountrow').remove();
     $('.totalcost').remove();
     $('#checkout').remove();
     $('.deliverywarning').remove();
@@ -95,12 +94,6 @@ function doBuildOrder(order,config) {
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
             var row = ('<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>' + labels['delivery-charge'] + '</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.deliveryCost.toFixed(2));
-            $('.orderbody').append(row);
-        }
-
-        // Add collection discount if applicable
-        if( order.collectionDiscount && order.collectionDiscount > 0 ) {
-            var row = ('<tr class=\'collectiondiscountrow\' valign=\'top\'><td width=\'65%\' class=\'collectiondiscount ordertableseparator\'>' + labels['collection-discount'] + '</td><td width=\'25%\' align=\'right\' class=\'collectiondiscount collectiondiscounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.collectionDiscount.toFixed(2));
             $('.orderbody').append(row);
         }
 
