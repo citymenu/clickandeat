@@ -5,7 +5,6 @@ var mainContact;
 var notificationOptions;
 var deliveryOptions;
 var menu;
-var discounts = [];
 
 // Global menu category edit form variable
 var menuCategoryEditForm;
@@ -89,7 +88,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 render:this.menuRendered
             },
 
-            'restaurantdiscount': {
+            'restaurantdiscounts': {
                 render:this.discountsRendered
             },
 
@@ -167,6 +166,18 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         });
 
+        // Initialize restaurant if one is set
+        this.initializeRestaurant(restaurantObj);
+
+    },
+
+	close: function(button) {
+	    location.href = ctx + '/admin/restaurants.html';
+	},
+
+    // Initialises the restaurant object
+    initializeRestaurant: function(restaurantObj) {
+
         // Initialize models from restaurant JSON
 	    restaurant = new AD.model.Restaurant(restaurantObj);
 	    address = new AD.model.Address(restaurantObj.address);
@@ -196,16 +207,49 @@ Ext.define('AD.controller.RestaurantEdit', {
 	    menu = new AD.model.Menu(restaurantObj.menu);
 	    menu.set('menuCategories',menuCategories);
 
+        // If a menu category or item is being edited clear it now
+        if( menuCategoryEditForm || menuItemEditForm ) {
+            this.getMenuCategoriesGrid().getSelectionModel().deselectAll(true);
+            this.getMenuItemsGrid().getSelectionModel().deselectAll(true);
+            this.getMenuItemsStore().removeAll(true);
+            this.getMenuEditForm().removeAll(true);
+            menuCategoryEditForm = null;
+            menuItemEditForm = null;
+        }
+
+        // Reload the menu categories store
+	    this.getMenuCategoriesStore().removeAll(true);
+        this.getMenuCategoriesStore().loadData(menu.get('menuCategories'));
+
         // Initialize the discounts for the restaurant
-        restaurantObj.discounts.forEach(function(discount){
-            var discount = new AD.model.Discount(discount);
+        var discounts = [];
+        restaurantObj.discounts.forEach(function(discountObj){
+            var discount = new AD.model.Discount(discountObj);
+            var discountApplicableTimes = [];
+            discountObj.discountApplicableTimes.forEach(function(discountApplicableTimeObj){
+                var discountApplicableTime = new AD.model.DiscountApplicableTime({
+                    dayOfWeek: discountApplicableTimeObj.dayOfWeek,
+                    applicable: discountApplicableTimeObj.applicable,
+                    applicableFrom: discountApplicableTimeObj.applicableFrom,
+                    applicableTo: discountApplicableTimeObj.applicableTo
+                });
+                discountApplicableTimes.push(discountApplicableTime);
+            });
+
+            discount.set('discountApplicableTimes',discountApplicableTimes);
             discounts.push(discount);
         });
-    },
 
-	close: function(button) {
-	    location.href = ctx + '/admin/restaurants.html';
-	},
+        // If a discount is being edited clear it now
+        if( discountEditForm ) {
+            this.getDiscountsGrid().getSelectionModel().deselectAll(true);
+            this.getDiscountEditForm().removeAll(true);
+            discountEditForm = null;
+        }
+
+        this.getDiscountsStore().removeAll(true);
+        this.getDiscountsStore().loadData(discounts);
+    },
 
     saveRestaurant: function(button) {
 
@@ -244,29 +288,32 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.cuisines = cuisines;
 
         // Update address details for the restaurant
-        restaurantObj.address = new Object();
-        restaurantObj.address.address1 = mainDetailValues['address1'];
-        restaurantObj.address.address2 = mainDetailValues['address2'];
-        restaurantObj.address.address3 = mainDetailValues['address3'];
-        restaurantObj.address.town = mainDetailValues['town'];
-        restaurantObj.address.region = mainDetailValues['region'];
-        restaurantObj.address.postCode = mainDetailValues['postCode'];
+        restaurantObj.address = new Object({
+            address1: mainDetailValues['address1'],
+            address2: mainDetailValues['address2'],
+            address3: mainDetailValues['address3'],
+            town: mainDetailValues['town'],
+            region: mainDetailValues['region'],
+            postCode: mainDetailValues['postCode']
+        });
 
         // Update main contact details for the restaurant
-        restaurantObj.mainContact = new Object();
-        restaurantObj.mainContact.firstName = mainDetailValues['firstName'];
-        restaurantObj.mainContact.lastName = mainDetailValues['lastName'];
-        restaurantObj.mainContact.telephone = mainDetailValues['telephone'];
-        restaurantObj.mainContact.mobile = mainDetailValues['mobile'];
-        restaurantObj.mainContact.email = mainDetailValues['email'];
+        restaurantObj.mainContact = new Object({
+            firstName: mainDetailValues['firstName'],
+            lastName: mainDetailValues['lastName'],
+            telephone: mainDetailValues['telephone'],
+            mobile: mainDetailValues['mobile'],
+            email: mainDetailValues['email']
+        });
 
         // Update notification options for the restuarant
-        restaurantObj.notificationOptions = new Object();
-        restaurantObj.notificationOptions.receiveNotificationCall = mainDetailValues['receiveNotificationCall'] == 'on';
-        restaurantObj.notificationOptions.receiveSMSNotification = mainDetailValues['receiveSMSNotification'] == 'on';
-        restaurantObj.notificationOptions.notificationPhoneNumber = mainDetailValues['notificationPhoneNumber'];
-        restaurantObj.notificationOptions.notificationSMSNumber = mainDetailValues['notificationSMSNumber'];
-        restaurantObj.notificationOptions.notificationEmailAddress = mainDetailValues['notificationEmailAddress'];
+        restaurantObj.notificationOptions = new Object({
+            receiveNotificationCall: mainDetailValues['receiveNotificationCall'] == 'on',
+            receiveSMSNotification: mainDetailValues['receiveSMSNotification'] == 'on',
+            notificationPhoneNumber: mainDetailValues['notificationPhoneNumber'],
+            notificationSMSNumber: mainDetailValues['notificationSMSNumber'],
+            notificationEmailAddress: mainDetailValues['notificationEmailAddress']
+        });
 
         // Get the input values from the delivery details form
         var deliveryDetailValues = this.getDeliveryDetailsForm().getForm().getValues();
@@ -278,56 +325,65 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Build daily opening times summary
         var openingTimes = [];
         for( i = 1; i < 8; i++ ) {
-            var openingTime = new Object();
-            openingTime.dayOfWeek = i;
-            openingTime.open = deliveryDetailValues['open_' + i] == 'on';
-            openingTime.collectionOpeningTime = deliveryDetailValues['collectionOpeningTime_' + i];
-            openingTime.collectionClosingTime = deliveryDetailValues['collectionClosingTime_' + i];
-            openingTime.deliveryOpeningTime = deliveryDetailValues['deliveryOpeningTime_' + i];
-            openingTime.deliveryClosingTime = deliveryDetailValues['deliveryClosingTime_' + i];
+            var openingTime = new Object({
+                dayOfWeek: i,
+                open: deliveryDetailValues['open_' + i] == 'on',
+                collectionOpeningTime: deliveryDetailValues['collectionOpeningTime_' + i],
+                collectionClosingTime: deliveryDetailValues['collectionClosingTime_' + i],
+                deliveryOpeningTime: deliveryDetailValues['deliveryOpeningTime_' + i],
+                deliveryClosingTime: deliveryDetailValues['deliveryClosingTime_' + i]
+            });
             openingTimes.push(openingTime);
         }
         restaurantObj.openingTimes.openingTimes = openingTimes;
         restaurantObj.openingTimes.closedDates = delimitedStringToArray(deliveryDetailValues['closedDates'],'\n');
 
         // Build delivery options details
-        restaurantObj.deliveryOptions = new Object();
-        restaurantObj.deliveryOptions.deliveryOptionsSummary = replaceNewLines(deliveryDetailValues['deliveryOptionsSummary']);
-        restaurantObj.deliveryOptions.deliveryTimeMinutes = deliveryDetailValues['deliveryTimeMinutes'];
-        restaurantObj.deliveryOptions.minimumOrderForFreeDelivery = deliveryDetailValues['minimumOrderForFreeDelivery'];
-        restaurantObj.deliveryOptions.allowDeliveryOrdersBelowMinimum = deliveryDetailValues['allowDeliveryOrdersBelowMinimum'] == 'on';
-        restaurantObj.deliveryOptions.deliveryCharge = deliveryDetailValues['deliveryCharge'];
-        restaurantObj.deliveryOptions.deliveryRadiusInKilometres = deliveryDetailValues['deliveryRadiusInKilometres'];
-        restaurantObj.deliveryOptions.areasDeliveredTo = delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n');
+        restaurantObj.deliveryOptions = new Object({
+            deliveryOptionsSummary: replaceNewLines(deliveryDetailValues['deliveryOptionsSummary']),
+            deliveryTimeMinutes: deliveryDetailValues['deliveryTimeMinutes'],
+            minimumOrderForFreeDelivery: deliveryDetailValues['minimumOrderForFreeDelivery'],
+            allowDeliveryOrdersBelowMinimum: deliveryDetailValues['allowDeliveryOrdersBelowMinimum'] == 'on',
+            deliveryCharge: deliveryDetailValues['deliveryCharge'],
+            deliveryRadiusInKilometres: deliveryDetailValues['deliveryRadiusInKilometres'],
+            areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n')
+        });
 
         // Build restaurant menu
         restaurantObj.menu = new Object();
         var menuCategories = [];
         this.getMenuCategoriesStore().getRange().forEach(function(category){
-            var menuCategory = new Object();
-            menuCategory.name = category.get('name');
-            menuCategory.categoryId = category.get('categoryId');
-            menuCategory.type = category.get('type');
-            menuCategory.summary = replaceNewLines(category.get('summary'));
-            menuCategory.iconClass = category.get('iconClass');
-            menuCategory.itemTypes = delimitedStringToArray(category.get('itemTypes'),'\n');
+            var menuCategory = new Object({
+                name: category.get('name'),
+                categoryId: category.get('categoryId'),
+                type: category.get('type'),
+                summary: replaceNewLines(category.get('summary')),
+                iconClass: category.get('iconClass'),
+                itemTypes: delimitedStringToArray(category.get('itemTypes'),'\n')
+            });
+
             var menuItems = [];
             category.get('menuItems').forEach(function(item){
-                var menuItem = new Object();
-                menuItem.number = item.get('number');
-                menuItem.itemId = item.get('itemId');
-                menuItem.title = item.get('title');
-                menuItem.subtitle = item.get('subtitle');
-                menuItem.description = replaceNewLines(item.get('description'));
-                menuItem.iconClass = item.get('iconClass');
-                menuItem.cost = item.get('cost');
+                var menuItem = new Object({
+                    number: item.get('number'),
+                    itemId: item.get('itemId'),
+                    title: item.get('title'),
+                    subtitle: item.get('subtitle'),
+                    description: replaceNewLines(item.get('description')),
+                    iconClass: item.get('iconClass'),
+                    cost: item.get('cost'),
+                    menuItemTypeCosts: []
+                });
+
                 var menuItemTypeCosts = [];
                 item.get('menuItemTypeCosts').forEach(function(itemTypeCost){
-                    var menuItemTypeCost = new Object();
-                    menuItemTypeCost.type = itemTypeCost.get('type');
-                    menuItemTypeCost.cost = itemTypeCost.get('cost');
+                    var menuItemTypeCost = new Object({
+                        type: itemTypeCost.get('type'),
+                        cost: itemTypeCost.get('cost')
+                    });
                     menuItemTypeCosts.push(menuItemTypeCost);
                 });
+
                 menuItem.menuItemTypeCosts = menuItemTypeCosts;
                 menuItems.push(menuItem);
             });
@@ -335,6 +391,37 @@ Ext.define('AD.controller.RestaurantEdit', {
             menuCategories.push(menuCategory);
         });
         restaurantObj.menu.menuCategories = menuCategories;
+
+        // Build the discounts
+        var restaurantDiscounts = [];
+        this.getDiscountsStore().getRange().forEach(function(discount){
+            var discountObj = new Object({
+                discountId: discount.get('discountId'),
+                title: discount.get('title'),
+                description: discount.get('description'),
+                discountType: discount.get('discountType'),
+                collection: discount.get('collection'),
+                delivery: discount.get('delivery'),
+                minimumOrderValue: discount.get('minimumOrderValue'),
+                discountAmount: discount.get('discountAmount'),
+                freeItems: delimitedStringToArray(discount.get('freeItems'),'\n')
+            });
+
+            var discountApplicableTimes = [];
+            discount.get('discountApplicableTimes').forEach(function(discountApplicableTime){
+                var discountApplicableTimeObj = new Object({
+                    dayOfWeek: discountApplicableTime.get('dayOfWeek'),
+                    applicable: discountApplicableTime.get('applicable'),
+                    applicableFrom: discountApplicableTime.get('applicableFrom'),
+                    applicableTo: discountApplicableTime.get('applicableTo')
+                });
+                discountApplicableTimes.push(discountApplicableTimeObj);
+            });
+
+            discountObj.discountApplicableTimes = discountApplicableTimes;
+            restaurantDiscounts.push(discountObj);
+        });
+        restaurantObj.discounts = restaurantDiscounts;
 
         // Submit the restaurant to the server
         Ext.Ajax.request({
@@ -346,7 +433,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             success: function(response) {
                 var obj = Ext.decode(response.responseText);
                 if( obj.success ) {
-                    restaurantObj.id = obj.id;
+                    this.initializeRestaurant(obj.restaurant);
                     showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
                 } else {
                     showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
@@ -409,7 +496,6 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     // Initialize menu panel
     menuRendered: function(panel) {
-        this.getMenuCategoriesStore().loadData(menu.get('menuCategories'));
         panel.down('#menuitemsgrid').view.on('drop',this.menuItemsGridDropped,this);
     },
 
@@ -427,7 +513,7 @@ Ext.define('AD.controller.RestaurantEdit', {
     // Fires when the remove button is clicked on the menu category grid
     removeMenuCategory: function(button) {
         Ext.MessageBox.show({
-            title:'Delete Menu Category',
+            title:'Delete menu category',
             msg:'Are you sure you want to remove this menu category?',
             buttons:Ext.MessageBox.YESNO,
             icon:Ext.MessageBox.QUESTION,
@@ -540,7 +626,7 @@ Ext.define('AD.controller.RestaurantEdit', {
     // Fires when the remove button is clicked on the menu item grid
     removeMenuItem: function(button) {
         Ext.MessageBox.show({
-            title:'Delete Menu Item',
+            title:'Delete menu item',
             msg:'Are you sure you want to remove this menu item?',
             buttons:Ext.MessageBox.YESNO,
             icon:Ext.MessageBox.QUESTION,
@@ -661,7 +747,6 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     // Fires when the discounts grid is rendered
     discountsRendered: function(panel) {
-        this.getDiscountsStore().loadData(discounts);
     },
 
     // Fires when a record is selected in the discounts grid
@@ -733,6 +818,33 @@ Ext.define('AD.controller.RestaurantEdit', {
             record.set('collection',formValues['collection'] == 'on');
             showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Discount details have been updated');
         }
+    },
+
+    // Fires when the revert button is clicked on the menu category edit form
+    revertDiscount: function(button) {
+        discountEditForm.getForm().reset();
+        discountEditForm.loadRecord(discountEditForm.getRecord());
+        showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Discount details have been reverted');
+    },
+
+    // Fires when the remove button is clicked on the discount grid
+    removeDiscount: function(button) {
+        Ext.MessageBox.show({
+            title:'Delete discount',
+            msg:'Are you sure you want to remove this discount?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.getDiscountsStore().remove(discountEditForm.getRecord());
+                    this.getDiscountEditForm().removeAll(true);
+                    discountEditForm = null;
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Deleted','Discount has been deleted');
+                }
+            },
+            scope:this
+        });
     },
 
     // Shows a warning alert box

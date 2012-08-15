@@ -107,7 +107,7 @@ Ext.define('AD.view.restaurant.DiscountEdit' ,{
         }]
     },{
         xtype:'fieldset',
-        title:'Days and times that discount is applicable',
+        title:'Days and times that discount is applicable (leave times blank for all day)',
         defaults:{
             allowBlank:true,
             anchor:'100%'

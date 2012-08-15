@@ -20,7 +20,7 @@ public class DiscountApplicableTime {
         this.dayOfWeek = dayOfWeek;
     }
 
-    public boolean isApplicable() {
+    public boolean getApplicable() {
         return applicable;
     }
 

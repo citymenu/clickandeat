@@ -99,6 +99,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
         
+        // Update discount identifiers
+        for( Discount discount: restaurant.getDiscounts()) {
+            if( !StringUtils.hasText(discount.getDiscountId())) {
+                discount.setDiscountId(sequenceGenerator.getNextSequence());
+            }
+        }
+        
         operations.save(restaurant);
         clusteredCache.put(Restaurant.class, restaurant.getRestaurantId(),restaurant);
         return restaurant;

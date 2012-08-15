@@ -4,13 +4,11 @@ import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.util.ResponseEntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -43,6 +41,9 @@ public class RestaurantController {
     @Autowired
     private JSONUtils jsonUtils;
 
+    @Autowired
+    private ResponseEntityUtils responseEntityUtils;
+    
     @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
     public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
 
@@ -53,7 +54,7 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        request.getSession(true).setAttribute("restaurantid",restaurantId);
+        request.getSession(true).setAttribute("restaurantid", restaurantId);
         return new ModelAndView("restaurant",model);
     }
 
@@ -82,11 +83,7 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants.getContent());
         model.put("count",repository.count());
-        String json = jsonUtils.serializeAndEscape(model);
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+        return responseEntityUtils.buildResponse(model);
     }
 
 
@@ -102,11 +99,11 @@ public class RestaurantController {
 
     @RequestMapping(value="/admin/restaurants/edit.html", method = RequestMethod.GET )
     public ModelAndView edit(@RequestParam(value = "restaurantId") String restaurantId) {
-        
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Editing restaurant with id [" + restaurantId + "]");
         }
-        
+
         Map<String,Object> model = getModel();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
@@ -118,6 +115,7 @@ public class RestaurantController {
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/save.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> save(@RequestParam(value = "body") String body) throws Exception {
+
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
@@ -125,24 +123,23 @@ public class RestaurantController {
             restaurant = repository.saveRestaurant(restaurant);
             model.put("success",true);
             model.put("id",restaurant.getId());
+            model.put("restaurant",restaurant);
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-
-        String json = jsonUtils.serializeAndEscape(model);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+        return responseEntityUtils.buildResponse(model);
     }
 
 
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/delete.ajax", method = RequestMethod.GET )
     public ResponseEntity<byte[]> delete(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+
         Map<String,Object> model = new HashMap<String, Object>();
+
         try {
             Restaurant restaurant = repository.findByRestaurantId(restaurantId);
             repository.delete(restaurant);
@@ -153,11 +150,7 @@ public class RestaurantController {
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-
-        String json = jsonUtils.serializeAndEscape(model);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+        return responseEntityUtils.buildResponse(model);
     }
 
 
@@ -174,6 +167,4 @@ public class RestaurantController {
         return model;
     }
 
-
- 
 }

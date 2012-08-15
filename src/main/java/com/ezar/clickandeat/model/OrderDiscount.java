@@ -4,11 +4,11 @@ public class OrderDiscount {
     
     private String discountId;
     
-    private String description;
-    
-    private String freeItem;
-    
+    private String title;
+
     private Double discountAmount;
+
+    private String freeItem;
 
     public String getDiscountId() {
         return discountId;
@@ -18,20 +18,12 @@ public class OrderDiscount {
         this.discountId = discountId;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getFreeItem() {
-        return freeItem;
-    }
-
-    public void setFreeItem(String freeItem) {
-        this.freeItem = freeItem;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Double getDiscountAmount() {
@@ -40,5 +32,13 @@ public class OrderDiscount {
 
     public void setDiscountAmount(Double discountAmount) {
         this.discountAmount = discountAmount;
+    }
+
+    public String getFreeItem() {
+        return freeItem;
+    }
+
+    public void setFreeItem(String freeItem) {
+        this.freeItem = freeItem;
     }
 }
