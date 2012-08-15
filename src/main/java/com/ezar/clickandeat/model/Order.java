@@ -8,9 +8,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
@@ -102,13 +100,6 @@ public class Order extends PersistentObject {
         }
         this.orderItemCost = orderItemCost;
 
-        // Update all discount costs
-        double totalDiscount = 0d;
-        for( OrderDiscount discount: orderDiscounts ) {
-            totalDiscount += discount.getDiscountAmount();
-        }
-        this.totalDiscount = totalDiscount;
-
         // Reset and update delivery cost and collection discount
         this.deliveryCost = 0d;
         this.extraSpendNeededForDelivery = 0d;
@@ -129,8 +120,56 @@ public class Order extends PersistentObject {
             }
         }
 
+        // Update all discount costs
+        updateOrderDiscounts();
+
+        totalDiscount = 0d;
+        for( OrderDiscount discount: orderDiscounts ) {
+            totalDiscount += discount.getDiscountAmount();
+        }
+
         // Set the total cost
         this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+    }
+
+
+    /**
+     * Updates all discounts applicable to this order
+     */
+    
+    public void updateOrderDiscounts() {
+
+        // Get all discounts applicable to this order
+        Map<String,Discount> applicableDiscounts = new HashMap<String,Discount>();
+        for( Discount discount: this.getRestaurant().getDiscounts()) {
+            if( discount.isApplicableTo(this)) {
+                applicableDiscounts.put(discount.getDiscountId(), discount);
+            }
+        }
+
+        // Remove any existing discounts which are no longer applicable to this order
+        List<OrderDiscount> discountsToRemove = new ArrayList<OrderDiscount>();
+        for( OrderDiscount orderDiscount: orderDiscounts ) {
+            if( !applicableDiscounts.containsKey(orderDiscount.getDiscountId())) {
+                discountsToRemove.add(orderDiscount);
+            }
+        }
+        if( discountsToRemove.size() > 0 ) {
+            orderDiscounts.removeAll(discountsToRemove);
+        }
+
+        // Now either add or update the discounts
+        for( Discount applicableDiscount: applicableDiscounts.values()) {
+            OrderDiscount existingDiscount = getOrderDiscount(applicableDiscount.getDiscountId());
+            if( existingDiscount == null ) {
+                OrderDiscount newDiscount = applicableDiscount.createOrderDiscount(this);
+                orderDiscounts.add(newDiscount);
+            }
+            else {
+                applicableDiscount.updateOrderDiscount(this,existingDiscount);
+            }
+        }
+        
     }
     
     
@@ -481,5 +520,14 @@ public class Order extends PersistentObject {
 
     public void setOrderDiscounts(List<OrderDiscount> orderDiscounts) {
         this.orderDiscounts = orderDiscounts;
+    }
+    
+    public OrderDiscount getOrderDiscount(String discountId) {
+        for( OrderDiscount orderDiscount: orderDiscounts ) {
+            if( discountId.equals(orderDiscount.getDiscountId())) {
+                return orderDiscount;
+            }
+        }
+        return null;
     }
 }

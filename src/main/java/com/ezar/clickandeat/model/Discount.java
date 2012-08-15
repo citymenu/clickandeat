@@ -1,5 +1,9 @@
 package com.ezar.clickandeat.model;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,109 @@ public class Discount {
         this.freeItems = new ArrayList<String>();
         this.discountApplicableTimes = new ArrayList<DiscountApplicableTime>();
     }
+
+
+    /**
+     * @param order
+     * @return
+     */
+
+    public boolean isApplicableTo(Order order) {
+
+        if( minimumOrderValue != null && order.getOrderItemCost() < minimumOrderValue ) {
+            return false;
+        }
+
+        if( Order.DELIVERY.equals(order.getDeliveryType())) {
+            if( !delivery ) {
+                return false;
+            }
+            DateTime expectedDeliveryTime = order.getExpectedDeliveryTime() == null? new DateTime(): order.getExpectedDeliveryTime();
+            DiscountApplicableTime applicableTime = getDiscountApplicableTime(expectedDeliveryTime);
+            if( applicableTime == null || !applicableTime.getApplicable()) {
+                return false;
+            }
+            if( applicableTime.getApplicableFrom() == null || applicableTime.getApplicableTo() == null ) {
+                return true;
+            }
+            LocalTime time = expectedDeliveryTime.toLocalTime();
+            return !time.isBefore(applicableTime.getApplicableFrom()) && !time.isAfter(applicableTime.getApplicableTo());
+        }
+        else {
+            if( !collection ) {
+                return false;
+            }
+            DateTime expectedCollectionTime = order.getExpectedCollectionTime() == null? new DateTime(): order.getExpectedCollectionTime();
+            DiscountApplicableTime applicableTime = getDiscountApplicableTime(expectedCollectionTime);
+            if( applicableTime == null || !applicableTime.getApplicable()) {
+                return false;
+            }
+            if( applicableTime.getApplicableFrom() == null || applicableTime.getApplicableTo() == null ) {
+                return true;
+            }
+            LocalTime time = expectedCollectionTime.toLocalTime();
+            return !time.isBefore(applicableTime.getApplicableFrom()) && !time.isAfter(applicableTime.getApplicableTo());
+        }
+    }
+
+
+    /**
+     * @param order
+     * @return
+     */
+    
+    public OrderDiscount createOrderDiscount(Order order) {
+        OrderDiscount orderDiscount = new OrderDiscount();
+        orderDiscount.setDiscountId(discountId);
+        orderDiscount.setTitle(title);
+        orderDiscount.setDiscountAmount(calculateDiscountAmount(order));
+        return orderDiscount;
+    }
+
+
+    /**
+     * @param order
+     * @param orderDiscount
+     * @return
+     */
+
+    public void updateOrderDiscount(Order order, OrderDiscount orderDiscount) {
+        orderDiscount.setDiscountAmount(calculateDiscountAmount(order));        
+    }
+
+
+    /**
+     * @param order
+     * @return
+     */
+    
+    private Double calculateDiscountAmount(Order order) {
+        if(DISCOUNT_FREE_ITEM.equals(discountType)) {
+            return 0d;
+        }
+        else if(DISCOUNT_CASH.equals(discountType)) {
+            return discountAmount;
+        }
+        else {
+            return order.getOrderItemCost() * discountAmount / 100;
+        }
+    }
+    
+    /**
+     * @param dateTime
+     * @return
+     */
+
+    private DiscountApplicableTime getDiscountApplicableTime(DateTime dateTime ) {
+        int dayOfWeek = dateTime.getDayOfWeek();
+        for( DiscountApplicableTime time: discountApplicableTimes ) {
+            if( dayOfWeek == time.getDayOfWeek()) {
+                return time;
+            }
+        }
+        return null;
+    }
+
 
     public String getDiscountId() {
         return discountId;

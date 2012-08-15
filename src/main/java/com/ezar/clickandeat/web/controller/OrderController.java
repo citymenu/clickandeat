@@ -178,6 +178,7 @@ public class OrderController implements InitializingBean {
                     order.setRestaurantId(restaurantId);
                     order.setRestaurant(restaurant);
                     order.getOrderItems().clear();
+                    order.getOrderDiscounts().clear();
                 }
             }
             
