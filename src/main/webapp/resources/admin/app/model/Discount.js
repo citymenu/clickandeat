@@ -11,6 +11,7 @@ Ext.define('AD.model.Discount', {
         {name:'discountType', type:'string'},
         {name:'collection', type:'boolean'},
         {name:'delivery', type:'boolean'},
+        {name:'delivery', type:'canCombineWithOtherDiscounts'},
         {name:'minimumOrderValue', type:'double'},
         {name:'discountAmount', type:'double'},
         {name:'freeItems',type:'auto',convert: arrayToString}

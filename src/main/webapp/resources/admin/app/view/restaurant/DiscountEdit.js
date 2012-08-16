@@ -89,6 +89,11 @@ Ext.define('AD.view.restaurant.DiscountEdit' ,{
                 name:'collection'
             }]
         },{
+            fieldLabel:'Discount can be combined with other discounts',
+            name:'canCombineWithOtherDiscounts',
+            labelAlign:'top',
+            xtype:'checkbox'
+        },{
             fieldLabel:'Discount amount',
             name:'discountAmount',
             labelAlign:'top',

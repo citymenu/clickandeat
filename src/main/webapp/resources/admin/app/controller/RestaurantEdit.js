@@ -402,6 +402,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 discountType: discount.get('discountType'),
                 collection: discount.get('collection'),
                 delivery: discount.get('delivery'),
+                canCombineWithOtherDiscounts: discount.get('canCombineWithOtherDiscounts'),
                 minimumOrderValue: discount.get('minimumOrderValue'),
                 discountAmount: discount.get('discountAmount'),
                 freeItems: delimitedStringToArray(discount.get('freeItems'),'\n')
@@ -771,6 +772,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             discountType:'DISCOUNT_CASH',
             collection:true,
             delivery:true,
+            canCombineWithOtherDiscounts:true,
             discountApplicableTimes:[]
         });
         this.getDiscountsStore().add(discount);
@@ -816,6 +818,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             record.set('discountApplicableTimes',discountApplicableTimes);
             record.set('delivery',formValues['delivery'] == 'on');
             record.set('collection',formValues['collection'] == 'on');
+            record.set('canCombineWithOtherDiscounts',formValues['canCombineWithOtherDiscounts'] == 'on');
             showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Discount details have been updated');
         }
     },

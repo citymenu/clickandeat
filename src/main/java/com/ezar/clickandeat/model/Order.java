@@ -141,10 +141,24 @@ public class Order extends PersistentObject {
 
         // Get all discounts applicable to this order
         Map<String,Discount> applicableDiscounts = new HashMap<String,Discount>();
+        Discount nonCombinableDiscount = null; // Only include at most one discount which cannot be combined with others
         for( Discount discount: this.getRestaurant().getDiscounts()) {
             if( discount.isApplicableTo(this)) {
-                applicableDiscounts.put(discount.getDiscountId(), discount);
+                if( discount.isCanCombineWithOtherDiscounts()) {
+                    applicableDiscounts.put(discount.getDiscountId(), discount);
+                }
+                else {
+                    if( nonCombinableDiscount == null ) {
+                        nonCombinableDiscount = discount;                        
+                    }
+                    else if( discount.getMinimumOrderValue() > nonCombinableDiscount.getMinimumOrderValue()) {
+                        nonCombinableDiscount = discount; // Keep the discount with the maximum minimum order value
+                    }
+                }
             }
+        }
+        if( nonCombinableDiscount != null ) {
+            applicableDiscounts.put(nonCombinableDiscount.getDiscountId(),nonCombinableDiscount);
         }
 
         // Remove any existing discounts which are no longer applicable to this order

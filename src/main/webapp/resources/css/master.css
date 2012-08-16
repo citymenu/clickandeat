@@ -56,9 +56,9 @@ a:hover {
 #header {
     margin:0;
     width: 100%;
-    height:50px;
+    height:120px;
     text-align:left;
-    background: #FFF;
+    background-color:#B00000;
     border-bottom:2px solid #AAA;
 }
 

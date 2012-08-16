@@ -24,6 +24,8 @@ public class Discount {
     private boolean collection;
     
     private boolean delivery;
+
+    private boolean canCombineWithOtherDiscounts;
     
     private Double minimumOrderValue;
     
@@ -188,6 +190,14 @@ public class Discount {
 
     public void setDelivery(boolean delivery) {
         this.delivery = delivery;
+    }
+
+    public boolean isCanCombineWithOtherDiscounts() {
+        return canCombineWithOtherDiscounts;
+    }
+
+    public void setCanCombineWithOtherDiscounts(boolean canCombineWithOtherDiscounts) {
+        this.canCombineWithOtherDiscounts = canCombineWithOtherDiscounts;
     }
 
     public Double getMinimumOrderValue() {
