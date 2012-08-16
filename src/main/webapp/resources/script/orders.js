@@ -54,6 +54,7 @@ function doBuildOrder(order,config) {
     $('.ordertitle').remove();
     $('.orderdeliverychoice').remove();
     $('.orderitemrow').remove();
+    $('.discountrow').remove();
     $('.deliverychargerow').remove();
     $('.totalcost').remove();
     $('#checkout').remove();
@@ -90,6 +91,12 @@ function doBuildOrder(order,config) {
             }
             $('.orderbody').prepend(row);
         };
+
+        // Add details of any discount
+        order.orderDiscounts.forEach(function(orderDiscount) {
+            var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>' + orderDiscount.title + '</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,orderDiscount.discountAmount.toFixed(2));
+            $('.orderbody').append(row);
+        });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
