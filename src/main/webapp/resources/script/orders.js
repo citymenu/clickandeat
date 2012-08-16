@@ -57,6 +57,7 @@ function doBuildOrder(order,config) {
     $('.discountrow').remove();
     $('.deliverychargerow').remove();
     $('.totalcost').remove();
+    $('.freeitem').remove();
     $('#checkout').remove();
     $('.deliverywarning').remove();
 
@@ -94,8 +95,28 @@ function doBuildOrder(order,config) {
 
         // Add details of any discount
         order.orderDiscounts.forEach(function(orderDiscount) {
-            var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>' + orderDiscount.title + '</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,orderDiscount.discountAmount.toFixed(2));
-            $('.orderbody').append(row);
+            if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
+                var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
+                selectBox += ('<option value = \'\'>{0}</option>').format(labels['no-thanks']);
+                orderDiscount.freeItems.forEach(function(freeItem) {
+                    if( orderDiscount.selectedFreeItem == freeItem ) {
+                        selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
+                    } else {
+                        selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                    }
+                });
+                selectBox += '</select>';
+                var div = ('<div class=\'freeitem\'><div class=\'freeitemtitle\'>{0}</div><div class=\'freeitemselect\'>{1}</div></div>').format(orderDiscount.title,selectBox);
+                $('#freeitems').append(div);
+                $('#' + orderDiscount.discountId).change(function(){
+                    var discountId = $(this).attr('id');
+                    var freeItem = $(this).val();
+                    updateFreeItem(discountId,freeItem);
+                });
+            } else {
+                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>' + orderDiscount.title + '</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,orderDiscount.discountAmount.toFixed(2));
+                $('.orderbody').append(row);
+            }
         });
 
         // Add delivery charge if applicable
@@ -203,6 +224,24 @@ function removeFromOrder(itemId, quantity ) {
 // Update delivery type
 function updateDeliveryType(deliveryType, restaurantId) {
     $.post( ctx+'/order/updateDeliveryType.ajax', { deliveryType: deliveryType, restaurantId: restaurantId },
+        function( data ) {
+            if( data.success ) {
+                buildOrder(data.order);
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+}
+
+// Update a selected free item in a discount option
+function updateFreeItem(discountId,freeItem) {
+    var update = {
+        discountId: discountId,
+        freeItem: freeItem
+    };
+
+    $.post( ctx+'/order/updateFreeItem.ajax', { body: JSON.stringify(update) },
         function( data ) {
             if( data.success ) {
                 buildOrder(data.order);

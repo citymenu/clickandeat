@@ -45,7 +45,7 @@ function replaceNewLines(value) {
 /* Converts array into newline delimited string */
 function arrayToString(value, record) {
     if( value && (value instanceof Array)) {
-        return unescapeQuotes(value).join('\n');
+        return unescapeQuotes(value.join('\n'));
     } else {
         return value;
     }

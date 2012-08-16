@@ -94,7 +94,9 @@ public class Discount {
     public OrderDiscount createOrderDiscount(Order order) {
         OrderDiscount orderDiscount = new OrderDiscount();
         orderDiscount.setDiscountId(discountId);
+        orderDiscount.setDiscountType(discountType);
         orderDiscount.setTitle(title);
+        orderDiscount.setFreeItems(freeItems);
         orderDiscount.setDiscountAmount(calculateDiscountAmount(order));
         return orderDiscount;
     }

@@ -1,12 +1,18 @@
 package com.ezar.clickandeat.model;
 
+import java.util.List;
+
 public class OrderDiscount {
     
     private String discountId;
+
+    private String discountType;
     
     private String title;
 
     private Double discountAmount;
+
+    private List<String> freeItems;
 
     private String freeItem;
 
@@ -16,6 +22,14 @@ public class OrderDiscount {
 
     public void setDiscountId(String discountId) {
         this.discountId = discountId;
+    }
+
+    public String getDiscountType() {
+        return discountType;
+    }
+
+    public void setDiscountType(String discountType) {
+        this.discountType = discountType;
     }
 
     public String getTitle() {
@@ -34,11 +48,19 @@ public class OrderDiscount {
         this.discountAmount = discountAmount;
     }
 
-    public String getFreeItem() {
+    public List<String> getFreeItems() {
+        return freeItems;
+    }
+
+    public void setFreeItems(List<String> freeItems) {
+        this.freeItems = freeItems;
+    }
+
+    public String getSelectedFreeItem() {
         return freeItem;
     }
 
-    public void setFreeItem(String freeItem) {
+    public void setSelectedFreeItem(String freeItem) {
         this.freeItem = freeItem;
     }
 }

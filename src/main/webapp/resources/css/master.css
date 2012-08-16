@@ -351,6 +351,27 @@ td.deliverycharge, td.discount {
     -webkit-border-radius: 3px;
 }
 
+.freeitem {
+    font: 11px/14px Arial, 'Lucida Grande', sans-serif;
+    padding:5px;
+    margin:5px 5px 5px 5px;
+}
+
+#freeitems {
+    margin-top:8px 0 8px 0;
+}
+
+select.freeitemselect {
+    font-family: Arial, 'Lucida Grande', sans-serif;
+    font-size:11px;
+    font-weight:normal;
+}
+
+.freeitemtitle {
+    font-weight:bold;
+    margin-bottom:2px;
+}
+
 .totalcost {
     padding:0 0 0 10px;
 }

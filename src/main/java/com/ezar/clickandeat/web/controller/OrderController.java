@@ -4,10 +4,7 @@ import com.ezar.clickandeat.converter.DateTimeTransformer;
 import com.ezar.clickandeat.converter.LocalDateTransformer;
 import com.ezar.clickandeat.converter.LocalTimeTransformer;
 import com.ezar.clickandeat.converter.NullIdStringTransformer;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.OrderItem;
-import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.Search;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
@@ -280,6 +277,50 @@ public class OrderController implements InitializingBean {
         return buildOrderResponse(model);
     }
 
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/updateFreeItem.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateFreeItem(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Updating free item: " + body);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
+            String discountId = (String)params.get("discountId");
+            String freeItem = (String)params.get("freeItem");
+
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order = null;
+            if( orderId != null ) {
+                order = orderRepository.findByOrderId(orderId);
+                if( order != null ) {
+                    OrderDiscount orderDiscount = order.getOrderDiscount(discountId);
+                    if( orderDiscount != null ) {
+                        orderDiscount.setSelectedFreeItem(freeItem);
+                        order = orderRepository.save(order);
+                    }
+                }
+            }
+            model.put("success",true);
+            model.put("order",order);
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+    
 
     /**
      * @param session

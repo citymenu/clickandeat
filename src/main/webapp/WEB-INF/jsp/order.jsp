@@ -20,7 +20,8 @@
         'add-item-anyway': "<spring:message code="label.add-item-anyway"/>",
         'dont-add-item': "<spring:message code="label.dont-add-item"/>",
         'remove-from-order': "<spring:message code="label.remove-from-order"/>",
-        'update-order': "<spring:message code="label.update-order"/>"
+        'update-order': "<spring:message code="label.update-order"/>",
+        'no-thanks': "<spring:message code="label.no-thanks"/>"
     });
 
 </script>
@@ -43,6 +44,7 @@
             </table>
         </div>
         <div id="ordertotal"><spring:message code="label.order-total"/>:</div>
+        <div id="freeitems"></div>
         <div class="deliverycheck"></div>
         <div id="checkoutcontainer"></div>
     </div>
