@@ -28,7 +28,7 @@ Ext.define('AD.view.restaurant.MenuCategoryEdit' ,{
     }],
 
     defaults:{
-        anchor: '100%',
+        anchor: '70%',
         allowBlank:true
     },
     defaultType: 'textfield',

@@ -7,6 +7,10 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
     layout:'anchor',
     autoScroll:true,
 
+    defaults:{
+        anchor:'70%'
+    },
+
     items: [{
         xtype:'fieldset',
         title:'Restaurant Details',

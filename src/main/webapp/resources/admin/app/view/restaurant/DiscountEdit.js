@@ -7,6 +7,10 @@ Ext.define('AD.view.restaurant.DiscountEdit' ,{
     layout:'anchor',
     autoScroll:true,
 
+    defaults:{
+        anchor:'70%'
+    },
+
     dockedItems:[{
         xtype:'toolbar',
         dock:'top',

@@ -18,14 +18,6 @@
     <title><decorator:title/></title>
 </head>
 <body>
-<div id="header">
-    <div id="titlenav">
-        <ul>
-            <li><a href="${ctx}/home.html">Home</a></li>
-            <li><a href="${ctx}/admin/restaurants.html">Admin</a></li>
-        </ul>
-    </div>
-</div>
 <div id="container">
     <decorator:body/>
 </div>
