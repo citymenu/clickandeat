@@ -312,7 +312,8 @@ Ext.define('AD.controller.RestaurantEdit', {
             receiveSMSNotification: mainDetailValues['receiveSMSNotification'] == 'on',
             notificationPhoneNumber: mainDetailValues['notificationPhoneNumber'],
             notificationSMSNumber: mainDetailValues['notificationSMSNumber'],
-            notificationEmailAddress: mainDetailValues['notificationEmailAddress']
+            notificationEmailAddress: mainDetailValues['notificationEmailAddress'],
+            printerEmailAddress: mainDetailValues['printerEmailAddress']
         });
 
         // Get the input values from the delivery details form

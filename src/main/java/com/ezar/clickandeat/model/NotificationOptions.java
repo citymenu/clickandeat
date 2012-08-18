@@ -11,6 +11,8 @@ public class NotificationOptions {
     String notificationSMSNumber;
     
     String notificationEmailAddress;
+    
+    String printerEmailAddress;
 
     public boolean isReceiveNotificationCall() {
         return receiveNotificationCall;
@@ -50,5 +52,13 @@ public class NotificationOptions {
 
     public void setNotificationEmailAddress(String notificationEmailAddress) {
         this.notificationEmailAddress = notificationEmailAddress;
+    }
+
+    public String getPrinterEmailAddress() {
+        return printerEmailAddress;
+    }
+
+    public void setPrinterEmailAddress(String printerEmailAddress) {
+        this.printerEmailAddress = printerEmailAddress;
     }
 }
