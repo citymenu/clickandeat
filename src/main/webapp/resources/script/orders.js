@@ -122,7 +122,7 @@ function doBuildOrder(order,config) {
                     }
                 }
             } else {
-                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{1}{2}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.title,ccy,orderDiscount.discountAmount.toFixed(2));
+                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{1}{2}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.title,ccy,orderDiscount.discountAmount.toFixed(2));
                 $('.orderbody').append(row);
             }
         });
