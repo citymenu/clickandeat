@@ -23,6 +23,7 @@ function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
         allowRemoveItems: true,
+        allowUpdateFreeItem: true,
         enableCheckoutButton: true
     };
     return config;
@@ -96,25 +97,32 @@ function doBuildOrder(order,config) {
         // Add details of any discount
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
-                var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
-                selectBox += ('<option value = \'\'>{0}</option>').format(labels['no-thanks']);
-                orderDiscount.freeItems.forEach(function(freeItem) {
-                    if( orderDiscount.selectedFreeItem == freeItem ) {
-                        selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
-                    } else {
-                        selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                if( config.allowUpdateFreeItem ) {
+                    var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
+                    selectBox += ('<option value = \'\'>{0}</option>').format(labels['no-thanks']);
+                    orderDiscount.freeItems.forEach(function(freeItem) {
+                        if( orderDiscount.selectedFreeItem == freeItem ) {
+                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
+                        } else {
+                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                        }
+                    });
+                    selectBox += '</select>';
+                    var div = ('<div class=\'freeitem\'><div class=\'freeitemtitle\'>{0}:</div><div class=\'freeitemselect\'>{1}</div></div>').format(orderDiscount.title,selectBox);
+                    $('#freeitems').append(div);
+                    $('#' + orderDiscount.discountId).change(function(){
+                        var discountId = $(this).attr('id');
+                        var freeItem = $(this).val();
+                        updateFreeItem(discountId,freeItem);
+                    });
+                } else {
+                    if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
+                        var row = ('<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} ({1})</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,'0.00');
+                        $('.orderbody').append(row);
                     }
-                });
-                selectBox += '</select>';
-                var div = ('<div class=\'freeitem\'><div class=\'freeitemtitle\'>{0}</div><div class=\'freeitemselect\'>{1}</div></div>').format(orderDiscount.title,selectBox);
-                $('#freeitems').append(div);
-                $('#' + orderDiscount.discountId).change(function(){
-                    var discountId = $(this).attr('id');
-                    var freeItem = $(this).val();
-                    updateFreeItem(discountId,freeItem);
-                });
+                }
             } else {
-                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>' + orderDiscount.title + '</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,orderDiscount.discountAmount.toFixed(2));
+                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{1}{2}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.title,ccy,orderDiscount.discountAmount.toFixed(2));
                 $('.orderbody').append(row);
             }
         });

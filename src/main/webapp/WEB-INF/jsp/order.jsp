@@ -21,7 +21,8 @@
         'dont-add-item': "<spring:message code="label.dont-add-item"/>",
         'remove-from-order': "<spring:message code="label.remove-from-order"/>",
         'update-order': "<spring:message code="label.update-order"/>",
-        'no-thanks': "<spring:message code="label.no-thanks"/>"
+        'no-thanks': "<spring:message code="label.no-thanks"/>",
+        'free': "<spring:message code="label.free"/>"
     });
 
 </script>

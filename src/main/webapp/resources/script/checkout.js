@@ -15,6 +15,7 @@ function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
         allowRemoveItems: false,
+        allowUpdateFreeItem: true,
         enableCheckoutButton: false
     };
     return config;
