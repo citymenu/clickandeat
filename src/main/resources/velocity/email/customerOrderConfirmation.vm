@@ -24,7 +24,31 @@ If you have provided a mobile number with your order you will receive an SMS mes
     #end
 #end
 
+#foreach( $discount in $order.orderDiscounts )
+    #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
+        <div>1 x $stringTool.unescape($discount.selectedFreeItem) (free)</div>
+    #end
+#end
+
+#if( $order.hasCashDiscount() )
+    <h3>Discounts applied to order</h3>
+#end
+
+#foreach( $discount in $order.orderDiscounts )
+    #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
+        <div>${discount.title}: -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+    #end
+#end
+
 <h3>Item cost: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+
+#if( $order.totalDiscount > 0 )
+    <h3>Total discounts: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
+#end
+
+#if( $order.deliveryCost > 0 )
+    <h3>Delivery charge: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
+#end
 
 <h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 

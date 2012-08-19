@@ -38,6 +38,13 @@
             #end
             </Say>
         #end
+
+        #foreach( $discount in $order.orderDiscounts )
+            #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
+                <Say language="en-gb">1 free $discount.selectedFreeItem</Say>
+            #end
+        #end
+
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="en-gb">The customer has added the following instructions for this order.</Say>
             <Say>$order.escapedAdditionalInstructions</Say>

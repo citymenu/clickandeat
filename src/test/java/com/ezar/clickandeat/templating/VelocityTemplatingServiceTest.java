@@ -101,6 +101,13 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setMenuItemTitle("Spinach Pakora");
         order.addOrderItem(item2);
 
+        // Add a free item for this order
+        OrderDiscount discount = new OrderDiscount();
+        discount.setDiscountType(Discount.DISCOUNT_FREE_ITEM);
+        discount.setTitle("Free bottle of wine");
+        discount.setSelectedFreeItem("Red wine");
+        order.getOrderDiscounts().add(discount);
+
         Map<String,Object> templateModel = new HashMap<String, Object>();
         String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
@@ -124,6 +131,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item1.setMenuItemNumber(101);
         item1.setMenuItemTitle("Spinach Pakora");
         item1.setQuantity(2);
+        item1.setCost(5.4);
         order.addOrderItem(item1);
 
         OrderItem item2 = new OrderItem();
@@ -131,7 +139,22 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setMenuItemNumber(0);
         item2.setQuantity(1);
         item2.setMenuItemTitle("Onion Bhajii###s");
+        item2.setCost(8.90);
         order.addOrderItem(item2);
+
+        // Add a collection discount for this order
+        OrderDiscount discount1 = new OrderDiscount();
+        discount1.setDiscountAmount(2.80);
+        discount1.setDiscountType(Discount.DISCOUNT_PERCENTAGE);
+        discount1.setTitle("10% off collection");
+        order.getOrderDiscounts().add(discount1);
+
+        // Add a free item for this order
+        OrderDiscount discount2 = new OrderDiscount();
+        discount2.setDiscountType(Discount.DISCOUNT_FREE_ITEM);
+        discount2.setTitle("Free bottle of wine");
+        discount2.setSelectedFreeItem("Red wine");
+        order.getOrderDiscounts().add(discount2);
 
         // Build a restaurant for the order
         Restaurant restaurant = new Restaurant();
@@ -142,6 +165,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.setRestaurant(restaurant);
         
         order.setOrderItemCost(1.355d);
+        order.setTotalDiscount(2.8);
         order.setTotalCost(35.403);
         
         Map<String,Object> templateModel = new HashMap<String, Object>();

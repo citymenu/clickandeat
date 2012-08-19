@@ -137,7 +137,7 @@ public class Order extends PersistentObject {
      * Updates all discounts applicable to this order
      */
     
-    public void updateOrderDiscounts() {
+    private void updateOrderDiscounts() {
 
         // Get all discounts applicable to this order
         Map<String,Discount> applicableDiscounts = new HashMap<String,Discount>();
@@ -259,6 +259,15 @@ public class Order extends PersistentObject {
         orderUpdates.add(orderUpdate);
     }
 
+        
+    public boolean hasCashDiscount() {
+        for( OrderDiscount discount: orderDiscounts ) {
+            if( !Discount.DISCOUNT_FREE_ITEM.equals(discount.getDiscountType())) {
+                return true;
+            }
+        }
+        return false;
+    }
     
     public String getOrderId() {
         return orderId;
