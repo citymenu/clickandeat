@@ -212,7 +212,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             this.getMenuCategoriesGrid().getSelectionModel().deselectAll();
             this.getMenuItemsGrid().getSelectionModel().deselectAll();
             this.getMenuItemsStore().removeAll();
-            this.getMenuEditForm().removeAll();
+            this.getMenuEditForm().removeAll(cd );
             menuCategoryEditForm = null;
             menuItemEditForm = null;
         }
@@ -440,6 +440,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             success: function(response) {
                 var obj = Ext.decode(response.responseText);
                 if( obj.success ) {
+                    restaurantObj.id = obj.id;
                     this.initializeRestaurant(obj.restaurant);
                     showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
                 } else {
