@@ -122,7 +122,7 @@ function doBuildOrder(order,config) {
                     }
                 }
             }
-        }
+        });
 
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
