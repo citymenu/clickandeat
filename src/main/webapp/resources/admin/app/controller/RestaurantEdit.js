@@ -209,10 +209,10 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // If a menu category or item is being edited clear it now
         if( menuCategoryEditForm || menuItemEditForm ) {
-            this.getMenuCategoriesGrid().getSelectionModel().deselectAll(true);
-            this.getMenuItemsGrid().getSelectionModel().deselectAll(true);
-            this.getMenuItemsStore().removeAll(true);
-            this.getMenuEditForm().removeAll(true);
+            this.getMenuCategoriesGrid().getSelectionModel().deselectAll();
+            this.getMenuItemsGrid().getSelectionModel().deselectAll();
+            this.getMenuItemsStore().removeAll();
+            this.getMenuEditForm().removeAll();
             menuCategoryEditForm = null;
             menuItemEditForm = null;
         }
