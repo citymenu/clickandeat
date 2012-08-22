@@ -94,7 +94,7 @@ function doBuildOrder(order,config) {
             $('.orderbody').prepend(row);
         };
 
-        // Add details of any discount
+        // Add details of any free item discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
                 if( config.allowUpdateFreeItem ) {
@@ -121,7 +121,12 @@ function doBuildOrder(order,config) {
                         $('.orderbody').append(row);
                     }
                 }
-            } else {
+            }
+        }
+
+        // Add details of any cash discounts
+        order.orderDiscounts.forEach(function(orderDiscount) {
+            if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
                 var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{1}{2}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.title,ccy,orderDiscount.discountAmount.toFixed(2));
                 $('.orderbody').append(row);
             }
