@@ -11,7 +11,10 @@ Ext.define('AD.model.MenuItem', {
         {name:'subtitle', type:'string', convert: unescapeQuotes},
         {name:'description',type: 'string',convert: replaceLineBreaks},
         {name:'iconClass', type:'string'},
-        {name:'cost', type:'double'}
+        {name:'cost', type:'double'},
+        {name:'additionalItemChoices',type:'auto',convert: arrayToString},
+        {name:'additionalItemCost', type:'double'},
+        {name:'additionalItemChoiceLimit', type:'double'}
     ],
     hasMany:{
         model:'AD.model.MenuItemTypeCost',

@@ -48,6 +48,9 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
         fieldLabel:'Subtitle',
         name:'subtitle'
     },{
+        fieldLabel:'Icon class',
+        name:'iconClass'
+    },{
         fieldLabel:'Description',
         name:'description',
         labelAlign:'top',
@@ -58,8 +61,22 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
         xtype:'numberfield',
         name:'cost'
     },{
-        fieldLabel:'Icon class',
-        name:'iconClass'
+        fieldLabel:'Additional choices for this item (enter one per line)',
+        labelAlign:'top',
+        name:'additionalItemChoices',
+        xtype:'textareafield',
+        height:90
+    },{
+        fieldLabel:'Additional item cost',
+        labelAlign:'top',
+        labelAlign:'top',
+        xtype:'numberfield',
+        name:'additionalItemCost'
+    },{
+        fieldLabel:'Maximum number of additional items that can be selected',
+        labelAlign:'top',
+        xtype:'numberfield',
+        name:'additionalItemChoiceLimit'
     }]
 
 });

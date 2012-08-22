@@ -26,7 +26,7 @@ function delimitedStringToArray(str,delim) {
         return arr;
     } else {
         str.split(delim).forEach(function(val){
-            arr.push(val);
+            arr.push(unescapeQuotes(val));
         });
         return arr;
     }

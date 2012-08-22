@@ -373,6 +373,9 @@ Ext.define('AD.controller.RestaurantEdit', {
                     description: replaceNewLines(item.get('description')),
                     iconClass: item.get('iconClass'),
                     cost: item.get('cost'),
+                    additionalItemChoices: delimitedStringToArray(item.get('additionalItemChoices'),'\n'),
+                    additionalItemCost: item.get('additionalItemCost'),
+                    additionalItemChoiceLimit: item.get('additionalItemChoiceLimit'),
                     menuItemTypeCosts: []
                 });
 
@@ -380,7 +383,8 @@ Ext.define('AD.controller.RestaurantEdit', {
                 item.get('menuItemTypeCosts').forEach(function(itemTypeCost){
                     var menuItemTypeCost = new Object({
                         type: itemTypeCost.get('type'),
-                        cost: itemTypeCost.get('cost')
+                        cost: itemTypeCost.get('cost'),
+                        additionalItemCost: itemTypeCost.get('additionalItemCost')
                     });
                     menuItemTypeCosts.push(menuItemTypeCost);
                 });
@@ -388,6 +392,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 menuItem.menuItemTypeCosts = menuItemTypeCosts;
                 menuItems.push(menuItem);
             });
+
             menuCategory.menuItems = menuItems;
             menuCategories.push(menuCategory);
         });
@@ -616,6 +621,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Create new menu item and add to the store
         var menuItem = new AD.model.MenuItem({
             title:'New Item',
+            additionalItemChoices:[],
             menuItemTypeCosts:[]
         });
         this.getMenuItemsStore().add(menuItem);
@@ -657,21 +663,35 @@ Ext.define('AD.controller.RestaurantEdit', {
             var record = this.getMenuItemsStore().getAt(index);
             record.set(menuItemEditForm.getValues());
 
+
             // Populate menu item type costs if present
             var menuItemTypeCosts = [];
-            menuItemEditForm.getForm().getFields().each(function(field){
-                var fieldName = field.getName();
-                if(fieldName.indexOf('cost_') != -1 ) {
-                    var fieldValue = field.getValue();
-                    if( fieldValue && fieldValue != 0 ) {
-                        var menuItemTypeCost = new AD.model.MenuItemTypeCost({
-                            type:fieldName.substring(5).replace('_',' '),
-                            cost:fieldValue
-                        });
-                        menuItemTypeCosts.push(menuItemTypeCost);
-                    }
+            var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
+            var itemTypes = selectedMenuCategory.get('itemTypes');
+            delimitedStringToArray(itemTypes,'\n').forEach(function(itemType) {
+
+                var cost;
+                var additionalItemCost;
+
+                var itemCostField = menuItemEditForm.getForm().findField('cost_' + itemType.replace(' ','_'));
+                if( itemCostField ) {
+                    cost = itemCostField.getValue();
                 }
+
+                var additionalItemCostField = menuItemEditForm.getForm().findField('additionalItemCost_' + itemType.replace(' ','_'));
+                if( additionalItemCostField ) {
+                    additionalItemCost = additionalItemCostField.getValue();
+                }
+
+                var menuItemTypeCost = new AD.model.MenuItemTypeCost({
+                    type:itemType,
+                    cost:cost,
+                    additionalItemCost:additionalItemCost
+                });
+                menuItemTypeCosts.push(menuItemTypeCost);
+
             });
+
             record.set('menuItemTypeCosts',menuItemTypeCosts);
 
             // Update menu items on menu category
@@ -687,9 +707,13 @@ Ext.define('AD.controller.RestaurantEdit', {
         menuItemEditForm.getForm().reset();
         menuItemEditForm.loadRecord(menuItemEditForm.getRecord());
         menuItemEditForm.getRecord().get('menuItemTypeCosts').forEach(function(menuItemTypeCost){
-            var field = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
-            if( field ) {
-                field.setValue(menuItemTypeCost.get('cost'));
+            var itemCostField = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( itemCostField ) {
+                itemCostField.setValue(menuItemTypeCost.get('cost'));
+            }
+            var additionalItemCostField = menuItemEditForm.getForm().findField('additionalItemCost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( additionalItemCostField ) {
+                additionalItemCostField.setValue(menuItemTypeCost.get('additionalItemCostField'));
             }
         });
         showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Menu item details have been reverted');
@@ -700,6 +724,11 @@ Ext.define('AD.controller.RestaurantEdit', {
         var selectedMenuItem = this.getMenuItemsGrid().getSelectionModel().getLastSelected();
         var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
         if( selectedMenuCategory.get('type') == 'GRID') {
+
+            // Disable cost and additional item costs fields
+            formPanel.getForm().findField('cost').disable();
+            formPanel.getForm().findField('additionalItemCost').disable();
+
             var itemTypes = selectedMenuCategory.get('itemTypes');
             if( itemTypes ) {
 
@@ -713,17 +742,34 @@ Ext.define('AD.controller.RestaurantEdit', {
                     }
                 });
 
-                // Generate an entry field for the item type cost
+                // Create field container for additional item costs
+                var additionalItemCostsContainer = Ext.create('Ext.form.FieldContainer', {
+                    fieldLabel:'Additional item costs',
+                    labelAlign:'top',
+                    defaults:{
+                        layout:'anchor',
+                        anchor:'100%'
+                    }
+                });
+
+                // Generate an entry field for the item type cost and additional item costs
                 itemTypes.split('\n').forEach(function(itemType){
-                    var field = Ext.create('Ext.form.field.Number', {
+                    var itemCostField = Ext.create('Ext.form.field.Number', {
                         fieldLabel:itemType,
                         name:'cost_' + itemType.replace(' ','_')
                     });
-                    itemTypesContainer.add(field);
+                    itemTypesContainer.add(itemCostField);
+
+                    var additionalItemCostField = Ext.create('Ext.form.field.Number', {
+                        fieldLabel:itemType,
+                        name:'additionalItemCost_' + itemType.replace(' ','_')
+                    });
+                    additionalItemCostsContainer.add(additionalItemCostField);
                 });
 
-                // Add the field container to the form
+                // Add the field containers to the form
                 menuItemEditForm.add(itemTypesContainer);
+                menuItemEditForm.add(additionalItemCostsContainer);
             }
         }
 
@@ -735,6 +781,18 @@ Ext.define('AD.controller.RestaurantEdit', {
             var field = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
             if( field ) {
                 field.setValue(menuItemTypeCost.get('cost'));
+            }
+        });
+
+        // Set the values on the form
+        selectedMenuItem.get('menuItemTypeCosts').forEach(function(menuItemTypeCost){
+            var itemCostField = menuItemEditForm.getForm().findField('cost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( itemCostField ) {
+                itemCostField.setValue(menuItemTypeCost.get('cost'));
+            }
+            var additionalItemCostField = menuItemEditForm.getForm().findField('additionalItemCost_' + menuItemTypeCost.get('type').replace(' ','_'));
+            if( additionalItemCostField ) {
+                additionalItemCostField.setValue(menuItemTypeCost.get('additionalItemCost'));
             }
         });
 
