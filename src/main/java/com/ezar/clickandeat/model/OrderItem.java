@@ -1,5 +1,8 @@
 package com.ezar.clickandeat.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrderItem {
 
     private String menuItemId;
@@ -7,7 +10,11 @@ public class OrderItem {
     private Integer menuItemNumber;
     
     private String menuItemTitle;
+    
+    private String menuItemTypeName;
 
+    private List<String> additionalItems;
+    
     private Double cost;
 
     private Integer quantity;
@@ -26,6 +33,7 @@ public class OrderItem {
 
     public void setMenuItemNumber(Integer menuItemNumber) {
         this.menuItemNumber = menuItemNumber;
+        this.additionalItems = new ArrayList<String>();
     }
 
     public String getMenuItemTitle() {
@@ -34,6 +42,22 @@ public class OrderItem {
 
     public void setMenuItemTitle(String menuItemTitle) {
         this.menuItemTitle = menuItemTitle;
+    }
+
+    public String getMenuItemTypeName() {
+        return menuItemTypeName;
+    }
+
+    public void setMenuItemTypeName(String menuItemTypeName) {
+        this.menuItemTypeName = menuItemTypeName;
+    }
+
+    public List<String> getAdditionalItems() {
+        return additionalItems;
+    }
+
+    public void setAdditionalItems(List<String> additionalItems) {
+        this.additionalItems = additionalItems;
     }
 
     public Double getCost() {

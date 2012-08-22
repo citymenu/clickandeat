@@ -30,8 +30,16 @@ public class MenuItem {
 
     private List<MenuItemTypeCost> menuItemTypeCosts;
 
+    private List<String> additionalItemChoices;
+    
+    private Double additionalItemCost;
+    
+    private Integer additionalItemChoiceLimit;
+            
+
     public MenuItem() {
         this.menuItemTypeCosts = new ArrayList<MenuItemTypeCost>();
+        this.additionalItemChoices = new ArrayList<String>();
     }
 
     public int getNumber() {
@@ -100,5 +108,29 @@ public class MenuItem {
 
     public void setMenuItemTypeCosts(List<MenuItemTypeCost> menuItemTypeCosts) {
         this.menuItemTypeCosts = menuItemTypeCosts;
+    }
+
+    public List<String> getAdditionalItemChoices() {
+        return additionalItemChoices;
+    }
+
+    public void setAdditionalItemChoices(List<String> additionalItemChoices) {
+        this.additionalItemChoices = additionalItemChoices;
+    }
+
+    public Double getAdditionalItemCost() {
+        return additionalItemCost;
+    }
+
+    public void setAdditionalItemCost(Double additionalItemCost) {
+        this.additionalItemCost = additionalItemCost;
+    }
+
+    public Integer getAdditionalItemChoiceLimit() {
+        return additionalItemChoiceLimit;
+    }
+
+    public void setAdditionalItemChoiceLimit(Integer additionalItemChoiceLimit) {
+        this.additionalItemChoiceLimit = additionalItemChoiceLimit;
     }
 }

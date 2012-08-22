@@ -6,6 +6,8 @@ public class MenuItemTypeCost {
     
     private Double cost;
 
+    private Double additionalItemCost;
+
     public String getType() {
         return type;
     }
@@ -20,5 +22,13 @@ public class MenuItemTypeCost {
 
     public void setCost(Double cost) {
         this.cost = cost;
+    }
+
+    public Double getAdditionalItemCost() {
+        return additionalItemCost;
+    }
+
+    public void setAdditionalItemCost(Double additionalItemCost) {
+        this.additionalItemCost = additionalItemCost;
     }
 }
