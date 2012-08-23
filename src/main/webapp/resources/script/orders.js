@@ -85,8 +85,8 @@ function doBuildOrder(order,config) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
                 var closeImg = '<img src=\'' + resources + '/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
-                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\')\">{5}</a></td></tr>'
-                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,closeImg);
+                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\',\'{5}\')\">{6}</a></td></tr>'
+                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle) + (orderItem.menuItemTypeName? ' (' + unescapeQuotes(orderItem.menuItemTypeName) + ')': ''),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,unescapeQuotes(orderItem.menuItemTypeName),closeImg);
             } else {
                 var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'></td></tr>'
                     .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2));
@@ -161,13 +161,13 @@ function doBuildOrder(order,config) {
 }
 
 // Add multiple items based on the select value
-function addMultipleToOrder(restaurantId, itemNumber, itemId, itemName, itemCost ) {
-    var quantity = $('#select_' + itemId ).val();
-    addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity);
+function addMultipleToOrder(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost ) {
+    var quantity = itemType? $('#select_' + itemId + '_' + itemType).val(): $('#select_' + itemId ).val();
+    addToOrder(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity);
 }
 
 // Add item to order, check that restaurant has not changed
-function addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity ) {
+function addToOrder(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
         $('<div></div>')
             .html(('<div>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name)))
@@ -178,7 +178,7 @@ function addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quanti
         		    text: labels['add-item-anyway'],
         		    click: function() {
                 	    $( this ).dialog( "close" );
-                	    doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity );
+                	    doAddToOrderCheck(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
                 	}
                 },{
                     text: labels['dont-add-item'],
@@ -188,19 +188,87 @@ function addToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quanti
                 }]
             });
     } else {
-        doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity );
+        doAddToOrderCheck(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
     }
 }
 
+// Add item to order, check if need to display additional item dialog
+function doAddToOrderCheck(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
+    if( additionalItemArray.length > 0 ) {
+        buildAdditionalItemDialog(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
+    } else {
+        doAddToOrder(restaurantId, itemId, itemType, [], quantity )
+    }
+}
+
+// Build dialog to show additional choices for a menu item
+function buildAdditionalItemDialog(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
+
+    var selectedItems = new HashTable();
+    var html = '';
+    var itemLimit = additionalItemLimit? additionalItemLimit: 0;
+
+    additionalItemArray.forEach(function(additionalItem){
+        var itemDiv = ('<div class=\'additionalItem\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}</div>').format(additionalItem,unescapeQuotes(additionalItem));
+        html += itemDiv;
+    });
+
+    html += '<div id=\'itemcountwarning\'></div>';
+
+    $('<div id=\'additionalItemDialog\'></div>')
+        .html(html)
+        .dialog({
+            modal:true,
+            title:labels['choose-additional'],
+            buttons: [{
+                text: labels['done'],
+                id: 'button-done',
+                click: function() {
+                    $( this ).dialog( "close" );
+                    doAddToOrder(restaurantId, itemId, itemType, [], quantity );
+                }
+            },{
+                text: labels['cancel'],
+                click: function() {
+                    $( this ).dialog( "close" );
+                }
+            }],
+            close: function() {
+                $(this).remove();
+            }
+        });
+
+    // Handler to maintain the selected additional items
+    $('.itemcheckbox').change(function(){
+        if($(this).is(':checked')) {
+            selectedItems.setItem($(this).attr('id'), "");
+        } else {
+            selectedItems.removeItem($(this).attr('id'));
+        }
+
+        $('.itemcountwarning').remove();
+        if( itemLimit > 0 && selectedItems.size() > itemLimit ) {
+            $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(labels['additional-item-limit']).format(itemLimit));
+            $('#button-done').button('disable');
+        } else {
+            $('#button-done').button('enable');
+        }
+
+    });
+
+
+
+
+}
+
 // Add item to order update result on display
-function doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quantity ) {
+function doAddToOrder(restaurantId, itemId, itemType, additionalItems, quantity ) {
 
     var update = {
         restaurantId: restaurantId,
-        itemNumber: itemNumber,
         itemId: itemId,
-        itemName: itemName,
-        itemCost: itemCost,
+        itemType: itemType,
+        additionalItems: additionalItems,
         quantity: quantity || 1
     };
 
@@ -216,10 +284,11 @@ function doAddToOrder(restaurantId, itemNumber, itemId, itemName, itemCost, quan
 }
 
 // Remove an item from the order
-function removeFromOrder(itemId, quantity ) {
+function removeFromOrder(itemId, itemType, quantity ) {
 
     var update = {
         itemId: itemId,
+        itemType: itemType,
         quantity: quantity || 1
     };
 

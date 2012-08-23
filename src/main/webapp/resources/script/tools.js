@@ -71,6 +71,11 @@ function HashTable(obj)
         return keys;
     }
 
+    this.size = function()
+    {
+        return this.keys().length;
+    }
+
     this.values = function()
     {
         var values = [];

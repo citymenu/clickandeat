@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.StringUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.DateTime;
@@ -192,7 +193,7 @@ public class Order extends PersistentObject {
      */
     
     public void addOrderItem(OrderItem orderItem) {
-        OrderItem existingOrderItem = findByMenuItemId(orderItem.getMenuItemId());
+        OrderItem existingOrderItem = findByMenuItemIdAndType(orderItem.getMenuItemId(), orderItem.getMenuItemTypeName());
         if( existingOrderItem == null ) {
             orderItems.add(orderItem);
         }
@@ -203,12 +204,13 @@ public class Order extends PersistentObject {
 
 
     /**
-     * 
      * @param itemId
+     * @param itemType
      * @param quantity
      */
-    public void removeOrderItem(String itemId, Integer quantity ) {
-        OrderItem orderItem = findByMenuItemId(itemId);
+
+    public void removeOrderItem(String itemId, String itemType, Integer quantity ) {
+        OrderItem orderItem = findByMenuItemIdAndType(itemId,itemType);
         if( orderItem != null ) {
             int newQuantity = orderItem.getQuantity() - quantity;
             if( newQuantity < 1 ) {
@@ -226,9 +228,9 @@ public class Order extends PersistentObject {
      * @return
      */
     
-    private OrderItem findByMenuItemId(String menuItemId) {
+    private OrderItem findByMenuItemIdAndType(String menuItemId, String itemType) {
         for( OrderItem orderItem: orderItems) {
-            if( menuItemId.equals(orderItem.getMenuItemId())) {
+            if( menuItemId.equals(orderItem.getMenuItemId()) && StringUtil.equals(orderItem.getMenuItemTypeName(), itemType)) {
                 return orderItem;
             }
         }

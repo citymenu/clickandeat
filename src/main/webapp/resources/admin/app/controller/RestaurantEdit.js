@@ -212,7 +212,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             this.getMenuCategoriesGrid().getSelectionModel().deselectAll();
             this.getMenuItemsGrid().getSelectionModel().deselectAll();
             this.getMenuItemsStore().removeAll();
-            this.getMenuEditForm().removeAll(cd );
+            this.getMenuEditForm().removeAll();
             menuCategoryEditForm = null;
             menuItemEditForm = null;
         }

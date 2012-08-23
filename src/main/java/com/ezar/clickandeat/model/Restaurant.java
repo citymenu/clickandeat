@@ -299,6 +299,23 @@ public class Restaurant extends PersistentObject {
         }
         return ret;
     }
+
+
+    /**
+     * @param menuItemId
+     * @return
+     */
+
+    public MenuItem getMenuItem(String menuItemId) {
+        for( MenuCategory menuCategory: menu.getMenuCategories()) {
+            for( MenuItem menuItem: menuCategory.getMenuItems()) {
+                if( menuItemId.equals(menuItem.getItemId())) {
+                    return menuItem;
+                }
+            }
+        }
+        return null;
+    }
     
 
     public String getRestaurantId() {

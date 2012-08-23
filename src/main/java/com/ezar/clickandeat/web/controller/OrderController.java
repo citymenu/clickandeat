@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -143,20 +144,31 @@ public class OrderController implements InitializingBean {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
-            Integer itemNumber = Integer.valueOf(params.get("itemNumber").toString());
             String itemId = (String)params.get("itemId");
-            String itemName = (String)params.get("itemName");
-            Double itemCost = Double.valueOf(params.get("itemCost").toString());
+            String itemType = (String)params.get("itemType");
             Integer quantity = Integer.valueOf(params.get("quantity").toString());
-            
+
+            // Get the restaurant object
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+            MenuItem menuItem = restaurant.getMenuItem(itemId);
+
             // Build new order item
             OrderItem orderItem = new OrderItem();
-            orderItem.setMenuItemNumber(itemNumber);
+            orderItem.setMenuItemNumber(menuItem.getNumber());
             orderItem.setMenuItemId(itemId);
-            orderItem.setMenuItemTitle(itemName);
-            orderItem.setCost(itemCost);
+            orderItem.setMenuItemTitle(menuItem.getTitle());
+            orderItem.setMenuItemTypeName(itemType);
             orderItem.setQuantity(quantity);
-            
+
+            // Build the cost of the item
+            if( StringUtils.hasText(itemType)) {
+                MenuItemTypeCost menuItemTypeCost = menuItem.getMenuItemTypeCost(itemType);
+                orderItem.setCost(menuItemTypeCost.getCost());
+            }
+            else {
+                orderItem.setCost(menuItem.getCost());
+            }
+
             // Get the order out of the session            
             HttpSession session = request.getSession(true);
             String orderId = (String)session.getAttribute("orderid");
@@ -171,7 +183,6 @@ public class OrderController implements InitializingBean {
                     session.setAttribute("orderid",order.getOrderId());
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
-                    Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
                     order.setRestaurantId(restaurantId);
                     order.setRestaurant(restaurant);
                     order.getOrderItems().clear();
@@ -211,6 +222,7 @@ public class OrderController implements InitializingBean {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String itemId = (String)params.get("itemId");
+            String itemType = (String)params.get("itemType");
             Integer quantity = (Integer)params.get("quantity");
 
             HttpSession session = request.getSession(true);
@@ -219,7 +231,7 @@ public class OrderController implements InitializingBean {
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
-                    order.removeOrderItem(itemId,quantity);
+                    order.removeOrderItem(itemId,itemType,quantity);
                     order = orderRepository.saveOrder(order);
                 }
             }
