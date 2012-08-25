@@ -9,7 +9,7 @@
 
 <h2>Order id: ${order.orderId}</h2>
 
-<div>Your order has been passed to $stringTool.unescape($order.restaurant.name). You will shortly receive an email confirming if $stringTool.unescape($order.restaurant.name)
+<div>Your order has been passed to $stringTool.removeQuotes($order.restaurant.name). You will shortly receive an email confirming if $stringTool.removeQuotes($order.restaurant.name)
 has accepted your order.</div>
 <div>In the unlikely event that the restaurant is not able to fulfil your order you will receive an email to let you know and you will not be charged for the order.
 If you have provided a mobile number with your order you will receive an SMS message if your order is declined.</div>

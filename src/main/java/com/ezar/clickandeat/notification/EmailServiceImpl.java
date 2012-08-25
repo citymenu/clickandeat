@@ -7,6 +7,7 @@ import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,7 +126,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = properties.getProperty("restaurant-order-accepted-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(), StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
@@ -146,7 +147,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = properties.getProperty("restaurant-order-declined-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE);
@@ -167,7 +168,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
         String subjectFormat = properties.getProperty("customer-order-cancelled-restaurant-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),order.getRestaurant().getName());
+        String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE);
@@ -272,7 +273,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
         String subjectFormat = properties.getProperty("restaurant-delisted-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,restaurant.getName());
+        String subject = MessageFormat.format(subjectFormat,StringEscapeUtils.unescapeHtml(restaurant.getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DELISTED_EMAIL_TEMPLATE);
@@ -293,7 +294,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
         String subjectFormat = properties.getProperty("restaurant-relisted-confirmation-subject");
-        String subject = MessageFormat.format(subjectFormat,restaurant.getName());
+        String subject = MessageFormat.format(subjectFormat,StringEscapeUtils.unescapeHtml(restaurant.getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_RELISTED_EMAIL_TEMPLATE);
