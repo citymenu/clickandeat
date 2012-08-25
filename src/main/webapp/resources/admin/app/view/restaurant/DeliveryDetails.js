@@ -8,7 +8,7 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
     autoScroll:true,
 
     defaults:{
-        anchor:'70%'
+        anchor:'100%'
     },
 
     items: [{

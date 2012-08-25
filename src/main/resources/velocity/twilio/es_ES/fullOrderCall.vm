@@ -34,20 +34,32 @@
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 numero $item.menuItemNumber
             #else
-                $item.menuItemTitle
+                $stringTool.removeQuotes($item.menuItemTitle)
+            #end
+            #if( $stringTool.hasText($item.menuItemTypeName ))
+                $stringTool.removeQuotes($item.menuItemTypeName)
+            #end
+            #if( $item.additionalItems.size() > 0 )
+                con
+                #foreach( $additionalItem in $item.additionalItems )
+                    #if( $item.additionalItems.size() > 1 && $velocityCount == $item.additionalItems.size())
+                        y
+                    #end
+                    $stringTool.unescape($additionalItem)
+                #end
             #end
             </Say>
         #end
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="es">1 libre $discount.selectedFreeItem</Say>
+                <Say language="es">1 libre $stringTool.unescape($discount.selectedFreeItem)</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="es">El cliente ha añadido las siguientes instrucciones a este pedido.</Say>
-            <Say>$order.escapedAdditionalInstructions</Say>
+            <Say>$stringTool.unescape($order.additionalInstructions)</Say>
         #end
         <Say language="es">Para aceptar el pedido pulsa el 1 seguido de la tecla de almohadilla, para rechazar el pedido pulsa el 2 seguido de la tecla de almohadilla, para aceptar este pedido y especificar un tiempo de entrega pulsa 3 seguido del numero de minutos y a continuaci&#243;n pulsa la tecla de almohadilla. Para repetir este mensaje pulsa 4 seguido de la tecla de almohadilla. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla 5 seguido de la tecla de almohadilla.</Say>
     </Gather>

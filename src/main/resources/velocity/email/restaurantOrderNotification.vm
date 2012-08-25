@@ -19,9 +19,24 @@
 
 #foreach( $item in $order.orderItems )
     #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-        <div>$item.quantity x ($item.menuItemNumber) $stringTool.unescape($item.menuItemTitle)</div>
+        <div>
+            $item.quantity x ($item.menuItemNumber) $stringTool.removeQuotes($item.menuItemTitle)
+            #if( $stringTool.hasText($item.menuItemTypeName ))
+                ($stringTool.removeQuotes($item.menuItemTypeName))
+            #end
+        </div>
     #else
-        <div>$item.quantity x $stringTool.unescape($item.menuItemTitle)</div>
+        <div>
+            $item.quantity x $stringTool.removeQuotes($item.menuItemTitle)
+            #if( $stringTool.hasText($item.menuItemTypeName ))
+                ($stringTool.removeQuotes($item.menuItemTypeName))
+            #end
+        </div>
+    #end
+    #if( $item.additionalItems.size() > 0 )
+        #foreach( $additionalItem in $item.additionalItems )
+            <div>- $stringTool.unescape($additionalItem)</div>
+        #end
     #end
 #end
 
@@ -31,13 +46,18 @@
     #end
 #end
 
+#if( $stringTool.hasText($order.additionalInstructions))
+    <h3>Additional instructions</h3>
+    <div>$stringTool.unescape($order.additionalInstructions)</div>
+#end
+
 #if( $order.hasCashDiscount() )
     <h3>Discounts applied to order</h3>
 #end
 
 #foreach( $discount in $order.orderDiscounts )
     #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-        <div>${discount.title}: -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+        <div>$stringTool.unescape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
     #end
 #end
 

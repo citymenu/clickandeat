@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.templating;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -118,6 +119,14 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final class StringTool {
 
         public String unescape(Object obj) {
+            if( obj == null ) {
+                return null;
+            }
+            String str = (String)obj;
+            return StringUtils.hasText(str)? StringEscapeUtils.escapeHtml(str).replace("###","'"): str;
+        }
+
+        public String removeQuotes(Object obj) {
             if( obj == null ) {
                 return null;
             }

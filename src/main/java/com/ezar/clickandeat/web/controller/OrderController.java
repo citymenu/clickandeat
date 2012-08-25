@@ -10,6 +10,7 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import flexjson.JSONSerializer;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -146,7 +147,7 @@ public class OrderController implements InitializingBean {
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String restaurantId = (String)params.get("restaurantId");
             String itemId = (String)params.get("itemId");
-            String itemType = (String)params.get("itemType");
+            String itemType = StringEscapeUtils.escapeHtml((String)params.get("itemType"));
             List<String> additionalItems = (List<String>)params.get("additionalItems");
             Integer quantity = Integer.valueOf(params.get("quantity").toString());
 

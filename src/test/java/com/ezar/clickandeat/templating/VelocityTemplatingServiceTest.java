@@ -99,6 +99,10 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setMenuItemNumber(0);
         item2.setQuantity(1);
         item2.setMenuItemTitle("Spinach Pakora");
+        item2.setMenuItemTypeName("Thin");
+        item2.getAdditionalItems().add("Olives");
+        item2.getAdditionalItems().add("Mushrooms");
+        item2.getAdditionalItems().add("Pineapple");
         order.addOrderItem(item2);
 
         // Add a free item for this order
@@ -140,6 +144,11 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setQuantity(1);
         item2.setMenuItemTitle("Onion Bhajii###s");
         item2.setCost(8.90);
+        item2.setMenuItemTypeName("Thin");
+        item2.getAdditionalItems().add("Olives");
+        item2.getAdditionalItems().add("Mushrooms");
+        item2.getAdditionalItems().add("Pineapple");
+
         order.addOrderItem(item2);
 
         // Add a collection discount for this order

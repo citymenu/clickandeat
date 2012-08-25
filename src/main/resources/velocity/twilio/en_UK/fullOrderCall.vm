@@ -34,20 +34,32 @@
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 number $item.menuItemNumber
             #else
-                $item.menuItemTitle
+                $stringTool.removeQuotes($item.menuItemTitle)
+            #end
+            #if( $stringTool.hasText($item.menuItemTypeName ))
+                $stringTool.removeQuotes($item.menuItemTypeName)
+            #end
+            #if( $item.additionalItems.size() > 0 )
+                with
+                #foreach( $additionalItem in $item.additionalItems )
+                    #if( $item.additionalItems.size() > 1 && $velocityCount == $item.additionalItems.size())
+                        and
+                    #end
+                    $stringTool.unescape($additionalItem)
+                #end
             #end
             </Say>
         #end
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="en-gb">1 free $discount.selectedFreeItem</Say>
+                <Say language="en-gb">1 free $stringTool.unescape($discount.selectedFreeItem)</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="en-gb">The customer has added the following instructions for this order.</Say>
-            <Say>$order.escapedAdditionalInstructions</Say>
+            <Say>$stringTool.unescape($order.dditionalInstructions)</Say>
         #end
         <Say language="en-gb">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
         order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key. To repeat this message

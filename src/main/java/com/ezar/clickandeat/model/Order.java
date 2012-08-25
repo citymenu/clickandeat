@@ -373,10 +373,6 @@ public class Order extends PersistentObject {
         this.additionalInstructions = additionalInstructions;
     }
     
-    public String getEscapedAdditionalInstructions() {
-        return additionalInstructions == null? null: StringEscapeUtils.escapeHtml(additionalInstructions);
-    }
-
     public String getOrderStatus() {
         return orderStatus;
     }
