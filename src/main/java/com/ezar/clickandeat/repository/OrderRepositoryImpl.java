@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.OrderItem;
 import com.ezar.clickandeat.model.OrderUpdate;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import com.mongodb.BasicDBObject;
@@ -53,6 +54,11 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Override
     public Order saveOrder(Order order) {
         order.updateCosts();
+        for( OrderItem orderItem: order.getOrderItems()) {
+            if( orderItem.getOrderItemId() == null ) {
+                orderItem.setOrderItemId(sequenceGenerator.getNextSequence());
+            }
+        }
         operations.save(order);
         return order;
     }

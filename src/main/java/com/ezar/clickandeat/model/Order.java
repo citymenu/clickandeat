@@ -193,7 +193,7 @@ public class Order extends PersistentObject {
      */
     
     public void addOrderItem(OrderItem orderItem) {
-        OrderItem existingOrderItem = findByMenuItemIdAndType(orderItem.getMenuItemId(), orderItem.getMenuItemTypeName());
+        OrderItem existingOrderItem = findExistingOrderItem(orderItem);
         if( existingOrderItem == null ) {
             orderItems.add(orderItem);
         }
@@ -204,13 +204,12 @@ public class Order extends PersistentObject {
 
 
     /**
-     * @param itemId
-     * @param itemType
+     * @param orderItemId
      * @param quantity
      */
 
-    public void removeOrderItem(String itemId, String itemType, Integer quantity ) {
-        OrderItem orderItem = findByMenuItemIdAndType(itemId,itemType);
+    public void removeOrderItem(String orderItemId, int quantity) {
+        OrderItem orderItem = findByOrderItemId(orderItemId);
         if( orderItem != null ) {
             int newQuantity = orderItem.getQuantity() - quantity;
             if( newQuantity < 1 ) {
@@ -224,13 +223,28 @@ public class Order extends PersistentObject {
     
     
     /**
-     * @param menuItemId
+     * @param orderItem
      * @return
      */
     
-    private OrderItem findByMenuItemIdAndType(String menuItemId, String itemType) {
+    private OrderItem findExistingOrderItem(OrderItem orderItem) {
+        for( OrderItem existingOrderItem: orderItems) {
+            if( existingOrderItem.equals(orderItem)) {
+                return existingOrderItem;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * @param orderItemId
+     * @return
+     */
+
+    private OrderItem findByOrderItemId(String orderItemId) {
         for( OrderItem orderItem: orderItems) {
-            if( menuItemId.equals(orderItem.getMenuItemId()) && StringUtil.equals(orderItem.getMenuItemTypeName(), itemType)) {
+            if( orderItemId.equals(orderItem.getOrderItemId())) {
                 return orderItem;
             }
         }
@@ -555,4 +569,5 @@ public class Order extends PersistentObject {
         }
         return null;
     }
+
 }

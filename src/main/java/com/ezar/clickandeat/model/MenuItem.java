@@ -150,7 +150,7 @@ public class MenuItem {
         sb.append("]");
         return sb.toString();
     }
-    
+
     public Double getAdditionalItemCost() {
         return additionalItemCost;
     }

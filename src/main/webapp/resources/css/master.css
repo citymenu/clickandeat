@@ -326,6 +326,13 @@ td.orderitem {
     padding:2px 0 0 0;
 }
 
+.additionalitem {
+    font-style:italic;
+    font-size:11px;
+    line-height:13px;
+    margin-left:5px;
+}
+
 td.deliverycharge, td.discount {
     font-family: Arial, 'Lucida Grande', sans-serif;
     font-size:11px;

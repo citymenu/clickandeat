@@ -85,11 +85,11 @@ function doBuildOrder(order,config) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
                 var closeImg = '<img src=\'' + resources + '/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
-                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{4}\',\'{5}\')\">{6}</a></td></tr>'
-                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle) + (orderItem.menuItemTypeName? ' (' + unescapeQuotes(orderItem.menuItemTypeName) + ')': ''),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.menuItemId,unescapeQuotes(orderItem.menuItemTypeName),closeImg);
+                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{1}{2}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{3}\')\">{4}</a></td></tr>'
+                    .format(buildDisplay(orderItem),ccy,(orderItem.cost * orderItem.quantity).toFixed(2),orderItem.orderItemId,closeImg);
             } else {
-                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} x {1}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'></td></tr>'
-                    .format(orderItem.quantity,unescapeQuotes(orderItem.menuItemTitle),ccy,(orderItem.cost * orderItem.quantity).toFixed(2));
+                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{1}{2}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'></td></tr>'
+                    .format(buildDisplay(orderItem),ccy,(orderItem.cost * orderItem.quantity).toFixed(2));
             }
             $('.orderbody').prepend(row);
         };
@@ -160,6 +160,18 @@ function doBuildOrder(order,config) {
     }
 }
 
+// Displays an order item
+function buildDisplay(orderItem) {
+    var display = orderItem.quantity + ' x ' + unescapeQuotes(orderItem.menuItemTitle);
+    if( orderItem.menuItemTypeName ) {
+        display += ' (' + unescapeQuotes(orderItem.menuItemTypeName) + ')';
+    }
+    orderItem.additionalItems.forEach(function(additionalItem){
+        display += ('<div class=\'additionalitem\'>-{0}</div>').format(unescapeQuotes(additionalItem));
+    });
+    return ('<div>{0}</div>').format(display);
+}
+
 // Add multiple items based on the select value
 function addMultipleToOrder(restaurantId, itemId, itemType, additionalItemArray, additionalItemLimit, additionalItemCost ) {
     var quantity = itemType? $('#select_' + itemId + '_' + itemType).val(): $('#select_' + itemId ).val();
@@ -208,13 +220,16 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, additionalIte
     var html = '';
     var itemLimit = additionalItemLimit? additionalItemLimit: 0;
 
+    // Build checkboxes for each additional item
     additionalItemArray.forEach(function(additionalItem){
         var itemDiv = ('<div class=\'additionalItem\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}</div>').format(additionalItem,unescapeQuotes(additionalItem));
         html += itemDiv;
     });
 
+    // Placeholder for item count warning
     html += '<div id=\'itemcountwarning\'></div>';
 
+    // Generate the dialog
     $('<div id=\'additionalItemDialog\'></div>')
         .html(html)
         .dialog({
@@ -225,7 +240,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, additionalIte
                 id: 'button-done',
                 click: function() {
                     $( this ).dialog( "close" );
-                    doAddToOrder(restaurantId, itemId, itemType, [], quantity );
+                    doAddToOrder(restaurantId, itemId, itemType, selectedItems.keys(), quantity );
                 }
             },{
                 text: labels['cancel'],
@@ -256,9 +271,6 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, additionalIte
 
     });
 
-
-
-
 }
 
 // Add item to order update result on display
@@ -284,11 +296,10 @@ function doAddToOrder(restaurantId, itemId, itemType, additionalItems, quantity 
 }
 
 // Remove an item from the order
-function removeFromOrder(itemId, itemType, quantity ) {
+function removeFromOrder(orderItemId, quantity ) {
 
     var update = {
-        itemId: itemId,
-        itemType: itemType,
+        orderItemId: orderItemId,
         quantity: quantity || 1
     };
 

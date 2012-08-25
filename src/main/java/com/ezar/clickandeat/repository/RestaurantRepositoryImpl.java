@@ -105,7 +105,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 discount.setDiscountId(sequenceGenerator.getNextSequence());
             }
         }
-        
+
         operations.save(restaurant);
         clusteredCache.put(Restaurant.class, restaurant.getRestaurantId(),restaurant);
         return restaurant;

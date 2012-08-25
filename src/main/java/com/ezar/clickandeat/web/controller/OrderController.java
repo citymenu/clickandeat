@@ -33,6 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -146,6 +147,7 @@ public class OrderController implements InitializingBean {
             String restaurantId = (String)params.get("restaurantId");
             String itemId = (String)params.get("itemId");
             String itemType = (String)params.get("itemType");
+            List<String> additionalItems = (List<String>)params.get("additionalItems");
             Integer quantity = Integer.valueOf(params.get("quantity").toString());
 
             // Get the restaurant object
@@ -158,15 +160,18 @@ public class OrderController implements InitializingBean {
             orderItem.setMenuItemId(itemId);
             orderItem.setMenuItemTitle(menuItem.getTitle());
             orderItem.setMenuItemTypeName(itemType);
+            orderItem.setAdditionalItems(additionalItems);
             orderItem.setQuantity(quantity);
 
             // Build the cost of the item
             if( StringUtils.hasText(itemType)) {
                 MenuItemTypeCost menuItemTypeCost = menuItem.getMenuItemTypeCost(itemType);
-                orderItem.setCost(menuItemTypeCost.getCost());
+                double additionalItemCost = menuItemTypeCost.getAdditionalItemCost() == null? 0d: menuItemTypeCost.getAdditionalItemCost();
+                orderItem.setCost(menuItemTypeCost.getCost() + additionalItemCost * additionalItems.size());
             }
             else {
-                orderItem.setCost(menuItem.getCost());
+                double additionalItemCost = menuItem.getAdditionalItemCost() == null? 0d: menuItem.getAdditionalItemCost();
+                orderItem.setCost(menuItem.getCost() + additionalItemCost * additionalItems.size());
             }
 
             // Get the order out of the session            
@@ -221,8 +226,7 @@ public class OrderController implements InitializingBean {
         try {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
-            String itemId = (String)params.get("itemId");
-            String itemType = (String)params.get("itemType");
+            String orderItemId = (String)params.get("orderItemId");
             Integer quantity = (Integer)params.get("quantity");
 
             HttpSession session = request.getSession(true);
@@ -231,7 +235,7 @@ public class OrderController implements InitializingBean {
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
-                    order.removeOrderItem(itemId,itemType,quantity);
+                    order.removeOrderItem(orderItemId,quantity);
                     order = orderRepository.saveOrder(order);
                 }
             }

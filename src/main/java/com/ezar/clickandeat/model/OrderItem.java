@@ -5,6 +5,8 @@ import java.util.List;
 
 public class OrderItem {
 
+    private String orderItemId;
+    
     private String menuItemId;
     
     private Integer menuItemNumber;
@@ -18,6 +20,48 @@ public class OrderItem {
     private Double cost;
 
     private Integer quantity;
+
+
+    public OrderItem() {
+        this.additionalItems = new ArrayList<String>();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderItem)) return false;
+
+        OrderItem orderItem = (OrderItem) o;
+
+        if (menuItemId != null ? !menuItemId.equals(orderItem.menuItemId) : orderItem.menuItemId != null) return false;
+
+        String thisMenuItemTypeName = "null".equals(menuItemTypeName)? null: menuItemTypeName;
+        String otherMenuItemTypeName = "null".equals(orderItem.menuItemTypeName)? null: orderItem.menuItemTypeName;
+        
+        if (thisMenuItemTypeName != null ? !thisMenuItemTypeName.equals(otherMenuItemTypeName) : otherMenuItemTypeName != null)
+            return false;
+
+        if( additionalItems.size() != orderItem.additionalItems.size()) {
+            return false;
+        }
+        
+        for( String additionalItem: additionalItems ) {
+            if( !orderItem.additionalItems.contains(additionalItem)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    public String getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(String orderItemId) {
+        this.orderItemId = orderItemId;
+    }
 
     public String getMenuItemId() {
         return menuItemId;

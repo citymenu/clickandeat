@@ -9,7 +9,7 @@ function unescapeQuotes(str) {
     if( !str || str == '' ) {
         return str;
     } else {
-        return str.replace("###","'").replace("%%%",'"');
+        return str.replace("###","'");
     }
 }
 

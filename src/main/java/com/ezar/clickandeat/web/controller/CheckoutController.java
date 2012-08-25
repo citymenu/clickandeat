@@ -10,6 +10,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.AddressValidator;
 import com.ezar.clickandeat.validator.PersonValidator;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -130,6 +131,7 @@ public class CheckoutController {
         Map<String,Object> model = new HashMap<String, Object>();
         
         try {
+
             // Extract person and address from request
             Person person = buildPerson(body);
             Address deliveryAddress = buildDeliveryAddress(body);

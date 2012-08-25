@@ -3,6 +3,8 @@ package com.ezar.clickandeat.converter;
 import flexjson.ObjectBinder;
 import flexjson.ObjectFactory;
 import flexjson.transformer.StringTransformer;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.joda.time.LocalDate;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -15,7 +17,17 @@ public class NullIdStringTransformer extends StringTransformer implements Object
     public NullIdStringTransformer() {
         escapeMap.put("\u200B","");
     }
-    
+
+    @Override
+    public void transform(Object object) {
+        if( object == null ) {
+            getContext().write("");
+        }
+        else {
+            getContext().writeQuoted(StringEscapeUtils.unescapeHtml((String)object));
+        }
+    }
+
     
     @Override
     public Object instantiate(ObjectBinder context, Object value, Type targetType, Class targetClass) {
@@ -27,8 +39,9 @@ public class NullIdStringTransformer extends StringTransformer implements Object
             for(Map.Entry<String,String> entry: escapeMap.entrySet()) {
                 str = str.replaceAll(entry.getKey(),entry.getValue());
             }
-            return str;
+            return StringEscapeUtils.escapeHtml(str);
         }
     }
+
 }
 
