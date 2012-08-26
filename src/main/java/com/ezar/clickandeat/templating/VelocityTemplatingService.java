@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Component(value="velocityTemplatingService")
@@ -50,7 +51,7 @@ public class VelocityTemplatingService implements InitializingBean {
     private VelocityEngine engine;
 
     private String locale;
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         engine = new VelocityEngine();
@@ -63,9 +64,14 @@ public class VelocityTemplatingService implements InitializingBean {
         engine.setProperty("file.resource.loader.modificationCheckInterval","-1");
         engine.setProperty("parser.pool.size","20");
         engine.init();
-        
+
         // Add velocity tools to map
-        velocityTools.put("numberTool", new NumberTool());
+        Map<String,String> params = new HashMap<String, String>();
+        params.put(NumberTool.DEFAULT_LOCALE_KEY, locale);
+        NumberTool numberTool = new NumberTool();
+        numberTool.configure(params);
+        velocityTools.put("numberTool", numberTool);
+
         velocityTools.put("stringTool", new StringTool());
     }
 
@@ -118,20 +124,11 @@ public class VelocityTemplatingService implements InitializingBean {
 
     public static final class StringTool {
 
-        public String unescape(Object obj) {
+        public String escape(Object obj) {
             if( obj == null ) {
                 return null;
             }
-            String str = (String)obj;
-            return StringUtils.hasText(str)? StringEscapeUtils.escapeHtml(str).replace("###","'"): str;
-        }
-
-        public String removeQuotes(Object obj) {
-            if( obj == null ) {
-                return null;
-            }
-            String str = (String)obj;
-            return StringUtils.hasText(str)? str.replace("###","'"): str;
+            return StringEscapeUtils.escapeHtml((String)obj);
         }
 
         public boolean hasText(Object obj) {

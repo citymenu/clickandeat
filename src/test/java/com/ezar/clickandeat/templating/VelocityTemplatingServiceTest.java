@@ -142,7 +142,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setMenuItemId("ITEM2");
         item2.setMenuItemNumber(0);
         item2.setQuantity(1);
-        item2.setMenuItemTitle("Onion Bhajii###s");
+        item2.setMenuItemTitle("Onion Bhajii's");
         item2.setCost(8.90);
         item2.setMenuItemTypeName("Thin");
         item2.getAdditionalItems().add("Olives");

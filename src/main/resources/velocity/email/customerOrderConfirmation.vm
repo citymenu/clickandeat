@@ -9,7 +9,7 @@
 
 <h2>Order id: ${order.orderId}</h2>
 
-<div>Your order has been passed to $stringTool.removeQuotes($order.restaurant.name). You will shortly receive an email confirming if $stringTool.removeQuotes($order.restaurant.name)
+<div>Your order has been passed to $stringTool.escape($order.restaurant.name). You will shortly receive an email confirming if $stringTool.escape($order.restaurant.name)
 has accepted your order.</div>
 <div>In the unlikely event that the restaurant is not able to fulfil your order you will receive an email to let you know and you will not be charged for the order.
 If you have provided a mobile number with your order you will receive an SMS message if your order is declined.</div>
@@ -19,35 +19,35 @@ If you have provided a mobile number with your order you will receive an SMS mes
 #foreach( $item in $order.orderItems )
     #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
         <div>
-            $item.quantity x ($item.menuItemNumber) $stringTool.removeQuotes($item.menuItemTitle)
+            $item.quantity x ($item.menuItemNumber) $stringTool.escape($item.menuItemTitle)
             #if( $stringTool.hasText($item.menuItemTypeName ))
-                ($stringTool.removeQuotes($item.menuItemTypeName))
+                ($stringTool.escape($item.menuItemTypeName))
             #end
         </div>
     #else
         <div>
-            $item.quantity x $stringTool.removeQuotes($item.menuItemTitle)
+            $item.quantity x $stringTool.escape($item.menuItemTitle)
             #if( $stringTool.hasText($item.menuItemTypeName ))
-                ($stringTool.removeQuotes($item.menuItemTypeName))
+                ($stringTool.escape($item.menuItemTypeName))
             #end
         </div>
     #end
     #if( $item.additionalItems.size() > 0 )
         #foreach( $additionalItem in $item.additionalItems )
-            <div>- $stringTool.unescape($additionalItem)</div>
+            <div>- $stringTool.escape($additionalItem)</div>
         #end
     #end
 #end
 
 #foreach( $discount in $order.orderDiscounts )
     #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-        <div>1 x $stringTool.unescape($discount.selectedFreeItem) (free)</div>
+        <div>1 x $stringTool.escape($discount.selectedFreeItem) (free)</div>
     #end
 #end
 
 #if( $stringTool.hasText($order.additionalInstructions))
     <h3>Additional instructions</h3>
-    <div>$stringTool.unescape($order.additionalInstructions)</div>
+    <div>$stringTool.escape($order.additionalInstructions)</div>
 #end
 
 #if( $order.hasCashDiscount() )

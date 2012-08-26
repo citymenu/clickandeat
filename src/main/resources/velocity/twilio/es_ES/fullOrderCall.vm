@@ -6,7 +6,7 @@
         #end
 
         #if($order.deliveryType == 'DELIVERY')
-            <Say language="es">Tiene un pedido para entregar en la direcci&#243;n $order.deliveryAddress.summary
+            <Say language="es">Tiene un pedido para entregar en la direcci&#243;n $stringTool.escape($order.deliveryAddress.summary)
             #if($order.expectedDeliveryTime)
                 A las $order.expectedDeliveryTime.hourOfDay $order.expectedDeliveryTime.minuteOfHour
                 #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
@@ -34,10 +34,10 @@
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 numero $item.menuItemNumber
             #else
-                $stringTool.removeQuotes($item.menuItemTitle)
+                $stringTool.escape($item.menuItemTitle)
             #end
             #if( $stringTool.hasText($item.menuItemTypeName ))
-                $stringTool.removeQuotes($item.menuItemTypeName)
+                $stringTool.escape($item.menuItemTypeName)
             #end
             #if( $item.additionalItems.size() > 0 )
                 con
@@ -45,7 +45,7 @@
                     #if( $item.additionalItems.size() > 1 && $velocityCount == $item.additionalItems.size())
                         y
                     #end
-                    $stringTool.unescape($additionalItem)
+                    $stringTool.escape($additionalItem)
                 #end
             #end
             </Say>
@@ -53,13 +53,13 @@
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="es">1 libre $stringTool.unescape($discount.selectedFreeItem)</Say>
+                <Say language="es">1 libre $stringTool.escape($discount.selectedFreeItem)</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="es">El cliente ha añadido las siguientes instrucciones a este pedido.</Say>
-            <Say>$stringTool.unescape($order.additionalInstructions)</Say>
+            <Say>$stringTool.escape($order.additionalInstructions)</Say>
         #end
         <Say language="es">Para aceptar el pedido pulsa el 1 seguido de la tecla de almohadilla, para rechazar el pedido pulsa el 2 seguido de la tecla de almohadilla, para aceptar este pedido y especificar un tiempo de entrega pulsa 3 seguido del numero de minutos y a continuaci&#243;n pulsa la tecla de almohadilla. Para repetir este mensaje pulsa 4 seguido de la tecla de almohadilla. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla 5 seguido de la tecla de almohadilla.</Say>
     </Gather>
