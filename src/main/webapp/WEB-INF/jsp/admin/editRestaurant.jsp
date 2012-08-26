@@ -6,7 +6,8 @@
     <title>ClickAndEat - Restaurants</title>
 
     <script type="text/javascript">
-        var restaurantObj = JSON.parse('${json}');
+        var restaurantObj;
+        var restaurantId = '${restaurantId}';
         var cuisines = [${cuisinesArray}];
     </script>
 

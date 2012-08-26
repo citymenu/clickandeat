@@ -5,6 +5,7 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -87,28 +88,48 @@ public class RestaurantController {
     }
 
 
-    @RequestMapping(value="/admin/restaurants/create.html", method = RequestMethod.GET )
-    public ModelAndView create() {
-        Map<String,Object> model = getModel();
-        Restaurant restaurant = repository.create();
-        model.put("restaurant", restaurant);
-        model.put("json",jsonUtils.serializeAndEscape(restaurant));
-        return new ModelAndView("admin/editRestaurant",model);
-    }
-
-
     @RequestMapping(value="/admin/restaurants/edit.html", method = RequestMethod.GET )
-    public ModelAndView edit(@RequestParam(value = "restaurantId") String restaurantId) {
+    public ModelAndView edit(@RequestParam(value = "restaurantId", required = false) String restaurantId) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Editing restaurant with id [" + restaurantId + "]");
         }
 
         Map<String,Object> model = getModel();
-        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
-        model.put("restaurant",restaurant);
-        model.put("json",jsonUtils.serializeAndEscape(restaurant));
+        model.put("restaurantId",restaurantId);
         return new ModelAndView("admin/editRestaurant",model);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/create.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> create() throws Exception {
+        Map<String,Object> model = getModel();
+        Restaurant restaurant = repository.create();
+        model.put("success",true);
+        model.put("restaurant", jsonUtils.serializeAndEscape(restaurant));
+        return responseEntityUtils.buildResponse(model);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/load.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> load(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            model.put("success",true);
+            model.put("id",restaurant.getId());
+            model.put("restaurant",jsonUtils.serializeAndEscape(restaurant));
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
     }
 
 

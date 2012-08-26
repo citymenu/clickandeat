@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="all" />
 	<link rel="shortcut icon" href="${resources}/images/favico.png">
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css"/>

@@ -24,7 +24,7 @@ public class NullIdStringTransformer extends StringTransformer implements Object
             getContext().write("");
         }
         else {
-            getContext().writeQuoted(StringEscapeUtils.unescapeHtml((String)object));
+            getContext().writeQuoted((String)object);
         }
     }
 
@@ -39,7 +39,7 @@ public class NullIdStringTransformer extends StringTransformer implements Object
             for(Map.Entry<String,String> entry: escapeMap.entrySet()) {
                 str = str.replaceAll(entry.getKey(),entry.getValue());
             }
-            return StringEscapeUtils.escapeHtml(str);
+            return str;
         }
     }
 

@@ -36,6 +36,7 @@ public class JSONUtils implements InitializingBean {
                 .transform(new LocalDateTransformer(), LocalDate.class)
                 .transform(new LocalTimeTransformer(), LocalTime.class)
                 .transform(new NullIdStringTransformer(), String.class);
+
         escapeMap.put("'","###");
     }
 
@@ -59,7 +60,7 @@ public class JSONUtils implements InitializingBean {
         return escapeQuotes(serializer.deepSerialize(obj));
     }
 
-    
+
     /**
      * @param klass
      * @param json

@@ -1,0 +1,15 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Uses StringEscapeUtils.escapeHtml on a string value</short-name>
+    <tag>
+        <name>escape</name>
+        <tag-class>com.ezar.clickandeat.web.tags.StringEscapingTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>

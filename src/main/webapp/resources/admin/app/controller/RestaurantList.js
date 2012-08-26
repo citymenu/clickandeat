@@ -41,7 +41,7 @@ Ext.define('AD.controller.RestaurantList', {
     },
 
     create: function(button) {
-        location.href = ctx + '/admin/restaurants/create.html';
+        location.href = ctx + '/admin/restaurants/edit.html';
     },
 
     editSelected: function() {
