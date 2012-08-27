@@ -11,21 +11,29 @@ public class StringEscapingTag extends SimpleTagSupport {
     
     private String value;
     
-    private boolean escape;
+    private boolean escapeComments;
+
+    private boolean escapeNewLines;
 
     public void doTag() throws JspException, IOException {
-        if( escape && StringUtils.hasText(value)) {
+        if( escapeComments && StringUtils.hasText(value)) {
             value = value.replace("'","###");
         }
-        getJspContext().getOut().write(StringEscapeUtils.escapeHtml(value));
+        if( escapeNewLines && StringUtils.hasText(value)) {
+            value = value.replace("\n","<br>");
+        }
+        getJspContext().getOut().write(value);
     }
 
     public void setValue(String value) {
-        this.value = value;
+        this.value = StringEscapeUtils.escapeHtml(value);
     }
 
-    public void setEscape(boolean escape) {
-        this.escape = escape;
+    public void setEscapeComments(boolean escapeComments) {
+        this.escapeComments = escapeComments;
     }
 
+    public void setEscapeNewLines(boolean escapeNewLines) {
+        this.escapeNewLines = escapeNewLines;
+    }
 }

@@ -19,14 +19,14 @@
     <div id="contentbody">
 
         <div id="restaurant"><util:escape value="${restaurant.name}"/></div>
-        <div><util:escape value="${restaurant.description}"/></div>
+        <div><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
 
         <div class="menu">
             <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
                 <div class="menucategory">
                     <div class="menucategoryheader">
                         <div class="menucategoryname"><util:escape value="${menuCategory.name}"/></div>
-                        <div class="menucategorysummary"><util:escape value="${menuCategory.summary}"/></div>
+                        <div class="menucategorysummary"><util:escape value="${menuCategory.summary}" escapeNewLines="true"/></div>
                     </div>
                     <div class="menuitems">
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" class="menuItemTable">
@@ -37,8 +37,8 @@
                                             <td width="80%">
                                                 <div class="menuItemDetails">
                                                     <div class="menuItemNumber">${menuItem.number}</div>
-                                                    <div class="menuItemTitle"><util:escape value="${menuItem.title}"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}"/></div></div>
-                                                    <div class="menuItemDescription"><util:escape value="${menuItem.description}"/></div>
+                                                    <div class="menuItemTitle"><util:escape value="${menuItem.title}" escapeNewLines="true"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}" escapeNewLines="true"/></div></div>
+                                                    <div class="menuItemDescription"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                 </div>
                                             </td>
                                             <td width="20%" align="right">
@@ -74,8 +74,8 @@
                                                 <td width="25%">
                                                     <div class="menuItemDetails">
                                                         <div class="menuItemNumber">${menuItem.number}</div>
-                                                        <div class="menuItemTitle"><util:escape value="${menuItem.title}"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}"/></div></div>
-                                                        <div class="menuItemDescription"><util:escape value="${menuItem.description}"/></div>
+                                                        <div class="menuItemTitle"><util:escape value="${menuItem.title}" escapeNewLines="true"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}" escapeNewLines="true"/></div></div>
+                                                        <div class="menuItemDescription"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                     </div>
                                                 </td>
                                                 <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
@@ -84,7 +84,7 @@
                                                             <div class="menuItemActions">
                                                                 <div class="menuItemCost"><spring:message code="label.currency"/>${menuItemTypeCost.formattedCost}</div>
                                                                 <div class="menuItemAction">
-                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemTypeCost.type}" escape="true"/>">
+                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>">
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
@@ -92,7 +92,7 @@
                                                                         <option value="5">5</option>
                                                                     </select>
 
-                                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escape="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})">
+                                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})">
                                                                         <img title="<spring:message code="label.add-to-order"/>" src="${resources}/images/icons-shadowless/plus-button.png"/>
                                                                     </a>
                                                                 </div>

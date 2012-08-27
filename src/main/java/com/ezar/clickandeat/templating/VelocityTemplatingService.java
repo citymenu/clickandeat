@@ -125,10 +125,15 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final class StringTool {
 
         public String escape(Object obj) {
+            return escape(obj,false);
+        }
+
+        public String escape(Object obj, boolean escapeNewLines) {
             if( obj == null ) {
                 return null;
             }
-            return StringEscapeUtils.escapeHtml((String)obj);
+            String escaped = StringEscapeUtils.escapeHtml((String)obj);
+            return escapeNewLines? escaped.replace("\n","<br>"): escaped;
         }
 
         public boolean hasText(Object obj) {

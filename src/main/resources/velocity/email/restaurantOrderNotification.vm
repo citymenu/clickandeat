@@ -48,7 +48,7 @@
 
 #if( $stringTool.hasText($order.additionalInstructions))
     <h3>Additional instructions</h3>
-    <div>$stringTool.escape($order.additionalInstructions)</div>
+    <div>$stringTool.escape($order.additionalInstructions,true)</div>
 #end
 
 #if( $order.hasCashDiscount() )

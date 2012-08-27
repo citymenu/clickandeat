@@ -7,7 +7,7 @@ Ext.define('AD.model.Discount', {
     fields: [
         {name:'discountId', type:'string'},
         {name:'title', type:'string', convert: unescapeQuotes},
-        {name:'description',type: 'string',convert: replaceLineBreaks},
+        {name:'description',type: 'string'},
         {name:'discountType', type:'string'},
         {name:'collection', type:'boolean'},
         {name:'delivery', type:'boolean'},

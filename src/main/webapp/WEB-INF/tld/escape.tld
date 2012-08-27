@@ -12,7 +12,12 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
         <attribute>
-            <name>escape</name>
+            <name>escapeComments</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
+        <attribute>
+            <name>escapeNewLines</name>
             <required>false</required>
             <type>boolean</type>
         </attribute>

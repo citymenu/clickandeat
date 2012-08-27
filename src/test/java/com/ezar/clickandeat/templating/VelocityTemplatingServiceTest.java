@@ -165,6 +165,8 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         discount2.setSelectedFreeItem("Red wine");
         order.getOrderDiscounts().add(discount2);
 
+        order.setAdditionalInstructions("Some new stuff\nMore new stuff");
+        
         // Build a restaurant for the order
         Restaurant restaurant = new Restaurant();
         NotificationOptions notificationOptions = new NotificationOptions();

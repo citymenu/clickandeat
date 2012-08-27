@@ -44,7 +44,7 @@
                 <c:forEach var="restaurant" items="${results}">
                     <div class="boxcontainer searchresult">
                         <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}"><util:escape value="${restaurant.name}"/></a>
-                        <div class="result-description"><util:escape value="${restaurant.description}"/></div>
+                        <div class="result-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
                     </div>
                 </c:forEach>
             </div>
