@@ -106,8 +106,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
 
-        operations.save(restaurant);
         clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        operations.save(restaurant);
         return restaurant;
     }
 
