@@ -128,6 +128,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
             order = handler.handle(order,context);
         }
         catch( Exception ex ) {
+            LOGGER.error("Error occurred: " + ex.getMessage(), ex);
             order.addOrderUpdate("Exception processing workflow update: " + ex.getMessage());
             throw new WorkflowException(ex);
         }
