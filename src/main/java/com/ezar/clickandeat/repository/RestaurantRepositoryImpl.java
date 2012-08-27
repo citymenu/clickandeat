@@ -71,7 +71,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( restaurant == null ) {
             restaurant = operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
             if( restaurant != null ) {
-                clusteredCache.put(Restaurant.class,restaurantId,restaurant);
+                clusteredCache.store(Restaurant.class,restaurantId,restaurant);
             }
         }
         return restaurant;
@@ -107,7 +107,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
 
         operations.save(restaurant);
-        clusteredCache.put(Restaurant.class, restaurant.getRestaurantId(),restaurant);
+        clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
         return restaurant;
     }
 

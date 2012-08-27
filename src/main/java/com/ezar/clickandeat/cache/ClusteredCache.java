@@ -64,22 +64,16 @@ public class ClusteredCache implements InitializingBean {
      * @param <T>
      */
 
-    public <T> void put(Class<T> klass, String key, T object ) {
+    public <T> void store(Class<T> klass, String key, T object ) {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Putting object with key [" + key + "] into cache [" + klass.getSimpleName() + "]");
         }
-
-        Map<String,String> map = new HashMap<String, String>();
-        map.put("action","update");
-        map.put("className",klass.getName());
-        map.put("key",key);
-        map.put("json",jsonUtils.serialize(object));
-        try {
-            redisTemplate.getConnectionFactory().getConnection().publish(TOPIC.getBytes(), jsonUtils.serialize(map).getBytes());
+        ConcurrentMap<String,Object> cacheMap = cache.get(klass);
+        if( cacheMap == null ) {
+            cacheMap = new ConcurrentHashMap<String, Object>();
+            cache.put(klass, cacheMap);
         }
-        catch(Exception ex) {
-            LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
-        }
+        cacheMap.put(key,object);
     }
 
 
@@ -93,8 +87,12 @@ public class ClusteredCache implements InitializingBean {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Removing object with key [" + key + "] from cache [" + klass.getSimpleName() + "]");
         }
+
+        // Wipe from this map
+        removeInternal(klass,key);
+
+        // Publish update to remove from other caches
         Map<String,String> map = new HashMap<String, String>();
-        map.put("action","delete");
         map.put("className",klass.getName());
         map.put("key",key);
         try {
@@ -103,23 +101,6 @@ public class ClusteredCache implements InitializingBean {
         catch(Exception ex) {
             LOGGER.error("Error publishing update to redis: " + ex.getMessage(),ex);
         }
-    }
-
-
-    /**
-     * @param klass
-     * @param key
-     * @param object
-     * @param <T>
-     */
-
-    private <T> void putInternal(Class<T> klass, String key, T object ) {
-        ConcurrentMap<String,Object> cacheMap = cache.get(klass);
-        if( cacheMap == null ) {
-            cacheMap = new ConcurrentHashMap<String, Object>();
-            cache.put(klass, cacheMap);
-        }
-        cacheMap.put(key,object);
     }
 
 
@@ -167,21 +148,13 @@ public class ClusteredCache implements InitializingBean {
         @SuppressWarnings("unchecked")
         public void onMessage(Message message, byte[] pattern) {
             try {
-                String content = new String(message.getBody());
+                String content = new String(message.getBody(),"utf-8");
+                LOGGER.info("Received message: " + content);
                 Map map = (Map) jsonUtils.deserialize(content);
-                String action = (String)map.get("action");
                 String className = (String)map.get("className");
                 String key = (String)map.get("key");
-                String json = (String)map.get("json");
                 Class klass = Class.forName(className);
-
-                if("update".equals(action)) {
-                    Object obj = jsonUtils.deserialize(klass, json);
-                    putInternal(klass, key, obj);
-                }
-                else {
-                    removeInternal(klass,key);
-                }
+                removeInternal(klass,key);
             }
             catch( Exception ex ) {
                 LOGGER.error("Exception in onMessage: " + ex.getMessage(),ex);

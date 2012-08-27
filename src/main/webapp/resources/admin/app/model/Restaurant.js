@@ -7,7 +7,7 @@ Ext.define('AD.model.Restaurant', {
     fields: [
         {name:'restaurantId', type:'string'},
         {name:'name', type:'string',convert: unescapeQuotes},
-        {name:'description',type: 'string'},
+        {name:'description',type: 'string',convert: unescapeQuotes},
         {name:'contactEmail', type:'string'},
         {name:'contactTelephone', type:'string'},
         {name:'contactMobile', type:'string'},

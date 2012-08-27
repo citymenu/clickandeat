@@ -5,7 +5,7 @@
 Ext.define('AD.model.DeliveryOptions', {
     extend: 'Ext.data.Model',
     fields: [
-        {name:'deliveryOptionsSummary',type: 'string'},
+        {name:'deliveryOptionsSummary',type: 'string',convert: unescapeQuotes},
         {name:'deliveryTimeMinutes', type:'number'},
         {name:'minimumOrderForFreeDelivery', type:'number'},
         {name:'allowDeliveryOrdersBelowMinimum', type:'boolean'},
