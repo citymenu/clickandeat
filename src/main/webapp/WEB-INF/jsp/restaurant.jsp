@@ -18,15 +18,15 @@
     <%@ include file="/WEB-INF/jsp/workflow.jsp" %>
     <div id="contentbody">
 
-        <div id="restaurant">${restaurant.name}</div>
-        <div>${restaurant.description}</div>
+        <div id="restaurant"><util:escape value="${restaurant.name}"/></div>
+        <div><util:escape value="${restaurant.description}"/></div>
 
         <div class="menu">
             <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
                 <div class="menucategory">
                     <div class="menucategoryheader">
-                        <div class="menucategoryname">${menuCategory.name}</div>
-                        <div class="menucategorysummary">${menuCategory.summary}</div>
+                        <div class="menucategoryname"><util:escape value="${menuCategory.name}"/></div>
+                        <div class="menucategorysummary"><util:escape value="${menuCategory.summary}"/></div>
                     </div>
                     <div class="menuitems">
                         <table width="100%" cellpadding="0" cellspacing="0" border="0" class="menuItemTable">
@@ -37,8 +37,8 @@
                                             <td width="80%">
                                                 <div class="menuItemDetails">
                                                     <div class="menuItemNumber">${menuItem.number}</div>
-                                                    <div class="menuItemTitle">${menuItem.title} <div class="menuItemSubtitle">${menuItem.subtitle}</div></div>
-                                                    <div class="menuItemDescription">${menuItem.description}</div>
+                                                    <div class="menuItemTitle"><util:escape value="${menuItem.title}"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}"/></div></div>
+                                                    <div class="menuItemDescription"><util:escape value="${menuItem.description}"/></div>
                                                 </div>
                                             </td>
                                             <td width="20%" align="right">
@@ -65,7 +65,7 @@
                                     <thead>
                                         <th width="25%"></th>
                                         <c:forEach var="itemType" items="${menuCategory.itemTypes}">
-                                            <th align="center">${itemType}</th>
+                                            <th align="center"><util:escape value="${itemType}"/></th>
                                         </c:forEach>
                                     </thead>
                                     <tbody>
@@ -74,8 +74,8 @@
                                                 <td width="25%">
                                                     <div class="menuItemDetails">
                                                         <div class="menuItemNumber">${menuItem.number}</div>
-                                                        <div class="menuItemTitle">${menuItem.title} <div class="menuItemSubtitle">${menuItem.subtitle}</div></div>
-                                                        <div class="menuItemDescription">${menuItem.description}</div>
+                                                        <div class="menuItemTitle"><util:escape value="${menuItem.title}"/> <div class="menuItemSubtitle"><util:escape value="${menuItem.subtitle}"/></div></div>
+                                                        <div class="menuItemDescription"><util:escape value="${menuItem.description}"/></div>
                                                     </div>
                                                 </td>
                                                 <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
@@ -84,14 +84,15 @@
                                                             <div class="menuItemActions">
                                                                 <div class="menuItemCost"><spring:message code="label.currency"/>${menuItemTypeCost.formattedCost}</div>
                                                                 <div class="menuItemAction">
-                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_${fn:replace(menuItemTypeCost.type,"'","###")}">
+                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemTypeCost.type}" escape="true"/>">
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
                                                                         <option value="4">4</option>
                                                                         <option value="5">5</option>
                                                                     </select>
-                                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','${fn:replace(menuItemTypeCost.type,"'","###")}',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})">
+
+                                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escape="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})">
                                                                         <img title="<spring:message code="label.add-to-order"/>" src="${resources}/images/icons-shadowless/plus-button.png"/>
                                                                     </a>
                                                                 </div>

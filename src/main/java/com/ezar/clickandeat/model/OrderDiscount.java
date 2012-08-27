@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
+
 import java.util.List;
 
 public class OrderDiscount {
@@ -62,5 +64,9 @@ public class OrderDiscount {
 
     public void setSelectedFreeItem(String freeItem) {
         this.freeItem = freeItem;
+    }
+    
+    public String getFormattedAmount() {
+        return NumberUtil.format(discountAmount == null? 0d: discountAmount);
     }
 }

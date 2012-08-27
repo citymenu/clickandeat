@@ -11,5 +11,10 @@
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
+        <attribute>
+            <name>escape</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
     </tag>
 </taglib>

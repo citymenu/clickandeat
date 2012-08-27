@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,4 +121,9 @@ public class OrderItem {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+    
+    public String getFormattedCost() {
+        return NumberUtil.format(cost * quantity);
+    }
+    
 }

@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
 import com.ezar.clickandeat.util.StringUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -469,8 +470,16 @@ public class Order extends PersistentObject {
         this.deliveryCost = deliveryCost;
     }
 
+    public String getFormattedDeliveryCost() {
+        return NumberUtil.format(deliveryCost == null? 0d: deliveryCost);
+    }
+
     public Double getExtraSpendNeededForDelivery() {
         return extraSpendNeededForDelivery;
+    }
+
+    public String getFormattedExtraSpendNeededForDelivery() {
+        return NumberUtil.format(extraSpendNeededForDelivery == null? 0d: extraSpendNeededForDelivery);
     }
 
     public void setExtraSpendNeededForDelivery(Double extraSpendNeededForDelivery) {
@@ -513,6 +522,10 @@ public class Order extends PersistentObject {
         return totalCost;
     }
 
+    public String getFormattedTotalCost() {
+        return NumberUtil.format(totalCost == null? 0d: totalCost);
+    }
+
     public String getCardTransactionId() {
         return cardTransactionId;
     }
@@ -532,6 +545,8 @@ public class Order extends PersistentObject {
     public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
+
+
 
     public Double getTotalDiscount() {
         return totalDiscount;

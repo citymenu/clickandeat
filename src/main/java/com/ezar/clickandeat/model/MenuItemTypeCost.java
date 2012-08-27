@@ -1,23 +1,16 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
+
 import java.text.DecimalFormat;
 
 public class MenuItemTypeCost {
-
-    private static final DecimalFormat formatter;
 
     private String type;
     
     private Double cost;
 
     private Double additionalItemCost;
-
-    static {
-        formatter = new DecimalFormat();
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
-    }
-
 
     public String getType() {
         return type;
@@ -36,7 +29,7 @@ public class MenuItemTypeCost {
     }
 
     public String getFormattedCost() {
-        return cost == null? "": formatter.format(cost);
+        return NumberUtil.format(cost);
     }
 
     public Double getAdditionalItemCost() {

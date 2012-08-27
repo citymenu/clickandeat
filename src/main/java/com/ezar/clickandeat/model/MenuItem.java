@@ -1,21 +1,16 @@
 package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.util.NumberUtil;
+import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class MenuItem {
-
-    private static final DecimalFormat formatter;
-
-    static {
-        formatter = new DecimalFormat();
-        formatter.setMinimumFractionDigits(2);
-        formatter.setMaximumFractionDigits(2);
-    }
 
     private int number;
     
@@ -118,7 +113,7 @@ public class MenuItem {
     }
 
     public String getFormattedCost() {
-        return cost == null? "": formatter.format(cost);
+        return NumberUtil.format(cost);
     }
     
     public List<MenuItemTypeCost> getMenuItemTypeCosts() {
@@ -143,7 +138,7 @@ public class MenuItem {
         for( String additionalItemChoice: additionalItemChoices ) {
             sb.append(delim);
             sb.append("'");
-            sb.append(additionalItemChoice.replace("'","###"));
+            sb.append(StringEscapeUtils.escapeHtml(additionalItemChoice.replace("'","###")));
             sb.append("'");
             delim = ",";
         }

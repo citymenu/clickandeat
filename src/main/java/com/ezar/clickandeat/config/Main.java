@@ -12,6 +12,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.joda.time.DateTimeZone;
 import redis.clients.jedis.JedisPool;
 
+import java.util.Locale;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -37,6 +38,12 @@ public class Main {
         String timezone = props.getProperty("timezone");
         DateTimeZone.setDefault(DateTimeZone.forID(timezone));
         LOGGER.info("Set default time zone for application to: " + DateTimeZone.getDefault().getID());
+        
+        // Set default locale for the whole system
+        String[] localeArray = props.getProperty("locale").split("_");
+        Locale systemLocale = new Locale(localeArray[0],localeArray[1]);
+        Locale.setDefault(systemLocale);
+        LOGGER.info("Set default locale for application to: " + Locale.getDefault());
         
 		// Configure redis session id manager
         JedisPool jedisPool = getJedisPool(props);
