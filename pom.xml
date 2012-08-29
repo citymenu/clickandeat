@@ -160,6 +160,13 @@
             <version>2.1</version>
         </dependency>
 
+        <!-- JDom -->
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>2.0.2</version>
+        </dependency>
+
         <!-- Drools -->
         <dependency>
             <groupId>org.drools</groupId>
@@ -309,6 +316,31 @@
                     <mainClass>com.ezar.clickandeat.config.Main</mainClass>
                 </configuration>
             </plugin>
+
+            <!-- Generates java sources from payment gateway wsdl -->
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-codegen-plugin</artifactId>
+                <version>2.6.2</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>https://sis-t.sermepa.es:25443/sis/services/SerClsWSEntrada/wsdl/SerClsWSEntrada.wsdl</wsdl>
+                                </wsdlOption>
+                            </wsdlOptions>
+                        </configuration>
+                        <goals>
+                            <goal>wsdl2java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

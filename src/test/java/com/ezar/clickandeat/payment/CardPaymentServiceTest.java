@@ -33,7 +33,7 @@ public class CardPaymentServiceTest {
     @Before
     public void setup() throws Exception {
         order = orderRepository.create();
-        order.setTotalCost(3000d);
+        order.setTotalCost(30.5d);
         Person customer = new Person();
         customer.setFirstName("Joe");
         customer.setLastName("Pugh");
@@ -44,6 +44,7 @@ public class CardPaymentServiceTest {
     @Test
     public void testBuildCardPaymentForm() throws Exception {
         cardPaymentService.buildCardPaymentForm(order);
+        LOGGER.info(cardPaymentService.buildTransactionRequest(order));
     }
 
 

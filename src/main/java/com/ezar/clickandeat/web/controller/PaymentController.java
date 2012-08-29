@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.payment.CardPaymentService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
@@ -9,6 +10,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +42,9 @@ public class PaymentController {
     private OrderWorkflowEngine orderWorkflowEngine;
 
     @Autowired
+    private CardPaymentService cardPaymentService;
+    
+    @Autowired
     private RequestHelper requestHelper;
 
     @Autowired
@@ -45,6 +52,7 @@ public class PaymentController {
 
     private String timeZone;
 
+    
     @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
 
@@ -55,6 +63,15 @@ public class PaymentController {
         return "payment";
     }
 
+
+    @RequestMapping(value="/secure/cardProcessing.html", method = RequestMethod.GET )
+    public ModelAndView processCardPayment(HttpServletRequest request) throws Exception {
+        Order order = requestHelper.getOrderFromSession(request);
+        Map<String,String> model = cardPaymentService.buildPaymentParams(order);
+        return new ModelAndView("cardProcessing",model);
+    }
+
+    
 
     @ResponseBody
     @RequestMapping(value="/secure/processCardPayment.ajax", method = RequestMethod.POST )
