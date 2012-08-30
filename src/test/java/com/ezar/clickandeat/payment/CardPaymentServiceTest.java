@@ -43,8 +43,9 @@ public class CardPaymentServiceTest {
     
     @Test
     public void testBuildCardPaymentForm() throws Exception {
-        cardPaymentService.buildCardPaymentForm(order);
-        LOGGER.info(cardPaymentService.buildTransactionRequest(order));
+        cardPaymentService.submitTransactionRequest(order);
+        cardPaymentService.submitTransactionRequest(order);
+        LOGGER.info("DONE");
     }
 
 

@@ -26,6 +26,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         'DeliveryOptions',
         'Menu',
         'MenuItemTypeCost',
+        'MenuItemSubType',
         'Discount',
         'DiscountApplicableTime'
     ],
@@ -140,6 +141,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 render:this.menuItemEditRendered
             },
 
+            'restaurantmenuitemedit radiofield[name=type]': {
+                change:this.menuItemTypeChanged
+            },
+
             '#discountsgrid': {
                 itemclick:this.discountsGridSelected
             },
@@ -198,6 +203,12 @@ Ext.define('AD.controller.RestaurantEdit', {
 	                menuItemTypeCosts.push(menuItemTypeCost);
 	            });
 	            menuItem.set('menuItemTypeCosts',menuItemTypeCosts);
+	            var menuItemSubTypes = [];
+	            item.menuItemSubTypes.forEach(function(subType){
+	                var menuItemSubType = new AD.model.MenuItemSubType(subType);
+	                menuItemSubTypes.push(menuItemSubType);
+	            });
+	            menuItem.set('menuItemSubTypes',menuItemSubTypes);
 	            menuItems.push(menuItem);
 	        });
 	        menuCategory.set('menuItems',menuItems);
@@ -366,6 +377,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             var menuItems = [];
             category.get('menuItems').forEach(function(item){
                 var menuItem = new Object({
+                    type: item.get('type'),
                     number: item.get('number'),
                     itemId: item.get('itemId'),
                     title: item.get('title'),
@@ -388,8 +400,18 @@ Ext.define('AD.controller.RestaurantEdit', {
                     });
                     menuItemTypeCosts.push(menuItemTypeCost);
                 });
-
                 menuItem.menuItemTypeCosts = menuItemTypeCosts;
+
+                var menuItemSubTypes = [];
+                item.get('menuItemSubTypes').forEach(function(itemSubType){
+                    var menuItemSubType = new Object({
+                        type: itemSubType.get('type'),
+                        cost: itemSubType.get('cost')
+                    });
+                    menuItemSubTypes.push(menuItemSubType);
+                });
+                menuItem.menuItemSubTypes = menuItemSubTypes;
+
                 menuItems.push(menuItem);
             });
 
@@ -622,8 +644,10 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Create new menu item and add to the store
         var menuItem = new AD.model.MenuItem({
             title:'New Item',
+            type:'STANDARD',
             additionalItemChoices:[],
-            menuItemTypeCosts:[]
+            menuItemTypeCosts:[],
+            menuItemSubTypes:[]
         });
         this.getMenuItemsStore().add(menuItem);
 
@@ -663,7 +687,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             var index = this.getMenuItemsStore().indexOf(menuItemEditForm.getRecord());
             var record = this.getMenuItemsStore().getAt(index);
             record.set(menuItemEditForm.getValues());
-
+            alert(record.get('type'));
 
             // Populate menu item type costs if present
             var menuItemTypeCosts = [];
@@ -690,10 +714,25 @@ Ext.define('AD.controller.RestaurantEdit', {
                     additionalItemCost:additionalItemCost
                 });
                 menuItemTypeCosts.push(menuItemTypeCost);
-
             });
-
             record.set('menuItemTypeCosts',menuItemTypeCosts);
+
+            // Populate sub type names and costs if present
+            var menuItemSubTypes = [];
+            var subTypeNamesField = menuItemEditForm.getForm().findField('subTypeNames');
+            var subTypeCostsField = menuItemEditForm.getForm().findField('subTypeCosts');
+            if( subTypeNamesField && subTypeCostsField ) {
+                var subTypeNames = delimitedStringToArray(subTypeNamesField.getValue(),'\n');
+                var subTypeCosts = delimitedStringToArray(subTypeCostsField.getValue(),'\n');
+                for( i = 0; i < subTypeNames.length; i++ ) {
+                    var menuItemSubType = new AD.model.MenuItemSubType({
+                        type: subTypeNames[i],
+                        cost: subTypeCosts[i]
+                    });
+                    menuItemSubTypes.push(menuItemSubType);
+                }
+            }
+            record.set('menuItemSubTypes',menuItemSubTypes);
 
             // Update menu items on menu category
             this.updateMenuCategoryItems();
@@ -717,6 +756,22 @@ Ext.define('AD.controller.RestaurantEdit', {
                 additionalItemCostField.setValue(menuItemTypeCost.get('additionalItemCostField'));
             }
         });
+        // Populate any subtypes and associated costs if set
+        var subTypeNames = [];
+        var subTypeCosts = [];
+        selectedMenuItem.get('menuItemSubTypes').forEach(function(menuItemSubType){
+            subTypeNames.push(menuItemSubType.get('type'));
+            subTypeCosts.push(menuItemSubType.get('cost'));
+        });
+        var subTypeNamesField = menuItemEditForm.getForm().findField('subTypeNames');
+        if( subTypeNamesField ) {
+            subTypeNamesField.setValue(subTypeNames.join('\n'));
+        }
+        var subTypeCostsField = menuItemEditForm.getForm().findField('subTypeCosts');
+        if( subTypeCostsField ) {
+            subTypeCostsField.setValue(subTypeCosts.join('\n'));
+        }
+
         showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Menu item details have been reverted');
     },
 
@@ -726,9 +781,16 @@ Ext.define('AD.controller.RestaurantEdit', {
         var selectedMenuCategory = this.getMenuCategoriesGrid().getSelectionModel().getLastSelected();
         if( selectedMenuCategory.get('type') == 'GRID') {
 
+            // Disable select option to switch menu item type (only available for standard items)
+            Ext.ComponentManager.get('menuitemtype').hide();
+
             // Disable cost and additional item costs fields
             formPanel.getForm().findField('cost').disable();
             formPanel.getForm().findField('additionalItemCost').disable();
+
+            // Hide the sub type fields
+            Ext.ComponentManager.get('subTypeNames').hide();
+            Ext.ComponentManager.get('subTypeCosts').hide();
 
             var itemTypes = selectedMenuCategory.get('itemTypes');
             if( itemTypes ) {
@@ -772,6 +834,19 @@ Ext.define('AD.controller.RestaurantEdit', {
                 menuItemEditForm.add(itemTypesContainer);
                 menuItemEditForm.add(additionalItemCostsContainer);
             }
+        } else {
+            // Populate any subtypes and associated costs if set
+            var subTypeNames = [];
+            var subTypeCosts = [];
+            selectedMenuItem.get('menuItemSubTypes').forEach(function(menuItemSubType){
+                subTypeNames.push(menuItemSubType.get('type'));
+                subTypeCosts.push(menuItemSubType.get('cost'));
+            });
+            menuItemEditForm.getForm().findField('subTypeNames').setValue(subTypeNames.join('\n'));
+            menuItemEditForm.getForm().findField('subTypeCosts').setValue(subTypeCosts.join('\n'));
+
+            // Hide/unhide fields based on menu item type
+            this.updateFormDisplay(selectedMenuItem.get('type'));
         }
 
         // Load the record onto the form
@@ -796,7 +871,25 @@ Ext.define('AD.controller.RestaurantEdit', {
                 additionalItemCostField.setValue(menuItemTypeCost.get('additionalItemCost'));
             }
         });
+    },
 
+    // Fires when the
+    menuItemTypeChanged:function(field,newValue,oldValue) {
+        var type = menuItemEditForm.getValues()['type'];
+        this.updateFormDisplay(type);
+    },
+
+    // Updates display and enabled/disabled properties
+    updateFormDisplay:function(type) {
+        if( type == 'STANDARD') {
+            Ext.ComponentManager.get('subTypeNames').hide();
+            Ext.ComponentManager.get('subTypeCosts').hide();
+            menuItemEditForm.getForm().findField('cost').enable();
+        } else {
+            Ext.ComponentManager.get('subTypeNames').show();
+            Ext.ComponentManager.get('subTypeCosts').show();
+            menuItemEditForm.getForm().findField('cost').disable();
+        }
     },
 
     // Updates menu items store into selected menu category menuItems attribute

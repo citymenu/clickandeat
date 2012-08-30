@@ -48,6 +48,26 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
         fieldLabel:'Subtitle',
         name:'subtitle'
     },{
+        xtype:'fieldcontainer',
+        id:'menuitemtype',
+        fieldLabel:'Type',
+        defaultType:'radiofield',
+        layout:'hbox',
+
+        defaults:{
+            width:85
+        },
+
+        items:[{
+            boxLabel:'Standard',
+            name:'type',
+            inputValue:'STANDARD'
+        },{
+            boxLabel:'SubType',
+            name:'type',
+            inputValue:'SUBTYPE'
+        }]
+    },{
         fieldLabel:'Icon class',
         name:'iconClass'
     },{
@@ -60,6 +80,20 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
         fieldLabel:'Cost',
         xtype:'numberfield',
         name:'cost'
+    },{
+        fieldLabel:'Subtypes for this item (enter one per line)',
+        labelAlign:'top',
+        id:'subTypeNames',
+        name:'subTypeNames',
+        xtype:'textareafield',
+        height:90
+    },{
+        fieldLabel:'Costs for each subtype (enter one for each subtype above)',
+        labelAlign:'top',
+        id:'subTypeCosts',
+        name:'subTypeCosts',
+        xtype:'textareafield',
+        height:90
     },{
         fieldLabel:'Additional choices for this item (enter one per line)',
         labelAlign:'top',

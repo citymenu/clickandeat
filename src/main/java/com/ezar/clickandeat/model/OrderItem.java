@@ -14,7 +14,9 @@ public class OrderItem {
     private Integer menuItemNumber;
     
     private String menuItemTitle;
-    
+
+    private String menuItemSubTypeName;
+
     private String menuItemTypeName;
 
     private List<String> additionalItems;
@@ -96,6 +98,14 @@ public class OrderItem {
 
     public void setMenuItemTypeName(String menuItemTypeName) {
         this.menuItemTypeName = menuItemTypeName;
+    }
+
+    public String getMenuItemSubTypeName() {
+        return menuItemSubTypeName;
+    }
+
+    public void setMenuItemSubTypeName(String menuItemSubTypeName) {
+        this.menuItemSubTypeName = menuItemSubTypeName;
     }
 
     public List<String> getAdditionalItems() {

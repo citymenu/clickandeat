@@ -5,6 +5,7 @@
 Ext.define('AD.model.MenuItem', {
     extend: 'Ext.data.Model',
     fields: [
+        {name:'type', type:'string'},
         {name:'number', type:'number'},
         {name:'itemId', type:'string'},
         {name:'title', type:'string', convert: unescapeQuotes},
@@ -19,5 +20,9 @@ Ext.define('AD.model.MenuItem', {
     hasMany:{
         model:'AD.model.MenuItemTypeCost',
         name:'menuItemTypeCosts'
+    },
+    hasMany:{
+        model:'AD.model.MenuItemSubType',
+        name:'menuItemSubTypes'
     }
 });

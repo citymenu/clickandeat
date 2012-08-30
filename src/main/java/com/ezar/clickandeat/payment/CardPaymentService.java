@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.util.*;
 import java.util.logging.XMLFormatter;
@@ -43,6 +44,8 @@ public class CardPaymentService {
     private String currencyCode;
 
     private String merchantCode;
+    
+    private String merchantName;
 
     private String terminalNumber;
     
@@ -52,7 +55,7 @@ public class CardPaymentService {
 
     
     public CardPaymentService() {
-        Format formatter = Format.getPrettyFormat();
+        Format formatter = Format.getCompactFormat();
         formatter.setExpandEmptyElements(true);
         formatter.setOmitDeclaration(true);
         formatter.setOmitEncoding(true);
@@ -62,71 +65,50 @@ public class CardPaymentService {
 
     /**
      * @param order
+     */
+    
+    public void submitTransactionRequest(Order order) throws Exception {
+        HttpClient client = new DefaultHttpClient();
+        HttpPost post = new HttpPost(virtualPosRequestUrl);
+        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+        nameValuePairs.add(new BasicNameValuePair("entrada",buildTransactionXml(order)));
+        post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+        HttpResponse response = client.execute(post);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+            LOGGER.info(line);
+        }
+
+    }
+    
+    
+    /**
+     * @param order
      * @return
      * @throws Exception
      */
 
-    public String buildTransactionRequest(Order order) throws Exception {
+    private String buildTransactionXml(Order order) throws Exception {
         Document document = new Document(new Element("DATOSENTRADA"));
         Element root = document.getRootElement();
         List<Element> children = root.getChildren();
         children.add(createElement("DS_Version","1.0"));
-        children.add(createElement("DS_MERCHANT_AMOUNT","1.0"));
-        children.add(createElement("DS_MERCHANT_CURRENCY","1.0"));
-        children.add(createElement("DS_MERCHANT_ORDER","1.0"));
-        children.add(createElement("DS_MERCHANT_MERCHANTCODE","1.0"));
-        children.add(createElement("DS_MERCHANT_MERCHANTNAME","1.0"));
-        children.add(createElement("DS_MERCHANT_CONSUMERLANGUAGE","1.0"));
-        children.add(createElement("DS_MERCHANT_MERCHANTSIGNATURE","1.0"));
-        children.add(createElement("DS_MERCHANT_TERMINAL","1.0"));
-        children.add(createElement("DS_MERCHANT_TRANSACTIONTYPE","1.0"));
-        children.add(createElement("DS_MERCHANT_MERCHANTDATA","1.0"));
-        children.add(createElement("DS_MERCHANT_PAN","1.0"));
-        children.add(createElement("DS_MERCHANT_EXPIRYDATE","1.0"));
-        children.add(createElement("DS_MERCHANT_CVV2","1.0"));
+        children.add(createElement("DS_MERCHANT_AMOUNT",NumberUtil.formatForCardPayment(order.getTotalCost())));
+        children.add(createElement("DS_MERCHANT_CURRENCY",currencyCode));
+        children.add(createElement("DS_MERCHANT_ORDER",order.getOrderId()));
+        children.add(createElement("DS_MERCHANT_MERCHANTCODE",merchantCode));
+        children.add(createElement("DS_MERCHANT_MERCHANTNAME",merchantName));
+        children.add(createElement("DS_MERCHANT_CONSUMERLANGUAGE",customerLanguage));
+        children.add(createElement("DS_MERCHANT_MERCHANTSIGNATURE",buildSignature(order)));
+        children.add(createElement("DS_MERCHANT_TERMINAL",terminalNumber));
+        children.add(createElement("DS_MERCHANT_TRANSACTIONTYPE","1"));
+        children.add(createElement("DS_MERCHANT_PAN","4548812049400004"));
+        children.add(createElement("DS_MERCHANT_EXPIRYDATE","1212"));
+        children.add(createElement("DS_MERCHANT_CVV2","123"));
         return outputter.outputString(document);
     }
     
-
-    /**
-     * @param order
-     * @return
-     */
-    
-    public Map<String,String> buildPaymentParams(Order order) throws Exception {
-        Map<String,String> params = new HashMap<String, String>();
-        params.put("Ds_Action", virtualPosRequestUrl);
-        params.put("Ds_Merchant_Amount", NumberUtil.formatForCardPayment(order.getTotalCost()));
-        params.put("Ds_Merchant_Currency", currencyCode);
-        params.put("Ds_Merchant_Order", order.getOrderId());
-        params.put("Ds_Merchant_ProductDescription","Online food order");
-        params.put("Ds_Merchant_CardHolder",order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName());
-        params.put("Ds_Merchant_MerchantCode",merchantCode);
-        params.put("Ds_Merchant_ConsumerLanguage",customerLanguage);
-        params.put("Ds_Merchant_Terminal",terminalNumber);
-        params.put("Ds_Merchant_TransactionType","0");
-        params.put("Ds_Merchant_MerchantSignature",buildSignature(order));
-        return params;
-    }
-    
-    /**
-     * @param order
-     * @throws Exception
-     */
-
-    public String buildCardPaymentForm(Order order) throws Exception {
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = buildRequest(order);
-        HttpResponse response = client.execute(post);
-        BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        StringBuilder sb = new StringBuilder();
-        String line = "";
-        while ((line = rd.readLine()) != null) {
-            sb.append(line);
-        }
-        return sb.toString();
-    }
-
 
     /**
      * @param name
@@ -145,29 +127,6 @@ public class CardPaymentService {
      * @param order
      * @return
      */
-    
-    private HttpPost buildRequest( Order order ) throws Exception {
-        HttpPost request = new HttpPost(virtualPosRequestUrl);
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_Amount", NumberUtil.formatForCardPayment(order.getTotalCost())));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_Currency", currencyCode));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_Order", order.getOrderId()));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_ProductDescription","Online food order"));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_CardHolder",order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName()));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_MerchantCode",merchantCode));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_ConsumerLanguage",customerLanguage));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_Terminal",terminalNumber));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_TransactionType","0"));
-        nameValuePairs.add(new BasicNameValuePair("Ds_Merchant_MerchantSignature",buildSignature(order)));
-        request.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-        return request;
-    }
-
-
-    /**
-     * @param order
-     * @return
-     */
 
     private String buildSignature(Order order) throws Exception {
         StringBuilder sb = new StringBuilder();
@@ -175,7 +134,9 @@ public class CardPaymentService {
         sb.append(order.getOrderId());
         sb.append(merchantCode);
         sb.append(currencyCode);
-        sb.append("0");
+        sb.append("4548812049400004");
+        sb.append("123");
+        sb.append("1");
         sb.append(secretCode);
 
         MessageDigest sha1 = MessageDigest.getInstance("SHA1");

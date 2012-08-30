@@ -67,8 +67,9 @@ public class PaymentController {
     @RequestMapping(value="/secure/cardProcessing.html", method = RequestMethod.GET )
     public ModelAndView processCardPayment(HttpServletRequest request) throws Exception {
         Order order = requestHelper.getOrderFromSession(request);
-        Map<String,String> model = cardPaymentService.buildPaymentParams(order);
-        return new ModelAndView("cardProcessing",model);
+        //Map<String,String> model = cardPaymentService.buildPaymentParams(order);
+        //return new ModelAndView("cardProcessing",model);
+        return null;
     }
 
     

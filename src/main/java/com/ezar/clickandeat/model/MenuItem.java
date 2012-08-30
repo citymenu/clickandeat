@@ -1,21 +1,22 @@
 package com.ezar.clickandeat.model;
 
-import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.NumberUtil;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.util.StringUtils;
 
-import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuItem {
+
+    public static final String TYPE_STANDARD = "STANDARD";
+    public static final String TYPE_SUBTYPE = "SUBTYPE";
+
+    private String type;
 
     private int number;
     
     private String itemId;
-    
+
     private String title;
     
     private String subtitle;
@@ -26,6 +27,8 @@ public class MenuItem {
 
     private Double cost;
 
+    private List<MenuItemSubType> menuItemSubTypes;
+    
     private List<MenuItemTypeCost> menuItemTypeCosts;
 
     private List<String> additionalItemChoices;
@@ -36,6 +39,7 @@ public class MenuItem {
             
 
     public MenuItem() {
+        this.menuItemSubTypes = new ArrayList<MenuItemSubType>();
         this.menuItemTypeCosts = new ArrayList<MenuItemTypeCost>();
         this.additionalItemChoices = new ArrayList<String>();
     }
@@ -55,6 +59,13 @@ public class MenuItem {
         return null;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public int getNumber() {
         return number;
@@ -118,6 +129,14 @@ public class MenuItem {
     
     public List<MenuItemTypeCost> getMenuItemTypeCosts() {
         return menuItemTypeCosts;
+    }
+
+    public List<MenuItemSubType> getMenuItemSubTypes() {
+        return menuItemSubTypes;
+    }
+
+    public void setMenuItemSubTypes(List<MenuItemSubType> menuItemSubTypes) {
+        this.menuItemSubTypes = menuItemSubTypes;
     }
 
     public void setMenuItemTypeCosts(List<MenuItemTypeCost> menuItemTypeCosts) {
