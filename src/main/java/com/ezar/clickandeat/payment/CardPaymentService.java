@@ -2,9 +2,6 @@ package com.ezar.clickandeat.payment;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.util.NumberUtil;
-import com.ezar.clickandeat.util.StringUtil;
-import com.sun.javaws.jnl.XMLFormat;
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -23,10 +20,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.*;
-import java.util.logging.XMLFormatter;
+import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.List;
 
 @Component(value = "cardPaymentService")
 public class CardPaymentService {
