@@ -24,12 +24,18 @@
             #if( $stringTool.hasText($item.menuItemTypeName ))
                 ($stringTool.removeQuotes($item.menuItemTypeName))
             #end
+            #if( $stringTool.hasText($item.menuItemSubTypeName ))
+                ($stringTool.removeQuotes($item.menuItemSubTypeName))
+            #end
         </div>
     #else
         <div>
             $item.quantity x $stringTool.escape($item.menuItemTitle)
             #if( $stringTool.hasText($item.menuItemTypeName ))
                 ($stringTool.escape($item.menuItemTypeName))
+            #end
+            #if( $stringTool.hasText($item.menuItemSubTypeName ))
+                ($stringTool.escape($item.menuItemSubTypeName))
             #end
         </div>
     #end

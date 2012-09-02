@@ -65,7 +65,7 @@
                                             <c:otherwise>
                                                 <c:forEach var="menuItemSubType" items="${menuItem.menuItemSubTypes}" varStatus="status">
                                                     <tr valign="top">
-                                                        <td width="60%">
+                                                        <td width="65%">
                                                             <c:if test="${status.count == 1}">
                                                                 <div class="menuItemDetails">
                                                                     <div class="menuItemNumber">${menuItem.number}</div>
@@ -74,7 +74,7 @@
                                                                 </div>
                                                             </c:if>
                                                         </td>
-                                                        <td width="20%">
+                                                        <td width="15%">
                                                             <div class="menuItemDetails">
                                                                 <div class="menuItemTitle">
                                                                     <util:escape value="${menuItemSubType.type}" escapeNewLines="true"/>

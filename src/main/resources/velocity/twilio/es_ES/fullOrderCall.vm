@@ -39,6 +39,9 @@
             #if( $stringTool.hasText($item.menuItemTypeName ))
                 $stringTool.escape($item.menuItemTypeName)
             #end
+            #if( $stringTool.hasText($item.menuItemSubTypeName ))
+                $stringTool.escape($item.menuItemSubTypeName)
+            #end
             #if( $item.additionalItems.size() > 0 )
                 con
                 #foreach( $additionalItem in $item.additionalItems )

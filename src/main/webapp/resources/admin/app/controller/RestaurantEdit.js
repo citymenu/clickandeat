@@ -687,7 +687,6 @@ Ext.define('AD.controller.RestaurantEdit', {
             var index = this.getMenuItemsStore().indexOf(menuItemEditForm.getRecord());
             var record = this.getMenuItemsStore().getAt(index);
             record.set(menuItemEditForm.getValues());
-            alert(record.get('type'));
 
             // Populate menu item type costs if present
             var menuItemTypeCosts = [];
