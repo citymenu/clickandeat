@@ -206,6 +206,18 @@ public class Order extends PersistentObject {
 
     /**
      * @param orderItemId
+     */
+
+    public void removeOrderItem(String orderItemId) {
+        OrderItem orderItem = findByOrderItemId(orderItemId);
+        if( orderItem != null ) {
+            getOrderItems().remove(orderItem);
+        }
+    }
+
+
+    /**
+     * @param orderItemId
      * @param quantity
      */
 

@@ -59,6 +59,22 @@ public class MenuItem {
         return null;
     }
 
+
+    /**
+     * @param itemSubType
+     * @return
+     */
+
+    public MenuItemSubType getMenuItemSubType(String itemSubType ) {
+        for( MenuItemSubType menuItemSubType: menuItemSubTypes ) {
+            if( itemSubType.equals(menuItemSubType.getType())) {
+                return menuItemSubType;
+            }
+        }
+        return null;
+    }
+
+
     public String getType() {
         return type;
     }
@@ -126,7 +142,7 @@ public class MenuItem {
     public String getFormattedCost() {
         return NumberUtil.format(cost);
     }
-    
+
     public List<MenuItemTypeCost> getMenuItemTypeCosts() {
         return menuItemTypeCosts;
     }

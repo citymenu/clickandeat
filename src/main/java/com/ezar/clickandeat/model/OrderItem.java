@@ -46,6 +46,12 @@ public class OrderItem {
         if (thisMenuItemTypeName != null ? !thisMenuItemTypeName.equals(otherMenuItemTypeName) : otherMenuItemTypeName != null)
             return false;
 
+        String thisMenuItemSubTypeName = "null".equals(menuItemSubTypeName)? null: menuItemSubTypeName;
+        String otherMenuItemSubTypeName = "null".equals(orderItem.menuItemSubTypeName)? null: orderItem.menuItemSubTypeName;
+
+        if (thisMenuItemSubTypeName != null ? !thisMenuItemSubTypeName.equals(otherMenuItemSubTypeName) : otherMenuItemSubTypeName != null)
+            return false;
+
         if( additionalItems.size() != orderItem.additionalItems.size()) {
             return false;
         }

@@ -148,6 +148,7 @@ public class OrderController implements InitializingBean {
             String restaurantId = (String)params.get("restaurantId");
             String itemId = (String)params.get("itemId");
             String itemType = (String)params.get("itemType");
+            String itemSubType = (String)params.get("itemSubType");
             List<String> additionalItems = (List<String>)params.get("additionalItems");
             Integer quantity = Integer.valueOf(params.get("quantity").toString());
 
@@ -161,6 +162,7 @@ public class OrderController implements InitializingBean {
             orderItem.setMenuItemId(itemId);
             orderItem.setMenuItemTitle(menuItem.getTitle());
             orderItem.setMenuItemTypeName(itemType);
+            orderItem.setMenuItemSubTypeName(itemSubType);
             orderItem.setAdditionalItems(additionalItems);
             orderItem.setQuantity(quantity);
 
@@ -169,6 +171,10 @@ public class OrderController implements InitializingBean {
                 MenuItemTypeCost menuItemTypeCost = menuItem.getMenuItemTypeCost(itemType);
                 double additionalItemCost = menuItemTypeCost.getAdditionalItemCost() == null? 0d: menuItemTypeCost.getAdditionalItemCost();
                 orderItem.setCost(menuItemTypeCost.getCost() + additionalItemCost * additionalItems.size());
+            }
+            else if( StringUtils.hasText(itemSubType)) {
+                MenuItemSubType menuItemSubType = menuItem.getMenuItemSubType(itemSubType);
+                orderItem.setCost(menuItemSubType.getCost());
             }
             else {
                 double additionalItemCost = menuItem.getAdditionalItemCost() == null? 0d: menuItem.getAdditionalItemCost();
