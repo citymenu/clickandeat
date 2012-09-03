@@ -179,9 +179,9 @@ function buildDisplay(orderItem) {
 function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost ) {
     var quantity;
     if( itemType ) {
-        quantity = $('#select_' + itemId + '_' + itemType).val();
+        quantity = $('#select_' + itemId + '_' + itemType.replace(/\s/g,'_')).val();
     } else if (itemSubType) {
-        quantity = $('#select_' + itemId + '_' + itemSubType).val();
+        quantity = $('#select_' + itemId + '_' + itemSubType.replace(/\s/g,'_')).val();
     } else {
         quantity = $('#select_' + itemId ).val();
     }
@@ -232,7 +232,10 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
     // Build checkboxes for each additional item
     additionalItemArray.forEach(function(additionalItem){
-        var itemDiv = ('<div class=\'additionalItem\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}</div>').format(additionalItem,unescapeQuotes(additionalItem));
+        var additionalItemArray = additionalItem.split('%%%');
+        var additionalItemCost = additionalItemArray[1];
+        var itemDiv = ('<div class=\'additionalItem\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}<span class=\'additionalitemcost\'>{2}</span></div>')
+                .format(additionalItemArray[0],unescapeQuotes(additionalItemArray[0]),(additionalItemArray[1] != 'null'? ' (' + ccy + additionalItemArray[1] + ')': ''));
         html += itemDiv;
     });
 
@@ -288,9 +291,9 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
     var update = {
         restaurantId: restaurantId,
         itemId: itemId,
-        itemType: itemType,
-        itemSubType: itemSubType,
-        additionalItems: additionalItems,
+        itemType: unescape(itemType),
+        itemSubType: unescape(itemSubType),
+        additionalItems: unescapeArray(additionalItems),
         quantity: quantity || 1
     };
 
@@ -375,4 +378,24 @@ function checkout() {
             location.href = ctx + '/secure/checkout.html';
         }
     }
+}
+
+// Unescapes string values
+function unescape(str) {
+    if(!str || str == '') {
+        return str;
+    }
+    while(str.indexOf('_') != -1) {
+        str = str.replace('_',' ');
+    }
+    return unescapeQuotes(str);
+}
+
+// Unescapes an array of string values
+function unescapeArray(arr) {
+    var ret = [];
+    arr.forEach(function(entry){
+        ret.push(unescape(entry));
+    });
+    return ret;
 }

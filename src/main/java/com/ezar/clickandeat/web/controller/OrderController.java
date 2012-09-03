@@ -166,19 +166,33 @@ public class OrderController implements InitializingBean {
             orderItem.setAdditionalItems(additionalItems);
             orderItem.setQuantity(quantity);
 
+            // Work out the cost of any additional Items
+            double additionalItemCost = 0d;
+            for( String additionalItemName: additionalItems ) {
+                if( StringUtils.hasText(itemType)) {
+                    MenuItemTypeCost menuItemTypeCost = menuItem.getMenuItemTypeCost(itemType);
+                    additionalItemCost += menuItemTypeCost.getAdditionalItemCost() == null? 0d: menuItemTypeCost.getAdditionalItemCost();
+                }
+                else if( menuItem.getAdditionalItemCost() != null ) {
+                    additionalItemCost += menuItem.getAdditionalItemCost();
+                }
+                else {
+                    MenuItemAdditionalItemChoice additionalItemChoice = menuItem.getMenuItemAdditionalItemChoice(additionalItemName);
+                    additionalItemCost += additionalItemChoice.getCost() == null? 0d: additionalItemChoice.getCost();
+                }
+            }
+
             // Build the cost of the item
             if( StringUtils.hasText(itemType)) {
                 MenuItemTypeCost menuItemTypeCost = menuItem.getMenuItemTypeCost(itemType);
-                double additionalItemCost = menuItemTypeCost.getAdditionalItemCost() == null? 0d: menuItemTypeCost.getAdditionalItemCost();
-                orderItem.setCost(menuItemTypeCost.getCost() + additionalItemCost * additionalItems.size());
+                orderItem.setCost(menuItemTypeCost.getCost() + additionalItemCost);
             }
             else if( StringUtils.hasText(itemSubType)) {
                 MenuItemSubType menuItemSubType = menuItem.getMenuItemSubType(itemSubType);
-                orderItem.setCost(menuItemSubType.getCost());
+                orderItem.setCost(menuItemSubType.getCost() + additionalItemCost);
             }
             else {
-                double additionalItemCost = menuItem.getAdditionalItemCost() == null? 0d: menuItem.getAdditionalItemCost();
-                orderItem.setCost(menuItem.getCost() + additionalItemCost * additionalItems.size());
+                orderItem.setCost(menuItem.getCost() + additionalItemCost);
             }
 
             // Get the order out of the session            

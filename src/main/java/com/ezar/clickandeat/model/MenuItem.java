@@ -31,17 +31,17 @@ public class MenuItem {
     
     private List<MenuItemTypeCost> menuItemTypeCosts;
 
-    private List<String> additionalItemChoices;
+    private List<MenuItemAdditionalItemChoice> additionalItemChoices;
     
     private Double additionalItemCost;
     
     private Integer additionalItemChoiceLimit;
-            
+
 
     public MenuItem() {
         this.menuItemSubTypes = new ArrayList<MenuItemSubType>();
         this.menuItemTypeCosts = new ArrayList<MenuItemTypeCost>();
-        this.additionalItemChoices = new ArrayList<String>();
+        this.additionalItemChoices = new ArrayList<MenuItemAdditionalItemChoice>();
     }
 
 
@@ -69,6 +69,21 @@ public class MenuItem {
         for( MenuItemSubType menuItemSubType: menuItemSubTypes ) {
             if( itemSubType.equals(menuItemSubType.getType())) {
                 return menuItemSubType;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * @param additionalItemChoice
+     * @return
+     */
+
+    public MenuItemAdditionalItemChoice getMenuItemAdditionalItemChoice(String additionalItemChoice ) {
+        for( MenuItemAdditionalItemChoice menuItemAdditionalItemChoice: additionalItemChoices ) {
+            if( additionalItemChoice.equals(menuItemAdditionalItemChoice.getName())) {
+                return menuItemAdditionalItemChoice;
             }
         }
         return null;
@@ -159,21 +174,23 @@ public class MenuItem {
         this.menuItemTypeCosts = menuItemTypeCosts;
     }
 
-    public List<String> getAdditionalItemChoices() {
+    public List<MenuItemAdditionalItemChoice> getAdditionalItemChoices() {
         return additionalItemChoices;
     }
 
-    public void setAdditionalItemChoices(List<String> additionalItemChoices) {
+    public void setAdditionalItemChoices(List<MenuItemAdditionalItemChoice> additionalItemChoices) {
         this.additionalItemChoices = additionalItemChoices;
     }
 
     public String getAdditionalItemChoiceArray() {
         StringBuilder sb = new StringBuilder("[");
         String delim = "";
-        for( String additionalItemChoice: additionalItemChoices ) {
+        for( MenuItemAdditionalItemChoice additionalItemChoice: additionalItemChoices ) {
             sb.append(delim);
             sb.append("'");
-            sb.append(StringEscapeUtils.escapeHtml(additionalItemChoice.replace("'","###")));
+            sb.append(StringEscapeUtils.escapeHtml(additionalItemChoice.getName().replace("'", "###")));
+            sb.append("%%%");
+            sb.append(additionalItemChoice.getCost() == null? "null": additionalItemChoice.getFormattedCost());
             sb.append("'");
             delim = ",";
         }
@@ -204,4 +221,5 @@ public class MenuItem {
     public Integer getNullSafeChoiceLimit() {
         return additionalItemChoiceLimit == null? 0: additionalItemChoiceLimit;
     }
+
 }

@@ -13,7 +13,6 @@ Ext.define('AD.model.MenuItem', {
         {name:'description',type: 'string',convert: unescapeQuotes},
         {name:'iconClass', type:'string'},
         {name:'cost', type:'double'},
-        {name:'additionalItemChoices',type:'auto',convert: arrayToString},
         {name:'additionalItemCost', type:'double'},
         {name:'additionalItemChoiceLimit', type:'double'}
     ],
@@ -24,5 +23,9 @@ Ext.define('AD.model.MenuItem', {
     hasMany:{
         model:'AD.model.MenuItemSubType',
         name:'menuItemSubTypes'
+    },
+    hasMany:{
+        model:'AD.model.MenuItemAdditionalItemChoice',
+        name:'additionalItemChoices'
     }
 });

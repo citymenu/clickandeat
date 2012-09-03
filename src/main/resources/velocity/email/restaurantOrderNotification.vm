@@ -22,10 +22,10 @@
         <div>
             $item.quantity x ($item.menuItemNumber) $stringTool.escape($item.menuItemTitle)
             #if( $stringTool.hasText($item.menuItemTypeName ))
-                ($stringTool.removeQuotes($item.menuItemTypeName))
+                ($stringTool.escape($item.menuItemTypeName))
             #end
             #if( $stringTool.hasText($item.menuItemSubTypeName ))
-                ($stringTool.removeQuotes($item.menuItemSubTypeName))
+                ($stringTool.escape($item.menuItemSubTypeName))
             #end
         </div>
     #else

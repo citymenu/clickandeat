@@ -102,7 +102,15 @@ public class Order extends PersistentObject {
         }
         this.orderItemCost = orderItemCost;
 
-        // Reset and update delivery cost and collection discount
+        // Update all discount costs
+        updateOrderDiscounts();
+
+        this.totalDiscount = 0d;
+        for( OrderDiscount discount: orderDiscounts ) {
+            this.totalDiscount += discount.getDiscountAmount();
+        }
+
+        // Reset and update delivery costs
         this.deliveryCost = 0d;
         this.extraSpendNeededForDelivery = 0d;
 
@@ -112,7 +120,7 @@ public class Order extends PersistentObject {
             Double deliveryCharge = this.restaurant.getDeliveryOptions().getDeliveryCharge();
             Boolean allowDeliveryOrdersBelowMinimum = this.restaurant.getDeliveryOptions().getAllowDeliveryOrdersBelowMinimum();
 
-            if(minimumOrderForFreeDelivery != null && this.orderItemCost < minimumOrderForFreeDelivery ) {
+            if(minimumOrderForFreeDelivery != null && this.orderItemCost  < minimumOrderForFreeDelivery ) {
                 if(allowDeliveryOrdersBelowMinimum != null && allowDeliveryOrdersBelowMinimum ) {
                     this.deliveryCost = deliveryCharge;
                 }
@@ -120,14 +128,6 @@ public class Order extends PersistentObject {
                     this.extraSpendNeededForDelivery = minimumOrderForFreeDelivery - this.orderItemCost;
                 }
             }
-        }
-
-        // Update all discount costs
-        updateOrderDiscounts();
-
-        totalDiscount = 0d;
-        for( OrderDiscount discount: orderDiscounts ) {
-            totalDiscount += discount.getDiscountAmount();
         }
 
         // Set the total cost

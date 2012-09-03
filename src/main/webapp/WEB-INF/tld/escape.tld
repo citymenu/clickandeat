@@ -21,5 +21,10 @@
             <required>false</required>
             <type>boolean</type>
         </attribute>
+        <attribute>
+            <name>escapeSpaces</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
     </tag>
 </taglib>

@@ -85,7 +85,7 @@
                                                             <div class="menuItemActions">
                                                                 <div class="menuItemCost"><spring:message code="label.currency"/>${menuItemSubType.formattedCost}</div>
                                                                 <div class="menuItemAction">
-                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemSubType.type}" escapeComments="true"/>">
+                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemSubType.type}" escapeComments="true" escapeSpaces="true"/>">
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>
@@ -127,7 +127,7 @@
                                                             <div class="menuItemActions">
                                                                 <div class="menuItemCost"><spring:message code="label.currency"/>${menuItemTypeCost.formattedCost}</div>
                                                                 <div class="menuItemAction">
-                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>">
+                                                                    <select class="menuItemQuantity" id="select_${menuItem.itemId}_<util:escape value="${menuItemTypeCost.type}" escapeComments="true" escapeSpaces="true"/>">
                                                                         <option value="1">1</option>
                                                                         <option value="2">2</option>
                                                                         <option value="3">3</option>

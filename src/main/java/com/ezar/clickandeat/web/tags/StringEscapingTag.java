@@ -15,12 +15,18 @@ public class StringEscapingTag extends SimpleTagSupport {
 
     private boolean escapeNewLines;
 
+    private boolean escapeSpaces;
+    
     public void doTag() throws JspException, IOException {
-        if( escapeComments && StringUtils.hasText(value)) {
+        boolean hasText = StringUtils.hasText(value);
+        if( escapeComments && hasText) {
             value = value.replace("'","###");
         }
-        if( escapeNewLines && StringUtils.hasText(value)) {
+        if( escapeNewLines && hasText) {
             value = value.replace("\n","<br>");
+        }
+        if( escapeSpaces && hasText) {
+            value = value.replace(" ","_");
         }
         getJspContext().getOut().write(value);
     }
@@ -35,5 +41,9 @@ public class StringEscapingTag extends SimpleTagSupport {
 
     public void setEscapeNewLines(boolean escapeNewLines) {
         this.escapeNewLines = escapeNewLines;
+    }
+
+    public void setEscapeSpaces(boolean escapeSpaces) {
+        this.escapeSpaces = escapeSpaces;
     }
 }

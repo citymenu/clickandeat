@@ -97,15 +97,20 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
     },{
         fieldLabel:'Additional choices for this item (enter one per line)',
         labelAlign:'top',
-        name:'additionalItemChoices',
+        name:'additionalItemChoiceNames',
         xtype:'textareafield',
         height:90
     },{
-        fieldLabel:'Additional item cost',
-        labelAlign:'top',
+        fieldLabel:'Default additional item cost (leave blank if setting individual additional item costs)',
         labelAlign:'top',
         xtype:'numberfield',
         name:'additionalItemCost'
+    },{
+        fieldLabel:'Costs for each additional choice (enter one for each choice above)',
+        labelAlign:'top',
+        name:'additionalItemChoiceCosts',
+        xtype:'textareafield',
+        height:90
     },{
         fieldLabel:'Maximum number of additional items that can be selected',
         labelAlign:'top',

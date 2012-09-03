@@ -62,7 +62,7 @@ If you have provided a mobile number with your order you will receive an SMS mes
 
 #foreach( $discount in $order.orderDiscounts )
     #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-        <div>$stringTool.unescape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+        <div>$stringTool.escape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
     #end
 #end
 
