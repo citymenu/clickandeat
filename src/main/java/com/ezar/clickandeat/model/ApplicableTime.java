@@ -2,7 +2,7 @@ package com.ezar.clickandeat.model;
 
 import org.joda.time.LocalTime;
 
-public class DiscountApplicableTime {
+public class ApplicableTime {
     
     private int dayOfWeek;
 

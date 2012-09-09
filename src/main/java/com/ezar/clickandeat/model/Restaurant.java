@@ -50,6 +50,8 @@ public class Restaurant extends PersistentObject {
 
     private List<Discount> discounts;
     
+    private List<SpecialOffer> specialOffers;
+    
     private String imageId;
 
     @Transient
@@ -67,6 +69,7 @@ public class Restaurant extends PersistentObject {
         this.menu = new Menu();
         this.cuisines = new ArrayList<String>();
         this.discounts = new ArrayList<Discount>();
+        this.specialOffers = new ArrayList<SpecialOffer>();
         this.listOnSite = true;
     }
 
@@ -452,6 +455,14 @@ public class Restaurant extends PersistentObject {
 
     public void setDiscounts(List<Discount> discounts) {
         this.discounts = discounts;
+    }
+
+    public List<SpecialOffer> getSpecialOffers() {
+        return specialOffers;
+    }
+
+    public void setSpecialOffers(List<SpecialOffer> specialOffers) {
+        this.specialOffers = specialOffers;
     }
 
     public String getImageId() {

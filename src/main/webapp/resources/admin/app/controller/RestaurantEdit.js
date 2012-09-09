@@ -15,9 +15,15 @@ var menuItemEditForm;
 // Global discount edit form variable
 var discountEditForm;
 
+// Global special offer edit form variable
+var specialOfferEditForm;
+
+// Global special offer item edit form variable
+var specialOfferItemEditForm;
+
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
-    stores:['Restaurants','MenuCategories','MenuItems','Discounts'],
+    stores:['Restaurants','MenuCategories','MenuItems','Discounts','SpecialOffers','SpecialOfferItems'],
     models: [
         'Restaurant',
         'Person',
@@ -29,14 +35,18 @@ Ext.define('AD.controller.RestaurantEdit', {
         'MenuItemSubType',
         'MenuItemAdditionalItemChoice',
         'Discount',
-        'DiscountApplicableTime'
+        'DiscountApplicableTime',
+        'SpecialOffer',
+        'SpecialOfferApplicableTime',
+        'SpecialOfferItem'
     ],
     views:[
     	'restaurant.Edit',
     	'restaurant.MainDetails',
     	'restaurant.DeliveryDetails',
     	'restaurant.Menu',
-    	'restaurant.Discounts'
+    	'restaurant.Discounts',
+    	'restaurant.SpecialOffers'
     ],
 
     refs: [{
@@ -63,6 +73,18 @@ Ext.define('AD.controller.RestaurantEdit', {
     },{
         ref:'discountEditForm',
         selector:'#discounteditform'
+    },{
+        ref:'specialOffersGrid',
+        selector:'#specialoffersgrid'
+    },{
+        ref:'specialOfferItemsGrid',
+        selector:'#specialofferitemsgrid'
+    },{
+        ref:'specialOfferEditForm',
+        selector:'#specialoffereditform'
+    },{
+        ref:'specialOfferItemEditForm',
+        selector:'#specialofferitemeditform'
     }],
 
 	init: function() {
@@ -168,7 +190,60 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantdiscountedit button[action=remove]': {
                 click:this.removeDiscount
+            },
+
+            'restaurantspecialoffers': {
+                render:this.specialOffersRendered
+            },
+
+            '#specialoffersgrid': {
+                itemclick:this.specialOffersGridSelected
+            },
+
+            '#specialoffersgrid button[action=create]': {
+                click:this.createSpecialOffer
+            },
+
+            'restaurantspecialofferedit button[action=save]': {
+                click:this.updateSpecialOffer
+            },
+
+            'restaurantspecialofferedit button[action=revert]': {
+                click:this.revertSpecialOffer
+            },
+
+            'restaurantspecialofferedit button[action=remove]': {
+                click:this.removeSpecialOffer
+            },
+
+            'restaurantspecialofferedit': {
+                render:this.specialOfferEditRendered
+            },
+
+            '#specialofferitemsgrid': {
+                itemclick:this.specialOfferItemsGridSelected
+            },
+
+            '#specialofferitemsgrid button[action=create]': {
+                click:this.createSpecialOfferItem
+            },
+
+            'restaurantspecialofferitemedit button[action=save]': {
+                click:this.updateSpecialOfferItem
+            },
+
+            'restaurantspecialofferitemedit button[action=revert]': {
+                click:this.revertSpecialOfferItem
+            },
+
+            'restaurantspecialofferitemedit button[action=remove]': {
+                click:this.removeSpecialOfferItem
+            },
+
+            'restaurantspecialofferitemedit': {
+                render:this.specialOfferItemEditRendered
             }
+
 
         });
 
@@ -256,6 +331,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             discount.set('discountApplicableTimes',discountApplicableTimes);
             discounts.push(discount);
+
         });
 
         // If a discount is being edited clear it now
@@ -267,6 +343,46 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         this.getDiscountsStore().removeAll(true);
         this.getDiscountsStore().loadData(discounts);
+
+	    // Initialize special offers for the restaurant
+	    var specialOffers = [];
+	    restaurantObj.specialOffers.forEach(function(offer) {
+	        var specialOffer = new AD.model.SpecialOffer(offer);
+            var specialOfferApplicableTimes = [];
+            offer.offerApplicableTimes.forEach(function(offerApplicableTimeObj){
+                var offerApplicableTime = new AD.model.SpecialOfferApplicableTime({
+                    dayOfWeek: offerApplicableTimeObj.dayOfWeek,
+                    applicable: offerApplicableTimeObj.applicable,
+                    applicableFrom: offerApplicableTimeObj.applicableFrom,
+                    applicableTo: offerApplicableTimeObj.applicableTo
+                });
+                specialOfferApplicableTimes.push(offerApplicableTime);
+            });
+            specialOffer.set('offerApplicableTimes',specialOfferApplicableTimes);
+
+	        var specialOfferItems = [];
+	        offer.specialOfferItems.forEach(function(item) {
+	            var specialOfferItem = new AD.model.SpecialOfferItem(item);
+	            specialOfferItems.push(specialOfferItem);
+	        });
+	        specialOffer.set('specialOfferItems',specialOfferItems);
+	        specialOffers.push(specialOffer);
+	    });
+
+        // If a special offer or special offer item is being edited clear it now
+        if( specialOfferEditForm || specialOfferItemEditForm ) {
+            this.getSpecialOffersGrid().getSelectionModel().deselectAll();
+            this.getSpecialOfferItemsGrid().getSelectionModel().deselectAll();
+            this.getSpecialOfferItemsStore().removeAll();
+            this.getSpecialOfferEditForm().removeAll();
+            specialOfferEditForm = null;
+            specialOfferItemEditForm = null;
+        }
+
+        // Reload the special offers store
+	    this.getSpecialOffersStore().removeAll(true);
+        this.getSpecialOffersStore().loadData(specialOffers);
+
     },
 
     saveRestaurant: function(button) {
@@ -465,6 +581,43 @@ Ext.define('AD.controller.RestaurantEdit', {
             restaurantDiscounts.push(discountObj);
         });
         restaurantObj.discounts = restaurantDiscounts;
+
+        // Build the special offers
+        var restaurantSpecialOffers = [];
+        this.getSpecialOffersStore().getRange().forEach(function(offer){
+            var specialOffer = new Object({
+                specialOfferId: offer.get('specialOfferId'),
+                title: offer.get('title'),
+                description: offer.get('description'),
+                cost: offer.get('cost')
+            });
+
+            var offerApplicableTimes = [];
+            offer.get('offerApplicableTimes').forEach(function(offerApplicableTime){
+                var offerApplicableTimeObj = new Object({
+                    dayOfWeek: offerApplicableTime.get('dayOfWeek'),
+                    applicable: offerApplicableTime.get('applicable'),
+                    applicableFrom: offerApplicableTime.get('applicableFrom'),
+                    applicableTo: offerApplicableTime.get('applicableTo')
+                });
+                offerApplicableTimes.push(offerApplicableTimeObj);
+            });
+            specialOffer.offerApplicableTimes = offerApplicableTimes;
+
+            // Build the special offer items
+            var specialOfferItems = [];
+            offer.get('specialOfferItems').forEach(function(item){
+                var specialOfferItem = new Object({
+                    title: item.get('title'),
+                    description: item.get('description'),
+                    specialOfferItemChoices: delimitedStringToArray(item.get('specialOfferItemChoices'),'\n')
+                });
+                specialOfferItems.push(specialOfferItem);
+            });
+            specialOffer.specialOfferItems = specialOfferItems;
+            restaurantSpecialOffers.push(specialOffer);
+        });
+        restaurantObj.specialOffers = restaurantSpecialOffers;
 
         // Submit the restaurant to the server
         Ext.Ajax.request({
@@ -1069,6 +1222,211 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
             scope:this
         });
+    },
+
+    // Initialize special offers
+    specialOffersRendered: function(panel) {
+        panel.down('#specialofferitemsgrid').view.on('drop',this.specialOfferItemsGridDropped,this);
+    },
+
+    // Fires when the add button is clicked on the special offer grid
+    createSpecialOffer: function(button) {
+        var specialOffer = new AD.model.SpecialOffer({
+            title:'New Special Offer',
+            offerApplicableTimes:[],
+            specialOfferItems:[]
+        });
+        this.getSpecialOffersStore().add(specialOffer);
+    },
+
+    // Fires when the remove button is clicked on the special offer grid
+    removeSpecialOffer: function(button) {
+        Ext.MessageBox.show({
+            title:'Delete special offer',
+            msg:'Are you sure you want to remove this special offer?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.getSpecialOffersStore().remove(specialOfferEditForm.getRecord());
+                    this.getSpecialOfferItemsStore().removeAll(false);
+                    this.getSpecialOfferEditForm().removeAll(true);
+                    specialOfferEditForm = null;
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Deleted','Special offer has been deleted');
+                }
+            },
+            scope:this
+        });
+    },
+
+    // Fires when the save button is clicked on the special offer edit form
+    updateSpecialOffer: function(button) {
+        if(!specialOfferEditForm.getForm().isValid()) {
+            this.showInvalidFormWarning();
+        } else {
+            var formValues = specialOfferEditForm.getValues();
+            var offerApplicableTimes = [];
+            for( day = 1; day < 8; day++ ) {
+                var applicable = formValues['applicable_' + day] == 'on';
+                var applicableFrom = formValues['applicableFrom_' + day];
+                var applicableTo = formValues['applicableTo_' + day];
+                var offerApplicableTime = new AD.model.SpecialOfferApplicableTime({
+                    dayOfWeek: day,
+                    applicable: applicable,
+                    applicableFrom: applicableFrom,
+                    applicableTo: applicableTo,
+                });
+                offerApplicableTimes.push(offerApplicableTime);
+            }
+
+            var index = this.getSpecialOffersStore().indexOf(specialOfferEditForm.getRecord());
+            var record = this.getSpecialOffersStore().getAt(index);
+            record.set(formValues);
+            record.set('offerApplicableTimes',offerApplicableTimes);
+            showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Special offer details have been updated');
+        }
+    },
+
+    // Fires when the revert button is clicked on the special offer edit form
+    revertSpecialOffer: function(button) {
+        specialOfferEditForm.getForm().reset();
+        specialOfferEditForm.loadRecord(specialOfferEditForm.getRecord());
+        showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Special offer details have been reverted');
+    },
+
+    // Fires when a record is selected in the menu categories grid
+    specialOffersGridSelected: function(rowmodel,record,item,index,evt,options) {
+
+        // If the item is already selected, do nothing
+        var selectedSpecialOffer = this.getSpecialOffersGrid().getSelectionModel().getLastSelected();
+        if( specialOfferEditForm && specialOfferEditForm.getRecord() == selectedSpecialOffer ) {
+            return; // Do nothing on purpose
+        }
+
+        this.getSpecialOfferItemsStore().removeAll(false);
+        this.getSpecialOfferItemsStore().loadData(record.get('specialOfferItems'));
+
+        var form = Ext.create('AD.view.restaurant.SpecialOfferEdit');
+        specialOfferEditForm = form; // Update global variable
+        specialOfferItemEditForm = null; // Update global variable
+        this.getSpecialOfferEditForm().removeAll(true);
+        this.getSpecialOfferEditForm().add(form);
+    },
+
+    // Updates the special offers grid after drag/drop
+    specialOfferItemsGridDropped: function(node, data, dropRec, dropPosition) {
+
+        // Reorder special offer items store
+        this.getSpecialOfferItemsStore().remove(data.records[0]);
+        var index = this.getSpecialOfferItemsStore().indexOf(dropRec);
+        this.getSpecialOfferItemsStore().insert((dropPosition == 'after'? index+1: index), data.records[0]);
+
+        // Update special offer items on special offer
+        this.updateSpecialOfferItems();
+    },
+
+    // Loads the selected special offer into the edit form
+    specialOfferEditRendered: function(formPanel) {
+        var selectedSpecialOffer = this.getSpecialOffersGrid().getSelectionModel().getLastSelected();
+        specialOfferEditForm.loadRecord(selectedSpecialOffer);
+    },
+
+    // Fires when a record is selected in the speical offer items grid
+    specialOfferItemsGridSelected: function(rowmodel,record,item,index,evt,options) {
+
+        // If the item is already selected, do nothing
+        var selectedSpecialOfferItem = this.getSpecialOfferItemsGrid().getSelectionModel().getLastSelected();
+        if( specialOfferItemEditForm && specialOfferItemEditForm.getRecord() == selectedSpecialOfferItem ) {
+            return; // Do nothing on purpose
+        }
+
+        var form = Ext.create('AD.view.restaurant.SpecialOfferItemEdit');
+        specialOfferItemEditForm = form; // Update global variable
+        specialOfferEditForm = null; // Update global variable
+        this.getSpecialOfferEditForm().removeAll(true);
+        this.getSpecialOfferEditForm().add(form);
+    },
+
+    // Fires when the add button is clicked on the special offer item grid
+    createSpecialOfferItem: function(button) {
+
+        // Get the selected special offer
+        var selectedSpecialOffer = this.getSpecialOffersGrid().getSelectionModel().getLastSelected();
+        if( !selectedSpecialOffer ) {
+            return; // No special offer selected, no nothing
+        }
+
+        // Create new special offer item and add to the store
+        var specialOfferItem = new AD.model.SpecialOfferItem({
+            title:'New Item',
+            specialOfferItemChoices:[]
+        });
+        this.getSpecialOfferItemsStore().add(specialOfferItem);
+
+        // Push new special offer item into special offer items store
+        var index = this.getSpecialOffersStore().indexOf(selectedSpecialOffer);
+        this.getSpecialOffersStore().getAt(index).set('specialOfferItems',this.getSpecialOfferItemsStore().getRange());
+    },
+
+    // Fires when the remove button is clicked on the special offer item grid
+    removeSpecialOfferItem: function(button) {
+        Ext.MessageBox.show({
+            title:'Delete special offer item',
+            msg:'Are you sure you want to remove this special offer item?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.getSpecialOfferItemsStore().remove(specialOfferItemEditForm.getRecord());
+                    this.getSpecialOfferEditForm().removeAll(true);
+                    specialOfferItemEditForm = null;
+                    // Update special offer items on special offer
+                    this.updateSpecialOfferItems();
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Deleted','Special offer item has been deleted');
+                }
+            },
+            scope:this
+        });
+    },
+
+    // Fires when the save button is clicked on the special offer item edit form
+    updateSpecialOfferItem: function(button) {
+
+        if(!specialOfferItemEditForm.getForm().isValid()) {
+            this.showInvalidFormWarning();
+        } else {
+            var index = this.getSpecialOfferItemsStore().indexOf(specialOfferItemEditForm.getRecord());
+            var record = this.getSpecialOfferItemsStore().getAt(index);
+            record.set(specialOfferItemEditForm.getValues());
+
+            // Update special offer items on special offer
+            this.updateSpecialOfferItems();
+
+            // Show success message
+            showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Special offer item details have been updated');
+        }
+    },
+
+    // Fires when the revert button is clicked on the special offer item edit form
+    revertSpecialOfferItem: function(button) {
+        specialOfferItemEditForm.getForm().reset();
+        specialOfferItemEditForm.loadRecord(specialOfferItemEditForm.getRecord());
+        showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Special offer item details have been reverted');
+    },
+
+    // Loads the selected special offer item into the edit form
+    specialOfferItemEditRendered: function(formPanel) {
+        var selectedSpecialOfferItem = this.getSpecialOfferItemsGrid().getSelectionModel().getLastSelected();
+        specialOfferItemEditForm.loadRecord(selectedSpecialOfferItem);
+    },
+
+    // Updates special offer items store into selected special offer items attribute
+    updateSpecialOfferItems:function() {
+       var selectedSpecialOffer = this.getSpecialOffersGrid().getSelectionModel().getLastSelected();
+       var specialOfferIndex = this.getSpecialOffersStore().indexOf(selectedSpecialOffer);
+       this.getSpecialOffersStore().getAt(specialOfferIndex).set('specialOfferItems',this.getSpecialOfferItemsStore().getRange());
     },
 
     // Shows a warning alert box

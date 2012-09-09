@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.model;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -33,12 +32,12 @@ public class Discount {
     
     private List<String> freeItems;
     
-    private List<DiscountApplicableTime> discountApplicableTimes;
+    private List<ApplicableTime> discountApplicableTimes;
 
 
     public Discount() {
         this.freeItems = new ArrayList<String>();
-        this.discountApplicableTimes = new ArrayList<DiscountApplicableTime>();
+        this.discountApplicableTimes = new ArrayList<ApplicableTime>();
     }
 
 
@@ -58,7 +57,7 @@ public class Discount {
                 return false;
             }
             DateTime expectedDeliveryTime = order.getExpectedDeliveryTime() == null? new DateTime(): order.getExpectedDeliveryTime();
-            DiscountApplicableTime applicableTime = getDiscountApplicableTime(expectedDeliveryTime);
+            ApplicableTime applicableTime = getDiscountApplicableTime(expectedDeliveryTime);
             if( applicableTime == null || !applicableTime.getApplicable()) {
                 return false;
             }
@@ -73,7 +72,7 @@ public class Discount {
                 return false;
             }
             DateTime expectedCollectionTime = order.getExpectedCollectionTime() == null? new DateTime(): order.getExpectedCollectionTime();
-            DiscountApplicableTime applicableTime = getDiscountApplicableTime(expectedCollectionTime);
+            ApplicableTime applicableTime = getDiscountApplicableTime(expectedCollectionTime);
             if( applicableTime == null || !applicableTime.getApplicable()) {
                 return false;
             }
@@ -135,9 +134,9 @@ public class Discount {
      * @return
      */
 
-    private DiscountApplicableTime getDiscountApplicableTime(DateTime dateTime ) {
+    private ApplicableTime getDiscountApplicableTime(DateTime dateTime ) {
         int dayOfWeek = dateTime.getDayOfWeek();
-        for( DiscountApplicableTime time: discountApplicableTimes ) {
+        for( ApplicableTime time: discountApplicableTimes ) {
             if( dayOfWeek == time.getDayOfWeek()) {
                 return time;
             }
@@ -226,11 +225,11 @@ public class Discount {
         this.freeItems = freeItems;
     }
 
-    public List<DiscountApplicableTime> getDiscountApplicableTimes() {
+    public List<ApplicableTime> getDiscountApplicableTimes() {
         return discountApplicableTimes;
     }
 
-    public void setDiscountApplicableTimes(List<DiscountApplicableTime> discountApplicableTimes) {
+    public void setDiscountApplicableTimes(List<ApplicableTime> discountApplicableTimes) {
         this.discountApplicableTimes = discountApplicableTimes;
     }
 }

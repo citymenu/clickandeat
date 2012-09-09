@@ -106,6 +106,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
 
+        // Update special offer item identifiers
+        for( SpecialOffer specialOffer: restaurant.getSpecialOffers()) {
+            if( !StringUtils.hasText(specialOffer.getSpecialOfferId())) {
+                specialOffer.setSpecialOfferId(sequenceGenerator.getNextSequence());
+            }
+        }
+
         clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
         operations.save(restaurant);
         return restaurant;
