@@ -185,11 +185,15 @@ function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additio
     } else {
         quantity = $('#select_' + itemId ).val();
     }
-    addToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity);
+
+    // Check restaurant with callback on restaurant id
+    restaurantCheck(restaurantId, function(){
+        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity);
+    });
 }
 
-// Add item to order, check that restaurant has not changed
-function addToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
+// Confirm if order should proceed
+function restaurantCheck(restaurantId, callback ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
         $('<div></div>')
             .html(('<div>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name)))
@@ -200,7 +204,7 @@ function addToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemA
         		    text: labels['add-item-anyway'],
         		    click: function() {
                 	    $( this ).dialog( "close" );
-                	    doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
+                	    callback();
                 	}
                 },{
                     text: labels['dont-add-item'],
@@ -210,8 +214,9 @@ function addToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemA
                 }]
             });
     } else {
-        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
+        callback();
     }
+
 }
 
 // Add item to order, check if need to display additional item dialog
@@ -252,8 +257,8 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
                 text: labels['done'],
                 id: 'button-done',
                 click: function() {
-                    $( this ).dialog( "close" );
                     doAddToOrder(restaurantId, itemId, itemType, itemSubType, selectedItems.keys(), quantity );
+                    $( this ).dialog( "close" );
                 }
             },{
                 text: labels['cancel'],
@@ -298,6 +303,141 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
     };
 
     $.post( ctx+'/order/addItem.ajax', { body: JSON.stringify(update) },
+        function( data ) {
+            if( data.success ) {
+                buildOrder(data.order);
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+}
+
+// Add a special offer item to the order
+function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray ) {
+
+    // Decode and build special offer items array
+    var specialOfferItems = [];
+    specialOfferItemsArray.forEach(function(specialOfferItemStr){
+
+        var itemArray = specialOfferItemStr.split('%%%');
+        var itemChoiceArrayStr = itemArray[2];
+        var itemChoices = [];
+
+        itemChoiceArrayStr.split('$$$').forEach(function(itemChoiceStr){
+            var itemChoice = new Object({
+                text:itemChoiceStr
+            });
+            itemChoices.push(itemChoice);
+        });
+
+        var specialOfferItem = new Object({
+            title: (itemArray[0] == 'null'? null: unescapeQuotes(itemArray[0])),
+            description: (itemArray[1] == 'null'? null: unescapeQuotes(itemArray[1])),
+            itemChoices: itemChoices
+        });
+        specialOfferItems.push(specialOfferItem);
+    });
+
+    // If all special offer items only have one choice, add to order now
+    var quantity = $('#select_' + specialOfferId).val();
+
+    // Check restaurant with callback to add to order
+    restaurantCheck(restaurantId, function(){
+        doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity);
+    });
+
+}
+
+// Either build select dialog or proceed directly to add special offer to order
+function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity) {
+
+    var singleChoiceOnly = true;
+    specialOfferItems.forEach(function(specialOfferItem){
+        if( specialOfferItem.itemChoices.length > 1 ) {
+            singleChoiceOnly = false;
+        }
+    });
+
+    // If only one choice for each option, add to order now
+    if( singleChoiceOnly ) {
+        var itemChoices = [];
+        specialOfferItems.forEach(function(specialOfferItem){
+            itemChoices.push(specialOfferItem.itemChoices[0].text);
+        });
+        doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
+    }
+    else {
+
+        // Build dialog to display items and choices
+        var html = '';
+        var specialOfferItemIndex = 0;
+        specialOfferItems.forEach(function(specialOfferItem){
+            var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
+            if( specialOfferItem.description ) {
+                specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
+            }
+            var selectBox;
+            if( specialOfferItem.itemChoices.length == 1 ) {
+                selectBox = ('<div class=\'specialofferitemchoice\'>{0}</div>').format(unescapeQuotes(specialOfferItem.itemChoices[0].text));
+            } else {
+                var selectOptions = '';
+                specialOfferItem.itemChoices.forEach(function(itemChoice){
+                    selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
+                });
+                selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
+            }
+            specialOfferItemContent += selectBox;
+            html += ('<div class=\'specialofferitem\'>{0}</div>').format(specialOfferItemContent);
+            specialOfferItemIndex++;
+        });
+
+        // Generate the dialog
+        $('<div id=\'specialOfferItemDialog\'></div>')
+            .html(html)
+            .dialog({
+                modal:true,
+                title:labels['special-offer-choices'],
+                buttons: [{
+                    text: labels['done'],
+                    id: 'button-done',
+                    click: function() {
+                        var itemChoices = [];
+                        for( i = 0; i < specialOfferItems.length; i++) {
+                            var itemSelect = $('#specialOfferItemSelect_' + i );
+                            if( itemSelect ) {
+                                itemChoices.push(itemSelect.val());
+                            } else {
+                                itemChoices.push(specialOfferItems[i].itemChoices[0].text);
+                            }
+                        }
+                        doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
+                        $( this ).dialog( "close" );
+                    }
+                },{
+                    text: labels['cancel'],
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }],
+                close: function() {
+                    $(this).remove();
+                }
+            });
+    }
+}
+
+// Add the special offer item to the order
+function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity ) {
+
+    var update = {
+        restaurantId: restaurantId,
+        specialOfferId: specialOfferId,
+        itemChoices: unescapeArray(itemChoices),
+        quantity: quantity || 1
+    };
+
+    $.post( ctx+'/order/addSpecialOffer.ajax', { body: JSON.stringify(update) },
         function( data ) {
             if( data.success ) {
                 buildOrder(data.order);

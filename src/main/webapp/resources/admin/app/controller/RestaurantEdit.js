@@ -587,6 +587,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         this.getSpecialOffersStore().getRange().forEach(function(offer){
             var specialOffer = new Object({
                 specialOfferId: offer.get('specialOfferId'),
+                number: offer.get('number'),
                 title: offer.get('title'),
                 description: offer.get('description'),
                 cost: offer.get('cost')

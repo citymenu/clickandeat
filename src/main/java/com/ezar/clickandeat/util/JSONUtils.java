@@ -17,25 +17,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 @Component
-public class JSONUtils implements InitializingBean {
+public class JSONUtils {
     
     private final ConcurrentMap<Class,JSONDeserializer> deserializerMap = new ConcurrentHashMap<Class, JSONDeserializer>();
     
     private JSONSerializer serializer;
 
+    private JSONSerializer htmlEscapingSerializer;
+
     private JSONDeserializer deserializer = new JSONDeserializer();
 
     private final Map<String,String> escapeMap = new HashMap<String,String>();
-    
-    private String timeZone;
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public JSONUtils() {
         this.serializer = new JSONSerializer()
                 .transform(new DateTimeTransformer(), DateTime.class)
                 .transform(new LocalDateTransformer(), LocalDate.class)
                 .transform(new LocalTimeTransformer(), LocalTime.class)
                 .transform(new NullIdStringTransformer(), String.class);
+
+        this.htmlEscapingSerializer = new JSONSerializer()
+                .transform(new DateTimeTransformer(), DateTime.class)
+                .transform(new LocalDateTransformer(), LocalDate.class)
+                .transform(new LocalTimeTransformer(), LocalTime.class)
+                .transform(new NullIdHtmlEscapingStringTransformer(), String.class);
 
         escapeMap.put("'","###");
     }
@@ -58,6 +63,15 @@ public class JSONUtils implements InitializingBean {
     
     public String serializeAndEscape(Object obj) {
         return escapeQuotes(serializer.deepSerialize(obj));
+    }
+
+    /**
+     * @param obj
+     * @return
+     */
+
+    public String serializeAndEscapeHtml(Object obj) {
+        return escapeQuotes(htmlEscapingSerializer.deepSerialize(obj));
     }
 
 
@@ -103,13 +117,6 @@ public class JSONUtils implements InitializingBean {
             json = json.replaceAll(entry.getKey(),entry.getValue());
         }
         return json;
-    }
-
-
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
     }
 
 }

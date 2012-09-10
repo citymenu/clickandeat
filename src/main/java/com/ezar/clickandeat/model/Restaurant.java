@@ -319,7 +319,25 @@ public class Restaurant extends PersistentObject {
         }
         return null;
     }
+
     
+    public int getSpecialOfferCount() {
+        return specialOffers.size();
+    }
+
+    /**
+     * @param specialOfferId
+     * @return
+     */
+
+    public SpecialOffer getSpecialOffer(String specialOfferId) {
+        for( SpecialOffer specialOffer: specialOffers ) {
+            if( specialOfferId.equals(specialOffer.getSpecialOfferId())) {
+                return specialOffer;
+            }
+        }
+        return null;
+    }
 
     public String getRestaurantId() {
         return restaurantId;

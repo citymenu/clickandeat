@@ -152,6 +152,48 @@
                     </div>
                 </div>
             </c:forEach>
+
+            <c:if test="${restaurant.specialOfferCount > 0}">
+                <div class="menucategory">
+                    <div class="menucategoryheader">
+                        <div class="menucategoryname"><spring:message code="label.special-offers"/></div>
+                    </div>
+                    <div class="menuitems">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="menuItemTable">
+                            <c:forEach var="specialOffer" items="${restaurant.specialOffers}">
+                                <tr valign="top">
+                                    <td width="80%" colspan="2">
+                                        <div class="menuItemDetails">
+                                            <div class="menuItemNumber">${specialOffer.number}</div>
+                                            <div class="menuItemTitle"><util:escape value="${specialOffer.title}" escapeNewLines="true"/></div>
+                                            <div class="menuItemDescription"><util:escape value="${specialOffer.description}" escapeNewLines="true"/></div>
+                                        </div>
+                                    </td>
+                                    <td width="20%" align="right">
+                                        <div class="menuItemActions">
+                                            <div class="menuItemCost"><spring:message code="label.currency"/>${specialOffer.formattedCost}</div>
+                                            <div class="menuItemAction">
+                                                <select class="menuItemQuantity" id="select_${specialOffer.specialOfferId}">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                                <a onclick="addSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray})">
+                                                    <img title="<spring:message code="label.add-to-order"/>" src="${resources}/images/icons-shadowless/plus-button.png"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </div>
+                </div>
+
+            </c:if>
+
         </div>
 
         <div>

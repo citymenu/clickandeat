@@ -42,6 +42,10 @@ Ext.define('AD.view.restaurant.SpecialOfferEdit' ,{
             xtype:'hidden',
             name:'specialOfferId'
         },{
+            fieldLabel:'Number',
+            xtype:'numberfield',
+            name:'number'
+        },{
             fieldLabel:'Title',
             name:'title',
             labelAlign:'left'

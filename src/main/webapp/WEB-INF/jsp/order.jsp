@@ -24,6 +24,7 @@
         'no-thanks': "<spring:message code="label.no-thanks"/>",
         'free': "<spring:message code="label.free"/>",
         'choose-additional': "<spring:message code="label.choose-additional"/>",
+        'special-offer-choices': "<spring:message code="label.special-offer-choices"/>",
         'additional-item-limit': "<spring:message code="label.additional-item-limit"/>",
         'done': "<spring:message code="label.done"/>",
         'cancel': "<spring:message code="label.cancel"/>"

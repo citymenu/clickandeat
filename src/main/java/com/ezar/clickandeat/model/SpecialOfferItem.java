@@ -19,12 +19,20 @@ public class SpecialOfferItem {
         return title;
     }
 
+    public String getNullSafeTitle() {
+        return title == null? "null": title;
+    }
+    
     public void setTitle(String title) {
         this.title = title;
     }
 
     public String getDescription() {
         return description;
+    }
+
+    public String getNullSafeDescription() {
+        return description == null? "null": description;
     }
 
     public void setDescription(String description) {
