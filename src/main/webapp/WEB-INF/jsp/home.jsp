@@ -29,7 +29,7 @@
 <div id="content">
     <div class="content-wrapper">
         <div class="header-tagline">
-            <h1>Simply the <span class="classy">easiest</span> way to order food online</h1>
+            <h1>Simply the <span class="classy">easiest</span> way to order food online.</h1>
             <form method="get" action="${ctx}/findRestaurant.html">
                 <input class="postCodeInput" type="text" name="loc" id="loc"/>
                 <input class="findButton" type="submit" value="<spring:message code="label.search"/>"/>
