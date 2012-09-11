@@ -405,7 +405,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
                         var itemChoices = [];
                         for( i = 0; i < specialOfferItems.length; i++) {
                             var itemSelect = $('#specialOfferItemSelect_' + i );
-                            if( itemSelect ) {
+                            if( itemSelect.length ) {
                                 itemChoices.push(itemSelect.val());
                             } else {
                                 itemChoices.push(specialOfferItems[i].itemChoices[0].text);
@@ -442,7 +442,11 @@ function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, qua
             if( data.success ) {
                 buildOrder(data.order);
             } else {
-                alert('success:' + data.success);
+                if(data.isApplicable == false) {
+                    alert('Sorry, not applicable');
+                } else {
+                    alert('success:' + data.success);
+                }
             }
         }
     );

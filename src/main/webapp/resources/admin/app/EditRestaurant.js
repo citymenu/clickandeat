@@ -31,19 +31,8 @@ function onRestaurantLoaded() {
                     collapsible: false,
                     height: 120
                 },{
-                    region: 'west',
-                    title: 'West Panel',
-                    collapsible: false,
-                    split: true,
-                    width: 225
-                },{
                     region:'center',
                     xtype:'restaurantedit'
-                },{
-                    region: 'south',
-                    title: 'South Panel',
-                    collapsible: false,
-                    height: 80
                 }]
             });
         }

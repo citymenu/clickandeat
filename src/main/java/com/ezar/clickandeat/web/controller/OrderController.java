@@ -206,7 +206,6 @@ public class OrderController implements InitializingBean {
                 order = orderRepository.findByOrderId(orderId);
                 if( order == null ) {
                     order = buildAndRegister(session,restaurantId);
-                    session.setAttribute("orderid",order.getOrderId());
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
                     order.setRestaurantId(restaurantId);
@@ -235,6 +234,85 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/order/addSpecialOffer.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> addSpecialOfferToOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Adding special offer to order: " + body);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
+            String restaurantId = (String)params.get("restaurantId");
+            String specialOfferId = (String)params.get("specialOfferId");
+            List<String> itemChoices = (List<String>)params.get("itemChoices");
+            Integer quantity = Integer.valueOf(params.get("quantity").toString());
+
+            // Get the restaurant object
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+            SpecialOffer specialOffer = restaurant.getSpecialOffer(specialOfferId);
+
+            // Get the order out of the session
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order;
+            if( orderId == null ) {
+                order = buildAndRegister(session,restaurantId);
+            }
+            else {
+                order = orderRepository.findByOrderId(orderId);
+                if( order == null ) {
+                    order = buildAndRegister(session,restaurantId);
+                }
+            }
+
+            // Check if the special offer is applicable to this order
+            if( !specialOffer.isApplicableTo(order)) {
+                model.put("success",false);
+                model.put("isApplicable",false);
+            }
+            else {
+                // Wipe existing order if a new restaurant is selected
+                if( !restaurantId.equals(order.getRestaurantId())) {
+                    order.setRestaurantId(restaurantId);
+                    order.setRestaurant(restaurant);
+                    order.getOrderItems().clear();
+                    order.getOrderDiscounts().clear();
+                }
+
+                // Build new order item
+                OrderItem orderItem = new OrderItem();
+                orderItem.setMenuItemNumber(specialOffer.getNumber());
+                orderItem.setMenuItemId(specialOfferId);
+                orderItem.setMenuItemTitle(specialOffer.getTitle());
+                orderItem.setAdditionalItems(itemChoices);
+                orderItem.setQuantity(quantity);
+                orderItem.setCost(specialOffer.getCost());
+
+                // Add new order item to order and update
+                order.addOrderItem(orderItem);
+                order = orderRepository.saveOrder(order);
+
+                // Return success
+                model.put("success",true);
+                model.put("order",order);
+            }
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/order/removeItem.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> removeFromOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
@@ -248,7 +326,6 @@ public class OrderController implements InitializingBean {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String orderItemId = (String)params.get("orderItemId");
-            Integer quantity = (Integer)params.get("quantity");
 
             HttpSession session = request.getSession(true);
             String orderId = (String)session.getAttribute("orderid");
@@ -256,7 +333,7 @@ public class OrderController implements InitializingBean {
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
-                    order.removeOrderItem(orderItemId,quantity);
+                    order.removeOrderItem(orderItemId);
                     order = orderRepository.saveOrder(order);
                 }
             }

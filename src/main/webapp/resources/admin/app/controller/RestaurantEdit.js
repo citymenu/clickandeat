@@ -1331,6 +1331,14 @@ Ext.define('AD.controller.RestaurantEdit', {
     specialOfferEditRendered: function(formPanel) {
         var selectedSpecialOffer = this.getSpecialOffersGrid().getSelectionModel().getLastSelected();
         specialOfferEditForm.loadRecord(selectedSpecialOffer);
+
+        // Populate individual applicability dates
+        selectedSpecialOffer.get('offerApplicableTimes').forEach(function(offerApplicableTime){
+            var day = offerApplicableTime.get('dayOfWeek');
+            specialOfferEditForm.getForm().findField('applicable_' + day).setValue(offerApplicableTime.get('applicable'));
+            specialOfferEditForm.getForm().findField('applicableFrom_' + day).setValue(offerApplicableTime.get('applicableFrom'));
+            specialOfferEditForm.getForm().findField('applicableTo_' + day).setValue(offerApplicableTime.get('applicableTo'));
+        });
     },
 
     // Fires when a record is selected in the speical offer items grid
