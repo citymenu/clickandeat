@@ -24,13 +24,12 @@
 
 .header-tagline h1 {
     color: #333333;
-    font-family: "cubano sharp",impact;
+    font-family: "myriad-pro-semi-condensed",impact;
     font-size: 32px;
     font-style: normal;
     font-weight: bold;
     letter-spacing: -0.01em;
     margin-bottom: 30px;
-    text-transform: uppercase;
 }
 
 .header-tagline h1 span.classy {

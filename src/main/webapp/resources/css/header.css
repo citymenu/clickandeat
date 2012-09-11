@@ -22,14 +22,15 @@
 }
 
 .header-company {
-    font-family: "cubano sharp",impact;
+    font-family: "peachy-keen",impact;
     font-size:28px;
     line-height:28px
     height:40px;
     text-align:right;
-    margin: 70px 40px;
+    margin: 70px 30px;
     color:#FFFFFF;
     text-shadow: 0 2px #333333;
+    text-transform: uppercase;
 }
 
 .navigation-wrapper {

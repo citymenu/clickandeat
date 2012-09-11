@@ -17,7 +17,7 @@ html {
 
 body {
     background: none repeat scroll 0 0 #666666;
-    font-family: "FF Tisa Web Pro",Georgia,"Times New Roman",serif;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 16px;
     line-height: 20px;
     color: #333333;
@@ -27,6 +27,10 @@ body {
     outline: 0 none;
     padding: 0;
     vertical-align: baseline;
+}
+
+input {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
