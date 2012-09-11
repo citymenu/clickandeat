@@ -1,0 +1,30 @@
+@charset "utf-8";
+
+#footer {
+    clear: both;
+    color: #FFFFFF;
+    text-shadow: 0 1px #333333;
+}
+
+.footer-wrapper {
+    clear: both;
+    margin: 0 auto;
+    padding: 40px 0 80px;
+    position: relative;
+    text-align: left;
+    width: 1020px;
+}
+
+.footer-contact {
+    clear: both;
+    padding-bottom: 40px;
+}
+
+h4.footer {
+    font-size:18px;
+    color:#FFFFFF;
+}
+
+
+
+
