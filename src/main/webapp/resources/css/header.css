@@ -22,7 +22,9 @@
 }
 
 .header-company {
-    font: 28px/28px "cubano sharp",impact;
+    font-family: "cubano sharp",impact;
+    font-size:28px;
+    line-height:28px
     height:40px;
     text-align:right;
     margin: 70px 40px;
