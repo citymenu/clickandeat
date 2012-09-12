@@ -19,7 +19,7 @@
 <div id="header">
     <div class="header-wrapper">
         <div class="header-banner">
-            <div class="header-company">llamar y comer</div>
+            <div class="header-company unselectable">llamar y comer</div>
         </div>
         <div class="navigation-wrapper">
         </div>

@@ -20,7 +20,7 @@
 <div id="header">
     <div class="header-wrapper">
         <div class="header-banner">
-            <div class="header-company">llamar y comer</div>
+            <div class="header-company unselectable">llamar y comer</div>
         </div>
         <div class="navigation-wrapper">
         </div>
@@ -57,7 +57,7 @@
                                 <table width="100" cellpadding="0" cellspacing="0" border="0">
                                     <tr valign="top">
                                         <td width="50" align="right"><span class="menu-item-cost"><spring:message code="label.currency"/>${menuItem.formattedCost}</span></td>
-                                        <td width="50" align="right"><span class="menu-item-action"><a class="menuitem-button">Add</a></span></td>
+                                        <td width="50" align="right"><span class="menu-item-action"><a class="menuitem-button unselectable">Add</a></span></td>
                                     </tr>
                                 </table>
                             </div>
