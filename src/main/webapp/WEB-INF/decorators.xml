@@ -8,6 +8,9 @@
     <decorator name="home" page="home.jsp">
         <pattern>/home*</pattern>
     </decorator>
+    <decorator name="home" page="home.jsp">
+        <pattern>/restaurant*</pattern>
+    </decorator>
 	<decorator name="default" page="blank.jsp">
 		<pattern>/*</pattern> 
   	</decorator>

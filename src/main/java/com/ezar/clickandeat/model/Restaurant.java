@@ -3,6 +3,8 @@ package com.ezar.clickandeat.model;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +16,8 @@ import java.util.UUID;
 
 @Document(collection="restaurants")
 public class Restaurant extends PersistentObject {
+
+    private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
     @Indexed(unique=true)
     private String restaurantId;
@@ -303,6 +307,38 @@ public class Restaurant extends PersistentObject {
         return ret;
     }
 
+    
+    public String getTodaysOpeningTimes() {
+        DateTime[] openingAndClosingTimes = getOpeningAndClosingTimes(new DateTime());
+        DateTime collectionOpeningTime = openingAndClosingTimes[0];
+        DateTime collectionClosingTime = openingAndClosingTimes[1];
+        DateTime deliveryOpeningTime = openingAndClosingTimes[2];
+        DateTime deliveryClosingTime = openingAndClosingTimes[3];
+
+        boolean hasCollectionTimes = (collectionOpeningTime != null && collectionClosingTime != null);
+        boolean hasDeliveryTimes = (deliveryOpeningTime != null && deliveryClosingTime != null);
+        
+        if( !hasCollectionTimes && !hasDeliveryTimes ) {
+            return "Closed";
+        }
+        
+        if( hasCollectionTimes && !hasDeliveryTimes ) {
+            return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (collection)";
+        }
+        else if( !hasCollectionTimes ) {
+            return deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (delivery)";
+        }
+        else {
+            if( collectionOpeningTime.equals(deliveryOpeningTime) && collectionClosingTime.equals(deliveryClosingTime)) {
+                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter);
+            }
+            else {
+                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (collection), " +
+                    deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (delivery)";
+            }
+        }
+    }
+    
 
     /**
      * @param menuItemId

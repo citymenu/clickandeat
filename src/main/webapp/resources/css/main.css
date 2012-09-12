@@ -18,8 +18,8 @@ html {
 body {
     background: none repeat scroll 0 0 #666666;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 16px;
-    line-height: 20px;
+    font-size: 12px;
+    line-height: 16px;
     color: #333333;
     border: 0 none;
     font-size: 100%;
@@ -63,3 +63,21 @@ ol, ul {
     padding-right: 0;
 }
 
+a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
+    background-color: #50A3E2;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0 10px 0 10px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.menuitem-button:active, a.menuitem-button:hover {
+    background-color: #247FCC;
+}

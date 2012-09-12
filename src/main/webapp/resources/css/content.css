@@ -13,7 +13,21 @@
     padding: 40px 0 80px;
     position: relative;
     text-align: left;
+    overflow: hidden;
     width: 1020px;
+}
+
+.content-left {
+    padding: 0;
+    float: left;
+    width: 720px;
+    margin: 0 20px 0 0;
+}
+
+.content-right {
+    padding: 0;
+    margin: 0;
+    width: 280px;
 }
 
 .header-tagline {

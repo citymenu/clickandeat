@@ -1,0 +1,123 @@
+@charset "utf-8";
+
+.restaurant-details-wrapper {
+    padding: 0px 10px 40px 10px;
+    margin-bottom: 10px;
+}
+
+.restaurant-details-wrapper h2 {
+    color: #333333;
+    font-family: "myriad-pro-semi-condensed",impact;
+    font-size: 26px;
+    font-style: normal;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+}
+
+.restaurant-details {
+    font-size: 14px;
+    line-height: 16px;
+    margin-top: 10px;
+}
+
+.restaurant-details-title {
+    color:#444444;
+    font-weight:700;
+}
+
+.menu-wrapper {
+    padding: 0px 10px 10px 10px;
+}
+
+.menu-category-wrapper {
+    padding-bottom: 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #BBBBBB;
+
+}
+
+.menu-category-wrapper h2 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:20px;
+    line-height:24px
+    color:#FFFFFF;
+    text-shadow: 0 1px #EEEEEE;
+    margin-bottom: 6px;
+    padding-top: 15px;
+}
+
+.menu-category-summary {
+    color: #666666;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+    font-weight: normal;
+    text-transform: none;
+    border-bottom: 1px dashed #EEEEEE;
+    padding-bottom: 10px;
+}
+
+.menu-item-wrapper {
+    margin-top: 10px;
+    padding-bottom: 10px;
+    overflow: hidden;
+    border-bottom: 1px dashed #EEEEEE;
+}
+
+menu-item-main-wrapper {
+    clear:both;
+    vertical-align: baseline;
+}
+
+.menu-item-title-wrapper {
+    float: left;
+    margin-right: 20px;
+    width: 580px;
+}
+
+.menu-item-cost-wrapper {
+    width: 100px;
+    float:left;
+}
+
+.menu-item-title-wrapper h3 {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    color: #444444;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.menu-item-subtitle {
+    color: #AA0000;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.menu-item-cost {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    color: #444444;
+    font-weight: 700;
+    padding-right: 5px;
+}
+
+.menu-item-action {
+}
+
+.menu-item-description {
+    clear: both;
+    color: #666666;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+}
