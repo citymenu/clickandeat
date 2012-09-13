@@ -38,9 +38,9 @@
     <div id="deliverycheck"></div>
     <div class="order-items-wrapper">
         <div class="order-item-wrapper-header">
-            <table width="258">
+            <table width="236">
                 <tr>
-                    <td width="168" align="left"><h3 class="order-table"><spring:message code="label.item"/></h3></td>
+                    <td width="146" align="left"><h3 class="order-table"><spring:message code="label.item"/></h3></td>
                     <td width="60" align="center"><h3 class="order-table"><spring:message code="label.price"/></h3></td>
                     <td width="30"></td>
                 </tr>

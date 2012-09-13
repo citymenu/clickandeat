@@ -84,10 +84,10 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\' align=\'left\'><a onclick=\"removeFromOrder(\'{3}\')\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'146\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\' align=\'left\'><a onclick=\"removeFromOrder(\'{3}\')\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
                     .format(buildDisplay(orderItem),ccy,orderItem.formattedCost,orderItem.orderItemId);
             } else {
-                var row = '<div class=\'order-item-wrapper\'><table width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\'></td></tr>'
+                var row = '<div class=\'order-item-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'146\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\'></td></tr>'
                     .format(buildDisplay(orderItem),ccy,orderItem.formattedCost);
             }
             $('#order-item-contents').prepend(row);
@@ -116,7 +116,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'258\'><trvalign=\'top\'><td width=\'168\'>{0} ({1})</td><td width=\'55\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><trvalign=\'top\'><td width=\'146\'>{0} ({1})</td><td width=\'55\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -126,14 +126,14 @@ function doBuildOrder(order,config) {
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>-{1}{2}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'236\'><tr valign=\'top\'><td width=\'146\'>{0}</td><td width=\'55\' align=\'right\'>-{1}{2}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
                 $('#order-item-contents').append(row);
             }
         });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'258\'><tr valign=\'top\'><td width=\'168\'>' + labels['delivery-charge'] + '</td><td width=\'55\' align=\'right\'>{0}{1}</td><td width=\'30\'></td></tr>').format(ccy,order.formattedDeliveryCost);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'236\'><tr valign=\'top\'><td width=\'146\'>' + labels['delivery-charge'] + '</td><td width=\'55\' align=\'right\'>{0}{1}</td><td width=\'30\'></td></tr>').format(ccy,order.formattedDeliveryCost);
             $('#order-item-contents').append(row);
         }
 

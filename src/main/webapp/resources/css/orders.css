@@ -2,6 +2,11 @@
 
 .order-wrapper {
     margin-right:10px;
+    border: 1px solid #BBBBBB;
+    background-color:#FCFCFC;
+    padding:10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .orderheader {
@@ -34,7 +39,7 @@ h3.order-table {
 
 .order-items-wrapper {
     border: 1px solid #CCCCCC;
-    background-color:#FCFCFC;
+    background-color:#FFFFFF;
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 10px;
@@ -78,7 +83,7 @@ h3.order-table {
     font-size: 18px;
     font-weight: bold;
     letter-spacing: -0.01em;
-    margin: 20px 0 20px 0;
+    margin: 20px 0 10px 0;
     padding: 10px 0 15px 0;
     border-bottom: 1px dashed #AAAAAA;
     border-top: 1px dashed #AAAAAA;
@@ -98,15 +103,18 @@ h3.order-table {
 
 .order-free-item-title {
     font-weight:bold;
+    color:#444444;
     margin-bottom: 6px;
 }
 
 .delivery-warning-wrapper {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     border: 1px solid #b64242;
-    background-color: #fffebe;
+    background-color: #fffece;
     font-size: 12px;
     line-height: 16px;
     margin-top: 10px;
     padding: 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
