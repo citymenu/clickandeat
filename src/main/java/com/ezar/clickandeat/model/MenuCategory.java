@@ -30,6 +30,10 @@ public class MenuCategory {
         this.itemTypes = new ArrayList<String>();
     }
 
+    public int getItemTypeCount() {
+        return itemTypes.size();
+    }
+    
     public String getCategoryId() {
         return categoryId;
     }

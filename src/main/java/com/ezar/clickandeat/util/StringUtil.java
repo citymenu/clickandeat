@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.util;
 
+import org.springframework.util.StringUtils;
+
 public class StringUtil {
 
 
@@ -33,6 +35,16 @@ public class StringUtil {
             sb.append("0");
         }
         return sb.toString() + in;
+    }
+    
+    public static String escape(String in) {
+        if( !StringUtils.hasText(in)) {
+            return in;
+        }
+        in = in.replace("'","###");
+        in = in.replace("\n","<br>");
+        in = in.replace(" ","_");
+        return in;
     }
     
 }

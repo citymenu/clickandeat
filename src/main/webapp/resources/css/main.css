@@ -33,6 +33,19 @@ input {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
 }
 
+select {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:12px;
+}
+
+table {
+    border:0;
+    padding:0;
+    margin:0;
+    border-collapse:collapse;
+
+}
+
 h1, h2, h3, h4, h5, h6 {
     color: #333333;
     font-family: myriad-pro-semi-condensed,'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
@@ -64,13 +77,13 @@ ol, ul {
 }
 
 a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #50A3E2;
+    background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-weight: 700;
     font-size: 12px;
-    padding: 0 10px 0 10px;
+    padding: 0 6px 0 6px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -79,7 +92,7 @@ a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
 }
 
 a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #247FCC;
+    background-color: #2c8023;
 }
 
 .unselectable {

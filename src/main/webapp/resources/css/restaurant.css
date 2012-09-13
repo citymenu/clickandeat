@@ -3,15 +3,25 @@
 .restaurant-details-wrapper {
     padding: 0px 10px 40px 10px;
     margin-bottom: 10px;
+    border-bottom: 1px dashed #AAAAAA;
 }
 
 .restaurant-details-wrapper h2 {
     color: #333333;
-    font-family: "myriad-pro-semi-condensed",impact;
+    font-family: "ff-tisa-web-pro",impact;
     font-size: 26px;
     font-style: normal;
     letter-spacing: -0.01em;
-    margin-bottom: 6px;
+    margin-bottom: 15px;
+}
+
+.restaurant-description {
+    color: #333333;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    font-style: italic;
+    letter-spacing: -0.01em;
+    width: 400px;
 }
 
 .restaurant-details {
@@ -26,7 +36,8 @@
 }
 
 .menu-wrapper {
-    padding: 0px 10px 10px 10px;
+    padding: 0px 10px 20px 10px;
+    border-bottom: 1px dashed #AAAAAA;
 }
 
 .menu-category-wrapper {
@@ -44,7 +55,7 @@
     color:#FFFFFF;
     text-shadow: 0 1px #EEEEEE;
     margin-bottom: 6px;
-    padding-top: 10px;
+    padding-top: 6px;
 }
 
 .menu-category-summary {
@@ -60,29 +71,13 @@
 }
 
 .menu-item-wrapper {
-    margin-top: 8px;
-    padding-bottom: 8px;
+    margin-top: 6px;
+    padding-bottom: 6px;
     overflow: hidden;
     border-bottom: 1px dashed #EEEEEE;
 }
 
-menu-item-main-wrapper {
-    clear:both;
-    vertical-align: baseline;
-}
-
-.menu-item-title-wrapper {
-    float: left;
-    margin-right: 20px;
-    width: 580px;
-}
-
-.menu-item-cost-wrapper {
-    width: 100px;
-    float:left;
-}
-
-.menu-item-title-wrapper h3 {
+h3.menu-item-title {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
     line-height: 16px;
@@ -92,7 +87,7 @@ menu-item-main-wrapper {
 }
 
 .menu-item-subtitle {
-    color: #AA0000;
+    color: #AA3333;
     font-size: 12px;
     line-height: 16px;
     letter-spacing: -0.01em;
@@ -107,17 +102,22 @@ menu-item-main-wrapper {
     line-height: 16px;
     color: #444444;
     font-weight: 700;
-    padding-right: 5px;
+    padding-right: 6px;
 }
 
 .menu-item-action {
+    padding-left:2px;
 }
 
 .menu-item-description {
     clear: both;
     color: #666666;
     font-size: 12px;
-    line-height: 16px;
+    line-height: 14px;
     letter-spacing: -0.01em;
     font-style: italic;
+}
+
+td.spacer {
+    padding-bottom:10px;
 }

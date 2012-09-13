@@ -89,6 +89,10 @@ public class MenuItem {
         return null;
     }
 
+    public int getMenuItemSubTypeCount() {
+        return menuItemSubTypes.size();
+    }
+    
 
     public String getType() {
         return type;

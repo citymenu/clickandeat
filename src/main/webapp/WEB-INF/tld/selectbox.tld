@@ -1,0 +1,20 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Creates a select field with numeric values</short-name>
+    <tag>
+        <name>selectbox</name>
+        <tag-class>com.ezar.clickandeat.web.tags.SelectBoxTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>size</name>
+            <required>false</required>
+            <type>int</type>
+        </attribute>
+    </tag>
+</taglib>

@@ -32,26 +32,25 @@
 
 </script>
 
-<div id="ordercontainer">
-    <div id="order">
-        <div class='orderheader'><spring:message code="label.your-order"/>:</div>
-        <div class="orderdelivery"></div>
-        <div class="orderitems">
-            <table width="100%" class="ordertable">
-                <thead>
-                    <tr>
-                        <th width="65%" align="left" class="ordertableheader ordertableseparator"><spring:message code="label.item"/></th>
-                        <th width="25%" align="center" class="ordertableheader ordertableseparator"><spring:message code="label.price"/></th>
-                        <th width="10%" class="ordertableheader"></th>
-                    </tr>
-                </thead>
-                <tbody class="orderbody">
+<div class="order-wrapper">
+    <div class='orderheader'><spring:message code="label.your-order"/>:</div>
+    <div class="order-delivery-wrapper"></div>
+    <div id="deliverycheck"></div>
+    <div class="order-items-wrapper">
+        <div class="order-item-wrapper-header">
+            <table width="258">
+                <tr>
+                    <td width="168" align="left"><h3 class="order-table"><spring:message code="label.item"/></h3></td>
+                    <td width="60" align="center"><h3 class="order-table"><spring:message code="label.price"/></h3></td>
+                    <td width="30"></td>
+                </tr>
+                <tbody>
                 </tbody>
             </table>
         </div>
-        <div id="ordertotal"><spring:message code="label.order-total"/>:</div>
-        <div id="freeitems"></div>
-        <div class="deliverycheck"></div>
-        <div id="checkoutcontainer"></div>
+        <div id="order-item-contents"></div>
     </div>
+    <div id="freeitems"></div>
+    <div id="ordertotal"><spring:message code="label.order-total"/>:</div>
+    <div id="checkoutcontainer"></div>
 </div>

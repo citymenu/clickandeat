@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.util.NumberUtil;
+import com.ezar.clickandeat.util.StringUtil;
 
 import java.text.DecimalFormat;
 
@@ -12,6 +13,10 @@ public class MenuItemTypeCost {
 
     private Double additionalItemCost;
 
+    public String getEscapedType() {
+        return StringUtil.escape(type);
+    }
+    
     public String getType() {
         return type;
     }

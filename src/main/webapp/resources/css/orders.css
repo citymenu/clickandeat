@@ -1,0 +1,112 @@
+@charset "utf-8";
+
+.order-wrapper {
+    margin-right:10px;
+}
+
+.orderheader {
+    text-align:left;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    color:#AA0000;
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.order-delivery-wrapper {
+    text-align:center;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    margin: 6px 0 6px 0;
+}
+
+h3.order-table {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    color: #444444;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+.order-items-wrapper {
+    border: 1px solid #CCCCCC;
+    background-color:#FCFCFC;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.order-item-wrapper, .order-item-wrapper-header {
+    padding-bottom: 2px;
+    overflow: hidden;
+    border-bottom: 1px dashed #EEEEEE;
+}
+
+.order-item-wrapper {
+    margin-top: 6px;
+}
+
+.order-item-wrapper td {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+.order-remove-item {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-left:5px;
+    background: url(../images/icons-shadowless/cross-script.png) -1px 1px no-repeat;
+    cursor:pointer;
+}
+
+.order-cash-discount {
+    color:#990000;
+}
+
+#ordertotal {
+    text-align:center;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    color:#444444;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    margin: 20px 0 20px 0;
+    padding: 10px 0 15px 0;
+    border-bottom: 1px dashed #AAAAAA;
+    border-top: 1px dashed #AAAAAA;
+}
+
+.order-totalcost {
+    padding-left: 10px;
+}
+
+.order-free-item-wrapper {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    line-height: 16px;
+    margin: 0;
+    padding: 0 10px 0 10px;
+}
+
+.order-free-item-title {
+    font-weight:bold;
+    margin-bottom: 6px;
+}
+
+.delivery-warning-wrapper {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    border: 1px solid #b64242;
+    background-color: #fffebe;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 10px;
+    padding: 10px;
+}

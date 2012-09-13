@@ -54,13 +54,13 @@ function doBuildOrder(order,config) {
     // Reset all previous order details
     $('.ordertitle').remove();
     $('.orderdeliverychoice').remove();
-    $('.orderitemrow').remove();
+    $('.order-item-wrapper').remove();
     $('.discountrow').remove();
     $('.deliverychargerow').remove();
-    $('.totalcost').remove();
-    $('.freeitem').remove();
+    $('.order-totalcost').remove();
+    $('.order-free-item-wrapper').remove();
     $('#checkout').remove();
-    $('.deliverywarning').remove();
+    $('.delivery-warning-wrapper').remove();
 
     // Add the delivery options to the order if at least one item is added and it is enabled
     if(config.showDeliveryOptions) {
@@ -69,7 +69,7 @@ function doBuildOrder(order,config) {
             var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
             var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> ' + labels['delivery'] + '</span>').format(deliveryChecked);
             var collectionRadio = ('<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> ' + labels['collection'] + '</span>').format(collectionChecked);
-            $('.orderdelivery').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
+            $('.order-delivery-wrapper').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
 
             // Event handlers to update delivery type
             $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY',order.restaurantId);});
@@ -84,14 +84,13 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var closeImg = '<img src=\'' + resources + '/images/icons-shadowless/cross-script.png\' title=\'' + labels['remove-from-order'] + '\'/>';
-                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{1}{2}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'><a onclick=\"removeFromOrder(\'{3}\')\">{4}</a></td></tr>'
-                    .format(buildDisplay(orderItem),ccy,orderItem.formattedCost,orderItem.orderItemId,closeImg);
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\' align=\'left\'><a onclick=\"removeFromOrder(\'{3}\')\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
+                    .format(buildDisplay(orderItem),ccy,orderItem.formattedCost,orderItem.orderItemId);
             } else {
-                var row = '<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{1}{2}</div></td><td width=\'10%\' align=\'center\' class=\'orderitem\'></td></tr>'
+                var row = '<div class=\'order-item-wrapper\'><table width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>{1}{2}</td><td width=\'30\'></td></tr>'
                     .format(buildDisplay(orderItem),ccy,orderItem.formattedCost);
             }
-            $('.orderbody').prepend(row);
+            $('#order-item-contents').prepend(row);
         };
 
         // Add details of any free item discounts
@@ -108,7 +107,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var div = ('<div class=\'freeitem\'><div class=\'freeitemtitle\'>{0}:</div><div class=\'freeitemselect\'>{1}</div></div>').format(orderDiscount.title,selectBox);
+                    var div = ('<div class=\'order-free-item-wrapper\'><div class=\'order-free-item-title\'>{0}:</div><div class=\'order-free-item-select\'>{1}</div></div>').format(orderDiscount.title,selectBox);
                     $('#freeitems').append(div);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -117,8 +116,8 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<tr class=\'orderitemrow\' valign=\'top\'><td width=\'65%\' class=\'orderitem ordertableseparator\'>{0} ({1})</td><td width=\'25%\' align=\'right\' class=\'orderitem ordertableseparator\'><div class=\'orderitemprice\'>{2}{3}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
-                        $('.orderbody').append(row);
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'258\'><trvalign=\'top\'><td width=\'168\'>{0} ({1})</td><td width=\'55\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
+                        $('#order-item-contents').append(row);
                     }
                 }
             }
@@ -127,27 +126,27 @@ function doBuildOrder(order,config) {
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<tr class=\'discountrow\' valign=\'top\'><td width=\'65%\' class=\'discount ordertableseparator\'>{0}</td><td width=\'25%\' align=\'right\' class=\'discount discounttotal ordertableseparator\'><div class=\'orderitemprice\'>-{1}{2}</div></td><td width=\'10%\'></td></tr>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
-                $('.orderbody').append(row);
+                var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'258\'><tr valign=\'top\'><td width=\'168\'>{0}</td><td width=\'55\' align=\'right\'>-{1}{2}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                $('#order-item-contents').append(row);
             }
         });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<tr class=\'deliverychargerow\' valign=\'top\'><td width=\'65%\' class=\'deliverycharge ordertableseparator\'>' + labels['delivery-charge'] + '</td><td width=\'25%\' align=\'right\' class=\'deliverycharge ordertableseparator\'><div class=\'orderitemprice\'>{0}{1}</div></td><td width=\'10%\'></td></tr>').format(ccy,order.formattedDeliveryCost);
-            $('.orderbody').append(row);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'258\'><tr valign=\'top\'><td width=\'168\'>' + labels['delivery-charge'] + '</td><td width=\'55\' align=\'right\'>{0}{1}</td><td width=\'30\'></td></tr>').format(ccy,order.formattedDeliveryCost);
+            $('#order-item-contents').append(row);
         }
 
         // Build total item cost
-        $('#ordertotal').append('<span class=\'totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
+        $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
 
         // Show warning if item cost is below minimum for delivery
         if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
-            var warning = ('<div class=\'deliverywarning\'>' + labels['delivery-warning'] + '</div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
-            $('.deliverycheck').append(warning);
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + labels['delivery-warning'] + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
+            $('#deliverycheck').append(warning);
         } else {
             // Show checkout button if enabled
-            if(config.enableCheckoutButton) {
+            if(order.orderItems.length > 0 && config.enableCheckoutButton) {
                 $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
                 $('.checkoutbutton').button();
                 $('.checkoutbutton').click(function(){
@@ -156,7 +155,7 @@ function doBuildOrder(order,config) {
             }
         }
     } else {
-        $('#ordertotal').append('<span class=\'totalitemcost\'>' + ccy + ' 0.00</span>');
+        $('#ordertotal').append('<span class=\'order-totalcost\'>' + ccy + ' 0.00</span>');
     }
 }
 

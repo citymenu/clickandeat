@@ -6,6 +6,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="/WEB-INF/tld/escape.tld" prefix="util" %>
+<%@ taglib uri="/WEB-INF/tld/selectbox.tld" prefix="select" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
