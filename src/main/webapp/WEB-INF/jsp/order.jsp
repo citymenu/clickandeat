@@ -11,6 +11,8 @@
     var labels = ({
         'delivery': "<spring:message code="label.delivery"/>",
         'collection': "<spring:message code="label.collection"/>",
+        'order-for-delivery': "<spring:message code="label.order-for-delivery"/>",
+        'order-for-collection': "<spring:message code="label.order-for-collection"/>",
         'delivery-charge': "<spring:message code="label.delivery-charge"/>",
         'collection-discount': "<spring:message code="label.collection-discount"/>",
         'delivery-warning': "<spring:message code="label.delivery-warning"/>",
@@ -27,7 +29,15 @@
         'special-offer-choices': "<spring:message code="label.special-offer-choices"/>",
         'additional-item-limit': "<spring:message code="label.additional-item-limit"/>",
         'done': "<spring:message code="label.done"/>",
-        'cancel': "<spring:message code="label.cancel"/>"
+        'today': "<spring:message code="label.today"/>",
+        'asap': "<spring:message code="label.asap"/>",
+        'day-of-week-1': "<spring:message code="label.day-of-week-1"/>",
+        'day-of-week-2': "<spring:message code="label.day-of-week-2"/>",
+        'day-of-week-3': "<spring:message code="label.day-of-week-3"/>",
+        'day-of-week-4': "<spring:message code="label.day-of-week-4"/>",
+        'day-of-week-5': "<spring:message code="label.day-of-week-5"/>",
+        'day-of-week-6': "<spring:message code="label.day-of-week-6"/>",
+        'day-of-week-7': "<spring:message code="label.day-of-week-7"/>"
     });
 
 </script>

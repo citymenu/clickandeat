@@ -22,10 +22,23 @@
 }
 
 .order-delivery-wrapper {
-    text-align:center;
+    text-align:left;
+    margin: 6px 0 6px 0;
+    padding: 6px 10px 6px 10px;
+}
+
+.delivery-title {
     font-family: "ff-tisa-web-pro",impact;
     font-size: 14px;
-    margin: 6px 0 6px 0;
+    color:#444444;
+    font-weight:700;
+    margin-bottom: 4px;
+}
+
+.delivery-header {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    color:#444444;
 }
 
 h3.order-table {
@@ -113,8 +126,34 @@ h3.order-table {
     background-color: #fffece;
     font-size: 12px;
     line-height: 16px;
-    margin-top: 10px;
-    padding: 10px;
+    margin-top: 6px;
+    padding: 6px 10px 6px 10px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.delivery-options-wrapper {
+    text-align:left;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    margin: 0 0 6px 0;
+}
+
+a.order-button, a.order-button:active, a.order-button:hover {
+    background-color: #50A3E2;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0 6px 0 6px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.order-button:active, a.order-button:hover {
+    background-color: #247FCC;
 }

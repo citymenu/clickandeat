@@ -76,25 +76,6 @@ ol, ul {
     padding-right: 0;
 }
 
-a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #50a747;
-    border: 1px solid #333333;
-    color: #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 0 6px 0 6px;
-    text-align: center;
-    vertical-align: baseline;
-    text-decoration: none;
-    text-shadow: 0 1px #333333;
-    cursor: pointer;
-}
-
-a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #2c8023;
-}
-
 .unselectable {
     -webkit-touch-callout: none;
     -webkit-user-select: none;

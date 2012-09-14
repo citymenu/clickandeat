@@ -33,9 +33,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class OrderController implements InitializingBean {
@@ -351,6 +349,80 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/order/deliveryEdit.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> buildDeliveryEdit(@RequestParam(value = "orderId") String orderId) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Building delivery options for orderId: " + orderId);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            Restaurant restaurant = order.getRestaurant();
+
+            // Get opening times for today and the next three days
+            DateTime now = new DateTime();
+            List<Integer> days = new ArrayList<Integer>();
+            List<List<LocalTime>> deliveryTimes = new ArrayList<List<LocalTime>>();
+            List<List<LocalTime>> collectionTimes = new ArrayList<List<LocalTime>>();
+
+            // Get the remaining options for today first
+            days.add(now.getDayOfWeek());
+            deliveryTimes.add(getTimeOptions(now, restaurant.getDeliveryClosingTime(now)));
+            collectionTimes.add(getTimeOptions(now, restaurant.getCollectionClosingTime(now)));
+
+            // Now get the rest of the options for the remaining times
+            for( int i = 0; i < 3; i++ ) {
+                now = now.plusDays(1);
+                DateTime[] openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
+                deliveryTimes.add(getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3]));
+                collectionTimes.add(getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1]));
+            }
+            
+            // Add the time options to the model
+            model.put("days", days);
+            model.put("deliveryTimes", deliveryTimes);
+            model.put("collectionTimes", collectionTimes);
+            model.put("success",true);
+            
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    /**
+     * @param from
+     * @param to
+     * @return
+     */
+    
+    private List<LocalTime> getTimeOptions(DateTime from, DateTime to) {
+        List<LocalTime> times = new ArrayList<LocalTime>();
+        if( from == null || to == null ) {
+            return times;
+        }
+        int minuteInterval = from.getMinuteOfHour() % 15;
+        from = from.plusMinutes(15 - minuteInterval);
+        while(!from.isAfter(to)) {
+            times.add(from.toLocalTime());
+            from = from.plusMinutes(15);
+        }
+        return times;
+    }
+
+
+
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/order/updateDeliveryType.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "deliveryType") String deliveryType,
                                                           @RequestParam(value = "restaurantId") String restaurantId) throws Exception {
@@ -453,7 +525,7 @@ public class OrderController implements InitializingBean {
         return order;
     }
 
-
+    
     /**
      * @param model
      * @return

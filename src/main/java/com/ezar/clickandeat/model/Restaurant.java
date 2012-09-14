@@ -207,7 +207,7 @@ public class Restaurant extends PersistentObject {
      * @return
      */
 
-    private DateTime[] getOpeningAndClosingTimes(DateTime now) {
+    public DateTime[] getOpeningAndClosingTimes(DateTime now) {
 
         Assert.notNull(now, "now must not be null");
 
@@ -360,7 +360,7 @@ public class Restaurant extends PersistentObject {
     public int getSpecialOfferCount() {
         return specialOffers.size();
     }
-
+    
     /**
      * @param specialOfferId
      * @return

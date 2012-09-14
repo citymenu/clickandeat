@@ -51,11 +51,45 @@
                 <div class="restaurant-details">
                     <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
                 </div>
+                <c:if test="${restaurant.deliveryOptions.deliveryTimeMinutes != null}">
                 <div class="restaurant-details">
-                    <span class="restaurant-details-title">Today's opening times: </span>${restaurant.todaysOpeningTimes}</span>
+                    Order delivery time: <span class="restaurant-details-title">${restaurant.deliveryOptions.formattedDeliveryTimeMinutes} minutes</span>
                 </div>
+                </c:if>
             </div>
             <div class="menu-wrapper">
+                <c:if test="${restaurant.specialOfferCount > 0}">
+                <div class="menu-category-wrapper">
+                    <h2><spring:message code="label.special-offers"/></h2>
+                    <div class="menu-category-summary"></div>
+                    <c:forEach var="specialOffer" items="${restaurant.specialOffers}">
+                    <div class="menu-item-wrapper">
+                        <table width="680">
+                            <tr valign="top">
+                                <td width="510">
+                                    <h3 class="menu-item-title"><util:escape value="${specialOffer.title}"/></h3>
+                                </td>
+                                <td width="170" align="right">
+                                    <span class="menu-item-cost"><spring:message code="label.currency"/>${specialOffer.formattedCost}</span>
+                                    <select:selectbox id="select_${specialOffer.specialOfferId}"/>
+                                    <span class="menu-item-action">
+                                        <a onclick="addSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray})" class="menuitem-button add-button unselectable">A&ntilde;adir</a>
+                                    </span>
+                                </td>
+                            </tr>
+                            <c:if test="${specialOffer.description != null }">
+                            <tr valign="top">
+                                <td width="510">
+                                    <div class="menu-item-description"><util:escape value="${specialOffer.description}" escapeNewLines="true"/></div>
+                                </td>
+                                <td width="170"></td>
+                            </tr>
+                            </c:if>
+                        </table>
+                        </div>
+                    </c:forEach>
+                </div>
+                </c:if>
                 <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
                 <div class="menu-category-wrapper">
                     <h2><span class="${menuCategory.iconClass}"><util:escape value="${menuCategory.name}"/></span></h2>

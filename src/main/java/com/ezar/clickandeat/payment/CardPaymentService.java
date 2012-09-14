@@ -91,7 +91,7 @@ public class CardPaymentService {
         Element root = document.getRootElement();
         List<Element> children = root.getChildren();
         children.add(createElement("DS_Version","1.0"));
-        children.add(createElement("DS_MERCHANT_AMOUNT",NumberUtil.formatForCardPayment(order.getTotalCost())));
+        children.add(createElement("DS_MERCHANT_AMOUNT",NumberUtil.formatStrict(order.getTotalCost())));
         children.add(createElement("DS_MERCHANT_CURRENCY",currencyCode));
         children.add(createElement("DS_MERCHANT_ORDER",order.getOrderId()));
         children.add(createElement("DS_MERCHANT_MERCHANTCODE",merchantCode));
@@ -127,7 +127,7 @@ public class CardPaymentService {
 
     private String buildSignature(Order order) throws Exception {
         StringBuilder sb = new StringBuilder();
-        sb.append(NumberUtil.formatForCardPayment(order.getTotalCost()));
+        sb.append(NumberUtil.formatStrict(order.getTotalCost()));
         sb.append(order.getOrderId());
         sb.append(merchantCode);
         sb.append(currencyCode);

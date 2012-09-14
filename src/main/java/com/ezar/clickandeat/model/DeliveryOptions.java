@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +41,10 @@ public class DeliveryOptions {
         this.deliveryTimeMinutes = deliveryTimeMinutes;
     }
 
+    public String getFormattedDeliveryTimeMinutes() {
+        return NumberUtil.formatStrict(deliveryTimeMinutes);
+    }
+    
     public Double getMinimumOrderForFreeDelivery() {
         return minimumOrderForFreeDelivery;
     }

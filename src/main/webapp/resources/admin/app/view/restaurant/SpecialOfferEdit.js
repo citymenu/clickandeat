@@ -1,7 +1,7 @@
 Ext.define('AD.view.restaurant.SpecialOfferEdit' ,{
     extend:'Ext.form.Panel',
     alias:'widget.restaurantspecialofferedit',
-    title:'Edit Discount',
+    title:'Edit Special Offer',
 
     bodyPadding: 15,
     layout:'anchor',

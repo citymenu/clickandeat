@@ -181,7 +181,7 @@ function buildDisplay(orderItem) {
         display += ' (' + unescapeQuotes(orderItem.menuItemSubTypeName) + ')';
     }
     orderItem.additionalItems.forEach(function(additionalItem){
-        display += ('<div class=\'additionalitem\'>-{0}</div>').format(unescapeQuotes(additionalItem));
+        display += ('<div class=\'additionalitem\'>&nbsp;&nbsp;- {0}</div>').format(unescapeQuotes(additionalItem));
     });
     return ('<div>{0}</div>').format(display);
 }
@@ -258,7 +258,7 @@ function buildDeliveryEdit(days, deliveryTimes, collectionTimes) {
     $('.delivery-wrapper').remove();
 
     // Add the new options in the same area
-    $('.order-delivery-wrapper').append(deliveryContainer);
+    $('.order-delivery-wrapper').append(('<div class=\'delivery-wrapper\'>{0}</div>').format(deliveryContainer));
 
 }
 

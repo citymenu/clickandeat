@@ -6,17 +6,17 @@ import java.text.NumberFormat;
 public class NumberUtil {
 
     private static final NumberFormat formatter;
-    private static final NumberFormat paymentFormatter;
+    private static final NumberFormat strictFormatter;
 
     static {
         formatter = DecimalFormat.getInstance();
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
-        paymentFormatter = DecimalFormat.getInstance();
-        paymentFormatter.setMinimumFractionDigits(0);
-        paymentFormatter.setMaximumFractionDigits(0);
-        paymentFormatter.setGroupingUsed(false);
+        strictFormatter = DecimalFormat.getInstance();
+        strictFormatter.setMinimumFractionDigits(0);
+        strictFormatter.setMaximumFractionDigits(0);
+        strictFormatter.setGroupingUsed(false);
     }
 
 
@@ -29,8 +29,8 @@ public class NumberUtil {
         return in == null? "": formatter.format(in);
     }
 
-    public static String formatForCardPayment(Double in) {
-        return in == null? "": paymentFormatter.format(in * 100);
+    public static String formatStrict(Double in) {
+        return in == null? "": strictFormatter.format(in);
     }
     
 }

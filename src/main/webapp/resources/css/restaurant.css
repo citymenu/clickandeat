@@ -1,9 +1,8 @@
 @charset "utf-8";
 
 .restaurant-details-wrapper {
-    padding: 0px 10px 40px 10px;
+    padding: 0px 10px 30px 10px;
     margin-bottom: 10px;
-    border-bottom: 1px dashed #AAAAAA;
 }
 
 .restaurant-details-wrapper h2 {
@@ -36,15 +35,14 @@
 }
 
 .menu-wrapper {
-    padding: 0px 10px 20px 10px;
-    border-bottom: 1px dashed #AAAAAA;
+    padding: 0px 10px 0px 10px;
 }
 
 .menu-category-wrapper {
+    padding-top:15px;
     padding-bottom: 20px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #DDDDDD;
-
+    border-top: 1px solid #DDDDDD;
+    overflow:hidden;
 }
 
 .menu-category-wrapper h2 {
@@ -120,4 +118,23 @@ h3.menu-item-title {
 
 td.spacer {
     padding-bottom:10px;
+}
+
+a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
+    background-color: #50a747;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 0 6px 0 6px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.menuitem-button:active, a.menuitem-button:hover {
+    background-color: #2c8023;
 }
