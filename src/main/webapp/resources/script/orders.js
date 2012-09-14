@@ -53,7 +53,7 @@ function doBuildOrder(order,config) {
 
     // Reset all previous order details
     $('.ordertitle').remove();
-    $('.orderdeliverychoice').remove();
+    $('.delivery-wrapper').remove();
     $('.order-item-wrapper').remove();
     $('.discountrow').remove();
     $('.deliverychargerow').remove();
@@ -64,16 +64,28 @@ function doBuildOrder(order,config) {
 
     // Add the delivery options to the order if at least one item is added and it is enabled
     if(config.showDeliveryOptions) {
-        if( order && order.orderItems.length > 0 ) {
-            var deliveryChecked = order? (order.deliveryType == 'DELIVERY'? ' checked': ''): ' checked';
-            var collectionChecked = order? (order.deliveryType == 'COLLECTION'? ' checked': ''): '';
-            var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0}> ' + labels['delivery'] + '</span>').format(deliveryChecked);
-            var collectionRadio = ('<span class=\'collectionradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0}> ' + labels['collection'] + '</span>').format(collectionChecked);
-            $('.order-delivery-wrapper').append('<div class=\'orderdeliverychoice\'>{0}{1}</div>'.format(deliveryRadio,collectionRadio));
+        if( order ) {
+            var deliveryDay, deliveryTime, orderType;
+            if( order.deliveryType == 'DELIVERY') {
+                orderType = labels['order-for-delivery'];
+                if( !order.expectedDeliveryTime ) {
+                    deliveryDay = labels['today'];
+                    deliveryTime = labels['asap'];
+                }
+            } else {
+                orderType = labels['order-for-collection'];
+            }
 
-            // Event handlers to update delivery type
-            $('#radioDelivery').change(function(element){ updateDeliveryType('DELIVERY',order.restaurantId);});
-            $('#radioCollection').change(function(element){ updateDeliveryType('COLLECTION',order.restaurantId);});
+
+            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>Editar</a>' : '');
+            var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'170\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
+                .format(orderType,deliveryDay,deliveryTime,link);
+            $('.order-delivery-wrapper').append(deliveryContainer);
+            if( config.showDeliveryOptions ) {
+                $('#deliveryedit').click(function(){
+                    deliveryEdit();
+                });
+            }
         }
     }
 
@@ -189,6 +201,65 @@ function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additio
     restaurantCheck(restaurantId, function(){
         doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity);
     });
+}
+
+// Edit delivery options
+function deliveryEdit() {
+    $.post( ctx+'/order/deliveryEdit.ajax', { orderId: currentOrder.orderId },
+        function( data ) {
+            if( data.success ) {
+                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes);
+            } else {
+                alert(data.success);
+            }
+        }
+    );
+}
+
+// Build delivery edit form
+function buildDeliveryEdit(days, deliveryTimes, collectionTimes) {
+
+    // If deliverytimes and collection times are both empty, alert an error
+    var hasDeliveryTime = false;
+    deliveryTimes.forEach(function(deliveryTime){
+        if(deliveryTime.length > 0 ) {
+            hasDeliveryTime = true;
+        }
+    });
+
+    var hasCollectionTime = false;
+    collectionTimes.forEach(function(collectionTime){
+        if(collectionTime.length > 0 ) {
+            hasCollectionTime = true;
+        }
+    });
+
+    if( !hasDeliveryTime && !hasCollectionTime ) {
+        alert('Error, no opening times');
+        return;
+    }
+
+    // Initialize wrapper for delivery options
+    var deliveryContainer;
+
+    // Build delivery edit options if there are options for both delivery and collection
+    if( hasDeliveryTime && hasCollectionTime ) {
+        var isdelivery = currentOrder.deliveryType == 'DELIVERY';
+        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),labels['delivery']);
+        var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),labels['collection']);
+        deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
+    }
+    else {
+        var label = (hasDeliveryTime? labels['order-for-delivery']: labels['order-for-collection']);
+        deliveryContainer = ('<div class=\'delivery-options-wrapper\'><div class=\'delivery-title\'>{0}:</div></div>').format(label);
+    }
+
+    // Remove the existing delivery wrapper
+    $('.delivery-wrapper').remove();
+
+    // Add the new options in the same area
+    $('.order-delivery-wrapper').append(deliveryContainer);
+
 }
 
 // Confirm if order should proceed
