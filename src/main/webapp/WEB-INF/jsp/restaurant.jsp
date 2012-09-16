@@ -201,10 +201,10 @@
             <br/>
             <br/>
             <br/>
-            <div style="text-align:center; padding: 10px;">** Will include a table of all of the opening times for the restaurant here **</div>
+            <div style="text-align:center; padding: 10px;">** Could include a table of all of the opening times for the restaurant here **</div>
             <br/>
             <br/>
-            <div style="text-align:center;">** Will include google maps link to restaurant location like below here: **</div>
+            <div style="text-align:center;">** Could include google maps link to restaurant location like below here: **</div>
             <div style="text-align:center; padding: 10px;">
                 <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=15&size=200x135&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
             </div>
