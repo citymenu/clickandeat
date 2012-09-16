@@ -56,3 +56,33 @@
     border-bottom-left-radius: 5px;
     height:28px;
 }
+
+.navigation-links {
+    padding-top: 4px;
+    padding-left: 25px;
+    clear:both;
+}
+
+ul, ol {
+    list-style:none outside none;
+}
+
+li {
+    color: #CCCCCC;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    display:inline;
+    float:left;
+    padding-right:30px;
+}
+
+.navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {
+    text-decoration:none;
+    color:#FFFFFF;
+    cursor:pointer;
+}
+
+.navigation-links a:active, .navigation-links a:hover {
+   color:#DD0033;
+}

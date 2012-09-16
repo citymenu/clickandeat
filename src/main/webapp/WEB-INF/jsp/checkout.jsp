@@ -2,22 +2,22 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <title><spring:message code="label.checkout"/></title>
-    <script type="text/javascript" src="${resources}/script/tools.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/checkout.js"></script>
+    <title><spring:message code="label.checkout"/></title>
+    <script type="text/javascript">
+        var deliveryType='${deliveryType}';
+    </script>
 </head>
 
 <body>
 
-<script type="text/javascript">
-    var deliveryType='${deliveryType}';
-</script>
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
 
-<div id="maincontent">
-    <%@ include file="/WEB-INF/jsp/workflow.jsp" %>
-    <div id="contentbody">
-        <div id="checkoutbody">
+<div id="content">
+    <div class="content-wrapper">
+        <div class="content-left">
             <div id="contactdetails">
                 <div class="checkoutheader"><spring:message code="label.your-details"/></div>
                 <div>
@@ -88,7 +88,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="collectiontime">
                     <div class="checkoutheader"><spring:message code="label.collection-time"/></div>
                     <div>
@@ -100,22 +99,15 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
-            <div>
-                <input type="button" id="updateorderbutton" value="<spring:message code="label.update-order"/>"/>
-                <input type="button" id="proceedbutton" value="<spring:message code="label.proceed"/>"/>
-            </div>
-
+        </div>
+        <div class="content-right">
+            <%@ include file="/WEB-INF/jsp/order.jsp" %>
         </div>
     </div>
 </div>
 
-<div id="rightbar">
-    <%@ include file="/WEB-INF/jsp/order.jsp" %>
-</div>
-
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 
 </body>
 </html>

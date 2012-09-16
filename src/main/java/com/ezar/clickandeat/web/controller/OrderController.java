@@ -214,11 +214,14 @@ public class OrderController implements InitializingBean {
                     order.getOrderDiscounts().clear();
                 }
             }
-            
+
             // Add new order item to order and update
             order.addOrderItem(orderItem);
             order = orderRepository.saveOrder(order);
 
+            // Update can checkout status of order
+            session.setAttribute("cancheckout", order.getCanCheckout());
+            
             // Return success
             model.put("success",true);
             model.put("order",order);
@@ -333,6 +336,9 @@ public class OrderController implements InitializingBean {
                 order.addOrderItem(orderItem);
                 order = orderRepository.saveOrder(order);
 
+                // Update can checkout status of order
+                session.setAttribute("cancheckout", order.getCanCheckout());
+
                 // Return success
                 model.put("success",true);
                 model.put("applicable",true);
@@ -374,6 +380,10 @@ public class OrderController implements InitializingBean {
                     order = orderRepository.saveOrder(order);
                 }
             }
+
+            // Update can checkout status of order
+            session.setAttribute("cancheckout", order.getCanCheckout());
+
             model.put("success",true);
             model.put("order",order);
         }
@@ -466,38 +476,6 @@ public class OrderController implements InitializingBean {
     }
 
 
-    /**
-     * @param from
-     * @param to
-     * @return
-     */
-    
-    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to) {
-        List<LocalTime> first = new ArrayList<LocalTime>();
-        List<LocalTime> second = new ArrayList<LocalTime>();
-        if( from == null || to == null ) {
-            return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
-        }
-        LocalTime startTime = from.toLocalTime();
-        int minuteInterval = from.getMinuteOfHour() % 15;
-        from = from.plusMinutes(15 - minuteInterval);
-        while(!from.isAfter(to)) {
-            LocalTime nextTime = from.toLocalTime();
-            if( !nextTime.isAfter(startTime)) {
-                second.add(nextTime);
-            }
-            else {
-                first.add(nextTime);
-            }
-            from = from.plusMinutes(15);
-        }
-        return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
-    }
-
-
-
-
-
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/order/updateOrderDelivery.ajax", method = RequestMethod.POST )
@@ -545,6 +523,10 @@ public class OrderController implements InitializingBean {
             order.updateCosts();
             order = orderRepository.saveOrder(order);
 
+            // Update can checkout status of order
+            HttpSession session = request.getSession(true);
+            session.setAttribute("cancheckout", order.getCanCheckout());
+
             // All worked ok
             model.put("success",true);
             model.put("order",order);
@@ -589,6 +571,10 @@ public class OrderController implements InitializingBean {
                     }
                 }
             }
+
+            // Update can checkout status of order
+            session.setAttribute("cancheckout", order.getCanCheckout());
+
             model.put("success",true);
             model.put("order",order);
         }
@@ -600,7 +586,35 @@ public class OrderController implements InitializingBean {
         return buildOrderResponse(model);
     }
 
-    
+
+    /**
+     * @param from
+     * @param to
+     * @return
+     */
+
+    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to) {
+        List<LocalTime> first = new ArrayList<LocalTime>();
+        List<LocalTime> second = new ArrayList<LocalTime>();
+        if( from == null || to == null ) {
+            return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
+        }
+        LocalTime startTime = from.toLocalTime();
+        int minuteInterval = from.getMinuteOfHour() % 15;
+        from = from.plusMinutes(15 - minuteInterval);
+        while(!from.isAfter(to)) {
+            LocalTime nextTime = from.toLocalTime();
+            if( !nextTime.isAfter(startTime)) {
+                second.add(nextTime);
+            }
+            else {
+                first.add(nextTime);
+            }
+            from = from.plusMinutes(15);
+        }
+        return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
+    }
+
 
     /**
      * @param session
@@ -619,14 +633,14 @@ public class OrderController implements InitializingBean {
         return order;
     }
 
-    
+
     /**
      * @param model
      * @return
      * @throws Exception
      */
 
-    private ResponseEntity<byte[]> buildOrderResponse(Map<String,Object> model ) throws Exception {
+    private ResponseEntity<byte[]> buildOrderResponse(Map<String,Object> model) throws Exception {
         String json = serializer.deepSerialize(model);
         String escaped = jsonUtils.escapeQuotes(json);
         final HttpHeaders headers = new HttpHeaders();

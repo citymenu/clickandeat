@@ -102,6 +102,7 @@ public class PaymentController {
             request.getSession(true).setAttribute("completedorderid",order.getOrderId());
             request.getSession(true).removeAttribute("orderid");
             request.getSession(true).removeAttribute("restaurantid");
+            request.getSession(true).removeAttribute("cancheckout");
 
             // Set status to success
             model.put("success",true);

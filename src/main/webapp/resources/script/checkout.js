@@ -1,13 +1,5 @@
 $(document).ready(function(){
     displayDeliveryOptions(deliveryType);
-    $('#proceedbutton').button();
-    $('#proceedbutton').click(function(){
-        proceed();
-    });
-    $('#updateorderbutton').button();
-    $('#updateorderbutton').click(function(){
-        updateOrder();
-    });
 });
 
 // Override order config

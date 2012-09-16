@@ -5,13 +5,7 @@
     <decorator name="workflow" page="workflow.jsp">
         <pattern>**/workflow/*</pattern>
     </decorator>
-    <decorator name="home" page="home.jsp">
-        <pattern>/home*</pattern>
-    </decorator>
-    <decorator name="home" page="home.jsp">
-        <pattern>/restaurant*</pattern>
-    </decorator>
-	<decorator name="default" page="blank.jsp">
+	<decorator name="default" page="site.jsp">
 		<pattern>/*</pattern> 
   	</decorator>
 </decorators>

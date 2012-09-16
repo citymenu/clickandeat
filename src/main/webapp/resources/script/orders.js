@@ -184,9 +184,8 @@ function doBuildOrder(order,config) {
         } else {
             // Show checkout button if enabled
             if(order.canCheckout && config.enableCheckoutButton) {
-                $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
-                $('.checkoutbutton').button();
-                $('.checkoutbutton').click(function(){
+                $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(labels['checkout']));
+                $('#checkoutbutton').click(function(){
                     checkout();
                 });
             }

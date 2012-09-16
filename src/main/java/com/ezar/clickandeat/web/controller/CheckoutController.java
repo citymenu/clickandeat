@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,9 +60,16 @@ public class CheckoutController {
     public ModelAndView checkout(HttpServletRequest request) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
-
-        if( request.getSession(true).getAttribute("orderid") == null ) {
-            return new ModelAndView("redirect:/home.html",model);
+        HttpSession session = request.getSession(true);
+        boolean canCheckout = session.getAttribute("cancheckout") != null && (Boolean)session.getAttribute("cancheckout");
+        
+        if( !canCheckout ) {
+            if( session.getAttribute("restaurantid") != null ) {
+                return new ModelAndView("redirect:/restaurant.html?restaurantId=" + session.getAttribute("restaurantid"),model);
+            }
+            else {
+                return new ModelAndView("redirect:/home.html",model);
+            }
         }
         
         Order order = requestHelper.getOrderFromSession(request);
@@ -80,6 +88,9 @@ public class CheckoutController {
         // Confirm that the restaurant is open for delivery and collection
         model.put("currentlyOpenForDelivery", restaurant.isOpenForDelivery(now));
         model.put("currentlyOpenForCollection", restaurant.isOpenForCollection(now));
+
+        // Update can checkout status of order
+        session.setAttribute("cancheckout", order.getCanCheckout());
         
         return new ModelAndView("checkout",model);
     }
@@ -107,6 +118,10 @@ public class CheckoutController {
             order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
+
+            // Update can checkout status of order
+            HttpSession session = request.getSession(true);
+            session.setAttribute("cancheckout", order.getCanCheckout());
 
             // Mark order updated successfully
             model.put("success",true);
@@ -155,7 +170,7 @@ public class CheckoutController {
             order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
-            
+
             // Mark order updated successfully
             model.put("success",true);
         }
