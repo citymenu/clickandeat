@@ -231,6 +231,11 @@ public class Restaurant extends PersistentObject {
         // Iterate through open dates
         for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
 
+            // If the openingTime is not open at all, continue
+            if( !openingTime.isOpen()) {
+                continue;
+            }
+            
             int dayOfWeek = openingTime.getDayOfWeek();
             LocalTime collectionOpen = openingTime.getCollectionOpeningTime();
             LocalTime collectionClose = openingTime.getCollectionClosingTime();

@@ -1,11 +1,12 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,9 @@ public class RestaurantController {
     private RestaurantRepository repository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private CuisineProvider cuisineProvider;
 
     @Autowired
@@ -51,11 +56,23 @@ public class RestaurantController {
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Retrieving restaurant with id [" + restaurantId + "]");
         }
-
+        
         Map<String,Object> model = getModel();
+        HttpSession session = request.getSession(true);
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        request.getSession(true).setAttribute("restaurantid", restaurantId);
+        session.setAttribute("restaurantid", restaurantId);
+        
+        // If there is no order in the session, create one now
+        String orderId = (String)session.getAttribute("orderid");
+        if( orderId == null ) {
+            Order order = orderRepository.create();
+            order.setRestaurantId(restaurantId);
+            orderRepository.save(order);
+            session.setAttribute("orderid",order.getOrderId());
+            session.removeAttribute("completedorderid");
+        }
+
         return new ModelAndView("restaurant",model);
     }
 

@@ -84,3 +84,20 @@ ol, ul {
     -ms-user-select: none;
     user-select: none;
 }
+
+.warning-wrapper {
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    width: 300px;
+    padding: 10px 15px 10px 15px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.warning-content {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+}
+

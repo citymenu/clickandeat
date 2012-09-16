@@ -8,6 +8,7 @@ import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import flexjson.JSONSerializer;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -15,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
+import org.joda.time.MutableDateTime;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -232,6 +234,42 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/order/checkSpecialOffer.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> checkSpecialOfferAvailability(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Checking if special offer is applicable for order");
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
+            String orderId = (String)params.get("orderId");
+            String specialOfferId = (String)params.get("specialOfferId");
+
+            // Get the order object
+            Order order = orderRepository.findByOrderId(orderId);
+            Restaurant restaurant = order.getRestaurant();
+            SpecialOffer specialOffer = restaurant.getSpecialOffer(specialOfferId);
+
+            // Check if the special offer is applicable to this order
+            model.put("success",true);
+            model.put("applicable",specialOffer.isApplicableTo(order));
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/order/addSpecialOffer.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> addSpecialOfferToOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
@@ -270,8 +308,8 @@ public class OrderController implements InitializingBean {
 
             // Check if the special offer is applicable to this order
             if( !specialOffer.isApplicableTo(order)) {
-                model.put("success",false);
-                model.put("isApplicable",false);
+                model.put("success",true);
+                model.put("applicable",false);
             }
             else {
                 // Wipe existing order if a new restaurant is selected
@@ -297,6 +335,7 @@ public class OrderController implements InitializingBean {
 
                 // Return success
                 model.put("success",true);
+                model.put("applicable",true);
                 model.put("order",order);
             }
         }
@@ -363,28 +402,58 @@ public class OrderController implements InitializingBean {
             Restaurant restaurant = order.getRestaurant();
 
             // Get opening times for today and the next three days
-            DateTime now = new DateTime();
+            DateTime currentTime = new DateTime();
+            DateTime now = new DateTime(currentTime.getYear(), currentTime.getMonthOfYear(), currentTime.getDayOfMonth(), currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
+
+            // Store if the restaurant is open for collection and delivery
+            boolean isOpenForDelivery = restaurant.isOpenForDelivery(currentTime);
+            boolean isOpenForCollection = restaurant.isOpenForCollection(currentTime);
+            
             List<Integer> days = new ArrayList<Integer>();
             List<List<LocalTime>> deliveryTimes = new ArrayList<List<LocalTime>>();
             List<List<LocalTime>> collectionTimes = new ArrayList<List<LocalTime>>();
 
             // Get the remaining options for today first
             days.add(now.getDayOfWeek());
-            deliveryTimes.add(getTimeOptions(now, restaurant.getDeliveryClosingTime(now)));
-            collectionTimes.add(getTimeOptions(now, restaurant.getCollectionClosingTime(now)));
+            DateTime deliveryOpeningTime = restaurant.getDeliveryOpeningTime(now);
+            DateTime collectionOpeningTime = restaurant.getCollectionOpeningTime(now);
+            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime: now, restaurant.getDeliveryClosingTime(now));
+            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime: now, restaurant.getCollectionClosingTime(now));
+            deliveryTimes.add(deliveryTimesPair.first);
+            collectionTimes.add(collectionTimesPair.first);
 
             // Now get the rest of the options for the remaining times
             for( int i = 0; i < 3; i++ ) {
+                
+                // Add any times after midnight from the previous list
+                List<LocalTime> deliveryTimesList = new ArrayList<LocalTime>();
+                List<LocalTime> collectionTimesList = new ArrayList<LocalTime>();
+                deliveryTimesList.addAll(deliveryTimesPair.second);
+                collectionTimesList.addAll(collectionTimesPair.second);
+                                
+                // Now get the next set of opening and closing times
                 now = now.plusDays(1);
+                days.add(now.getDayOfWeek());
+
                 DateTime[] openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
-                deliveryTimes.add(getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3]));
-                collectionTimes.add(getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1]));
+                deliveryTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3]);
+                collectionTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1]);
+                
+                // Add this day's time options to the list
+                deliveryTimesList.addAll(deliveryTimesPair.first);
+                collectionTimesList.addAll(collectionTimesPair.first);
+                
+                // Add these lists to the return
+                deliveryTimes.add(deliveryTimesList);
+                collectionTimes.add(collectionTimesList);
             }
             
             // Add the time options to the model
             model.put("days", days);
             model.put("deliveryTimes", deliveryTimes);
             model.put("collectionTimes", collectionTimes);
+            model.put("openForDelivery", isOpenForDelivery);
+            model.put("openForCollection", isOpenForCollection);
             model.put("success",true);
             
         }
@@ -403,18 +472,26 @@ public class OrderController implements InitializingBean {
      * @return
      */
     
-    private List<LocalTime> getTimeOptions(DateTime from, DateTime to) {
-        List<LocalTime> times = new ArrayList<LocalTime>();
+    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to) {
+        List<LocalTime> first = new ArrayList<LocalTime>();
+        List<LocalTime> second = new ArrayList<LocalTime>();
         if( from == null || to == null ) {
-            return times;
+            return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
         }
+        LocalTime startTime = from.toLocalTime();
         int minuteInterval = from.getMinuteOfHour() % 15;
         from = from.plusMinutes(15 - minuteInterval);
         while(!from.isAfter(to)) {
-            times.add(from.toLocalTime());
+            LocalTime nextTime = from.toLocalTime();
+            if( !nextTime.isAfter(startTime)) {
+                second.add(nextTime);
+            }
+            else {
+                first.add(nextTime);
+            }
             from = from.plusMinutes(15);
         }
-        return times;
+        return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
     }
 
 
@@ -423,35 +500,52 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping(value="/order/updateDeliveryType.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> updateOrderDeliveryType(HttpServletRequest request, @RequestParam(value = "deliveryType") String deliveryType,
-                                                          @RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+    @RequestMapping(value="/order/updateOrderDelivery.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateOrderDelivery(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Updating order delivery type to: " + deliveryType);
+            LOGGER.debug("Updating order delivery type");
         }
         
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
             // Extract request parameters
-            HttpSession session = request.getSession(true);
-            String orderId = (String)session.getAttribute("orderid");
-            Order order = null;
-            if( orderId != null ) {
-                order = orderRepository.findByOrderId(orderId);
-                if( order != null ) {
-                    order.setDeliveryType(deliveryType);
-                    order.updateCosts();
-                    order = orderRepository.saveOrder(order);
+            Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
+            String orderId = (String)params.get("orderId");
+            String deliveryType = (String)params.get("deliveryType");
+            Integer dayOffset = Integer.valueOf((String)params.get("dayIndex"));
+            String time = (String)params.get("time");
+            
+            // Get the order and update the delivery type
+            Order order = orderRepository.findByOrderId(orderId);
+            order.setDeliveryType(deliveryType);
+            
+            // Clear existing expected delivery/collection times
+            order.setExpectedCollectionTime(null);
+            order.setExpectedDeliveryTime(null);
+
+            // If the selected time is 'ASAP' no need to do any processing
+            if( !"ASAP".equals(time)) {
+                DateTime now = new DateTime().plusDays(dayOffset);
+                MutableDateTime expectedDate = new MutableDateTime(now.getYear(),now.getMonthOfYear(),now.getDayOfMonth(),0,0,0,0);
+                Integer hour = Integer.valueOf(time.split(":")[0]);
+                Integer minute = Integer.valueOf(time.split(":")[1]);
+                expectedDate.setHourOfDay(hour);
+                expectedDate.setMinuteOfHour(minute);
+                if( Order.DELIVERY.equals(deliveryType)) {
+                    order.setExpectedDeliveryTime(expectedDate.toDateTime());
+                }
+                else {
+                    order.setExpectedCollectionTime(expectedDate.toDateTime());
                 }
             }
-            if( order == null ) {
-                order = buildAndRegister(session, restaurantId);
-                order.setDeliveryType(deliveryType);
-                order = orderRepository.saveOrder(order);
-            }
-            
+
+            // Update order costs and save
+            order.updateCosts();
+            order = orderRepository.saveOrder(order);
+
+            // All worked ok
             model.put("success",true);
             model.put("order",order);
         }

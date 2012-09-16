@@ -4,6 +4,16 @@ var minimumOrderForFreeDelivery;
 var allowDeliveryOrdersBelowMinimum;
 var deliveryCharge;
 
+// Global delivery variables
+var deliveryType;
+var days;
+var deliveryTimes;
+var collectionTimes;
+var deliveryDayOfWeek;
+var deliveryTimeOfDay;
+var openForDelivery;
+var openForCollection;
+
 $(document).ready(function(){
     if( orderid && orderid != '') {
         $.post( ctx+'/order/getOrder.ajax?mgn=' + (Math.random() * 99999999),
@@ -16,6 +26,14 @@ $(document).ready(function(){
             }
         );
     }
+});
+
+$(document).ajaxStart(function(){
+    $.fancybox.showLoading();
+});
+
+$(document).ajaxComplete(function(){
+    $.fancybox.hideLoading();
 });
 
 // Returns the config for the order, can be overridden
@@ -66,18 +84,22 @@ function doBuildOrder(order,config) {
     if(config.showDeliveryOptions) {
         if( order ) {
             var deliveryDay, deliveryTime, orderType;
-            if( order.deliveryType == 'DELIVERY') {
-                orderType = labels['order-for-delivery'];
-                if( !order.expectedDeliveryTime ) {
-                    deliveryDay = labels['today'];
-                    deliveryTime = labels['asap'];
-                }
+            var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
+            var orderType = (order.deliveryType == 'DELIVERY'? labels['order-for-delivery']: labels['order-for-collection']);
+            if( !expectedTime ) {
+                deliveryDayOfWeek = null;
+                deliveryTimeOfDay = null;
+                deliveryDay = labels['today'];
+                deliveryTime = labels['asap'];
             } else {
-                orderType = labels['order-for-collection'];
+                var time = new Date(expectedTime);
+                deliveryDayOfWeek = (time.getDay() == 0? 7: time.getDay());
+                deliveryTimeOfDay = (time.getHours() < 10? '0' + time.getHours(): time.getHours()) + ':' + (time.getMinutes() < 10? '0' + time.getMinutes(): time.getMinutes());
+                deliveryDay = (deliveryDayOfWeek == new Date().getDay()? labels['today']: labels['day-of-week-'+deliveryDayOfWeek]);
+                deliveryTime = deliveryTimeOfDay;
             }
 
-
-            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>Editar</a>' : '');
+            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>Cambiar</a>' : '');
             var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'170\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
                 .format(orderType,deliveryDay,deliveryTime,link);
             $('.order-delivery-wrapper').append(deliveryContainer);
@@ -152,13 +174,16 @@ function doBuildOrder(order,config) {
         // Build total item cost
         $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
 
-        // Show warning if item cost is below minimum for delivery
-        if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
+        // Show warning if restaurant is not open at given order time
+        if( !order.restaurantIsOpen ) {
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(order.deliveryType == 'DELIVERY'? labels['restaurant-delivery-closed-warning']: labels['restaurant-collection-closed-warning']);
+            $('#deliverycheck').append(warning);
+         } else if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + labels['delivery-warning'] + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
             $('#deliverycheck').append(warning);
         } else {
             // Show checkout button if enabled
-            if(order.orderItems.length > 0 && config.enableCheckoutButton) {
+            if(order.canCheckout && config.enableCheckoutButton) {
                 $('#checkoutcontainer').append('<div id=\'checkout\'><input type=\'button\' value=\'' + labels['checkout'] + '\' class=\'checkoutbutton\'></div>');
                 $('.checkoutbutton').button();
                 $('.checkoutbutton').click(function(){
@@ -208,7 +233,7 @@ function deliveryEdit() {
     $.post( ctx+'/order/deliveryEdit.ajax', { orderId: currentOrder.orderId },
         function( data ) {
             if( data.success ) {
-                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes);
+                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.openForDelivery, data.openForCollection);
             } else {
                 alert(data.success);
             }
@@ -217,7 +242,18 @@ function deliveryEdit() {
 }
 
 // Build delivery edit form
-function buildDeliveryEdit(days, deliveryTimes, collectionTimes) {
+function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, isOpenForDelivery, isOpenForCollection) {
+
+    // Update global delivery variables
+    days = daysArray;
+    deliveryTimes = deliveryTimesArray;
+    collectionTimes = collectionTimesArray;
+    deliveryType = currentOrder.deliveryType;
+    openForDelivery = isOpenForDelivery;
+    openForCollection = isOpenForCollection;
+
+    // Indicates if the current option is for delivery
+    var isdelivery = deliveryType == 'DELIVERY';
 
     // If deliverytimes and collection times are both empty, alert an error
     var hasDeliveryTime = false;
@@ -244,7 +280,6 @@ function buildDeliveryEdit(days, deliveryTimes, collectionTimes) {
 
     // Build delivery edit options if there are options for both delivery and collection
     if( hasDeliveryTime && hasCollectionTime ) {
-        var isdelivery = currentOrder.deliveryType == 'DELIVERY';
         var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),labels['delivery']);
         var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),labels['collection']);
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
@@ -252,41 +287,189 @@ function buildDeliveryEdit(days, deliveryTimes, collectionTimes) {
     else {
         var label = (hasDeliveryTime? labels['order-for-delivery']: labels['order-for-collection']);
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'><div class=\'delivery-title\'>{0}:</div></div>').format(label);
+        deliveryType = (hasDeliveryTime? 'DELIVERY':'COLLECTION');
     }
+
+    // Build selection fields for day and time based on current delivery type
+    var times = (deliveryType == 'DELIVERY'? deliveryTimes: collectionTimes);
+    var deliverySelectContainer = buildDeliverySelection(days,times);
+
+    // Build save and cancel buttons
+    var saveButton = '<a id=\'deliverysave\' class=\'order-button add-button unselectable\'>Ahorrar</a>';
+    var cancelButton = '<a id=\'deliverycancel\' class=\'order-button add-button unselectable\'>Cancelar</a>';
+    var buttonContainer = ('<div class=\'delivery-buttons\'>{0} {1}</div>').format(saveButton,cancelButton);
 
     // Remove the existing delivery wrapper
     $('.delivery-wrapper').remove();
 
     // Add the new options in the same area
-    $('.order-delivery-wrapper').append(('<div class=\'delivery-wrapper\'>{0}</div>').format(deliveryContainer));
+    $('.order-delivery-wrapper').append(('<div class=\'delivery-wrapper\'><div class=\'delivery-form\'>{0}{1}</div>{2}</div>').format(deliveryContainer,deliverySelectContainer,buttonContainer));
 
+    // Add onchange events to the delivery radio buttons if they are present
+    if( hasDeliveryTime && hasCollectionTime ) {
+        $('#radioDelivery').change(function(){
+            updateDeliveryType('DELIVERY',days,deliveryTimes);
+        });
+        $('#radioCollection').change(function(){
+            updateDeliveryType('COLLECTION',days,collectionTimes);
+        });
+    }
+
+    // Add onchange event to the day select field to repopulate available times
+    $('#dayselect').change(function(){
+        var selectedDay = $('#dayselect').val();
+        var times = (deliveryType == 'DELIVERY'? deliveryTimes: collectionTimes);
+        var timeSelect = buildDeliveryTimeSelect(selectedDay,times);
+        $('#timeselect').remove();
+        $('.delivery-header').append(timeSelect);
+    });
+
+    // Add onclick event to the save button
+    $('#deliverysave').click(function(){
+        var update = {
+            orderId: currentOrder.orderId,
+            deliveryType: deliveryType,
+            dayIndex: $('#dayselect').val(),
+            time: $('#timeselect').val()
+        };
+        $.post( ctx+'/order/updateOrderDelivery.ajax', { body: JSON.stringify(update) },
+            function( data ) {
+                if( data.success ) {
+                    buildOrder(data.order);
+                } else {
+                    alert(data.success);
+                }
+            }
+        );
+    });
+
+    // Add onclick event to the cancel button
+    $('#deliverycancel').click(function(){
+        doBuildOrder(currentOrder,getOrderPanelConfig());
+    });
+
+    // If a date and time are selected, apply selection now
+    if( deliveryDayOfWeek && deliveryTimeOfDay ) {
+        for( var i = 0; i < days.length; i++ ) {
+            if( days[i] == deliveryDayOfWeek ) {
+                $('#dayselect').val(i);
+                var times = (deliveryType == 'DELIVERY'? deliveryTimes: collectionTimes);
+                var timeSelect = buildDeliveryTimeSelect(i,times);
+                $('#timeselect').remove();
+                $('.delivery-header').append(timeSelect);
+                $('#timeselect').val(deliveryTimeOfDay);
+            }
+        }
+    }
+}
+
+// Updates the selected delivery type
+function updateDeliveryType(updatedDeliveryType,days,times) {
+
+    // Update global variable
+    deliveryType = updatedDeliveryType;
+
+    // Rebuild select day and times
+    var deliverySelection = buildDeliverySelection(days,times);
+
+    // Replace select fields
+    $('.delivery-header').remove();
+    $('.delivery-form').append(deliverySelection);
+
+    // Update onchange event for dayselect
+    $('#dayselect').change(function(){
+        var selectedDay = $('#dayselect').val();
+        var timeSelect = buildDeliveryTimeSelect(selectedDay,times);
+        $('#timeselect').remove();
+        $('.delivery-header').append(timeSelect);
+    });
+}
+
+// Builds select fields for day and time based on delivery type
+function buildDeliverySelection(days,times) {
+    var deliveryTimeContainer = '<div class=\'delivery-header\'>{0} - {1}</div>';
+    var deliveryDaySelect = buildDeliveryDaySelect(days,times);
+    var firstAvailableDay = 0;
+    for( var i = 0; i < days.length; i++ ) {
+        if(times[i].length > 0) {
+            firstAvailableDay = i;
+            break;
+        }
+    }
+    var deliveryTimeSelect = buildDeliveryTimeSelect(firstAvailableDay,times);
+    return deliveryTimeContainer.format(deliveryDaySelect,deliveryTimeSelect);
+}
+
+// Builds an array of available days that can be selected
+function buildDeliveryDaySelect(days,times) {
+    var select = '<select id=\'dayselect\'>';
+    for( var i = 0; i < days.length; i++ ) {
+        var timeArray = times[i];
+        if( timeArray.length > 0 ) {
+            var optionLabel = (i == 0? labels['today']: labels['day-of-week-' + days[i]]);
+            select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
+        }
+    }
+    select += '</select>';
+    return select;
+}
+
+// Builds an array of times that can be selected
+function buildDeliveryTimeSelect(selectedDay,times) {
+    var select = '<select id=\'timeselect\'>';
+    var timeArray = times[selectedDay];
+    if( selectedDay == 0 ) {
+        if(( deliveryType == 'DELIVERY' && openForDelivery) || (deliveryType == 'COLLECTION' && openForCollection )) {
+            select += ('<option value=\'{0}\'>{1}</option>').format('ASAP',labels['asap']);
+        }
+    }
+    timeArray.forEach(function(time){
+        select += ('<option value=\'{0}\'>{0}</option>').format(time);
+    });
+    select += '</select>';
+    return select;
 }
 
 // Confirm if order should proceed
 function restaurantCheck(restaurantId, callback ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
-        $('<div></div>')
-            .html(('<div>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name)))
-        	.dialog({
-        	    modal:true,
-        		title:labels['are-you-sure'],
-        		buttons: [{
-        		    text: labels['add-item-anyway'],
-        		    click: function() {
-                	    $( this ).dialog( "close" );
-                	    callback();
-                	}
-                },{
-                    text: labels['dont-add-item'],
-                    click: function() {
-                	    $( this ).dialog( "close" );
-                    }
-                }]
-            });
+
+        // Build buttons for proceed and cancel
+        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['add-item-anyway']);
+        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['dont-add-item']);
+        var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+
+        // Build body content
+        var warningBody = ('<div class=\'warning-container\'>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
+
+        // Build header
+        var warningHeader = ('<h3>{0}</h3>').format(labels['are-you-sure']);
+
+        // Build main container
+        var warningContainer = ('<div class=\'restaurant-warning-wrapper\'>{0}{1}{2}</div>').format(warningHeader,warningBody,buttonContainer);
+
+        // Show the dialog
+        $.fancybox.open({
+            type: 'html',
+            content: warningContainer,
+            minHeight:0,
+            modal:false,
+            openEffect:'none',
+            closeEffect:'none'
+        });
+
+        // Add click event handlers
+        $('#cancelbutton').click(function(){
+            $.fancybox.close(true);
+        });
+
+        $('#additembutton').click(function(){
+            $.fancybox.close(true);
+            callback();
+        });
     } else {
         callback();
     }
-
 }
 
 // Add item to order, check if need to display additional item dialog
@@ -304,42 +487,56 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     var selectedItems = new HashTable();
     var html = '';
     var itemLimit = additionalItemLimit? additionalItemLimit: 0;
+    var canAddToOrder = true;
 
     // Build checkboxes for each additional item
+    var additionalItemsChoices = '<div class=\'additional-items-choices\'>';
     additionalItemArray.forEach(function(additionalItem){
         var additionalItemArray = additionalItem.split('%%%');
         var additionalItemCost = additionalItemArray[1];
-        var itemDiv = ('<div class=\'additionalItem\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}<span class=\'additionalitemcost\'>{2}</span></div>')
+        var itemDiv = ('<div class=\'additional-item\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}<span class=\'additionalitemcost\'>{2}</span></div>')
                 .format(additionalItemArray[0],unescapeQuotes(additionalItemArray[0]),(additionalItemArray[1] != 'null'? ' (' + ccy + additionalItemArray[1] + ')': ''));
-        html += itemDiv;
+        additionalItemsChoices += itemDiv;
     });
+    additionalItemsChoices += '</div>';
+
+    // build additional items header
+    var additionalItemsHeader = ('<h3>{0}</h3><div id=\'itemcountwarning\'></div>').format(labels['choose-additional']);
+
+    // Build additional items body
+    var additionalItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(additionalItemsChoices);
+
+    // Build buttons for save and cancel
+    var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['done']);
+    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['cancel']);
+    var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+
+    // Build main container for additional items
+    var additionalItemsContainer = ('<div class=\'additional-items-wrapper\'>{0}{1}{2}</div>').format(additionalItemsHeader,additionalItemsBody,buttonContainer);
 
     // Placeholder for item count warning
     html += '<div id=\'itemcountwarning\'></div>';
 
-    // Generate the dialog
-    $('<div id=\'additionalItemDialog\'></div>')
-        .html(html)
-        .dialog({
-            modal:true,
-            title:labels['choose-additional'],
-            buttons: [{
-                text: labels['done'],
-                id: 'button-done',
-                click: function() {
-                    doAddToOrder(restaurantId, itemId, itemType, itemSubType, selectedItems.keys(), quantity );
-                    $( this ).dialog( "close" );
-                }
-            },{
-                text: labels['cancel'],
-                click: function() {
-                    $( this ).dialog( "close" );
-                }
-            }],
-            close: function() {
-                $(this).remove();
-            }
-        });
+    $.fancybox.open({
+        type: 'html',
+        content: additionalItemsContainer,
+        modal:false,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+
+    // Handler for the cancel button
+    $('#cancelbutton').click(function(){
+        $.fancybox.close(true);
+    });
+
+    // Handler for the done button
+    $('#additembutton').click(function(){
+        if( canAddToOrder ) {
+            doAddToOrder(restaurantId, itemId, itemType, itemSubType, selectedItems.keys(), quantity );
+            $.fancybox.close(true);
+        }
+    });
 
     // Handler to maintain the selected additional items
     $('.itemcheckbox').change(function(){
@@ -349,14 +546,12 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
             selectedItems.removeItem($(this).attr('id'));
         }
 
+        canAddToOrder = true;
         $('.itemcountwarning').remove();
         if( itemLimit > 0 && selectedItems.size() > itemLimit ) {
+            canAddToOrder = false;
             $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(labels['additional-item-limit']).format(itemLimit));
-            $('#button-done').button('disable');
-        } else {
-            $('#button-done').button('enable');
         }
-
     });
 }
 
@@ -381,6 +576,45 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
             }
         }
     );
+}
+
+// Check if a special offer is applicable to an order
+function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray ) {
+
+    var update = ({
+        orderId: currentOrder.orderId,
+        specialOfferId: specialOfferId
+    });
+
+    $.post( ctx+'/order/checkSpecialOffer.ajax', { body: JSON.stringify(update) },
+        function( data ) {
+            if( data.success ) {
+                if( data.applicable ) {
+                    addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray );
+                } else {
+                    showSpecialOfferWarning();
+                }
+            } else {
+                alert(data);
+            }
+        }
+    );
+}
+
+function showSpecialOfferWarning() {
+
+    var warning = (currentOrder.deliveryType == 'DELIVERY'? labels['special-offer-not-available-delivery']: labels['special-offer-not-available-collection']);
+    var warningText = ('<div class=\'warning-content\'>{0}</div>').format(warning);
+    var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
+
+    $.fancybox.open({
+        type: 'html',
+        content: warningContainer,
+        minHeight:0,
+        modal:false,
+        openEffect:'none',
+        closeEffect:'none'
+    });
 }
 
 // Add a special offer item to the order
@@ -440,7 +674,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     else {
 
         // Build dialog to display items and choices
-        var html = '';
+        var specialOfferItemBody = '';
         var specialOfferItemIndex = 0;
         specialOfferItems.forEach(function(specialOfferItem){
             var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
@@ -458,42 +692,52 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
                 selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
             }
             specialOfferItemContent += selectBox;
-            html += ('<div class=\'specialofferitem\'>{0}</div>').format(specialOfferItemContent);
+            specialOfferItemBody += ('<div class=\'specialofferitem\'>{0}</div>').format(specialOfferItemContent);
             specialOfferItemIndex++;
         });
 
-        // Generate the dialog
-        $('<div id=\'specialOfferItemDialog\'></div>')
-            .html(html)
-            .dialog({
-                modal:true,
-                title:labels['special-offer-choices'],
-                buttons: [{
-                    text: labels['done'],
-                    id: 'button-done',
-                    click: function() {
-                        var itemChoices = [];
-                        for( i = 0; i < specialOfferItems.length; i++) {
-                            var itemSelect = $('#specialOfferItemSelect_' + i );
-                            if( itemSelect.length ) {
-                                itemChoices.push(itemSelect.val());
-                            } else {
-                                itemChoices.push(specialOfferItems[i].itemChoices[0].text);
-                            }
-                        }
-                        doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
-                        $( this ).dialog( "close" );
-                    }
-                },{
-                    text: labels['cancel'],
-                    click: function() {
-                        $( this ).dialog( "close" );
-                    }
-                }],
-                close: function() {
-                    $(this).remove();
+        // build special offer items header
+        var specialOfferItemsHeader = ('<h3>{0}</h3>').format(labels['special-offer-choices']);
+
+        // Build special offer items body
+        var specialOfferItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(specialOfferItemBody);
+
+        // Build buttons for save and cancel
+        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['done']);
+        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['cancel']);
+        var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+
+        // Build main container for additional items
+        var specialOfferItemsContainer = ('<div class=\'additional-items-wrapper\'>{0}{1}{2}</div>').format(specialOfferItemsHeader,specialOfferItemsBody,buttonContainer);
+
+        $.fancybox.open({
+            type: 'html',
+            content: specialOfferItemsContainer,
+            minHeight:0,
+            modal:false,
+            openEffect:'none',
+            closeEffect:'none'
+        });
+
+        // Handler for the cancel button
+        $('#cancelbutton').click(function(){
+            $.fancybox.close(true);
+        });
+
+        // Handler for the add item button
+        $('#additembutton').click(function(){
+            var itemChoices = [];
+            for( i = 0; i < specialOfferItems.length; i++) {
+                var itemSelect = $('#specialOfferItemSelect_' + i );
+                if( itemSelect.length ) {
+                    itemChoices.push(itemSelect.val());
+                } else {
+                    itemChoices.push(specialOfferItems[i].itemChoices[0].text);
                 }
-            });
+            }
+            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
+            $.fancybox.close(true);
+        });
     }
 }
 
@@ -510,13 +754,13 @@ function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, qua
     $.post( ctx+'/order/addSpecialOffer.ajax', { body: JSON.stringify(update) },
         function( data ) {
             if( data.success ) {
-                buildOrder(data.order);
-            } else {
-                if(data.isApplicable == false) {
-                    alert('Sorry, not applicable');
+                if( data.applicable ) {
+                    buildOrder(data.order);
                 } else {
-                    alert('success:' + data.success);
+                    showSpecialOfferWarning();
                 }
+            } else {
+                alert('success:' + data.success);
             }
         }
     );
@@ -531,19 +775,6 @@ function removeFromOrder(orderItemId, quantity ) {
     };
 
     $.post( ctx+'/order/removeItem.ajax', { body: JSON.stringify(update) },
-        function( data ) {
-            if( data.success ) {
-                buildOrder(data.order);
-            } else {
-                alert('success:' + data.success);
-            }
-        }
-    );
-}
-
-// Update delivery type
-function updateDeliveryType(deliveryType, restaurantId) {
-    $.post( ctx+'/order/updateDeliveryType.ajax', { deliveryType: deliveryType, restaurantId: restaurantId },
         function( data ) {
             if( data.success ) {
                 buildOrder(data.order);

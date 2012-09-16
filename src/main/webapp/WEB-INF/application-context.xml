@@ -138,7 +138,12 @@
         <property name="hostName" value="#{@redisUrl.getHost()}"/>
         <property name="port" value="#{@redisUrl.getPort()}"/>
         <property name="password" value="#{@redisUrl.getUserInfo().split(':')[1]}"/>
-        <property name="usePool" value="false"/>
+        <property name="usePool" value="true"/>
+        <property name="poolConfig">
+            <bean class="redis.clients.jedis.JedisPoolConfig">
+                <property name="testOnBorrow" value="true"/>
+            </bean>
+        </property>
     </bean>
 
     <!-- Redis default template -->

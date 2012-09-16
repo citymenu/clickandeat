@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
 
 public class DateTimeTransformer extends AbstractTransformer implements ObjectFactory {
 
-    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss z");
+    private final DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm:ss");
 
     @Override
     public void transform(Object object) {

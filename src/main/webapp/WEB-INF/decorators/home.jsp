@@ -5,7 +5,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="all" />
 	<link rel="shortcut icon" href="${resources}/images/favico.png">
-    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.7.2.min.js"></script>
     <decorator:head/>
     <title><decorator:title/></title>
 </head>

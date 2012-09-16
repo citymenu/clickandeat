@@ -56,6 +56,8 @@ public class Order extends PersistentObject {
     private Double totalCost;
 
     // Order tracking details
+    private boolean canCheckout;
+    private boolean restaurantIsOpen;
     private String orderStatus;
     private String orderNotificationStatus;
     private String additionalRequestDetails;
@@ -132,6 +134,12 @@ public class Order extends PersistentObject {
 
         // Set the total cost
         this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        
+        // Update whether or not the restaurant is currently open
+        updateRestaurantIsOpen();
+        
+        // Update whether or not the order is ready for checkout
+        updateCanCheckout();
     }
 
 
@@ -203,6 +211,29 @@ public class Order extends PersistentObject {
         }
     }
 
+        
+    public void updateRestaurantIsOpen() {
+        if( Order.DELIVERY.equals(deliveryType)) {
+            restaurantIsOpen = restaurant.isOpenForDelivery(expectedDeliveryTime == null? new DateTime(): expectedDeliveryTime);
+        }
+        else {
+            restaurantIsOpen = restaurant.isOpenForCollection(expectedCollectionTime == null ? new DateTime() : expectedCollectionTime);
+        }
+    }
+    
+    public void updateCanCheckout() {
+        canCheckout = true;
+        if( orderItems.size() == 0 ) {
+            canCheckout = false;
+        }
+        if( extraSpendNeededForDelivery > 0 ) {
+            canCheckout = false;
+        }
+        if( !restaurantIsOpen) {
+            canCheckout = false;
+        }
+    }
+    
 
     /**
      * @param orderItemId
@@ -385,7 +416,23 @@ public class Order extends PersistentObject {
     public void setAdditionalInstructions(String additionalInstructions) {
         this.additionalInstructions = additionalInstructions;
     }
-    
+
+    public boolean getCanCheckout() {
+        return canCheckout;
+    }
+
+    public void setCanCheckout(boolean canCheckout) {
+        this.canCheckout = canCheckout;
+    }
+
+    public boolean getRestaurantIsOpen() {
+        return restaurantIsOpen;
+    }
+
+    public void setRestaurantIsOpen(boolean restaurantIsOpen) {
+        this.restaurantIsOpen = restaurantIsOpen;
+    }
+
     public String getOrderStatus() {
         return orderStatus;
     }

@@ -136,7 +136,17 @@ h3.order-table {
     text-align:left;
     font-family: "ff-tisa-web-pro",impact;
     font-size: 14px;
+    font-weight: bold;
     margin: 0 0 6px 0;
+}
+
+.deliveryradio {
+    padding-right: 10px;
+}
+
+.delivery-buttons {
+    padding-top: 10px;
+    text-align:right;
 }
 
 a.order-button, a.order-button:active, a.order-button:hover {
@@ -156,4 +166,149 @@ a.order-button, a.order-button:active, a.order-button:hover {
 
 a.order-button:active, a.order-button:hover {
     background-color: #247FCC;
+}
+
+.additional-items-wrapper {
+    background-color:#FFFFFF;
+    width: 500px;
+    padding: 10px 15px 10px 15px;
+    border:1px solid #FFFFFF;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.additional-items-body {
+    max-height: 350px;
+    overflow:auto;
+    margin-bottom:10px;
+    position:relative;
+}
+
+.itemcheckbox {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+}
+
+.additional-item {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    letter-spacing: -0.01em;
+    margin-bottom:5px;
+}
+
+.additionalitemcost {
+    padding-left: 6px;
+    font-weight:bold;
+}
+
+.additional-items-wrapper h3 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:22px;
+    text-shadow: 0 1px #EEEEEE;
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 16px;
+    padding-bottom:6px;
+}
+
+.additional-items-buttons {
+    text-align:right;
+    border-top: 1px dashed #AAAAAA;
+    padding:16px 0 6px 0;
+    margin-top:20px;
+}
+
+#itemcountwarning {
+    margin-bottom: 10px;
+}
+
+.itemcountwarning {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    line-height: 16px;
+    margin-top: 6px;
+    padding: 6px 10px 10px 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.restaurant-warning-wrapper {
+    background-color:#FFFFFF;
+    width: 500px;
+    padding: 10px 15px 10px 15px;
+    border:1px solid #FFFFFF;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+
+}
+
+.restaurant-warning-wrapper h3 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:22px
+    text-shadow: 0 1px #EEEEEE;
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 16px;
+    padding-bottom:6px;
+}
+
+.warning-container {
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+    margin-top: 6px;
+    padding: 6px 10px 6px 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.warning-container p {
+    padding-bottom:6px;
+}
+
+.specialofferitemtop {
+    border-top: 1px dashed #EEEEEE;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+}
+
+.specialofferitem {
+    border-bottom: 1px dashed #EEEEEE;
+    margin-bottom: 10px;
+    padding-bottom: 16px;
+}
+
+.specialofferitemtitle {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:16px;
+    line-height:18px;
+    font-weight:bold;
+    text-shadow: 0 1px #EEEEEE;
+}
+
+.specialofferitemdescription {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 16px;
+    padding-top:3px;
+}
+
+.specialofferitemchoice {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    padding-top:6px;
+}
+
+.specialofferitemchoice select{
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
 }
