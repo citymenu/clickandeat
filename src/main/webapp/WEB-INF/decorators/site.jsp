@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="robots" content="all" />
     <meta http-equiv="expires" content="0">
-	<link rel="shortcut icon" href="${resources}/images/favico.png">
+	<link rel="shortcut icon" href="${resources}/images/favicon.png">
 
     <!-- Typekit -->
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
