@@ -19,7 +19,6 @@
                 <table width="680">
                     <tr valign="middle">
                         <td width="400">
-                            <img src="${resources}/images/example.gif" width="90" height="70"/>
                             <h2><util:escape value="${restaurant.name}"/></h2>
                             <c:if test="${restaurant.description != null}">
                             <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
