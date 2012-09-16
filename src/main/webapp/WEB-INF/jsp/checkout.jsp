@@ -90,6 +90,11 @@
                 </div>
                 <div id="collectiontime">
                     <div class="checkoutheader"><spring:message code="label.collection-time"/></div>
+
+                    <div class="collection-location">
+                        <img src="http://maps.googleapis.com/maps/api/staticmap?center=${order.restaurant.address.postCode}&zoom=15&size=400x275&maptype=roadmap&markers=color:blue%7Clabel:S%7C${order.restaurant.address.postCode}&sensor=false"/>
+                    </div>
+
                     <div>
                         <div class="checkoutsummary"><spring:message code="label.collection-time-text"/></div>
                         <div class="checkouttime">
