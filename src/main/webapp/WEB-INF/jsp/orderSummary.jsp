@@ -7,19 +7,15 @@
 
 <body>
 
-<div id="maincontent">
-    <%@ include file="/WEB-INF/jsp/workflow.jsp" %>
-    <div id="contentbody">
-        <div id="paymentbody">
-            <div id="paymentdetails">
-                <div class="checkoutheader"><spring:message code="label.thankyou-for-your-order"/> (${order.orderId})</div>
-            </div>
-        </div>
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
+<div id="content">
+    <div class="content-wrapper">
+        <h2><spring:message code="label.thankyou-for-your-order"/> (${order.orderId})</h2>
     </div>
 </div>
 
-<div id="rightbar"></div>
-
+<%@ include file="/WEB-INF/jsp/footer.jsp" %>
 
 </body>
 </html>

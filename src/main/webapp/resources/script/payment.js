@@ -1,14 +1,3 @@
-$(document).ready(function(){
-    $('#deliveryoptionsbutton').button();
-    $('#deliveryoptionsbutton').click(function(){
-        deliveryOptions();
-    });
-    $('#placeorderbutton').button();
-    $('#placeorderbutton').click(function(){
-        placeOrder();
-    });
-});
-
 // Override order config
 function getOrderPanelConfig() {
     var config = {

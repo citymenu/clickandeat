@@ -2,6 +2,8 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/checkout.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/checkout.js"></script>
@@ -39,6 +41,34 @@
                     </div>
                 </div>
 
+                <div class="checkoutheader"><spring:message code="label.delivery-details"/></div>
+                <div>
+                    <div class="detailsitem">
+                        <div class="detailslabel"><spring:message code="label.address"/></div>
+                        <div class="detailsfield"><input type="text" name="address1" class="checkoutfield" value="${order.deliveryAddress.address1}"/></div>
+                    </div>
+                    <div class="detailsitem">
+                        <div class="detailslabel">&nbsp;</div>
+                        <div class="detailsfield"><input type="text" name="address2" class="checkoutfield" value="${order.deliveryAddress.address2}"/></div>
+                    </div>
+                    <div class="detailsitem">
+                        <div class="detailslabel">&nbsp;</div>
+                        <div class="detailsfield"><input type="text" name="address3" class="checkoutfield" value="${order.deliveryAddress.address3}"/></div>
+                    </div>
+                    <div class="detailsitem">
+                        <div class="detailslabel"><spring:message code="label.town"/></div>
+                        <div class="detailsfield"><input type="text" name="town" class="checkoutfield" value="${order.deliveryAddress.town}"/></div>
+                    </div>
+                    <div class="detailsitem">
+                        <div class="detailslabel"><spring:message code="label.region"/></div>
+                        <div class="detailsfield"><input type="text" name="region" class="checkoutfield" value="${order.deliveryAddress.region}"/></div>
+                    </div>
+                    <div class="detailsitem">
+                        <div class="detailslabel"><spring:message code="label.postcode"/></div>
+                        <div class="detailsfield"><input type="text" name="postCode" class="checkoutfield" value="${order.deliveryAddress.postCode}"/></div>
+                    </div>
+                </div>
+
                 <div id="additionalinstructions">
                     <div class="checkoutheader"><spring:message code="label.additionalinstructions"/></div>
                     <div>
@@ -48,62 +78,7 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="deliverytime">
-                    <div class="checkoutheader"><spring:message code="label.delivery-time"/></div>
-                    <div>
-                        <div class="checkoutsummary"><spring:message code="label.delivery-time-text"/></div>
-                        <div class="checkouttime">
-                            <select name="requestedTime" id="requestedDeliveryTime" class="checkoutselect">
-                                <option value="asap"><spring:message code="label.asap"/></option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="checkoutheader"><spring:message code="label.delivery-details"/></div>
-                    <div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><spring:message code="label.address"/></div>
-                            <div class="detailsfield"><input type="text" name="address1" class="checkoutfield" value="${order.deliveryAddress.address1}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel">&nbsp;</div>
-                            <div class="detailsfield"><input type="text" name="address2" class="checkoutfield" value="${order.deliveryAddress.address2}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel">&nbsp;</div>
-                            <div class="detailsfield"><input type="text" name="address3" class="checkoutfield" value="${order.deliveryAddress.address3}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><spring:message code="label.town"/></div>
-                            <div class="detailsfield"><input type="text" name="town" class="checkoutfield" value="${order.deliveryAddress.town}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><spring:message code="label.region"/></div>
-                            <div class="detailsfield"><input type="text" name="region" class="checkoutfield" value="${order.deliveryAddress.region}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><spring:message code="label.postcode"/></div>
-                            <div class="detailsfield"><input type="text" name="postCode" class="checkoutfield" value="${order.deliveryAddress.postCode}"/></div>
-                        </div>
-                    </div>
-                </div>
-                <div id="collectiontime">
-                    <div class="checkoutheader"><spring:message code="label.collection-time"/></div>
-
-                    <div class="collection-location">
-                        <img src="http://maps.googleapis.com/maps/api/staticmap?center=${order.restaurant.address.postCode}&zoom=15&size=400x275&maptype=roadmap&markers=color:blue%7Clabel:S%7C${order.restaurant.address.postCode}&sensor=false"/>
-                    </div>
-
-                    <div>
-                        <div class="checkoutsummary"><spring:message code="label.collection-time-text"/></div>
-                        <div class="checkouttime">
-                            <select name="requestedTime" id="requestedCollectionTime" class="checkoutselect">
-                                <option value="asap"><spring:message code="label.asap"/></option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
+                <div><a href="javascript:proceed();" class="menuitem-button add-button unselectable">Payment</a></div>
             </div>
         </div>
         <div class="content-right">

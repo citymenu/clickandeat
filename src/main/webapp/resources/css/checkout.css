@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+.detailsitem {
+    clear:both;
+    padding-bottom: 10px;
+    overflow:hidden;
+}
+
+.detailslabel {
+    width: 130px;
+    float:left;
+}
+
+.detailsfield {
+    width: 190px;
+    float:left;
+}
+
+.checkoutheader {
+    clear:both;
+    margin-bottom:10px;
+}
+
+#additionalinstructions {
+    clear:both;
+    margin-bottom:10px;
+}
