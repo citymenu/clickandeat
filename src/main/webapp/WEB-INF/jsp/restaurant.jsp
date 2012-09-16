@@ -16,18 +16,31 @@
     <div class="content-wrapper">
         <div class="content-left">
             <div class="restaurant-details-wrapper">
-                <h2><util:escape value="${restaurant.name}"/></h2>
-                <c:if test="${restaurant.description != null}">
-                <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
-                </c:if>
-                <div class="restaurant-details">
-                    <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
-                </div>
-                <c:if test="${restaurant.deliveryOptions.deliveryTimeMinutes != null}">
-                <div class="restaurant-details">
-                    Order delivery time: <span class="restaurant-details-title">${restaurant.deliveryOptions.formattedDeliveryTimeMinutes} minutes</span>
-                </div>
-                </c:if>
+                <table width="680">
+                    <tr valign="middle">
+                        <td width="400">
+                            <img src="${resources}/images/example.gif" width="90" height="70"/>
+                            <h2><util:escape value="${restaurant.name}"/></h2>
+                            <c:if test="${restaurant.description != null}">
+                            <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                            </c:if>
+                            <div class="restaurant-details">
+                                <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
+                            </div>
+                            <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
+                            <div class="restaurant-details">
+                                <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeComments="true" escapeNewLines="true"/>
+                            </div>
+                            </c:if>
+                            <c:if test="${restaurant.deliveryOptions.deliveryTimeMinutes != null}">
+                            <div class="restaurant-details">
+                                <b>Order delivery time: ${restaurant.deliveryOptions.formattedDeliveryTimeMinutes} minutes</b>
+                            </div>
+                            </c:if>
+                        </td>
+                        <td width="280">** Will include details of any discounts, today's opening and closing times in this section, etc. **</td>
+                    </tr>
+                </table>
             </div>
             <div class="menu-wrapper">
                 <c:if test="${restaurant.specialOfferCount > 0}">
@@ -185,6 +198,17 @@
         </div>
         <div class="content-right">
             <%@ include file="/WEB-INF/jsp/order.jsp" %>
+            <br/>
+            <br/>
+            <br/>
+            <div style="text-align:center; padding: 10px;">** Will include a table of all of the opening times for the restaurant here **</div>
+            <br/>
+            <br/>
+            <div style="text-align:center;">** Will include google maps link to restaurant location like below here: **</div>
+            <div style="text-align:center; padding: 10px;">
+                <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=15&size=200x135&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
+            </div>
+
         </div>
     </div>
 </div>

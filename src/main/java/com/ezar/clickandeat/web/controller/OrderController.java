@@ -627,6 +627,7 @@ public class OrderController implements InitializingBean {
         Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
         order.setRestaurantId(restaurantId);
         order.setRestaurant(restaurant);
+        order.updateCosts();
         order = orderRepository.save(order);
         session.setAttribute("orderid",order.getOrderId());
         session.removeAttribute("completedorderid");

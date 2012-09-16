@@ -18,6 +18,11 @@
                 <input class="findButton" type="submit" value="<spring:message code="label.search"/>"/>
             </form>
         </div>
+        <div style="text-align: center; margin: 40px 0 30px 0;">
+            <div>Thought we could use something like the below to explain how the process of ordering works. See <a href="http://developers.slidedeck.com">SlideDeck</a> for a working demo.</div>
+            <br/>
+            <div><img src="${resources}/images/slidedeck.jpg"/></div>
+        </div>
     </div>
 </div>
 

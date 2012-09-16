@@ -269,8 +269,21 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
         }
     });
 
+    // Restaurant not open for delivery or collection in the near future
     if( !hasDeliveryTime && !hasCollectionTime ) {
-        alert('Error, no opening times');
+
+        var warningText = ('<div class=\'warning-content\'>{0}</div>').format(labels['restaurant-is-not-open-warning']);
+        var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
+
+        $.fancybox.open({
+            type: 'html',
+            content: warningContainer,
+            minHeight:0,
+            modal:false,
+            openEffect:'none',
+            closeEffect:'none'
+        });
+
         return;
     }
 

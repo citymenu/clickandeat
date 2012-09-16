@@ -74,7 +74,11 @@ li {
     font-weight: 700;
     display:inline;
     float:left;
-    padding-right:30px;
+    padding-right:15px;
+}
+
+.arrow {
+    font-weight: bold;
 }
 
 .navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {

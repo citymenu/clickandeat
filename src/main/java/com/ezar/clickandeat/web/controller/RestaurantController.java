@@ -34,7 +34,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 public class RestaurantController {
 
     private static final Logger LOGGER = Logger.getLogger(RestaurantController.class);
-    
+
     @Autowired
     private RestaurantRepository repository;
 
@@ -49,28 +49,44 @@ public class RestaurantController {
 
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
-    
+
     @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
     public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Retrieving restaurant with id [" + restaurantId + "]");
         }
-        
+
         Map<String,Object> model = getModel();
         HttpSession session = request.getSession(true);
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-        session.setAttribute("restaurantid", restaurantId);
-        
+
         // If there is no order in the session, create one now
         String orderId = (String)session.getAttribute("orderid");
         if( orderId == null ) {
-            Order order = orderRepository.create();
-            order.setRestaurantId(restaurantId);
-            orderRepository.save(order);
-            session.setAttribute("orderid",order.getOrderId());
-            session.removeAttribute("completedorderid");
+            assignOrderToSession(session, restaurant);
+        }
+        else {
+            // If there is no restaurant id in the session, get the order and assign this restaurant to it
+            if( session.getAttribute("restaurantid") == null ) {
+                Order order = orderRepository.findByOrderId(orderId);
+                if( order == null ) {
+                    assignOrderToSession(session,restaurant);
+                }
+                else {
+                    order.setRestaurantId(restaurantId);
+                    order.setRestaurant(restaurant);
+                    order.updateCosts();
+                    orderRepository.saveOrder(order);
+                }
+            }
+        }
+
+        // Update the restaurant session id
+        String restaurantSessionId = (String)session.getAttribute("restaurantid");
+        if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
+            session.setAttribute("restaurantid", restaurantId);
         }
 
         return new ModelAndView("restaurant",model);
@@ -84,7 +100,7 @@ public class RestaurantController {
                                        @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort ) throws Exception {
 
         PageRequest request;
-        
+
         if( StringUtils.hasText(sort)) {
             List<Map<String,String>> sortParams = (List<Map<String,String>>)jsonUtils.deserialize(sort);
             Map<String,String> sortProperties = sortParams.get(0);
@@ -95,7 +111,7 @@ public class RestaurantController {
         else {
             request = new PageRequest(page - 1, limit - start );
         }
-        
+
         Page<Restaurant> restaurants = repository.findAll(request);
 
         Map<String,Object> model = new HashMap<String,Object>();
@@ -193,10 +209,26 @@ public class RestaurantController {
 
 
     /**
+     * @param session
+     * @param restaurant
+     */
+
+    private void assignOrderToSession( HttpSession session, Restaurant restaurant ) {
+        Order order = orderRepository.create();
+        order.setRestaurantId(restaurant.getRestaurantId());
+        order.setRestaurant(restaurant);
+        order.updateCosts();
+        orderRepository.save(order);
+        session.setAttribute("orderid",order.getOrderId());
+        session.removeAttribute("completedorderid");
+    }
+
+
+    /**
      * Returns standard model
      * @return
      */
-    
+
     private Map<String,Object> getModel() {
         Map<String,Object> model = new HashMap<String, Object>();
         Set<String> cuisines = cuisineProvider.getCuisineList();

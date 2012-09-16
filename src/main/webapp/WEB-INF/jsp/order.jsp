@@ -18,6 +18,7 @@
         'delivery-warning': "<spring:message code="label.delivery-warning"/>",
         'restaurant-delivery-closed-warning': "<spring:message code="label.restaurant-delivery-closed-warning"/>",
         'restaurant-collection-closed-warning': "<spring:message code="label.restaurant-collection-closed-warning"/>",
+        'restaurant-is-not-open-warning': "<spring:message code="label.restaurant-is-not-open-warning"/>",
         'checkout': "<spring:message code="label.checkout"/>",
         'restaurant-warning': "<spring:message code="label.restaurant-warning"/>",
         'are-you-sure': "<spring:message code="label.are-you-sure"/>",
