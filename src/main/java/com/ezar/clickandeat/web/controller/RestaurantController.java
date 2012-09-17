@@ -173,7 +173,9 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
+            LOGGER.debug("Deserializing restaurant object");
             Restaurant restaurant = jsonUtils.deserialize(Restaurant.class,body);
+            LOGGER.debug("Saving restaurant into database");
             restaurant = repository.saveRestaurant(restaurant);
             model.put("success",true);
             model.put("id",restaurant.getId());

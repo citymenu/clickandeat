@@ -58,7 +58,7 @@
 }
 
 .navigation-links {
-    padding-top: 4px;
+    padding-top: 6px;
     padding-left: 25px;
     clear:both;
 }
@@ -68,8 +68,8 @@ ul, ol {
 }
 
 li {
-    color: #CCCCCC;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    color: #999999;
+    font-family: arial, "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
     font-weight: 700;
     display:inline;
@@ -77,16 +77,22 @@ li {
     padding-right:15px;
 }
 
+li.active {
+    color:#FFFFFF;
+}
+
+
 .arrow {
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {
+    color: #999999;
     text-decoration:none;
-    color:#FFFFFF;
     cursor:pointer;
 }
 
 .navigation-links a:active, .navigation-links a:hover {
-   color:#DD0033;
+   color:#FFFFFF;
+   text-decoration:underline;
 }

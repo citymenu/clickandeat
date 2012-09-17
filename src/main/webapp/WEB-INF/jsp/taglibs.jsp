@@ -21,6 +21,8 @@
     </c:otherwise>
 </c:choose>
 
+<c:set var="resources" value="${ctx}/resources"/>
+
 <script type="text/javascript">
 var ctx = "${ctx}";
 var locale = "${locale}";

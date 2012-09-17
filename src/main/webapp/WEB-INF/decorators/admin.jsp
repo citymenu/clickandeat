@@ -9,6 +9,8 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/overrides.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/master.css"/>
+    <!-- JQuery -->
+    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js"></script>
 	<!-- ExtJS -->
 	<script type="text/javascript" src="${resources}/ext/ext-all-debug.js"></script>
 	<script type="text/javascript" src="${resources}/ext/bootstrap.js"></script>

@@ -26,7 +26,11 @@ function delimitedStringToArray(str,delim) {
         return arr;
     } else {
         str.split(delim).forEach(function(val){
-            arr.push(unescapeQuotes(val));
+            var unescaped = unescapeQuotes(val);
+            var trimmed = $.trim(unescaped);
+            if( trimmed && trimmed != '') {
+                arr.push(unescaped);
+            }
         });
         return arr;
     }
