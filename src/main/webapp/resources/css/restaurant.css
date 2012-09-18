@@ -137,7 +137,7 @@ a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-weight: 700;
     font-size: 12px;
-    padding: 0 6px 0 6px;
+    padding: 1px 6px 1px 6px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;

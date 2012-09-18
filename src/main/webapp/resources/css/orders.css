@@ -47,7 +47,7 @@
 }
 
 h3.order-table {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: "myriad-pro-semi-condensed";
     font-size: 12px;
     line-height: 16px;
     color: #444444;
@@ -155,13 +155,13 @@ h3.order-table {
 }
 
 a.order-button, a.order-button:active, a.order-button:hover {
-    background-color: #50A3E2;
+    background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-weight: 700;
     font-size: 12px;
-    padding: 0 6px 0 6px;
+    padding: 1px 6px 1px 6px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -170,7 +170,15 @@ a.order-button, a.order-button:active, a.order-button:hover {
 }
 
 a.order-button:active, a.order-button:hover {
-    background-color: #247FCC;
+    background-color: #2c8023;
+}
+
+a.order-button-large, a.order-button-large:active, a.order-button-large:hover {
+    padding: 4px 10px 4px 10px;
+}
+
+a.order-button-large:active, a.order-button-large:hover {
+    background-color: #2c8023;
 }
 
 .additional-items-wrapper {
@@ -320,18 +328,18 @@ a.order-button:active, a.order-button:hover {
 
 #checkout {
     text-align:center;
-    padding: 3px 0 3px 0;
+    padding: 5px 0 5px 0;
     vertical-align:middle;
 }
 
 a.checkout-button, a.checkout-button:active, a.checkout-button:hover {
-    background-color: #50a747;
+    background-color: #50A3E2;
     border: 1px solid #333333;
     color: #FFFFFF;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-weight: 700;
-    font-size: 12px;
-    padding: 0 6px 0 6px;
+    font-size: 16px;
+    padding: 3px 15px 3px 15px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -340,5 +348,5 @@ a.checkout-button, a.checkout-button:active, a.checkout-button:hover {
 }
 
 a.checkout-button:active, a.checkout-button:hover {
-    background-color: #2c8023;
+    background-color: #247FCC;
 }

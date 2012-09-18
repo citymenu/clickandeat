@@ -150,7 +150,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><trvalign=\'top\'><td width=\'146\'>{0} ({1})</td><td width=\'55\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><trvalign=\'top\'><td width=\'146\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -519,8 +519,8 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     var additionalItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(additionalItemsChoices);
 
     // Build buttons for save and cancel
-    var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['done']);
-    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['cancel']);
+    var addItemButton = ('<a id=\'additembutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(labels['done']);
+    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(labels['cancel']);
     var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
 
     // Build main container for additional items
