@@ -2,6 +2,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +37,11 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public User saveUser(User user) {
 
-        if( user.getAddress() != null && StringUtils.hasText(user.getAddress().getPostCode())) {
-            double[] location = locationService.getLocation(user.getAddress().getPostCode());
-            user.getAddress().setLocation(location);
+        if( user.getAddress() != null ) {
+            AddressLocation location = locationService.getSingleLocation(user.getAddress());
+            if( location != null ) {
+                user.getAddress().setLocation(location.getLocation());
+            }
         }
 
         if( user.getId() == null ) {

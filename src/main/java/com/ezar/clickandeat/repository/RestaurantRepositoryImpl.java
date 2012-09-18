@@ -6,7 +6,6 @@ import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -28,12 +27,12 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(RestaurantRepositoryImpl.class);
-    
+
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
     @Autowired
     private MongoOperations operations;
-    
+
     @Autowired
     private LocationService locationService;
 
@@ -41,17 +40,20 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private SequenceGenerator sequenceGenerator;
 
     @Autowired
+    private AddressLocationRepository addressLocationRepository;
+
+    @Autowired
     private ClusteredCache clusteredCache;
-    
+
     private double maxDistance;
 
     private String timeZone;
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         operations.ensureIndex(new GeospatialIndex("address.location"), Restaurant.class);
     }
-    
+
 
     @Override
     public Restaurant create() {
@@ -80,9 +82,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     @SuppressWarnings("unchecked")
     public Restaurant saveRestaurant(Restaurant restaurant) {
-        if( restaurant.getAddress() != null && StringUtils.hasText(restaurant.getAddress().getPostCode())) {
-            double[] location = locationService.getLocation(restaurant.getAddress().getPostCode());
-            restaurant.getAddress().setLocation(location);
+
+        if( restaurant.getAddress() != null ) {
+            AddressLocation location = locationService.getSingleLocation(restaurant.getAddress());
+            if( location != null ) {
+                restaurant.getAddress().setLocation(location.getLocation());
+            }
         }
 
         // Update category and menu item identifiers
@@ -98,7 +103,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 }
             }
         }
-        
+
         // Update discount identifiers
         for( Discount discount: restaurant.getDiscounts()) {
             if( !StringUtils.hasText(discount.getDiscountId())) {
@@ -130,26 +135,17 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     public List<Restaurant> search(Search search) {
 
-        String location = search.getLocation();
-        
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Looking up restaurants serving location: " + location);
+            LOGGER.debug("Looking up restaurants serving matching search: " + search);
         }
 
-        if( !StringUtils.hasText(location)) {
-            LOGGER.warn("Empty location value passed to 'search' method");
-            return new ArrayList<Restaurant>();
-        }
-        
-        String lookupLocation = location.toUpperCase().replace(" ","");
-        
         // Build geolocation query
-        double[] geoLocation = locationService.getLocation(lookupLocation);
+        double[] geoLocation = search.getLocation().getLocation();
         if( geoLocation == null ) {
-            LOGGER.warn("No geolocation found for location " + location);
+            LOGGER.warn("No geolocation passed");
             return new ArrayList<Restaurant>();
         }
-        
+
         Query query = new Query(where("address.location").nearSphere(new Point(geoLocation[0], geoLocation[1]))
                 .maxDistance(maxDistance / DIVISOR));
 
@@ -158,7 +154,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( cuisines != null && cuisines.size() > 0 ) {
             query.addCriteria(where("cuisines").in(cuisines));
         }
-        
+
         // Specify sort order if specified
         String sort = search.getSort();
         String dir = search.getDir();
@@ -168,7 +164,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Exclude menu from results
         query.fields().exclude("menu");
-        
+
         // Execute the query
         List<Restaurant> restaurants = operations.find(query,Restaurant.class);
         if( restaurants.size() == 0 ) {
@@ -181,7 +177,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Get the current time and date to determine if restaurants are open
         DateTime now = new DateTime();
-        
+
         // Iterate over the results to determine which restaurants will serve the location
         List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();
         for( Restaurant restaurant: restaurants ) {
@@ -190,7 +186,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
                 double distance = locationService.getDistance(geoLocation,restaurantLocation);
                 if( LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Distance from location " + location + " to restaurant " + restaurant.getName() + " is " + distance);
+                    LOGGER.debug("Distance from location " + search.getLocation() + " to restaurant " + restaurant.getName() + " is " + distance);
                 }
                 // Set transient distance to location property for search result ordering
                 restaurant.setDistanceToSearchLocation(distance);
@@ -201,8 +197,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                     availableRestaurants.add(restaurant);
                     continue;
                 }
+                String lookupLocationAddress = search.getLocation().getAddress().toUpperCase();
                 for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
-                    if(deliveryLocation.toUpperCase().replace(" ", "").startsWith(lookupLocation)) {
+                    if(lookupLocationAddress.contains(deliveryLocation.toUpperCase())) {
                         // Set transient open for delivery property for search result ordering
                         restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(now));
                         availableRestaurants.add(restaurant);
@@ -215,18 +212,18 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Returning list of " + availableRestaurants.size() + " available restaurants");
         }
-        
+
         return availableRestaurants;
     }
 
-    
+
     @Required
     @Value(value="${location.maxDistance}")
     public void setMaxDistance(double maxDistance) {
         this.maxDistance = maxDistance;
     }
 
-    
+
     @Required
     @Value(value="${timezone}")
     public void setTimeZone(String timeZone) {

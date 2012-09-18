@@ -8,16 +8,15 @@ public class Search implements Serializable {
 
     private static final long serialVersionUID = 1234L;
 
-    private String location;
-    
+    private AddressLocation location;
+
     private List<String> cuisines;
     
     private String sort;
     
     private String dir;
-    
-    private boolean includeOpenOnly;
 
+    private boolean includeOpenOnly;
 
     public Search() {
         this.cuisines = new ArrayList<String>();
@@ -31,13 +30,12 @@ public class Search implements Serializable {
      * @param dir
      */
 
-    public Search(String location, List<String> cuisines, String sort, String dir) {
+    public Search(AddressLocation location, List<String> cuisines, String sort, String dir ) {
         this.location = location;
         this.cuisines = cuisines;
         this.sort = sort;
         this.dir = dir;
     }
-
 
     public String getQueryString() {
         StringBuilder sb = new StringBuilder("?loc=").append(location);
@@ -55,13 +53,18 @@ public class Search implements Serializable {
         return sb.toString();
     }
 
-
-
-    public String getLocation() {
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Search: {");
+        sb.append("location:").append(location);
+        sb.append("}");
+        return sb.toString();
+    }
+    
+    public AddressLocation getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(AddressLocation location) {
         this.location = location;
     }
 

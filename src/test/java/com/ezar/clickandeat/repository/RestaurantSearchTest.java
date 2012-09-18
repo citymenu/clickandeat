@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.*;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -21,9 +22,12 @@ public class RestaurantSearchTest {
     
     @Autowired
     private RestaurantRepository repository;
-    
+
+    @Autowired
+    private LocationService locationService;
+
     private String restaurantId = "testrestaurant";
-    
+
     @Before
     public void setup() throws Exception {
 
@@ -54,7 +58,6 @@ public class RestaurantSearchTest {
         OpeningTimes openingTimes = new OpeningTimes();
         openingTimes.getClosedDates().add(new LocalDate(2012,12,1));
         restaurant.setOpeningTimes(openingTimes);
-        
         repository.saveRestaurant(restaurant);
         LOGGER.debug("Saved restaurant");
         
@@ -78,16 +81,17 @@ public class RestaurantSearchTest {
 
     
     @Test
-    @Ignore
     public void testFindRestaurantsServingLocation() throws Exception {
         
         // Check for restaurants serving Mexican food in E18 ordered by name
         try {
-            Search search = new Search("E18", Arrays.asList("Mexican", "Italian"),"name","asc");
+            AddressLocation location = locationService.getSingleLocation("E18");
+            Search search = new Search(location, Arrays.asList("Mexican", "Italian"),"name","asc");
             List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
             Restaurant restaurant = restaurants.get(0);
             Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new DateTime()));
+            LOGGER.info("Distance from restaurant to location is: " + restaurant.getDistanceToSearchLocation());
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);

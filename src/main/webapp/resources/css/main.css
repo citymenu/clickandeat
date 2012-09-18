@@ -102,3 +102,29 @@ ol, ul {
     letter-spacing: -0.01em;
 }
 
+.dialog-wrapper {
+    background-color:#FFFFFF;
+    width: 500px;
+    padding: 10px 15px 10px 15px;
+    border:1px solid #FFFFFF;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.dialog-wrapper h3 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:22px;
+    text-shadow: 0 1px #EEEEEE;
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 16px;
+    padding-bottom:6px;
+}
+
+.dialog-body {
+    min-height: 275px;
+    max-height: 500px;
+    overflow:auto;
+    margin-bottom:10px;
+}
