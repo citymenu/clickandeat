@@ -35,12 +35,19 @@ public class Main {
         server.setGracefulShutdown(5000);
 
         // Set the default time zone for the whole system
-        String timezone = props.getProperty("timezone");
+        String timezone = System.getenv("timezone");
+        if( timezone == null ) {
+            timezone = props.getProperty("timezone");
+        }
         DateTimeZone.setDefault(DateTimeZone.forID(timezone));
         LOGGER.info("Set default time zone for application to: " + DateTimeZone.getDefault().getID());
         
         // Set default locale for the whole system
-        String[] localeArray = props.getProperty("locale").split("_");
+        String locale = System.getenv("locale");
+        if( locale == null ) {
+            locale = props.getProperty("locale");
+        }
+        String[] localeArray = locale.split("_");
         Locale systemLocale = new Locale(localeArray[0],localeArray[1]);
         Locale.setDefault(systemLocale);
         LOGGER.info("Set default locale for application to: " + Locale.getDefault());
