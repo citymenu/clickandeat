@@ -85,21 +85,21 @@ function doBuildOrder(order,config) {
         if( order ) {
             var deliveryDay, deliveryTime, orderType;
             var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
-            var orderType = (order.deliveryType == 'DELIVERY'? labels['order-for-delivery']: labels['order-for-collection']);
+            var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
             if( !expectedTime ) {
                 deliveryDayOfWeek = null;
                 deliveryTimeOfDay = null;
-                deliveryDay = labels['today'];
-                deliveryTime = labels['asap'];
+                deliveryDay = getLabel('weekday.today');
+                deliveryTime = getLabel('time.asap');
             } else {
                 var time = new Date(expectedTime);
                 deliveryDayOfWeek = (time.getDay() == 0? 7: time.getDay());
                 deliveryTimeOfDay = (time.getHours() < 10? '0' + time.getHours(): time.getHours()) + ':' + (time.getMinutes() < 10? '0' + time.getMinutes(): time.getMinutes());
-                deliveryDay = (deliveryDayOfWeek == new Date().getDay()? labels['today']: labels['day-of-week-'+deliveryDayOfWeek]);
+                deliveryDay = (deliveryDayOfWeek == new Date().getDay()? getLabel('weekday.today'): getLabel('weekday.day-of-week-'+deliveryDayOfWeek));
                 deliveryTime = deliveryTimeOfDay;
             }
 
-            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>Cambiar</a>' : '');
+            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
             var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'170\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
                 .format(orderType,deliveryDay,deliveryTime,link);
             $('.order-delivery-wrapper').append(deliveryContainer);
@@ -132,7 +132,7 @@ function doBuildOrder(order,config) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
                 if( config.allowUpdateFreeItem ) {
                     var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
-                    selectBox += ('<option value = \'\'>{0}</option>').format(labels['no-thanks']);
+                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
                     orderDiscount.freeItems.forEach(function(freeItem) {
                         if( orderDiscount.selectedFreeItem == freeItem ) {
                             selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
@@ -150,7 +150,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><trvalign=\'top\'><td width=\'146\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,labels['free'],ccy,orderDiscount.formattedAmount);
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'236\'><trvalign=\'top\'><td width=\'146\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,orderDiscount.formattedAmount);
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -167,7 +167,7 @@ function doBuildOrder(order,config) {
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'236\'><tr valign=\'top\'><td width=\'146\'>' + labels['delivery-charge'] + '</td><td width=\'55\' align=\'right\'>{0}{1}</td><td width=\'30\'></td></tr>').format(ccy,order.formattedDeliveryCost);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'236\'><tr valign=\'top\'><td width=\'146\'>' + getLabel('order.delivery-charge') + '</td><td width=\'55\' align=\'right\'>{0}{1}</td><td width=\'30\'></td></tr>').format(ccy,order.formattedDeliveryCost);
             $('#order-item-contents').append(row);
         }
 
@@ -176,15 +176,15 @@ function doBuildOrder(order,config) {
 
         // Show warning if restaurant is not open at given order time
         if( !order.restaurantIsOpen ) {
-            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(order.deliveryType == 'DELIVERY'? labels['restaurant-delivery-closed-warning']: labels['restaurant-collection-closed-warning']);
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
             $('#deliverycheck').append(warning);
          } else if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
-            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + labels['delivery-warning'] + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + getLabel('order.delivery-warning') + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
             $('#deliverycheck').append(warning);
         } else {
             // Show checkout button if enabled
             if(order.canCheckout && config.enableCheckoutButton) {
-                $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(labels['checkout']));
+                $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
                 $('#checkoutbutton').click(function(){
                     checkout();
                 });
@@ -272,7 +272,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     // Restaurant not open for delivery or collection in the near future
     if( !hasDeliveryTime && !hasCollectionTime ) {
 
-        var warningText = ('<div class=\'warning-content\'>{0}</div>').format(labels['restaurant-is-not-open-warning']);
+        var warningText = ('<div class=\'warning-content\'>{0}</div>').format(getLabel('order.restaurant-is-not-open-warning'));
         var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
 
         $.fancybox.open({
@@ -292,12 +292,12 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
 
     // Build delivery edit options if there are options for both delivery and collection
     if( hasDeliveryTime && hasCollectionTime ) {
-        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),labels['delivery']);
-        var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),labels['collection']);
+        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),getLabel('order.delivery'));
+        var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),getLabel('order.collection'));
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
     }
     else {
-        var label = (hasDeliveryTime? labels['order-for-delivery']: labels['order-for-collection']);
+        var label = (hasDeliveryTime? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'><div class=\'delivery-title\'>{0}:</div></div>').format(label);
         deliveryType = (hasDeliveryTime? 'DELIVERY':'COLLECTION');
     }
@@ -307,8 +307,8 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     var deliverySelectContainer = buildDeliverySelection(days,times);
 
     // Build save and cancel buttons
-    var saveButton = '<a id=\'deliverysave\' class=\'order-button add-button unselectable\'>Ahorrar</a>';
-    var cancelButton = '<a id=\'deliverycancel\' class=\'order-button add-button unselectable\'>Cancelar</a>';
+    var saveButton = '<a id=\'deliverysave\' class=\'order-button add-button unselectable\'>' + getLabel('button.update') + '</a>';
+    var cancelButton = '<a id=\'deliverycancel\' class=\'order-button add-button unselectable\'>' + getLabel('button.cancel') + '</a>';
     var buttonContainer = ('<div class=\'delivery-buttons\'>{0} {1}</div>').format(saveButton,cancelButton);
 
     // Remove the existing delivery wrapper
@@ -418,7 +418,7 @@ function buildDeliveryDaySelect(days,times) {
     for( var i = 0; i < days.length; i++ ) {
         var timeArray = times[i];
         if( timeArray.length > 0 ) {
-            var optionLabel = (i == 0? labels['today']: labels['day-of-week-' + days[i]]);
+            var optionLabel = (i == 0? getLabel('weekday.today'): getLabel('weekday.day-of-week-' + days[i]));
             select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
         }
     }
@@ -432,7 +432,7 @@ function buildDeliveryTimeSelect(selectedDay,times) {
     var timeArray = times[selectedDay];
     if( selectedDay == 0 ) {
         if(( deliveryType == 'DELIVERY' && openForDelivery) || (deliveryType == 'COLLECTION' && openForCollection )) {
-            select += ('<option value=\'{0}\'>{1}</option>').format('ASAP',labels['asap']);
+            select += ('<option value=\'{0}\'>{1}</option>').format('ASAP',getLabel('time.asap'));
         }
     }
     timeArray.forEach(function(time){
@@ -447,15 +447,15 @@ function restaurantCheck(restaurantId, callback ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
 
         // Build buttons for proceed and cancel
-        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['add-item-anyway']);
-        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['dont-add-item']);
+        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.add-item-anyway'));
+        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.dont-add-item'));
         var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
 
         // Build body content
-        var warningBody = ('<div class=\'warning-container\'>' + labels['restaurant-warning'] + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
+        var warningBody = ('<div class=\'warning-container\'>' + getLabel('order.restaurant-warning') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
 
         // Build header
-        var warningHeader = ('<h3>{0}</h3>').format(labels['are-you-sure']);
+        var warningHeader = ('<h3>{0}</h3>').format(getLabel('order.are-you-sure'));
 
         // Build main container
         var warningContainer = ('<div class=\'restaurant-warning-wrapper\'>{0}{1}{2}</div>').format(warningHeader,warningBody,buttonContainer);
@@ -513,14 +513,14 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     additionalItemsChoices += '</div>';
 
     // build additional items header
-    var additionalItemsHeader = ('<h3>{0}</h3><div id=\'itemcountwarning\'></div>').format(labels['choose-additional']);
+    var additionalItemsHeader = ('<h3>{0}</h3><div id=\'itemcountwarning\'></div>').format(getLabel('order.choose-additional'));
 
     // Build additional items body
     var additionalItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(additionalItemsChoices);
 
     // Build buttons for save and cancel
-    var addItemButton = ('<a id=\'additembutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(labels['done']);
-    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(labels['cancel']);
+    var addItemButton = ('<a id=\'additembutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(getLabel('button.done'));
+    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(getLabel('button.cancel'));
     var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
 
     // Build main container for additional items
@@ -562,7 +562,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
         $('.itemcountwarning').remove();
         if( itemLimit > 0 && selectedItems.size() > itemLimit ) {
             canAddToOrder = false;
-            $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(labels['additional-item-limit']).format(itemLimit));
+            $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(getLabel('order.additional-item-limit')).format(itemLimit));
         }
     });
 }
@@ -615,7 +615,7 @@ function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOff
 
 function showSpecialOfferWarning() {
 
-    var warning = (currentOrder.deliveryType == 'DELIVERY'? labels['special-offer-not-available-delivery']: labels['special-offer-not-available-collection']);
+    var warning = (currentOrder.deliveryType == 'DELIVERY'? getLabel('order.special-offer-not-available-delivery'): getLabel('order.special-offer-not-available-collection'));
     var warningText = ('<div class=\'warning-content\'>{0}</div>').format(warning);
     var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
 
@@ -709,14 +709,14 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
         });
 
         // build special offer items header
-        var specialOfferItemsHeader = ('<h3>{0}</h3>').format(labels['special-offer-choices']);
+        var specialOfferItemsHeader = ('<h3>{0}</h3>').format(getLabel('order.special-offer-choices'));
 
         // Build special offer items body
         var specialOfferItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(specialOfferItemBody);
 
         // Build buttons for save and cancel
-        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['done']);
-        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(labels['cancel']);
+        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.done'));
+        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.cancel'));
         var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
 
         // Build main container for additional items

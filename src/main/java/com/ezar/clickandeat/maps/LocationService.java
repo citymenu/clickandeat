@@ -18,10 +18,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component(value = "locationService")
 public class LocationService {
@@ -73,8 +70,25 @@ public class LocationService {
             List<Map<String,Object>> results = (List<Map<String,Object>>)json.get("results");
             for( Map<String,Object> result: results ) {
 
+                // Full text address
                 String formattedAddress = (String)result.get("formatted_address");
+                
+                // Extract address components
+                Map<String,String> locationAddressComponents = new HashMap<String, String>();
+                List addressComponents = (List)result.get("address_components");
+                if( addressComponents != null ) {
+                    for( Object entry: addressComponents ) {
+                        Map<String,Object> addressComponent = (Map<String,Object>)entry;
+                        List typesList = (List)addressComponent.get("types");
+                        String type = (String)typesList.get(0);
+                        String value = (String)addressComponent.get("long_name");
+                        locationAddressComponents.put(type,value);
+                    }
+                }
+
+                // Determine the geometry
                 Map<String,Object> geometry = (Map<String,Object>)result.get("geometry");
+                String locationType = (String) geometry.get("location_type");
                 Map<String,Object> geolocation = (Map<String,Object>)geometry.get("location");
                 double[] coordinates = new double[2];
                 coordinates[0] = (Double)geolocation.get("lng");
@@ -82,6 +96,8 @@ public class LocationService {
 
                 AddressLocation addressLocation = new AddressLocation();
                 addressLocation.setAddress(address);
+                addressLocation.setLocationType(locationType);
+                addressLocation.setLocationComponents(locationAddressComponents);
                 addressLocation.setFormattedAddress(formattedAddress);
                 addressLocation.setLocation(coordinates);
                 
@@ -213,13 +229,13 @@ public class LocationService {
                 Math.sin(dLon/2) * Math.sin(dLon/2) *
                 Math.cos(lat1) * Math.cos(lat2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return Metrics.KILOMETERS.getMultiplier() * c;
+        return DIVISOR * c;
 
     }
 
 
     @Required
-    @Value(value="${location.locale}")
+    @Value(value="${locale}")
     public void setLocale(String locale) {
         this.locale = locale;
         this.country = locale.split("_")[1];

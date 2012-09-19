@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.payment.CardPaymentService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
@@ -10,23 +9,16 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
@@ -41,9 +33,6 @@ public class PaymentController {
     @Autowired
     private OrderWorkflowEngine orderWorkflowEngine;
 
-    @Autowired
-    private CardPaymentService cardPaymentService;
-    
     @Autowired
     private RequestHelper requestHelper;
 
@@ -63,16 +52,6 @@ public class PaymentController {
         return "payment";
     }
 
-
-    @RequestMapping(value="/secure/cardProcessing.html", method = RequestMethod.GET )
-    public ModelAndView processCardPayment(HttpServletRequest request) throws Exception {
-        Order order = requestHelper.getOrderFromSession(request);
-        //Map<String,String> model = cardPaymentService.buildPaymentParams(order);
-        //return new ModelAndView("cardProcessing",model);
-        return null;
-    }
-
-    
 
     @ResponseBody
     @RequestMapping(value="/secure/processCardPayment.ajax", method = RequestMethod.POST )

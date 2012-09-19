@@ -56,14 +56,22 @@ function showMatches(matches) {
     var matchHeader = '<h3>More than one matching address found.</h3>';
     var matchSubHeader = ('<div class=\'dialog-subtitle\'>{0}</div>').format('Is it one of the following?');
 
+    var locations = {};
+
     var matchEntries = '';
+    var index = 0;
     matches.forEach(function(match){
-        matchEntries += ('<div class=\'location-match\'>{0}</div>').format(match.formattedAddress);
+        locations[index] = match.formattedAddress;
+        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, match.formattedAddress);
     });
 
-    matchEntries += ('<div class=\'location-match\'>{0}</div>').format('None of the above');
+    locations[index] = 'CANCEL';
+    matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index,'None of the above');
+
+    var matchHeader = ('<div class=\'dialog-header\'>{0}</div>').format(matchHeader);
     var matchBody = ('<div class=\'dialog-body\'>{0}{1}</div>').format(matchSubHeader,matchEntries);
-    var matchContainer = ('<div class=\'dialog-wrapper\'>{0}{1}</div>').format(matchHeader,matchBody);
+    var matchFooter = ('<div class=\'dialog-footer\'></div>');
+    var matchContainer = ('<div class=\'dialog-wrapper\'>{0}{1}{2}</div>').format(matchHeader,matchBody,matchFooter);
 
     // Show the dialog
     $.fancybox.open({
@@ -72,6 +80,19 @@ function showMatches(matches) {
         modal:false,
         openEffect:'none',
         closeEffect:'none'
+    });
+
+    // Add click events to all of the divs
+    $('.location-link').click(function(){
+        var id = $(this).attr('id');
+        var index = id.split("_")[1];
+        var location = locations[index];
+        if( location == 'CANCEL') {
+            $.fancybox.close(true);
+        } else {
+            $.fancybox.close(true);
+            validateLocation(location);
+        }
     });
 
 }

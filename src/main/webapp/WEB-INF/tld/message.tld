@@ -1,0 +1,20 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Returns the escaped value of a translation tag</short-name>
+    <tag>
+        <name>message</name>
+        <tag-class>com.ezar.clickandeat.web.tags.MessageTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>escape</name>
+            <required>false</required>
+            <type>boolean</type>
+        </attribute>
+    </tag>
+</taglib>

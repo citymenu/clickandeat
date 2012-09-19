@@ -306,7 +306,7 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
@@ -319,7 +319,7 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
@@ -335,7 +335,7 @@ public class TwilioController implements InitializingBean {
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 

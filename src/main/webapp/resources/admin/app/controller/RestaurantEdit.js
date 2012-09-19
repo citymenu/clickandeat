@@ -900,12 +900,19 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             // Populate additional item choices and costs if present
             var additionalItemChoices = [];
+            var hasDefaultAdditionalItemCost = menuItemEditForm.getValues()['additionalItemCost'] != null;
             var additionalItemChoiceNamesField = menuItemEditForm.getForm().findField('additionalItemChoiceNames');
             var additionalItemChoiceCostsField = menuItemEditForm.getForm().findField('additionalItemChoiceCosts');
             if( additionalItemChoiceNamesField && additionalItemChoiceCostsField ) {
+
+                if( additionalItemChoiceCostsField.getValue() && additionalItemChoiceCostsField.getValue() != '' && hasDefaultAdditionalItemCost ) {
+                    showErrorMessage(Ext.get('restauranteditpanel'),'Error','You cannot set individual costs per additional item if the default item cost is set.');
+                    return;
+                }
+
                 var additionalItemNames = delimitedStringToArray(additionalItemChoiceNamesField.getValue(),'\n');
                 var additionalItemCosts = delimitedStringToArray(additionalItemChoiceCostsField.getValue(),'\n');
-                if( additionalItemNames.length != additionalItemCosts.length ) {
+                if( additionalItemNames.length != additionalItemCosts.length && !hasDefaultAdditionalItemCost) {
                     showErrorMessage(Ext.get('restauranteditpanel'),'Error','You must enter the same number of additional item costs as additional items');
                     return;
                 }

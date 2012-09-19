@@ -46,7 +46,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
         defaultType: 'textfield',
         items:[{
             fieldLabel:'Address 1',
-            name:'address1'
+            name:'address1',
+            allowBlank: false
         },{
             fieldLabel:'Address 2',
             name:'address2'
@@ -61,7 +62,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             name:'region'
         },{
             fieldLabel:'Postcode',
-            name:'postCode'
+            name:'postCode',
+            allowBlank: false
         }]
     },{
         xtype:'fieldset',

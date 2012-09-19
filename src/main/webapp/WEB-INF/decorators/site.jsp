@@ -26,6 +26,7 @@
     <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.pack.js?v=2.1.0"></script>
 
     <!-- Scripts -->
+    <script type="text/javascript" src="${ctx}/script/messages.html"></script>
     <script type="text/javascript" src="${resources}/script/json2.js"></script>
     <script type="text/javascript" src="${resources}/script/tools.js"></script>
 

@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.notification;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
@@ -28,7 +29,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component(value="emailService")
-public class EmailServiceImpl implements IEmailService, InitializingBean {
+public class EmailServiceImpl implements IEmailService {
     
     private static final Logger LOGGER = Logger.getLogger(EmailServiceImpl.class);
 
@@ -46,22 +47,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
     private String from;
 
-    private String locale;
-
     private String baseUrl;
-    
-    private Properties properties = new Properties();
-    
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        String path = "/messages_" + locale.split("_")[0] + ".properties";
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Loading properties from file: " + path);
-        }
-        Resource resource = new ClassPathResource(path);
-        properties.load(resource.getInputStream());
-    }
 
     
     /**
@@ -77,7 +63,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
 
         NotificationOptions notificationOptions = order.getRestaurant().getNotificationOptions();
         String emailAddress = notificationOptions.getNotificationEmailAddress();
-        String subjectFormat = properties.getProperty("restaurant-order-notification-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-notification-subject", false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -104,7 +90,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-order-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-order-confirmation-subject", false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -125,7 +111,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("restaurant-order-accepted-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-accepted-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(), StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -146,7 +132,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("restaurant-order-declined-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-declined-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -167,7 +153,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
-        String subjectFormat = properties.getProperty("customer-order-cancelled-restaurant-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-order-cancelled-restaurant-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -188,7 +174,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-order-cancelled-customer-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-order-cancelled-customer-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -209,7 +195,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("restaurant-order-cancelled-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -230,7 +216,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-auto-cancelled-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-auto-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -251,7 +237,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
-        String subjectFormat = properties.getProperty("restaurant-auto-cancelled-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-auto-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -272,7 +258,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
-        String subjectFormat = properties.getProperty("restaurant-delisted-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-delisted-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,StringEscapeUtils.unescapeHtml(restaurant.getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
@@ -293,7 +279,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
-        String subjectFormat = properties.getProperty("restaurant-relisted-confirmation-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-relisted-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,StringEscapeUtils.unescapeHtml(restaurant.getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
@@ -314,7 +300,7 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = properties.getProperty("customer-cancellation-offer-subject");
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-cancellation-offer-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
@@ -357,12 +343,6 @@ public class EmailServiceImpl implements IEmailService, InitializingBean {
     @Value(value="${email.from}")
     public void setFrom(String from) {
         this.from = from;
-    }
-
-    @Required
-    @Value(value="${locale}")
-    public void setLocale(String locale) {
-        this.locale = locale;
     }
 
 }

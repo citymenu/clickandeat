@@ -7,19 +7,14 @@ import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
-import com.ezar.clickandeat.validator.AddressValidator;
-import com.ezar.clickandeat.validator.PersonValidator;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,12 +33,6 @@ public class CheckoutController {
 
     @Autowired
     private OrderRepository orderRepository;
-
-    @Autowired
-    private PersonValidator personValidator;
-
-    @Autowired
-    private AddressValidator addressValidator;
 
     @Autowired
     private RequestHelper requestHelper;
@@ -151,14 +140,6 @@ public class CheckoutController {
             Person person = buildPerson(body);
             Address deliveryAddress = buildDeliveryAddress(body);
             String additionalInstructions = buildAdditionalInstructions(body); 
-
-            // Validate the person object
-            BindException personErrors = new BindException(person,"person");
-            personValidator.validate(person,personErrors);
-
-            // Validate the address object
-            BindException addressErrors = new BindException(deliveryAddress,"address");
-            addressValidator.validate(deliveryAddress,addressErrors);
 
             // Get the order out of the session
             Order order = requestHelper.getOrderFromSession(request);

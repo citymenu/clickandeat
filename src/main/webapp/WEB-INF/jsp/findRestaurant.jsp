@@ -5,8 +5,10 @@
 
 <head>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
+    <script type="text/javascript" src="${resources}/script/search.js"></script>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
-    <title><spring:message code="label.search"/></title>
+    <title><message:message key="page-title.search-results" escape="false"/></title>
+
 </head>
 
 <body>
@@ -19,28 +21,27 @@
             <table width="700">
                 <tr valign="top">
                     <td width="250">
-                        <form method="GET" action="${ctx}/findRestaurant.html">
-                            <h3><spring:message code="label.search"/></h3>
-                            <div>Location:</div>
-                            <div><input name="loc" type="text" class="search" value="${search.location}"/></div>
-                            <input type="submit" value="<spring:message code="label.search"/>"/>
-                            <div>Cuisines:</div>
-                            <c:forEach var="cuisine" items="${cuisines}">
-                                <c:set var="checked" value=""/>
-                                <c:forEach var="c" items="${search.cuisines}">
-                                    <c:if test="${c eq cuisine}">
-                                        <c:set var="checked" value="checked='true'" />
-                                    </c:if>
-                                </c:forEach>
-                                <div><input type="checkbox" name="c" value="${cuisine}" ${checked}/> ${cuisine}</div>
+                        <h3><message:message key="search.search"/></h3>
+                        <div>Location:</div>
+                        <div><input id="loc" type="text" class="search" value="${search.location}"/></div>
+                        <input type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
+                        <div><message:message key="config.cuisines"/></div>
+                        <c:forEach var="cuisine" items="${cuisines}">
+                            <c:set var="checked" value=""/>
+                            <c:forEach var="c" items="${search.cuisines}">
+                                <c:if test="${c eq cuisine}">
+                                    <c:set var="checked" value="checked='true'" />
+                                </c:if>
                             </c:forEach>
-                        </form>
+                            <div><input type="checkbox" name="c" value="${cuisine}" ${checked}/> ${cuisine}</div>
+                        </c:forEach>
                     </td>
                     <td width="450">
                         <div id="searchresultsright">
                             <div id="results">
                                 <div id="searchheader" class="boxcontainer">
-                                    <h3>Showing ${count} restaurants serving location ${search.location}</h3>
+                                    <div><message:message key="search.your-location"/>: ${search.location}</div>
+                                    <div>${count} <message:message key="search.restaurants-found"/></div>
                                 </div>
                                 <c:forEach var="restaurant" items="${results}">
                                     <div class="boxcontainer searchresult">

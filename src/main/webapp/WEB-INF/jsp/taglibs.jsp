@@ -7,6 +7,7 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib uri="/WEB-INF/tld/escape.tld" prefix="util" %>
 <%@ taglib uri="/WEB-INF/tld/selectbox.tld" prefix="select" %>
+<%@ taglib uri="/WEB-INF/tld/message.tld" prefix="message" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
@@ -26,6 +27,6 @@
 <script type="text/javascript">
 var ctx = "${ctx}";
 var locale = "${locale}";
-var ccy = "<spring:message code="label.currency"/>";
+var ccy = "<message:message key="config.currency" escape="false"/>";
 var resources = "${resources}";
 </script>

@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Map;
 
 @Document(collection="addressLocations")
 public class AddressLocation extends PersistentObject implements Serializable {
@@ -17,6 +18,10 @@ public class AddressLocation extends PersistentObject implements Serializable {
 
     private double[] location;
 
+    private String locationType;
+    
+    private Map<String,String> locationComponents;
+    
     private double radius;
 
     private boolean radiusWarning;
@@ -37,6 +42,22 @@ public class AddressLocation extends PersistentObject implements Serializable {
 
     public void setFormattedAddress(String formattedAddress) {
         this.formattedAddress = formattedAddress;
+    }
+
+    public String getLocationType() {
+        return locationType;
+    }
+
+    public void setLocationType(String locationType) {
+        this.locationType = locationType;
+    }
+
+    public Map<String, String> getLocationComponents() {
+        return locationComponents;
+    }
+
+    public void setLocationComponents(Map<String, String> locationComponents) {
+        this.locationComponents = locationComponents;
     }
 
     public double getRadius() {

@@ -1,10 +1,10 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
-import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import com.ezar.clickandeat.workflow.WorkflowStatusExceptionMessageResolver;
 import org.apache.log4j.Logger;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,9 +36,6 @@ public class RestaurantEmailConfirmController implements InitializingBean {
 
     @Autowired
     private SecurityUtils securityUtils;
-
-    @Autowired
-    private ResourceBundleMessageSource messageSource;
 
     @Autowired
     private WorkflowStatusExceptionMessageResolver workflowStatusExceptionMessageResolver;
@@ -81,14 +77,14 @@ public class RestaurantEmailConfirmController implements InitializingBean {
             try {
                 order = orderWorkflowEngine.processAction(order,action);
                 model.put("success",true);
-                String orderStatusDescription = messageSource.getMessage("description." + order.getOrderStatus(),new Object[]{order.getRestaurant().getName()}, systemLocale);
-                String message = messageSource.getMessage("workflow.update.message",new Object[]{order.getOrderId(),orderStatusDescription},systemLocale); 
+                String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true,order.getRestaurant().getName());
+                String message = MessageFactory.formatMessage("workflow.update.message", true, order.getOrderId(), orderStatusDescription);
                 model.put("message",message);
             }
             catch( WorkflowStatusException ex ) {
                 LOGGER.error("Workflow exception: " + ex.getMessage());
                 model.put("success",false);
-                String message = workflowStatusExceptionMessageResolver.getWorkflowStatusExceptionMessage(ex,systemLocale);
+                String message = workflowStatusExceptionMessageResolver.getWorkflowStatusExceptionMessage(ex);
                 model.put("message",message);
             }
 
@@ -96,7 +92,7 @@ public class RestaurantEmailConfirmController implements InitializingBean {
         catch( Exception ex ) {
             LOGGER.error("Execption for orderId: " + orderId,ex);
             model.put("success",false);
-            String message = messageSource.getMessage("workflow.exception.message",new Object[]{ex.getMessage()},systemLocale);
+            String message = MessageFactory.formatMessage("workflow.exception.message", true, ex.getMessage());
             model.put("message",message);
         }
 

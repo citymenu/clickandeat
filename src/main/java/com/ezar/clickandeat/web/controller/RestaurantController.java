@@ -7,6 +7,8 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import com.ezar.clickandeat.validator.RestaurantValidator;
+import com.ezar.clickandeat.validator.ValidationErrors;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,6 +52,10 @@ public class RestaurantController {
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
+    @Autowired
+    private RestaurantValidator restaurantValidator;
+    
+            
     @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
     public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
 
@@ -173,13 +179,20 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
-            LOGGER.debug("Deserializing restaurant object");
             Restaurant restaurant = jsonUtils.deserialize(Restaurant.class,body);
-            LOGGER.debug("Saving restaurant into database");
-            restaurant = repository.saveRestaurant(restaurant);
-            model.put("success",true);
-            model.put("id",restaurant.getId());
-            model.put("restaurant",restaurant);
+            
+            // Validate restaurant
+            ValidationErrors errors = restaurantValidator.validate(restaurant);
+            if( errors.hasErrors()) {
+                model.put("success",false);
+                model.put("message",errors.getErrorSummary());
+            }
+            else {
+                restaurant = repository.saveRestaurant(restaurant);
+                model.put("success",true);
+                model.put("id",restaurant.getId());
+                model.put("restaurant",restaurant);
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
