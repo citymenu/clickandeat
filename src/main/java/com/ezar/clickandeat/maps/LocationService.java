@@ -4,6 +4,7 @@ import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.repository.AddressLocationRepository;
 import flexjson.JSONDeserializer;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -84,7 +85,7 @@ public class LocationService {
                         Map<String,Object> addressComponent = (Map<String,Object>)entry;
                         List typesList = (List)addressComponent.get("types");
                         String type = (String)typesList.get(0);
-                        String value = (String)addressComponent.get("long_name");
+                        String value = StringEscapeUtils.escapeHtml((String)addressComponent.get("long_name"));
                         locationAddressComponents.put(type,value);
                     }
                 }
@@ -99,7 +100,7 @@ public class LocationService {
 
                 AddressLocation addressLocation = new AddressLocation();
                 addressLocation.setAddress(address);
-                addressLocation.setFormattedAddress(formattedAddress);
+                addressLocation.setFormattedAddress(StringEscapeUtils.escapeHtml(formattedAddress));
                 addressLocation.setLocationType(locationType);
                 addressLocation.setLocationComponents(locationAddressComponents);
                 addressLocation.setLocation(coordinates);

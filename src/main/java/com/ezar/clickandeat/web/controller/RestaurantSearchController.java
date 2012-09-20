@@ -45,7 +45,7 @@ public class RestaurantSearchController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/validateLocation.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> list(@RequestParam(value = "loc") String loc ) throws Exception {
+    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc") String loc ) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
         
