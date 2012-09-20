@@ -14,6 +14,8 @@ public class AddressLocation extends PersistentObject implements Serializable {
     @Indexed
     private String address;
 
+    private String displayAddress;
+    
     private String formattedAddress;
 
     private double[] location;
@@ -42,6 +44,14 @@ public class AddressLocation extends PersistentObject implements Serializable {
 
     public void setFormattedAddress(String formattedAddress) {
         this.formattedAddress = formattedAddress;
+    }
+
+    public String getDisplayAddress() {
+        return displayAddress;
+    }
+
+    public void setDisplayAddress(String displayAddress) {
+        this.displayAddress = displayAddress;
     }
 
     public String getLocationType() {

@@ -6,6 +6,9 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.tools.generic.NumberTool;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import java.io.StringWriter;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 @Component(value="velocityTemplatingService")
@@ -52,6 +54,8 @@ public class VelocityTemplatingService implements InitializingBean {
 
     private String locale;
 
+    private String baseUrl;
+    
     @Override
     public void afterPropertiesSet() throws Exception {
         engine = new VelocityEngine();
@@ -71,7 +75,6 @@ public class VelocityTemplatingService implements InitializingBean {
         NumberTool numberTool = new NumberTool();
         numberTool.configure(params);
         velocityTools.put("numberTool", numberTool);
-
         velocityTools.put("stringTool", new StringTool());
     }
 
@@ -98,6 +101,10 @@ public class VelocityTemplatingService implements InitializingBean {
         for( Map.Entry<String,Object> entry: velocityTools.entrySet()) {
             context.put(entry.getKey(),entry.getValue());
         }
+        
+        // Add default useful objects
+        context.put("today",new LocalDate());
+        context.put("baseUrl",baseUrl);
 
         StringWriter sw = new StringWriter();
         engine.mergeTemplate(getLocaleTemplate(templateLocation),"utf-8",context,sw);
@@ -121,6 +128,14 @@ public class VelocityTemplatingService implements InitializingBean {
         this.locale = locale;
     }
 
+    
+    @Required
+    @Value(value="${baseUrl}")
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+
+
 
     public static final class StringTool {
 
@@ -128,6 +143,14 @@ public class VelocityTemplatingService implements InitializingBean {
             return escape(obj,false);
         }
 
+        public String escapeXml(Object obj) {
+            if( obj == null ) {
+                return null;
+            }
+            return StringEscapeUtils.escapeXml((String) obj);
+
+        }
+        
         public String escape(Object obj, boolean escapeNewLines) {
             if( obj == null ) {
                 return null;
@@ -138,6 +161,13 @@ public class VelocityTemplatingService implements InitializingBean {
 
         public boolean hasText(Object obj) {
             return obj != null && StringUtils.hasText((String)obj);
+        }
+        
+        public String formatDate(DateTime dateTime) {
+            if( dateTime == null ) {
+                return null;
+            }
+            return DateTimeFormat.forPattern("HH:mm").print(dateTime);
         }
     }
 }

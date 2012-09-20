@@ -61,8 +61,8 @@ function showMatches(matches) {
     var matchEntries = '';
     var index = 0;
     matches.forEach(function(match){
-        locations[index] = match.formattedAddress;
-        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, match.formattedAddress);
+        locations[index] = match.displayAddress;
+        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, match.displayAddress);
     });
 
     locations[index] = 'CANCEL';

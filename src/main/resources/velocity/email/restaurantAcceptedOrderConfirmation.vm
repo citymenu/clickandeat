@@ -7,6 +7,29 @@
 
 <h1>The restaurant has accepted your order $order.orderId</h1>
 
+#if( $order.deliveryType == 'DELIVERY' )
+    <div>Expected delivery time:
+        $stringTool.formatDate($order.expectedDeliveryTime)
+        #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+            on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+        #end
+    </div>
+#else
+    <div>Order is for collection</div>
+#end
+
+#if ($allowCancel)
+    <div>If you don't want to wait this long for your order, please click the link below to cancel this order.</div>
+    <div>You until $stringTool.formatDate($cancelCutoffTime)
+    #if(!($cancelCutoffTime.toLocalDate() == $today))
+        on $cancelCutoffTime.dayOfWeek().getAsText($locale)
+    #end
+    to cancel the order.</div>
+    <div>
+        <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancel order</a>
+    </div>
+#end
+
 </body>
 
 

@@ -900,7 +900,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             // Populate additional item choices and costs if present
             var additionalItemChoices = [];
-            var hasDefaultAdditionalItemCost = menuItemEditForm.getValues()['additionalItemCost'] != null;
+            var hasDefaultAdditionalItemCost = menuItemEditForm.getValues()['additionalItemCost'] != '';
             var additionalItemChoiceNamesField = menuItemEditForm.getForm().findField('additionalItemChoiceNames');
             var additionalItemChoiceCostsField = menuItemEditForm.getForm().findField('additionalItemChoiceCosts');
             if( additionalItemChoiceNamesField && additionalItemChoiceCostsField ) {

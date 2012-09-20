@@ -64,9 +64,7 @@ public class ExpiredOrderCleanupTask extends AbstractClusteredTask {
             LOGGER.error("Error occurred removing expired orders orders: " + ex.getMessage(),ex);
         }
         finally {
-            if( shouldRun ) {
-                cleanUp();
-            }
+            cleanUp();
         }
     }
     

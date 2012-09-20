@@ -5,6 +5,7 @@ import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,8 +34,15 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
-        String deliveryMinutes = (String)context.get("DeliveryMinutes");
+        Integer deliveryMinutes = (Integer)context.get("DeliveryMinutes");
         order.addOrderUpdate("Restaurant accepted order with modified delivery time of " + deliveryMinutes + " minutes");
+
+        // Update expected order delivery time (if the order is for delivery)
+        if( Order.DELIVERY.equals(order.getDeliveryType())) {
+            order.setDeliveryTimeNonStandard(true);
+            DateTime expectedDeliveryTime = order.getExpectedDeliveryTime() == null? new DateTime(): order.getExpectedDeliveryTime();
+            order.setExpectedDeliveryTime(expectedDeliveryTime.plusMinutes(deliveryMinutes));
+        }
 
         try {
             notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);

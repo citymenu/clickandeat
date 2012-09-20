@@ -28,6 +28,8 @@ public class LocationService {
     private static final String MAP_URL = "http://maps.googleapis.com/maps/api/geocode/json?address={0}&sensor=false&components=country:{1}&language={2}";
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
+
+    private static final int MAX_DISPLAY_COMPONENTS = 3;
     
     @Autowired
     private AddressLocationRepository addressLocationRepository;
@@ -40,6 +42,7 @@ public class LocationService {
 
     private Double invalidRadius;
 
+    private List<String> componentPreferences = new ArrayList<String>();
 
     /**
      * Gets a list of matching locations from the google maps api
@@ -96,10 +99,13 @@ public class LocationService {
 
                 AddressLocation addressLocation = new AddressLocation();
                 addressLocation.setAddress(address);
+                addressLocation.setFormattedAddress(formattedAddress);
                 addressLocation.setLocationType(locationType);
                 addressLocation.setLocationComponents(locationAddressComponents);
-                addressLocation.setFormattedAddress(formattedAddress);
                 addressLocation.setLocation(coordinates);
+
+                // Build the display address for this location 
+                buildDisplayAddress(addressLocation);
                 
                 Map<String,Object> bounds = (Map<String,Object>)geometry.get("bounds");
                 if( bounds == null ) {
@@ -234,6 +240,31 @@ public class LocationService {
     }
 
 
+    /**
+     * @param addressLocation
+     * @return
+     */
+
+    public void buildDisplayAddress(AddressLocation addressLocation) {
+        StringBuilder sb = new StringBuilder();
+        String delim = "";
+        int componentCount = 0;        
+        for( String componentPreference: componentPreferences ) {
+            String component = addressLocation.getLocationComponents().get(componentPreference);
+            if( component != null ) {
+                sb.append(delim).append(component);
+                delim = " ";
+                componentCount++;
+            }
+            if( componentCount >= MAX_DISPLAY_COMPONENTS ) {
+                break;
+            }
+        }
+        addressLocation.setDisplayAddress(componentCount < MAX_DISPLAY_COMPONENTS? addressLocation.getFormattedAddress(): sb.toString());
+    }
+    
+    
+
     @Required
     @Value(value="${locale}")
     public void setLocale(String locale) {
@@ -253,5 +284,10 @@ public class LocationService {
         this.invalidRadius = invalidRadius;
     }
 
+    @Required
+    @Value(value="${location.componentpreferences}")
+    public void setComponentPreferences(String componentPreferences) {
+        Collections.addAll(this.componentPreferences, componentPreferences.split(","));
+    }
 }
 

@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <title><message:message key="workflow.order-confirmation"/></title>
+    <title><message:message key="workflow.relist-restaurant-title"/></title>
 </head>
 
 <body>

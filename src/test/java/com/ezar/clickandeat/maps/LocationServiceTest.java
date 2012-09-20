@@ -20,7 +20,7 @@ public class LocationServiceTest {
     @Test
     public void testDistanceBetweenPostCodes() throws Exception {
         
-        String postCode1 = "Perth";
+        String postCode1 = "Rosello, 285 08037";
         String postCode2 = "PE3 6LJ";
         String postCode3 = "E18";
         String postCode4 = "South Woodford";

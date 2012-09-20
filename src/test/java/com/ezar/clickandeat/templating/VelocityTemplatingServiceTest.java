@@ -8,7 +8,6 @@ import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -42,8 +41,6 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     @Autowired
     private SecurityUtils securityUtils;
 
-    private String timeZone;
-    
     private String locale;
 
     private Locale systemLocale;
@@ -76,7 +73,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
 
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
-        order.setExpectedDeliveryTime(new DateTime().minusDays(2).minusHours(3));
+        order.setExpectedDeliveryTime(new DateTime().plusDays(1));
         order.setAdditionalInstructions("Please can I have some extra cheese & onion");
         
         // Add a delivery address to the order
@@ -98,7 +95,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         item2.setMenuItemId("ITEM2");
         item2.setMenuItemNumber(0);
         item2.setQuantity(1);
-        item2.setMenuItemTitle("Spinach Pakora");
+        item2.setMenuItemTitle("Spinach Pakoára");
         item2.setMenuItemTypeName("Thin");
         item2.getAdditionalItems().add("Olives");
         item2.getAdditionalItems().add("Mushrooms");
@@ -181,6 +178,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("order",order);
+        templateModel.put("today",new LocalDate());
         String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
         String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
         templateModel.put("acceptCurl", acceptCurl);
@@ -191,12 +189,34 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         LOGGER.info("Generated text:\n" + text );
     }
 
+    
+    @Test
+    public void testBuildRestaurantAcceptanceConfirmation() throws Exception {
 
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
+        Order order = orderRepository.create();
+        order.setDeliveryType(Order.DELIVERY);
+        order.setExpectedDeliveryTime(new DateTime().plusMinutes(50));
+        order.setDeliveryTimeNonStandard(false);
+
+        Restaurant restaurant = new Restaurant();
+        restaurant.getDeliveryOptions().setDeliveryTimeMinutes(45d);
+        order.setRestaurant(restaurant);
+
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("order",order);
+        templateModel.put("today",new LocalDate());
+        templateModel.put("allowCancel", true);
+        DateTime cancelExpiryTime = order.getExpectedDeliveryTime().minusMinutes(order.getRestaurant().getDeliveryTimeMinutes());
+        templateModel.put("cancelCutoffTime", cancelExpiryTime);
+        String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
+        templateModel.put("cancelCurl", cancelCurl);
+
+        String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
+        Assert.assertNotNull(text);
+        LOGGER.info("Generated text:\n" + text );
+
     }
+
 
     @Required
     @Value(value="${locale}")

@@ -10,7 +10,6 @@ import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import com.ezar.clickandeat.workflow.WorkflowStatusExceptionMessageResolver;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,6 @@ import java.util.Map;
 public class TwilioController implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioController.class);
-    
 
     @Autowired
     private OrderRepository orderRepository;
@@ -56,8 +54,6 @@ public class TwilioController implements InitializingBean {
     private ResponseEntityUtils responseEntityUtils;
 
     private String authKey;
-
-    private String timeZone;
 
     private String locale;
 
@@ -96,7 +92,7 @@ public class TwilioController implements InitializingBean {
         Map<String,Object> templateModel = new HashMap<String, Object>();
         String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, orderId);
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
-        templateModel.put("delivery",order.getDeliveryType().toLowerCase());
+        templateModel.put("order",order);
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
 
         if( LOGGER.isDebugEnabled()) {
@@ -325,7 +321,18 @@ public class TwilioController implements InitializingBean {
 
             // Order accepted with non-standard delivery time
             case '3':
-                String deliveryMinutes = digits.substring(1);
+                String deliveryMinutesText = digits.substring(1);
+
+                // Try to extract the delivery minutes from the input
+                int deliveryMinutes;
+                try {
+                    deliveryMinutes = Integer.valueOf(deliveryMinutesText);
+                }
+                catch( Exception ex ) {
+                    LOGGER.error("Could not parse delivery time minutes: " + ex.getMessage());
+                    return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
+                }
+
                 Map<String,Object> context = new HashMap<String, Object>();
                 context.put("DeliveryMinutes",deliveryMinutes);
                 try {
@@ -447,13 +454,6 @@ public class TwilioController implements InitializingBean {
     }
 
     
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
-
-
     @Required
     @Value(value="${locale}")
     public void setLocale(String locale) {

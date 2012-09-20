@@ -103,8 +103,6 @@ public class CheckoutController {
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime());
-            order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
 
@@ -147,8 +145,6 @@ public class CheckoutController {
             // Update order delivery details
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
-            order.setRequestedDeliveryTime(new DateTime());
-            order.setRequestedCollectionTime(new DateTime());
             order.setAdditionalInstructions(additionalInstructions);
             orderRepository.save(order);
 

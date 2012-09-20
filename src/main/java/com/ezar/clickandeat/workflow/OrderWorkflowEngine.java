@@ -31,6 +31,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String ORDER_STATUS_RESTAURANT_CANCELLED = "ORDER_STATUS_RESTAURANT_CANCELLED";
     public static final String ORDER_STATUS_CUSTOMER_CANCELLED = "ORDER_STATUS_CUSTOMER_CANCELLED";
     public static final String ORDER_STATUS_AUTO_CANCELLED = "ORDER_STATUS_AUTO_CANCELLED";
+    public static final String ORDER_STATUS_CANCEL_CUTOFF_EXPIRED = "ORDER_STATUS_CANCEL_CUTOFF_EXPIRED";
 
 
     /**

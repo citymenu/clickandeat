@@ -427,8 +427,14 @@ public class OrderController implements InitializingBean {
             days.add(now.getDayOfWeek());
             DateTime deliveryOpeningTime = restaurant.getDeliveryOpeningTime(now);
             DateTime collectionOpeningTime = restaurant.getCollectionOpeningTime(now);
-            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime: now, restaurant.getDeliveryClosingTime(now));
-            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime: now, restaurant.getCollectionClosingTime(now));
+
+            // For delivery times allow delivery time selection up to after the delivery time beyond order closing
+            int deliveryTimeMinutes = restaurant.getDeliveryTimeMinutes();
+            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)?
+                    deliveryOpeningTime.plusMinutes(deliveryTimeMinutes): now.plusMinutes(deliveryTimeMinutes), restaurant.getDeliveryClosingTime(now).plusMinutes(deliveryTimeMinutes));
+            
+            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)?
+                    collectionOpeningTime: now, restaurant.getCollectionClosingTime(now));
             deliveryTimes.add(deliveryTimesPair.first);
             collectionTimes.add(collectionTimesPair.first);
 

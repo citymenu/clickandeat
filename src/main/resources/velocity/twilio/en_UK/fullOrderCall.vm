@@ -8,9 +8,9 @@
         #if($order.deliveryType == 'DELIVERY')
             <Say language="en-gb">You have an order for delivery to $stringTool.escape($order.deliveryAddress.summary) to be delivered
             #if($order.expectedDeliveryTime)
-                at $order.expectedDeliveryTime.hourOfDay $order.expectedDeliveryTime.minuteOfHour
+                at $stringTool.formatDate($order.expectedDeliveryTime)
                 #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
-                    on $order.expectedDeliveryTime.monthOfYear().getAsText($locale) $order.expectedDeliveryTime.dayOfMonth
+                    on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
                 #end
             #else
                 as soon as possible
@@ -19,9 +19,9 @@
         #else
             <Say language="en-gb">You have an order for collection
             #if($order.expectedCollectionTime)
-                at $order.expectedCollectionTime.hourOfDay $order.expectedCollectionTime.minuteOfHour.
+                at $stringTool.formatDate($order.expectedCollectionTime)
                 #if(!$order.expectedCollectionTime.toLocalDate() == $today)
-                    on $order.expectedCollectionTime.dayOfMonth of $order.expectedCollectionTime.monthOfYear().getAsText($locale)
+                    on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
                 #end
             #else
                 as soon as possible
@@ -34,13 +34,13 @@
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 number $item.menuItemNumber
             #else
-                $stringTool.escape($item.menuItemTitle)
+                $stringTool.escapeXml($item.menuItemTitle)
             #end
             #if( $stringTool.hasText($item.menuItemTypeName ))
-                $stringTool.escape($item.menuItemTypeName)
+                $stringTool.escapeXml($item.menuItemTypeName)
             #end
             #if( $stringTool.hasText($item.menuItemSubTypeName ))
-                $stringTool.escape($item.menuItemSubTypeName)
+                $stringTool.escapeXml($item.menuItemSubTypeName)
             #end
             #if( $item.additionalItems.size() > 0 )
                 with
@@ -48,7 +48,7 @@
                     #if( $item.additionalItems.size() > 1 && $velocityCount == $item.additionalItems.size())
                         and
                     #end
-                    $stringTool.escape($additionalItem)
+                    $stringTool.escapeXml($additionalItem)
                 #end
             #end
             </Say>
@@ -56,13 +56,13 @@
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="en-gb">1 free $stringTool.escape($discount.selectedFreeItem)</Say>
+                <Say language="en-gb">1 free $stringTool.escapeXml($discount.selectedFreeItem)</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="en-gb">The customer has added the following instructions for this order.</Say>
-            <Say>$stringTool.escape($order.additionalInstructions)</Say>
+            <Say>$stringTool.escapeXml($order.additionalInstructions)</Say>
         #end
         <Say language="en-gb">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
         order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key. To repeat this message

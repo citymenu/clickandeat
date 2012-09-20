@@ -47,8 +47,7 @@ public class OrderRepositoryTest {
         
         Order order = new Order();
         order.setOrderId(testOrderId);
-        order.setRequestedDeliveryTime(new DateTime());
-        repository.save(order);
+        repository.saveOrder(order);
         
         Order retrievedOrder = repository.findByOrderId(testOrderId);
         Assert.assertNotNull(retrievedOrder);

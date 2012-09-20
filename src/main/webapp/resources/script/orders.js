@@ -81,33 +81,31 @@ function doBuildOrder(order,config) {
     $('.delivery-warning-wrapper').remove();
 
     // Add the delivery options to the order if at least one item is added and it is enabled
-    if(config.showDeliveryOptions) {
-        if( order ) {
-            var deliveryDay, deliveryTime, orderType;
-            var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
-            var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
-            if( !expectedTime ) {
-                deliveryDayOfWeek = null;
-                deliveryTimeOfDay = null;
-                deliveryDay = getLabel('weekday.today');
-                deliveryTime = getLabel('time.asap');
-            } else {
-                var time = new Date(expectedTime);
-                deliveryDayOfWeek = (time.getDay() == 0? 7: time.getDay());
-                deliveryTimeOfDay = (time.getHours() < 10? '0' + time.getHours(): time.getHours()) + ':' + (time.getMinutes() < 10? '0' + time.getMinutes(): time.getMinutes());
-                deliveryDay = (deliveryDayOfWeek == new Date().getDay()? getLabel('weekday.today'): getLabel('weekday.day-of-week-'+deliveryDayOfWeek));
-                deliveryTime = deliveryTimeOfDay;
-            }
+    if( order ) {
+        var deliveryDay, deliveryTime, orderType;
+        var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
+        var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
+        if( !expectedTime ) {
+            deliveryDayOfWeek = null;
+            deliveryTimeOfDay = null;
+            deliveryDay = getLabel('weekday.today');
+            deliveryTime = getLabel('time.asap');
+        } else {
+            var time = new Date(expectedTime);
+            deliveryDayOfWeek = (time.getDay() == 0? 7: time.getDay());
+            deliveryTimeOfDay = (time.getHours() < 10? '0' + time.getHours(): time.getHours()) + ':' + (time.getMinutes() < 10? '0' + time.getMinutes(): time.getMinutes());
+            deliveryDay = (deliveryDayOfWeek == new Date().getDay()? getLabel('weekday.today'): getLabel('weekday.day-of-week-'+deliveryDayOfWeek));
+            deliveryTime = deliveryTimeOfDay;
+        }
 
-            var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
-            var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'170\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
-                .format(orderType,deliveryDay,deliveryTime,link);
-            $('.order-delivery-wrapper').append(deliveryContainer);
-            if( config.showDeliveryOptions ) {
-                $('#deliveryedit').click(function(){
-                    deliveryEdit();
-                });
-            }
+        var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
+        var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'236\'><tr valign=\'top\'><td width=\'170\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
+            .format(orderType,deliveryDay,deliveryTime,link);
+        $('.order-delivery-wrapper').append(deliveryContainer);
+        if( config.showDeliveryOptions ) {
+            $('#deliveryedit').click(function(){
+                deliveryEdit();
+            });
         }
     }
 

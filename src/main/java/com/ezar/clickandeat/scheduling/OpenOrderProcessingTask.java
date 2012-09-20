@@ -126,9 +126,7 @@ public class OpenOrderProcessingTask extends AbstractClusteredTask {
             LOGGER.error("Error occurred processing open orders: " + ex.getMessage(),ex);
         }
         finally {
-            if( shouldRun ) {
-                cleanUp();
-            }
+            cleanUp();
         }
     }
 

@@ -5,6 +5,7 @@ import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +28,24 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
 
     @Override
     public boolean isActionValidForOrder(Order order) {
-        return(ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus()));
+        if( ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
+            return true;
+        }
+        else if ( order.getDeliveryTimeNonStandard()) {
+            DateTime cutoffTime = order.getExpectedDeliveryTime().minusMinutes(order.getRestaurant().getDeliveryTimeMinutes());
+            if( cutoffTime.isBefore(new DateTime())) {
+                order.setOrderStatus(ORDER_STATUS_CANCEL_CUTOFF_EXPIRED);
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return false;
+        }
     }
+
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {

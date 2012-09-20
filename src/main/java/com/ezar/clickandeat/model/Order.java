@@ -42,10 +42,9 @@ public class Order extends PersistentObject {
     // Order timing details
     private DateTime orderCreatedTime;
     private DateTime orderPlacedTime;
-    private DateTime requestedDeliveryTime;
     private DateTime expectedDeliveryTime;
-    private DateTime requestedCollectionTime;
     private DateTime expectedCollectionTime;
+    private boolean deliveryTimeNonStandard = false;
 
     // Order cost details
     private Double orderItemCost;
@@ -400,7 +399,7 @@ public class Order extends PersistentObject {
     public void setDeliveryAddress(Address deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
-
+    
     public Address getBillingAddress() {
         return billingAddress;
     }
@@ -481,14 +480,6 @@ public class Order extends PersistentObject {
         this.orderPlacedTime = orderPlacedTime;
     }
 
-    public DateTime getRequestedDeliveryTime() {
-        return requestedDeliveryTime;
-    }
-
-    public void setRequestedDeliveryTime(DateTime requestedDeliveryTime) {
-        this.requestedDeliveryTime = requestedDeliveryTime;
-    }
-
     public DateTime getExpectedDeliveryTime() {
         return expectedDeliveryTime;
     }
@@ -497,12 +488,12 @@ public class Order extends PersistentObject {
         this.expectedDeliveryTime = expectedDeliveryTime;
     }
 
-    public DateTime getRequestedCollectionTime() {
-        return requestedCollectionTime;
+    public boolean getDeliveryTimeNonStandard() {
+        return deliveryTimeNonStandard;
     }
 
-    public void setRequestedCollectionTime(DateTime requestedCollectionTime) {
-        this.requestedCollectionTime = requestedCollectionTime;
+    public void setDeliveryTimeNonStandard(boolean deliveryTimeNonStandard) {
+        this.deliveryTimeNonStandard = deliveryTimeNonStandard;
     }
 
     public DateTime getExpectedCollectionTime() {

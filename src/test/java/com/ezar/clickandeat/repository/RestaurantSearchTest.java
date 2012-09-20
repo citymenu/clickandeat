@@ -90,6 +90,8 @@ public class RestaurantSearchTest {
             List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());
             Restaurant restaurant = restaurants.get(0);
+            restaurant.setListOnSite(true);
+            repository.saveRestaurant(restaurant);
             Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new DateTime()));
             LOGGER.info("Distance from restaurant to location is: " + restaurant.getDistanceToSearchLocation());
         }

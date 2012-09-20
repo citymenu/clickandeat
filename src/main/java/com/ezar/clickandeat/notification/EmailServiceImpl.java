@@ -10,23 +10,19 @@ import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
-import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Component(value="emailService")
 public class EmailServiceImpl implements IEmailService {
@@ -47,9 +43,7 @@ public class EmailServiceImpl implements IEmailService {
 
     private String from;
 
-    private String baseUrl;
 
-    
     /**
      * @param order
      */
@@ -67,11 +61,12 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        templateMap.put("baseUrl",baseUrl);
         String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
         String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+        String acceptWithDeliveryCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL);
         templateMap.put("acceptCurl", acceptCurl);
         templateMap.put("declineCurl", declineCurl);
+        templateMap.put("acceptWithDeliveryCurl", acceptWithDeliveryCurl);
 
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
@@ -94,6 +89,7 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -115,6 +111,18 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(), StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        if( order.getDeliveryTimeNonStandard()) {
+            
+            // Check if the user has time to cancel the order
+            DateTime cancelExpiryTime = order.getExpectedDeliveryTime().minusMinutes(order.getRestaurant().getDeliveryTimeMinutes());
+            if( cancelExpiryTime.isAfter(new DateTime())) {
+                // Build link to enable customer to cancel the order
+                templateMap.put("allowCancel", true);
+                templateMap.put("cancelCutoffTime", cancelExpiryTime);
+                String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
+                templateMap.put("cancelCurl", cancelCurl);
+            }
+        }
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -153,11 +161,11 @@ public class EmailServiceImpl implements IEmailService {
         }
 
         String emailAddress = order.getRestaurant().getNotificationOptions().getNotificationEmailAddress();
-        String subjectFormat = MessageFactory.getMessage("email-subject.customer-order-cancelled-restaurant-confirmation-subject",false);
+        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
 
@@ -178,7 +186,7 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
 
@@ -262,6 +270,8 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,StringEscapeUtils.unescapeHtml(restaurant.getName()));
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
+        String relistCurl = securityUtils.encrypt("restaurantId=" + restaurant.getRestaurantId());
+        templateMap.put("relistCurl", relistCurl);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DELISTED_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -304,6 +314,8 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
+        templateMap.put("cancelCurl", cancelCurl);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
 
@@ -330,14 +342,6 @@ public class EmailServiceImpl implements IEmailService {
         
     }
 
-
-    @Required
-    @Value(value="${baseUrl}")
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
-    }
-
-    
 
     @Required
     @Value(value="${email.from}")
