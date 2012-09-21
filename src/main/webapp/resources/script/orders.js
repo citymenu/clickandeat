@@ -1,5 +1,5 @@
 // Order position
-var top;
+var ordertop;
 
 // Global order variables
 var currentOrder;
@@ -30,13 +30,12 @@ $(document).ready(function(){
         );
     } else {
         $('#order-wrapper').removeClass('fixed');
-        top = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
+        ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
         updatePanelPos();
         $(window).scroll(function (event) {
             updatePanelPos(event);
         });
     }
-
 });
 
 $(document).ajaxStart(function(){
@@ -65,7 +64,7 @@ function onBeforeBuildOrder(order,config) {
 // Event handler for after order is built, intended to be overriden
 function onAfterBuildOrder(order,config) {
     $('#order-wrapper').removeClass('fixed');
-    top = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
+    ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
     updatePanelPos();
     $(window).scroll(function (event) {
         updatePanelPos(event);
@@ -75,10 +74,10 @@ function onAfterBuildOrder(order,config) {
 // Set the order panel fixed or floating
 function updatePanelPos(event) {
     var y = $(this).scrollTop();
-    if (y >= top) {
-      $('#order-wrapper').addClass('fixed');
+    if (y >= ordertop) {
+        $('#order-wrapper').addClass('fixed');
     } else {
-      $('#order-wrapper').removeClass('fixed');
+        $('#order-wrapper').removeClass('fixed');
     }
 }
 
