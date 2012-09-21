@@ -28,17 +28,14 @@ $(document).ready(function(){
                 }
             }
         );
+    } else {
+        $('#order-wrapper').removeClass('fixed');
+        top = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
+        updatePanelPos();
+        $(window).scroll(function (event) {
+            updatePanelPos(event);
+        });
     }
-
-    $(window).scroll(function (event) {
-        var y = $(this).scrollTop();
-        if (y >= top) {
-            $('#comment').addClass('fixed');
-        } else {
-            // otherwise remove it
-            $('#comment').removeClass('fixed');
-        }
-    });
 
 });
 
@@ -652,7 +649,13 @@ function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOff
 
 function showSpecialOfferWarning() {
 
-    var warning = (currentOrder.deliveryType == 'DELIVERY'? getLabel('order.special-offer-not-available-delivery'): getLabel('order.special-offer-not-available-collection'));
+    var warning;
+    if( currentOrder ) {
+        warning = (currentOrder.deliveryType == 'DELIVERY'? getLabel('order.special-offer-not-available-delivery'): getLabel('order.special-offer-not-available-collection'));
+    } else {
+        warning = getLabel('order.special-offer-not-available');
+    }
+
     var warningText = ('<div class=\'warning-content\'>{0}</div>').format(warning);
     var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
 
