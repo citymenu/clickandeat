@@ -67,15 +67,22 @@ function onBeforeBuildOrder(order,config) {
 
 // Event handler for after order is built, intended to be overriden
 function onAfterBuildOrder(order,config) {
+    $('#order-wrapper').removeClass('fixed');
     top = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
+    updatePanelPos();
     $(window).scroll(function (event) {
-        var y = $(this).scrollTop();
-        if (y >= top) {
-          $('#order-wrapper').addClass('fixed');
-        } else {
-          $('#order-wrapper').removeClass('fixed');
-        }
+        updatePanelPos(event);
     });
+}
+
+// Set the order panel fixed or floating
+function updatePanelPos(event) {
+    var y = $(this).scrollTop();
+    if (y >= top) {
+      $('#order-wrapper').addClass('fixed');
+    } else {
+      $('#order-wrapper').removeClass('fixed');
+    }
 }
 
 // Order build function

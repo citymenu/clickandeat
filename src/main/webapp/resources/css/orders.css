@@ -11,6 +11,7 @@
     position: absolute;
     width: 248px;
     top: 0;
+    z-index:200;
 }
 
 #order-wrapper.fixed {
