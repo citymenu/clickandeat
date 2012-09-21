@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
@@ -35,13 +36,30 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         Integer deliveryMinutes = (Integer)context.get("DeliveryMinutes");
-        order.addOrderUpdate("Restaurant accepted order with modified delivery time of " + deliveryMinutes + " minutes");
+        order.addOrderUpdate("Restaurant accepted order with modified delivery/collection time of " + deliveryMinutes + " minutes");
+        Restaurant restaurant = order.getRestaurant();
+        order.setRestaurantActionedTime(new DateTime());
 
         // Update expected order delivery time (if the order is for delivery)
         if( Order.DELIVERY.equals(order.getDeliveryType())) {
             order.setDeliveryTimeNonStandard(true);
-            DateTime expectedDeliveryTime = order.getExpectedDeliveryTime() == null? new DateTime(): order.getExpectedDeliveryTime();
-            order.setExpectedDeliveryTime(expectedDeliveryTime.plusMinutes(deliveryMinutes));
+            if( order.getExpectedDeliveryTime() == null ) {
+                order.setExpectedDeliveryTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
+            }
+            else {
+                order.setExpectedDeliveryTime(order.getExpectedDeliveryTime().plusMinutes(deliveryMinutes));
+            }
+        }
+
+        // Update expected order collection time (if the order is for delivery)
+        if( Order.COLLECTION.equals(order.getDeliveryType())) {
+            order.setDeliveryTimeNonStandard(true);
+            if( order.getExpectedCollectionTime() == null ) {
+                order.setExpectedCollectionTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
+            }
+            else {
+                order.setExpectedCollectionTime(order.getExpectedCollectionTime().plusMinutes(deliveryMinutes));
+            }
         }
 
         try {

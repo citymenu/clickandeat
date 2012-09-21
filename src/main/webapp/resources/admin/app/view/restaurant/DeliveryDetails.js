@@ -283,17 +283,30 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             xtype:'numberfield',
             allowBlank:false
         },{
+            fieldLabel:'Collection time (minutes)',
+            name:'collectionTimeMinutes',
+            xtype:'numberfield',
+            allowBlank:false
+        },{
+            fieldLabel:'Delivery charge',
+            name:'deliveryCharge',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Minimum order value for delivery',
+            name:'minimumOrderForDelivery',
+            xtype:'numberfield'
+        },{
+            fieldLabel:'Allow free delivery',
+            name:'allowFreeDelivery',
+            xtype:'checkbox'
+        },{
             fieldLabel:'Minimum order value for free delivery',
             name:'minimumOrderForFreeDelivery',
             xtype:'numberfield'
         },{
-            fieldLabel:'Allow delivery orders below minumum order value',
-            name:'allowDeliveryOrdersBelowMinimum',
+            fieldLabel:'Allow delivery orders below minimum value for free delivery',
+            name:'allowDeliveryBelowMinimumForFreeDelivery',
             xtype:'checkbox'
-        },{
-            fieldLabel:'Delivery charge for orders under minimum value',
-            name:'deliveryCharge',
-            xtype:'numberfield'
         },{
             fieldLabel:'Delivery radius (kilometres)',
             name:'deliveryRadiusInKilometres',

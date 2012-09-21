@@ -210,18 +210,10 @@ function buildDisplay(orderItem) {
 
 // Add multiple items based on the select value
 function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost ) {
-    var quantity;
-    if( itemType ) {
-        quantity = $('#select_' + itemId + '_' + itemType.replace(/\s/g,'_')).val();
-    } else if (itemSubType) {
-        quantity = $('#select_' + itemId + '_' + itemSubType.replace(/\s/g,'_')).val();
-    } else {
-        quantity = $('#select_' + itemId ).val();
-    }
 
     // Check restaurant with callback on restaurant id
     restaurantCheck(restaurantId, function(){
-        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity);
+        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, 1);
     });
 }
 
@@ -401,6 +393,12 @@ function buildDeliverySelection(days,times) {
     var deliveryDaySelect = buildDeliveryDaySelect(days,times);
     var firstAvailableDay = 0;
     for( var i = 0; i < days.length; i++ ) {
+        if( i == 0 ) {
+            if(( deliveryType == 'DELIVERY' && openForDelivery ) || ( deliveryType == 'COLLECTION' && openForCollection )) {
+                firstAvailableDay = 0;
+                break;
+            }
+        }
         if(times[i].length > 0) {
             firstAvailableDay = i;
             break;
@@ -415,7 +413,17 @@ function buildDeliveryDaySelect(days,times) {
     var select = '<select id=\'dayselect\'>';
     for( var i = 0; i < days.length; i++ ) {
         var timeArray = times[i];
-        if( timeArray.length > 0 ) {
+
+        // Special case for empty time array but restaurant is currently open
+        if( i == 0 ) {
+            if(( deliveryType == 'DELIVERY' && openForDelivery ) || ( deliveryType == 'COLLECTION' && openForCollection )) {
+                var optionLabel = getLabel('weekday.today');
+                select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
+                continue;
+            }
+        }
+
+        if( timeArray.length > 0 || ( i == 0 && openForDelivery )) {
             var optionLabel = (i == 0? getLabel('weekday.today'): getLabel('weekday.day-of-week-' + days[i]));
             select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
         }
@@ -653,12 +661,9 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
         specialOfferItems.push(specialOfferItem);
     });
 
-    // If all special offer items only have one choice, add to order now
-    var quantity = $('#select_' + specialOfferId).val();
-
     // Check restaurant with callback to add to order
     restaurantCheck(restaurantId, function(){
-        doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity);
+        doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, 1);
     });
 
 }

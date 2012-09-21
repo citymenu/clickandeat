@@ -7,6 +7,8 @@ import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -21,6 +23,8 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
 
+    private int cancelCutoffMinutes;
+
     @Override
     public String getWorkflowAction() {
         return ACTION_CUSTOMER_CANCELS;
@@ -31,9 +35,9 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
         if( ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
             return true;
         }
-        else if ( order.getDeliveryTimeNonStandard()) {
-            DateTime cutoffTime = order.getExpectedDeliveryTime().minusMinutes(order.getRestaurant().getDeliveryTimeMinutes());
-            if( cutoffTime.isBefore(new DateTime())) {
+        else if (order.getDeliveryTimeNonStandard()) {
+            DateTime restaurantAcceptedTime = order.getRestaurantActionedTime();
+            if( restaurantAcceptedTime.plusMinutes(cancelCutoffMinutes).isBefore(new DateTime())) {
                 order.setOrderStatus(ORDER_STATUS_CANCEL_CUTOFF_EXPIRED);
                 return false;
             }
@@ -72,6 +76,13 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
 
         order.setOrderStatus(ORDER_STATUS_CUSTOMER_CANCELLED);
         return order;
+    }
+
+
+    @Required
+    @Value(value="${order.cancelCutoffMinutes}")
+    public void setCancelCutoffMinutes(int cancelCutoffMinutes) {
+        this.cancelCutoffMinutes = cancelCutoffMinutes;
     }
 
 }

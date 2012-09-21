@@ -44,6 +44,7 @@ public class Order extends PersistentObject {
     private DateTime orderPlacedTime;
     private DateTime expectedDeliveryTime;
     private DateTime expectedCollectionTime;
+    private DateTime restaurantActionedTime; // Time the restaurant accepted or declined the order
     private boolean deliveryTimeNonStandard = false;
 
     // Order cost details
@@ -116,17 +117,30 @@ public class Order extends PersistentObject {
         this.extraSpendNeededForDelivery = 0d;
 
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
+            DeliveryOptions deliveryOptions = this.restaurant.getDeliveryOptions();
+            
+            Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery();
+            Double minimumOrderForFreeDelivery = deliveryOptions.getMinimumOrderForFreeDelivery();
+            Double deliveryCharge = deliveryOptions.getDeliveryCharge();
+            boolean allowFreeDelivery = deliveryOptions.isAllowFreeDelivery();
+            boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
 
-            Double minimumOrderForFreeDelivery = this.restaurant.getDeliveryOptions().getMinimumOrderForFreeDelivery();
-            Double deliveryCharge = this.restaurant.getDeliveryOptions().getDeliveryCharge();
-            Boolean allowDeliveryOrdersBelowMinimum = this.restaurant.getDeliveryOptions().getAllowDeliveryOrdersBelowMinimum();
-
-            if(minimumOrderForFreeDelivery != null && this.orderItemCost  < minimumOrderForFreeDelivery ) {
-                if(allowDeliveryOrdersBelowMinimum != null && allowDeliveryOrdersBelowMinimum ) {
-                    this.deliveryCost = deliveryCharge;
+            if( !allowFreeDelivery ) {
+                this.deliveryCost = deliveryCharge;
+            }
+            else {
+                if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
+                    this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
                 }
-                else {
-                    this.extraSpendNeededForDelivery = minimumOrderForFreeDelivery - this.orderItemCost;
+                if( minimumOrderForFreeDelivery != null && this.orderItemCost < minimumOrderForFreeDelivery ) {
+                    if( allowDeliveryBelowMinimumForFreeDelivery ) {
+                        this.deliveryCost = deliveryCharge;
+                    }
+                    else {
+                        if( this.extraSpendNeededForDelivery == 0 ) {
+                            this.extraSpendNeededForDelivery = minimumOrderForFreeDelivery - this.orderItemCost;
+                        }
+                    }
                 }
             }
         }
@@ -566,6 +580,14 @@ public class Order extends PersistentObject {
 
     public void setRestaurantDeclinedReason(String restaurantDeclinedReason) {
         this.restaurantDeclinedReason = restaurantDeclinedReason;
+    }
+
+    public DateTime getRestaurantActionedTime() {
+        return restaurantActionedTime;
+    }
+
+    public void setRestaurantActionedTime(DateTime restaurantActionedTime) {
+        this.restaurantActionedTime = restaurantActionedTime;
     }
 
     public Double getTotalCost() {

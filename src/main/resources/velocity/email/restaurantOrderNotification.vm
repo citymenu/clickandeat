@@ -97,19 +97,27 @@
 
 <h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 
-
-
 <div>
     <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>
     <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Decline</a>
 </div>
 
+#if($order.deliveryType == 'DELIVERY')
+    <div>Your standard delivery time is: $order.restaurant.deliveryTimeMinutes minutes</div>
+    <div>Click below to add additional time beyond your standard delivery time for this order</div>
+#else
+    <div>Your standard collection time is: $order.restaurant.collectionTimeMinutes minutes</div>
+    <div>Click below to add additional time beyond your standard collection time for this order</div>
+#end
+
+<div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">Plus 15 minutes</a></div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">Plus 30 minutes</a></div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">Plus 45 minutes</a></div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">Plus 60 minutes</a></div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">Plus 90 minutes</a></div>
 <div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">Plus 120 minutes</a></div>
+</div>
 
 </body>
 

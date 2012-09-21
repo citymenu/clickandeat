@@ -66,8 +66,7 @@ public class CheckoutController {
         
         // Set the standard delivery time onto the request
         Restaurant restaurant = order.getRestaurant();
-        Double deliveryTime = restaurant.getDeliveryOptions().getDeliveryTimeMinutes();
-        model.put("deliveryTimeMinutes", deliveryTime == null? 0d: deliveryTime);
+        model.put("deliveryTimeMinutes", restaurant.getDeliveryTimeMinutes());
 
         DateTime now = new DateTime();
 

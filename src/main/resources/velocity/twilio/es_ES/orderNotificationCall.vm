@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Gather action="$url" timeout="30" numDigits="1">
+    <Gather action="$url" timeout="10" numDigits="1">
         <Say language="es">Hola, esta es una llamada de llamar y comer. A recibido un nuevo pedido para
         #if($order.deliveryType == 'DELIVERY')
             entrega

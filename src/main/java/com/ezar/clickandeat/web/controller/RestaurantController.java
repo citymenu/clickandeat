@@ -41,9 +41,6 @@ public class RestaurantController {
     private RestaurantRepository repository;
 
     @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
     private CuisineProvider cuisineProvider;
 
     @Autowired
@@ -67,27 +64,6 @@ public class RestaurantController {
         HttpSession session = request.getSession(true);
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
-
-        // If there is no order in the session, create one now
-        String orderId = (String)session.getAttribute("orderid");
-        if( orderId == null ) {
-            assignOrderToSession(session, restaurant);
-        }
-        else {
-            // If there is no restaurant id in the session, get the order and assign this restaurant to it
-            if( session.getAttribute("restaurantid") == null ) {
-                Order order = orderRepository.findByOrderId(orderId);
-                if( order == null ) {
-                    assignOrderToSession(session,restaurant);
-                }
-                else {
-                    order.setRestaurantId(restaurantId);
-                    order.setRestaurant(restaurant);
-                    order.updateCosts();
-                    orderRepository.saveOrder(order);
-                }
-            }
-        }
 
         // Update the restaurant session id
         String restaurantSessionId = (String)session.getAttribute("restaurantid");
@@ -220,22 +196,6 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
         return responseEntityUtils.buildResponse(model);
-    }
-
-
-    /**
-     * @param session
-     * @param restaurant
-     */
-
-    private void assignOrderToSession( HttpSession session, Restaurant restaurant ) {
-        Order order = orderRepository.create();
-        order.setRestaurantId(restaurant.getRestaurantId());
-        order.setRestaurant(restaurant);
-        order.updateCosts();
-        orderRepository.save(order);
-        session.setAttribute("orderid",order.getOrderId());
-        session.removeAttribute("completedorderid");
     }
 
 

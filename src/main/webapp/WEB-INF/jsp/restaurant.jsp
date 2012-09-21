@@ -31,13 +31,11 @@
                                 <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeComments="true" escapeNewLines="true"/>
                             </div>
                             </c:if>
-                            <c:if test="${restaurant.deliveryOptions.deliveryTimeMinutes != null}">
                             <div class="restaurant-details">
-                                <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryOptions.formattedDeliveryTimeMinutes} <message:message key="time.minutes"/></b>
+                                <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/></b>
                             </div>
-                            </c:if>
                         </td>
-                        <td width="280">** Will include details of any discounts, today's opening and closing times in this section, etc. **</td>
+                        <td width="280"></td>
                     </tr>
                 </table>
             </div>
@@ -55,7 +53,6 @@
                                 </td>
                                 <td width="170" align="right">
                                     <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${specialOffer.formattedCost}</span>
-                                    <select:selectbox id="select_${specialOffer.specialOfferId}"/>
                                     <span class="menu-item-action">
                                         <a onclick="checkCanAddSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
                                     </span>
@@ -91,7 +88,6 @@
                                             </td>
                                             <td width="170" align="right">
                                                 <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItem.formattedCost}</span>
-                                                <select:selectbox id="select_${menuItem.itemId}"/>
                                                 <span class="menu-item-action">
                                                     <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
                                                 </span>
@@ -126,7 +122,6 @@
                                                 </td>
                                                 <td width="170" align="right">
                                                     <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemSubType.formattedCost}</span>
-                                                    <select:selectbox id="select_${menuItem.itemId}_${menuItemSubType.escapedType}"/>
                                                     <span class="menu-item-action">
                                                         <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,'<util:escape value="${menuItemSubType.type}" escapeComments="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
                                                     </span>
@@ -162,7 +157,6 @@
                                     <td align="right" width="${colwidth}">
                                         <c:if test="${menuItemTypeCost.cost != null}">
                                         <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemTypeCost.formattedCost}</span>
-                                        <select:selectbox id="select_${menuItem.itemId}_${menuItemTypeCost.escapedType}"/>
                                         <span class="menu-item-action">
                                             <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
                                         </span>
@@ -192,17 +186,6 @@
         </div>
         <div class="content-right">
             <%@ include file="/WEB-INF/jsp/order.jsp" %>
-            <br/>
-            <br/>
-            <br/>
-            <div style="text-align:center; padding: 10px;">** Could include a table of all of the opening times for the restaurant here **</div>
-            <br/>
-            <br/>
-            <div style="text-align:center;">** Could include google maps link to restaurant location like below here: **</div>
-            <div style="text-align:center; padding: 10px;">
-                <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=15&size=200x135&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
-            </div>
-
         </div>
     </div>
 </div>

@@ -407,6 +407,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update the restaurant object details from the main details form
         restaurantObj.name = mainDetailValues['name'];
         restaurantObj.description = mainDetailValues['description'];
+        restaurantObj.listOnSite = mainDetailValues['listOnSite'] == 'on';
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
         restaurantObj.contactMobile = mainDetailValues['contactMobile'];
@@ -477,9 +478,12 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.deliveryOptions = new Object({
             deliveryOptionsSummary: deliveryDetailValues['deliveryOptionsSummary'],
             deliveryTimeMinutes: deliveryDetailValues['deliveryTimeMinutes'],
-            minimumOrderForFreeDelivery: deliveryDetailValues['minimumOrderForFreeDelivery'],
-            allowDeliveryOrdersBelowMinimum: deliveryDetailValues['allowDeliveryOrdersBelowMinimum'] == 'on',
+            collectionTimeMinutes: deliveryDetailValues['collectionTimeMinutes'],
+            minimumOrderForDelivery: deliveryDetailValues['minimumOrderForDelivery'],
             deliveryCharge: deliveryDetailValues['deliveryCharge'],
+            allowFreeDelivery: deliveryDetailValues['allowFreeDelivery'] == 'on',
+            minimumOrderForFreeDelivery: deliveryDetailValues['minimumOrderForFreeDelivery'],
+            allowDeliveryBelowMinimumForFreeDelivery: deliveryDetailValues['allowDeliveryBelowMinimumForFreeDelivery'] == 'on',
             deliveryRadiusInKilometres: deliveryDetailValues['deliveryRadiusInKilometres'],
             areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n')
         });

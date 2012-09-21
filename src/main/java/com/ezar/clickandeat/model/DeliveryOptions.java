@@ -1,27 +1,31 @@
 package com.ezar.clickandeat.model;
 
-import com.ezar.clickandeat.util.NumberUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class DeliveryOptions {
 
+    private static final int DEFAULT_DELIVERY_TIME = 45;
+    private static final int DEFAULT_COLLECTION_TIME = 20;
+    
     private String deliveryOptionsSummary;
 
-    private Double deliveryTimeMinutes;
-    
-    private Double minimumOrderForFreeDelivery;
+    private int deliveryTimeMinutes;
+    private int collectionTimeMinutes;
 
-    private Boolean allowDeliveryOrdersBelowMinimum;
-    
+    // Costings around delivery
+    private Double minimumOrderForDelivery;
     private Double deliveryCharge;
+    private boolean allowFreeDelivery;
+    private Double minimumOrderForFreeDelivery;
+    private boolean allowDeliveryBelowMinimumForFreeDelivery;
 
     private Double deliveryRadiusInKilometres;
-
     private List<String> areasDeliveredTo;
 
     public DeliveryOptions() {
+        this.deliveryTimeMinutes = DEFAULT_DELIVERY_TIME;
+        this.collectionTimeMinutes = DEFAULT_COLLECTION_TIME;
         this.areasDeliveredTo = new ArrayList<String>();
     }
 
@@ -33,18 +37,22 @@ public class DeliveryOptions {
         this.deliveryOptionsSummary = deliveryOptionsSummary;
     }
 
-    public Double getDeliveryTimeMinutes() {
+    public int getDeliveryTimeMinutes() {
         return deliveryTimeMinutes;
     }
 
-    public void setDeliveryTimeMinutes(Double deliveryTimeMinutes) {
+    public void setDeliveryTimeMinutes(int deliveryTimeMinutes) {
         this.deliveryTimeMinutes = deliveryTimeMinutes;
     }
 
-    public String getFormattedDeliveryTimeMinutes() {
-        return NumberUtil.formatStrict(deliveryTimeMinutes);
+    public int getCollectionTimeMinutes() {
+        return collectionTimeMinutes;
     }
-    
+
+    public void setCollectionTimeMinutes(int collectionTimeMinutes) {
+        this.collectionTimeMinutes = collectionTimeMinutes;
+    }
+
     public Double getMinimumOrderForFreeDelivery() {
         return minimumOrderForFreeDelivery;
     }
@@ -53,12 +61,28 @@ public class DeliveryOptions {
         this.minimumOrderForFreeDelivery = minimumOrderForFreeDelivery;
     }
 
-    public Boolean getAllowDeliveryOrdersBelowMinimum() {
-        return allowDeliveryOrdersBelowMinimum;
+    public Double getMinimumOrderForDelivery() {
+        return minimumOrderForDelivery;
     }
 
-    public void setAllowDeliveryOrdersBelowMinimum(Boolean allowDeliveryOrdersBelowMinimum) {
-        this.allowDeliveryOrdersBelowMinimum = allowDeliveryOrdersBelowMinimum;
+    public void setMinimumOrderForDelivery(Double minimumOrderForDelivery) {
+        this.minimumOrderForDelivery = minimumOrderForDelivery;
+    }
+
+    public boolean isAllowFreeDelivery() {
+        return allowFreeDelivery;
+    }
+
+    public void setAllowFreeDelivery(boolean allowFreeDelivery) {
+        this.allowFreeDelivery = allowFreeDelivery;
+    }
+
+    public boolean isAllowDeliveryBelowMinimumForFreeDelivery() {
+        return allowDeliveryBelowMinimumForFreeDelivery;
+    }
+
+    public void setAllowDeliveryBelowMinimumForFreeDelivery(boolean allowDeliveryBelowMinimumForFreeDelivery) {
+        this.allowDeliveryBelowMinimumForFreeDelivery = allowDeliveryBelowMinimumForFreeDelivery;
     }
 
     public Double getDeliveryCharge() {

@@ -42,9 +42,9 @@ public class AutoCancelledHandler implements IWorkflowHandler {
         order.addOrderUpdate("System auto cancelled order due to no response from restaurant");
 
         try {
-            LOGGER.info("Delisting restaurant until we get a response to notification email");
             Restaurant restaurant = order.getRestaurant();
             if( restaurant.getListOnSite()) {
+                LOGGER.info("Delisting restaurant until we get a response to notification email");
                 restaurant.setListOnSite(false);
                 restaurantRepository.saveRestaurant(restaurant);
                 notificationService.sendDelistedConfirmationToRestaurant(restaurant);

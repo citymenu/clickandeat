@@ -15,7 +15,12 @@
         #end
     </div>
 #else
-    <div>Order is for collection</div>
+    <div>Time for collection:
+        $stringTool.formatDate($order.expectedCollectionTime)
+        #if(!($order.expectedCollectionTime.toLocalDate() == $today))
+            on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+        #end
+    </div>
 #end
 
 #if ($allowCancel)

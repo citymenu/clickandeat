@@ -22,7 +22,7 @@ function validateLocation(location) {
     $.post( ctx+'/validateLocation.ajax', { loc: location },
         function( data ) {
             if( data.success ) {
-                onResults(data.locations);
+                onResults(location, data.locations);
             } else {
                 alert('success:' + data.success);
             }
@@ -31,21 +31,15 @@ function validateLocation(location) {
 }
 
 // Handler for multiple matches found
-function onResults(matches) {
-    var validMatches = [];
-    matches.forEach(function(match){
-        if(!match.radiusInvalid) {
-            validMatches.push(match);
-        }
-    });
-    if(validMatches.length == 0 ) {
+function onResults(location, matches) {
+    if(matches.length == 0 ) {
         alert('Match not found');
     }
-    else if( validMatches.length == 1 ) {
-        window.location.href = ctx + '/findRestaurant.html?loc=' + validMatches[0].address;
+    else if( matches.length == 1 ) {
+        window.location.href = ctx + '/findRestaurant.html?loc=' + encodeURI(location);
     }
     else {
-        showMatches(validMatches);
+        showMatches(matches);
     }
 }
 
@@ -61,9 +55,8 @@ function showMatches(matches) {
     var matchEntries = '';
     var index = 0;
     matches.forEach(function(match){
-        var matchValue = unescapeQuotes(match.displayAddress);
-        locations[index] = matchValue;
-        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, matchValue);
+        locations[index] = unescapeQuotes(match.address);
+        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, unescapeQuotes(match.displayAddress));
     });
 
     locations[index] = 'CANCEL';

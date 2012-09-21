@@ -381,7 +381,11 @@ public class Restaurant extends PersistentObject {
     }
     
     public int getDeliveryTimeMinutes() {
-        return deliveryOptions.getDeliveryTimeMinutes() == null? 0: deliveryOptions.getDeliveryTimeMinutes().intValue();
+        return deliveryOptions.getDeliveryTimeMinutes();
+    }
+
+    public int getCollectionTimeMinutes() {
+        return deliveryOptions.getDeliveryTimeMinutes();
     }
 
     public String getRestaurantId() {

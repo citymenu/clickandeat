@@ -80,7 +80,7 @@ public class RestaurantSearchController {
         Map<String,Object> model = new HashMap<String,Object>();
 
         AddressLocation addressLocation = locationService.getSingleLocation(location);
-        if( addressLocation == null || addressLocation.isRadiusInvalid()) {
+        if( addressLocation == null ) {
             return new ModelAndView("redirect:/home.html",model);
         }
 

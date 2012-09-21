@@ -199,7 +199,6 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.setDeliveryTimeNonStandard(false);
 
         Restaurant restaurant = new Restaurant();
-        restaurant.getDeliveryOptions().setDeliveryTimeMinutes(45d);
         order.setRestaurant(restaurant);
 
         Map<String,Object> templateModel = new HashMap<String, Object>();

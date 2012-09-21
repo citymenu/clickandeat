@@ -7,9 +7,12 @@ Ext.define('AD.model.DeliveryOptions', {
     fields: [
         {name:'deliveryOptionsSummary',type: 'string',convert: unescapeQuotes},
         {name:'deliveryTimeMinutes', type:'number'},
-        {name:'minimumOrderForFreeDelivery', type:'number'},
-        {name:'allowDeliveryOrdersBelowMinimum', type:'boolean'},
+        {name:'collectionTimeMinutes', type:'number'},
+        {name:'minimumOrderForDelivery', type:'number'},
         {name:'deliveryCharge', type:'number'},
+        {name:'allowFreeDelivery', type:'boolean'},
+        {name:'minimumOrderForFreeDelivery', type:'number'},
+        {name:'allowDeliveryBelowMinimumForFreeDelivery', type:'boolean'},
         {name:'deliveryRadiusInKilometres', type:'number'},
         {
             name:'areasDeliveredTo',
@@ -18,3 +21,4 @@ Ext.define('AD.model.DeliveryOptions', {
         }
     ]
 });
+

@@ -57,15 +57,14 @@ public class LocationService {
         if( !StringUtils.hasText(address)) {
             return new ArrayList<AddressLocation>();
         }
-        
-        List<AddressLocation> locations = new ArrayList<AddressLocation>();
 
         AddressLocation location = addressLocationRepository.findByAddress(address);
         if( location != null ) {
-            locations.add(location);
-            return locations;
+            return Arrays.asList(location);
         }
-        
+
+        List<AddressLocation> locations = new ArrayList<AddressLocation>();
+
         try {
             URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
             URLConnection conn = url.openConnection();
@@ -85,29 +84,42 @@ public class LocationService {
                         Map<String,Object> addressComponent = (Map<String,Object>)entry;
                         List typesList = (List)addressComponent.get("types");
                         String type = (String)typesList.get(0);
-                        String value = StringEscapeUtils.escapeHtml((String)addressComponent.get("long_name"));
+                        String value = (String)addressComponent.get("long_name");
                         locationAddressComponents.put(type,value);
                     }
                 }
 
                 // Determine the geometry
                 Map<String,Object> geometry = (Map<String,Object>)result.get("geometry");
-                String locationType = (String) geometry.get("location_type");
                 Map<String,Object> geolocation = (Map<String,Object>)geometry.get("location");
                 double[] coordinates = new double[2];
                 coordinates[0] = (Double)geolocation.get("lng");
                 coordinates[1] = (Double)geolocation.get("lat");
 
+                // Build the display address
+                StringBuilder sb = new StringBuilder();
+                String delim = "";
+                int componentCount = 0;
+                for( String componentPreference: componentPreferences ) {
+                    String component = locationAddressComponents.get(componentPreference);
+                    if( component != null ) {
+                        sb.append(delim).append(component);
+                        delim = " ";
+                        componentCount++;
+                    }
+                    if( componentCount >= MAX_DISPLAY_COMPONENTS ) {
+                        break;
+                    }
+                }
+                String displayAddress = StringEscapeUtils.escapeHtml(componentCount < MAX_DISPLAY_COMPONENTS? formattedAddress: sb.toString());
+
                 AddressLocation addressLocation = new AddressLocation();
                 addressLocation.setAddress(address);
-                addressLocation.setFormattedAddress(StringEscapeUtils.escapeHtml(formattedAddress));
-                addressLocation.setLocationType(locationType);
+                addressLocation.setDisplayAddress(displayAddress);
                 addressLocation.setLocationComponents(locationAddressComponents);
                 addressLocation.setLocation(coordinates);
 
-                // Build the display address for this location 
-                buildDisplayAddress(addressLocation);
-                
+                // Determine the geometry
                 Map<String,Object> bounds = (Map<String,Object>)geometry.get("bounds");
                 if( bounds == null ) {
                     addressLocation.setRadius(0d);
@@ -125,10 +137,12 @@ public class LocationService {
 
                     double radius = getDistance(northeastcorner, southwestcorner) / 2;
                     addressLocation.setRadius(radius);
-                    addressLocation.setRadiusWarning(isWarningRadius(addressLocation));
-                    addressLocation.setRadiusInvalid(isInvalidRadius(addressLocation));
+                    addressLocation.setRadiusWarning(radius > warningRadius);
                 }
-                locations.add(addressLocation);
+                
+                if( addressLocation.getRadius() <= invalidRadius ) {
+                    locations.add(addressLocation);
+                }
             }
         }
         catch( Exception ex ) {
@@ -193,26 +207,6 @@ public class LocationService {
 
 
     /**
-     * @param location
-     * @return
-     */
-
-    public boolean isWarningRadius(AddressLocation location) {
-        return location.getRadius() > warningRadius;
-    }
-
-
-    /**
-     * @param location
-     * @return
-     */
-
-    public boolean isInvalidRadius(AddressLocation location) {
-        return location.getRadius() > invalidRadius;
-    }
-
-    
-    /**
      * Returns the distance in kilometres between two locations 
      * @param location1
      * @param location2
@@ -240,31 +234,6 @@ public class LocationService {
 
     }
 
-
-    /**
-     * @param addressLocation
-     * @return
-     */
-
-    public void buildDisplayAddress(AddressLocation addressLocation) {
-        StringBuilder sb = new StringBuilder();
-        String delim = "";
-        int componentCount = 0;        
-        for( String componentPreference: componentPreferences ) {
-            String component = addressLocation.getLocationComponents().get(componentPreference);
-            if( component != null ) {
-                sb.append(delim).append(component);
-                delim = " ";
-                componentCount++;
-            }
-            if( componentCount >= MAX_DISPLAY_COMPONENTS ) {
-                break;
-            }
-        }
-        addressLocation.setDisplayAddress(componentCount < MAX_DISPLAY_COMPONENTS? addressLocation.getFormattedAddress(): sb.toString());
-    }
-    
-    
 
     @Required
     @Value(value="${locale}")

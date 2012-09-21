@@ -35,6 +35,11 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             columns:3,
             vertical:true,
             items:[]
+        },{
+            fieldLabel:'Include this restaurant on the main site',
+            labelAlign:'top',
+            xtype:'checkbox',
+            name:'listOnSite'
         }]
     },{
         xtype:'fieldset',

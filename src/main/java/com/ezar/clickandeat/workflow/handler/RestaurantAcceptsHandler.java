@@ -37,15 +37,19 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Restaurant accepted order");
-
+        order.setRestaurantActionedTime(new DateTime());
         Restaurant restaurant = order.getRestaurant();
-        int deliveryTimeMinutes = restaurant.getDeliveryOptions().getDeliveryTimeMinutes() == null? 0: restaurant.getDeliveryOptions().getDeliveryTimeMinutes().intValue(); 
 
         // Update expected delivery time for the restaurant (if the user has not requested a specific time and date)
         if( Order.DELIVERY.equals(order.getDeliveryType()) && order.getExpectedDeliveryTime() == null ) {
-            order.setExpectedDeliveryTime(new DateTime().plusMinutes(deliveryTimeMinutes));
+            order.setExpectedDeliveryTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes()));
         }
-        
+
+        // Update expected collection time for the restaurant (if the user has not requested a specific time and date)
+        if( Order.COLLECTION.equals(order.getDeliveryType()) && order.getExpectedCollectionTime() == null ) {
+            order.setExpectedCollectionTime(new DateTime().plusMinutes(restaurant.getCollectionTimeMinutes()));
+        }
+
         try {
             notificationService.sendRestaurantAcceptedConfirmationToCustomer(order);
             order.addOrderUpdate("Sent confirmation of restaurant acceptance to customer");

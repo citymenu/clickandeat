@@ -13,6 +13,7 @@ Ext.define('AD.model.Restaurant', {
         {name:'contactMobile', type:'string'},
         {name:'website', type:'string'},
         {name:'cuisines', type:'auto'},
+        {name:'listOnSite', type:'boolean'},
         {name:'imageId', type:'string'}
     ]
 });

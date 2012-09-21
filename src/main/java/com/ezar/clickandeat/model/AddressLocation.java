@@ -15,20 +15,14 @@ public class AddressLocation extends PersistentObject implements Serializable {
     private String address;
 
     private String displayAddress;
-    
-    private String formattedAddress;
 
     private double[] location;
 
-    private String locationType;
-    
     private Map<String,String> locationComponents;
     
     private double radius;
 
     private boolean radiusWarning;
-
-    private boolean radiusInvalid;
 
     public String getAddress() {
         return address;
@@ -38,28 +32,12 @@ public class AddressLocation extends PersistentObject implements Serializable {
         this.address = address;
     }
 
-    public String getFormattedAddress() {
-        return formattedAddress;
-    }
-
-    public void setFormattedAddress(String formattedAddress) {
-        this.formattedAddress = formattedAddress;
-    }
-
     public String getDisplayAddress() {
         return displayAddress;
     }
 
     public void setDisplayAddress(String displayAddress) {
         this.displayAddress = displayAddress;
-    }
-
-    public String getLocationType() {
-        return locationType;
-    }
-
-    public void setLocationType(String locationType) {
-        this.locationType = locationType;
     }
 
     public Map<String, String> getLocationComponents() {
@@ -78,20 +56,12 @@ public class AddressLocation extends PersistentObject implements Serializable {
         this.radius = radius;
     }
 
-    public boolean isRadiusWarning() {
+    public boolean getRadiusWarning() {
         return radiusWarning;
     }
 
     public void setRadiusWarning(boolean radiusWarning) {
         this.radiusWarning = radiusWarning;
-    }
-
-    public boolean isRadiusInvalid() {
-        return radiusInvalid;
-    }
-
-    public void setRadiusInvalid(boolean radiusInvalid) {
-        this.radiusInvalid = radiusInvalid;
     }
 
     public double[] getLocation() {

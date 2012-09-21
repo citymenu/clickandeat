@@ -5,6 +5,7 @@ import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -35,6 +36,7 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Restaurant declined order");
+        order.setRestaurantActionedTime(new DateTime());
 
         try {
             notificationService.sendRestaurantDeclinedConfirmationToCustomer(order);

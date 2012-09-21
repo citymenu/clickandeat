@@ -43,6 +43,7 @@ public class EmailServiceImpl implements IEmailService {
 
     private String from;
 
+    private int cancelCutoffMinutes;
 
     /**
      * @param order
@@ -113,15 +114,12 @@ public class EmailServiceImpl implements IEmailService {
         templateMap.put("order",order);
         if( order.getDeliveryTimeNonStandard()) {
             
-            // Check if the user has time to cancel the order
-            DateTime cancelExpiryTime = order.getExpectedDeliveryTime().minusMinutes(order.getRestaurant().getDeliveryTimeMinutes());
-            if( cancelExpiryTime.isAfter(new DateTime())) {
-                // Build link to enable customer to cancel the order
-                templateMap.put("allowCancel", true);
-                templateMap.put("cancelCutoffTime", cancelExpiryTime);
-                String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
-                templateMap.put("cancelCurl", cancelCurl);
-            }
+            // Give the customer an opportunity to cancel the order
+            templateMap.put("allowCancel", true);
+            templateMap.put("cancelCutoffTime", new DateTime().plusMinutes(cancelCutoffMinutes));
+            String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
+            templateMap.put("cancelCurl", cancelCurl);
+
         }
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
@@ -347,6 +345,12 @@ public class EmailServiceImpl implements IEmailService {
     @Value(value="${email.from}")
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    @Required
+    @Value(value="${order.cancelCutoffMinutes}")
+    public void setCancelCutoffMinutes(int cancelCutoffMinutes) {
+        this.cancelCutoffMinutes = cancelCutoffMinutes;
     }
 
 }
