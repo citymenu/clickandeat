@@ -1,3 +1,6 @@
+// Order position
+var top;
+
 // Global order variables
 var currentOrder;
 var minimumOrderForFreeDelivery;
@@ -26,6 +29,17 @@ $(document).ready(function(){
             }
         );
     }
+
+    $(window).scroll(function (event) {
+        var y = $(this).scrollTop();
+        if (y >= top) {
+            $('#comment').addClass('fixed');
+        } else {
+            // otherwise remove it
+            $('#comment').removeClass('fixed');
+        }
+    });
+
 });
 
 $(document).ajaxStart(function(){
@@ -53,6 +67,15 @@ function onBeforeBuildOrder(order,config) {
 
 // Event handler for after order is built, intended to be overriden
 function onAfterBuildOrder(order,config) {
+    top = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
+    $(window).scroll(function (event) {
+        var y = $(this).scrollTop();
+        if (y >= top) {
+          $('#order-wrapper').addClass('fixed');
+        } else {
+          $('#order-wrapper').removeClass('fixed');
+        }
+    });
 }
 
 // Order build function
@@ -600,7 +623,8 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
 function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray ) {
 
     var update = ({
-        orderId: currentOrder.orderId,
+        restaurantId: restaurantId,
+        orderId: (currentOrder? currentOrder.orderId: null),
         specialOfferId: specialOfferId
     });
 

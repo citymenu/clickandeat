@@ -2,7 +2,7 @@
 
 .restaurant-details-wrapper {
     padding: 0px 10px 20px 10px;
-    margin-bottom: 10px;
+    border-bottom: 1px dashed #AAAAAA;
 }
 
 .restaurant-details-wrapper h2 {
@@ -46,13 +46,14 @@
 }
 
 .menu-wrapper {
+    margin-top:20px;
     padding: 0px 10px 0px 10px;
 }
 
 .menu-category-wrapper {
-    padding-top:15px;
-    padding-bottom: 20px;
-    border-top: 1px solid #DDDDDD;
+    padding-bottom: 25px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #DDDDDD;
     overflow:hidden;
 }
 

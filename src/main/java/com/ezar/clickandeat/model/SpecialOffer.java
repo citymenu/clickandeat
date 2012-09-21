@@ -33,6 +33,26 @@ public class SpecialOffer {
         this.offerApplicableTimes = new ArrayList<ApplicableTime>();
     }
 
+
+    /**
+     * @param dateTime
+     * @return
+     */
+
+    public boolean isAvailableAt(DateTime dateTime) {
+
+        ApplicableTime applicableTime = getOfferApplicableTime(dateTime);
+        if( applicableTime == null || !applicableTime.getApplicable()) {
+            return false;
+        }
+        if( applicableTime.getApplicableFrom() == null || applicableTime.getApplicableTo() == null ) {
+            return true;
+        }
+        LocalTime time = dateTime.toLocalTime();
+        return !time.isBefore(applicableTime.getApplicableFrom()) && !time.isAfter(applicableTime.getApplicableTo());
+    }
+
+
     /**
      * @param order
      * @return

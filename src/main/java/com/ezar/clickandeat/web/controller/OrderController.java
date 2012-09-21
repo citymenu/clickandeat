@@ -250,17 +250,24 @@ public class OrderController implements InitializingBean {
 
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
+            String restaurantId = (String)params.get("restaurantId");
             String orderId = (String)params.get("orderId");
             String specialOfferId = (String)params.get("specialOfferId");
 
-            // Get the order object
-            Order order = orderRepository.findByOrderId(orderId);
-            Restaurant restaurant = order.getRestaurant();
+            // Get the restaurant object
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
             SpecialOffer specialOffer = restaurant.getSpecialOffer(specialOfferId);
-
-            // Check if the special offer is applicable to this order
-            model.put("success",true);
-            model.put("applicable",specialOffer.isApplicableTo(order));
+            
+            // Get the order object
+            if( orderId != null ) {
+                Order order = orderRepository.findByOrderId(orderId);
+                model.put("success",true);
+                model.put("applicable",specialOffer.isApplicableTo(order));
+            }
+            else {
+                model.put("success",true);
+                model.put("applicable",specialOffer.isAvailableAt(new DateTime()));
+            }
         }
         catch(Exception ex ) {
             LOGGER.error("",ex);

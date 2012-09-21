@@ -6,7 +6,7 @@
     var orderid = '${orderid}';
 </script>
 
-<div class="order-wrapper">
+<div id="order-wrapper">
     <div class='orderheader'><message:message key="order.your-order"/>:</div>
     <div class="order-delivery-wrapper"></div>
     <div id="deliverycheck"></div>

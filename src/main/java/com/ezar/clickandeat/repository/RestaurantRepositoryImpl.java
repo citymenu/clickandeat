@@ -149,6 +149,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         Query query = new Query(where("address.location").nearSphere(new Point(geoLocation[0], geoLocation[1]))
                 .maxDistance(maxDistance / DIVISOR));
 
+        // Only include restaurants listed on the site
+        query.addCriteria(where("listOnSite").is(true));
+        
         // Specify cuisines if required
         List<String> cuisines = search.getCuisines();
         if( cuisines != null && cuisines.size() > 0 ) {

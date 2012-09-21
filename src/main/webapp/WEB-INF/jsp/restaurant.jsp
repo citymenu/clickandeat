@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <title>${restaurant.name}</title>
+    <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
 </head>
 
 <body>
@@ -14,31 +15,31 @@
 
 <div id="content">
     <div class="content-wrapper">
+        <div class="restaurant-details-wrapper">
+            <table width="680">
+                <tr valign="middle">
+                    <td width="400">
+                        <h2><util:escape value="${restaurant.name}"/></h2>
+                        <c:if test="${restaurant.description != null}">
+                        <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                        </c:if>
+                        <div class="restaurant-details">
+                            <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
+                        </div>
+                        <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
+                        <div class="restaurant-details">
+                            <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeComments="true" escapeNewLines="true"/>
+                        </div>
+                        </c:if>
+                        <div class="restaurant-details">
+                            <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/></b>
+                        </div>
+                    </td>
+                    <td width="280"></td>
+                </tr>
+            </table>
+        </div>
         <div class="content-left">
-            <div class="restaurant-details-wrapper">
-                <table width="680">
-                    <tr valign="middle">
-                        <td width="400">
-                            <h2><util:escape value="${restaurant.name}"/></h2>
-                            <c:if test="${restaurant.description != null}">
-                            <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
-                            </c:if>
-                            <div class="restaurant-details">
-                                <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
-                            </div>
-                            <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
-                            <div class="restaurant-details">
-                                <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeComments="true" escapeNewLines="true"/>
-                            </div>
-                            </c:if>
-                            <div class="restaurant-details">
-                                <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/></b>
-                            </div>
-                        </td>
-                        <td width="280"></td>
-                    </tr>
-                </table>
-            </div>
             <div class="menu-wrapper">
                 <c:if test="${restaurant.specialOfferCount > 0}">
                 <div class="menu-category-wrapper">
