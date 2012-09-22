@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -42,59 +43,27 @@ public class RestaurantSearchController {
     private CuisineProvider cuisineProvider;
 
 
-    @SuppressWarnings("unchecked")
-    @ResponseBody
-    @RequestMapping(value="/validateLocation.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc") String loc ) throws Exception {
-        
-        Map<String,Object> model = new HashMap<String, Object>();
-        
-        try {
-            List<AddressLocation> locations = new ArrayList<AddressLocation>();
-            AddressLocation addressLocation = addressLocationRepository.findByAddress(loc);
-            if( addressLocation != null ) {
-                locations.add(addressLocation);
-            }
-            else {
-                locations.addAll(locationService.getLocations(loc));
-            }
-            model.put("locations",locations);
-            model.put("success",true);
-        }
-        catch( Exception ex ) {
-            model.put("success",false);
-        }
-        return responseEntityUtils.buildResponse(model);
-    }
-
-
     @RequestMapping(value="/findRestaurant.html", method = RequestMethod.GET)
-    public ModelAndView search(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) List<String> cuisines,
-                                        @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
-                                        HttpServletRequest request) {
+    public ModelAndView search(HttpServletRequest request) {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Searching for restaurants serving location: " + location);
+            LOGGER.debug("Searching for restaurants");
         }
 
         Map<String,Object> model = new HashMap<String,Object>();
 
-        AddressLocation addressLocation = locationService.getSingleLocation(location);
-        if( addressLocation == null ) {
-            return new ModelAndView("redirect:/home.html",model);
+        Search search = (Search)request.getSession(true).getAttribute("search");
+        if( search == null ) {
+            return new ModelAndView("redirect:/home.html");
         }
-
-        Search search = new Search(addressLocation,cuisines,sort,dir);
-        SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
-        results.addAll(restaurantRepository.search(search));
-        model.put("results",results);
-        model.put("count",results.size());
-        model.put("cuisines",cuisineProvider.getCuisineList());
-
-        // Store search in session
-        request.getSession(true).setAttribute("search",search);
-
-        return new ModelAndView("findRestaurant",model);
+        else {
+            SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
+            results.addAll(restaurantRepository.search(search));
+            model.put("results",results);
+            model.put("count",results.size());
+            model.put("cuisines",cuisineProvider.getCuisineList());
+            return new ModelAndView("findRestaurant",model);
+        }
     }
 
     

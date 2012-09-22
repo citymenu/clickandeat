@@ -23,7 +23,7 @@
                     <td width="250">
                         <h3><message:message key="search.search"/></h3>
                         <div>Location:</div>
-                        <div><input id="loc" type="text" class="search" value="<util:escape value="${search.location}"/>"/></div>
+                        <div><input id="loc" type="text" class="search" value="<util:escape value="${search.location.address}"/>"/></div>
                         <input type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
                         <div><message:message key="config.cuisines"/></div>
                         <c:forEach var="cuisine" items="${cuisines}">
@@ -40,7 +40,7 @@
                         <div id="searchresultsright">
                             <div id="results">
                                 <div id="searchheader" class="boxcontainer">
-                                    <div><message:message key="search.your-location"/>: <util:escape value="${search.location}"/></div>
+                                    <div><message:message key="search.your-location"/>: <util:escape value="${search.location.displayAddress}"/></div>
                                     <div>${count} <message:message key="search.restaurants-found"/></div>
                                 </div>
                                 <c:forEach var="restaurant" items="${results}">

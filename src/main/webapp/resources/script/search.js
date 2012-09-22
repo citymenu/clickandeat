@@ -22,7 +22,12 @@ function validateLocation(location) {
     $.post( ctx+'/validateLocation.ajax', { loc: location },
         function( data ) {
             if( data.success ) {
-                onResults(location, data.locations);
+                if( data.exactMatch == true ) {
+                    window.location.href = ctx + '/findRestaurant.html';
+                }
+                else {
+                    onResults(data.locations);
+                }
             } else {
                 alert('success:' + data.success);
             }
@@ -31,32 +36,29 @@ function validateLocation(location) {
 }
 
 // Handler for multiple matches found
-function onResults(location, matches) {
-    if(matches.length == 0 ) {
+function onResults(locations) {
+    if(locations.length == 0 ) {
         alert('Match not found');
     }
-    else if( matches.length == 1 ) {
-        window.location.href = ctx + '/findRestaurant.html?loc=' + encodeURI(location);
-    }
     else {
-        showMatches(matches);
+        showMatchingLocations(locations);
     }
 }
 
 
 // Handler for multiple results found
-function showMatches(matches) {
+function showMatchingLocations(locations) {
 
     var matchHeader = '<h3>More than one matching address found.</h3>';
     var matchSubHeader = ('<div class=\'dialog-subtitle\'>{0}</div>').format('Is it one of the following?');
 
-    var locations = {};
+    var locationsMap = {};
 
     var matchEntries = '';
     var index = 0;
-    matches.forEach(function(match){
-        locations[index] = unescapeQuotes(match.address);
-        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, unescapeQuotes(match.displayAddress));
+    locations.forEach(function(location){
+        locationsMap[index] = location;
+        matchEntries += ('<div class=\'location-match\'>&gt&gt <a class=\'location-link\' id=\'match_{0}\'>{1}</a></div>').format(index++, unescapeQuotes(location));
     });
 
     locations[index] = 'CANCEL';

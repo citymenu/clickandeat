@@ -2,11 +2,15 @@ package com.ezar.clickandeat.maps;
 
 import com.ezar.clickandeat.model.AddressLocation;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
@@ -16,38 +20,55 @@ public class LocationServiceTest {
 
     @Autowired
     private LocationService locationService;
+
+    @Before
+    public void setup() throws Exception {
+        locationService.setLocale("ca_ES");
+    }
     
     @Test
-    public void testDistanceBetweenPostCodes() throws Exception {
-        
-        String postCode1 = "Rosello, 285 08037";
-        String postCode2 = "PE3 6LJ";
-        String postCode3 = "E18";
-        String postCode4 = "South Woodford";
-        String postCode5 = "Peel Road South Woodford";
-        String postCode6 = "80 Peel Road E18 2LG";
-
-        AddressLocation address1 = locationService.getSingleLocation(postCode1);
-        AddressLocation address2 = locationService.getSingleLocation(postCode2);
-        AddressLocation address3 = locationService.getSingleLocation(postCode3);
-        AddressLocation address4 = locationService.getSingleLocation(postCode4);
-        AddressLocation address5 = locationService.getSingleLocation(postCode5);
-        AddressLocation address6 = locationService.getSingleLocation(postCode6);
-
-        LOGGER.info(postCode1 + " radius: " + address1.getRadius());
-        LOGGER.info(postCode2 + " radius: " + address2.getRadius());
-        LOGGER.info(postCode3 + " radius: " + address3.getRadius());
-        LOGGER.info(postCode4 + " radius: " + address4.getRadius());
-        LOGGER.info(postCode5 + " radius: " + address5.getRadius());
-        LOGGER.info(postCode5 + " radius: " + address6.getRadius());
-
-        double[] location1 = address1.getLocation();
-        double[] location2 = address2.getLocation();
-
-        double distance = locationService.getDistance(location1,location2);
-        
-        LOGGER.info("Distance between points is " + distance + " kilometres");
-
+    public void testLocateValidAddress() throws Exception {
+        String address = "Calle de Bailén, 56 08009";
+        List<AddressLocation> locations = locationService.getLocations(address);
+        Assert.assertTrue("Should have found one location only", locations.size() == 1 );
+        AddressLocation location = locations.get(0);
+        LOGGER.info("Resolved location: " + location );
+    }
+    
+    
+    @Test
+    public void testAmbiguousAddressWithOneResult() throws Exception {
+        String address = "Calle Bailén 56 08009";
+        List<AddressLocation> locations = locationService.getLocations(address);
+        Assert.assertTrue("Should have found one location", locations.size() == 1 );
+        AddressLocation location = locations.get(0);
+        LOGGER.info("Resolved location: " + location );
     }
 
+
+    @Test
+    public void testAmbiguousAddressWithMultipleResults() throws Exception {
+        String address = "Calle Bailén 56";
+        List<AddressLocation> locations = locationService.getLocations(address);
+        Assert.assertEquals("Should have found three locations", 3, locations.size());
+        for(AddressLocation location: locations ) {
+            LOGGER.info("Resolved location: " + location );
+        }
+    }
+
+
+    @Test
+    public void testExactAddressWithMultipleResults() throws Exception {
+        String address = "Placa Joaquim Pena 4 08017";
+        List<AddressLocation> locations = locationService.getLocations(address);
+        Assert.assertEquals("Should have found three locations", 3, locations.size());
+        for(AddressLocation location: locations ) {
+            LOGGER.info("Resolved location: " + location );
+        }
+    }
+
+
+
+
 }
+

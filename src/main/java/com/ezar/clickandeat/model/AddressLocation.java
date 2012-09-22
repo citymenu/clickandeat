@@ -14,6 +14,8 @@ public class AddressLocation extends PersistentObject implements Serializable {
     @Indexed
     private String address;
 
+    private String fullAddress;
+    
     private String displayAddress;
 
     private double[] location;
@@ -30,6 +32,14 @@ public class AddressLocation extends PersistentObject implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getFullAddress() {
+        return fullAddress;
+    }
+
+    public void setFullAddress(String fullAddress) {
+        this.fullAddress = fullAddress;
     }
 
     public String getDisplayAddress() {
@@ -73,6 +83,19 @@ public class AddressLocation extends PersistentObject implements Serializable {
     }
     
     public String toString() {
-        return address;
+        StringBuilder sb = new StringBuilder("AddressLocation:{");
+        sb.append("address:'").append(address).append("',");
+        sb.append("displayAddress:'").append(displayAddress).append("',");
+        String delim = "";
+        sb.append("locationComponents[");
+        for( Map.Entry<String,String> entry: locationComponents.entrySet()) {
+            sb.append(delim);
+            sb.append("{").append(entry.getKey()).append(":'").append(entry.getValue()).append("'}");
+            delim = ",";
+        }
+        sb.append("],radius:").append(radius);
+        sb.append(",radiusWarning:").append(radiusWarning);
+        sb.append("}");
+        return sb.toString();
     }
 }

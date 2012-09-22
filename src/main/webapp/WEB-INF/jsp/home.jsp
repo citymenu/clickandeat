@@ -6,6 +6,7 @@
     <title><message:message key="page-title.home" escape="false"/></title>
 </head>
 
+
 <body>
 
 <%@ include file="/WEB-INF/jsp/header.jsp" %>

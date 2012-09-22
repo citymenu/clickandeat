@@ -4,7 +4,6 @@ import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.repository.AddressLocationRepository;
 import flexjson.JSONDeserializer;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -19,7 +18,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
+import java.text.Normalizer;
 import java.util.*;
+import java.util.regex.Pattern;
 
 @Component(value = "locationService")
 public class LocationService {
@@ -30,11 +31,9 @@ public class LocationService {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_DISPLAY_COMPONENTS = 3;
-    
     @Autowired
     private AddressLocationRepository addressLocationRepository;
-    
+
     private String locale;
     
     private String country;
@@ -43,8 +42,13 @@ public class LocationService {
 
     private Double invalidRadius;
 
+    private int minComponentMatches;
+    
     private List<String> componentPreferences = new ArrayList<String>();
 
+    private List<String> commaBeforeComponents = new ArrayList<String>();
+    
+    
     /**
      * Gets a list of matching locations from the google maps api
      * @param address
@@ -57,10 +61,10 @@ public class LocationService {
         if( !StringUtils.hasText(address)) {
             return new ArrayList<AddressLocation>();
         }
-
-        AddressLocation location = addressLocationRepository.findByAddress(address);
-        if( location != null ) {
-            return Arrays.asList(location);
+        
+        AddressLocation savedLocation = addressLocationRepository.findByAddress(address);
+        if( savedLocation != null ) {
+            return Arrays.asList(savedLocation);
         }
 
         List<AddressLocation> locations = new ArrayList<AddressLocation>();
@@ -74,8 +78,8 @@ public class LocationService {
             for( Map<String,Object> result: results ) {
 
                 // Full text address
-                String formattedAddress = (String)result.get("formatted_address");
-                
+                String fullAddress = (String)result.get("formatted_address");
+
                 // Extract address components
                 Map<String,String> locationAddressComponents = new HashMap<String, String>();
                 List addressComponents = (List)result.get("address_components");
@@ -103,19 +107,34 @@ public class LocationService {
                 for( String componentPreference: componentPreferences ) {
                     String component = locationAddressComponents.get(componentPreference);
                     if( component != null ) {
+                        if( commaBeforeComponents.contains(componentPreference)) {
+                            sb.append(",");
+                        }
                         sb.append(delim).append(component);
                         delim = " ";
                         componentCount++;
-                    }
-                    if( componentCount >= MAX_DISPLAY_COMPONENTS ) {
-                        break;
+                        if( componentCount >= minComponentMatches ) {
+                            break;
+                        }
                     }
                 }
-                String displayAddress = StringEscapeUtils.escapeHtml(componentCount < MAX_DISPLAY_COMPONENTS? formattedAddress: sb.toString());
+                String displayAddress;
+                if( componentCount < minComponentMatches ) {
+                    displayAddress = fullAddress;
+                }
+                else {
+                    String concatenated = sb.toString();
+                    if( concatenated.endsWith(",")) {
+                        concatenated = concatenated.substring(0,concatenated.length() - 1 );
+                    }
+                    displayAddress = concatenated;
+                }
 
+                // Build address location object
                 AddressLocation addressLocation = new AddressLocation();
                 addressLocation.setAddress(address);
                 addressLocation.setDisplayAddress(displayAddress);
+                addressLocation.setFullAddress(fullAddress);
                 addressLocation.setLocationComponents(locationAddressComponents);
                 addressLocation.setLocation(coordinates);
 
@@ -139,16 +158,31 @@ public class LocationService {
                     addressLocation.setRadius(radius);
                     addressLocation.setRadiusWarning(radius > warningRadius);
                 }
-                
-                if( addressLocation.getRadius() <= invalidRadius ) {
-                    locations.add(addressLocation);
+
+                // Only include locations which are within the minimum bounds
+                if( addressLocation.getRadius() < invalidRadius ) {
+                    boolean locationMatchesSearch = true;
+                    // Only include locations where the full address contains all words entered by the user
+                    // Normalise accented characters
+                    String fullAddressUpper = deAccent(addressLocation.getFullAddress().toUpperCase());
+                    String[] searchCoponents = address.replace(",","").split(" " );
+                    for( String searchComponent: searchCoponents ) {
+                        if( !fullAddressUpper.contains(deAccent(searchComponent.toUpperCase()))) {
+                            locationMatchesSearch = false;
+                            break;
+                        }
+                    }
+                    if( locationMatchesSearch ) {
+                        locations.add(addressLocation);
+                    }
                 }
             }
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
         }
-        
+
+        // If we found an exact match, save the entry
         if( locations.size() == 1 ) {
             addressLocationRepository.save(locations.get(0));
         }
@@ -235,8 +269,21 @@ public class LocationService {
     }
 
 
+    /**
+     * Remove accent from string
+     * @param str
+     * @return
+     */
+
+    private String deAccent(String str) {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("");
+    }
+
+
     @Required
-    @Value(value="${locale}")
+    @Value(value="${location.locale}")
     public void setLocale(String locale) {
         this.locale = locale;
         this.country = locale.split("_")[1];
@@ -255,9 +302,22 @@ public class LocationService {
     }
 
     @Required
+    @Value(value="${location.mincomponentmatches}")
+    public void setMinComponentMatches(int minComponentMatches) {
+        this.minComponentMatches = minComponentMatches;
+    }
+
+    @Required
     @Value(value="${location.componentpreferences}")
     public void setComponentPreferences(String componentPreferences) {
         Collections.addAll(this.componentPreferences, componentPreferences.split(","));
     }
+
+    @Required
+    @Value(value="${location.commabeforecomponents}")
+    public void setCommaBeforeComponents(String commaBeforeComponents) {
+        Collections.addAll(this.commaBeforeComponents, commaBeforeComponents.split(","));
+    }
+
 }
 
