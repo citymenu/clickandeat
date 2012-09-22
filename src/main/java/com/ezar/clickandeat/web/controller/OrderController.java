@@ -11,7 +11,6 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import flexjson.JSONSerializer;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -35,7 +34,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class OrderController implements InitializingBean {
@@ -437,12 +439,25 @@ public class OrderController implements InitializingBean {
 
             // For delivery times push the current time past the delivery time in minutes
             int deliveryTimeMinutes = restaurant.getDeliveryTimeMinutes();
-            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)?
-                    deliveryOpeningTime.plusMinutes(deliveryTimeMinutes): now.plusMinutes(deliveryTimeMinutes), restaurant.getDeliveryClosingTime(now));
+            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair;
+            if( deliveryOpeningTime != null ) {
+                deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime.plusMinutes(deliveryTimeMinutes):
+                        now.plusMinutes(deliveryTimeMinutes), restaurant.getDeliveryClosingTime(now));
+            }
+            else {
+                deliveryTimesPair = getTimeOptions(deliveryOpeningTime, restaurant.getDeliveryClosingTime(now));
+            }
 
+            // For collection times push the current time past the collection time in minutes
             int collectionTimeMinutes = restaurant.getCollectionTimeMinutes();
-            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)?
-                    collectionOpeningTime.plusMinutes(collectionTimeMinutes): now.plusMinutes(collectionTimeMinutes), restaurant.getCollectionClosingTime(now));
+            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair;
+            if( collectionOpeningTime != null ) {
+                collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime.plusMinutes(collectionTimeMinutes):
+                        now.plusMinutes(collectionTimeMinutes), restaurant.getCollectionClosingTime(now));            }
+            else {
+                collectionTimesPair = getTimeOptions(collectionOpeningTime, restaurant.getCollectionClosingTime(now));
+            }
+
             deliveryTimes.add(deliveryTimesPair.first);
             collectionTimes.add(collectionTimesPair.first);
 
