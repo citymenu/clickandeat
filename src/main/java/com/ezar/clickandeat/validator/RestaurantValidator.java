@@ -4,19 +4,33 @@ import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.model.Restaurant;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component(value="restaurantValidator")
-public class RestaurantValidator extends AbstractObjectValidator<Restaurant> {
+public class RestaurantValidator extends AbstractObjectValidator<Restaurant> implements InitializingBean {
 
     @Autowired
     private LocationService locationService;
-    
+
     private int maxRadiusMetres;
+
+    private String regexp;
+
+    private Pattern pattern;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        pattern = Pattern.compile(regexp);
+    }
+
     
     @Override
     public void validateObject(Restaurant restaurant, ValidationErrors errors) {
@@ -29,6 +43,16 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> {
         if( !StringUtils.hasText(address.getPostCode())) {
             errors.addError("Postcode is required");
         }
+
+        if( !errors.hasErrors()) {
+            String location = address.getAddress1() + " " + address.getPostCode();
+            Matcher matcher = pattern.matcher(location);
+            if( !matcher.matches()) {
+                errors.addError("Please ensure a valid postcode is entered");
+            }
+        }
+            
+            
         
         if( !errors.hasErrors()) {
             AddressLocation addressLocation = locationService.getSingleLocation(address);
@@ -48,5 +72,10 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> {
         this.maxRadiusMetres = maxRadiusMetres;
     }
 
+    @Required
+    @Value(value="${location.validationRegexp}")
+    public void setRegexp(String regexp) {
+        this.regexp = regexp;
+    }
 
 }
