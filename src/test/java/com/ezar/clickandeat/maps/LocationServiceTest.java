@@ -23,7 +23,7 @@ public class LocationServiceTest {
 
     @Before
     public void setup() throws Exception {
-        locationService.setLocale("ca_ES");
+        locationService.setLocale("es_ES");
     }
     
     @Test
@@ -56,19 +56,14 @@ public class LocationServiceTest {
         }
     }
 
-
     @Test
-    public void testExactAddressWithMultipleResults() throws Exception {
+    public void testCatalanAddressWithSingleResult() throws Exception {
         String address = "Placa Joaquim Pena 4 08017";
         List<AddressLocation> locations = locationService.getLocations(address);
-        Assert.assertEquals("Should have found three locations", 3, locations.size());
-        for(AddressLocation location: locations ) {
-            LOGGER.info("Resolved location: " + location );
-        }
+        Assert.assertTrue("Should have found one location only", locations.size() == 1 );
+        AddressLocation location = locations.get(0);
+        LOGGER.info("Resolved location: " + location );
     }
-
-
-
 
 }
 

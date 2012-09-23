@@ -20,6 +20,11 @@
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js"></script>
+
+    <!-- Watermark -->
+    <script type="text/javascript" src="${resources}/jquery/script/jquery.data.js"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery.watermark.min.js"></script>
 
     <!-- Fancybox -->
     <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" />

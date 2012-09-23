@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -18,9 +17,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
-import java.text.Normalizer;
 import java.util.*;
-import java.util.regex.Pattern;
 
 @Component(value = "locationService")
 public class LocationService {
@@ -58,10 +55,6 @@ public class LocationService {
     @SuppressWarnings("unchecked")
     public List<AddressLocation> getLocations( String address ) {
 
-        if( !StringUtils.hasText(address)) {
-            return new ArrayList<AddressLocation>();
-        }
-        
         AddressLocation savedLocation = addressLocationRepository.findByAddress(address);
         if( savedLocation != null ) {
             return Arrays.asList(savedLocation);
@@ -161,20 +154,7 @@ public class LocationService {
 
                 // Only include locations which are within the minimum bounds
                 if( addressLocation.getRadius() < invalidRadius ) {
-                    boolean locationMatchesSearch = true;
-                    // Only include locations where the full address contains all words entered by the user
-                    // Normalise accented characters
-                    String fullAddressUpper = deAccent(addressLocation.getFullAddress().toUpperCase());
-                    String[] searchCoponents = address.replace(",","").split(" " );
-                    for( String searchComponent: searchCoponents ) {
-                        if( !fullAddressUpper.contains(deAccent(searchComponent.toUpperCase()))) {
-                            locationMatchesSearch = false;
-                            break;
-                        }
-                    }
-                    if( locationMatchesSearch ) {
-                        locations.add(addressLocation);
-                    }
+                    locations.add(addressLocation);
                 }
             }
         }
@@ -254,7 +234,7 @@ public class LocationService {
                     Arrays.toString(location1) + " and " + Arrays.toString(location2));
         }
 
-        double dLon = Math.toRadians(location1[0]-location2[0]);
+        double dLon = Math.toRadians(location1[0] - location2[0]);
         double dLat = Math.toRadians(location1[1]-location2[1]);
 
         double lat1 = Math.toRadians(location1[1]);
@@ -269,21 +249,8 @@ public class LocationService {
     }
 
 
-    /**
-     * Remove accent from string
-     * @param str
-     * @return
-     */
-
-    private String deAccent(String str) {
-        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(nfdNormalizedString).replaceAll("");
-    }
-
-
     @Required
-    @Value(value="${location.locale}")
+    @Value(value="${locale}")
     public void setLocale(String locale) {
         this.locale = locale;
         this.country = locale.split("_")[1];

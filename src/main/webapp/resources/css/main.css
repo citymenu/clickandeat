@@ -28,15 +28,6 @@ body {
     vertical-align: baseline;
 }
 
-input {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-}
-
-select {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size:12px;
-}
-
 table {
     border:0;
     padding:0;

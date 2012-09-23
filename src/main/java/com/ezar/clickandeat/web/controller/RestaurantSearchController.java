@@ -8,6 +8,7 @@ import com.ezar.clickandeat.repository.AddressLocationRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import com.ezar.clickandeat.validator.AddressValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +28,6 @@ public class RestaurantSearchController {
     
     private static final Logger LOGGER = Logger.getLogger(RestaurantSearchController.class);
 
-    @Autowired
-    private LocationService locationService;
-
-    @Autowired
-    private AddressLocationRepository addressLocationRepository;
-    
     @Autowired
     private RestaurantRepository restaurantRepository;
 

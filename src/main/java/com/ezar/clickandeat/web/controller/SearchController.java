@@ -4,6 +4,8 @@ import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.validator.AddressValidator;
+import com.ezar.clickandeat.validator.ValidationErrors;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class SearchController {
     private static final Logger LOGGER = Logger.getLogger(SearchController.class);
 
     @Autowired
+    private AddressValidator addressValidator;
+
+    @Autowired
     private LocationService locationService;
     
     @Autowired
@@ -46,31 +51,32 @@ public class SearchController {
 
         try {
             String address = StringEscapeUtils.unescapeHtml(location).replace("###","'");
-            List<AddressLocation> locations = locationService.getLocations(address);
-            if( locations.size() == 1 ) {
-
-                if( LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Found exact match for location: " + location );
-                }
-
-                // Build new search object and place in session
-                Search search = new Search();
-                search.setLocation(locations.get(0));
-                search.setCuisines(cuisines);
-                search.setDir(dir);
-                search.setSort(sort);
-                request.getSession(true).setAttribute("search",search);
+            ValidationErrors errors = addressValidator.validate(address);
+            if( errors.hasErrors()) {
                 model.put("success",true);
-                model.put("exactMatch",true);
-            }
-            else {
-                List<String> locationNames = new ArrayList<String>();
-                for( AddressLocation addressLocation: locations) {
-                    locationNames.add(addressLocation.getDisplayAddress());
+                model.put("valid",false);
+            } else {
+                model.put("valid",true);
+                List<AddressLocation> locations = locationService.getLocations(address);
+                if( locations.size() == 1 ) {
+                    Search search = new Search();
+                    search.setLocation(locations.get(0));
+                    search.setCuisines(cuisines);
+                    search.setDir(dir);
+                    search.setSort(sort);
+                    request.getSession(true).setAttribute("search",search);
+                    model.put("success",true);
+                    model.put("exactMatch",true);
                 }
-                model.put("success",true);
-                model.put("locations",locationNames);
-                model.put("exactMatch",false);
+                else {
+                    List<String> locationNames = new ArrayList<String>();
+                    for( AddressLocation addressLocation: locations) {
+                        locationNames.add(addressLocation.getDisplayAddress());
+                    }
+                    model.put("success",true);
+                    model.put("locations",locationNames);
+                    model.put("exactMatch",false);
+                }
             }
         }
         catch( Exception ex ) {

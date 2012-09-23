@@ -1,6 +1,8 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.User;
+import com.ezar.clickandeat.util.CuisineProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +20,15 @@ public class PageController {
 	
     private int counter = 0;
     
+    @Autowired
+    private CuisineProvider cuisineProvider;
+
+
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
-	public String home(HttpServletRequest request) {
-		return "home";
+	public ModelAndView home(HttpServletRequest request) {
+        Map<String,Object> model = new HashMap<String, Object>();
+        model.put("cuisines", cuisineProvider.getCuisineList());
+		return new ModelAndView("home",model);
 	}
 
 

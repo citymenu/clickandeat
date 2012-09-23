@@ -7,22 +7,53 @@ $(document).ajaxComplete(function(){
     $.fancybox.hideLoading();
 });
 
+var locationHasBeenValid = false;
+var locationValid = true;
+
 // Initialize page
 $(document).ready(function(){
     $('#searchbutton').click(function(){
         var location = $('#loc').val();
-        if( location && location != '' ) {
+        checkLocationValid(location);
+//        if( locationValid ) {
             validateLocation(location);
+//        }
+    });
+
+    $('#loc').focusout(function(){
+        checkLocationValid($(this).val());
+    });
+
+    $('#loc').keyup(function(){
+        if( !locationValid || locationHasBeenValid ) {
+            checkLocationValid($(this).val());
         }
-    })
+    });
 });
+
+// Validates the location field
+function checkLocationValid(location) {
+    if( !location || location.search(/.*[0-9]{5}.*/) == -1 ) {
+        if( locationValid == true ) {
+            $('#validation-error').remove();
+            $('#validation-wrapper').append(('<span id=\'validation-error\'>{0}</span>').format(getLabel('search.location-invalid')));
+            locationValid = false;
+        }
+    } else {
+        $('#validation-error').remove();
+        locationHasBeenValid = true;
+        locationValid = true;
+    }
+}
 
 // Checks user search input
 function validateLocation(location) {
     $.post( ctx+'/validateLocation.ajax', { loc: location },
         function( data ) {
             if( data.success ) {
-                if( data.exactMatch == true ) {
+                if( data.valid == false ) {
+                    checkLocationValid(location);
+                } else if( data.exactMatch == true ) {
                     window.location.href = ctx + '/findRestaurant.html';
                 }
                 else {

@@ -9,9 +9,8 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     position: absolute;
-    width: 248px;
+    width: 228px;
     top: 0;
-    z-index:200;
 }
 
 #order-wrapper.fixed {
