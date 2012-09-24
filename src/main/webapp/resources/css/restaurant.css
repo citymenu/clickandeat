@@ -23,16 +23,16 @@
     font-style: normal;
     letter-spacing: -0.01em;
     padding:0 0 0 5px;
-    display:inline;
+    margin-bottom:6px;
 }
 
 .restaurant-description {
     color: #AA0000;
     font-family: Georgia,"Times New Roman",Times,serif;
     font-size:12px;
-    margin-top: 5px;
     letter-spacing: -0.01em;
     font-style: italic;
+    padding: 0 0 0 5px;
 }
 
 .restaurant-details {

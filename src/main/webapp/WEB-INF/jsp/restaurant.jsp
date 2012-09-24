@@ -23,11 +23,17 @@
                         <table width="1000">
                             <tr valign="top">
                                 <td width="480">
-                                    <img src="${resources}/images/example.gif" width="65" height="50"/>
-                                    <h2><util:escape value="${restaurant.name}"/></h2>
-                                    <c:if test="${restaurant.description != null}">
-                                    <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
-                                    </c:if>
+                                    <table width="480">
+                                        <tr valign="bottom">
+                                            <td width="65"><img src="${resources}/images/example.gif" width="65" height="50"/></td>
+                                            <td width="415">
+                                                <h2><util:escape value="${restaurant.name}"/></h2>
+                                                <c:if test="${restaurant.description != null}">
+                                                <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                                                </c:if>
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <div class="restaurant-details">
                                         <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
                                     </div>
