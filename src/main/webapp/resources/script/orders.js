@@ -29,13 +29,6 @@ $(document).ready(function(){
                 }
             }
         );
-    } else {
-        $('#order-wrapper').removeClass('fixed');
-        ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
-        updatePanelPos();
-        $(window).scroll(function (event) {
-            updatePanelPos(event);
-        });
     }
 });
 
@@ -64,35 +57,6 @@ function onBeforeBuildOrder(order,config) {
 
 // Event handler for after order is built, intended to be overriden
 function onAfterBuildOrder(order,config) {
-    $('#order-wrapper').removeClass('fixed');
-    ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
-    updatePanelPos();
-    $(window).scroll(function (event) {
-        updatePanelPos(event);
-    });
-}
-
-// Set the order panel fixed or floating
-function updatePanelPos(event) {
-    var y = $(this).scrollTop();
-
-    var orderheight = $('#order-wrapper').height() + 10;
-    var contenttop = $('.content-wrapper').offset().top;
-    var contentheight = $('.content-wrapper').height();
-    var contentbottom = contenttop + contentheight;
-    var orderbottom = orderheight + y;
-
-    if( orderbottom >= contentbottom ) {
-        var newtop = contentbottom - orderheight - ordertop;
-        $('#order-wrapper').css('top',(newtop < 0? 0: newtop));
-        $('#order-wrapper').removeClass('fixed');
-    } else if (y >= ordertop ) {
-        $('#order-wrapper').css('top',0);
-        $('#order-wrapper').addClass('fixed');
-    } else {
-        $('#order-wrapper').css('top',0);
-        $('#order-wrapper').removeClass('fixed');
-    }
 }
 
 // Order build function
@@ -117,6 +81,7 @@ function doBuildOrder(order,config) {
     $('.deliverychargerow').remove();
     $('.order-totalcost').remove();
     $('.order-free-item-wrapper').remove();
+    $('.order-discount-wrapper').remove();
     $('#checkout').remove();
     $('.delivery-warning-wrapper').remove();
 
@@ -165,28 +130,10 @@ function doBuildOrder(order,config) {
             $('#order-item-contents').prepend(row);
         };
 
-        // Add details of any free item discounts
+        // Add details of any free item discounts (display only)
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
-                if( config.allowUpdateFreeItem ) {
-                    var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
-                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
-                    orderDiscount.freeItems.forEach(function(freeItem) {
-                        if( orderDiscount.selectedFreeItem == freeItem ) {
-                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
-                        } else {
-                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
-                        }
-                    });
-                    selectBox += '</select>';
-                    var div = ('<div class=\'order-free-item-wrapper\'><div class=\'order-free-item-title\'>{0}:</div><div class=\'order-free-item-select\'>{1}</div></div>').format(orderDiscount.title,selectBox);
-                    $('#freeitems').append(div);
-                    $('#' + orderDiscount.discountId).change(function(){
-                        var discountId = $(this).attr('id');
-                        var freeItem = $(this).val();
-                        updateFreeItem(discountId,freeItem);
-                    });
-                } else {
+                if( !config.allowUpdateFreeItem ) {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
                         var row = ('<div class=\'order-item-wrapper\'><table width=\'216\'><trvalign=\'top\'><td width=\'126\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,orderDiscount.formattedAmount);
                         $('#order-item-contents').append(row);
@@ -211,6 +158,48 @@ function doBuildOrder(order,config) {
 
         // Build total item cost
         $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
+
+        // Show details of discounts if available
+        if( order.restaurantDiscounts.length > 0 ) {
+            var discountItems = '';
+            var freeItems = [];
+            order.restaurantDiscounts.forEach(function(discount){
+                var orderDiscount = null;
+                order.orderDiscounts.forEach(function(applicableDiscount) {
+                    if( applicableDiscount.discountId == discount.discountId ) {
+                        orderDiscount = applicableDiscount;
+                    }
+                });
+                if(discount.discountType == 'DISCOUNT_FREE_ITEM' && orderDiscount != null ) {
+                    var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
+                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
+                    orderDiscount.freeItems.forEach(function(freeItem) {
+                        if( orderDiscount.selectedFreeItem == freeItem ) {
+                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
+                        } else {
+                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                        }
+                    });
+                    selectBox += '</select>';
+                    discountItems += ('<div class=\'order-discount-item\'>{0}: {1}</div>').format(unescape(discount.title),selectBox);
+                    freeItems.push(discount.discountId);
+                } else {
+                    discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));
+                }
+            });
+            var discountItemHeader = ('<h2>{0}:</h2>').format(getLabel('order.discounts-available'));
+            var discountContainer = ('<div class=\'order-discount-wrapper\'>{0}{1}</div>').format(discountItemHeader,discountItems);
+            $('#discounts').append(discountContainer);
+
+            // Add event handlers for any free item selections
+            freeItems.forEach(function(freeItemSelect){
+                $('#' + freeItemSelect).change(function(){
+                    var discountId = $(this).attr('id');
+                    var freeItem = $(this).val();
+                    updateFreeItem(discountId,freeItem);
+                });
+            });
+        }
 
         // Show warning if restaurant is not open at given order time
         if( !order.restaurantIsOpen ) {
@@ -450,7 +439,7 @@ function buildDeliverySelection(days,times) {
 
 // Builds an array of available days that can be selected
 function buildDeliveryDaySelect(days,times) {
-    var select = '<select id=\'dayselect\'>';
+    var select = '<select id=\'dayselect\' class=\'deliveryselect\'>';
     for( var i = 0; i < days.length; i++ ) {
         var timeArray = times[i];
 
@@ -474,7 +463,7 @@ function buildDeliveryDaySelect(days,times) {
 
 // Builds an array of times that can be selected
 function buildDeliveryTimeSelect(selectedDay,times) {
-    var select = '<select id=\'timeselect\'>';
+    var select = '<select id=\'timeselect\' class=\'deliveryselect\'>';
     var timeArray = times[selectedDay];
     if( selectedDay == 0 ) {
         if(( deliveryType == 'DELIVERY' && openForDelivery) || (deliveryType == 'COLLECTION' && openForCollection )) {

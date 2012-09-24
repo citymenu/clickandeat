@@ -8,14 +8,7 @@
     padding:10px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    position: absolute;
     width: 228px;
-    top: 0;
-}
-
-#order-wrapper.fixed {
-  position: fixed;
-  top: 0;
 }
 
 .orderheader {
@@ -75,13 +68,13 @@ h3.order-table {
 }
 
 .order-item-wrapper, .order-item-wrapper-header {
-    padding-bottom: 2px;
+    padding-bottom: 1px;
     overflow: hidden;
     border-bottom: 1px dashed #EEEEEE;
 }
 
 .order-item-wrapper {
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .order-item-wrapper td {
@@ -102,6 +95,42 @@ h3.order-table {
 .order-cash-discount {
     color:#990000;
 }
+
+select.deliveryselect {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+}
+
+.order-discount-wrapper {
+    border: 1px solid #CCCCCC;
+    background-color:#FFFFFF;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.order-discount-wrapper h2 {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    color:#990000;
+    font-weight:700;
+    margin-bottom: 2px;
+}
+
+.order-discount-item {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    padding-top: 2px;
+    font-weight:700;
+}
+
+select.freeitemselect {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+}
+
 
 #ordertotal {
     text-align:center;

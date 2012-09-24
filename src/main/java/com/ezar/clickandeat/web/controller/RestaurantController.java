@@ -41,6 +41,9 @@ public class RestaurantController {
     private RestaurantRepository repository;
 
     @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
     private CuisineProvider cuisineProvider;
 
     @Autowired
@@ -65,6 +68,13 @@ public class RestaurantController {
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
 
+        // If no order associated with the session, create now
+        String orderId = (String)session.getAttribute("orderid");
+        if( orderId == null ) {
+            Order order = buildAndRegister(session, restaurantId);
+            session.setAttribute("orderid",order.getOrderId());
+        }
+        
         // Update the restaurant session id
         String restaurantSessionId = (String)session.getAttribute("restaurantid");
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
@@ -210,6 +220,25 @@ public class RestaurantController {
         String cuisineArrayList = StringUtils.collectionToDelimitedString(cuisines,"','");
         model.put("cuisinesArray","'" + cuisineArrayList + "'");
         return model;
+    }
+
+
+    /**
+     * @param session
+     * @param restaurantId
+     * @return
+     */
+
+    private Order buildAndRegister(HttpSession session, String restaurantId) {
+        Order order = orderRepository.create();
+        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        order.setRestaurantId(restaurantId);
+        order.setRestaurant(restaurant);
+        order.updateCosts();
+        order = orderRepository.save(order);
+        session.setAttribute("orderid",order.getOrderId());
+        session.removeAttribute("completedorderid");
+        return order;
     }
 
 }

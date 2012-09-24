@@ -22,7 +22,10 @@ public class Order extends PersistentObject {
     private String orderId;
 
     private String userId;
+
+    // Restaurant details
     private String restaurantId;
+    private List<Discount> restaurantDiscounts;
 
     @Transient
     private Restaurant restaurant;
@@ -31,7 +34,7 @@ public class Order extends PersistentObject {
     private List<OrderItem> orderItems;
     private List<OrderDiscount> orderDiscounts;
 
-    // Customer/delivery/billing details 
+    // Customer/delivery/billing details
     private Person customer;
     private String deliveryType;
     private String paymentType;
@@ -88,6 +91,8 @@ public class Order extends PersistentObject {
         this.orderItems = new ArrayList<OrderItem>();
         this.orderUpdates = new ArrayList<OrderUpdate>();
         this.orderDiscounts = new ArrayList<OrderDiscount>();
+
+        this.restaurantDiscounts = new ArrayList<Discount>();
     }
 
 
@@ -380,6 +385,7 @@ public class Order extends PersistentObject {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+        this.restaurantDiscounts = restaurant.getDiscounts();
     }
 
     public Person getCustomer() {
@@ -618,7 +624,13 @@ public class Order extends PersistentObject {
         this.totalCost = totalCost;
     }
 
+    public List<Discount> getRestaurantDiscounts() {
+        return restaurantDiscounts;
+    }
 
+    public void setRestaurantDiscounts(List<Discount> restaurantDiscounts) {
+        this.restaurantDiscounts = restaurantDiscounts;
+    }
 
     public Double getTotalDiscount() {
         return totalDiscount;

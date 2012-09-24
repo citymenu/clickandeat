@@ -385,13 +385,12 @@ public class OrderController implements InitializingBean {
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
-                    order.removeOrderItem(orderItemId);
+                    order.removeOrderItem(orderItemId, 1);
                     order = orderRepository.saveOrder(order);
+                    // Update can checkout status of order
+                    session.setAttribute("cancheckout", order.getCanCheckout());
                 }
             }
-
-            // Update can checkout status of order
-            session.setAttribute("cancheckout", order.getCanCheckout());
 
             model.put("success",true);
             model.put("order",order);

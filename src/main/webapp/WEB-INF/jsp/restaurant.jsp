@@ -2,10 +2,10 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
-    <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
+    <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
     <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
 </head>
@@ -22,7 +22,8 @@
                     <div class="restaurant-details-wrapper">
                         <table width="1000">
                             <tr valign="top">
-                                <td width="600">
+                                <td width="480">
+                                    <img src="${resources}/images/example.gif" width="65" height="50"/>
                                     <h2><util:escape value="${restaurant.name}"/></h2>
                                     <c:if test="${restaurant.description != null}">
                                     <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
@@ -30,22 +31,43 @@
                                     <div class="restaurant-details">
                                         <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
                                     </div>
-                                    <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
+                                    <c:if test="${restaurant.collectionTimeMinutes != 0}">
                                     <div class="restaurant-details">
-                                        <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeComments="true" escapeNewLines="true"/>
+                                        <b><message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/></b>
                                     </div>
                                     </c:if>
+                                    <c:if test="${restaurant.deliveryTimeMinutes != 0}">
                                     <div class="restaurant-details">
                                         <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/></b>
                                     </div>
+                                    </c:if>
                                 </td>
-                                <td width="170"></td>
-                                <td width="230">
+                                <td width="320">
+                                    <div class="restuarant-summary-wrapper">
+                                        <div class="restaurant-detail-wrapper">
+                                            <div class="restaurant-detail-title">
+                                                <message:message key="restaurant.opening-times-today"/>:
+                                            </div>
+                                            <div class="restaurant-detail-content">
+                                                <util:escape value="${restaurant.todaysOpeningTimes}" escapeNewLines="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="restaurant-detail-wrapper">
+                                            <div class="restaurant-detail-title">
+                                                <message:message key="restaurant.delivery-details"/>:
+                                            </div>
+                                            <div class="restaurant-detail-content">
+                                                <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td width="200">
                                     <div class="restaurant-location">
                                         <div class="restaurant-map">
-                                            <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=14&size=230x135&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
+                                            <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=14&size=200x100&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
                                         </div>
-                                        <div>Get directions from your location to <util:escape value="${restaurant.name}"/>.
+                                        <div class="restaurant-details">Get directions from your location to <util:escape value="${restaurant.name}"/>.</div>
                                     </div>
                                 </td>
                             </tr>
@@ -58,7 +80,7 @@
                 <td width="180">
                     <div class="menu-left">
                         <div id="menu-launch-wrapper">
-                            <h2><message:message key="restaurant.menu-categories"/>:</h2>
+                            <h2><message:message key="restaurant.menu"/>:</h2>
                             <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
                             <div class="menu-launch-content-wrapper">
                                 <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">

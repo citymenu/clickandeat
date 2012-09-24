@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -324,22 +325,22 @@ public class Restaurant extends PersistentObject {
         boolean hasDeliveryTimes = (deliveryOpeningTime != null && deliveryClosingTime != null);
         
         if( !hasCollectionTimes && !hasDeliveryTimes ) {
-            return "Closed";
+            return MessageFactory.getMessage("restaurant.closed",false);
         }
         
         if( hasCollectionTimes && !hasDeliveryTimes ) {
-            return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (collection)";
+            return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.collection",false) + ")";
         }
         else if( !hasCollectionTimes ) {
-            return deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (delivery)";
+            return deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.delivery",false) + ")";
         }
         else {
             if( collectionOpeningTime.equals(deliveryOpeningTime) && collectionClosingTime.equals(deliveryClosingTime)) {
                 return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter);
             }
             else {
-                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (collection), " +
-                    deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (delivery)";
+                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.collection",false) + ")\n" +
+                    deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.delivery",false) + ")";
             }
         }
     }
