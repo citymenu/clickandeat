@@ -128,6 +128,7 @@ select.deliveryselect {
 select.freeitemselect {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
+    margin-top:2px;
 }
 
 

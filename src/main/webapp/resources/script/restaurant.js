@@ -45,7 +45,7 @@ function updateOrderPanelPos() {
         var newtop = contentbottom - orderheight - ordertop;
         $('#order-wrapper').css('top',(newtop < 0? 20: newtop));
         $('#order-wrapper').removeClass('fixed');
-    } else if (y >= ordertop ) {
+    } else if (y >= ordertop - 20 ) {
         $('#order-wrapper').css('top',20);
         $('#order-wrapper').addClass('fixed');
     } else {
