@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,13 +55,48 @@ public class RestaurantSearchController {
         else {
             SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
             results.addAll(restaurantRepository.search(search));
-            model.put("results",results);
-            model.put("count",results.size());
+            Map<String,Integer> cuisineResultCount = buildCuisineResultCount(results);
+            if( StringUtils.hasText(search.getCuisine())) {
+                SortedSet<Restaurant> filteredResults = new TreeSet<Restaurant>(new RestaurantSearchComparator());
+                for( Restaurant restaurant: results ) {
+                    if( restaurant.getCuisines().contains(search.getCuisine())) {
+                        filteredResults.add(restaurant);
+                    }
+                    model.put("results",filteredResults);
+                    model.put("count",filteredResults.size());
+                }
+            }
+            else {
+                model.put("results",results);
+                model.put("count",results.size());
+            }
+
+            model.put("resultCount", cuisineResultCount);
             model.put("cuisines",cuisineProvider.getCuisineList());
             return new ModelAndView("findRestaurant",model);
         }
     }
 
+
+    /**
+     * @param results
+     * @return
+     */
+    
+    private Map<String,Integer> buildCuisineResultCount(Set<Restaurant> results) {
+        Map<String,Integer> resultMap = new LinkedHashMap<String, Integer>();
+        resultMap.put("ALL", results.size());
+        for( Restaurant restaurant: results ) {
+            for( String cuisine: restaurant.getCuisines()) {
+                Integer resultCount = resultMap.get(cuisine);
+                if( resultCount == null ) {
+                    resultCount = 0;
+                }
+                resultMap.put(cuisine, resultCount + 1 );
+            }
+        }
+        return resultMap;
+    }
     
     /**
      * Custom ordering for restaurant search results 

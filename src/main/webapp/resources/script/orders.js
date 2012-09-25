@@ -133,9 +133,27 @@ function doBuildOrder(order,config) {
         // Add details of any free item discounts (display only)
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
-                if( !config.allowUpdateFreeItem ) {
+                if( config.allowUpdateFreeItem ) {
+                    var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
+                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
+                    orderDiscount.freeItems.forEach(function(freeItem) {
+                        if( orderDiscount.selectedFreeItem == freeItem ) {
+                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
+                        } else {
+                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                        }
+                    });
+                    selectBox += '</select>';
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'216\'><tr valign=\'top\'><td width=\'126\'><b>{0}:</b><br/>{1}</td><td width=\'55\' align=\'right\'><b>{2}{3}</b></td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,orderDiscount.formattedAmount);
+                    $('#order-item-contents').append(row);
+                    $('#' + orderDiscount.discountId).change(function(){
+                        var discountId = $(this).attr('id');
+                        var freeItem = $(this).val();
+                        updateFreeItem(discountId,freeItem);
+                    });
+                } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'216\'><trvalign=\'top\'><td width=\'126\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,orderDiscount.formattedAmount);
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'216\'><tr valign=\'top\'><td width=\'126\'>{0} ({1})</td><td width=\'55\' align=\'right\'>{2}{3}</td><td width=\'30\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,orderDiscount.formattedAmount);
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -162,43 +180,12 @@ function doBuildOrder(order,config) {
         // Show details of discounts if available
         if( order.restaurantDiscounts.length > 0 ) {
             var discountItems = '';
-            var freeItems = [];
             order.restaurantDiscounts.forEach(function(discount){
-                var orderDiscount = null;
-                order.orderDiscounts.forEach(function(applicableDiscount) {
-                    if( applicableDiscount.discountId == discount.discountId ) {
-                        orderDiscount = applicableDiscount;
-                    }
-                });
-                if(discount.discountType == 'DISCOUNT_FREE_ITEM' && orderDiscount != null ) {
-                    var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
-                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
-                    orderDiscount.freeItems.forEach(function(freeItem) {
-                        if( orderDiscount.selectedFreeItem == freeItem ) {
-                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
-                        } else {
-                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
-                        }
-                    });
-                    selectBox += '</select>';
-                    discountItems += ('<div class=\'order-discount-item\'>{0}: {1}</div>').format(unescape(discount.title),selectBox);
-                    freeItems.push(discount.discountId);
-                } else {
-                    discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));
-                }
+                discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));
             });
             var discountItemHeader = ('<h2>{0}:</h2>').format(getLabel('order.discounts-available'));
             var discountContainer = ('<div class=\'order-discount-wrapper\'>{0}{1}</div>').format(discountItemHeader,discountItems);
             $('#discounts').append(discountContainer);
-
-            // Add event handlers for any free item selections
-            freeItems.forEach(function(freeItemSelect){
-                $('#' + freeItemSelect).change(function(){
-                    var discountId = $(this).attr('id');
-                    var freeItem = $(this).val();
-                    updateFreeItem(discountId,freeItem);
-                });
-            });
         }
 
         // Show warning if restaurant is not open at given order time

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,11 +78,13 @@ public class PaymentController {
                 orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             }
 
-            // Add completed order id to the session
-            request.getSession(true).setAttribute("completedorderid",order.getOrderId());
-            request.getSession(true).removeAttribute("orderid");
-            request.getSession(true).removeAttribute("restaurantid");
-            request.getSession(true).removeAttribute("cancheckout");
+            // Clear session attributes
+            HttpSession session = request.getSession(true);
+            session.setAttribute("completedorderid",order.getOrderId());
+            session.removeAttribute("orderid");
+            session.removeAttribute("orderrestaurantid");
+            session.removeAttribute("restaurantid");
+            session.removeAttribute("cancheckout");
 
             // Set status to success
             model.put("success",true);

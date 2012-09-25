@@ -43,7 +43,7 @@ public class SearchController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/validateLocation.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) List<String> cuisines,
+    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
                                                    @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
                                                    HttpServletRequest request) throws Exception {
 
@@ -61,7 +61,7 @@ public class SearchController {
                 if( locations.size() == 1 ) {
                     Search search = new Search();
                     search.setLocation(locations.get(0));
-                    search.setCuisines(cuisines);
+                    search.setCuisine(cuisine);
                     search.setDir(dir);
                     search.setSort(sort);
                     request.getSession(true).setAttribute("search",search);

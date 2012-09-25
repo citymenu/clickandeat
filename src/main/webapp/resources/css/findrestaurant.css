@@ -1,0 +1,154 @@
+@charset "utf-8";
+
+.cuisine-wrapper {
+    margin-left:10px;
+    border: 1px solid #BBBBBB;
+    background-color:#FCFCFC;
+    padding:10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 168px;
+}
+
+.cuisine-wrapper h2 {
+    text-align:left;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: -0.01em;
+    color:#AA0000;
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.cuisine-wrapper-description {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    color:#444444;
+    padding: 0 5px 0 5px;
+}
+
+.cuisine-entry-wrapper {
+    border: 1px solid #CCCCCC;
+    background-color:#FFFFFF;
+    margin-top: 10px;
+    padding: 6px 10px 6px 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.cuisine-wrapper-entry {
+    padding: 5px 10px 5px 10px;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 16px;
+    color:#444444;
+}
+
+.search-results-wrapper {
+    margin: 0 30px 0 30px;
+    width: 500px;
+}
+
+.search-results-header-wrapper {
+    border-bottom: 1px dashed #AAAAAA;
+    padding: 0 0 10px 0;
+    margin: 0 0 20px 0;
+}
+
+.search-results-header-wrapper h2 {
+    font-family: "myriad-pro-semi-condensed",impact;
+    font-size: 18px;
+    color:#444444;
+    font-weight:700;
+}
+
+.search-results-detail {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 16px;
+    color:#444444;
+    padding: 8px 0 0 0;
+}
+
+.search-result-wrapper {
+    padding-bottom: 20px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #DDDDDD;
+}
+
+.search-result-detail h2 {
+    color: #444444;
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    padding: 0 0 0 10px;
+    margin-bottom:6px;
+}
+
+.restaurant-description {
+    color: #AA0000;
+    font-family: Georgia,"Times New Roman",Times,serif;
+    font-size:12px;
+    line-height:14px;
+    letter-spacing: -0.01em;
+    font-style: italic;
+    padding: 0 0 0 10px;
+}
+
+.restaurant-details {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    margin-top: 6px;
+    padding: 0 0 0 10px;
+}
+
+
+.search-results-right {
+    padding: 0;
+    margin: 0;
+    width: 260px;
+    position:relative;
+}
+
+element.style {
+    opacity: 0;
+    width: 100px;
+}
+
+div.selector select {
+    border: 0 none;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 23px;
+    margin: 0;
+    min-width: 15px;
+    padding: 0 40px 0 0;
+    position: relative;
+    width: 100%;
+}
+
+.restsSortingSelect {
+    height: 26px;
+    padding: 0 !important;
+    width: 176px !important;
+}
+
+a.search-result-button, a.search-result-button:active, a.search-result-button:hover {
+    background-color: #50a747;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 3px 15px 3px 15px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.search-result-button:active, a.search-result-button:hover {
+    background-color: #2c8023;
+}

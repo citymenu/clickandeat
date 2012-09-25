@@ -2,12 +2,12 @@
 
 #order-wrapper {
     position: absolute;
-    top: 0;
+    top: 20px;
 }
 
 #order-wrapper.fixed {
   position: fixed;
-  top: 0;
+  top: 20px;
 }
 
 
@@ -65,7 +65,7 @@
 
 .restaurant-detail-wrapper {
     border: 1px solid #CCCCCC;
-    background-color: #FFFFDF;
+    background-color: #F6F5F4;
     margin: 0 0 10px 0;
     padding: 8px;
     -moz-border-radius: 5px;
@@ -104,7 +104,7 @@
 }
 
 .menu-right {
-    padding: 0;
+    padding: 20px 0 0 0;
     margin: 0;
     width: 260px;
     position:relative;

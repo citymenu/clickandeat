@@ -43,13 +43,13 @@ function updateOrderPanelPos() {
 
     if( orderbottom >= contentbottom ) {
         var newtop = contentbottom - orderheight - ordertop;
-        $('#order-wrapper').css('top',(newtop < 0? 0: newtop));
+        $('#order-wrapper').css('top',(newtop < 0? 20: newtop));
         $('#order-wrapper').removeClass('fixed');
     } else if (y >= ordertop ) {
-        $('#order-wrapper').css('top',0);
+        $('#order-wrapper').css('top',20);
         $('#order-wrapper').addClass('fixed');
     } else {
-        $('#order-wrapper').css('top',0);
+        $('#order-wrapper').css('top',20);
         $('#order-wrapper').removeClass('fixed');
     }
 }

@@ -223,7 +223,12 @@ public class OrderController implements InitializingBean {
 
             // Update can checkout status of order
             session.setAttribute("cancheckout", order.getCanCheckout());
-            
+
+            // Update order restaurant id session attribute if any items present
+            if( order.getOrderItems().size() > 0 ) {
+                session.setAttribute("orderrestaurantid", order.getRestaurantId());
+            }
+
             // Return success
             model.put("success",true);
             model.put("order",order);
@@ -348,6 +353,11 @@ public class OrderController implements InitializingBean {
                 // Update can checkout status of order
                 session.setAttribute("cancheckout", order.getCanCheckout());
 
+                // Update order restaurant id session attribute if any items present
+                if( order.getOrderItems().size() > 0 ) {
+                    session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                }
+
                 // Return success
                 model.put("success",true);
                 model.put("applicable",true);
@@ -389,6 +399,13 @@ public class OrderController implements InitializingBean {
                     order = orderRepository.saveOrder(order);
                     // Update can checkout status of order
                     session.setAttribute("cancheckout", order.getCanCheckout());
+
+                    // Update order restaurant id session attribute if any items present
+                    if( order.getOrderItems().size() > 0 ) {
+                        session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                    } else {
+                        session.removeAttribute("orderrestaurantid");
+                    }
                 }
             }
 
@@ -440,21 +457,19 @@ public class OrderController implements InitializingBean {
             int deliveryTimeMinutes = restaurant.getDeliveryTimeMinutes();
             Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair;
             if( deliveryOpeningTime != null ) {
-                deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime.plusMinutes(deliveryTimeMinutes):
-                        now.plusMinutes(deliveryTimeMinutes), restaurant.getDeliveryClosingTime(now));
+                deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime: now, restaurant.getDeliveryClosingTime(now), deliveryTimeMinutes);
             }
             else {
-                deliveryTimesPair = getTimeOptions(deliveryOpeningTime, restaurant.getDeliveryClosingTime(now));
+                deliveryTimesPair = getTimeOptions(deliveryOpeningTime, restaurant.getDeliveryClosingTime(now), deliveryTimeMinutes);
             }
 
             // For collection times push the current time past the collection time in minutes
             int collectionTimeMinutes = restaurant.getCollectionTimeMinutes();
             Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair;
             if( collectionOpeningTime != null ) {
-                collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime.plusMinutes(collectionTimeMinutes):
-                        now.plusMinutes(collectionTimeMinutes), restaurant.getCollectionClosingTime(now));            }
+                collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime: now, restaurant.getCollectionClosingTime(now), collectionTimeMinutes);            }
             else {
-                collectionTimesPair = getTimeOptions(collectionOpeningTime, restaurant.getCollectionClosingTime(now));
+                collectionTimesPair = getTimeOptions(collectionOpeningTime, restaurant.getCollectionClosingTime(now), collectionTimeMinutes);
             }
 
             deliveryTimes.add(deliveryTimesPair.first);
@@ -474,8 +489,8 @@ public class OrderController implements InitializingBean {
                 days.add(now.getDayOfWeek());
 
                 DateTime[] openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
-                deliveryTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3]);
-                collectionTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1]);
+                deliveryTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3], deliveryTimeMinutes);
+                collectionTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1], collectionTimeMinutes);
                 
                 // Add this day's time options to the list
                 deliveryTimesList.addAll(deliveryTimesPair.first);
@@ -597,11 +612,18 @@ public class OrderController implements InitializingBean {
                         orderDiscount.setSelectedFreeItem(freeItem);
                         order = orderRepository.save(order);
                     }
+
+                    // Update order restaurant id session attribute if any items present
+                    if( order.getOrderItems().size() > 0 ) {
+                        session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                    } else {
+                        session.removeAttribute("orderrestaurantid");
+                    }
+
+                    // Update can checkout status of order
+                    session.setAttribute("cancheckout", order.getCanCheckout());
                 }
             }
-
-            // Update can checkout status of order
-            session.setAttribute("cancheckout", order.getCanCheckout());
 
             model.put("success",true);
             model.put("order",order);
@@ -621,15 +643,16 @@ public class OrderController implements InitializingBean {
      * @return
      */
 
-    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to) {
+    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to, int offsetMinutes ) {
         List<LocalTime> first = new ArrayList<LocalTime>();
         List<LocalTime> second = new ArrayList<LocalTime>();
         if( from == null || to == null ) {
             return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
         }
         LocalTime startTime = from.toLocalTime();
+        from = from.plusMinutes(offsetMinutes);
         int minuteInterval = from.getMinuteOfHour() % 15;
-        from = from.plusMinutes(15 - minuteInterval);
+        from = from.plusMinutes(minuteInterval == 0? 0: 15 - minuteInterval);
         while(!from.isAfter(to)) {
             LocalTime nextTime = from.toLocalTime();
             if( !nextTime.isAfter(startTime)) {

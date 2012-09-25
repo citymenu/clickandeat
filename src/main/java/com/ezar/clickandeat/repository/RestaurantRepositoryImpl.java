@@ -152,12 +152,6 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         // Only include restaurants listed on the site
         query.addCriteria(where("listOnSite").is(true));
         
-        // Specify cuisines if required
-        List<String> cuisines = search.getCuisines();
-        if( cuisines != null && cuisines.size() > 0 ) {
-            query.addCriteria(where("cuisines").in(cuisines));
-        }
-
         // Specify sort order if specified
         String sort = search.getSort();
         String dir = search.getDir();
@@ -218,6 +212,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         return availableRestaurants;
     }
+
+
+
 
 
     @Required

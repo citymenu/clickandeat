@@ -1,16 +1,18 @@
 package com.ezar.clickandeat.model;
 
+import org.springframework.util.StringUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Search implements Serializable {
 
-    private static final long serialVersionUID = 1234L;
+    private static final long serialVersionUID = -1L;
 
     private AddressLocation location;
 
-    private List<String> cuisines;
+    private String cuisine;
     
     private String sort;
     
@@ -19,30 +21,27 @@ public class Search implements Serializable {
     private boolean includeOpenOnly;
 
     public Search() {
-        this.cuisines = new ArrayList<String>();
     }
 
 
     /**
      * @param location
-     * @param cuisines
+     * @param cuisine
      * @param sort
      * @param dir
      */
 
-    public Search(AddressLocation location, List<String> cuisines, String sort, String dir ) {
+    public Search(AddressLocation location, String cuisine, String sort, String dir ) {
         this.location = location;
-        this.cuisines = cuisines;
+        this.cuisine = cuisine;
         this.sort = sort;
         this.dir = dir;
     }
 
     public String getQueryString() {
         StringBuilder sb = new StringBuilder("?loc=").append(location);
-        if(cuisines != null) {
-            for( String cuisine: cuisines) {
-                sb.append("&c=").append(cuisine);
-            }
+        if(StringUtils.hasText(cuisine)) {
+            sb.append("&c=").append(cuisine);
         }
         if( sort != null ) {
             sb.append("&s=").append(sort);
@@ -68,12 +67,12 @@ public class Search implements Serializable {
         this.location = location;
     }
 
-    public List<String> getCuisines() {
-        return cuisines;
+    public String getCuisine() {
+        return cuisine;
     }
 
-    public void setCuisines(List<String> cuisines) {
-        this.cuisines = cuisines;
+    public void setCuisine(String cuisine) {
+        this.cuisine = cuisine;
     }
 
     public String getSort() {

@@ -92,6 +92,11 @@ li.active {
     cursor:pointer;
 }
 
+.navigation-links li.active a, .navigation-links li.active a:visited, .navigation-links li.active a:active, .navigation-links li.active a:hover {
+    color: #FFFFFF;
+}
+
+
 .navigation-links a:active, .navigation-links a:hover {
    color:#FFFFFF;
    text-decoration:underline;
