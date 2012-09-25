@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -45,7 +46,9 @@ public class OrderRepositoryTest {
     @Test
     public void testSaveAndRetrieveOrder() throws Exception {
         
-        Order order = new Order();
+        Order order = repository.create();
+        Restaurant restaurant = new Restaurant();
+        order.setRestaurant(restaurant);
         order.setOrderId(testOrderId);
         repository.saveOrder(order);
         

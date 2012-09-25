@@ -79,7 +79,8 @@ public class RestaurantSearchTest {
         }
     }
 
-    
+
+    @Ignore
     @Test
     public void testFindRestaurantsServingLocation() throws Exception {
         
