@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.DateTime;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class MessageController {
     static {
         StringBuilder sb = new StringBuilder("var labels = {};\n");
         for(Map.Entry<String,String> entry: MessageFactory.getMessages()) {
-            sb.append("labels[\"").append(entry.getKey()).append("\"] = \"").append(entry.getValue()).append("\";\n");
+            sb.append("labels[\"").append(entry.getKey()).append("\"] = \"").append(StringEscapeUtils.escapeHtml(entry.getValue())).append("\";\n");
         }
         sb.append("function getLabel(key){ return (labels[key]? labels[key]: 'missing: ' + key); }");
         script = sb.toString();
