@@ -2,12 +2,11 @@
 
 .cuisine-wrapper {
     margin-left:10px;
-    border: 1px solid #BBBBBB;
-    background-color:#FCFCFC;
-    padding:10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    width: 168px;
+    width: 190px;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+
 }
 
 .cuisine-wrapper h2 {
@@ -31,15 +30,15 @@
 
 .cuisine-entry-wrapper {
     border: 1px solid #CCCCCC;
-    background-color:#FFFFFF;
+    background-color: #FCFCFC;
     margin-top: 10px;
-    padding: 6px 10px 6px 10px;
+    padding: 6px 5px 6px 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
 
-.cuisine-wrapper-entry {
-    padding: 5px 10px 5px 10px;
+.cuisine-entry {
+    padding: 8px 5px 8px 5px;
     font-family: "ff-tisa-web-pro",impact;
     font-size: 16px;
     color:#444444;
@@ -51,9 +50,13 @@
 }
 
 .search-results-header-wrapper {
-    border-bottom: 1px dashed #AAAAAA;
-    padding: 0 0 10px 0;
-    margin: 0 0 20px 0;
+    background-color: #FCFCFC;
+    border: 1px solid #AAAAAA;
+    padding: 10px;
+    margin: 0 0 30px 0;
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
 }
 
 .search-results-header-wrapper h2 {

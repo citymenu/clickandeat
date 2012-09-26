@@ -10,14 +10,13 @@
   top: 20px;
 }
 
-
 .restaurant-details-wrapper {
     padding: 0px 10px 20px 10px;
     border-bottom: 1px dashed #AAAAAA;
 }
 
 .restaurant-details-wrapper h2 {
-    color: #444444;
+    color: #AA0000;
     font-family: "ff-tisa-web-pro",impact;
     font-size: 28px;
     font-style: normal;
@@ -27,7 +26,7 @@
 }
 
 .restaurant-description {
-    color: #AA0000;
+    color: #444444;
     font-family: Georgia,"Times New Roman",Times,serif;
     font-size:12px;
     letter-spacing: -0.01em;
@@ -64,12 +63,13 @@
 }
 
 .restaurant-detail-wrapper {
-    border: 1px solid #CCCCCC;
-    background-color: #F6F5F4;
-    margin: 0 0 10px 0;
+    border: 1px solid #AAAAAA;
+    background-color: #FCFCFC;
+    margin: 0 0 14px 0;
     padding: 8px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
 }
 
 .restaurant-detail-title {
@@ -112,14 +112,13 @@
 
 #menu-launch-wrapper {
     margin-top:20px;
-    width: 150px;
-    border: 1px solid #BBBBBB;
-    background-color:#FCFCFC;
-    padding:10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    width: 160px;
     position: absolute;
     top: 0;
+    background-color:#FCFCFC;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
 
 #menu-launch-wrapper.fixed {
@@ -194,20 +193,27 @@
     font-style: italic;
     font-weight: normal;
     text-transform: none;
-    border-bottom: 1px dashed #EEEEEE;
+    border-bottom: 1px dashed #AAAAAA;
     padding-bottom: 10px;
+    margin-bottom: 5px;
 }
 
 .menu-item-wrapper {
-    margin-top: 6px;
-    padding-bottom: 6px;
-    overflow: hidden;
-    border-bottom: 1px dashed #EEEEEE;
+    padding: 8px 0 8px 0;
 }
+
+.menu-item-title-wrapper {
+    padding: 8px 0 8px 0;
+}
+
+div.even {
+    background-color:#FAFAFA;
+}
+
 
 h3.menu-item-title {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 16px;
     color: #444444;
     font-weight: 700;
@@ -230,11 +236,11 @@ h3.menu-item-title {
     line-height: 16px;
     color: #444444;
     font-weight: 700;
-    padding-right: 6px;
+    padding-right: 1px;
 }
 
-.menu-item-action {
-    padding-left:2px;
+span.menu-item-action {
+    background:transparent url(../images/plus.png) no-repeat 0 3px;
 }
 
 .menu-item-description {
@@ -252,20 +258,12 @@ td.spacer {
 }
 
 a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #50a747;
-    border: 1px solid #333333;
-    color: #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 1px 6px 1px 6px;
-    text-align: center;
-    vertical-align: baseline;
-    text-decoration: none;
-    text-shadow: 0 1px #333333;
+    display:inline-block;
+    width:16px;
+    height:16px;
     cursor: pointer;
 }
 
+
 a.menuitem-button:active, a.menuitem-button:hover {
-    background-color: #2c8023;
 }

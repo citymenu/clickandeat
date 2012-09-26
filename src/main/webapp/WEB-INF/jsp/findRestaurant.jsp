@@ -24,17 +24,23 @@
                 <!-- Cusine bar -->
                 <td width="200">
                     <div class="cuisine-wrapper">
-                        <h2><message:message key="search.choose-cuisine"/></h2>
-                        <div class="cuisine-wrapper-description"><message:message key="search.choose-cuisine-instructions"/></div>
-                        <div class="cuisine-entry-wrapper">
-                            <c:forEach var="entry" items="${resultCount}" varStatus="status">
-                                <c:if test="${status.count == 1}">
-                                <div class="cuisine-wrapper-entry"><b><message:message key="search.all"/></b> (${entry.value})</div>
-                                </c:if>
-                                <c:if test="${status.count > 1}">
-                                <div class="cuisine-wrapper-entry"><b><util:escape value="${entry.key}"/></b> (${entry.value})</div>
-                                </c:if>
-                            </c:forEach>
+                        <div class="outer-box">
+                            <div class="middle-box">
+                                <div class="center-box">
+                                    <h2><message:message key="search.choose-cuisine"/></h2>
+                                    <div class="cuisine-wrapper-description"><message:message key="search.choose-cuisine-instructions"/></div>
+                                    <div class="cuisine-entry-wrapper">
+                                        <c:forEach var="entry" items="${resultCount}" varStatus="status">
+                                            <c:if test="${status.count == 1}">
+                                            <div class="cuisine-entry"><b><message:message key="search.all"/></b> (${entry.value})</div>
+                                            </c:if>
+                                            <c:if test="${status.count > 1}">
+                                            <div class="cuisine-entry"><b><util:escape value="${entry.key}"/></b> (${entry.value})</div>
+                                            </c:if>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </td>

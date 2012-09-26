@@ -2,13 +2,13 @@
 
 #order-wrapper {
     margin-right:10px;
-    border: 1px solid #BBBBBB;
+    width: 250px;
     background-color:#FCFCFC;
-    padding:10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    width: 228px;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
+
 
 .orderheader {
     text-align:left;
@@ -371,20 +371,20 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 a.checkout-button, a.checkout-button:active, a.checkout-button:hover {
-    background-color: #50A3E2;
-    border: 1px solid #333333;
+    display:inline-block;
+    padding-top:5px;
+    height:27px;
+    width: 122px;
+    background: transparent url(../images/button.png) no-repeat 0 0;
     color: #FFFFFF;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-weight: 700;
-    font-size: 16px;
-    padding: 3px 15px 3px 15px;
+    font-size: 18px;
     text-align: center;
-    vertical-align: baseline;
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
 }
 
 a.checkout-button:active, a.checkout-button:hover {
-    background-color: #247FCC;
 }

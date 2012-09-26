@@ -14,6 +14,7 @@
 
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
+<!-- Menu item index -->
 <div id="content">
     <div class="content-wrapper">
         <table width="1020">
@@ -86,19 +87,25 @@
                 <td width="180">
                     <div class="menu-left">
                         <div id="menu-launch-wrapper">
-                            <h2><message:message key="restaurant.menu"/>:</h2>
-                            <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
-                            <div class="menu-launch-content-wrapper">
-                                <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
-                                <div class="menu-launch-entry">
-                                    <a onclick="jump('${menuCategory.categoryId}')"><util:escape value="${menuCategory.name}"/></a>
+                            <div class="outer-box">
+                                <div class="middle-box">
+                                    <div class="center-box">
+                                        <h2><message:message key="restaurant.menu"/>:</h2>
+                                        <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
+                                        <div class="menu-launch-content-wrapper">
+                                            <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
+                                            <div class="menu-launch-entry">
+                                                <a onclick="jump('${menuCategory.categoryId}')"><util:escape value="${menuCategory.name}"/></a>
+                                            </div>
+                                            </c:forEach>
+                                            <c:if test="${restaurant.specialOfferCount > 0}">
+                                            <div class="menu-launch-entry">
+                                                <a onclick="jump('special_offers')"><message:message key="order.special-offers"/></a>
+                                            </div>
+                                            </c:if>
+                                        </div>
+                                    </div>
                                 </div>
-                                </c:forEach>
-                                <c:if test="${restaurant.specialOfferCount > 0}">
-                                <div class="menu-launch-entry">
-                                    <a onclick="jump('special_offers')"><message:message key="order.special-offers"/></a>
-                                </div>
-                                </c:if>
                             </div>
                         </div>
                     </div>
@@ -113,28 +120,28 @@
                             <div class="menu-category-summary"><util:escape value="${menuCategory.summary}" escapeNewLines="true"/></div>
                             <c:choose>
                                 <c:when test="${menuCategory.type == 'STANDARD'}">
-                                    <c:forEach var="menuItem" items="${menuCategory.menuItems}">
+                                    <c:forEach var="menuItem" items="${menuCategory.menuItems}" varStatus="index">
                                     <div class="menu-item-wrapper">
                                         <table width="520">
                                             <c:choose>
                                                 <c:when test="${menuItem.type == 'STANDARD'}">
                                                 <tr valign="top">
-                                                    <td width="400">
+                                                    <td width="420">
                                                         <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                     </td>
-                                                    <td width="120" align="right">
+                                                    <td width="100" align="right">
                                                         <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItem.formattedCost}</span>
                                                         <span class="menu-item-action">
-                                                            <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
+                                                            <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"></a>
                                                         </span>
                                                     </td>
                                                 </tr>
                                                 <c:if test="${menuItem.description != null }">
                                                 <tr valign="top">
-                                                    <td width="400">
+                                                    <td width="420">
                                                         <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                     </td>
-                                                    <td width="120"></td>
+                                                    <td width="100"></td>
                                                 </tr>
                                                 </c:if>
                                                 </c:when>
@@ -146,7 +153,7 @@
                                                             <c:set var="style" value="spacer"/>
                                                         </c:if>
                                                         <c:if test="${status.count == 1}">
-                                                        <td width="280" rowspan="${menuItem.menuItemSubTypeCount}">
+                                                        <td width="300" rowspan="${menuItem.menuItemSubTypeCount}">
                                                             <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                             <c:if test="${menuItem.description != null }">
                                                                 <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
@@ -156,10 +163,10 @@
                                                         <td width="120" class="${style}">
                                                             <h3 class="menu-item-title"><util:escape value="${menuItemSubType.type}" escapeNewLines="true"/></h3>
                                                         </td>
-                                                        <td width="120" align="right">
+                                                        <td width="100" align="right">
                                                             <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemSubType.formattedCost}</span>
                                                             <span class="menu-item-action">
-                                                                <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,'<util:escape value="${menuItemSubType.type}" escapeComments="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
+                                                                <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,'<util:escape value="${menuItemSubType.type}" escapeComments="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"></a>
                                                             </span>
                                                         </td>
                                                     </tr>
@@ -171,11 +178,11 @@
                                     </c:forEach>
                                 </c:when>
                                 <c:otherwise>
-                                <c:set var="colwidth" value="${360 / menuCategory.itemTypeCount}"/>
-                                <div class="menu-item-wrapper">
+                                <c:set var="colwidth" value="${340 / menuCategory.itemTypeCount}"/>
+                                <div class="menu-item-title-wrapper">
                                     <table width="520">
                                         <tr valign="top">
-                                            <td width="160"></td>
+                                            <td width="180"></td>
                                             <c:forEach var="itemType" items="${menuCategory.itemTypes}">
                                             <td align="center" width="${colwidth}"><h3 class="menu-item-title"><util:escape value="${itemType}"/></h3></td>
                                             </c:forEach>
@@ -186,7 +193,7 @@
                                 <div class="menu-item-wrapper">
                                     <table width="520">
                                         <tr valign="top">
-                                            <td width="160">
+                                            <td width="180">
                                                 <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                             </td>
                                             <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
@@ -194,7 +201,7 @@
                                                 <c:if test="${menuItemTypeCost.cost != null}">
                                                 <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemTypeCost.formattedCost}</span>
                                                 <span class="menu-item-action">
-                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
+                                                    <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost})" class="menuitem-button add-button unselectable"></a>
                                                 </span>
                                                 </c:if>
                                             </td>
@@ -202,7 +209,7 @@
                                         </tr>
                                         <c:if test="${menuItem.description != null }">
                                         <tr valign="top">
-                                            <td width="160">
+                                            <td width="180">
                                                 <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                             </td>
                                             <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
@@ -231,7 +238,7 @@
                                         <td width="120" align="right">
                                             <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${specialOffer.formattedCost}</span>
                                             <span class="menu-item-action">
-                                                <a onclick="checkCanAddSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray})" class="menuitem-button add-button unselectable"><message:message key="button.add"/></a>
+                                                <a onclick="checkCanAddSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray})" class="menuitem-button add-button unselectable">&nbsp;</a>
                                             </span>
                                         </td>
                                     </tr>

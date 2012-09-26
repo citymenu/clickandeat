@@ -76,6 +76,23 @@ ol, ul {
     user-select: none;
 }
 
+div.outer-box {
+    border: 1px solid #675c58;
+    padding: 3px;
+}
+
+div.middle-box {
+    border: 2px solid #000000;
+    padding: 1px;
+}
+
+div.center-box {
+    border: 1px solid #786d69;
+    padding: 10px;
+}
+
+div.boxcontent { padding: 8px;}
+
 .warning-wrapper {
     border: 1px solid #b64242;
     background-color: #fffece;

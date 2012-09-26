@@ -4,6 +4,14 @@ var ordertop;
 
 // Initialize scrolling options for menu launch and order panel launch
 $(document).ready(function(){
+
+    var index = 1;
+    $('.menu-item-wrapper').each(function(){
+        if( index++ % 2 == 0 ) {
+            $(this).addClass('even');
+        }
+    });
+
     launchtop = $('#menu-launch-wrapper').offset().top - parseFloat($('#menu-launch-wrapper').css('marginTop').replace(/auto/, 0));
     ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
     updateLaunchPos();
