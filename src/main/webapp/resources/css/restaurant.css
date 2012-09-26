@@ -260,7 +260,7 @@ td.spacer {
 a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
     display:inline-block;
     width:16px;
-    height:16px;
+    height:14px;
     cursor: pointer;
 }
 
