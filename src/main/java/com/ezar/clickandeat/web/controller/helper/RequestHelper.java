@@ -2,7 +2,6 @@ package com.ezar.clickandeat.web.controller.helper;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.repository.OrderRepository;
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +11,6 @@ import javax.servlet.http.HttpSession;
 @Component(value="requestHelper")
 public class RequestHelper {
     
-    private static final Logger LOGGER = Logger.getLogger(RequestHelper.class);
-
     @Autowired
     private OrderRepository orderRepository;
     
@@ -27,13 +24,9 @@ public class RequestHelper {
         HttpSession session = request.getSession(true);
         String orderid = (String)session.getAttribute("orderid");
         if( orderid == null ) {
-            throw new Exception("No order associated with session");
+            return null;
         }
-        Order order = orderRepository.findByOrderId(orderid);
-        if( order == null ) {
-            throw new Exception("No order found for orderId: " + orderid);
-        }
-        return order;
+        return orderRepository.findByOrderId(orderid);
     }
 
     

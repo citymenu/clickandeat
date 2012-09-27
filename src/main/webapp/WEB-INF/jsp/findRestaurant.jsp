@@ -50,7 +50,14 @@
                     <div class="search-results-wrapper">
                         <div class="search-results-header-wrapper">
                             <h2><message:message key="search.your-location"/>: <util:escape value="${search.location.displayAddress}"/></h2>
+                            <c:if test="${count > 0 && search.location.radiusWarning == true}">
+                            <div class="search-results-warning">
+                                <message:message key="search.location-radius-warning"/>
+                            </div>
+                            </c:if>
                             <div class="search-results-detail">
+                                <c:if test="${count > 0 && search.location.radiusWarning == true}">
+                                </c:if>
                                 <c:choose>
                                     <c:when test="${count == 0}">
                                         <message:message key="search.no-results-found"/>

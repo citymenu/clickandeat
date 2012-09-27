@@ -120,6 +120,9 @@ public class OrderController implements InitializingBean {
             Order order = null;
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
+                order.updateCosts();
+                // Update can checkout status of order
+                session.setAttribute("cancheckout", order.getCanCheckout());
             }
             model.put("success",true);
             model.put("order",order);

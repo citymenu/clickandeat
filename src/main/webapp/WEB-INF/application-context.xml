@@ -139,6 +139,7 @@
         <property name="port" value="#{@redisUrl.getPort()}"/>
         <property name="password" value="#{@redisUrl.getUserInfo().split(':')[1]}"/>
         <property name="usePool" value="false"/>
+        <property name="timeout" value="5000"/>
     </bean>
 
     <!-- Redis default template -->

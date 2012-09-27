@@ -316,7 +316,6 @@ public class EmailServiceImpl implements IEmailService {
         templateMap.put("cancelCurl", cancelCurl);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
-
     }
 
 
@@ -332,7 +331,7 @@ public class EmailServiceImpl implements IEmailService {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
                 message.setFrom(from);
-                message.setSubject(subject);
+                message.getMimeMessage().setSubject(subject, "utf-8");
                 message.setText(text,true);
             }
         };

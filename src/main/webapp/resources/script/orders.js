@@ -46,7 +46,8 @@ function getOrderPanelConfig() {
         showDeliveryOptions: true,
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
-        enableCheckoutButton: true
+        enableCheckoutButton: true,
+        showDiscountInformation: true
     };
     return config;
 }
@@ -178,7 +179,7 @@ function doBuildOrder(order,config) {
         $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
 
         // Show details of discounts if available
-        if( order.restaurantDiscounts.length > 0 ) {
+        if( config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
             var discountItems = '';
             order.restaurantDiscounts.forEach(function(discount){
                 discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));

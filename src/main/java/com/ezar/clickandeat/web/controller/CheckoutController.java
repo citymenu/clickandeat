@@ -9,7 +9,6 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,43 +42,36 @@ public class CheckoutController {
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
-    private String timeZone;
-
     @RequestMapping(value="/secure/checkout.html", method= RequestMethod.GET)
     public ModelAndView checkout(HttpServletRequest request) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
         HttpSession session = request.getSession(true);
-        boolean canCheckout = session.getAttribute("cancheckout") != null && (Boolean)session.getAttribute("cancheckout");
         
-        if( !canCheckout ) {
+        Order order = requestHelper.getOrderFromSession(request);
+        if( order == null ) {
             if( session.getAttribute("restaurantid") != null ) {
                 return new ModelAndView("redirect:/restaurant.html?restaurantId=" + session.getAttribute("restaurantid"),model);
             }
             else {
-                return new ModelAndView("redirect:/home.html",model);
+                return new ModelAndView("redirect:/home.html");
             }
         }
-        
-        Order order = requestHelper.getOrderFromSession(request);
-        model.put("order",order);
-        
+        else {
+            model.put("order",order);
+        }
+
+        // Confirm if we can checkout this order
+        boolean canCheckout = order.getCanCheckout();
+        session.setAttribute("cancheckout", canCheckout);
+        if( !canCheckout ) {
+            return new ModelAndView("redirect:/restaurant.html?restaurantId=" + order.getRestaurant().getRestaurantId());
+        }
+
         // Set the standard delivery time onto the request
         Restaurant restaurant = order.getRestaurant();
-        model.put("deliveryTimeMinutes", restaurant.getDeliveryTimeMinutes());
+        model.put("restaurant",restaurant);
 
-        DateTime now = new DateTime();
-
-        // Set the current delivery type of the order
-        model.put("deliveryType",order.getDeliveryType());
-
-        // Confirm that the restaurant is open for delivery and collection
-        model.put("currentlyOpenForDelivery", restaurant.isOpenForDelivery(now));
-        model.put("currentlyOpenForCollection", restaurant.isOpenForCollection(now));
-
-        // Update can checkout status of order
-        session.setAttribute("cancheckout", order.getCanCheckout());
-        
         return new ModelAndView("checkout",model);
     }
 
@@ -210,13 +202,6 @@ public class CheckoutController {
     private String buildAdditionalInstructions(String json) {
         Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         return (String)params.get("additionalInstructions");
-    }
-    
-    
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
     }
 
 }

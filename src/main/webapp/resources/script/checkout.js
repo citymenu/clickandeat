@@ -8,7 +8,8 @@ function getOrderPanelConfig() {
         showDeliveryOptions: true,
         allowRemoveItems: false,
         allowUpdateFreeItem: true,
-        enableCheckoutButton: false
+        enableCheckoutButton: false,
+        showDiscountInformation: false
     };
     return config;
 }
