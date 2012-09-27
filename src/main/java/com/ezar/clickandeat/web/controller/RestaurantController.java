@@ -68,15 +68,28 @@ public class RestaurantController {
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("restaurant",restaurant);
 
+        String restaurantSessionId = (String)session.getAttribute("restaurantid");
+        
         // If no order associated with the session, create now
         String orderId = (String)session.getAttribute("orderid");
         if( orderId == null ) {
-            Order order = buildAndRegister(session, restaurantId);
+            Order order = buildAndRegister(session, restaurant);
             session.setAttribute("orderid",order.getOrderId());
         }
-        
+        else {
+            // If the restaurant session id is different from the restaurant id, update the order
+            if( !restaurantId.equals(restaurantSessionId)) {
+                // If there is no order restaurant session id present then the order is empty and we can update it
+                if( session.getAttribute("orderrestaurantid") == null ) {
+                    Order order = orderRepository.findByOrderId(orderId);
+                    order.setRestaurant(restaurant);
+                    order.updateCosts();
+                    orderRepository.save(order);
+                }
+            }
+        }
+
         // Update the restaurant session id
-        String restaurantSessionId = (String)session.getAttribute("restaurantid");
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
             session.setAttribute("restaurantid", restaurantId);
         }
@@ -225,14 +238,12 @@ public class RestaurantController {
 
     /**
      * @param session
-     * @param restaurantId
+     * @param restaurant
      * @return
      */
 
-    private Order buildAndRegister(HttpSession session, String restaurantId) {
+    private Order buildAndRegister(HttpSession session, Restaurant restaurant) {
         Order order = orderRepository.create();
-        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
-        order.setRestaurantId(restaurantId);
         order.setRestaurant(restaurant);
         order.updateCosts();
         order = orderRepository.save(order);

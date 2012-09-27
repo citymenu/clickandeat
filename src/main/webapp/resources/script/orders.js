@@ -76,6 +76,7 @@ function doBuildOrder(order,config) {
 
     // Reset all previous order details
     $('.ordertitle').remove();
+    $('.restaurant-warning').remove();
     $('.delivery-wrapper').remove();
     $('.order-item-wrapper').remove();
     $('.discountrow').remove();
@@ -85,6 +86,13 @@ function doBuildOrder(order,config) {
     $('.order-discount-wrapper').remove();
     $('#checkout').remove();
     $('.delivery-warning-wrapper').remove();
+
+    // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
+    if (typeof(restaurantId) != 'undefined' && order && order.restaurantId != restaurantId ) {
+        var warningMessage = getLabel('order.existing-restaurant-warning').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
+        var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningMessage);
+        $('#restaurant-warning-wrapper').append(warning);
+    }
 
     // Add the delivery options to the order if at least one item is added and it is enabled
     if( order ) {
@@ -189,9 +197,10 @@ function doBuildOrder(order,config) {
             $('#discounts').append(discountContainer);
         }
 
-        // Show warning if restaurant is not open at given order time
-        if( !order.restaurantIsOpen ) {
-            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
+        // If we are either on a restaurant page or there are items in the order and the restaurant is closed, show a warning
+        if( (typeof(restaurantId) != 'undefined' || order.orderItems.length > 0 ) && !order.restaurantIsOpen ) {
+            var warningMessage = (order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
             $('#deliverycheck').append(warning);
          } else if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + getLabel('order.delivery-warning') + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);

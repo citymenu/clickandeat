@@ -8,6 +8,7 @@
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
     <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
+    <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
 </head>
 
 <body>

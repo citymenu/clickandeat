@@ -175,6 +175,18 @@ select.freeitemselect {
     border-radius: 5px;
 }
 
+.restaurant-warning {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    font-size: 12px;
+    line-height: 16px;
+    margin-top: 6px;
+    padding: 6px 10px 6px 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
 .delivery-options-wrapper {
     text-align:left;
     font-family: "ff-tisa-web-pro",impact;

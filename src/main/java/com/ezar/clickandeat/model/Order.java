@@ -25,6 +25,7 @@ public class Order extends PersistentObject {
 
     // Restaurant details
     private String restaurantId;
+    private String restaurantName;
     private List<Discount> restaurantDiscounts;
 
     @Transient
@@ -379,12 +380,22 @@ public class Order extends PersistentObject {
         this.restaurantId = restaurantId;
     }
 
+    public String getRestaurantName() {
+        return restaurantName;
+    }
+
+    public void setRestaurantName(String restaurantName) {
+        this.restaurantName = restaurantName;
+    }
+
     public Restaurant getRestaurant() {
         return restaurant;
     }
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+        this.restaurantId = restaurant.getRestaurantId();
+        this.restaurantName = restaurant.getName();
         this.restaurantDiscounts = restaurant.getDiscounts();
     }
 

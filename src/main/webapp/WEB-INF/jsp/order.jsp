@@ -11,6 +11,7 @@
         <div class="middle-box">
             <div class="center-box">
                 <div class='orderheader'><message:message key="order.your-order"/>:</div>
+                <div id="restaurant-warning-wrapper"></div>
                 <div class="order-delivery-wrapper"></div>
                 <div id="deliverycheck"></div>
                 <div class="order-items-wrapper">

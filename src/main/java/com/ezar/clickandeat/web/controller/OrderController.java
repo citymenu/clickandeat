@@ -117,9 +117,15 @@ public class OrderController implements InitializingBean {
         try {
             HttpSession session = request.getSession(true);
             String orderId = (String)session.getAttribute("orderid");
+            String restaurantId = (String)session.getAttribute("restaurantid");
             Order order = null;
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
+
+                // If the current order has no items but is linked to another restauarant, update it now
+                if( order.getOrderItems().size() == 0 && !order.getRestaurantId().equals(restaurantId)) {
+                    order.setRestaurant(restaurantRepository.findByRestaurantId(restaurantId));
+                }
                 order.updateCosts();
                 // Update can checkout status of order
                 session.setAttribute("cancheckout", order.getCanCheckout());
@@ -230,6 +236,8 @@ public class OrderController implements InitializingBean {
             // Update order restaurant id session attribute if any items present
             if( order.getOrderItems().size() > 0 ) {
                 session.setAttribute("orderrestaurantid", order.getRestaurantId());
+            } else {
+                session.removeAttribute("orderrestaurantId");
             }
 
             // Return success
@@ -359,6 +367,8 @@ public class OrderController implements InitializingBean {
                 // Update order restaurant id session attribute if any items present
                 if( order.getOrderItems().size() > 0 ) {
                     session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                } else {
+                    session.removeAttribute("orderrestaurantId");
                 }
 
                 // Return success
@@ -407,6 +417,16 @@ public class OrderController implements InitializingBean {
                     if( order.getOrderItems().size() > 0 ) {
                         session.setAttribute("orderrestaurantid", order.getRestaurantId());
                     } else {
+                        // If the restaurant session id does not match the order restaurant id, update the order
+                        String restaurantId = (String)session.getAttribute("restaurantid");
+                        if( !order.getRestaurantId().equals(restaurantId)) {
+                            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+                            order.setRestaurant(restaurant);
+                            order.updateCosts();
+                            order = orderRepository.save(order);
+                        }
+                        
+                        
                         session.removeAttribute("orderrestaurantid");
                     }
                 }
@@ -569,8 +589,15 @@ public class OrderController implements InitializingBean {
             order.updateCosts();
             order = orderRepository.saveOrder(order);
 
-            // Update can checkout status of order
+            // Update order restaurant id session attribute if any items present
             HttpSession session = request.getSession(true);
+            if( order.getOrderItems().size() > 0 ) {
+                session.setAttribute("orderrestaurantid", order.getRestaurantId());
+            } else {
+                session.removeAttribute("orderrestaurantId");
+            }
+            
+            // Update can checkout status of order
             session.setAttribute("cancheckout", order.getCanCheckout());
 
             // All worked ok
