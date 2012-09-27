@@ -58,7 +58,7 @@
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.contact-number"/>:<span class="required">*</span></div></td>
                                                             <td width="370">
                                                                 <div class="contact-form-field"><input type="text" name="telephone" value="${order.customer.telephone}"/></div>
-                                                                <div class="telephone-instructions"><message:message key="checkout.mobile-instructions"/></div>
+                                                                <div class="telephone-instructions"><message:message key="checkout.mobile-instructions" format="${order.restaurant.name}"/></div>
                                                             </td>
                                                             <td width="30"><span id="contact-number-validation" class="invalid"/></td>
                                                         </tr>
@@ -69,7 +69,7 @@
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.email-address"/>:<span class="required">*</span></div></td>
                                                             <td width="370"><div class="contact-form-field"><input type="text" name="email" value="${order.customer.email}"/></div></td>
-                                                            <td width="30"><span id="email-address-validation" class="invalid"/></td>
+                                                            <td width="30"><span id="email-address-validation" class="invalid" title="Required"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -122,7 +122,7 @@
                                         <!-- Additional instructions -->
                                         <div class="checkout-item-wrapper">
                                             <h2><message:message key="checkout.additional-instructions"/></h2>
-                                            <div class="checkout-description"><message:message key="checkout.additional-instructions-help"/></div>
+                                            <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
                                             <div class="contact-form-entry">
                                                 <div class="contact-form-field">
                                                     <textarea name="additionalInstructions">${order.additionalInstructions}</textarea>

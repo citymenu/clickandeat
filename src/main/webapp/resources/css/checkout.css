@@ -74,6 +74,7 @@
 .telephone-instructions {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
+    line-height:14px;
     color:#444444;
     padding-top: 3px;
     font-style:italic;
