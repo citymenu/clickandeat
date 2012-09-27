@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    displayDeliveryOptions(deliveryType);
+    updateDeliveryDisplay(deliveryType);
 });
 
 // Override order config
@@ -9,7 +9,7 @@ function getOrderPanelConfig() {
         allowRemoveItems: false,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,
-        showDiscountInformation: false
+        showDiscountInformation: true
     };
     return config;
 }
@@ -17,18 +17,32 @@ function getOrderPanelConfig() {
 
 // Override order behaviour
 function onBeforeBuildOrder(order) {
-    displayDeliveryOptions(order.deliveryType);
+    canCheckout = order.canCheckout;
+    updateDeliveryDisplay(order.deliveryType);
 }
 
 // Updates display based on delivery type
-function displayDeliveryOptions(deliveryType) {
+function updateDeliveryDisplay(deliveryType) {
     if(deliveryType == 'DELIVERY') {
-        $('#collectiontime').hide();
-        $('#deliverytime').show();
+        $('#collection-details').hide();
+        $('#delivery-details').show();
     } else {
-        $('#deliverytime').hide();
-        $('#collectiontime').show();
+        $('#delivery-details').hide();
+        $('#collection-details').show();
     }
+}
+
+// Initialize google map
+function initializeMap() {
+    var mapOptions = {
+        center: new google.maps.LatLng(-34.397, 150.644),
+        zoom: 8,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(
+        document.getElementById("restaurant-location"),
+        mapOptions
+    );
 }
 
 // Update order

@@ -1,27 +1,106 @@
 @charset "utf-8";
 
-.detailsitem {
-    clear:both;
-    padding-bottom: 10px;
-    overflow:hidden;
+.checkout-left {
+    padding: 0;
+    margin: 0 30px 0 10px;
+    width: 720px;
+    position:relative;
 }
 
-.detailslabel {
-    width: 130px;
-    float:left;
+.checkout-right {
+    padding: 0;
+    margin: 0;
+    width: 260px;
+    position:relative;
 }
 
-.detailsfield {
-    width: 190px;
-    float:left;
+.checkout-wrapper {
+    padding: 10px;
 }
 
-.checkoutheader {
-    clear:both;
-    margin-bottom:10px;
+.checkout-item-wrapper {
+    margin-bottom: 20px;
+    width:530px;
 }
 
-#additionalinstructions {
-    clear:both;
-    margin-bottom:10px;
+.checkout-wrapper h2 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:22px
+    text-shadow: 0 1px #EEEEEE;
+}
+
+.contact-form-entry {
+    margin-bottom: 12px;
+}
+
+.contact-form-table {
+    margin-top: 15px;
+}
+
+.contact-form-label {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 13px;
+    line-height: 16px;
+    color: #666666;
+    font-weight: 700;
+}
+
+.checkout-description {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color:#666666;
+    padding: 5px 0 10px 0;
+}
+
+.contact-form-field input, .contact-form-field textarea {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 13px;
+    width:360px;
+    background-clip: padding-box;
+    border: 1px solid #B6B6B6;
+    padding: 3px 5px 3px 5px;
+    color:#444444;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.contact-form-field input:focus, .contact-form-field textarea:focus {
+    border: 1px solid #AA0000;
+}
+
+.telephone-instructions {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    color:#444444;
+    padding-top: 3px;
+    font-style:italic;
+}
+
+.contact-form-field textarea {
+    width: 520px;
+    height: 70px;
+}
+
+span.required {
+    color:#AA0000;
+    padding-left: 5px;
+}
+
+span.invalid {
+    background: transparent url(../images/icons-shadowless/cross-circle.png) no-repeat bottom right;
+    display:inline-block;
+    padding-left:10px;
+    width:16px;
+    height:16px;
+}
+
+span.valid {
+    background: transparent url(../images/icons-shadowless/tick-circle.png) no-repeat bottom right;
+    display:inline-block;
+    padding-left:10px;
+    width:16px;
+    height:16px;
 }

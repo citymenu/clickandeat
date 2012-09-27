@@ -74,6 +74,12 @@ function doBuildOrder(order,config) {
     // Update current order object
     currentOrder = order;
 
+    // Indicate if we should enable additional order panel functionality and display
+    var advancedDisplay = typeof(restaurantId) != 'undefined' || order.orderItems.length > 0;
+
+    // Indicate if we are looking at a restaurant page other than the restaurant for the order
+    var orderIsForAnotherRestaurant = typeof(restaurantId) != 'undefined' && order.restaurantId != restaurantId;
+
     // Reset all previous order details
     $('.ordertitle').remove();
     $('.restaurant-warning').remove();
@@ -88,14 +94,16 @@ function doBuildOrder(order,config) {
     $('.delivery-warning-wrapper').remove();
 
     // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
-    if (typeof(restaurantId) != 'undefined' && order && order.restaurantId != restaurantId ) {
-        var warningMessage = getLabel('order.existing-restaurant-warning').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
-        var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningMessage);
-        $('#restaurant-warning-wrapper').append(warning);
+    if( order ) {
+        if ( orderIsForAnotherRestaurant ) {
+            var warningMessage = getLabel('order.existing-restaurant-warning').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
+            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningMessage);
+            $('#restaurant-warning-wrapper').append(warning);
+        }
     }
 
     // Add the delivery options to the order if at least one item is added and it is enabled
-    if( order ) {
+    if( order && advancedDisplay ) {
         var deliveryDay, deliveryTime, orderType;
         var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
         var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
@@ -186,8 +194,8 @@ function doBuildOrder(order,config) {
         // Build total item cost
         $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
 
-        // Show details of discounts if available
-        if( config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
+        // Show details of discounts if available and if we are either on a menu page or there are items
+        if( advancedDisplay && config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
             var discountItems = '';
             order.restaurantDiscounts.forEach(function(discount){
                 discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));
@@ -198,7 +206,7 @@ function doBuildOrder(order,config) {
         }
 
         // If we are either on a restaurant page or there are items in the order and the restaurant is closed, show a warning
-        if( (typeof(restaurantId) != 'undefined' || order.orderItems.length > 0 ) && !order.restaurantIsOpen ) {
+        if( advancedDisplay && !order.restaurantIsOpen ) {
             var warningMessage = (order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
             $('#deliverycheck').append(warning);
