@@ -2,6 +2,7 @@ package com.ezar.clickandeat.maps;
 
 import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.AddressLocation;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.AddressLocationRepository;
 import flexjson.JSONDeserializer;
 import org.apache.log4j.Logger;

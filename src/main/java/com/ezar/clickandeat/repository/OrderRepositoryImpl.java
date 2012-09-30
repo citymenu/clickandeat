@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.OrderItem;
 import com.ezar.clickandeat.model.OrderUpdate;
@@ -32,6 +34,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private LocationService locationService;
 
     @Override
     public Order create() {
@@ -53,6 +57,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public Order saveOrder(Order order) {
+        if( order.getDeliveryAddress() != null ) {
+            AddressLocation location = locationService.getSingleLocation(order.getDeliveryAddress());
+            if( location != null ) {
+                order.getDeliveryAddress().setLocation(location.getLocation());
+            }
+        }
+
         order.updateCosts();
         for( OrderItem orderItem: order.getOrderItems()) {
             if( orderItem.getOrderItemId() == null ) {

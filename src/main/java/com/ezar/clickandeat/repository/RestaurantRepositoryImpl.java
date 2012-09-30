@@ -215,6 +215,28 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
 
 
+    /**
+     * @param restaurant
+     * @param location
+     * @param postCode
+     * @return
+     */
+
+    public boolean willDeliverToLocationOrPostCode(Restaurant restaurant, double[] location, String postCode ) {
+        if( restaurant.getAddress().getLocation() != null ) {
+            Double distance = locationService.getDistance(restaurant.getAddress().getLocation(), location);
+            Double deliveryRadius = restaurant.getDeliveryOptions().getDeliveryRadiusInKilometres();
+            if( deliveryRadius != null && distance <= deliveryRadius ) {
+                return true;
+            }
+        }
+        for( String deliveryLocation: restaurant.getDeliveryOptions().getAreasDeliveredTo()) {
+            if(deliveryLocation.toUpperCase().contains(postCode.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     @Required

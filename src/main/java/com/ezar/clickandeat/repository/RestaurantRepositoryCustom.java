@@ -16,5 +16,7 @@ public interface RestaurantRepositoryCustom {
     void deleteRestaurant(Restaurant restaurant);
 
     List<Restaurant> search(Search search);
+
+    boolean willDeliverToLocationOrPostCode(Restaurant restaurant, double[] location, String postCode);
     
 }
