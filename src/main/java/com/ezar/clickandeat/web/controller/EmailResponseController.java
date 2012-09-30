@@ -10,6 +10,7 @@ import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import com.ezar.clickandeat.workflow.WorkflowStatusExceptionMessageResolver;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -156,6 +157,7 @@ public class EmailResponseController {
             Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
             if( !restaurant.getListOnSite()) {
                 restaurant.setListOnSite(true);
+                restaurant.setLastOrderReponseTime(new DateTime()); // Mark the last time we got a response from the restaurant
                 restaurantRepository.saveRestaurant(restaurant);
                 model.put("message",MessageFactory.getMessage("workflow.restaurant-relisted-confirmation",true));
             }

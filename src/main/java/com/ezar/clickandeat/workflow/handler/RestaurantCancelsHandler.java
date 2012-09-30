@@ -1,10 +1,13 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +22,10 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
 
     @Override
     public String getWorkflowAction() {
@@ -36,6 +43,11 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Customer cancelled order");
+
+        // Update the last time the restaurant responded to the system
+        Restaurant restaurant = order.getRestaurant();
+        restaurant.setLastOrderReponseTime(new DateTime());
+        restaurantRepository.saveRestaurant(restaurant);
 
         try {
             notificationService.sendRestaurantCancelledConfirmationToCustomer(order);

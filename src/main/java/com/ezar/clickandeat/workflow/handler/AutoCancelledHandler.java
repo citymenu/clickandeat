@@ -6,7 +6,10 @@ import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -26,6 +29,9 @@ public class AutoCancelledHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
 
+    private int minutesBeforeAutoCancelOrder;
+    
+    
     @Override
     public String getWorkflowAction() {
         return ACTION_AUTO_CANCEL;
@@ -42,8 +48,12 @@ public class AutoCancelledHandler implements IWorkflowHandler {
         order.addOrderUpdate("System auto cancelled order due to no response from restaurant");
 
         try {
+            // Delist the restaurant if no response from restaurant for any order in the last 20 minutes
             Restaurant restaurant = order.getRestaurant();
-            if( restaurant.getListOnSite()) {
+            DateTime lastOrderResponseCutoff = new DateTime().minusMinutes(minutesBeforeAutoCancelOrder);
+            DateTime lastOrderReponseTime = restaurant.getLastOrderReponseTime() == null? new DateTime(2000,1,1,0,0,0,0): restaurant.getLastOrderReponseTime();
+            
+            if( restaurant.getListOnSite() && lastOrderReponseTime.isBefore(lastOrderResponseCutoff)) {
                 LOGGER.info("Delisting restaurant until we get a response to notification email");
                 restaurant.setListOnSite(false);
                 restaurantRepository.saveRestaurant(restaurant);
@@ -75,6 +85,13 @@ public class AutoCancelledHandler implements IWorkflowHandler {
 
         order.setOrderStatus(ORDER_STATUS_AUTO_CANCELLED);
         return order;
+    }
+
+
+    @Required
+    @Value(value="${twilio.minutesBeforeAutoCancelOrder}")
+    public void setMinutesBeforeAutoCancelOrder(int minutesBeforeAutoCancelOrder) {
+        this.minutesBeforeAutoCancelOrder = minutesBeforeAutoCancelOrder;
     }
 
 }

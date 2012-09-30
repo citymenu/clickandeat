@@ -59,6 +59,9 @@ public class Restaurant extends PersistentObject {
     
     private String imageId;
 
+    // The last time the restaurant responded in any way to an order
+    private DateTime lastOrderReponseTime;
+    
     @Transient
     private Double distanceToSearchLocation;
 
@@ -491,6 +494,14 @@ public class Restaurant extends PersistentObject {
 
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    public DateTime getLastOrderReponseTime() {
+        return lastOrderReponseTime;
+    }
+
+    public void setLastOrderReponseTime(DateTime lastOrderReponseTime) {
+        this.lastOrderReponseTime = lastOrderReponseTime;
     }
 
     public DeliveryOptions getDeliveryOptions() {

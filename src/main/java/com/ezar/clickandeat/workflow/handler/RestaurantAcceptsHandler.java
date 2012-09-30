@@ -3,6 +3,7 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -22,6 +23,9 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
     
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+    
     @Override
     public String getWorkflowAction() {
         return ACTION_RESTAURANT_ACCEPTS;
@@ -39,6 +43,10 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
         order.addOrderUpdate("Restaurant accepted order");
         order.setRestaurantActionedTime(new DateTime());
         Restaurant restaurant = order.getRestaurant();
+
+        // Update the last time the restaurant responded to the system
+        restaurant.setLastOrderReponseTime(new DateTime());
+        restaurantRepository.saveRestaurant(restaurant);
 
         // Update expected delivery time for the restaurant (if the user has not requested a specific time and date)
         if( Order.DELIVERY.equals(order.getDeliveryType()) && order.getExpectedDeliveryTime() == null ) {

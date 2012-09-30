@@ -1,7 +1,9 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -21,6 +23,10 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
+
+
     @Override
     public String getWorkflowAction() {
         return ACTION_RESTAURANT_DECLINES;
@@ -37,6 +43,12 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
 
         order.addOrderUpdate("Restaurant declined order");
         order.setRestaurantActionedTime(new DateTime());
+
+        // Update the last time the restaurant responded to the system
+        Restaurant restaurant = order.getRestaurant();
+        restaurant.setLastOrderReponseTime(new DateTime());
+        restaurantRepository.saveRestaurant(restaurant);
+
 
         try {
             notificationService.sendRestaurantDeclinedConfirmationToCustomer(order);
