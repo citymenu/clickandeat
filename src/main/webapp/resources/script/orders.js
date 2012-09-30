@@ -120,7 +120,7 @@ function doBuildOrder(order,config) {
             deliveryTime = deliveryTimeOfDay;
         }
 
-        var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'order-button add-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
+        var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'delivery-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
         var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'128\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
             .format(orderType,deliveryDay,deliveryTime,link);
         $('.order-delivery-wrapper').append(deliveryContainer);

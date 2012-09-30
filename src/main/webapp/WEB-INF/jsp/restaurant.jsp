@@ -25,36 +25,43 @@
                         <table width="1000">
                             <tr valign="top">
                                 <td width="480">
-                                    <table width="480">
-                                        <tr valign="bottom">
-                                            <td width="65"><img src="${resources}/images/example.gif" width="65" height="50"/></td>
-                                            <td width="415">
-                                                <h2><util:escape value="${restaurant.name}"/></h2>
-                                                <c:if test="${restaurant.description != null}">
-                                                <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                                    <div class="restaurant-title-wrapper">
+                                        <div class="restaurant-logo">
+                                            <img src="${resources}/images/example.gif"/>
+                                        </div>
+                                        <div class="restaurant-title">
+                                            <h2><util:escape value="${restaurant.name}"/></h2>
+                                            <c:if test="${restaurant.description != null}">
+                                            <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                                            </c:if>
+                                            <div class="restaurant-details">
+                                                <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
+                                            </div>
+                                            <div class="restaurant-details">
+                                                <c:if test="${restaurant.collectionTimeMinutes != 0}">
+                                                <div class="restaurant-delivery-details">
+                                                    <message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
+                                                </div>
                                                 </c:if>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <div class="restaurant-details">
-                                        <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
+                                                <c:if test="${restaurant.deliveryTimeMinutes != 0}">
+                                                <div class="restaurant-delivery-details">
+                                                    <message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/>
+                                                </div>
+                                                </c:if>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <c:if test="${restaurant.collectionTimeMinutes != 0}">
-                                    <div class="restaurant-details">
-                                        <b><message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/></b>
-                                    </div>
-                                    </c:if>
-                                    <c:if test="${restaurant.deliveryTimeMinutes != 0}">
-                                    <div class="restaurant-details">
-                                        <b><message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/></b>
-                                    </div>
-                                    </c:if>
                                 </td>
                                 <td width="320">
                                     <div class="restuarant-summary-wrapper">
                                         <div class="restaurant-detail-wrapper">
                                             <div class="restaurant-detail-title">
-                                                <message:message key="restaurant.opening-times-today"/>:
+                                                <div class="restaurant-opening-today">
+                                                    <message:message key="restaurant.opening-times-today"/>:
+                                                </div>
+                                                <div class="restaurant-opening-all">
+                                                    <a class="restaurant-text" onclick="showAllOpeningTimes()"><message:message key="restaurant.show-all-opening-times"/></a>
+                                                </div>
                                             </div>
                                             <div class="restaurant-detail-content">
                                                 <util:escape value="${restaurant.todaysOpeningTimes}" escapeNewLines="true"/>
@@ -75,7 +82,7 @@
                                         <div class="restaurant-map">
                                             <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=14&size=200x100&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
                                         </div>
-                                        <div class="restaurant-details">Get directions from your location to <util:escape value="${restaurant.name}"/>.</div>
+                                        <div class="restaurant-details"><a class="restaurant-text">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
                                     </div>
                                 </td>
                             </tr>

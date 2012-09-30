@@ -204,6 +204,15 @@ select.freeitemselect {
     text-align:right;
 }
 
+a.delivery-button {
+    color:#AA0000;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
 a.order-button, a.order-button:active, a.order-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;

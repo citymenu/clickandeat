@@ -19,10 +19,24 @@
     color: #AA0000;
     font-family: "ff-tisa-web-pro",impact;
     font-size: 28px;
+    line-height: 30px;
     font-style: normal;
     letter-spacing: -0.01em;
-    padding:0 0 0 5px;
     margin-bottom:6px;
+}
+
+.restaurant-title-wrapper {
+}
+
+.restaurant-logo {
+    display:inline-block;
+    vertical-align:top;
+}
+
+.restaurant-title {
+    display:inline-block;
+    vertical-align:bottom;
+    padding: 0 0 0 5px;
 }
 
 .restaurant-description {
@@ -31,13 +45,17 @@
     font-size:12px;
     letter-spacing: -0.01em;
     font-style: italic;
-    padding: 0 0 0 5px;
 }
 
 .restaurant-details {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 14px;
     margin-top: 6px;
+}
+
+.restaurant-delivery-details {
+    font-weight: 700;
+    margin-top: 3px;
 }
 
 .restaurant-details-title {
@@ -75,9 +93,21 @@
 .restaurant-detail-title {
     font-weight:bold;
     margin-bottom:3px;
+    clear:both;
+    overflow:hidden;
 }
 
 .restaurant-detail-content {
+}
+
+.restaurant-opening-today {
+    float:left;
+    text-align:left;
+}
+
+.restaurant-opening-all {
+    float:right;
+    text-align:right;
 }
 
 .restaurant-location h3 {
@@ -146,6 +176,7 @@
     color:#BB0000;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
+    text-decoration:underline;
     cursor:pointer;
     line-height: 16px;
     padding: 4px 0 4px 0;
@@ -266,4 +297,13 @@ a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
 
 
 a.menuitem-button:active, a.menuitem-button:hover {
+}
+
+a.restaurant-text {
+    color:#AA0000;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-decoration:underline;
+    cursor:pointer;
 }
