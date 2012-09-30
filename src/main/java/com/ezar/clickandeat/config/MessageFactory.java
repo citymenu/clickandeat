@@ -14,6 +14,8 @@ import java.util.Set;
 public class MessageFactory {
     
     private static final Map<String,String> messages;
+
+    private static final String systemLocale;
     
     static {
         try {
@@ -27,7 +29,7 @@ public class MessageFactory {
             Resource resource = new ClassPathResource("/messages_" + locale.split("_")[0] + ".properties");
             Properties props = new Properties();
             props.load(resource.getInputStream());
-            
+            systemLocale = locale;
             messages = new HashMap<String, String>();
             for( Object key: props.keySet()) {
                 messages.put((String)key, (String)props.get(key));
@@ -38,6 +40,10 @@ public class MessageFactory {
         }
     }
 
+
+    public static String getLocale() {
+        return systemLocale; 
+    }
 
     /**
      * @param key

@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/checkout.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/validation.js"></script>
-    <script type="text/javascript" src="${resources}/script/validation/validators_${locale}.js"></script>
+    <script type="text/javascript" src="${resources}/script/validation/validators_${validatorLocale}.js"></script>
     <script type="text/javascript" src="${resources}/script/checkout.js"></script>
 
     <!-- Google maps api -->

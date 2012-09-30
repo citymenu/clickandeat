@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.maps.LocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
@@ -80,6 +81,9 @@ public class CheckoutController {
         Restaurant restaurant = order.getRestaurant();
         model.put("restaurant",restaurant);
 
+        // Put the system locale on the response
+        model.put("validatorLocale", MessageFactory.getLocale().split("_")[0]);
+        
         return new ModelAndView("checkout",model);
     }
 
