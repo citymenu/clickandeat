@@ -1,6 +1,80 @@
+var isValid = false;
+
 $(document).ready(function(){
     updateDeliveryDisplay(deliveryType);
+    validateForm();
+
+    // Add validation event handlers
+    validators.each(function(fieldName,validator){
+        $('#' + fieldName).change(function(){
+            validateForm();
+        });
+        $('#' + fieldName).keyup(function(){
+            validateForm();
+        });
+    });
+
 });
+
+
+// Updates validation on all form fields
+function validateForm() {
+    isValid = true;
+    validators.each(function(fieldName,validator){
+        if( $('#' + fieldName).is(":visible")) {
+            if( !validator.validate()) {
+                isValid = false;
+            };
+        }
+    });
+}
+
+
+// Validation entries
+var validators = new HashTable();
+
+// First name validation
+validators.setItem('firstName',new Validator({
+    fieldName: 'firstName',
+    regexp: checkoutRegexps.firstName,
+    invalidText: getLabel('validation.firstName.invalidText')
+}));
+
+// Last name validation
+validators.setItem('lastName',new Validator({
+    fieldName: 'lastName',
+    regexp: checkoutRegexps.lastName,
+    invalidText: getLabel('validation.lastName.invalidText')
+}));
+
+// Telephone number validation
+validators.setItem('telephone',new Validator({
+    fieldName: 'telephone',
+    regexp: checkoutRegexps.telephone,
+    invalidText: getLabel('validation.telephone.invalidText')
+}));
+
+// Email address validation
+validators.setItem('email',new Validator({
+    fieldName: 'email',
+    regexp: checkoutRegexps.email,
+    invalidText: getLabel('validation.firstName.invalidText')
+}));
+
+// Address line one validation
+validators.setItem('address1',new Validator({
+    fieldName: 'address1',
+    regexp: checkoutRegexps.address1,
+    invalidText: getLabel('validation.address1.invalidText')
+}));
+
+// Postcode validation
+validators.setItem('postCode',new Validator({
+    fieldName: 'postCode',
+    regexp: checkoutRegexps.postCode,
+    invalidText: getLabel('validation.postCode.invalidText')
+}));
+
 
 // Override order config
 function getOrderPanelConfig() {
@@ -59,38 +133,39 @@ function updateOrder() {
 }
 
 // Proceed to payment
-function proceed() {
-    $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
-        function( data ) {
-            if( data.success ) {
-                location.href = ctx + '/secure/payment.html';
-            } else {
-                alert('success:' + data.success);
+function proceedToPayment() {
+    validateForm();
+    if( isValid ) {
+        $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
+            function( data ) {
+                if( data.success ) {
+                    location.href = ctx + '/secure/payment.html';
+                } else {
+                    alert('success:' + data.success);
+                }
             }
-        }
-    );
+        );
+    }
 }
 
 // Builds the update object
 function buildUpdate() {
 
     var person = {
-        firstName: $('input[name="firstName"]').val(),
-        lastName: $('input[name="lastName"]').val(),
-        telephone: $('input[name="telephone"]').val(),
-        email: $('input[name="email"]').val()
+        firstName: $('#firstName').val(),
+        lastName: $('#lastName').val(),
+        telephone: $('#telephone').val(),
+        email: $('#email').val()
     };
 
     var deliveryAddress = {
-        address1: $('input[name="address1"]').val(),
-        address2: $('input[name="address2"]').val(),
-        address3: $('input[name="address3"]').val(),
-        town: $('input[name="town"]').val(),
-        region: $('input[name="region"]').val(),
-        postCode: $('input[name="postCode"]').val()
+        address1: $('#address1').val(),
+        town: $('#town').val(),
+        region: $('#region').val(),
+        postCode: $('#postCode').val()
     }
 
-    var additionalInstructions = $('textarea[name="additionalInstructions"]').val()
+    var additionalInstructions = $('#additionalInstructions').val()
 
     return {
         person: person,

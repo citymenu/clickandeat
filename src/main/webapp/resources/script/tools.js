@@ -13,6 +13,10 @@ function unescapeQuotes(str) {
     }
 }
 
+function unescapeLabel(label) {
+    return label.replace('&lt;','<').replace('&gt;','>').replace('&quot;','"');
+}
+
 /* Hashtable object */
 function HashTable(obj)
 {

@@ -82,15 +82,12 @@ public class OrderController implements InitializingBean {
         }
 
         HttpSession session = request.getSession(true);
-        String orderid = (String)session.getAttribute("orderid");
+        String orderrestaurantid = (String)session.getAttribute("orderrestaurantid");
         String restaurantid = (String)session.getAttribute("restaurantid");
         Search search = (Search)session.getAttribute("search");
 
-        if( orderid != null ) {
-            Order order = orderRepository.findByOrderId(orderid);
-            if( order != null ) {
-                restaurantid = order.getRestaurantId();
-            }
+        if( orderrestaurantid != null ) {
+            restaurantid = orderrestaurantid;
         }
         
         if( restaurantid == null ) {
@@ -237,7 +234,7 @@ public class OrderController implements InitializingBean {
             if( order.getOrderItems().size() > 0 ) {
                 session.setAttribute("orderrestaurantid", order.getRestaurantId());
             } else {
-                session.removeAttribute("orderrestaurantId");
+                session.removeAttribute("orderrestaurantid");
             }
 
             // Return success

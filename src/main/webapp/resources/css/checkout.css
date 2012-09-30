@@ -96,6 +96,7 @@ span.invalid {
     padding-left:10px;
     width:16px;
     height:16px;
+    cursor:pointer;
 }
 
 span.valid {
@@ -104,4 +105,32 @@ span.valid {
     padding-left:10px;
     width:16px;
     height:16px;
+    cursor:pointer;
+}
+
+a.checkout-nav-button, a.checkout-nav-button:active, a.checkout-nav-button:hover {
+    background-color: #50a747;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 1px 6px 1px 6px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.checkout-nav-button:active, a.checkout-nav-button:hover {
+    background-color: #2c8023;
+}
+
+a.checkout-nav-button-large, a.checkout-nav-button-large:active, a.checkout-nav-button-large:hover {
+    padding: 4px 10px 4px 10px;
+}
+
+a.checkout-nav-button-large:active, a.checkout-nav-button-large:hover {
+    background-color: #2c8023;
 }

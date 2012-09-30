@@ -2,9 +2,11 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/checkout.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/checkout.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
+    <script type="text/javascript" src="${resources}/script/validation.js"></script>
+    <script type="text/javascript" src="${resources}/script/validation/validators_${locale}.js"></script>
     <script type="text/javascript" src="${resources}/script/checkout.js"></script>
 
     <!-- Google maps api -->
@@ -38,8 +40,8 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.first-name"/>:<span class="required">*</span></div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="firstName" value="${order.customer.firstName}"/></div></td>
-                                                            <td width="30"><span id="first-name-validation" class="invalid"/></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="firstName" value="${order.customer.firstName}"/></div></td>
+                                                            <td width="30"><span id="firstName-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -47,8 +49,8 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.last-name"/>:<span class="required">*</span></div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="lastName" value="${order.customer.lastName}"/></div></td>
-                                                            <td width="30"><span id="last-name-validation" class="valid"/></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="lastName" value="${order.customer.lastName}"/></div></td>
+                                                            <td width="30"><span id="lastName-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -57,10 +59,10 @@
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.contact-number"/>:<span class="required">*</span></div></td>
                                                             <td width="370">
-                                                                <div class="contact-form-field"><input type="text" name="telephone" value="${order.customer.telephone}"/></div>
+                                                                <div class="contact-form-field"><input type="text" id="telephone" value="${order.customer.telephone}"/></div>
                                                                 <div class="telephone-instructions"><message:message key="checkout.mobile-instructions" format="${order.restaurant.name}"/></div>
                                                             </td>
-                                                            <td width="30"><span id="contact-number-validation" class="invalid"/></td>
+                                                            <td width="30"><span id="telephone-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -68,8 +70,8 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.email-address"/>:<span class="required">*</span></div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="email" value="${order.customer.email}"/></div></td>
-                                                            <td width="30"><span id="email-address-validation" class="invalid" title="Required"/></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="email" value="${order.customer.email}"/></div></td>
+                                                            <td width="30"><span id="email-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -84,8 +86,8 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.street-address"/>:<span class="required">*</span></div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="address1" value="${order.deliveryAddress.address1}"/></div></td>
-                                                            <td width="30"><span id="street-address-validation" class="invalid"/></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="address1" value="${order.deliveryAddress.address1}"/></div></td>
+                                                            <td width="30"><span id="address1-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -93,7 +95,7 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.town"/>:</div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="town" value="${order.deliveryAddress.town}"/></div></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="town" value="${order.deliveryAddress.town}"/></div></td>
                                                             <td width="30"></td>
                                                         </tr>
                                                     </table>
@@ -102,7 +104,7 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.region"/>:</div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="region" value="${order.deliveryAddress.region}"/></div></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="region" value="${order.deliveryAddress.region}"/></div></td>
                                                             <td width="30"></td>
                                                         </tr>
                                                     </table>
@@ -111,8 +113,8 @@
                                                     <table width="530">
                                                         <tr valign="top">
                                                             <td width="130"><div class="contact-form-label"><message:message key="user.post-code"/>:<span class="required">*</span></div></td>
-                                                            <td width="370"><div class="contact-form-field"><input type="text" name="postCode" value="${order.deliveryAddress.postCode}"/></div></td>
-                                                            <td width="30"><span id="post-code-validation" class="invalid"/></td>
+                                                            <td width="370"><div class="contact-form-field"><input type="text" id="postCode" value="${order.deliveryAddress.postCode}"/></div></td>
+                                                            <td width="30"><span id="postCode-validation" class="invalid"/></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -125,7 +127,7 @@
                                             <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
                                             <div class="contact-form-entry">
                                                 <div class="contact-form-field">
-                                                    <textarea name="additionalInstructions">${order.additionalInstructions}</textarea>
+                                                    <textarea id="additionalInstructions">${order.additionalInstructions}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -135,6 +137,12 @@
                                             <h2><message:message key="checkout.collection-details"/></h2>
                                             <div class="checkout-description"><message:message key="checkout.collection-help"/></div>
                                             <div id="restaurant-location"></div>
+                                        </div>
+
+                                        <!-- Navigation buttons -->
+                                        <div class="checkout-navigation-wrapper">
+                                            <a class="checkout-nav-button checkout-nav-button-large" onclick="updateOrder()"><message:message key="button.update-order"/></a>
+                                            <a class="checkout-nav-button checkout-nav-button-large" onclick="proceedToPayment()"><message:message key="button.payment"/></a>
                                         </div>
                                     </div>
                                 </div>
