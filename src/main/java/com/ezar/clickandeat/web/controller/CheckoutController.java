@@ -136,12 +136,7 @@ public class CheckoutController {
         Map<String,Object> model = new HashMap<String, Object>();
         
         try {
-
-            // Build response map
-            model.put("locationFound",true);
-            model.put("locationRadiusValid",true);
-            model.put("restaurantWillDeliver",true);
-            model.put("restaurantOpen",true);
+            boolean hasValidationError = false;
             
             // Extract person and address from request
             Person person = buildPerson(body);
@@ -158,33 +153,33 @@ public class CheckoutController {
             order.updateRestaurantIsOpen();
             orderRepository.saveOrder(order);
 
-            // Confirm that we can get a strong fix on the location for delivery orders
-            if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                AddressLocation deliveryLocation = locationService.getSingleLocation(order.getDeliveryAddress(),true);
-                if( deliveryLocation == null ) {
-                    model.put("success",false);
-                    model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
-                    model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
+            // Indicate if the restaurant is not open (only if no other errors have been found
+            if( !order.getRestaurantIsOpen()) {
+                model.put("header",MessageFactory.getMessage("checkout.restaurant-not-open", true));
+                if( Order.DELIVERY.equals(order.getDeliveryType())) {
+                    model.put("message",MessageFactory.formatMessage("checkout.restaurant-not-open-for-delivery", true, order.getRestaurantName()));
                 }
                 else {
-                    if( deliveryLocation.getRadius() > maxRadiusMetres ) {
-                        model.put("locationRadiusValid",false);
-                    }
-                    
-                    // Check that the restaurant will deliver to this location
-                    if( !restaurantRepository.willDeliverToLocationOrPostCode(order.getRestaurant(), deliveryLocation.getLocation(), deliveryAddress.getPostCode())) {
-                        model.put("restaurantWillDeliver",false);
-                    }
+                    model.put("message",MessageFactory.formatMessage("checkout.restaurant-not-open-for-collection", true, order.getRestaurantName()));
+                }
+                hasValidationError = true;
+            }
+            else if( Order.DELIVERY.equals(order.getDeliveryType())) {
+                AddressLocation deliveryLocation = locationService.getSingleLocation(order.getDeliveryAddress(),true);
+                if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
+                    model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
+                    model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
+                    hasValidationError = true;
+                }
+                else if( !restaurantRepository.willDeliverToLocationOrPostCode(order.getRestaurant(), deliveryLocation.getLocation(), deliveryAddress.getPostCode())) {
+                    model.put("header",MessageFactory.getMessage("checkout.location-restaurant-wont-deliver", true));
+                    model.put("message",MessageFactory.formatMessage("checkout.location-restaurant-wont-deliver-text", true, order.getRestaurant().getName()));
+                    hasValidationError = true;
                 }
             }
 
-            // Indicate if the restaurant is not open
-            if( !order.getRestaurantIsOpen()) {
-                model.put("restaurantOpen",false);
-            }
-
-            // Mark order updated successfully
-            model.put("success",true);
+            // Indicate if the data is all valid
+            model.put("success",!hasValidationError);
         }
         
         catch( Exception ex ) {

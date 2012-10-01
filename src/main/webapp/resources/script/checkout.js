@@ -150,9 +150,8 @@ function proceedToPayment() {
 }
 
 // Builds a warning dialog
-function showError(title,content) {
-    var header = content;
-    var subheader = ('<div class=\'warning-container\'>{0}</div>').format(content);
+function showError(header,message) {
+    var subheader = ('<div class=\'warning-container\'>{0}</div>').format(message);
     var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div></div>')
         .format(header,subheader);
 
@@ -161,8 +160,8 @@ function showError(title,content) {
         content: container,
         modal:false,
         autoSize:false,
-        minHeight: 200,
-        width: 350,
+        height: 200,
+        width: 450,
         openEffect:'none',
         closeEffect:'none'
     });
