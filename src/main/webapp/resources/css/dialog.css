@@ -1,0 +1,48 @@
+@charset "utf-8";
+
+.dialog-container {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.dialog-header {
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 12px;
+    padding-bottom:6px;
+}
+
+.dialog-header h2 {
+    color: #BB0000;
+    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:22px;
+    text-shadow: 0 1px #EEEEEE;
+}
+
+.dialog-subheader {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 13px;
+    color: #444444;
+    padding: 0 5px 12px 5px;
+}
+
+.dialog-content {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+    color: #444444;
+    padding: 0 5px 0 5px;
+}
+
+.dialog-content-text {
+    padding-bottom: 5px;
+}
+
+.dialog-footer {
+    border-top: 1px dashed #AAAAAA;
+    margin-top: 16px;
+    padding-top: 6px;
+}
+
+.dialog-buttons {
+    text-align:right;
+    padding: 10px;
+}

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -66,7 +67,7 @@ public class LocationService {
         try {
             URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
             URLConnection conn = url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
             Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
             List<Map<String,Object>> results = (List<Map<String,Object>>)json.get("results");
             for( Map<String,Object> result: results ) {
@@ -112,17 +113,11 @@ public class LocationService {
                         }
                     }
                 }
-                String displayAddress;
-                if( componentCount < minComponentMatches ) {
-                    displayAddress = fullAddress;
+                String concatenated = sb.toString();
+                if( concatenated.endsWith(",")) {
+                    concatenated = concatenated.substring(0,concatenated.length() - 1 );
                 }
-                else {
-                    String concatenated = sb.toString();
-                    if( concatenated.endsWith(",")) {
-                        concatenated = concatenated.substring(0,concatenated.length() - 1 );
-                    }
-                    displayAddress = concatenated;
-                }
+                String displayAddress = concatenated;
 
                 // Build address location object
                 AddressLocation addressLocation = new AddressLocation();
@@ -215,9 +210,36 @@ public class LocationService {
      * @return
      */
 
-    public AddressLocation getSingleLocation(Address address ) {
+    public AddressLocation getSingleLocation(Address address, boolean enforcePostCode ) {
+        if( enforcePostCode && !StringUtils.hasText(address.getPostCode())) {
+            LOGGER.warn("No postcode entered in address, not searching");
+            return null;
+        }
         List<AddressLocation> locations = getLocations(address);
-        return locations.size() == 1? locations.get(0): null;
+        if( locations.size() != 1 ) {
+            return null;
+        }
+        else {
+            AddressLocation location = locations.get(0);
+            if( !enforcePostCode) {
+                return location;
+            }
+            else {
+                String locationPostCode = location.getLocationComponents().get("postal_code");
+                if( !StringUtils.hasText(locationPostCode)) {
+                    LOGGER.warn("No postcode found for matching location");
+                    return null;
+                }
+                String expectedPostCode = address.getPostCode().toUpperCase().replace(" ","");
+                String actualPostCode = locationPostCode.toUpperCase().replace(" ","");
+                if( expectedPostCode.equals(actualPostCode)) {
+                    return location;
+                }
+                else {
+                    return null;
+                }
+            }
+        }
     }
 
 

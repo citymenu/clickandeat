@@ -2,11 +2,13 @@
 
 .cuisine-wrapper {
     margin-left:10px;
-    width: 190px;
+    width: 168px;
+    padding: 10px;
+    border: 1px solid #AAAAAA;
+    background-color:#FCFCFC;
     -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-
 }
 
 .cuisine-wrapper h2 {
@@ -30,7 +32,7 @@
 
 .cuisine-entry-wrapper {
     border: 1px solid #CCCCCC;
-    background-color: #FCFCFC;
+    background-color: #FFFFFF;
     margin-top: 10px;
     padding: 6px 5px 6px 5px;
     -moz-border-radius: 5px;
@@ -38,9 +40,9 @@
 }
 
 .cuisine-entry {
-    padding: 8px 5px 8px 5px;
+    padding: 5px 5px 5px 5px;
     font-family: "ff-tisa-web-pro",impact;
-    font-size: 16px;
+    font-size: 14px;
     color:#444444;
 }
 

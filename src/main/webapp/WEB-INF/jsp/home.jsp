@@ -20,25 +20,31 @@
         </div>
         <div class="searchbar-wrapper">
             <div class="searchbar">
-                <div class="searchelement-wrapper">
-                    <div class="searchelement searchleft">
-                        <h2><message:message key="search.where-are-you"/></h2>
-                        <input class="searchinput" type="text" id="loc"/>
-                        <div id="validation-wrapper"></div>
-                    </div>
-                    <div class="searchelement searchleft">
-                        <h2><message:message key="search.what-would-you-like"/></h2>
-                        <div id="dropdownshadow">
-                            <select name="cuisines" class="searchselect">
-                                <option value=""><message:message key="cuisine.any"/></option>
-                                <c:forEach var="cuisine" items="${cuisines}">
-                                <option value="${cuisine}"><util:escape value="${cuisine}"/></option>
-                                </c:forEach>
-                            </select>
+                <div class="outer-box">
+                    <div class="middle-box">
+                        <div class="center-box">
+                            <div class="searchelement-wrapper">
+                                <div class="searchelement searchleft">
+                                    <h2><message:message key="search.where-are-you"/></h2>
+                                    <input class="searchinput" type="text" id="loc"/>
+                                    <div id="validation-wrapper"></div>
+                                </div>
+                                <div class="searchelement searchleft">
+                                    <h2><message:message key="search.what-would-you-like"/></h2>
+                                    <div id="dropdownshadow">
+                                        <select name="cuisines" class="searchselect">
+                                            <option value=""><message:message key="cuisine.any"/></option>
+                                            <c:forEach var="cuisine" items="${cuisines}">
+                                            <option value="${cuisine}"><util:escape value="${cuisine}"/></option>
+                                            </c:forEach>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="searchelement button">
+                                    <input class="searchbutton" type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="searchelement button">
-                        <input class="searchbutton" type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
                     </div>
                 </div>
             </div>

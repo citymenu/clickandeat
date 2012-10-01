@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/footer.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/dialog.css"/>
 
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js"></script>

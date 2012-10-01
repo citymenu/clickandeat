@@ -19,6 +19,10 @@ var openForDelivery;
 var openForCollection;
 
 $(document).ready(function(){
+    getOrder();
+});
+
+function getOrder() {
     if( orderid && orderid != '') {
         $.post( ctx+'/order/getOrder.ajax?mgn=' + (Math.random() * 99999999),
             function( data ) {
@@ -30,7 +34,7 @@ $(document).ready(function(){
             }
         );
     }
-});
+}
 
 $(document).ajaxStart(function(){
     $.fancybox.showLoading();
@@ -47,7 +51,8 @@ function getOrderPanelConfig() {
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: true,
-        showDiscountInformation: true
+        showDiscountInformation: true,
+        showAdditionalInformation: true
     };
     return config;
 }
@@ -80,6 +85,12 @@ function doBuildOrder(order,config) {
     // Indicate if we are looking at a restaurant page other than the restaurant for the order
     var orderIsForAnotherRestaurant = typeof(restaurantId) != 'undefined' && order.restaurantId != restaurantId;
 
+    // If this order is for another restaurant switch off some functionality
+    if( orderIsForAnotherRestaurant ) {
+        config.showDeliveryOptions = false;
+        config.showDiscountInformation = false;
+    }
+
     // Reset all previous order details
     $('.ordertitle').remove();
     $('.restaurant-warning').remove();
@@ -90,15 +101,43 @@ function doBuildOrder(order,config) {
     $('.order-totalcost').remove();
     $('.order-free-item-wrapper').remove();
     $('.order-discount-wrapper').remove();
+    $('.additional-information').remove();
     $('#checkout').remove();
     $('.delivery-warning-wrapper').remove();
 
     // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
     if( order ) {
         if ( orderIsForAnotherRestaurant ) {
-            var warningMessage = getLabel('order.existing-restaurant-warning').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
-            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningMessage);
+            var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
+            var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(order.restaurantName));
+            var warningMessage3 = getLabel('order.existing-restaurant-warning-3').format(unescapeQuotes(restaurantName));
+
+            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
+            var clearOrderLink = ('<a id=\'clearorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
+
+            var warningContent = ('<div class=\'restaurant-warning-text\'>{0}</div><div class=\'restaurant-warning-text\'>{1} {2}</div><div class=\'restaurant-warning-text\'>{3} {4}</div>')
+                .format(warningMessage1, buildOrderLink, warningMessage2, clearOrderLink, warningMessage3);
+
+            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
             $('#restaurant-warning-wrapper').append(warning);
+
+            // Add link to continue building existing order
+            $('#buildorder').click(function(){
+                location.href = ctx + '/restaurant.html?restaurantId=' + order.restaurantId;
+            });
+
+            $('#clearorder').click(function(){
+                $.post( ctx+'/order/clearOrder.ajax', {orderId: currentOrder.orderId, restaurantId: restaurantId},
+                    function( data ) {
+                        if( data.success ) {
+                            buildOrder(data.order);
+                        } else {
+                            alert('success:' + data.success);
+                        }
+                    }
+                );
+            });
+
         }
     }
 
@@ -203,6 +242,16 @@ function doBuildOrder(order,config) {
             var discountItemHeader = ('<h2>{0}:</h2>').format(getLabel('order.discounts-available'));
             var discountContainer = ('<div class=\'order-discount-wrapper\'>{0}{1}</div>').format(discountItemHeader,discountItems);
             $('#discounts').append(discountContainer);
+        }
+
+        // Show link for adding additional information if this exists
+        if( config.showAdditionalInformation ) {
+            var additionalInformationLink = ('<div class=\'additional-information\'><a id=\'additionalinformation\' class=\'delivery-button unselectable\'>{0}</a> {1}</div>')
+                .format(getLabel('button.click-here'), getLabel('order.to-add-additional-instructions'));
+            $('#additionalinstructions').append(additionalInformationLink);
+            $('#additionalinstructions').click(function(){
+                editAdditionalInstructions();
+            });
         }
 
         // If we are either on a restaurant page or there are items in the order and the restaurant is closed, show a warning
@@ -482,30 +531,69 @@ function buildDeliveryTimeSelect(selectedDay,times) {
     return select;
 }
 
+// Edits additional instructions for an order
+function editAdditionalInstructions() {
+
+    var header = getLabel('order.additional-instructions');
+    var subheader = getLabel('order.additional-instructions.help');
+    var content = ('<textarea id=\'instructions\'>{0}</textarea>').format(unescapeQuotes(currentOrder.additionalInstructions).replace('<br>','\n'));
+    var buttons = ('<a id=\'updatebutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.save-changes'));
+
+    var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div><div class=\'dialog-content\'>{2}</div><div class=\'dialog-footer\'><div class=\'dialog-buttons\'>{3}</div></div></div>')
+        .format(header,subheader,content,buttons);
+
+    $.fancybox.open({
+        type: 'html',
+        content: container,
+        modal:false,
+        autoSize:false,
+        autoHeight: true,
+        width: 500,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+
+    $('#updatebutton').click(function(){
+        var additionalInstructions = $('#instructions').val();
+        $.post( ctx+'/order/updateAdditionalInstructions.ajax', {
+            orderId: currentOrder.orderId,
+            additionalInstructions: $('#instructions').val()
+        },function( data ) {
+                $.fancybox.close(true);
+                if( data.success ) {
+                    buildOrder(data.order);
+                } else {
+                    alert('success:' + data.success);
+                }
+            }
+        );
+    });
+}
+
 // Confirm if order should proceed
 function restaurantCheck(restaurantId, callback ) {
     if( currentOrder && currentOrder.orderItems.length > 0 && currentOrder.restaurantId != restaurantId ) {
 
-        // Build buttons for proceed and cancel
+        var header = getLabel('order.are-you-sure');
+        var content1 = ('<div class=\'dialog-content-text\'>' + getLabel('order.restaurant-warning-1') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
+        var content2 = ('<div class=\'dialog-content-text\'>' + getLabel('order.restaurant-warning-2') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
+        var content3 = ('<div class=\'dialog-content-text\'>{0}</div>').format(getLabel('order.restaurant-warning-3'));
+        var subheader = ('<div class=\'warning-container\'>{0}{1}{2}</div>').format(content1,content2,content3);
         var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.add-item-anyway'));
         var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.dont-add-item'));
-        var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+        var buttons = addItemButton + ' ' + cancelButton;
 
-        // Build body content
-        var warningBody = ('<div class=\'warning-container\'>' + getLabel('order.restaurant-warning') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
-
-        // Build header
-        var warningHeader = ('<h3>{0}</h3>').format(getLabel('order.are-you-sure'));
-
-        // Build main container
-        var warningContainer = ('<div class=\'restaurant-warning-wrapper\'>{0}{1}{2}</div>').format(warningHeader,warningBody,buttonContainer);
+        var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div><div class=\'dialog-content\'></div><div class=\'dialog-footer\'><div class=\'dialog-buttons\'>{2}</div></div></div>')
+            .format(header,subheader,buttons);
 
         // Show the dialog
         $.fancybox.open({
             type: 'html',
-            content: warningContainer,
-            minHeight:0,
+            content: container,
             modal:false,
+            autoSize:false,
+            autoHeight: true,
+            width: 500,
             openEffect:'none',
             closeEffect:'none'
         });

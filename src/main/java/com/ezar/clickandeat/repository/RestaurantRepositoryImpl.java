@@ -84,7 +84,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public Restaurant saveRestaurant(Restaurant restaurant) {
 
         if( restaurant.getAddress() != null ) {
-            AddressLocation location = locationService.getSingleLocation(restaurant.getAddress());
+            AddressLocation location = locationService.getSingleLocation(restaurant.getAddress(),true);
             if( location != null ) {
                 restaurant.getAddress().setLocation(location.getLocation());
             }

@@ -95,25 +95,19 @@
                 <td width="180">
                     <div class="menu-left">
                         <div id="menu-launch-wrapper">
-                            <div class="outer-box">
-                                <div class="middle-box">
-                                    <div class="center-box">
-                                        <h2><message:message key="restaurant.menu"/>:</h2>
-                                        <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
-                                        <div class="menu-launch-content-wrapper">
-                                            <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
-                                            <div class="menu-launch-entry">
-                                                <a onclick="jump('${menuCategory.categoryId}')"><util:escape value="${menuCategory.name}"/></a>
-                                            </div>
-                                            </c:forEach>
-                                            <c:if test="${restaurant.specialOfferCount > 0}">
-                                            <div class="menu-launch-entry">
-                                                <a onclick="jump('special_offers')"><message:message key="order.special-offers"/></a>
-                                            </div>
-                                            </c:if>
-                                        </div>
-                                    </div>
+                            <h2><message:message key="restaurant.menu"/>:</h2>
+                            <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
+                            <div class="menu-launch-content-wrapper">
+                                <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
+                                <div class="menu-launch-entry">
+                                    <a onclick="jump('${menuCategory.categoryId}')"><util:escape value="${menuCategory.name}"/></a>
                                 </div>
+                                </c:forEach>
+                                <c:if test="${restaurant.specialOfferCount > 0}">
+                                <div class="menu-launch-entry">
+                                    <a onclick="jump('special_offers')"><message:message key="order.special-offers"/></a>
+                                </div>
+                                </c:if>
                             </div>
                         </div>
                     </div>

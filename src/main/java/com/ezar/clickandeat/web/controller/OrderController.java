@@ -216,10 +216,10 @@ public class OrderController implements InitializingBean {
                     order = buildAndRegister(session,restaurantId);
                 }
                 else if( !restaurantId.equals(order.getRestaurantId())) {
-                    order.setRestaurantId(restaurantId);
                     order.setRestaurant(restaurant);
                     order.getOrderItems().clear();
                     order.getOrderDiscounts().clear();
+                    order.updateCosts();
                 }
             }
 
@@ -422,17 +422,74 @@ public class OrderController implements InitializingBean {
                             order.updateCosts();
                             order = orderRepository.save(order);
                         }
-                        
-                        
                         session.removeAttribute("orderrestaurantid");
                     }
                 }
             }
-
             model.put("success",true);
             model.put("order",order);
         }
         catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/updateAdditionalInstructions.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateAdditionalInstructions(@RequestParam(value = "orderId") String orderId,
+                                                    @RequestParam(value = "additionalInstructions") String additionalInstructions) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Updating additional instructions for orderId: " + orderId);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            order.setAdditionalInstructions(additionalInstructions);
+            order = orderRepository.saveOrder(order);
+            model.put("success",true);
+            model.put("order",order);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/clearOrder.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> clearOrder(@RequestParam(value = "orderId") String orderId,
+                                                               @RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Clearing order for orderId: " + orderId);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+            order.setRestaurant(restaurant);
+            order.getOrderItems().clear();
+            order.getOrderDiscounts().clear();
+            order.updateCosts();
+            order = orderRepository.saveOrder(order);
+            model.put("success",true);
+            model.put("order",order);
+        }
+        catch( Exception ex ) {
             LOGGER.error("",ex);
             model.put("success",false);
             model.put("message",ex.getMessage());

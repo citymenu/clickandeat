@@ -83,7 +83,8 @@ function getOrderPanelConfig() {
         allowRemoveItems: false,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,
-        showDiscountInformation: true
+        showDiscountInformation: true,
+        showAdditionalInformation: false
     };
     return config;
 }
@@ -141,11 +142,30 @@ function proceedToPayment() {
                 if( data.success ) {
                     location.href = ctx + '/secure/payment.html';
                 } else {
-                    alert('success:' + data.success);
+                    showError(data.header,data.message);
                 }
             }
         );
     }
+}
+
+// Builds a warning dialog
+function showError(title,content) {
+    var header = content;
+    var subheader = ('<div class=\'warning-container\'>{0}</div>').format(content);
+    var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div></div>')
+        .format(header,subheader);
+
+    $.fancybox.open({
+        type: 'html',
+        content: container,
+        modal:false,
+        autoSize:false,
+        minHeight: 200,
+        width: 350,
+        openEffect:'none',
+        closeEffect:'none'
+    });
 }
 
 // Builds the update object

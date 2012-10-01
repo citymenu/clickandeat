@@ -138,10 +138,10 @@ public class CheckoutController {
         try {
 
             // Build response map
-            model.put("locationNotFound",false);
-            model.put("locationRadiusInvalid",false);
-            model.put("restaurantWillDeliver",false);
-            model.put("restaurantClosed",false);
+            model.put("locationFound",true);
+            model.put("locationRadiusValid",true);
+            model.put("restaurantWillDeliver",true);
+            model.put("restaurantOpen",true);
             
             // Extract person and address from request
             Person person = buildPerson(body);
@@ -160,13 +160,15 @@ public class CheckoutController {
 
             // Confirm that we can get a strong fix on the location for delivery orders
             if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                AddressLocation deliveryLocation = locationService.getSingleLocation(order.getDeliveryAddress());
+                AddressLocation deliveryLocation = locationService.getSingleLocation(order.getDeliveryAddress(),true);
                 if( deliveryLocation == null ) {
-                    model.put("locationNotFound",true);
+                    model.put("success",false);
+                    model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
+                    model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
                 }
                 else {
                     if( deliveryLocation.getRadius() > maxRadiusMetres ) {
-                        model.put("locationRadiusInvalid",true);
+                        model.put("locationRadiusValid",false);
                     }
                     
                     // Check that the restaurant will deliver to this location
@@ -178,11 +180,9 @@ public class CheckoutController {
 
             // Indicate if the restaurant is not open
             if( !order.getRestaurantIsOpen()) {
-                model.put("success",false);
-                model.put("restaurantClosed",true);
+                model.put("restaurantOpen",false);
             }
-            
-            
+
             // Mark order updated successfully
             model.put("success",true);
         }

@@ -125,12 +125,29 @@ select.deliveryselect {
     font-weight:700;
 }
 
+.additional-information {
+    border: 1px solid #CCCCCC;
+    background-color:#FFFFFF;
+    padding: 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 12px;
+}
+
 select.freeitemselect {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
     margin-top:2px;
 }
 
+#instructions {
+    width: 480px;
+    height: 150px;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size: 13px;
+    color:#000000;
+}
 
 #ordertotal {
     text-align:center;
@@ -185,6 +202,10 @@ select.freeitemselect {
     padding: 6px 10px 6px 10px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.restaurant-warning-text {
+    padding-bottom: 5px;
 }
 
 .delivery-options-wrapper {

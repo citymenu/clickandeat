@@ -28,8 +28,8 @@
                     </div>
                     <div id="order-item-contents"></div>
                 </div>
+                <div id="additionalinstructions"></div>
                 <div id="discounts"></div>
-                <div id="freeitems"></div>
                 <div id="ordertotal"><message:message key="order.total"/>:</div>
                 <div id="checkoutcontainer"></div>
             </div>

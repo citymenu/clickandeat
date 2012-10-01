@@ -38,7 +38,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public User saveUser(User user) {
 
         if( user.getAddress() != null ) {
-            AddressLocation location = locationService.getSingleLocation(user.getAddress());
+            AddressLocation location = locationService.getSingleLocation(user.getAddress(),true);
             if( location != null ) {
                 user.getAddress().setLocation(location.getLocation());
             }

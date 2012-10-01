@@ -142,18 +142,20 @@
 
 #menu-launch-wrapper {
     margin-top:20px;
-    width: 160px;
+    width: 148px;
     position: absolute;
     top: 0;
-    background-color:#FCFCFC;
+    border: 1px solid #AAAAAA;
+    padding:10px;
+    background-color: #FCFCFC;
     -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
 
 #menu-launch-wrapper.fixed {
-  position: fixed;
-  top: 0;
+    position: fixed;
+    top: 0;
 }
 
 .menu-launch-content-wrapper {

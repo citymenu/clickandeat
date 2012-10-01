@@ -4,6 +4,15 @@ String.prototype.format = function () {
   return this.replace(/\{(\d+)\}/g, function (m, n) { return args[n]; });
 };
 
+/* Adds forEach method to array */
+if ( !Array.prototype.forEach ) {
+  Array.prototype.forEach = function(fn, scope) {
+    for(var i = 0, len = this.length; i < len; ++i) {
+      fn.call(scope || this, this[i], i, this);
+    }
+  }
+}
+
 /* Unescapes quotes */
 function unescapeQuotes(str) {
     if( !str || str == '' ) {
