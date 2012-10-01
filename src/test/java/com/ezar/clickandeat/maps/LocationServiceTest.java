@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.maps;
 
+import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.AddressLocation;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -65,5 +66,15 @@ public class LocationServiceTest {
         LOGGER.info("Resolved location: " + location );
     }
 
+    @Test
+    public void testExactAddress() throws Exception {
+        Address address = new Address();
+        address.setAddress1("Calle Planeta");
+        address.setPostCode("08012");
+        AddressLocation location = locationService.getSingleLocation(address,true);
+        LOGGER.info("Resolved location: " + location );
+    }
+
+    
 }
 

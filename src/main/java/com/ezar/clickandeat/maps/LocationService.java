@@ -216,29 +216,26 @@ public class LocationService {
             return null;
         }
         List<AddressLocation> locations = getLocations(address);
-        if( locations.size() != 1 ) {
+        if( locations.size() == 0 ) {
             return null;
         }
+        else if( locations.size() == 1 && !enforcePostCode ) {
+            return locations.get(0);
+        }
         else {
-            AddressLocation location = locations.get(0);
-            if( !enforcePostCode) {
-                return location;
-            }
-            else {
+            List<AddressLocation> validLocations = new ArrayList<AddressLocation>();
+            for( AddressLocation location: locations ) {
                 String locationPostCode = location.getLocationComponents().get("postal_code");
                 if( !StringUtils.hasText(locationPostCode)) {
-                    LOGGER.warn("No postcode found for matching location");
-                    return null;
+                    continue;
                 }
                 String expectedPostCode = address.getPostCode().toUpperCase().replace(" ","");
                 String actualPostCode = locationPostCode.toUpperCase().replace(" ","");
                 if( expectedPostCode.equals(actualPostCode)) {
-                    return location;
-                }
-                else {
-                    return null;
+                    validLocations.add(location);
                 }
             }
+            return validLocations.size() == 1? validLocations.get(0): null;
         }
     }
 
