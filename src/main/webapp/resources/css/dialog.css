@@ -2,6 +2,7 @@
 
 .dialog-container {
     background: none repeat scroll 0 0 #FFFFFF;
+    padding: 10px;
 }
 
 .dialog-header {
@@ -45,4 +46,16 @@
 .dialog-buttons {
     text-align:right;
     padding: 10px;
+}
+
+.dialog-warning-wrapper {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    line-height: 16px;
+    margin-top: 6px;
+    padding: 6px 10px 10px 10px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }

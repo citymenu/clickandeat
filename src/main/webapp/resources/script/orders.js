@@ -145,7 +145,7 @@ function doBuildOrder(order,config) {
     if( order && advancedDisplay ) {
         var deliveryDay, deliveryTime, orderType;
         var expectedTime = (order.deliveryType == 'DELIVERY'? order.expectedDeliveryTime: order.expectedCollectionTime);
-        var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
+        var orderType = (order.deliveryType == 'DELIVERY'? getLabel('order.delivery'): getLabel('order.collection'));
         if( !expectedTime ) {
             deliveryDayOfWeek = null;
             deliveryTimeOfDay = null;
@@ -159,8 +159,8 @@ function doBuildOrder(order,config) {
             deliveryTime = deliveryTimeOfDay;
         }
 
-        var link = (config.showDeliveryOptions ? '<a id=\'deliveryedit\' class=\'delivery-button unselectable\'>' + getLabel('button.change') + '</a>' : '');
-        var deliveryContainer = ('<div class=\'delivery-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'128\'><div class=\'delivery-title\'>{0}:</div><div class=\'delivery-header\'>{1} - {2}</div></td><td width=\'66\' align=\'right\'>{3}</td></tr></table></div>')
+        var link = (config.showDeliveryOptions? '<div class=\'delivery-edit\'><a id=\'deliveryedit\' class=\'delivery-button unselectable\'>' + getLabel('button.change') + '</a></div>' : '');
+        var deliveryContainer = ('<div class=\'delivery-wrapper\'><div class=\'delivery-title\'>{0}: <span class=\'delivery-header\'>{1} - {2}</span></div>{3}</div>')
             .format(orderType,deliveryDay,deliveryTime,link);
         $('.order-delivery-wrapper').append(deliveryContainer);
         if( config.showDeliveryOptions ) {
@@ -292,11 +292,10 @@ function buildDisplay(orderItem) {
 }
 
 // Add multiple items based on the select value
-function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost ) {
-
+function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost ) {
     // Check restaurant with callback on restaurant id
     restaurantCheck(restaurantId, function(){
-        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, 1);
+        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, 1);
     });
 }
 
@@ -370,7 +369,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
     }
     else {
-        var label = (hasDeliveryTime? getLabel('order.order-for-delivery'): getLabel('order.order-for-collection'));
+        var label = (hasDeliveryTime? getLabel('order.delivery'): getLabel('order.collection'));
         deliveryContainer = ('<div class=\'delivery-options-wrapper\'><div class=\'delivery-title\'>{0}:</div></div>').format(label);
         deliveryType = (hasDeliveryTime? 'DELIVERY':'COLLECTION');
     }
@@ -380,8 +379,8 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     var deliverySelectContainer = buildDeliverySelection(days,times);
 
     // Build save and cancel buttons
-    var saveButton = '<a id=\'deliverysave\' class=\'order-button add-button unselectable\'>' + getLabel('button.update') + '</a>';
-    var cancelButton = '<a id=\'deliverycancel\' class=\'order-button add-button unselectable\'>' + getLabel('button.cancel') + '</a>';
+    var saveButton = '<a id=\'deliverysave\' class=\'delivery-button unselectable\'>' + getLabel('button.update') + '</a>';
+    var cancelButton = '<a id=\'deliverycancel\' class=\'delivery-button unselectable\'>' + getLabel('button.cancel') + '</a>';
     var buttonContainer = ('<div class=\'delivery-buttons\'>{0} {1}</div>').format(saveButton,cancelButton);
 
     // Remove the existing delivery wrapper
@@ -534,9 +533,11 @@ function buildDeliveryTimeSelect(selectedDay,times) {
 // Edits additional instructions for an order
 function editAdditionalInstructions() {
 
+    var additionalInstructions = currentOrder.additionalInstructions || '';
+
     var header = getLabel('order.additional-instructions');
     var subheader = getLabel('order.additional-instructions.help');
-    var content = ('<textarea id=\'instructions\'>{0}</textarea>').format(unescapeQuotes(currentOrder.additionalInstructions).replace('<br>','\n'));
+    var content = ('<textarea id=\'instructions\'>{0}</textarea>').format(unescapeQuotes(additionalInstructions).replace('<br>','\n'));
     var buttons = ('<a id=\'updatebutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.save-changes'));
 
     var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div><div class=\'dialog-content\'>{2}</div><div class=\'dialog-footer\'><div class=\'dialog-buttons\'>{3}</div></div></div>')
@@ -613,56 +614,120 @@ function restaurantCheck(restaurantId, callback ) {
 }
 
 // Add item to order, check if need to display additional item dialog
-function doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
+function doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity ) {
     if( additionalItemArray.length > 0 ) {
-        buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity );
+        buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity );
     } else {
         doAddToOrder(restaurantId, itemId, itemType, itemSubType, [], quantity )
     }
 }
 
 // Build dialog to show additional choices for a menu item
-function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, quantity ) {
+function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity ) {
 
     var selectedItems = new HashTable();
+    var itemCosts = new HashTable();
+
     var html = '';
     var itemLimit = additionalItemLimit? additionalItemLimit: 0;
+    var defaultItemCost = additionalItemCost? additionalItemCost: 0;
     var canAddToOrder = true;
 
-    // Build checkboxes for each additional item
-    var additionalItemsChoices = '<div class=\'additional-items-choices\'>';
-    additionalItemArray.forEach(function(additionalItem){
-        var additionalItemArray = additionalItem.split('%%%');
-        var additionalItemCost = additionalItemArray[1];
-        var itemDiv = ('<div class=\'additional-item\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>{1}<span class=\'additionalitemcost\'>{2}</span></div>')
-                .format(additionalItemArray[0],unescapeQuotes(additionalItemArray[0]),(additionalItemArray[1] != 'null'? ' (' + ccy + additionalItemArray[1] + ')': ''));
-        additionalItemsChoices += itemDiv;
-    });
-    additionalItemsChoices += '</div>';
+    var currentQuantity = quantity;
+    var currentCost = itemCost;
 
-    // build additional items header
-    var additionalItemsHeader = ('<h3>{0}</h3><div id=\'itemcountwarning\'></div>').format(getLabel('order.choose-additional'));
+    // Work out how to split rows across tables
+    var itemCount = additionalItemArray.length;
+    var defaultBreak = 6;
+    var rowBreak = Math.max(itemCount / 2, defaultBreak );
 
-    // Build additional items body
-    var additionalItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(additionalItemsChoices);
+    // Build the total cost item and quantity
+    var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel('order.additional-item-limit-description').format(itemLimit)): '');
+    var itemDefaultCostDescription = (defaultItemCost > 0? ('<div class=\'additional-item-description\'>{0} <b>{1}</b></div>').format(getLabel('order.additional-item-cost-description'), ccy + defaultItemCost.toFixed(2)): '');
+    var itemDescriptionContainer = '';
+    if( itemLimitDescription != '' || itemDefaultCostDescription != '' ) {
+        itemDescriptionContainer = ('<div class=\'additional-item-description-wrapper\'>{0}{1}</div>').format(itemLimitDescription,itemDefaultCostDescription);
+    }
+
+    // Build the container for showing the quantity and total cost
+    var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
+    var itemTotalField = ('<div class=\'additional-item-total-cost\'>{0}<span id=\'itemcost\'></span></div>').format(ccy);
+    var itemCostContainer = ('<div class=\'additional-item-cost-wrapper\'>{0}{1}</div>').format(itemQuantityField,itemTotalField);
+
+    // Build warning div for additional item limit
+    var itemWarningContainer = '<div id=\'itemcountwarning\'></div>';
+
+    var additionalItemChoiceContainer = '<div class=\'additional-item-grid\'>';
+
+    // Build container for additional item choices
+    for( var i = 0; i < itemCount; i++ ) {
+        if( i % rowBreak == 0 ) {
+            if( i > 0 ) {
+                additionalItemChoiceContainer += '</table></div>';
+            }
+            additionalItemChoiceContainer += '<div class=\'additional-item-table\'><table width=\'200\'>'
+        }
+
+        var additionalItemElements = additionalItemArray[i].split('%%%');
+        var additionalItemName = additionalItemElements[0];
+        var additionalItemCost = additionalItemElements[1];
+
+        if( defaultItemCost > 0 ) {
+            itemCosts.setItem(additionalItemName, defaultItemCost);
+        } else {
+            itemCosts.setItem(additionalItemName, (additionalItemCost == 'null'? 0: additionalItemCost));
+        }
+
+        var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/> <span id=\'{0}_span\'>{1}</span></div>').format(additionalItemName,unescapeQuotes(additionalItemName));
+        var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': ccy + additionalItemElements[1]));
+        additionalItemChoiceContainer += ('<tr valign=\'top\'><td width=\'150\'>{0}</td><td width=\'50\' align=\'right\'>{1}</td></tr>').format(additionalItemTitleDiv,additionalItemCostDiv);
+
+    }
+    additionalItemChoiceContainer += '</table></div></div>';
 
     // Build buttons for save and cancel
     var addItemButton = ('<a id=\'additembutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(getLabel('button.done'));
     var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(getLabel('button.cancel'));
-    var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+    var buttonContainer = ('<div class=\'dialog-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
 
     // Build main container for additional items
-    var additionalItemsContainer = ('<div class=\'additional-items-wrapper\'>{0}{1}{2}</div>').format(additionalItemsHeader,additionalItemsBody,buttonContainer);
+    var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.choose-additional'));
+    var subheader = ('<div class=\'dialog-subheader\'>{0}{1}</div>').format(itemDescriptionContainer,itemCostContainer);
+    var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(itemWarningContainer,additionalItemChoiceContainer);
+    var footer = ('<div class=\'dialog-footer\'>{0}</div>').format(buttonContainer);
 
-    // Placeholder for item count warning
-    html += '<div id=\'itemcountwarning\'></div>';
+    var container = ('<div class=\'dialog-container\'><div class=\'additional-items-wrapper\'>{0}{1}{2}{3}</div></div>').format(header,subheader,content,footer);
 
     $.fancybox.open({
         type: 'html',
-        content: additionalItemsContainer,
+        content: container,
         modal:false,
+        autoSize:true,
         openEffect:'none',
         closeEffect:'none'
+    });
+
+    // Update the total cost
+    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((currentCost * currentQuantity).toFixed(2)));
+
+    // Only allow numeric input in quantity field
+    $("#quantity").keydown(function(event) {
+        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+            (event.keyCode == 65 && event.ctrlKey === true) ||
+            (event.keyCode >= 35 && event.keyCode <= 39)) {
+                 return;
+        } else {
+            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                event.preventDefault();
+            }
+        }
+    });
+
+    // Update total cost on quantity update
+    $("#quantity").keyup(function(event) {
+        currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
+        $('#itemtotalcost').remove();
+        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((currentCost * currentQuantity).toFixed(2)));
     });
 
     // Handler for the cancel button
@@ -673,7 +738,9 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     // Handler for the done button
     $('#additembutton').click(function(){
         if( canAddToOrder ) {
-            doAddToOrder(restaurantId, itemId, itemType, itemSubType, selectedItems.keys(), quantity );
+            if( currentQuantity != '' && currentQuantity > 0 ) {
+                doAddToOrder(restaurantId, itemId, itemType, itemSubType, selectedItems.keys(), currentQuantity );
+            }
             $.fancybox.close(true);
         }
     });
@@ -682,9 +749,15 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     $('.itemcheckbox').change(function(){
         if($(this).is(':checked')) {
             selectedItems.setItem($(this).attr('id'), "");
+            $('#' + $(this).attr('id') + '_span').addClass('red');
+            currentCost += parseFloat(itemCosts.getItem($(this).attr('id')));
         } else {
             selectedItems.removeItem($(this).attr('id'));
+            $('#' + $(this).attr('id') + '_span').removeClass('red');
+            currentCost -= parseFloat(itemCosts.getItem($(this).attr('id')));
         }
+        $('#itemtotalcost').remove();
+        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((currentCost * currentQuantity).toFixed(2)));
 
         canAddToOrder = true;
         $('.itemcountwarning').remove();
@@ -719,7 +792,7 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
 }
 
 // Check if a special offer is applicable to an order
-function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray ) {
+function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray, cost ) {
 
     var update = ({
         restaurantId: restaurantId,
@@ -731,7 +804,7 @@ function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOff
         function( data ) {
             if( data.success ) {
                 if( data.applicable ) {
-                    addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray );
+                    addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray, cost );
                 } else {
                     showSpecialOfferWarning();
                 }
@@ -751,13 +824,16 @@ function showSpecialOfferWarning() {
         warning = getLabel('order.special-offer-not-available');
     }
 
-    var warningText = ('<div class=\'warning-content\'>{0}</div>').format(warning);
-    var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
+    var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.special-offer-not-available-title'));
+    var subheader = ('<div class=\'dialog-subheader\'><div class=\'dialog-warning-wrapper\'>{0}</div></div>').format(warning);
+    var container = ('<div class=\'dialog-wrapper\'>{0}{1}<div class=\'dialog-footer\'></div>').format(header,subheader);
 
     $.fancybox.open({
         type: 'html',
-        content: warningContainer,
-        minHeight:0,
+        content: container,
+        autoSize:false,
+        width:400,
+        autoHeight:true,
         modal:false,
         openEffect:'none',
         closeEffect:'none'
@@ -765,7 +841,7 @@ function showSpecialOfferWarning() {
 }
 
 // Add a special offer item to the order
-function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray ) {
+function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray, cost ) {
 
     // Decode and build special offer items array
     var specialOfferItems = [];
@@ -792,97 +868,107 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
 
     // Check restaurant with callback to add to order
     restaurantCheck(restaurantId, function(){
-        doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, 1);
+        doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, 1, cost);
     });
 
 }
 
 // Either build select dialog or proceed directly to add special offer to order
-function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity) {
+function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity, cost) {
 
-    var singleChoiceOnly = true;
+    var currentQuantity = quantity;
+
+    // Build the container for showing the quantity and total cost
+    var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
+    var itemTotalField = ('<div class=\'additional-item-total-cost\'>{0}<span id=\'itemcost\'></span></div>').format(ccy);
+    var itemCostContainer = ('<div class=\'additional-item-cost-wrapper\'>{0}{1}</div>').format(itemQuantityField,itemTotalField);
+
+    // Build dialog to display items and choices
+    var specialOfferItemBody = '';
+    var specialOfferItemIndex = 0;
     specialOfferItems.forEach(function(specialOfferItem){
-        if( specialOfferItem.itemChoices.length > 1 ) {
-            singleChoiceOnly = false;
+        var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
+        var selectOptions = ('<option value=\'EMPTY\'>{0}</option>').format(unescapeQuotes(specialOfferItem.description));
+        specialOfferItem.itemChoices.forEach(function(itemChoice){
+            selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
+        });
+        var selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
+
+        specialOfferItemContent += selectBox;
+        specialOfferItemBody += ('<div class=\'specialofferitem\'>{0}</div>').format(specialOfferItemContent);
+        specialOfferItemIndex++;
+    });
+
+    var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.special-offer-choices'));
+    var subheader = ('<div class=\'dialog-subheader\'>{0}</div>').format(itemCostContainer);
+    var content = ('<div class=\'dialog-content\'>{0}</div>').format(specialOfferItemBody);
+
+    // Build buttons for save and cancel
+    var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.done'));
+    var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.cancel'));
+    var buttonContainer = ('<div class=\'dialog-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
+    var footer = ('<div class=\'dialog-footer\'>{0}</div>').format(buttonContainer);
+
+    // Build main container for additional items
+    var container = ('<div class=\'dialog-wrapper\'>{0}{1}{2}{3}</div>').format(header,subheader,content,footer);
+
+    $.fancybox.open({
+        type: 'html',
+        content: container,
+        autoSize:false,
+        autoHeight:true,
+        width:450,
+        minHeight:150,
+        modal:false,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+
+
+    // Update the total cost
+    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+
+    // Only allow numeric input in quantity field
+    $("#quantity").keydown(function(event) {
+        if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+            (event.keyCode == 65 && event.ctrlKey === true) ||
+            (event.keyCode >= 35 && event.keyCode <= 39)) {
+                 return;
+        } else {
+            if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                event.preventDefault();
+            }
         }
     });
 
-    // If only one choice for each option, add to order now
-    if( singleChoiceOnly ) {
-        var itemChoices = [];
-        specialOfferItems.forEach(function(specialOfferItem){
-            itemChoices.push(specialOfferItem.itemChoices[0].text);
-        });
-        doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
-    }
-    else {
+    // Update total cost on quantity update
+    $("#quantity").keyup(function(event) {
+        currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
+        $('#itemtotalcost').remove();
+        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+    });
 
-        // Build dialog to display items and choices
-        var specialOfferItemBody = '';
-        var specialOfferItemIndex = 0;
-        specialOfferItems.forEach(function(specialOfferItem){
-            var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
-            if( specialOfferItem.description ) {
-                specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
-            }
-            var selectBox;
-            if( specialOfferItem.itemChoices.length == 1 ) {
-                selectBox = ('<div class=\'specialofferitemchoice\'>{0}</div>').format(unescapeQuotes(specialOfferItem.itemChoices[0].text));
-            } else {
-                var selectOptions = '';
-                specialOfferItem.itemChoices.forEach(function(itemChoice){
-                    selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
-                });
-                selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
-            }
-            specialOfferItemContent += selectBox;
-            specialOfferItemBody += ('<div class=\'specialofferitem\'>{0}</div>').format(specialOfferItemContent);
-            specialOfferItemIndex++;
-        });
+    // Handler for the cancel button
+    $('#cancelbutton').click(function(){
+        $.fancybox.close(true);
+    });
 
-        // build special offer items header
-        var specialOfferItemsHeader = ('<h3>{0}</h3>').format(getLabel('order.special-offer-choices'));
-
-        // Build special offer items body
-        var specialOfferItemsBody = ('<div class=\'additional-items-body\'>{0}</div>').format(specialOfferItemBody);
-
-        // Build buttons for save and cancel
-        var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.done'));
-        var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.cancel'));
-        var buttonContainer = ('<div class=\'additional-items-buttons\'>{0} {1}</div>').format(addItemButton,cancelButton);
-
-        // Build main container for additional items
-        var specialOfferItemsContainer = ('<div class=\'additional-items-wrapper\'>{0}{1}{2}</div>').format(specialOfferItemsHeader,specialOfferItemsBody,buttonContainer);
-
-        $.fancybox.open({
-            type: 'html',
-            content: specialOfferItemsContainer,
-            minHeight:0,
-            modal:false,
-            openEffect:'none',
-            closeEffect:'none'
-        });
-
-        // Handler for the cancel button
-        $('#cancelbutton').click(function(){
-            $.fancybox.close(true);
-        });
-
-        // Handler for the add item button
-        $('#additembutton').click(function(){
+    // Handler for the add item button
+    $('#additembutton').click(function(){
+        if( currentQuantity != '' && currentQuantity > 0 ) {
             var itemChoices = [];
             for( i = 0; i < specialOfferItems.length; i++) {
-                var itemSelect = $('#specialOfferItemSelect_' + i );
-                if( itemSelect.length ) {
-                    itemChoices.push(itemSelect.val());
+                var selectedValue = $('#specialOfferItemSelect_' + i ).val();
+                if( selectedValue == 'EMPTY' ) {
+                    return;
                 } else {
-                    itemChoices.push(specialOfferItems[i].itemChoices[0].text);
+                    itemChoices.push(selectedValue);
                 }
             }
-            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity);
-            $.fancybox.close(true);
-        });
-    }
+            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, currentQuantity);
+        }
+        $.fancybox.close(true);
+    });
 }
 
 // Add the special offer item to the order

@@ -24,13 +24,13 @@
 
 .order-delivery-wrapper {
     text-align:left;
-    margin: 6px 0 6px 0;
-    padding: 0px 10px 0px 10px;
+    margin: 6px 0 10px 0;
+    padding: 0px 5px 0px 5px;
 }
 
 .delivery-wrapper {
     text-align:left;
-    padding: 6px 0 6px 0;
+    padding: 0;
 }
 
 .delivery-title {
@@ -38,13 +38,14 @@
     font-size: 14px;
     color:#444444;
     font-weight:700;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .delivery-header {
     font-family: "ff-tisa-web-pro",impact;
     font-size: 14px;
     color:#444444;
+    font-weight:normal;
 }
 
 h3.order-table {
@@ -221,8 +222,8 @@ select.freeitemselect {
 }
 
 .delivery-buttons {
-    padding-top: 10px;
-    text-align:right;
+    margin: 5px 0 10px 0;
+    text-align:left;
 }
 
 a.delivery-button {
@@ -262,12 +263,87 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-items-wrapper {
-    background-color:#FFFFFF;
-    width: 500px;
-    padding: 10px 15px 10px 15px;
-    border:1px solid #FFFFFF;
+    width: 510px;
+}
+
+.additional-item-description-wrapper {
+    padding: 2px 0 2px 0;
+}
+
+.additional-item-description {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 2px 0 2px 0;
+}
+
+.additional-item-cost-wrapper {
+    font-family: "ff-tisa-web-pro",impact;
+    font-size: 16px;
+    line-height: 18px;
+    background-color:#FCFCFC;
+    clear:both;
+    overflow:hidden;
+    margin: 20px 0 0 0;
+    padding: 6px 12px 6px 12px;
+    color:#444444;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    font-weight: 700;
+}
+
+.additional-item-quantity {
+    float:left;
+}
+
+.additional-item-total-cost {
+    float:right;
+}
+
+#quantity {
+    width:20px;
+    border:1px solid #AAAAAA;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:14px;
+    padding: 0 5px 0 5px;
+    margin-left: 5px;
+}
+
+#quantity:focus {
+    border:1px solid #AA0000;
+}
+
+.additional-item-grid {
+    clear:both;
+    overflow:hidden;
+    border: 1px solid #BBBBBB;
+    margin: 10px 0 10px 0;
+    padding: 8px 15px 8px 15px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.additional-item-table {
+    float:left;
+    width: 230px;
+}
+
+.additional-item-title {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:13px;
+    font-weight:700;
+    padding: 4px 0 4px 0;
+}
+
+.red {
+    color:#AA0000;
+}
+
+.additional-item-cost {
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:13px;
+    font-weight:700;
+    padding: 4px 0 4px 0;
 }
 
 .additional-items-body {
@@ -280,6 +356,12 @@ a.order-button-large:active, a.order-button-large:hover {
 .itemcheckbox {
     font-family: "ff-tisa-web-pro",impact;
     font-size: 14px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
 }
 
 .additional-item {
@@ -313,7 +395,6 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 #itemcountwarning {
-    margin-bottom: 10px;
 }
 
 .itemcountwarning {
@@ -373,37 +454,22 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .specialofferitem {
-    border-bottom: 1px dashed #EEEEEE;
-    margin-bottom: 10px;
-    padding-bottom: 16px;
+    margin-bottom: 20px;
 }
 
 .specialofferitemtitle {
     color: #BB0000;
     font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
-    font-size:16px;
-    line-height:18px;
-    font-weight:bold;
-    text-shadow: 0 1px #EEEEEE;
-}
-
-.specialofferitemdescription {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 12px;
-    font-style: italic;
-    line-height: 16px;
-    padding-top:3px;
-}
-
-.specialofferitemchoice {
-    font-family: "ff-tisa-web-pro",impact;
-    font-size: 14px;
-    padding-top:6px;
+    font-size:14px;
+    line-height:16px;
+    font-weight:700;
+    color:#AA0000;
+    padding-bottom:6px;
 }
 
 .specialofferitemchoice select{
-    font-family: "ff-tisa-web-pro",impact;
-    font-size: 14px;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-size:13px;
 }
 
 #checkout {

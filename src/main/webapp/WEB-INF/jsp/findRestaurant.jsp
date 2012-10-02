@@ -22,7 +22,7 @@
         <table width="1020">
             <tr valign="top">
                 <!-- Cusine bar -->
-                <td width="200">
+                <td width="160">
                     <div class="cuisine-wrapper">
                         <h2><message:message key="search.choose-cuisine"/></h2>
                         <div class="cuisine-wrapper-description"><message:message key="search.choose-cuisine-instructions"/></div>
@@ -40,7 +40,7 @@
                 </td>
 
                 <!-- Search results -->
-                <td width="560">
+                <td width="600">
                     <div class="search-results-wrapper">
                         <div class="search-results-header-wrapper">
                             <h2><message:message key="search.your-location"/>: <util:escape value="${search.location.displayAddress}"/></h2>
