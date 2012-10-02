@@ -678,7 +678,8 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
             itemCosts.setItem(additionalItemName, (additionalItemCost == 'null'? 0: additionalItemCost));
         }
 
-        var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/> <span id=\'{0}_span\'>{1}</span></div>').format(additionalItemName,unescapeQuotes(additionalItemName));
+        var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/> <span id=\'{1}_span\'>{2}</span></div>')
+            .format(additionalItemName,additionalItemName.replace(' ','_').replace('###','_'), unescapeQuotes(additionalItemName));
         var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': ccy + additionalItemElements[1]));
         additionalItemChoiceContainer += ('<tr valign=\'top\'><td width=\'150\'>{0}</td><td width=\'50\' align=\'right\'>{1}</td></tr>').format(additionalItemTitleDiv,additionalItemCostDiv);
 
@@ -749,11 +750,11 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     $('.itemcheckbox').change(function(){
         if($(this).is(':checked')) {
             selectedItems.setItem($(this).attr('id'), "");
-            $('#' + $(this).attr('id') + '_span').addClass('red');
+            $('#' + $(this).attr('id').replace(' ','_').replace('###','_') + '_span').addClass('red');
             currentCost += parseFloat(itemCosts.getItem($(this).attr('id')));
         } else {
             selectedItems.removeItem($(this).attr('id'));
-            $('#' + $(this).attr('id') + '_span').removeClass('red');
+            $('#' + $(this).attr('id').replace(' ','_').replace('###','_') + '_span').removeClass('red');
             currentCost -= parseFloat(itemCosts.getItem($(this).attr('id')));
         }
         $('#itemtotalcost').remove();
