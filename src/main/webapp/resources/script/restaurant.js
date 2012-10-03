@@ -62,7 +62,32 @@ function updateOrderPanelPos() {
     }
 }
 
-
 function jump(category) {
     $.scrollTo('#' + category, 0, {offset: -10});
+}
+
+// Build directions map to restaurant
+function showDirections(coordinates) {
+
+    var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.directions'));
+    var content = ('<div class=\'dialog-content\'><div id=\'map_canvas\'></div></div>');
+    var container = ('<div class=\'dialog-wrapper\'>{0}{1}</div>').format(header,content);
+
+    $.fancybox.open({
+        type: 'html',
+        content: container,
+        modal:false,
+        autoSize:false,
+        height: 375,
+        width: 500,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+
+    var mapOptions = {
+        center: new google.maps.LatLng(-34.397, 150.644),
+        zoom: 8,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map_canvas"),mapOptions);
 }

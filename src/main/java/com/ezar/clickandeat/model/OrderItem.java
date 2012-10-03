@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.util.NumberUtil;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,6 +141,21 @@ public class OrderItem {
     
     public String getFormattedCost() {
         return NumberUtil.format(cost * quantity);
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(quantity).append(" x ").append(menuItemTitle);
+        if( StringUtils.hasText(menuItemTypeName)) {
+            sb.append(" (").append(menuItemTypeName).append(")");
+        }
+        if( StringUtils.hasText(menuItemSubTypeName)) {
+            sb.append(" (").append(menuItemSubTypeName).append(")");
+        }
+        for( String additionalItem: additionalItems) {
+            sb.append("\n").append(additionalItem);
+        }
+        return sb.toString();
     }
     
 }

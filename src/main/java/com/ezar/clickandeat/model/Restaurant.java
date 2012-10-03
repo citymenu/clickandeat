@@ -57,7 +57,7 @@ public class Restaurant extends PersistentObject {
     
     private List<SpecialOffer> specialOffers;
     
-    private String imageId;
+    private String imageName;
 
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
@@ -389,7 +389,7 @@ public class Restaurant extends PersistentObject {
     }
 
     public int getCollectionTimeMinutes() {
-        return deliveryOptions.getDeliveryTimeMinutes();
+        return deliveryOptions.getCollectionTimeMinutes();
     }
 
     public String getRestaurantId() {
@@ -487,6 +487,15 @@ public class Restaurant extends PersistentObject {
     public void setAddress(Address address) {
         this.address = address;
     }
+    
+    public String getCoordinates() {
+        if( this.address == null || this.address.getLocation() == null ) {
+            return "";
+        }
+        else {
+            return this.address.getLocation()[1] + "," + this.address.getLocation()[0];
+        }
+    }
 
     public Menu getMenu() {
         return menu;
@@ -544,12 +553,12 @@ public class Restaurant extends PersistentObject {
         this.specialOffers = specialOffers;
     }
 
-    public String getImageId() {
-        return imageId;
+    public String getImageName() {
+        return imageName;
     }
 
-    public void setImageId(String imageId) {
-        this.imageId = imageId;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public Double getDistanceToSearchLocation() {

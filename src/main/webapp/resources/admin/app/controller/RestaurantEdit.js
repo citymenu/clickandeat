@@ -407,6 +407,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update the restaurant object details from the main details form
         restaurantObj.name = mainDetailValues['name'];
         restaurantObj.description = mainDetailValues['description'];
+        restaurantObj.imageName = mainDetailValues['imageName'];
         restaurantObj.listOnSite = mainDetailValues['listOnSite'] == 'on';
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];

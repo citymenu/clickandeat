@@ -693,8 +693,8 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
     // Build main container for additional items
     var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.choose-additional'));
-    var subheader = ('<div class=\'dialog-subheader\'>{0}{1}</div>').format(itemDescriptionContainer,itemCostContainer);
-    var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(itemWarningContainer,additionalItemChoiceContainer);
+    var subheader = ('<div class=\'dialog-subheader\'>{0}</div>').format(itemDescriptionContainer);
+    var content = ('<div class=\'dialog-content\'>{0}{1}{2}</div>').format(itemWarningContainer,additionalItemChoiceContainer,itemCostContainer);
     var footer = ('<div class=\'dialog-footer\'>{0}</div>').format(buttonContainer);
 
     var container = ('<div class=\'dialog-container\'><div class=\'additional-items-wrapper\'>{0}{1}{2}{3}</div></div>').format(header,subheader,content,footer);

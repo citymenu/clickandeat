@@ -73,13 +73,10 @@
                             <div class="search-result-wrapper">
                                 <table width="500">
                                     <tr valign="top">
-                                        <td width="65"><img src="${resources}/images/example.gif" width="65" height="50"/></td>
+                                        <td width="65"><img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="50"/></td>
                                         <td width="285">
                                             <div class="search-result-detail">
                                                 <h2><util:escape value="${restaurant.name}"/></h2>
-                                                <c:if test="${restaurant.description != null}">
-                                                <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
-                                                </c:if>
                                                 <div class="restaurant-details">
                                                     <util:escape value="${restaurant.address.summary}"/><br>${restaurant.contactTelephone}
                                                 </div>

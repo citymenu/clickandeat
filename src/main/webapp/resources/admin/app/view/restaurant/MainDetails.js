@@ -30,6 +30,10 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             xtype:'textareafield',
             height:90
         },{
+            fieldLabel:'Image name',
+            name:'imageName',
+            allowBlank: true
+        },{
             fieldLabel:'Cuisines',
             xtype:'checkboxgroup',
             columns:3,

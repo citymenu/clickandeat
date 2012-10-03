@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.9&sensor=false&key=AIzaSyBA16bOnz8T0T9mNRGMDGRmBZ-TkctIELY"></script>
     <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
@@ -27,7 +28,7 @@
                                 <td width="480">
                                     <div class="restaurant-title-wrapper">
                                         <div class="restaurant-logo">
-                                            <img src="${resources}/images/example.gif"/>
+                                            <img src="${resources}/images/restaurant/${restaurant.imageName}"/>
                                         </div>
                                         <div class="restaurant-title">
                                             <h2><util:escape value="${restaurant.name}"/></h2>
@@ -80,9 +81,9 @@
                                 <td width="200">
                                     <div class="restaurant-location">
                                         <div class="restaurant-map">
-                                            <img src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.address.postCode}&zoom=14&size=200x100&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.address.postCode}&sensor=false"/>
+                                            <img width="200" height="100" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x100&scale=2&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.coordinates}&sensor=false"/>
                                         </div>
-                                        <div class="restaurant-details"><a class="restaurant-text">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
+                                        <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections('${restaurant.coordinates}')">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
                                     </div>
                                 </td>
                             </tr>

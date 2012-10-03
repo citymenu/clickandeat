@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.util.DateTimeUtil;
 import com.ezar.clickandeat.util.NumberUtil;
 import com.ezar.clickandeat.util.StringUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
@@ -73,6 +75,11 @@ public class Order extends PersistentObject {
     private String restaurantDeclinedReason;
     private List<OrderUpdate> orderUpdates;
 
+    // Order voucher details
+    private String voucherId;
+    
+    @Transient
+    private Voucher voucher;
     
     public Order() {
 
@@ -518,6 +525,14 @@ public class Order extends PersistentObject {
     public void setExpectedDeliveryTime(DateTime expectedDeliveryTime) {
         this.expectedDeliveryTime = expectedDeliveryTime;
     }
+    
+    public String getExpectedDeliveryTimeString() {
+        return DateTimeUtil.formatOrderDate(expectedDeliveryTime);
+    }
+
+    public String getExpectedCollectionTimeString() {
+        return DateTimeUtil.formatOrderDate(expectedCollectionTime);
+    }
 
     public boolean getDeliveryTimeNonStandard() {
         return deliveryTimeNonStandard;
@@ -676,4 +691,20 @@ public class Order extends PersistentObject {
         return null;
     }
 
+
+    public String getVoucherId() {
+        return voucherId;
+    }
+
+    public void setVoucherId(String voucherId) {
+        this.voucherId = voucherId;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+    }
 }
