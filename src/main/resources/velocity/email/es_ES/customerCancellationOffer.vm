@@ -1,0 +1,21 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>Would you like to cancel order ${order.orderId}?</h1>
+
+<div>We are sorry, $stringTool.escape($order.restaurant.name) are very busy with orders today and have not had a chance to respond to your order.</div>
+<div>If you would like to cancel this order, please click on the link below.</div>
+
+<div>
+    <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancel order</a>
+</div>
+
+
+</body>
+
+
+</html>

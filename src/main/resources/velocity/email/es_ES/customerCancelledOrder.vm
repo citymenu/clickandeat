@@ -1,0 +1,13 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>Your order $order.orderId is now cancelled</h1>
+
+</body>
+
+
+</html>

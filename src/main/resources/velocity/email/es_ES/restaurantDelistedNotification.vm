@@ -1,0 +1,15 @@
+<html>
+
+<head>
+</head>
+
+<body>
+
+<h1>You have been delisted from our site</h1>
+
+<div>Please click <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">Here</a> to relist on our site.</div>
+
+</body>
+
+
+</html>

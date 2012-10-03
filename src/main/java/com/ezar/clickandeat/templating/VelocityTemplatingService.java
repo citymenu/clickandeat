@@ -34,18 +34,18 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE = "/velocity/twilio/{locale}/fullOrderErrorResponse.vm";
 
     // Email velocity template locations
-    public static final String CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/customerOrderConfirmation.vm";
-    public static final String RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE = "/velocity/email/restaurantOrderNotification.vm";
-    public static final String RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE = "/velocity/email/restaurantAcceptedOrderConfirmation.vm";
-    public static final String RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE = "/velocity/email/restaurantDeclinedOrderConfirmation.vm";
-    public static final String CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/customerCancelledOrder.vm";
-    public static final String CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/customerCancelledOrderConfirmation.vm";
-    public static final String RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/restaurantCancelledOrderConfirmation.vm";
-    public static final String AUTO_CANCELLED_RESTAURANT_EMAIL_TEMPLATE = "/velocity/email/autoCancelledRestaurantConfirmation.vm";
-    public static final String AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE = "/velocity/email/autoCancelledCustomerConfirmation.vm";
-    public static final String CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE = "/velocity/email/customerCancellationOffer.vm";
-    public static final String RESTAURANT_DELISTED_EMAIL_TEMPLATE = "/velocity/email/restaurantDelistedNotification.vm";
-    public static final String RESTAURANT_RELISTED_EMAIL_TEMPLATE = "/velocity/email/restaurantRelistedNotification.vm";
+    public static final String CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerOrderConfirmation.vm";
+    public static final String RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantOrderNotification.vm";
+    public static final String RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantAcceptedOrderConfirmation.vm";
+    public static final String RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantDeclinedOrderConfirmation.vm";
+    public static final String CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancelledOrder.vm";
+    public static final String CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancelledOrderConfirmation.vm";
+    public static final String RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantCancelledOrderConfirmation.vm";
+    public static final String AUTO_CANCELLED_RESTAURANT_EMAIL_TEMPLATE = "/velocity/email/{locale}/autoCancelledRestaurantConfirmation.vm";
+    public static final String AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE = "/velocity/email/{locale}/autoCancelledCustomerConfirmation.vm";
+    public static final String CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancellationOffer.vm";
+    public static final String RESTAURANT_DELISTED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantDelistedNotification.vm";
+    public static final String RESTAURANT_RELISTED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantRelistedNotification.vm";
 
     // Velocity tools to be added to all contexts
     private Map<String,Object> velocityTools = new HashMap<String, Object>();
