@@ -86,7 +86,7 @@ public class RestaurantSearchTest {
         
         // Check for restaurants serving Mexican food in E18 ordered by name
         try {
-            AddressLocation location = locationService.getSingleLocation("E18");
+            AddressLocation location = locationService.getLocation("E18");
             Search search = new Search(location, "Italian","name","asc");
             List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());

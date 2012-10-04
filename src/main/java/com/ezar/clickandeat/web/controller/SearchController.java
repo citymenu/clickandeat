@@ -43,40 +43,25 @@ public class SearchController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/validateLocation.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc", required = false) String location, @RequestParam(value = "c", required = false ) String cuisine,
+    public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc", required = false) String address, @RequestParam(value = "c", required = false ) String cuisine,
                                                    @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
                                                    HttpServletRequest request) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
-            String address = StringEscapeUtils.unescapeHtml(location).replace("###","'");
-            ValidationErrors errors = addressValidator.validate(address);
-            if( errors.hasErrors()) {
+            AddressLocation location = locationService.getLocation(address);
+            if( location == null ) {
+                model.put("success",false);
+            }
+            else {
+                Search search = new Search();
+                search.setLocation(location);
+                search.setCuisine(cuisine);
+                search.setDir(dir);
+                search.setSort(sort);
+                request.getSession(true).setAttribute("search",search);
                 model.put("success",true);
-                model.put("valid",false);
-            } else {
-                model.put("valid",true);
-                List<AddressLocation> locations = locationService.getLocations(address);
-                if( locations.size() == 1 ) {
-                    Search search = new Search();
-                    search.setLocation(locations.get(0));
-                    search.setCuisine(cuisine);
-                    search.setDir(dir);
-                    search.setSort(sort);
-                    request.getSession(true).setAttribute("search",search);
-                    model.put("success",true);
-                    model.put("exactMatch",true);
-                }
-                else {
-                    List<String> locationNames = new ArrayList<String>();
-                    for( AddressLocation addressLocation: locations) {
-                        locationNames.add(addressLocation.getDisplayAddress());
-                    }
-                    model.put("success",true);
-                    model.put("locations",locationNames);
-                    model.put("exactMatch",false);
-                }
             }
         }
         catch( Exception ex ) {

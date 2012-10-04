@@ -58,7 +58,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Override
     public Order saveOrder(Order order) {
         if( order.getDeliveryAddress() != null ) {
-            AddressLocation location = locationService.getSingleLocation(order.getDeliveryAddress(),true);
+            AddressLocation location = locationService.getLocation(order.getDeliveryAddress());
             if( location != null ) {
                 order.getDeliveryAddress().setLocation(location.getLocation());
             }

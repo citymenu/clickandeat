@@ -55,7 +55,7 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> imp
             
         
         if( !errors.hasErrors()) {
-            AddressLocation addressLocation = locationService.getSingleLocation(address,true);
+            AddressLocation addressLocation = locationService.getLocation(address);
             if( addressLocation == null ) {
                 errors.addError("Unable to determine location, please check address");
             }

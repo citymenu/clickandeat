@@ -24,10 +24,10 @@
             <div>
                 <c:choose>
                     <c:when test="${order.deliveryType == 'DELIVERY'}">
-                        <message:message key="order.for-delivery"/>:<util:escape value="${order.expectedDeliveryTimeString}"/>
+                        <message:message key="order.order-for-delivery"/>: <util:escape value="${order.expectedDeliveryTimeString}"/>
                     </c:when>
                     <c:otherwise>
-                        <message:message key="order.for-collection"/>:<util:escape value="${order.expectedCollectionTimeString}"/>
+                        <message:message key="order.order-for-collection"/>: <util:escape value="${order.expectedCollectionTimeString}"/>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -43,7 +43,7 @@
                     </tr>
                     <c:forEach var="orderItem" items="${order.orderItems}">
                     <tr valign="top">
-                        <td width="320"><util:escape value="${orderItem}" escapeComments="true" escapeNewLines="true"/></td>
+                        <td width="320"><util:escape value="${orderItem}" escapeNewLines="true"/></td>
                         <td width="80" align="right"><message:message key="config.currency" escape="false"/>${orderItem.formattedCost}</td>
                     </tr>
                     </c:forEach>
@@ -70,7 +70,7 @@
                     </tr>
                     </c:if>
                     <tr valign="top">
-                        <td width="320"><message:message key="order.total-cost"/></td>
+                        <td width="320"><message:message key="order.total"/></td>
                         <td width="80" align="right"><message:message key="config.currency" escape="false"/>${order.formattedTotalCost}</td>
                     </tr>
                 </table>
@@ -82,6 +82,12 @@
                     <div><util:escape value="${order.additionalInstructions}" escapeComments="true" escapeNewLines="true"/></div>
                 </div>
             </c:if>
+
+            <c:choose>
+                <c:when test="${order.deliveryType == 'DELIVERY'}">
+
+                </c:when>
+            </c:choose>
 
         </div>
     </div>

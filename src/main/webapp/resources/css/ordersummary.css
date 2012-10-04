@@ -1,14 +1,17 @@
 @charset "utf-8";
 
 .order-summary-wrapper {
-    width: 650px;
+    width: 750px;
     min-height: 450px;
+    padding-bottom: 120px;
     background: url(../images/butler-confirmation.png) no-repeat bottom right;
 }
 
 .order-summary-wrapper h2 {
      font-family: "ff-tisa-web-pro",impact;
      font-size: 28px;
+     line-height: 32px;
+     margin-bottom:10px;
      color:#AA0000;
      font-weight: 700;
 }

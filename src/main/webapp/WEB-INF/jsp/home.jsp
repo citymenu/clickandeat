@@ -5,6 +5,11 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css"/>
     <script type="text/javascript" src="${resources}/script/home.js"></script>
     <script type="text/javascript" src="${resources}/script/search.js"></script>
+
+    <!-- Bootstrap -->
+    <script type="text/javascript" src="${resources}/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/bootstrap.css"/>
+
     <title><message:message key="page-title.home" escape="false"/></title>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
 </head>
@@ -26,19 +31,7 @@
                             <div class="searchelement-wrapper">
                                 <div class="searchelement searchleft">
                                     <h2><message:message key="search.where-are-you"/></h2>
-                                    <input class="searchinput" type="text" id="loc"/>
-                                    <div id="validation-wrapper"></div>
-                                </div>
-                                <div class="searchelement searchleft">
-                                    <h2><message:message key="search.what-would-you-like"/></h2>
-                                    <div id="dropdownshadow">
-                                        <select name="cuisines" class="searchselect">
-                                            <option value=""><message:message key="cuisine.any"/></option>
-                                            <c:forEach var="cuisine" items="${cuisines}">
-                                            <option value="${cuisine}"><util:escape value="${cuisine}"/></option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
+                                    <input class="location" type="text" id="loc"/>
                                 </div>
                                 <div class="searchelement button">
                                     <input class="searchbutton" type="button" id="searchbutton" value="<message:message key="button.search"/>"/>

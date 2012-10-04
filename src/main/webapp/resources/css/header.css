@@ -63,11 +63,11 @@
     clear:both;
 }
 
-ul, ol {
+.navigation-wrapper ul {
     list-style:none outside none;
 }
 
-li {
+.navigation-wrapper li {
     color: #999999;
     font-family: arial, "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 12px;
@@ -77,7 +77,7 @@ li {
     padding-right:15px;
 }
 
-li.active {
+.navigation-wrapper li.active {
     color:#FFFFFF;
 }
 

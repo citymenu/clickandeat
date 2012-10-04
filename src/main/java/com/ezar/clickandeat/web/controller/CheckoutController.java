@@ -165,7 +165,7 @@ public class CheckoutController {
                 hasValidationError = true;
             }
             else if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                AddressLocation deliveryLocation = locationService.getSingleLocation(order.getDeliveryAddress(),true);
+                AddressLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
                 if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
                     model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
                     model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
