@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.util.StringUtils;
 
 import java.io.Console;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -19,6 +21,8 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
 
     private static final Logger LOGGER = Logger.getLogger(OrderRepositoryImpl.class);
 
+    private static final List<String> letters = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z");
+    
     @Autowired
     private MongoOperations operations;
 
@@ -57,10 +61,28 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
     @Override
     public Voucher createVoucher() {
         Voucher voucher = new Voucher();
-        voucher.setVoucherId("66");
+        String voucherId = generateVoucherId();
+        boolean voucherAlreadyExists = findByVoucherId(voucherId) != null;
+        while( voucherAlreadyExists ) {
+            voucherId = generateVoucherId();
+            voucherAlreadyExists = findByVoucherId(voucherId) != null;
+        }
+        voucher.setVoucherId(voucherId);
+        saveVoucher(voucher);
         return voucher;
     }
-    
+
+
+    private String generateVoucherId() {
+        String id = "";
+        for( int i = 0; i < 8; i++ ) {
+            Double random = Math.random() * 26;
+            int floor = (int)Math.floor(random);
+            id += letters.get(floor);
+        }
+        return id;
+    }
+
     
 
     

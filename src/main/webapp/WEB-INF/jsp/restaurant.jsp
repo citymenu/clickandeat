@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.9&sensor=false&key=AIzaSyBA16bOnz8T0T9mNRGMDGRmBZ-TkctIELY"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDkoPG9mhZAqfr5q5dQbRzTjrwKNidabE4&sensor=false"></script>
     <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
