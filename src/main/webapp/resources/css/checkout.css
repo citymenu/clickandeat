@@ -20,7 +20,7 @@
 
 .checkout-item-wrapper {
     margin-bottom: 20px;
-    width:530px;
+    width:630px;
 }
 
 .checkout-wrapper h2 {
@@ -58,7 +58,7 @@
 .contact-form-field input, .contact-form-field textarea {
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 13px;
-    width:360px;
+    width:460px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
@@ -81,7 +81,7 @@
 }
 
 .contact-form-field textarea {
-    width: 520px;
+    width: 620px;
     height: 100px;
 }
 
@@ -106,6 +106,16 @@ span.valid {
     width:16px;
     height:16px;
     cursor:pointer;
+}
+
+#restaurant-location {
+    width: 630px;
+    height: 260px;
+}
+
+.checkout-navigation-wrapper {
+    width: 630px;
+    text-align:right;
 }
 
 a.checkout-nav-button, a.checkout-nav-button:active, a.checkout-nav-button:hover {

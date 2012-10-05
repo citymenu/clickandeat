@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.cache.ClusteredCache;
-import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
@@ -34,13 +34,13 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private MongoOperations operations;
 
     @Autowired
-    private LocationService locationService;
+    private GeoLocationService locationService;
 
     @Autowired
     private SequenceGenerator sequenceGenerator;
 
     @Autowired
-    private AddressLocationRepository addressLocationRepository;
+    private GeoLocationRepository addressLocationRepository;
 
     @Autowired
     private ClusteredCache clusteredCache;
@@ -84,7 +84,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public Restaurant saveRestaurant(Restaurant restaurant) {
 
         if( restaurant.getAddress() != null ) {
-            AddressLocation location = locationService.getLocation(restaurant.getAddress());
+            GeoLocation location = locationService.getLocation(restaurant.getAddress());
             if( location != null ) {
                 restaurant.getAddress().setLocation(location.getLocation());
             }

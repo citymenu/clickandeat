@@ -2,11 +2,11 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&sensor=false"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDDcKFvdqm3RLIDZXHo7UlQY2DkrRsaODE&sensor=false"></script>
     <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
@@ -83,7 +83,7 @@
                                         <div class="restaurant-map">
                                             <img width="200" height="100" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x100&scale=2&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.coordinates}&sensor=false"/>
                                         </div>
-                                        <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections('${restaurant.coordinates}')">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
+                                        <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates})">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
                                     </div>
                                 </td>
                             </tr>

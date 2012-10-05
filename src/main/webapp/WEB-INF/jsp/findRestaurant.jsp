@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css"/>
-    <script type="text/javascript" src="${resources}/script/search.js"></script>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 

@@ -146,7 +146,13 @@ select.freeitemselect {
     height: 150px;
     font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 13px;
-    color:#000000;
+    border: 1px solid #B6B6B6;
+    padding: 3px 5px 3px 5px;
+    color:#444444;
+}
+
+#instructions:focus {
+    border: 1px solid #AA0000;
 }
 
 #ordertotal {
@@ -277,7 +283,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-cost-wrapper {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
     font-size: 16px;
     line-height: 18px;
     background-color:#FCFCFC;
@@ -302,10 +308,12 @@ a.order-button-large:active, a.order-button-large:hover {
 #quantity {
     width:20px;
     border:1px solid #AAAAAA;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size:14px;
+    font-family: "myriad-pro-semi-condensed",impact;
+    font-size:16px;
+    color: #444444;
     padding: 0 5px 0 5px;
     margin-left: 5px;
+    text-align:center;
 }
 
 #quantity:focus {

@@ -24,6 +24,12 @@ public class PageController {
     private CuisineProvider cuisineProvider;
 
 
+    @RequestMapping(value="/test.html", method=RequestMethod.GET)
+    public String test() {
+        return "test";
+    }
+
+
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
 	public ModelAndView home(HttpServletRequest request) {
         Map<String,Object> model = new HashMap<String, Object>();

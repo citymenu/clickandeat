@@ -1,6 +1,6 @@
 package com.ezar.clickandeat.repository;
 
-import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -24,7 +23,7 @@ public class RestaurantSearchTest {
     private RestaurantRepository repository;
 
     @Autowired
-    private LocationService locationService;
+    private GeoLocationService locationService;
 
     private String restaurantId = "testrestaurant";
 
@@ -86,7 +85,7 @@ public class RestaurantSearchTest {
         
         // Check for restaurants serving Mexican food in E18 ordered by name
         try {
-            AddressLocation location = locationService.getLocation("E18");
+            GeoLocation location = locationService.getLocation("E18");
             Search search = new Search(location, "Italian","name","asc");
             List<Restaurant> restaurants = repository.search(search);
             Assert.assertEquals("Should return one restaurant",1,restaurants.size());

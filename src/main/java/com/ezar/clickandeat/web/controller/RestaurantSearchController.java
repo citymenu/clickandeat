@@ -1,27 +1,20 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.maps.LocationService;
-import com.ezar.clickandeat.model.AddressLocation;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
-import com.ezar.clickandeat.repository.AddressLocationRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
-import com.ezar.clickandeat.validator.AddressValidator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -40,7 +33,7 @@ public class RestaurantSearchController {
 
 
     @RequestMapping(value="/findRestaurant.html", method = RequestMethod.GET)
-    public ModelAndView search(HttpServletRequest request) {
+    public ModelAndView search(HttpServletRequest request ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants");

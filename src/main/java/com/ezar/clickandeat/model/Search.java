@@ -3,14 +3,12 @@ package com.ezar.clickandeat.model;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Search implements Serializable {
 
     private static final long serialVersionUID = -1L;
 
-    private AddressLocation location;
+    private GeoLocation location;
 
     private String cuisine;
     
@@ -31,7 +29,7 @@ public class Search implements Serializable {
      * @param dir
      */
 
-    public Search(AddressLocation location, String cuisine, String sort, String dir ) {
+    public Search(GeoLocation location, String cuisine, String sort, String dir ) {
         this.location = location;
         this.cuisine = cuisine;
         this.sort = sort;
@@ -59,11 +57,20 @@ public class Search implements Serializable {
         return sb.toString();
     }
     
-    public AddressLocation getLocation() {
+    public String getCoordinates() {
+        if( location == null || location.getLocation() == null ) {
+            return "0,0";
+        }
+        else {
+            return location.getLocation()[1] + "," + location.getLocation()[0];
+        }
+    }
+    
+    public GeoLocation getLocation() {
         return location;
     }
 
-    public void setLocation(AddressLocation location) {
+    public void setLocation(GeoLocation location) {
         this.location = location;
     }
 

@@ -1,14 +1,13 @@
 
 package com.ezar.clickandeat.repository;
 
-import com.ezar.clickandeat.maps.LocationService;
-import com.ezar.clickandeat.model.AddressLocation;
+import com.ezar.clickandeat.maps.GeoLocationService;
+import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.User;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
-import org.springframework.util.StringUtils;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -25,7 +24,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private LocationService locationService;
+    private GeoLocationService locationService;
 
 
     @Override
@@ -38,7 +37,7 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     public User saveUser(User user) {
 
         if( user.getAddress() != null ) {
-            AddressLocation location = locationService.getLocation(user.getAddress());
+            GeoLocation location = locationService.getLocation(user.getAddress());
             if( location != null ) {
                 user.getAddress().setLocation(location.getLocation());
             }

@@ -1,4 +1,5 @@
 var isValid = false;
+var mapRendered = false;
 
 $(document).ready(function(){
     updateDeliveryDisplay(deliveryType);
@@ -13,6 +14,11 @@ $(document).ready(function(){
             validateForm();
         });
     });
+
+    // Build collection display for collection deliveries
+    if( deliveryType == 'COLLECTION' ) {
+        initializeMap();
+    }
 
 });
 
@@ -104,21 +110,40 @@ function updateDeliveryDisplay(deliveryType) {
     } else {
         $('#delivery-details').hide();
         $('#collection-details').show();
+        initializeMap();
     }
 }
 
-// Initialize google map
+// Show restaurant map
 function initializeMap() {
+
+    // Do nothing if already rendered
+    if( mapRendered ) {
+        return;
+    }
+
+    // Coordinates of user and restaurant
+    var restaurantLatlng = new google.maps.LatLng(coordinates[0],coordinates[1]);
+
     var mapOptions = {
-        center: new google.maps.LatLng(-34.397, 150.644),
-        zoom: 8,
+        center: restaurantLatlng,
+        zoom: 15,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    var map = new google.maps.Map(
-        document.getElementById("restaurant-location"),
-        mapOptions
-    );
+
+    // Display map
+    var map = new google.maps.Map(document.getElementById("restaurant-location"),mapOptions);
+
+    // Add restaurant marker
+    var restaurantMarker = new google.maps.Marker({
+        position: restaurantLatlng,
+        icon: resources + '/images/markers/blue_MarkerB.png',
+        map: map
+    });
+
+    mapRendered = true;
 }
+
 
 // Update order
 function updateOrder() {

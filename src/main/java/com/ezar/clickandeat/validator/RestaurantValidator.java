@@ -1,8 +1,8 @@
 package com.ezar.clickandeat.validator;
 
-import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.Address;
-import com.ezar.clickandeat.model.AddressLocation;
+import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Restaurant;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 public class RestaurantValidator extends AbstractObjectValidator<Restaurant> implements InitializingBean {
 
     @Autowired
-    private LocationService locationService;
+    private GeoLocationService locationService;
 
     private int maxRadiusMetres;
 
@@ -55,7 +55,7 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> imp
             
         
         if( !errors.hasErrors()) {
-            AddressLocation addressLocation = locationService.getLocation(address);
+            GeoLocation addressLocation = locationService.getLocation(address);
             if( addressLocation == null ) {
                 errors.addError("Unable to determine location, please check address");
             }

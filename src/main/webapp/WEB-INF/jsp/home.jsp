@@ -2,16 +2,10 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css"/>
     <script type="text/javascript" src="${resources}/script/home.js"></script>
-    <script type="text/javascript" src="${resources}/script/search.js"></script>
-
-    <!-- Bootstrap -->
-    <script type="text/javascript" src="${resources}/bootstrap/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/bootstrap.css"/>
-
     <title><message:message key="page-title.home" escape="false"/></title>
-    <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
 </head>
 
 <body>
@@ -29,11 +23,11 @@
                     <div class="middle-box">
                         <div class="center-box">
                             <div class="searchelement-wrapper">
-                                <div class="searchelement searchleft">
+                                <div class="search-input">
                                     <h2><message:message key="search.where-are-you"/></h2>
-                                    <input class="location" type="text" id="loc"/>
+                                    <input class="location" type="text" id="loc" placeholder="<message:message key="search.watermark"/>"/>
                                 </div>
-                                <div class="searchelement button">
+                                <div class="search-button">
                                     <input class="searchbutton" type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
                                 </div>
                             </div>

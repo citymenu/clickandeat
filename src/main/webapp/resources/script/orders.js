@@ -83,7 +83,7 @@ function doBuildOrder(order,config) {
     var advancedDisplay = typeof(restaurantId) != 'undefined' || order.orderItems.length > 0;
 
     // Indicate if we are looking at a restaurant page other than the restaurant for the order
-    var orderIsForAnotherRestaurant = typeof(restaurantId) != 'undefined' && order.restaurantId != restaurantId;
+    var orderIsForAnotherRestaurant = typeof(restaurantId) != 'undefined' && order.restaurantId != restaurantId && order.orderItems.length > 0 ;
 
     // If this order is for another restaurant switch off some functionality
     if( orderIsForAnotherRestaurant ) {
@@ -108,15 +108,14 @@ function doBuildOrder(order,config) {
     // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
     if( order ) {
         if ( orderIsForAnotherRestaurant ) {
-            var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName), unescapeQuotes(restaurantName));
-            var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(order.restaurantName));
-            var warningMessage3 = getLabel('order.existing-restaurant-warning-3').format(unescapeQuotes(restaurantName));
+            var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
+            var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(restaurantName));
 
             var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
             var clearOrderLink = ('<a id=\'clearorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
 
-            var warningContent = ('<div class=\'restaurant-warning-text\'>{0}</div><div class=\'restaurant-warning-text\'>{1} {2}</div><div class=\'restaurant-warning-text\'>{3} {4}</div>')
-                .format(warningMessage1, buildOrderLink, warningMessage2, clearOrderLink, warningMessage3);
+            var warningContent = ('<div class=\'restaurant-warning-text\'>{0} {1}</div><div class=\'restaurant-warning-text\'>{2} {3}</div>')
+                .format(buildOrderLink, warningMessage1, clearOrderLink, warningMessage2);
 
             var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
             $('#restaurant-warning-wrapper').append(warning);
@@ -693,7 +692,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
     // Build main container for additional items
     var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.choose-additional'));
-    var subheader = ('<div class=\'dialog-subheader\'>{0}</div>').format(itemDescriptionContainer);
+    var subheader = (itemDescriptionContainer == ''? '': ('<div class=\'dialog-subheader\'>{0}</div>').format(itemDescriptionContainer));
     var content = ('<div class=\'dialog-content\'>{0}{1}{2}</div>').format(itemWarningContainer,additionalItemChoiceContainer,itemCostContainer);
     var footer = ('<div class=\'dialog-footer\'>{0}</div>').format(buttonContainer);
 

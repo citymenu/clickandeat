@@ -8,6 +8,7 @@
 <%@ taglib uri="/WEB-INF/tld/escape.tld" prefix="util" %>
 <%@ taglib uri="/WEB-INF/tld/selectbox.tld" prefix="select" %>
 <%@ taglib uri="/WEB-INF/tld/message.tld" prefix="message" %>
+<%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
@@ -27,6 +28,8 @@
 <script type="text/javascript">
 var ctx = "${ctx}";
 var locale = "${locale}";
+var language="<locale:language/>";
+var country="<locale:country/>";
 var ccy = "<message:message key="config.currency" escape="false"/>";
 var resources = "${resources}";
 </script>

@@ -1,0 +1,15 @@
+<taglib>
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>Returns the system configured country</short-name>
+    <tag>
+        <name>country</name>
+        <tag-class>com.ezar.clickandeat.web.tags.CountryTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+    <tag>
+        <name>language</name>
+        <tag-class>com.ezar.clickandeat.web.tags.LanguageTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
+</taglib>

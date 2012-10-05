@@ -309,3 +309,8 @@ a.restaurant-text {
     text-decoration:underline;
     cursor:pointer;
 }
+
+#map_canvas {
+    width: 450px;
+    height: 400px;
+}

@@ -1,7 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.maps.LocationService;
+import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -40,7 +40,7 @@ public class CheckoutController {
     private RequestHelper requestHelper;
 
     @Autowired
-    private LocationService locationService;
+    private GeoLocationService locationService;
     
     @Autowired
     private JSONUtils jsonUtils;
@@ -165,7 +165,7 @@ public class CheckoutController {
                 hasValidationError = true;
             }
             else if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                AddressLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
+                GeoLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
                 if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
                     model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
                     model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
