@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
