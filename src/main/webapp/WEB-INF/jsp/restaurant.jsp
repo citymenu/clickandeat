@@ -81,7 +81,7 @@
                                 <td width="200">
                                     <div class="restaurant-location">
                                         <div class="restaurant-map">
-                                            <img width="200" height="100" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x100&scale=2&maptype=roadmap&markers=color:blue%7Clabel:S%7C${restaurant.coordinates}&sensor=false"/>
+                                            <img width="200" height="100" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x100&scale=2&maptype=roadmap&markers=color:blue%7Clabel:B%7C${restaurant.coordinates}&sensor=false"/>
                                         </div>
                                         <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates})">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
                                     </div>
