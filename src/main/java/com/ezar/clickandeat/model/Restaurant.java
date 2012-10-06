@@ -10,6 +10,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -472,6 +473,10 @@ public class Restaurant extends PersistentObject {
         this.cuisines = cuisines;
     }
 
+    public String getCuisineSummary() {
+        return StringUtils.collectionToDelimitedString(cuisines, ", ");
+    }
+    
     public Person getMainContact() {
         return mainContact;
     }
@@ -543,6 +548,10 @@ public class Restaurant extends PersistentObject {
 
     public void setDiscounts(List<Discount> discounts) {
         this.discounts = discounts;
+    }
+    
+    public boolean getHasDiscounts() {
+        return discounts.size() > 0;
     }
 
     public List<SpecialOffer> getSpecialOffers() {

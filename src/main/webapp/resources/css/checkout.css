@@ -25,7 +25,7 @@
 
 .checkout-wrapper h2 {
     color: #BB0000;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px
     text-shadow: 0 1px #EEEEEE;
@@ -40,7 +40,7 @@
 }
 
 .contact-form-label {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 13px;
     line-height: 16px;
     color: #666666;
@@ -48,7 +48,7 @@
 }
 
 .checkout-description {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     font-weight: 700;
     color:#666666;

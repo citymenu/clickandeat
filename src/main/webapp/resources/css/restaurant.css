@@ -17,7 +17,7 @@
 
 .restaurant-details-wrapper h2 {
     color: #AA0000;
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold,impact;
     font-size: 28px;
     line-height: 30px;
     font-style: normal;
@@ -191,10 +191,9 @@
 
 #menu-launch-wrapper h2 {
     text-align:left;
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 20px;
-    font-weight: bold;
-    letter-spacing: -0.01em;
+    font-weight:normal;
     color:#AA0000;
     border-bottom: 1px dashed #AAAAAA;
     margin-bottom: 10px;
@@ -210,10 +209,11 @@
 }
 
 .menu-category-wrapper h2 {
-    color: #BB0000;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    color: #AA0000;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px
+    font-weight:normal;
     text-shadow: 0 1px #EEEEEE;
     margin-bottom: 6px;
 }

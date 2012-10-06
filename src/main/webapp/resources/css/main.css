@@ -16,7 +16,7 @@ html {
 
 body {
     background: none repeat scroll 0 0 #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     line-height: 16px;
     color: #333333;
@@ -25,7 +25,6 @@ body {
     margin: 0;
     outline: 0 none;
     padding: 0;
-    vertical-align: baseline;
 }
 
 table {
@@ -39,14 +38,15 @@ table {
 
 h1, h2, h3, h4, h5, h6 {
     color: #333333;
-    font-family: myriad-pro-semi-condensed,'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-weight: 700;
+    font-family: myriad-pro-semi-condensed;
+    font-weight: normal;
 }
 
 h3, h4, h5, h6 {
     font-size: 20px;
     line-height: 24px;
     margin: 0 0 10px;
+    font-weight: normal;
 }
 
 .left {
@@ -99,15 +99,14 @@ div.boxcontent { padding: 8px;}
 }
 
 .warning-content {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     line-height: 18px;
-    font-weight: 700;
     letter-spacing: -0.01em;
 }
 
 .location-match {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 16px;
     line-height:18px;
     padding-bottom:6px;

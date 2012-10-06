@@ -12,10 +12,8 @@
 
 .orderheader {
     text-align:left;
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 20px;
-    font-weight: bold;
-    letter-spacing: -0.01em;
     color:#AA0000;
     border-bottom: 1px dashed #AAAAAA;
     margin-bottom: 10px;
@@ -34,22 +32,21 @@
 }
 
 .delivery-title {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     color:#444444;
-    font-weight:700;
     margin-bottom: 2px;
 }
 
 .delivery-header {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     color:#444444;
     font-weight:normal;
 }
 
 h3.order-table {
-    font-family: "myriad-pro-semi-condensed";
+    font-family: myriad-pro-semi-condensed;
     font-size: 12px;
     line-height: 16px;
     color: #444444;
@@ -77,7 +74,7 @@ h3.order-table {
 }
 
 .order-item-wrapper td {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     line-height: 16px;
 }
@@ -96,7 +93,7 @@ h3.order-table {
 }
 
 select.deliveryselect {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
 }
 
@@ -110,15 +107,14 @@ select.deliveryselect {
 }
 
 .order-discount-wrapper h2 {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     color:#990000;
-    font-weight:700;
     margin-bottom: 2px;
 }
 
 .order-discount-item {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     padding-top: 2px;
     font-weight:700;
@@ -130,13 +126,13 @@ select.deliveryselect {
     padding: 5px 10px 5px 10px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     line-height: 16px;
 }
 
 select.freeitemselect {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     margin-top:2px;
 }
@@ -144,7 +140,7 @@ select.freeitemselect {
 #instructions {
     width: 460px;
     height: 150px;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 13px;
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
@@ -157,10 +153,9 @@ select.freeitemselect {
 
 #ordertotal {
     text-align:center;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-family: MaiandraOTGD-DemiBold;
     color:#444444;
     font-size: 18px;
-    font-weight: bold;
     letter-spacing: -0.01em;
     margin: 20px 0 10px 0;
     padding: 10px 0 15px 0;
@@ -173,7 +168,7 @@ select.freeitemselect {
 }
 
 .order-free-item-wrapper {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size: 12px;
     line-height: 16px;
     margin: 0;
@@ -187,7 +182,7 @@ select.freeitemselect {
 }
 
 .delivery-warning-wrapper {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     border: 1px solid #b64242;
     background-color: #fffece;
     font-size: 12px;
@@ -199,7 +194,7 @@ select.freeitemselect {
 }
 
 .restaurant-warning {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     border: 1px solid #b64242;
     background-color: #fffece;
     font-size: 12px;
@@ -216,9 +211,8 @@ select.freeitemselect {
 
 .delivery-options-wrapper {
     text-align:left;
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
-    font-weight: bold;
     margin: 0 0 6px 0;
 }
 
@@ -233,7 +227,7 @@ select.freeitemselect {
 
 a.delivery-button {
     color:#AA0000;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-weight: 700;
     font-size: 12px;
     text-decoration:underline;
@@ -244,7 +238,7 @@ a.order-button, a.order-button:active, a.order-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-weight: 700;
     font-size: 12px;
     padding: 1px 6px 1px 6px;
@@ -276,14 +270,14 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-description {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: pt-sans;
     font-size: 14px;
     line-height: 16px;
     padding: 2px 0 2px 0;
 }
 
 .additional-item-cost-wrapper {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 16px;
     line-height: 18px;
     background-color:#FCFCFC;
@@ -294,7 +288,6 @@ a.order-button-large:active, a.order-button-large:hover {
     color:#444444;
     border-top: 1px solid #CCCCCC;
     border-bottom: 1px solid #CCCCCC;
-    font-weight: 700;
 }
 
 .additional-item-quantity {
@@ -308,12 +301,13 @@ a.order-button-large:active, a.order-button-large:hover {
 #quantity {
     width:20px;
     border:1px solid #AAAAAA;
-    font-family: "myriad-pro-semi-condensed",impact;
+    font-family: pt-sans;
     font-size:16px;
     color: #444444;
     padding: 0 5px 0 5px;
     margin-left: 5px;
     text-align:center;
+    font-weight:700;
 }
 
 #quantity:focus {
@@ -336,7 +330,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-title {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size:13px;
     font-weight:700;
     padding: 4px 0 4px 0;
@@ -347,7 +341,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-cost {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size:13px;
     font-weight:700;
     padding: 4px 0 4px 0;
@@ -361,7 +355,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .itemcheckbox {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     padding: 0;
     margin:0;
@@ -372,7 +366,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     letter-spacing: -0.01em;
     margin-bottom:5px;
@@ -385,7 +379,7 @@ a.order-button-large:active, a.order-button-large:hover {
 
 .additional-items-wrapper h3 {
     color: #BB0000;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px;
     text-shadow: 0 1px #EEEEEE;
@@ -405,7 +399,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .itemcountwarning {
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     border: 1px solid #b64242;
     background-color: #fffece;
@@ -427,8 +421,8 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .restaurant-warning-wrapper h3 {
-    color: #BB0000;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    color: #AA0000;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px
     text-shadow: 0 1px #EEEEEE;
@@ -440,7 +434,7 @@ a.order-button-large:active, a.order-button-large:hover {
 .warning-container {
     border: 1px solid #b64242;
     background-color: #fffece;
-    font-family: "ff-tisa-web-pro",impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 14px;
     line-height: 18px;
     letter-spacing: -0.01em;
@@ -466,16 +460,15 @@ a.order-button-large:active, a.order-button-large:hover {
 
 .specialofferitemtitle {
     color: #BB0000;
-    font-family: "ff-tisa-web-pro",Georgia,"Times New Roman",serif;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:14px;
     line-height:16px;
-    font-weight:700;
     color:#AA0000;
     padding-bottom:6px;
 }
 
 .specialofferitemchoice select{
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-family: pt-sans;
     font-size:13px;
 }
 
@@ -487,15 +480,14 @@ a.order-button-large:active, a.order-button-large:hover {
 
 a.checkout-button, a.checkout-button:active, a.checkout-button:hover {
     display:inline-block;
-    padding-top:5px;
-    height:27px;
     width: 122px;
     background: transparent url(../images/button.png) no-repeat 0 0;
     color: #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-weight: 700;
+    font-family: MaiandraOTGD-DemiBold;
     font-size: 18px;
     text-align: center;
+    height:31px;
+    padding-top: 1px;
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
