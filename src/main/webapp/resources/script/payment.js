@@ -2,6 +2,7 @@
 function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: false,
+        showBuildOrderLink: true,
         allowRemoveItems: false,
         allowUpdateFreeItem: false,
         enableCheckoutButton: false,

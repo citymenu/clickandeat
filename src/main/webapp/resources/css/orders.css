@@ -33,14 +33,14 @@
 
 .delivery-title {
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 14px;
+    font-size: 13px;
     color:#444444;
     margin-bottom: 2px;
 }
 
 .delivery-header {
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 14px;
+    font-size: 13px;
     color:#444444;
     font-weight:normal;
 }
@@ -195,12 +195,12 @@ select.freeitemselect {
 
 .restaurant-warning {
     font-family: pt-sans;
-    border: 1px solid #b64242;
-    background-color: #fffece;
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
     font-size: 12px;
     line-height: 16px;
     margin-top: 6px;
-    padding: 6px 10px 6px 10px;
+    padding: 5px 10px 5px 10px;
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
@@ -212,7 +212,8 @@ select.freeitemselect {
 .delivery-options-wrapper {
     text-align:left;
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight:normal;
     margin: 0 0 6px 0;
 }
 

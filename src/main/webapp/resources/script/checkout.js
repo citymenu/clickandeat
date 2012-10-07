@@ -10,6 +10,7 @@ $(document).ready(function(){
         $('#' + fieldName).change(function(){
             validateForm();
         });
+
         $('#' + fieldName).keyup(function(){
             validateForm();
         });
@@ -86,6 +87,7 @@ validators.setItem('postCode',new Validator({
 function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
+        showBuildOrderLink: true,
         allowRemoveItems: false,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,

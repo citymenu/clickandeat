@@ -48,6 +48,7 @@ $(document).ajaxComplete(function(){
 function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
+        showBuildOrderLink: false,
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: true,
@@ -107,7 +108,20 @@ function doBuildOrder(order,config) {
 
     // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
     if( order ) {
-        if ( orderIsForAnotherRestaurant ) {
+        if( config.showBuildOrderLink && order.orderItems.length > 0 ) {
+            var warningMessage = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
+            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
+            var warningContent = ('<div class=\'restaurant-warning-text\'>{0} {1}</div>')
+                .format(buildOrderLink, warningMessage);
+
+            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
+            $('#restaurant-warning-wrapper').append(warning);
+
+            // Add link to continue building existing order
+            $('#buildorder').click(function(){
+                location.href = ctx + '/restaurant.html?restaurantId=' + order.restaurantId;
+            });
+        } else if ( orderIsForAnotherRestaurant ) {
             var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
             var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(restaurantName));
 
@@ -254,7 +268,7 @@ function doBuildOrder(order,config) {
         }
 
         // If we are either on a restaurant page or there are items in the order and the restaurant is closed, show a warning
-        if( advancedDisplay && !order.restaurantIsOpen ) {
+        if( advancedDisplay && !order.restaurantIsOpen && config.showDeliveryOptions ) {
             var warningMessage = (order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
             $('#deliverycheck').append(warning);
@@ -900,8 +914,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     });
 
     var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.special-offer-choices'));
-    var subheader = ('<div class=\'dialog-subheader\'>{0}</div>').format(itemCostContainer);
-    var content = ('<div class=\'dialog-content\'>{0}</div>').format(specialOfferItemBody);
+    var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(specialOfferItemBody,itemCostContainer);
 
     // Build buttons for save and cancel
     var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.done'));
@@ -910,7 +923,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     var footer = ('<div class=\'dialog-footer\'>{0}</div>').format(buttonContainer);
 
     // Build main container for additional items
-    var container = ('<div class=\'dialog-wrapper\'>{0}{1}{2}{3}</div>').format(header,subheader,content,footer);
+    var container = ('<div class=\'dialog-wrapper\'>{0}{1}{2}</div>').format(header,content,footer);
 
     $.fancybox.open({
         type: 'html',

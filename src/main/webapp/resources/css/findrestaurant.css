@@ -1,50 +1,5 @@
 @charset "utf-8";
 
-.cuisine-wrapper {
-    margin-left:10px;
-    width: 128px;
-    padding: 10px;
-    border: 1px solid #AAAAAA;
-    background-color:#FCFCFC;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-}
-
-.cuisine-wrapper h2 {
-    text-align:left;
-    font-family: myriad-pro-semi-condensed;
-    font-size: 18px;
-    color:#444444;
-    letter-spacing: -0.01em;
-    border-bottom: 1px dashed #AAAAAA;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-}
-
-.cuisine-wrapper-description {
-    font-family: pt-sans;
-    font-size: 12px;
-    color:#444444;
-    padding: 0 5px 0 5px;
-}
-
-.cuisine-entry-wrapper {
-    border: 1px solid #CCCCCC;
-    background-color: #FFFFFF;
-    margin-top: 10px;
-    padding: 6px 5px 6px 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.cuisine-entry {
-    padding: 5px 5px 5px 5px;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 14px;
-    color:#444444;
-}
-
 .search-results-entry-wrapper {
     border-top: 1px dashed #AAAAAA;
 }
@@ -55,26 +10,117 @@
 }
 
 .search-results-header-wrapper {
+    border: 1px solid #AAAAAA;
+    background-color:#FCFCFC;
     padding: 10px;
     margin: 0 0 30px 0;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
 
 .search-results-header-wrapper h2 {
-    font-family: pt-sans;
-    color:#444444;
-    font-size: 16px;
+    font-family: MaiandraOTGD-DemiBold;
+    font-size: 20px;
+    color:#AA0000;
+    margin-bottom: 15px;
 }
 
-.search-results-warning {
+.location-warning {
     font-family: pt-sans;
     border: 1px solid #b64242;
     background-color: #fffece;
     font-size: 12px;
     line-height: 16px;
     margin-top: 6px;
+    margin-bottom: 10px;
     padding: 6px 10px 6px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+}
+
+.search-location-wrapper {
+    background-color:#FFFFFF;
+    padding: 8px 10px 8px 10px;
+    border:1px solid #CCCCCC;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+}
+
+.search-filters {
+    margin-top: 10px;
+    padding:0 10px 0 10px;
+}
+
+.search-cuisine-filter {
+    font-family:pt-sans;
+    font-size: 13px;
+    color:#000000;
+}
+
+.search-location, .search-location-empty {
+    font-family: pt-sans;
+    font-size: 16px;
+    line-height: 18px;
+    font-weight:700;
+    color:#444444;
+    margin-bottom: 6px;
+}
+
+.search-location-edit {
+
+}
+
+#loc {
+    font-family: "myriad-pro-semi-condensed",impact;
+    font-size: 16px;
+    line-height: 28px;
+    color:#666666;
+    height: 26px;
+    padding: 2px 6px;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    background-clip: padding-box;
+    width: 400px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+
+#loc:focus {
+    border: 1px solid #AA0000;
+}
+
+.search-location-results {
+    font-family: pt-sans;
+    font-size: 14px;
+    color:#444444;
+}
+
+.search-checkbox {
+    padding: 0;
+    margin:0;
+    font-family:pt-sans;
+    font-size: 13px;
+    font-weight:700;
+    color:#666666;
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+    margin-right:5px;
+}
+
+.search-select {
+    padding: 0;
+    margin:0;
+    font-family:pt-sans;
+    font-size: 13px;
+    font-weight:700;
+    letter-spacing: 0.02em;
+    color:#444444;
+    border:1px solid #AAAAAA;
+    position: relative;
+    *overflow: hidden;
+    margin-left:5px;
 }
 
 .search-results-detail {
@@ -86,7 +132,7 @@
 
 .search-result-wrapper {
     border-bottom: 1px dashed #AAAAAA;
-    padding: 20px 0 20px 0;
+    padding: 20px 10px 20px 10px;
 }
 
 .search-result-wrapper h2 {
@@ -214,4 +260,30 @@ a.search-result-button, a.search-result-button:active, a.search-result-button:ho
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
+}
+
+a.location-button {
+    color:#AA0000;
+    font-family: pt-sans;
+    font-weight: 700;
+    font-size: 12px;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+.pac-container:after {
+    content: none;
+}
+
+div.pac-item {
+    font-family: "myriad-pro-semi-condensed",impact;
+    font-size: 18px;
+    line-height: 20px;
+    padding: 2px 5px 2px 5px;
+    color:#666666;
+}
+
+div.pac-selected, div.pac-item:hover {
+    background-color:#AA0000;
+    color:#FFFFFF;
 }

@@ -78,7 +78,6 @@ public class RestaurantSearchController {
     
     private Map<String,Integer> buildCuisineResultCount(Set<Restaurant> results) {
         Map<String,Integer> resultMap = new LinkedHashMap<String, Integer>();
-        resultMap.put("ALL", results.size());
         for( Restaurant restaurant: results ) {
             for( String cuisine: restaurant.getCuisines()) {
                 Integer resultCount = resultMap.get(cuisine);
