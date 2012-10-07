@@ -11,7 +11,7 @@
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
