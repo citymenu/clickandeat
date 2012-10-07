@@ -11,6 +11,7 @@
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
+    <!-- Have to load locally because of @font-face declaration -->
     <link rel="stylesheet" type="text/css" media="all" href="${ctx}/resources/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header.css"/>
