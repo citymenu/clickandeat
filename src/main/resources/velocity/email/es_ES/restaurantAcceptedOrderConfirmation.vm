@@ -5,17 +5,17 @@
 
 <body>
 
-<h1>The restaurant has accepted your order $order.orderId</h1>
+<h1>El restaurante ha aceptado tu pedido $order.orderId</h1>
 
 #if( $order.deliveryType == 'DELIVERY' )
-    <div>Expected delivery time:
+    <div>Tiempo estimado de entrega:
         $stringTool.formatDate($order.expectedDeliveryTime)
         #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
             on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
         #end
     </div>
 #else
-    <div>Time for collection:
+    <div>Hora para recoger:
         $stringTool.formatDate($order.expectedCollectionTime)
         #if(!($order.expectedCollectionTime.toLocalDate() == $today))
             on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
@@ -24,12 +24,12 @@
 #end
 
 #if ($allowCancel)
-    <div>If you don't want to wait this long for your order, please click the link below to cancel this order.</div>
-    <div>You until $stringTool.formatDate($cancelCutoffTime)
+    <div>En el caso de que no quieras esperar tanto tiempo para recibir tu pedido, haz clic en el siguiente enlace para cancelar el pedido.</div>
+    <div>Tienes hasta las $stringTool.formatDate($cancelCutoffTime)
     #if(!($cancelCutoffTime.toLocalDate() == $today))
-        on $cancelCutoffTime.dayOfWeek().getAsText($locale)
+        del $cancelCutoffTime.dayOfWeek().getAsText($locale)
     #end
-    to cancel the order.</div>
+    para cancelar el pedido.</div>
     <div>
         <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancel order</a>
     </div>

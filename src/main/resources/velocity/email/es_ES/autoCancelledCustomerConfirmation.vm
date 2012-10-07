@@ -5,7 +5,7 @@
 
 <body>
 
-<h1>Your order $order.orderId has been cancelled as the restaurant did not respond</h1>
+<h1>Tu pedido $order.orderId ha sido cancelado debido a que el restaurant no ha contestado</h1>
 
 </body>
 

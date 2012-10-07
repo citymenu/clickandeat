@@ -5,16 +5,15 @@
 
 <body>
 
-<h1>Confirmation of your order from ClickAndEat</h1>
+<h1>Confirmación de tu pedido con LlamarYComer</h1>
 
-<h2>Order id: ${order.orderId}</h2>
+<h2>Numero del pedido: ${order.orderId}</h2>
 
-<div>Your order has been passed to $stringTool.escape($order.restaurant.name). You will shortly receive an email confirming if $stringTool.escape($order.restaurant.name)
-has accepted your order.</div>
-<div>In the unlikely event that the restaurant is not able to fulfil your order you will receive an email to let you know and you will not be charged for the order.
-If you have provided a mobile number with your order you will receive an SMS message if your order is declined.</div>
+<div>Tu pedido ha sido comunicado al restaurante $stringTool.escape($order.restaurant.name).  Pronto recibirás un correo electrónico confirmando si el restaurante $stringTool.escape($order.restaurant.name) ha aceptado tu pedido.</div>
+<div>En el caso improbable de que el restaurante no sea capaz de llevar a cabo tu pedido recibirás un correo electrónico de notificación y por supuesto no se efectuara ningún cargo a tu tarjeta.
+Si has proporcionado un teléfono móvil con tu pedido recibiras un SMS si tu pedido es rechazado.</div>
 
-<h3>Details of order</h3>
+<h3>Datos del pedido</h3>
 
 #foreach( $item in $order.orderItems )
     #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
@@ -52,12 +51,12 @@ If you have provided a mobile number with your order you will receive an SMS mes
 #end
 
 #if( $stringTool.hasText($order.additionalInstructions))
-    <h3>Additional instructions</h3>
+    <h3>Instrucciones adicionales</h3>
     <div>$stringTool.escape($order.additionalInstructions,true)</div>
 #end
 
 #if( $order.hasCashDiscount() )
-    <h3>Discounts applied to order</h3>
+    <h3>Descuentos aplicados al pedido</h3>
 #end
 
 #foreach( $discount in $order.orderDiscounts )
@@ -66,17 +65,17 @@ If you have provided a mobile number with your order you will receive an SMS mes
     #end
 #end
 
-<h3>Item cost: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+<h3>Precio del plato: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
 
 #if( $order.totalDiscount > 0 )
-    <h3>Total discounts: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
+    <h3>Total descuentos: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
 #end
 
 #if( $order.deliveryCost > 0 )
-    <h3>Delivery charge: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
+    <h3>Costes de envio: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
 #end
 
-<h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+<h3>Coste Total: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 
 </body>
 

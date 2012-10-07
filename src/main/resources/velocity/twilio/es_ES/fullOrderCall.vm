@@ -17,14 +17,14 @@
             #end
             </Say>
         #else
-            <Say language="es">Tienes un pedido para ser recogido
+            <Say language="es">Tienes un pedido para recoger
             #if($order.expectedCollectionTime)
                 A las $stringTool.formatDate($order.expectedCollectionTime)
                 #if(!($order.expectedCollectionTime.toLocalDate() == $today))
                     el $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
                 #end
             #else
-                Lo m&#225;s pronto posible
+                Cuanto antes
             #end
             </Say>
         #end
@@ -32,7 +32,7 @@
         #foreach( $item in $order.orderItems )
             <Say language="es">$item.quantity de
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-                numero $item.menuItemNumber
+                n&#250;mero $item.menuItemNumber
             #else
                 $stringTool.escapeXml($item.menuItemTitle)
             #end
@@ -56,7 +56,7 @@
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="es">1 libre $stringTool.escapeXml($discount.selectedFreeItem)</Say>
+                <Say language="es">1 $stringTool.escapeXml($discount.selectedFreeItem) gratis</Say>
             #end
         #end
 

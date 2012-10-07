@@ -5,13 +5,13 @@
 
 <body>
 
-<h1>Would you like to cancel order ${order.orderId}?</h1>
+<h1>¿Deseas cancelar el pedido ${order.orderId}?</h1>
 
-<div>We are sorry, $stringTool.escape($order.restaurant.name) are very busy with orders today and have not had a chance to respond to your order.</div>
-<div>If you would like to cancel this order, please click on the link below.</div>
+<div>Lo sentimos pero en este momento el restaurante $stringTool.escape($order.restaurant.name) esta muy ocupado y no ha tenido la oportunidad de atender tu pedido.</div>
+<div>Si deseas cancelar el pedido, haz clic en el enlace de abajo.</div>
 
 <div>
-    <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancel order</a>
+    <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancelar el pedido</a>
 </div>
 
 

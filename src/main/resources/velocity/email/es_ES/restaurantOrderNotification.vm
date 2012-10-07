@@ -5,35 +5,35 @@
 
 <body>
 
-<h1>You have a new order from ClickAndEat</h1>
+<h1>Tienes un nuevo pedido de LlamarYComer</h1>
 
-<h2>Order id: ${order.orderId}</h2>
+<h2>Numero del pedido: ${order.orderId}</h2>
 
 #if($order.deliveryType == 'DELIVERY')
-    <div>Order is for delivery
+    <div>El pedido es para entregar
     #if($order.expectedDeliveryTime)
-        at $stringTool.formatDate($order.expectedDeliveryTime)
+        a las $stringTool.formatDate($order.expectedDeliveryTime)
         #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
-            on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+            el $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
         #end
     #else
-        as soon as possible.
+        cuanto antes.
     #end
     </div>
 #else
-    <div>Order is for collection
+    <div>El pedido es para recoger
     #if($order.expectedCollectionTime)
-        at $stringTool.formatDate($order.expectedCollectionTime)
+        a las $stringTool.formatDate($order.expectedCollectionTime)
         #if(!($order.expectedCollectionTime.toLocalDate() == $today))
-            on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+            el $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
         #end
     #else
-        as soon as possible.
+        cuanto antes.
     #end
     </div>
 #end
 
-<h3>Details of order</h3>
+<h3>Datos del pedido</h3>
 
 #foreach( $item in $order.orderItems )
     #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
@@ -71,12 +71,12 @@
 #end
 
 #if( $stringTool.hasText($order.additionalInstructions))
-    <h3>Additional instructions</h3>
+    <h3>Instrucciones adicionales</h3>
     <div>$stringTool.escape($order.additionalInstructions,true)</div>
 #end
 
 #if( $order.hasCashDiscount() )
-    <h3>Discounts applied to order</h3>
+    <h3>Descuentos aplicados al pedido</h3>
 #end
 
 #foreach( $discount in $order.orderDiscounts )
@@ -85,17 +85,17 @@
     #end
 #end
 
-<h3>Item cost: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+<h3>Coste del plato: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
 
 #if( $order.totalDiscount > 0 )
-    <h3>Total discounts: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
+    <h3>Total descuentos: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
 #end
 
 #if( $order.deliveryCost > 0 )
-    <h3>Delivery charge: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
+    <h3>Costes de envio: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
 #end
 
-<h3>Total cost: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+<h3>Coste total: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 
 <div>
     <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>
@@ -103,20 +103,20 @@
 </div>
 
 #if($order.deliveryType == 'DELIVERY')
-    <div>Your standard delivery time is: $order.restaurant.deliveryTimeMinutes minutes</div>
-    <div>Click below to add additional time beyond your standard delivery time for this order</div>
+    <div>Tu tiempo de entrega estándar es: $order.restaurant.deliveryTimeMinutes minutos</div>
+    <div>Haz clic abajo para añadir tiempo al tiempo de entrega estándar para este pedido</div>
 #else
-    <div>Your standard collection time is: $order.restaurant.collectionTimeMinutes minutes</div>
-    <div>Click below to add additional time beyond your standard collection time for this order</div>
+    <div>Tu tiempo de recogida es: $order.restaurant.collectionTimeMinutes minutos</div>
+    <div>Haz clic abajo para añadir tiempo al tiempo de recogida estándar para este pedido</div>
 #end
 
 <div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">Plus 15 minutes</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">Plus 30 minutes</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">Plus 45 minutes</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">Plus 60 minutes</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">Plus 90 minutes</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">Plus 120 minutes</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">15 minutos mas</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">30 minutos mas</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">45 minutos mas</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">60 minutos mas</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">90 minutos mas</a></div>
+<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">120 minutos mas</a></div>
 </div>
 
 </body>

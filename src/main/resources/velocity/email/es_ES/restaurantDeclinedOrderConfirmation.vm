@@ -5,7 +5,7 @@
 
 <body>
 
-<h1>The restaurant has declined your order $order.orderId</h1>
+<h1>El restaurante ha rechazado tu pedido $order.orderId</h1>
 
 </body>
 
