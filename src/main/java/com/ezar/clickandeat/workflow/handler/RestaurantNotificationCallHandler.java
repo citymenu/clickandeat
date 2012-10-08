@@ -51,19 +51,9 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             return order;
         }
                         
-        DateTime now = new DateTime();
-        String deliveryType = order.getDeliveryType();
-
-        if( Order.DELIVERY.equals(deliveryType) && !restaurant.isOpenForDelivery(now)) {
+        if( !restaurant.isOpen(new DateTime())) {
             if( LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open for delivery not placing call");
-            }
-            return order;
-        }
-
-        if( Order.COLLECTION.equals(deliveryType) && !restaurant.isOpenForCollection(now)) {
-            if( LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open for collection not placing call");
+                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open, not placing call");
             }
             return order;
         }

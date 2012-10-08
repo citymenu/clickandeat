@@ -70,7 +70,7 @@ h3.order-table {
 }
 
 .order-item-wrapper {
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .order-item-wrapper td {
@@ -435,10 +435,7 @@ a.order-button-large:active, a.order-button-large:hover {
 .warning-container {
     border: 1px solid #b64242;
     background-color: #fffece;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 14px;
-    line-height: 18px;
-    letter-spacing: -0.01em;
+    font:14px/16px pt-sans;
     margin-top: 6px;
     padding: 6px 10px 6px 10px;
     -moz-border-radius: 5px;

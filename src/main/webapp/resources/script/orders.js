@@ -15,8 +15,7 @@ var deliveryTimes;
 var collectionTimes;
 var deliveryDayOfWeek;
 var deliveryTimeOfDay;
-var openForDelivery;
-var openForCollection;
+var open;
 
 $(document).ready(function(){
     getOrder();
@@ -317,7 +316,7 @@ function deliveryEdit() {
     $.post( ctx+'/order/deliveryEdit.ajax', { orderId: currentOrder.orderId },
         function( data ) {
             if( data.success ) {
-                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.openForDelivery, data.openForCollection);
+                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.open);
             } else {
                 alert(data.success);
             }
@@ -326,15 +325,14 @@ function deliveryEdit() {
 }
 
 // Build delivery edit form
-function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, isOpenForDelivery, isOpenForCollection) {
+function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, isOpen) {
 
     // Update global delivery variables
     days = daysArray;
     deliveryTimes = deliveryTimesArray;
     collectionTimes = collectionTimesArray;
     deliveryType = currentOrder.deliveryType;
-    openForDelivery = isOpenForDelivery;
-    openForCollection = isOpenForCollection;
+    open = isOpen;
 
     // Indicates if the current option is for delivery
     var isdelivery = deliveryType == 'DELIVERY';
@@ -357,13 +355,16 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     // Restaurant not open for delivery or collection in the near future
     if( !hasDeliveryTime && !hasCollectionTime ) {
 
-        var warningText = ('<div class=\'warning-content\'>{0}</div>').format(getLabel('order.restaurant-is-not-open-warning'));
-        var warningContainer = ('<div class=\'warning-wrapper\'>{0}</div>').format(warningText);
+        var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('order.restaurant-closed'));
+        var subheader = ('<div class=\'dialog-subheader\'><div class=\'dialog-warning-wrapper\'>{0}</div></div>').format(getLabel('order.restaurant-closed-warning'));
+        var container = ('<div class=\'dialog-wrapper\'>{0}{1}<div class=\'dialog-footer\'></div>').format(header,subheader);
 
         $.fancybox.open({
             type: 'html',
-            content: warningContainer,
-            minHeight:0,
+            content: container,
+            autoSize:false,
+            width:400,
+            autoHeight:true,
             modal:false,
             openEffect:'none',
             closeEffect:'none'
@@ -376,16 +377,9 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     var deliveryContainer;
 
     // Build delivery edit options if there are options for both delivery and collection
-    if( hasDeliveryTime && hasCollectionTime ) {
-        var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),getLabel('order.delivery'));
-        var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),getLabel('order.collection'));
-        deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
-    }
-    else {
-        var label = (hasDeliveryTime? getLabel('order.delivery'): getLabel('order.collection'));
-        deliveryContainer = ('<div class=\'delivery-options-wrapper\'><div class=\'delivery-title\'>{0}:</div></div>').format(label);
-        deliveryType = (hasDeliveryTime? 'DELIVERY':'COLLECTION');
-    }
+    var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),getLabel('order.delivery'));
+    var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),getLabel('order.collection'));
+    deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
 
     // Build selection fields for day and time based on current delivery type
     var times = (deliveryType == 'DELIVERY'? deliveryTimes: collectionTimes);
@@ -489,7 +483,7 @@ function buildDeliverySelection(days,times) {
     var firstAvailableDay = 0;
     for( var i = 0; i < days.length; i++ ) {
         if( i == 0 ) {
-            if(( deliveryType == 'DELIVERY' && openForDelivery ) || ( deliveryType == 'COLLECTION' && openForCollection )) {
+            if( open ) {
                 firstAvailableDay = 0;
                 break;
             }
@@ -510,15 +504,13 @@ function buildDeliveryDaySelect(days,times) {
         var timeArray = times[i];
 
         // Special case for empty time array but restaurant is currently open
-        if( i == 0 ) {
-            if(( deliveryType == 'DELIVERY' && openForDelivery ) || ( deliveryType == 'COLLECTION' && openForCollection )) {
-                var optionLabel = getLabel('weekday.today');
-                select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
-                continue;
-            }
+        if( i == 0 && open ) {
+            var optionLabel = getLabel('weekday.today');
+            select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
+            continue;
         }
 
-        if( timeArray.length > 0 || ( i == 0 && openForDelivery )) {
+        if( timeArray.length > 0 || ( i == 0 && open )) {
             var optionLabel = (i == 0? getLabel('weekday.today'): getLabel('weekday.day-of-week-' + days[i]));
             select += ('<option value=\'{0}\'>{1}</option>').format(i,optionLabel);
         }
@@ -531,10 +523,8 @@ function buildDeliveryDaySelect(days,times) {
 function buildDeliveryTimeSelect(selectedDay,times) {
     var select = '<select id=\'timeselect\' class=\'deliveryselect\'>';
     var timeArray = times[selectedDay];
-    if( selectedDay == 0 ) {
-        if(( deliveryType == 'DELIVERY' && openForDelivery) || (deliveryType == 'COLLECTION' && openForCollection )) {
-            select += ('<option value=\'{0}\'>{1}</option>').format('ASAP',getLabel('time.asap'));
-        }
+    if( selectedDay == 0 && open ) {
+        select += ('<option value=\'{0}\'>{1}</option>').format('ASAP',getLabel('time.asap'));
     }
     timeArray.forEach(function(time){
         select += ('<option value=\'{0}\'>{0}</option>').format(time);
@@ -592,7 +582,7 @@ function restaurantCheck(restaurantId, callback ) {
         var content1 = ('<div class=\'dialog-content-text\'>' + getLabel('order.restaurant-warning-1') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
         var content2 = ('<div class=\'dialog-content-text\'>' + getLabel('order.restaurant-warning-2') + '</div>').format(unescapeQuotes(currentOrder.restaurant.name));
         var content3 = ('<div class=\'dialog-content-text\'>{0}</div>').format(getLabel('order.restaurant-warning-3'));
-        var subheader = ('<div class=\'warning-container\'>{0}{1}{2}</div>').format(content1,content2,content3);
+        var subheader = ('<div class=\'dialog-warning-wrapper\'>{0}{1}{2}</div>').format(content1,content2,content3);
         var addItemButton = ('<a id=\'additembutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.add-item-anyway'));
         var cancelButton = ('<a id=\'cancelbutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.dont-add-item'));
         var buttons = addItemButton + ' ' + cancelButton;

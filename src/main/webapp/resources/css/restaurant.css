@@ -22,7 +22,7 @@
     line-height: 30px;
     font-style: normal;
     letter-spacing: -0.01em;
-    margin-bottom:6px;
+    margin-bottom:5px;
 }
 
 .restaurant-title-wrapper {
@@ -40,11 +40,23 @@
 }
 
 .restaurant-description {
-    color: #444444;
-    font-family: Georgia,"Times New Roman",Times,serif;
+    color: #666666;
+    font:12px/16px Georgia,"Times New Roman",Times,serif;
     font-size:12px;
+    line-height:14px;
+    margin-bottom:4px;
     letter-spacing: -0.01em;
     font-style: italic;
+}
+
+.cuisine-summary {
+    font: 16px/18px pt-sans;
+    font-weight:700;
+    color:#444444;
+}
+
+.restaurant-summary {
+    margin: 10px 10px 0 0;
 }
 
 .restaurant-details {
@@ -53,70 +65,52 @@
     margin-top: 6px;
 }
 
-.restaurant-delivery-details {
-    font-weight: 700;
-    margin-top: 3px;
-}
-
-.restaurant-details-title {
-    color:#444444;
-    font-weight:700;
-}
-
-.restaurant-info-wrapper {
+.restaurant-opening-details {
     border: 1px solid #CCCCCC;
-    background-color:#FFFFFF;
-    margin: 0 0 10px 0;
-    padding: 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-}
-
-.restuarant-summary-wrapper {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    color:#444444;
-    font-size: 12px;
-    line-height: 14px;
-    margin-right:40px;
-}
-
-.restaurant-detail-wrapper {
-    border: 1px solid #AAAAAA;
-    background-color: #FCFCFC;
-    margin: 0 0 14px 0;
-    padding: 8px;
-    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-    box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-}
-
-.restaurant-detail-title {
-    font-weight:bold;
-    margin-bottom:3px;
+    background-color: #FDFDFD;
+    padding: 4px 12px 4px 8px;
+    margin-right:30px;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
     clear:both;
-    overflow:hidden;
 }
 
-.restaurant-detail-content {
-}
-
-.restaurant-opening-today {
-    float:left;
-    text-align:left;
-}
-
-.restaurant-opening-all {
-    float:right;
+.opening-details-link {
     text-align:right;
+    margin-bottom:3px;
 }
 
-.restaurant-location h3 {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 12px;
-    line-height: 14px;
-    font-weight: 700;
-    margin:0 0 10px 0;
-    padding:0;
+.opening-details {
+    text-align:left;
+    font: 11px/14px pt-sans;
+    min-height:16px;
+    background: url(../images/icons-shadowless/clock.png) 0 0 no-repeat;
+    color:#444444;
+    margin: 0 0 0 2px;
+    padding: 0 0 0 24px;
+}
+
+.delivery-details {
+    text-align:left;
+    font: 11px/14px pt-sans;
+    min-height:16px;
+    background: url(../images/moped.png) 0 1px no-repeat;
+    color:#444444;
+    margin-top: 4px;
+    padding: 0 0 0 26px;
+}
+
+.restaurant-time-details {
+    border-top: 1px dashed #CCCCCC;
+    margin-top:5px;
+    padding-top:5px;
+}
+
+.restaurant-delivery-details {
+    font:12px/14px pt-sans;
+    color:#444444;
+    padding: 0 0 5px 26px;
 }
 
 .menu-left {

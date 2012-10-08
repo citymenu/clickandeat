@@ -9,16 +9,16 @@
 
 #if( $order.deliveryType == 'DELIVERY' )
     <div>Tiempo estimado de entrega:
-        $stringTool.formatDate($order.expectedDeliveryTime)
-        #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
-            on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+        $stringTool.formatDate($order.setRestaurantConfirmedTime)
+        #if(!($order.setRestaurantConfirmedTime.toLocalDate() == $today))
+            on $order.setRestaurantConfirmedTime.dayOfWeek().getAsText($locale)
         #end
     </div>
 #else
     <div>Hora para recoger:
-        $stringTool.formatDate($order.expectedCollectionTime)
-        #if(!($order.expectedCollectionTime.toLocalDate() == $today))
-            on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+        $stringTool.formatDate($order.setRestaurantConfirmedTime)
+        #if(!($order.setRestaurantConfirmedTime.toLocalDate() == $today))
+            on $order.setRestaurantConfirmedTime.dayOfWeek().getAsText($locale)
         #end
     </div>
 #end

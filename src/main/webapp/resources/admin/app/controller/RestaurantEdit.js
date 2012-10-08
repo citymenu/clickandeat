@@ -465,10 +465,10 @@ Ext.define('AD.controller.RestaurantEdit', {
             var openingTime = new Object({
                 dayOfWeek: i,
                 open: deliveryDetailValues['open_' + i] == 'on',
-                collectionOpeningTime: deliveryDetailValues['collectionOpeningTime_' + i],
-                collectionClosingTime: deliveryDetailValues['collectionClosingTime_' + i],
-                deliveryOpeningTime: deliveryDetailValues['deliveryOpeningTime_' + i],
-                deliveryClosingTime: deliveryDetailValues['deliveryClosingTime_' + i]
+                earlyOpeningTime: deliveryDetailValues['earlyOpeningTime_' + i],
+                earlyClosingTime: deliveryDetailValues['earlyClosingTime_' + i],
+                lateOpeningTime: deliveryDetailValues['lateOpeningTime_' + i],
+                lateClosingTime: deliveryDetailValues['lateClosingTime_' + i]
             });
             openingTimes.push(openingTime);
         }
@@ -687,10 +687,10 @@ Ext.define('AD.controller.RestaurantEdit', {
         openingTimes.openingTimes.forEach(function(openingTime){
             var day = openingTime.dayOfWeek;
             form.findField('open_' + day).setValue(openingTime.open);
-            form.findField('collectionOpeningTime_' + day).setValue(openingTime.collectionOpeningTime);
-            form.findField('collectionClosingTime_' + day).setValue(openingTime.collectionClosingTime);
-            form.findField('deliveryOpeningTime_' + day).setValue(openingTime.deliveryOpeningTime);
-            form.findField('deliveryClosingTime_' + day).setValue(openingTime.deliveryClosingTime);
+            form.findField('earlyOpeningTime_' + day).setValue(openingTime.earlyOpeningTime);
+            form.findField('earlyClosingTime_' + day).setValue(openingTime.earlyClosingTime);
+            form.findField('lateOpeningTime_' + day).setValue(openingTime.lateOpeningTime);
+            form.findField('lateClosingTime_' + day).setValue(openingTime.lateClosingTime);
         });
 
         // Populate form values from delivery options record

@@ -48,20 +48,20 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                fieldLabel:'Collection open',
-                name:'collectionOpeningTime_1'
+                fieldLabel:'Early open',
+                name:'earlyOpeningTime_1'
             },{
                 xtype:'timefield',
-                fieldLabel:'Collection close',
-                name:'collectionClosingTime_1'
+                fieldLabel:'Early close',
+                name:'earlyClosingTime_1'
             },{
                 xtype:'timefield',
-                fieldLabel:'Delivery open',
-                name:'deliveryOpeningTime_1'
+                fieldLabel:'Late open',
+                name:'lateOpeningTime_1'
              },{
                 xtype:'timefield',
-                fieldLabel:'Delivery close',
-                name:'deliveryClosingTime_1'
+                fieldLabel:'Late close',
+                name:'lateClosingTime_1'
              }]
         },{
             xtype:'fieldcontainer',
@@ -84,16 +84,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_2'
+                name:'earlyOpeningTime_2'
             },{
                 xtype:'timefield',
-                name:'collectionClosingTime_2'
+                name:'earlyClosingTime_2'
             },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_2'
+                name:'lateOpeningTime_2'
              },{
                 xtype:'timefield',
-                name:'deliveryClosingTime_2'
+                name:'lateClosingTime_2'
              }]
         },{
             xtype:'fieldcontainer',
@@ -116,16 +116,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_3'
+                name:'earlyOpeningTime_3'
            },{
                 xtype:'timefield',
-                name:'collectionClosingTime_3'
+                name:'earlyClosingTime_3'
            },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_3'
+                name:'lateOpeningTime_3'
             },{
                xtype:'timefield',
-               name:'deliveryClosingTime_3'
+               name:'lateClosingTime_3'
             }]
          },{
             xtype:'fieldcontainer',
@@ -148,16 +148,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_4'
+                name:'earlyOpeningTime_4'
             },{
                 xtype:'timefield',
-                name:'collectionClosingTime_4'
+                name:'earlyClosingTime_4'
             },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_4'
+                name:'lateOpeningTime_4'
             },{
                 xtype:'timefield',
-                name:'deliveryClosingTime_4'
+                name:'lateClosingTime_4'
             }]
         },{
             xtype:'fieldcontainer',
@@ -180,16 +180,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_5'
+                name:'earlyOpeningTime_5'
             },{
                 xtype:'timefield',
-                name:'collectionClosingTime_5'
+                name:'earlyClosingTime_5'
             },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_5'
+                name:'lateOpeningTime_5'
             },{
                 xtype:'timefield',
-                name:'deliveryClosingTime_5'
+                name:'lateClosingTime_5'
             }]
         },{
             xtype:'fieldcontainer',
@@ -212,16 +212,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_6'
+                name:'earlyOpeningTime_6'
             },{
                 xtype:'timefield',
-                name:'collectionClosingTime_6'
+                name:'earlyClosingTime_6'
             },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_6'
+                name:'lateOpeningTime_6'
             },{
                 xtype:'timefield',
-                name:'deliveryClosingTime_6'
+                name:'lateClosingTime_6'
             }]
         },{
             xtype:'fieldcontainer',
@@ -244,16 +244,16 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 width:60
             },{
                 xtype:'timefield',
-                name:'collectionOpeningTime_7'
+                name:'earlyOpeningTime_7'
             },{
                 xtype:'timefield',
-                name:'collectionClosingTime_7'
+                name:'earlyClosingTime_7'
             },{
                 xtype:'timefield',
-                name:'deliveryOpeningTime_7'
+                name:'lateOpeningTime_7'
             },{
                 xtype:'timefield',
-                name:'deliveryClosingTime_7'
+                name:'lateClosingTime_7'
             }]
         },{
             name:'closedDates',

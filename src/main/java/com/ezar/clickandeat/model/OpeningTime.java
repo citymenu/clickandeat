@@ -8,13 +8,13 @@ public class OpeningTime {
 
     private boolean open;
 
-    private LocalTime collectionOpeningTime;
+    private LocalTime earlyOpeningTime;
     
-    private LocalTime collectionClosingTime;
+    private LocalTime earlyClosingTime;
 
-    private LocalTime deliveryOpeningTime;
+    private LocalTime lateOpeningTime;
 
-    private LocalTime deliveryClosingTime;
+    private LocalTime lateClosingTime;
 
     public int getDayOfWeek() {
         return dayOfWeek;
@@ -32,35 +32,35 @@ public class OpeningTime {
         this.open = open;
     }
 
-    public LocalTime getCollectionOpeningTime() {
-        return collectionOpeningTime;
+    public LocalTime getEarlyOpeningTime() {
+        return earlyOpeningTime;
     }
 
-    public void setCollectionOpeningTime(LocalTime collectionOpeningTime) {
-        this.collectionOpeningTime = collectionOpeningTime;
+    public void setEarlyOpeningTime(LocalTime earlyOpeningTime) {
+        this.earlyOpeningTime = earlyOpeningTime;
     }
 
-    public LocalTime getCollectionClosingTime() {
-        return collectionClosingTime;
+    public LocalTime getEarlyClosingTime() {
+        return earlyClosingTime;
     }
 
-    public void setCollectionClosingTime(LocalTime collectionClosingTime) {
-        this.collectionClosingTime = collectionClosingTime;
+    public void setEarlyClosingTime(LocalTime earlyClosingTime) {
+        this.earlyClosingTime = earlyClosingTime;
     }
 
-    public LocalTime getDeliveryOpeningTime() {
-        return deliveryOpeningTime;
+    public LocalTime getLateOpeningTime() {
+        return lateOpeningTime;
     }
 
-    public void setDeliveryOpeningTime(LocalTime deliveryOpeningTime) {
-        this.deliveryOpeningTime = deliveryOpeningTime;
+    public void setLateOpeningTime(LocalTime lateOpeningTime) {
+        this.lateOpeningTime = lateOpeningTime;
     }
 
-    public LocalTime getDeliveryClosingTime() {
-        return deliveryClosingTime;
+    public LocalTime getLateClosingTime() {
+        return lateClosingTime;
     }
 
-    public void setDeliveryClosingTime(LocalTime deliveryClosingTime) {
-        this.deliveryClosingTime = deliveryClosingTime;
+    public void setLateClosingTime(LocalTime lateClosingTime) {
+        this.lateClosingTime = lateClosingTime;
     }
 }

@@ -51,9 +51,9 @@ $(document).ready(function(){
 // Update visible restaurants
 function filterRestaurants() {
     $('.search-result-wrapper').each(function(index,element){
-        var open = $(this).attr('open');
+        var open = $(this).attr('isOpen');
         var cuisineSummary = $(this).attr('cuisines');
-        if( open == false && ignoreClosed == true ) {
+        if( open == 'false' && ignoreClosed == true ) {
             $(this).hide();
         } else if( cuisine != '' && cuisineSummary.indexOf(cuisine) == -1 ) {
             $(this).hide();

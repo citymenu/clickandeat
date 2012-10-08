@@ -65,7 +65,7 @@ validators.setItem('telephone',new Validator({
 validators.setItem('email',new Validator({
     fieldName: 'email',
     regexp: checkoutRegexps.email,
-    invalidText: getLabel('validation.firstName.invalidText')
+    invalidText: getLabel('validation.email.invalidText')
 }));
 
 // Address line one validation

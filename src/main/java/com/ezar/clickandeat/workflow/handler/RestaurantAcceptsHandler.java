@@ -50,12 +50,12 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
 
         // Update expected delivery time for the restaurant (if the user has not requested a specific time and date)
         if( Order.DELIVERY.equals(order.getDeliveryType()) && order.getExpectedDeliveryTime() == null ) {
-            order.setExpectedDeliveryTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes()));
+            order.setRestaurantConfirmedTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes()));
         }
 
         // Update expected collection time for the restaurant (if the user has not requested a specific time and date)
         if( Order.COLLECTION.equals(order.getDeliveryType()) && order.getExpectedCollectionTime() == null ) {
-            order.setExpectedCollectionTime(new DateTime().plusMinutes(restaurant.getCollectionTimeMinutes()));
+            order.setRestaurantConfirmedTime(new DateTime().plusMinutes(restaurant.getCollectionTimeMinutes()));
         }
 
         try {

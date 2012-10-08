@@ -11,7 +11,7 @@
 
 .search-results-header-wrapper {
     border: 1px solid #AAAAAA;
-    background-color:#FCFCFC;
+    background-color:#F6F6F6;
     padding: 10px;
     margin: 0 0 30px 0;
     -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
@@ -123,6 +123,16 @@
     margin-left:5px;
 }
 
+option {
+    font-family:pt-sans;
+    font-size: 13px;
+    font-weight:700;
+    letter-spacing: 0.02em;
+    color:#444444;
+}
+
+
+
 .search-results-detail {
     font-family: pt-sans;
     font-size: 16px;
@@ -148,7 +158,7 @@
 .address-details {
     font: 12px/14px pt-sans;
     color:#444444;
-    margin-bottom: 4px;
+    margin: 6px 20px 0 0;
 }
 
 .menu-link {
@@ -157,16 +167,18 @@
 }
 
 .restaurant-opening-details {
-    display:inline-block;
     border: 1px solid #CCCCCC;
+    background-color: #FDFDFD;
     padding: 4px 12px 4px 8px;
     margin-top: 10px;
+    width: 275px;
     -webkit-border-radius: 10px;
        -moz-border-radius: 10px;
             border-radius: 10px;
 }
 
 .opening-details {
+    text-align:left;
     font: 11px/14px pt-sans;
     min-height:16px;
     background: url(../images/icons-shadowless/clock.png) 0 0 no-repeat;
@@ -176,6 +188,7 @@
 }
 
 .delivery-details {
+    text-align:left;
     font: 11px/14px pt-sans;
     min-height:16px;
     background: url(../images/moped.png) 0 1px no-repeat;
@@ -184,10 +197,15 @@
     padding: 0 0 0 26px;
 }
 
+.restaurant-delivery-details {
+    font:12px/14px pt-sans;
+    color:#444444;
+}
+
 .restaurant-discount-details {
     border: 1px dashed #cf6e6e;
     padding: 4px 12px 4px 8px;
-    margin-right: 10px;
+    margin: 0 10px 6px 0;
     -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
@@ -215,6 +233,7 @@
     font: 14px/16px pt-sans;
     font-weight:700;
     color:#444444;
+    margin-bottom:3px;
 }
 
 .search-results-right {
@@ -247,10 +266,25 @@ div.selector select {
     width: 176px !important;
 }
 
-a.search-result-button, a.search-result-button:active, a.search-result-button:hover {
+a.search-result-button-open, a.search-result-button-open:active, a.search-result-button-open:hover {
     display:inline-block;
     width: 122px;
     background: transparent url(../images/button.png) no-repeat 0 0;
+    color: #FFFFFF;
+    font: 16px MaiandraOTGD-DemiBold;
+    font-weight:normal;
+    text-align: center;
+    height:29px;
+    padding-top: 3px;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.search-result-button-closed, a.search-result-button-closed:active, a.search-result-button-closed:hover {
+    display:inline-block;
+    width: 122px;
+    background: transparent url(../images/button-orange.png) no-repeat 0 0;
     color: #FFFFFF;
     font: 16px MaiandraOTGD-DemiBold;
     font-weight:normal;
@@ -286,4 +320,18 @@ div.pac-item {
 div.pac-selected, div.pac-item:hover {
     background-color:#AA0000;
     color:#FFFFFF;
+}
+
+#map_canvas {
+    width: 450px;
+    height: 400px;
+}
+
+a.restaurant-location {
+    color:#AA0000;
+    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-decoration:underline;
+    cursor:pointer;
 }

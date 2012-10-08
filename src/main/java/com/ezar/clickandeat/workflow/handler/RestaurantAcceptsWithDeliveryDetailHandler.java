@@ -52,10 +52,10 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
         if( Order.DELIVERY.equals(order.getDeliveryType())) {
             order.setDeliveryTimeNonStandard(true);
             if( order.getExpectedDeliveryTime() == null ) {
-                order.setExpectedDeliveryTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
+                order.setRestaurantConfirmedTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
             }
             else {
-                order.setExpectedDeliveryTime(order.getExpectedDeliveryTime().plusMinutes(deliveryMinutes));
+                order.setRestaurantConfirmedTime(order.getExpectedDeliveryTime().plusMinutes(deliveryMinutes));
             }
         }
 
@@ -63,10 +63,10 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
         if( Order.COLLECTION.equals(order.getDeliveryType())) {
             order.setDeliveryTimeNonStandard(true);
             if( order.getExpectedCollectionTime() == null ) {
-                order.setExpectedCollectionTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
+                order.setRestaurantConfirmedTime(new DateTime().plusMinutes(restaurant.getDeliveryTimeMinutes() + deliveryMinutes ));
             }
             else {
-                order.setExpectedCollectionTime(order.getExpectedCollectionTime().plusMinutes(deliveryMinutes));
+                order.setRestaurantConfirmedTime(order.getExpectedCollectionTime().plusMinutes(deliveryMinutes));
             }
         }
 

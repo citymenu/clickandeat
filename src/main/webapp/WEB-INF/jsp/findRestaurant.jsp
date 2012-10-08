@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
+    <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
@@ -84,53 +85,69 @@
                         <c:if test="${count > 0}">
                         <div class="search-results-entry-wrapper">
                             <c:forEach var="restaurant" items="${results}">
-                            <div class="search-result-wrapper" open="${restaurant.openForDelivery}" cuisines="${restaurant.cuisineSummary}">
+                            <div class="search-result-wrapper" isOpen="${restaurant.open}" cuisines="${restaurant.cuisineSummary}">
                                 <div class="search-result">
                                     <table width="710">
                                         <tr valign="top">
-                                            <td width="65"><img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="50" alt="<util:escape value="${restaurant.name}"/>"/></td>
-                                            <c:choose>
-                                                <c:when test="${restaurant.hasDiscounts == true}">
-                                                    <td width="295">
-                                                        <div class="search-result-center">
-                                                            <h2><util:escape value="${restaurant.name}"/></h2>
-                                                            <div class="address-details"><util:escape value="${restaurant.address.summary}"/></div>
-                                                            <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
-                                                        </div>
-                                                    </td>
-                                                    <td width="250">
-                                                        <div class="restaurant-discount-details">
-                                                            <div class="scissors"></div>
-                                                            <c:forEach var="discount" items="${restaurant.discounts}">
-                                                                <div class="discount-details"><util:escape value="${discount.title}"/></div>
-                                                            </c:forEach>
-                                                        </div>
-                                                    </td>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <td width="545">
-                                                        <div class="search-result-center">
-                                                            <h2><util:escape value="${restaurant.name}"/></h2>
-                                                            <div class="address-details"><util:escape value="${restaurant.address.summary}"/></div>
-                                                            <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
-                                                        </div>
-                                                    </td>
-                                                </c:otherwise>
-                                            </c:choose>
-                                            <td width="150" align="right">
-                                                <div class="menu-link">
-                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button"><message:message key="search.order-now"/></a>
-                                                </div>
+                                            <td width="360">
+                                                <table width="310">
+                                                    <tr valign="bottom">
+                                                        <td width="65">
+                                                            <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="50" alt="<util:escape value="${restaurant.name}"/>"/></td>
+                                                        </td>
+                                                        <td width="245">
+                                                            <div class="search-result-center">
+                                                                <h2><util:escape value="${restaurant.name}"/></h2>
+                                                                <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr valign="top">
+                                                        <td width="310" colspan="2">
+                                                            <div class="address-details">
+                                                                <util:escape value="${restaurant.address.summary}"/><br>
+                                                                <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
-                                        </tr>
-                                    </table>
-                                    <table width="710">
-                                        <tr valign="top">
-                                            <td width="710">
-                                                <div class="restaurant-opening-details">
-                                                    <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
-                                                    <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
-                                                </div>
+                                            <td width="400">
+                                                <table width="400">
+                                                    <tr valign="top">
+                                                        <td width="250">
+                                                            <c:if test="${restaurant.hasDiscounts == true}">
+                                                                <div class="restaurant-discount-details">
+                                                                    <div class="scissors"></div>
+                                                                    <c:forEach var="discount" items="${restaurant.discounts}">
+                                                                        <div class="discount-details"><util:escape value="${discount.title}"/></div>
+                                                                    </c:forEach>
+                                                                </div>
+                                                            </c:if>
+                                                        </td>
+                                                        <td width="150" align="right">
+                                                            <div class="menu-link">
+                                                                <c:choose>
+                                                                    <c:when test="${restaurant.open == true}">
+                                                                        <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.order-now"/></a>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <tr valign="top">
+                                                        <td width="400" colspan="2" align="right">
+                                                            <div class="restaurant-opening-details">
+                                                                <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
+                                                                <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
                                             </td>
                                         </tr>
                                     </table>

@@ -181,7 +181,8 @@ public class GeoLocationService {
             }
 
             // Save the location and return
-            //geoLocationRepository.saveGeoLocation(geoLocation);
+            geoLocation.setValid(true);
+            geoLocationRepository.saveGeoLocation(geoLocation);
             return geoLocation;
         }
         catch( Exception ex ) {
@@ -246,7 +247,7 @@ public class GeoLocationService {
         GeoLocation geoLocation = new GeoLocation();
         geoLocation.setAddress(address);
         geoLocation.setValid(false);
-        //geoLocationRepository.saveGeoLocation(geoLocation);
+        geoLocationRepository.saveGeoLocation(geoLocation);
     }
     
     

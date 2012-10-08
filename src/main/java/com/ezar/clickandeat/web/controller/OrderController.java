@@ -34,10 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class OrderController implements InitializingBean {
@@ -517,73 +514,75 @@ public class OrderController implements InitializingBean {
             DateTime currentTime = new DateTime();
             DateTime now = new DateTime(currentTime.getYear(), currentTime.getMonthOfYear(), currentTime.getDayOfMonth(), currentTime.getHourOfDay(), currentTime.getMinuteOfHour(), 0, 0);
 
-            // Store if the restaurant is open for collection and delivery
-            boolean isOpenForDelivery = restaurant.isOpenForDelivery(currentTime);
-            boolean isOpenForCollection = restaurant.isOpenForCollection(currentTime);
-            
+            // Store if the restaurant is currently open
+            boolean isOpen = restaurant.isOpen(currentTime);
+
             List<Integer> days = new ArrayList<Integer>();
-            List<List<LocalTime>> deliveryTimes = new ArrayList<List<LocalTime>>();
-            List<List<LocalTime>> collectionTimes = new ArrayList<List<LocalTime>>();
+            List<Set<LocalTime>> deliveryTimes = new ArrayList<Set<LocalTime>>();
+            List<Set<LocalTime>> collectionTimes = new ArrayList<Set<LocalTime>>();
 
             // Get the remaining options for today first
             days.add(now.getDayOfWeek());
-            DateTime deliveryOpeningTime = restaurant.getDeliveryOpeningTime(now);
-            DateTime collectionOpeningTime = restaurant.getCollectionOpeningTime(now);
+            DateTime[] openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
+            DateTime earlyOpeningTime = openingAndClosingTimes[0] == null? now :  openingAndClosingTimes[0];
+            DateTime lateOpeningTime = openingAndClosingTimes[2] == null? now :  openingAndClosingTimes[2];
 
             // For delivery times push the current time past the delivery time in minutes
             int deliveryTimeMinutes = restaurant.getDeliveryTimeMinutes();
-            Pair<List<LocalTime>,List<LocalTime>> deliveryTimesPair;
-            if( deliveryOpeningTime != null ) {
-                deliveryTimesPair = getTimeOptions(now.isBefore(deliveryOpeningTime)? deliveryOpeningTime: now, restaurant.getDeliveryClosingTime(now), deliveryTimeMinutes);
-            }
-            else {
-                deliveryTimesPair = getTimeOptions(deliveryOpeningTime, restaurant.getDeliveryClosingTime(now), deliveryTimeMinutes);
-            }
+            Pair<Set<LocalTime>,Set<LocalTime>> earlyDeliveryTimesPair = getTimeOptions(now.isBefore(earlyOpeningTime)? earlyOpeningTime: now, openingAndClosingTimes[1], deliveryTimeMinutes);
+            Pair<Set<LocalTime>,Set<LocalTime>> lateDeliveryTimesPair = getTimeOptions(now.isBefore(lateOpeningTime)? lateOpeningTime: now, openingAndClosingTimes[3], deliveryTimeMinutes);
+            earlyDeliveryTimesPair.first.addAll(lateDeliveryTimesPair.first);
+            earlyDeliveryTimesPair.second.addAll(lateDeliveryTimesPair.second);
 
-            // For collection times push the current time past the collection time in minutes
+            // For delivery times push the current time past the collection time in minutes
             int collectionTimeMinutes = restaurant.getCollectionTimeMinutes();
-            Pair<List<LocalTime>,List<LocalTime>> collectionTimesPair;
-            if( collectionOpeningTime != null ) {
-                collectionTimesPair = getTimeOptions(now.isBefore(collectionOpeningTime)? collectionOpeningTime: now, restaurant.getCollectionClosingTime(now), collectionTimeMinutes);            }
-            else {
-                collectionTimesPair = getTimeOptions(collectionOpeningTime, restaurant.getCollectionClosingTime(now), collectionTimeMinutes);
-            }
+            Pair<Set<LocalTime>,Set<LocalTime>> earlyCollectionTimesPair = getTimeOptions(now.isBefore(earlyOpeningTime)? earlyOpeningTime: now, openingAndClosingTimes[1], collectionTimeMinutes);
+            Pair<Set<LocalTime>,Set<LocalTime>> lateCollectionTimesPair = getTimeOptions(now.isBefore(lateOpeningTime)? lateOpeningTime: now, openingAndClosingTimes[3], collectionTimeMinutes);
+            earlyCollectionTimesPair.first.addAll(lateCollectionTimesPair.first);
+            earlyCollectionTimesPair.second.addAll(lateCollectionTimesPair.second);
 
-            deliveryTimes.add(deliveryTimesPair.first);
-            collectionTimes.add(collectionTimesPair.first);
+            // Add today's opening times
+            deliveryTimes.add(earlyDeliveryTimesPair.first);
+            collectionTimes.add(earlyCollectionTimesPair.first);
 
             // Now get the rest of the options for the remaining times
             for( int i = 0; i < 3; i++ ) {
                 
                 // Add any times after midnight from the previous list
-                List<LocalTime> deliveryTimesList = new ArrayList<LocalTime>();
-                List<LocalTime> collectionTimesList = new ArrayList<LocalTime>();
-                deliveryTimesList.addAll(deliveryTimesPair.second);
-                collectionTimesList.addAll(collectionTimesPair.second);
-                                
+                Set<LocalTime> deliveryTimesSet = new TreeSet<LocalTime>();
+                Set<LocalTime> collectionTimesSet = new TreeSet<LocalTime>();
+                deliveryTimesSet.addAll(earlyDeliveryTimesPair.second);
+                collectionTimesSet.addAll(earlyCollectionTimesPair.second);
+
                 // Now get the next set of opening and closing times
                 now = now.plusDays(1);
                 days.add(now.getDayOfWeek());
 
-                DateTime[] openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
-                deliveryTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3], deliveryTimeMinutes);
-                collectionTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1], collectionTimeMinutes);
-                
+                openingAndClosingTimes = restaurant.getOpeningAndClosingTimes(now);
+                earlyDeliveryTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1], deliveryTimeMinutes);
+                lateDeliveryTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3], deliveryTimeMinutes);
+                earlyDeliveryTimesPair.first.addAll(lateDeliveryTimesPair.first);
+                earlyDeliveryTimesPair.second.addAll(lateDeliveryTimesPair.second);
+
+                earlyCollectionTimesPair = getTimeOptions(openingAndClosingTimes[0], openingAndClosingTimes[1], collectionTimeMinutes);
+                lateCollectionTimesPair = getTimeOptions(openingAndClosingTimes[2], openingAndClosingTimes[3], collectionTimeMinutes);
+                earlyCollectionTimesPair.first.addAll(lateCollectionTimesPair.first);
+                earlyCollectionTimesPair.second.addAll(lateCollectionTimesPair.second);
+
                 // Add this day's time options to the list
-                deliveryTimesList.addAll(deliveryTimesPair.first);
-                collectionTimesList.addAll(collectionTimesPair.first);
+                deliveryTimesSet.addAll(earlyDeliveryTimesPair.first);
+                collectionTimesSet.addAll(earlyCollectionTimesPair.first);
                 
                 // Add these lists to the return
-                deliveryTimes.add(deliveryTimesList);
-                collectionTimes.add(collectionTimesList);
+                deliveryTimes.add(deliveryTimesSet);
+                collectionTimes.add(collectionTimesSet);
             }
             
             // Add the time options to the model
             model.put("days", days);
             model.put("deliveryTimes", deliveryTimes);
             model.put("collectionTimes", collectionTimes);
-            model.put("openForDelivery", isOpenForDelivery);
-            model.put("openForCollection", isOpenForCollection);
+            model.put("open", isOpen);
             model.put("success",true);
             
         }
@@ -724,14 +723,15 @@ public class OrderController implements InitializingBean {
     /**
      * @param from
      * @param to
+     * @param offsetMinutes
      * @return
      */
 
-    private Pair<List<LocalTime>,List<LocalTime>> getTimeOptions(DateTime from, DateTime to, int offsetMinutes ) {
-        List<LocalTime> first = new ArrayList<LocalTime>();
-        List<LocalTime> second = new ArrayList<LocalTime>();
+    private Pair<Set<LocalTime>,Set<LocalTime>> getTimeOptions(DateTime from, DateTime to, int offsetMinutes ) {
+        Set<LocalTime> first = new TreeSet<LocalTime>();
+        Set<LocalTime> second = new TreeSet<LocalTime>();
         if( from == null || to == null ) {
-            return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
+            return new Pair<Set<LocalTime>, Set<LocalTime>>(first,second);
         }
         LocalTime startTime = from.toLocalTime();
         from = from.plusMinutes(offsetMinutes);
@@ -747,7 +747,7 @@ public class OrderController implements InitializingBean {
             }
             from = from.plusMinutes(15);
         }
-        return new Pair<List<LocalTime>, List<LocalTime>>(first,second);
+        return new Pair<Set<LocalTime>, Set<LocalTime>>(first,second);
     }
 
 

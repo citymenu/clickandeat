@@ -48,6 +48,10 @@ public class Discount {
 
     public boolean isApplicableTo(Order order) {
 
+        if( order.getOrderItems().size() == 0 ) {
+            return false;
+        }
+        
         if( minimumOrderValue != null && order.getOrderItemCost() < minimumOrderValue ) {
             return false;
         }

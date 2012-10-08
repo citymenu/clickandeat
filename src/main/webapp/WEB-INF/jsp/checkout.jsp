@@ -138,6 +138,18 @@
                                 </div>
                             </div>
 
+                            <!-- Vouchers -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.apply-voucher"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
+                                <div class="contact-form-entry">
+                                    <div class="contact-form-field">
+                                        <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
+                                        <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Navigation buttons -->
                             <div class="checkout-navigation-wrapper">
                                 <a class="checkout-nav-button checkout-nav-button-large" onclick="updateOrder()"><message:message key="button.update-order"/></a>

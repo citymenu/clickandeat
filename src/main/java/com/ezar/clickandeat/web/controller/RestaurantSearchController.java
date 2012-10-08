@@ -77,7 +77,7 @@ public class RestaurantSearchController {
      */
     
     private Map<String,Integer> buildCuisineResultCount(Set<Restaurant> results) {
-        Map<String,Integer> resultMap = new LinkedHashMap<String, Integer>();
+        SortedMap<String,Integer> resultMap = new TreeMap<String, Integer>();
         for( Restaurant restaurant: results ) {
             for( String cuisine: restaurant.getCuisines()) {
                 Integer resultCount = resultMap.get(cuisine);
@@ -98,10 +98,10 @@ public class RestaurantSearchController {
 
         @Override
         public int compare(Restaurant restaurant1, Restaurant restaurant2) {
-            if( restaurant1.isOpenForDelivery() && !restaurant2.isOpenForDelivery()) {
+            if( restaurant1.getOpen() && !restaurant2.getOpen()) {
                 return -1;                
             }
-            else if( !restaurant1.isOpenForDelivery() && restaurant2.isOpenForDelivery()) {
+            else if( !restaurant1.getOpen() && restaurant2.getOpen()) {
                 return 1;
             }
             else {

@@ -67,7 +67,7 @@ public class Restaurant extends PersistentObject {
     private Double distanceToSearchLocation;
 
     @Transient
-    private boolean openForDelivery;
+    private boolean open;
     
     public Restaurant() {
         this.uuid = UUID.randomUUID().toString();
@@ -89,58 +89,70 @@ public class Restaurant extends PersistentObject {
      * @return
      */
     
-    public RestaurantOpenStatus isOpen(DateTime now) {
+    public boolean isOpen(DateTime now) {
         
         DateTime[] dateTimes = getOpeningAndClosingTimes(now);
         
-        DateTime collectionOpeningTime = dateTimes[0];
-        DateTime collectionClosingTime = dateTimes[1];
-        DateTime deliveryOpeningTime = dateTimes[2];
-        DateTime deliveryClosingTime = dateTimes[3];
+        DateTime earlyOpeningTime = dateTimes[0];
+        DateTime earlyClosingTime = dateTimes[1];
+        DateTime lateOpeningTime = dateTimes[2];
+        DateTime lateClosingTime = dateTimes[3];
 
-        if( collectionOpeningTime == null && collectionClosingTime == null && deliveryOpeningTime == null && deliveryClosingTime == null ) {
-            return RestaurantOpenStatus.CLOSED;
+        if( earlyOpeningTime == null && earlyClosingTime == null && lateOpeningTime == null && lateClosingTime == null ) {
+            return false;
         }
-
-        boolean openForCollection = false;
-        boolean openForDelivery = false;
         
-        // Check collection times status for T+1 closing first
-        if( collectionOpeningTime != null && collectionClosingTime != null ) {
-            if( collectionClosingTime.isBefore(collectionOpeningTime)) {
-                if( !now.isAfter(collectionClosingTime)) {
-                    openForCollection = true;
-                }
-            }
-            else if( !now.isBefore(collectionOpeningTime) && !now.isAfter(collectionClosingTime)) {
-                openForCollection = true;
+        if( earlyOpeningTime != null && earlyClosingTime != null ) {
+            if( !now.isBefore(earlyOpeningTime) && !now.isAfter(earlyClosingTime)) {
+                return true;
             }
         }
 
-        // Check delivery times status for T+1 closing first
-        if( deliveryOpeningTime != null && deliveryClosingTime != null ) {
-            if( deliveryClosingTime.isBefore(deliveryOpeningTime)) {
-                if( !now.isAfter(deliveryClosingTime)) {
-                    openForDelivery = true;
-                }
-            }
-            else if( !now.isBefore(deliveryOpeningTime) && !now.isAfter(deliveryClosingTime)) {
-                openForDelivery = true;
+        if( lateOpeningTime != null && lateClosingTime != null ) {
+            if( !now.isBefore(lateOpeningTime) && !now.isAfter(lateClosingTime)) {
+                return true;
             }
         }
 
-        // Return status based on opening times
-        if( openForCollection && openForDelivery ) {
-            return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY;
-        }
-        else if( openForDelivery ) {
-            return RestaurantOpenStatus.OPEN_FOR_DELIVERY_ONLY;
-        }
-        else if( openForCollection ) {
-            return RestaurantOpenStatus.OPEN_FOR_COLLECTION_ONLY;
+        return false;
+    }
+
+
+    public DateTime getEarlyOpeningTime(DateTime now) {
+        DateTime[] times = getOpeningAndClosingTimes(now);
+        DateTime earlyOpeningTime = times[0];
+        DateTime lateOpeningTime = times[2];
+        return earlyOpeningTime == null? lateOpeningTime: earlyOpeningTime;
+    }
+    
+    
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getOpeningTime(DateTime now) {
+        DateTime[] times = getOpeningAndClosingTimes(now);
+        DateTime earlyOpeningTime = times[0];
+        DateTime earlyClosingTime = times[1];
+        DateTime lateOpeningTime = times[2];
+        DateTime lateClosingTime = times[3];
+
+        if( earlyOpeningTime == null || earlyClosingTime == null ) {
+            if( lateOpeningTime != null && lateClosingTime != null ) {
+                return lateOpeningTime;
+            }
+            else {
+                return null;
+            }
         }
         else {
-            return RestaurantOpenStatus.CLOSED;
+            if( lateOpeningTime != null && lateClosingTime != null ) {
+                return now.isAfter(earlyClosingTime)? lateOpeningTime: earlyOpeningTime;
+            }
+            else {
+                return earlyOpeningTime;
+            }
         }
     }
 
@@ -150,60 +162,29 @@ public class Restaurant extends PersistentObject {
      * @return
      */
 
-    public boolean isOpenForDelivery(DateTime now) {
-        RestaurantOpenStatus status = isOpen(now);
-        return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_DELIVERY_ONLY.equals(status);
-    }
+    public DateTime getClosingTime(DateTime now) {
+        DateTime[] times = getOpeningAndClosingTimes(now);
+        DateTime earlyOpeningTime = times[0];
+        DateTime earlyClosingTime = times[1];
+        DateTime lateOpeningTime = times[2];
+        DateTime lateClosingTime = times[3];
 
-
-    /**
-     * @param now
-     * @return
-     */
-
-    public boolean isOpenForCollection(DateTime now) {
-        RestaurantOpenStatus status = isOpen(now);
-        return RestaurantOpenStatus.OPEN_FOR_COLLECTION_AND_DELIVERY.equals(status) || RestaurantOpenStatus.OPEN_FOR_COLLECTION_ONLY.equals(status);
-    }
-
-
-    /**
-     * @param now
-     * @return
-     */
-
-    public DateTime getCollectionOpeningTime(DateTime now ) {
-        return getOpeningAndClosingTimes(now)[0];
-    }
-
-
-    /**
-     * @param now
-     * @return
-     */
-
-    public DateTime getCollectionClosingTime(DateTime now) {
-        return getOpeningAndClosingTimes(now)[1];
-    }
-
-
-    /**
-     * @param now
-     * @return
-     */
-
-    public DateTime getDeliveryOpeningTime(DateTime now ) {
-        return getOpeningAndClosingTimes(now)[2];
-    }
-
-
-    /**
-     * @param now
-     * @return
-     */
-
-    public DateTime getDeliveryClosingTime(DateTime now ) {
-        return getOpeningAndClosingTimes(now)[3];
+        if( earlyOpeningTime == null || earlyClosingTime == null ) {
+            if( lateOpeningTime != null && lateClosingTime != null ) {
+                return lateClosingTime;
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            if( lateOpeningTime != null && lateClosingTime != null ) {
+                return now.isAfter(earlyClosingTime)? lateClosingTime: earlyClosingTime;
+            }
+            else {
+                return earlyOpeningTime;
+            }
+        }
     }
 
 
@@ -242,55 +223,54 @@ public class Restaurant extends PersistentObject {
             }
             
             int dayOfWeek = openingTime.getDayOfWeek();
-            LocalTime collectionOpen = openingTime.getCollectionOpeningTime();
-            LocalTime collectionClose = openingTime.getCollectionClosingTime();
-            LocalTime deliveryOpen = openingTime.getDeliveryOpeningTime();
-            LocalTime deliveryClose = openingTime.getDeliveryClosingTime();
+            LocalTime earlyOpen = openingTime.getEarlyOpeningTime();
+            LocalTime earlyClose = openingTime.getEarlyClosingTime();
+            LocalTime lateOpen = openingTime.getLateOpeningTime();
+            LocalTime lateClose = openingTime.getLateClosingTime();
 
             // Test collection times if collection open and close are not null
-            if( collectionOpen != null && collectionClose != null ) {
+            if( earlyOpen != null && earlyClose != null ) {
 
                 // Check from day before for closing times after midnight
-                if( currentDayOfWeek - 1 == dayOfWeek % 7 && collectionClose.isBefore(collectionOpen)) {
-                    if(!now.toLocalTime().isAfter(collectionClose)) {
-                        times[0] = now.toLocalDate().minusDays(1).toDateTime(collectionOpen); // Collection open the day before
-                        times[1] = now.toLocalDate().toDateTime(collectionClose);
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && earlyClose.isBefore(earlyOpen)) {
+                    if(!now.toLocalTime().isAfter(earlyClose)) {
+                        times[0] = now.toLocalDate().minusDays(1).toDateTime(earlyOpen); // Collection open the day before
+                        times[1] = now.toLocalDate().toDateTime(earlyClose);
                     }
                 }
                 else if( currentDayOfWeek == dayOfWeek ) {
                     // Don't override previously set collection times
                     if( times[0] == null && times[1] == null ) {
-                        times[0] = now.toLocalDate().toDateTime(collectionOpen);
-                        if( collectionClose.isBefore(collectionOpen)) {
-                            times[1] = now.toLocalDate().plusDays(1).toDateTime(collectionClose);
+                        times[0] = now.toLocalDate().toDateTime(earlyOpen);
+                        if( earlyClose.isBefore(earlyOpen)) {
+                            times[1] = now.toLocalDate().plusDays(1).toDateTime(earlyClose);
                         }
                         else {
-                            times[1] = now.toLocalDate().toDateTime(collectionClose);    
+                            times[1] = now.toLocalDate().toDateTime(earlyClose);
                         }
-                        
                     }
                 }
             }
 
             // Test delivery times if delivery open and close are not null
-            if( deliveryOpen != null && deliveryClose != null ) {
+            if( lateOpen != null && lateClose != null ) {
 
                 // Check from day before for closing times after midnight
-                if( currentDayOfWeek - 1 == dayOfWeek % 7 && deliveryClose.isBefore(deliveryOpen)) {
-                    if(!now.toLocalTime().isAfter(deliveryClose)) {
-                        times[2] = now.toLocalDate().minusDays(1).toDateTime(deliveryOpen); // Delivery open the day before
-                        times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                if( currentDayOfWeek - 1 == dayOfWeek % 7 && lateClose.isBefore(lateOpen)) {
+                    if(!now.toLocalTime().isAfter(lateClose)) {
+                        times[2] = now.toLocalDate().minusDays(1).toDateTime(lateOpen); // Delivery open the day before
+                        times[3] = now.toLocalDate().toDateTime(lateClose);
                     }
                 }
                 else if( currentDayOfWeek == dayOfWeek ) {
                     // Don't override previously set delivery times
                     if( times[2] == null && times[3] == null ) {
-                        times[2] = now.toLocalDate().toDateTime(deliveryOpen);
-                        if( deliveryClose.isBefore(deliveryOpen)) {
-                            times[3] = now.toLocalDate().plusDays(1).toDateTime(deliveryClose);
+                        times[2] = now.toLocalDate().toDateTime(lateOpen);
+                        if( lateClose.isBefore(lateOpen)) {
+                            times[3] = now.toLocalDate().plusDays(1).toDateTime(lateClose);
                         }
                         else {
-                            times[3] = now.toLocalDate().toDateTime(deliveryClose);
+                            times[3] = now.toLocalDate().toDateTime(lateClose);
                         }
                     }
                 }
@@ -320,32 +300,26 @@ public class Restaurant extends PersistentObject {
     
     public String getTodaysOpeningTimes() {
         DateTime[] openingAndClosingTimes = getOpeningAndClosingTimes(new DateTime());
-        DateTime collectionOpeningTime = openingAndClosingTimes[0];
-        DateTime collectionClosingTime = openingAndClosingTimes[1];
-        DateTime deliveryOpeningTime = openingAndClosingTimes[2];
-        DateTime deliveryClosingTime = openingAndClosingTimes[3];
+        DateTime earlyOpeningTime = openingAndClosingTimes[0];
+        DateTime earlyClosingTime = openingAndClosingTimes[1];
+        DateTime lateOpeningTime = openingAndClosingTimes[2];
+        DateTime lateClosingTime = openingAndClosingTimes[3];
 
-        boolean hasCollectionTimes = (collectionOpeningTime != null && collectionClosingTime != null);
-        boolean hasDeliveryTimes = (deliveryOpeningTime != null && deliveryClosingTime != null);
-        
-        if( !hasCollectionTimes && !hasDeliveryTimes ) {
+        boolean hasEarlyTimes = (earlyOpeningTime != null && earlyClosingTime != null);
+        boolean hasLateTimes = (lateOpeningTime != null && lateClosingTime != null);
+
+        if( !hasEarlyTimes && !hasLateTimes ) {
             return MessageFactory.getMessage("restaurant.closed",false);
         }
         
-        if( hasCollectionTimes && !hasDeliveryTimes ) {
-            return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.collection",false) + ")";
+        if( hasEarlyTimes && !hasLateTimes ) {
+            return earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter);
         }
-        else if( !hasCollectionTimes ) {
-            return deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.delivery",false) + ")";
+        else if( !hasEarlyTimes ) {
+            return lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
         }
         else {
-            if( collectionOpeningTime.equals(deliveryOpeningTime) && collectionClosingTime.equals(deliveryClosingTime)) {
-                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter);
-            }
-            else {
-                return collectionOpeningTime.toString(formatter) + " - " + collectionClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.collection",false) + ")\n" +
-                    deliveryOpeningTime.toString(formatter) + " - " + deliveryClosingTime.toString(formatter) + " (" + MessageFactory.getMessage("restaurant.delivery",false) + ")";
-            }
+            return earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter) + " | " + lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
         }
     }
     
@@ -578,11 +552,11 @@ public class Restaurant extends PersistentObject {
         this.distanceToSearchLocation = distanceToSearchLocation;
     }
 
-    public boolean isOpenForDelivery() {
-        return openForDelivery;
+    public boolean getOpen() {
+        return open;
     }
 
-    public void setOpenForDelivery(boolean openForDelivery) {
-        this.openForDelivery = openForDelivery;
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

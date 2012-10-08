@@ -190,7 +190,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
                 if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
                     // Set transient open for delivery property for search result ordering
-                    restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(now));
+                    restaurant.setOpen(restaurant.isOpen(now));
                     availableRestaurants.add(restaurant);
                     continue;
                 }
@@ -198,7 +198,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
                     if(lookupLocationAddress.contains(deliveryLocation.toUpperCase())) {
                         // Set transient open for delivery property for search result ordering
-                        restaurant.setOpenForDelivery(restaurant.isOpenForDelivery(now));
+                        restaurant.setOpen(restaurant.isOpen(now));
                         availableRestaurants.add(restaurant);
                         break;
                     }

@@ -49,12 +49,10 @@
 }
 
 .dialog-warning-wrapper {
-    font-family: "pt-sans";
-    font-size: 12px;
+    font: 14px/16px "pt-sans";
     border: 1px solid #b64242;
     background-color: #fffece;
-    line-height: 16px;
-    font-weight:700;
+    font-weight:600;
     color:#444444;
     margin-top: 6px;
     padding: 6px 10px 10px 10px;

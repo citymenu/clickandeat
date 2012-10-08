@@ -51,6 +51,7 @@ public class Order extends PersistentObject {
     private DateTime expectedDeliveryTime;
     private DateTime expectedCollectionTime;
     private DateTime restaurantActionedTime; // Time the restaurant accepted or declined the order
+    private DateTime restaurantConfirmedTime;
     private boolean deliveryTimeNonStandard = false;
 
     // Order cost details
@@ -109,6 +110,19 @@ public class Order extends PersistentObject {
      */
 
     public void updateCosts() {
+
+        // Check that any special offers are still valid (i.e. if the delivery date changes)
+        List<OrderItem> toRemove = new ArrayList<OrderItem>();
+        for( OrderItem orderItem: orderItems ) {
+            String specialOfferId = orderItem.getMenuItemId();
+            SpecialOffer specialOffer = restaurant.getSpecialOffer(specialOfferId);
+            if( specialOffer != null ) {
+                if( !specialOffer.isApplicableTo(this)) {
+                    toRemove.add(orderItem);
+                }
+            }
+        }
+        orderItems.removeAll(toRemove);
 
         // Update order item costs
         double orderItemCost = 0d;
@@ -240,10 +254,10 @@ public class Order extends PersistentObject {
         
     public void updateRestaurantIsOpen() {
         if( Order.DELIVERY.equals(deliveryType)) {
-            restaurantIsOpen = restaurant.isOpenForDelivery(expectedDeliveryTime == null? new DateTime(): expectedDeliveryTime);
+            restaurantIsOpen = restaurant.isOpen(expectedDeliveryTime == null? new DateTime(): expectedDeliveryTime);
         }
         else {
-            restaurantIsOpen = restaurant.isOpenForCollection(expectedCollectionTime == null ? new DateTime() : expectedCollectionTime);
+            restaurantIsOpen = restaurant.isOpen(expectedCollectionTime == null ? new DateTime() : expectedCollectionTime);
         }
     }
     
@@ -620,6 +634,14 @@ public class Order extends PersistentObject {
 
     public void setRestaurantActionedTime(DateTime restaurantActionedTime) {
         this.restaurantActionedTime = restaurantActionedTime;
+    }
+
+    public DateTime getRestaurantConfirmedTime() {
+        return restaurantConfirmedTime;
+    }
+
+    public void setRestaurantConfirmedTime(DateTime restaurantConfirmedTime) {
+        this.restaurantConfirmedTime = restaurantConfirmedTime;
     }
 
     public Double getTotalCost() {
