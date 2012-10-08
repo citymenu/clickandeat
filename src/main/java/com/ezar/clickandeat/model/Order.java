@@ -60,7 +60,9 @@ public class Order extends PersistentObject {
     private Double extraSpendNeededForDelivery;
     private Double cardTransactionCost;
     private Double totalDiscount;
+    private Double voucherDiscount;
     private Double totalCost;
+    private Double restaurantCost; // Cost to restaurant (without any vouchers applied)
 
     // Order tracking details
     private boolean canCheckout;
@@ -171,9 +173,18 @@ public class Order extends PersistentObject {
                 }
             }
         }
+        
+        // Set the restaurant cost
+        this.restaurantCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        
+        // Apply any vouchers to the overall cost
+        this.voucherDiscount = 0d;
+        if( voucher != null ) {
+            this.voucherDiscount = this.restaurantCost * voucher.getDiscount() / 100d;
+        }           
 
         // Set the total cost
-        this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount - this.voucherDiscount;
         
         // Update whether or not the restaurant is currently open
         updateRestaurantIsOpen();
@@ -670,6 +681,14 @@ public class Order extends PersistentObject {
 
     public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
+    }
+
+    public Double getRestaurantCost() {
+        return restaurantCost;
+    }
+
+    public void setRestaurantCost(Double restaurantCost) {
+        this.restaurantCost = restaurantCost;
     }
 
     public List<Discount> getRestaurantDiscounts() {

@@ -7,6 +7,7 @@ import com.ezar.clickandeat.converter.NullIdStringTransformer;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
@@ -46,6 +47,9 @@ public class OrderController implements InitializingBean {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @Autowired
     private SequenceGenerator sequenceGenerator;
@@ -434,6 +438,36 @@ public class OrderController implements InitializingBean {
         return buildOrderResponse(model);
     }
 
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/applyVoucher.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> applyVoucher(@RequestParam(value = "orderId") String orderId, 
+                                               @RequestParam(value = "voucherId") String voucherId) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Applying voucher to orderId: " + orderId);
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            if( order != null ) {
+                
+            }
+            
+            
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+    
 
     @SuppressWarnings("unchecked")
     @ResponseBody
