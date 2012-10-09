@@ -212,7 +212,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0}:<br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><b>{0}:</b><br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
