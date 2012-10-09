@@ -7,6 +7,9 @@
 
 <h1>Your order $order.orderId has been cancelled as the restaurant did not respond</h1>
 
+<div>Please give us another chance, here's a discount voucher:</div>
+<div>$voucherId</div>
+
 </body>
 
 

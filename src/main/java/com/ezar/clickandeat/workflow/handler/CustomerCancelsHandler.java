@@ -1,7 +1,9 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -22,6 +24,9 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     private int cancelCutoffMinutes;
 
@@ -55,6 +60,9 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         order.addOrderUpdate("Customer cancelled order");
+
+        // Set any voucher on this order to be unused
+        voucherRepository.markVoucherUnused(order.getVoucherId());
 
         try {
             notificationService.sendCustomerCancelledConfirmationToRestaurant(order);

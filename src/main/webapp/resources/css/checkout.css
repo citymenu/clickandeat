@@ -40,24 +40,20 @@
 }
 
 .contact-form-label {
-    font-family: pt-sans;
-    font-size: 13px;
-    line-height: 16px;
-    color: #666666;
-    font-weight: 700;
+    font:13px/16px pt-sans;
+    color: #444444;
+    padding-top:4px;
 }
 
 .checkout-description {
-    font-family: pt-sans;
-    font-size: 12px;
-    font-weight: 700;
+    font:12px/15px prenton;
+    font-weight: 500;
     color:#666666;
     padding: 5px 0 10px 0;
 }
 
 .contact-form-field input, .contact-form-field textarea {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 13px;
+    font: 13px/15px pt-sans;
     width:460px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
@@ -72,12 +68,10 @@
 }
 
 .telephone-instructions {
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 12px;
-    line-height:14px;
-    color:#444444;
-    padding-top: 3px;
+    font:12px/14px pt-sans;
+    color:#666666;
     font-style:italic;
+    padding-top: 3px;
 }
 
 .contact-form-field textarea {
@@ -122,9 +116,8 @@ a.checkout-nav-button, a.checkout-nav-button:active, a.checkout-nav-button:hover
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font-family: "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-weight: 700;
-    font-size: 12px;
+    font: 12px prenton;
+    font-weight: 500;
     padding: 1px 6px 1px 6px;
     text-align: center;
     vertical-align: baseline;
@@ -144,3 +137,20 @@ a.checkout-nav-button-large, a.checkout-nav-button-large:active, a.checkout-nav-
 a.checkout-nav-button-large:active, a.checkout-nav-button-large:hover {
     background-color: #2c8023;
 }
+
+.invalid-voucher {
+    display:inline-block;
+    font:500 12px/15px prenton;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    padding: 6px 10px 6px 10px;
+}
+
+.checkout-validation-error {
+     font:500 13px/16px prenton;
+     border: 1px solid #b64242;
+     background-color: #fffece;
+     margin-bottom: 20px;
+     width: 608px;
+     padding: 6px 10px 6px 10px;
+ }

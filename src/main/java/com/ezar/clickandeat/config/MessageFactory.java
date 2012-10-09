@@ -6,16 +6,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class MessageFactory {
     
     private static final Map<String,String> messages;
 
     private static final String systemLocale;
+    
+    private static final Locale applicationLocale;
     
     static {
         try {
@@ -30,6 +29,7 @@ public class MessageFactory {
             Properties props = new Properties();
             props.load(resource.getInputStream());
             systemLocale = locale;
+            applicationLocale = new Locale(locale.split("_")[0],locale.split("_")[1]);
             messages = new HashMap<String, String>();
             for( Object key: props.keySet()) {
                 messages.put((String)key, (String)props.get(key));
@@ -40,8 +40,11 @@ public class MessageFactory {
         }
     }
 
-
-    public static String getLocale() {
+    public static Locale getLocale() {
+        return applicationLocale;
+    }
+    
+    public static String getLocaleString() {
         return systemLocale; 
     }
 

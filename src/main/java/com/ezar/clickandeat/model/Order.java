@@ -156,6 +156,9 @@ public class Order extends PersistentObject {
 
             if( !allowFreeDelivery ) {
                 this.deliveryCost = deliveryCharge;
+                if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
+                    this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
+                }
             }
             else {
                 if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
@@ -707,6 +710,14 @@ public class Order extends PersistentObject {
         this.totalDiscount = totalDiscount;
     }
 
+    public Double getVoucherDiscount() {
+        return voucherDiscount;
+    }
+
+    public void setVoucherDiscount(Double voucherDiscount) {
+        this.voucherDiscount = voucherDiscount;
+    }
+
     public List<OrderUpdate> getOrderUpdates() {
         return orderUpdates;
     }
@@ -746,6 +757,9 @@ public class Order extends PersistentObject {
     }
 
     public void setVoucher(Voucher voucher) {
-        this.voucher = voucher;
+        if( voucher != null ) {
+            this.voucherId = voucher.getVoucherId();
+            this.voucher = voucher;
+        }
     }
 }

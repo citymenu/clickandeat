@@ -1,7 +1,9 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.repository.VoucherRepositoryImpl;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -23,6 +25,9 @@ public class OrderPlacedHandler implements IWorkflowHandler {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private VoucherRepositoryImpl voucherRepository;
     
     private String timeZone;
     
@@ -47,6 +52,9 @@ public class OrderPlacedHandler implements IWorkflowHandler {
 
         // Update order placed time
         order.setOrderPlacedTime(new DateTime());
+
+        // Set any voucher on this order to be unused
+        voucherRepository.markVoucherUsed(order.getVoucherId());
         
         // Send notifications to restaurant and customer
         try {

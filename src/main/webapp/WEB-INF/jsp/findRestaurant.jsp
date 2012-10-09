@@ -89,11 +89,11 @@
                                 <div class="search-result">
                                     <table width="710">
                                         <tr valign="top">
-                                            <td width="360">
-                                                <table width="310">
+                                            <td width="330">
+                                                <table width="330">
                                                     <tr valign="bottom">
-                                                        <td width="65">
-                                                            <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="50" alt="<util:escape value="${restaurant.name}"/>"/></td>
+                                                        <td width="85">
+                                                            <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/></td>
                                                         </td>
                                                         <td width="245">
                                                             <div class="search-result-center">
@@ -103,7 +103,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
-                                                        <td width="310" colspan="2">
+                                                        <td width="330" colspan="2">
                                                             <div class="address-details">
                                                                 <util:escape value="${restaurant.address.summary}"/><br>
                                                                 <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
@@ -112,10 +112,10 @@
                                                     </tr>
                                                 </table>
                                             </td>
-                                            <td width="400">
-                                                <table width="400">
+                                            <td width="380">
+                                                <table width="380">
                                                     <tr valign="top">
-                                                        <td width="250">
+                                                        <td width="230">
                                                             <c:if test="${restaurant.hasDiscounts == true}">
                                                                 <div class="restaurant-discount-details">
                                                                     <div class="scissors"></div>
@@ -135,12 +135,11 @@
                                                                         <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
                                                                     </c:otherwise>
                                                                 </c:choose>
-
                                                             </div>
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
-                                                        <td width="400" colspan="2" align="right">
+                                                        <td width="380" colspan="2" align="right">
                                                             <div class="restaurant-opening-details">
                                                                 <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                                                 <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>

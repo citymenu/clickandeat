@@ -1,5 +1,8 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.model.OpeningTime;
+import com.ezar.clickandeat.model.OpeningTimes;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
@@ -10,6 +13,10 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalTime;
+import org.joda.time.MutableDateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,10 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -37,6 +41,8 @@ public class RestaurantController {
 
     private static final Logger LOGGER = Logger.getLogger(RestaurantController.class);
 
+    private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+    
     @Autowired
     private RestaurantRepository repository;
 
@@ -100,12 +106,69 @@ public class RestaurantController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/restaurant/getOpeningTimes.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> getOpeningTimes(@RequestParam(value = "restaurantId") String restaurantId ) throws Exception {
+        
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            OpeningTimes openingTimes = restaurant.getOpeningTimes();
+            Map<String,String> dailyOpeningTimes = new LinkedHashMap<String, String>();
+            MutableDateTime dateTime = new MutableDateTime();
+            for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+                int dayOfWeek = openingTime.getDayOfWeek();
+                dateTime.setDayOfWeek(dayOfWeek);
+
+                LocalTime earlyOpeningTime = openingTime.getEarlyOpeningTime();
+                LocalTime earlyClosingTime = openingTime.getEarlyClosingTime();
+                LocalTime lateOpeningTime = openingTime.getLateOpeningTime();
+                LocalTime lateClosingTime = openingTime.getLateClosingTime();
+
+                boolean hasEarlyTimes = (earlyOpeningTime != null && earlyClosingTime != null);
+                boolean hasLateTimes = (lateOpeningTime != null && lateClosingTime != null);
+
+                String openingTimeSummary;
+                
+                if( !hasEarlyTimes && !hasLateTimes ) {
+                    openingTimeSummary = MessageFactory.getMessage("restaurant.closed",false);
+                }
+                else if( hasEarlyTimes && !hasLateTimes ) {
+                    openingTimeSummary = earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter);
+                }
+                else if( !hasEarlyTimes ) {
+                    openingTimeSummary = lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
+                }
+                else {
+                    openingTimeSummary = earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter) + " | " + lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
+                }
+
+                String weekDay = dateTime.dayOfWeek().getAsText(MessageFactory.getLocale());
+                dailyOpeningTimes.put(weekDay, openingTimeSummary);
+            }
+            
+            model.put("success",true);
+            model.put("openingTimes",dailyOpeningTimes);
+        }
+        catch( Exception ex ) {
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+
+    
+    
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )
     public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
                                        @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort ) throws Exception {
 
         PageRequest request;
 
+        
         if( StringUtils.hasText(sort)) {
             List<Map<String,String>> sortParams = (List<Map<String,String>>)jsonUtils.deserialize(sort);
             Map<String,String> sortProperties = sortParams.get(0);

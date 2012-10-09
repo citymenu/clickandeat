@@ -4,6 +4,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -29,6 +30,9 @@ public class AutoCancelledHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private VoucherRepository voucherRepository;
+
     private int minutesBeforeAutoCancelOrder;
     
     
@@ -47,6 +51,9 @@ public class AutoCancelledHandler implements IWorkflowHandler {
 
         order.addOrderUpdate("System auto cancelled order due to no response from restaurant");
 
+        // Set any voucher on this order to be unused
+        voucherRepository.markVoucherUnused(order.getVoucherId());
+        
         try {
             // Delist the restaurant if no response from restaurant for any order in the last 20 minutes
             Restaurant restaurant = order.getRestaurant();

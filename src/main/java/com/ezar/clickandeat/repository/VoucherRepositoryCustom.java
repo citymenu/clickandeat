@@ -9,5 +9,9 @@ public interface VoucherRepositoryCustom {
     Voucher saveVoucher(Voucher voucher);
     
     Voucher createVoucher();
+    
+    void markVoucherUsed(String voucherId);
+    
+    void markVoucherUnused(String voucherId);
 
 }

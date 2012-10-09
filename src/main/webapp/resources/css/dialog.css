@@ -20,15 +20,14 @@
 }
 
 .dialog-subheader {
-    font-family: pt-sans;
+    font: 14px/16px prenton;
     font-size: 13px;
     color: #444444;
     padding: 0 5px 12px 5px;
 }
 
 .dialog-content {
-    font-family: pt-sans;
-    font-size: 12px;
+    font: 13px/15px prenton;
     color: #444444;
     padding: 0 5px 0 5px;
 }
@@ -49,10 +48,10 @@
 }
 
 .dialog-warning-wrapper {
-    font: 14px/16px "pt-sans";
+    font: 14px/16px prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
-    font-weight:600;
+    font-weight:500;
     color:#444444;
     margin-top: 6px;
     padding: 6px 10px 10px 10px;

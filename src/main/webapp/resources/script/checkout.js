@@ -1,3 +1,4 @@
+var orderId;
 var isValid = false;
 var mapRendered = false;
 
@@ -100,8 +101,17 @@ function getOrderPanelConfig() {
 
 // Override order behaviour
 function onBeforeBuildOrder(order) {
+    orderId = order.orderId;
     canCheckout = order.canCheckout;
     updateDeliveryDisplay(order.deliveryType);
+}
+
+// Override after build order
+function onAfterBuildOrder(order) {
+    // Override build order click event
+    $('#buildorder').click(function(){
+        updateOrder();
+    });
 }
 
 // Updates display based on delivery type
@@ -147,6 +157,26 @@ function initializeMap() {
 }
 
 
+// Apply voucher
+function applyVoucher() {
+    var voucherId = $('#voucherid').val();
+    if( voucherId != '' ) {
+        $('.invalid-voucher').remove();
+        $.post( ctx + '/order/applyVoucher.ajax', { orderId: orderId, voucherId: voucherId },
+            function(data) {
+                if( data.success ) {
+                    $('#voucherid').val('');
+                    buildOrder(data.order);
+                } else {
+                    var reason = data.reason;
+                    $('#voucher-validation').append(('<div class=\'invalid-voucher\'>{0}</div>').format(getLabel('checkout.' + reason)));
+                }
+            }
+        );
+    }
+}
+
+
 // Update order
 function updateOrder() {
     $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()) },
@@ -164,12 +194,20 @@ function updateOrder() {
 function proceedToPayment() {
     validateForm();
     if( isValid ) {
-        $.post( ctx + '/secure/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
+        $('.checkout-validation-error').remove();
+        $('.invalid-voucher').remove();
+        $.post( ctx + '/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
             function( data ) {
                 if( data.success ) {
-                    location.href = ctx + '/secure/payment.html';
+                    location.href = ctx + '/payment.html';
                 } else {
-                    showError(data.header,data.message);
+                    if( data.reason != null ) {
+                        var reason = data.reason;
+                        $('#checkout-validation').append(('<div class=\'checkout-validation-error\'>{0}</div>').format(getLabel('checkout.' + reason)));
+                        $.scrollTo(0);
+                    } else {
+                        alert(data.success);
+                    }
                 }
             }
         );

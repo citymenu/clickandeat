@@ -15,7 +15,7 @@ public class DateTimeUtil {
     private static Locale locale;
 
     static {
-        String[] localeArray = MessageFactory.getLocale().split("_");
+        String[] localeArray = MessageFactory.getLocaleString().split("_");
         locale = new Locale(localeArray[0],localeArray[1]);
     }
     

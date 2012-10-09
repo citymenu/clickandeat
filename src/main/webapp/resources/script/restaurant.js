@@ -29,6 +29,20 @@ function onAfterBuildOrder(order,config) {
     updateOrderPanelPos();
 }
 
+// Show all opening times for the restaurant
+function showAllOpeningTimes() {
+    $.post( ctx+'/restaurant/getOpeningTimes.ajax', { restaurantId: restaurantId },
+        function( data ) {
+            if( data.success ) {
+
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+
+}
+
 
 // Updates the position of the menu launch object
 function updateLaunchPos() {

@@ -4,7 +4,9 @@ import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
@@ -31,6 +33,9 @@ public class EmailServiceImpl implements IEmailService {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
     
     @Autowired
     private JavaMailSender mailSender;
@@ -224,8 +229,12 @@ public class EmailServiceImpl implements IEmailService {
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = MessageFactory.getMessage("email-subject.customer-auto-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+        
+        // Create a voucher to try to keep this customer for the next order
+        Voucher voucher = voucherRepository.createVoucher();
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        templateMap.put("voucherId",voucher.getVoucherId());
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }

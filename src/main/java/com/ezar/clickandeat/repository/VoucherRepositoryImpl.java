@@ -56,7 +56,7 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
         operations.save(voucher);
         return voucher;
     }
-
+    
     
     @Override
     public Voucher createVoucher() {
@@ -72,6 +72,31 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
         return voucher;
     }
 
+    @Override
+    public void markVoucherUsed(String voucherId) {
+        updateVoucherStatus(voucherId, true);
+    }
+
+    @Override
+    public void markVoucherUnused(String voucherId) {
+        updateVoucherStatus(voucherId, false);
+    }
+
+    /**
+     * @param voucherId
+     * @param used
+     */
+    
+    private void updateVoucherStatus(String voucherId, boolean used) {
+        if( StringUtils.hasText(voucherId)) {
+            Voucher voucher = findByVoucherId(voucherId);
+            if( voucher != null ) {
+                voucher.setUsed(used);
+                saveVoucher(voucher);
+            }
+        }
+    }
+    
 
     private String generateVoucherId() {
         String id = "";

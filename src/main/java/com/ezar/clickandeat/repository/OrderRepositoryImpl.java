@@ -34,6 +34,9 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private VoucherRepository voucherRepository;
+
     @Override
     public Order create() {
         Order order = new Order();
@@ -45,8 +48,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     public Order findByOrderId(String orderId) {
         Query query = query(where("orderId").is(orderId));
         Order order = operations.findOne(query,Order.class);
-        if( order != null && order.getRestaurantId() != null ) {
-            order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+        if( order != null ) {
+            if( order.getRestaurantId() != null ) {
+                order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+            }
+            if( order.getVoucherId() != null ) {
+                order.setVoucher(voucherRepository.findByVoucherId(order.getVoucherId()));
+            }
         }
         return order;
     }

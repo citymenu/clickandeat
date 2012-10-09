@@ -110,7 +110,7 @@ function doBuildOrder(order,config) {
         if( config.showBuildOrderLink && order.orderItems.length > 0 ) {
             var warningMessage = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
             var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-            var warningContent = ('<div class=\'restaurant-warning-text\'>{0} {1}</div>')
+            var warningContent = ('<div>{0} {1}</div>')
                 .format(buildOrderLink, warningMessage);
 
             var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
@@ -127,7 +127,7 @@ function doBuildOrder(order,config) {
             var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
             var clearOrderLink = ('<a id=\'clearorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
 
-            var warningContent = ('<div class=\'restaurant-warning-text\'>{0} {1}</div><div class=\'restaurant-warning-text\'>{2} {3}</div>')
+            var warningContent = ('<div>{0} {1}</div><div class=\'restaurant-warning-text\'>{2} {3}</div>')
                 .format(buildOrderLink, warningMessage1, clearOrderLink, warningMessage2);
 
             var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
@@ -212,7 +212,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><b>{0}:</b><br/>{1}</td><td width=\'50\' align=\'right\'><b>{2}{3}</b></td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0}:<br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -239,6 +239,19 @@ function doBuildOrder(order,config) {
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
             var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'194\'><tr valign=\'top\'><td width=\'124\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{0}{1}</td><td width=\'20\' align=\'right\'></td></tr>').format(ccy,order.formattedDeliveryCost);
+            $('#order-item-contents').append(row);
+        }
+
+        // Add voucher if applicable
+        if( order.voucher != null ) {
+            var voucher = order.voucher;
+            if(config.allowRemoveItems) {
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{2}{3}</td><td width=\'20\' align=\'right\'><a onclick=\"removeVoucher()\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
+                    .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
+            } else {
+                var row = '<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{2}{3}</td><td width=\'20\'></td></tr>'
+                    .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
+            }
             $('#order-item-contents').append(row);
         }
 
@@ -892,7 +905,10 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     var specialOfferItemIndex = 0;
     specialOfferItems.forEach(function(specialOfferItem){
         var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
-        var selectOptions = ('<option value=\'EMPTY\'>{0}</option>').format(unescapeQuotes(specialOfferItem.description));
+        if( specialOfferItem.description != '' ) {
+            specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
+        }
+        var selectOptions = ('<option value=\'EMPTY\'>{0}</option>').format(getLabel('order.please-choose'));
         specialOfferItem.itemChoices.forEach(function(itemChoice){
             selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
         });
@@ -1018,6 +1034,20 @@ function removeFromOrder(orderItemId, quantity ) {
     );
 }
 
+// Remove voucher from order
+function removeVoucher() {
+    $.post( ctx+'/order/removeVoucher.ajax', {},
+        function( data ) {
+            if( data.success ) {
+                buildOrder(data.order);
+            } else {
+                alert('success:' + data.success);
+            }
+        }
+    );
+}
+
+
 // Update a selected free item in a discount option
 function updateFreeItem(discountId,freeItem) {
     var update = {
@@ -1038,24 +1068,7 @@ function updateFreeItem(discountId,freeItem) {
 
 // Proceed to checkout
 function checkout() {
-    if( currentOrder && currentOrder.orderItems.length > 0 ) {
-        if(currentOrder.deliveryType == 'DELIVERY' && !allowDeliveryOrdersBelowMinimum && currentOrder.orderItemCost < minimumOrderForFreeDelivery) {
-            var additionalSpend = minimumOrderForFreeDelivery - currentOrder.orderItemCost;
-            $('<div></div>')
-                .html('<div>Your order value is below the minimum amount for delivery, you need to spend an additional {0}{1} on this order.</div>'.format(ccy,additionalSpend.toFixed(2)))
-                .dialog({
-                    modal:true,
-                    title:'Order cost below minimum for delivery',
-                    buttons: {
-                        "OK": function() {
-                            $( this ).dialog( "close" );
-                        }
-                    }
-                });
-        } else {
-            location.href = ctx + '/secure/checkout.html';
-        }
-    }
+    location.href = ctx + '/checkout.html';
 }
 
 // Unescapes string values

@@ -27,27 +27,38 @@
                         <table width="1000">
                             <tr valign="top">
                                 <td width="460">
-                                    <div class="restaurant-title-wrapper">
-                                        <div>
-                                            <div class="restaurant-logo">
+                                    <table width="460">
+                                        <tr valign="bottom">
+                                            <td nowrap>
                                                 <img src="${resources}/images/restaurant/${restaurant.imageName}"/>
-                                            </div>
-                                            <div class="restaurant-title">
-                                                <h2><util:escape value="${restaurant.name}"/></h2>
-                                                <c:if test="${restaurant.description != null}">
-                                                <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
-                                                </c:if>
-                                                <div class="cuisine-summary">${restaurant.cuisineSummary}</div>
-                                            </div>
+                                            </td>
+                                            <td width="100%">
+                                                <div class="restaurant-title">
+                                                    <h2><util:escape value="${restaurant.name}"/></h2>
+                                                    <c:if test="${restaurant.description != null}">
+                                                    <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
+                                                    </c:if>
+                                                    <div class="cuisine-summary">${restaurant.cuisineSummary}</div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="restaurant-summary">
+                                        <div class="restaurant-details">
+                                            <util:escape value="${restaurant.address.summary}"/>
+                                            <c:if test="${restaurant.contactTelephone != ''}">
+                                            <br>${restaurant.contactTelephone}
+                                            </c:if>
                                         </div>
-                                        <div class="restaurant-summary">
-                                            <div class="restaurant-details">
-                                                <util:escape value="${restaurant.address.summary}"/>
-                                                <c:if test="${restaurant.contactTelephone != ''}">
-                                                <br>${restaurant.contactTelephone}
-                                                </c:if>
-                                            </div>
+                                        <div class="restaurant-delivery-details">
+                                            <c:if test="${restaurant.deliveryTimeMinutes != 0}">
+                                            <message:message key="order.delivery-time"/> ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/>
+                                            </c:if>
+                                            <c:if test="${restaurant.collectionTimeMinutes != 0}">
+                                            <br><message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
+                                            </c:if>
                                         </div>
+
                                     </div>
                                 </td>
                                 <td width="340">
@@ -58,33 +69,29 @@
                                                     <message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}&nbsp;&nbsp;<a class="restaurant-text" onclick="showAllOpeningTimes()"><message:message key="restaurant.opening-show-all"/></a>
                                                 </div>
                                                 <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
-                                                <div class="restaurant-time-details">
-                                                    <c:if test="${restaurant.collectionTimeMinutes != 0}">
-                                                    <div class="restaurant-delivery-details">
-                                                        <message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
-                                                    </div>
-                                                    </c:if>
-                                                    <c:if test="${restaurant.deliveryTimeMinutes != 0}">
-                                                    <div class="restaurant-delivery-details">
-                                                        <message:message key="order.delivery-time"/>: ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/>
-                                                    </div>
-                                                    </c:if>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <c:if test="${restaurant.hasDiscounts == true}">
+                                        <div class="restaurant-discount-details">
+                                            <div class="scissors"></div>
+                                            <c:forEach var="discount" items="${restaurant.discounts}">
+                                                <div class="discount-details"><util:escape value="${discount.title}"/></div>
+                                            </c:forEach>
+                                        </div>
+                                    </c:if>
                                 </td>
                                 <td width="200">
                                     <div class="restaurant-location">
                                         <div class="restaurant-map">
-                                            <img width="200" height="90" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x90&scale=2&maptype=roadmap&markers=color:blue%7Clabel:B%7C${restaurant.coordinates}&sensor=false"/>
+                                            <img width="200" height="120" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=200x120&scale=2&maptype=roadmap&markers=color:blue%7Clabel:B%7C${restaurant.coordinates}&sensor=false"/>
                                         </div>
                                         <c:choose>
                                             <c:when test="${search != null && search.coordinates != null}">
-                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Get directions</a> from your location to <util:escape value="${restaurant.name}"/>.</div>
+                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Get directions</a> from your location.</div>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Show location</a> of <util:escape value="${restaurant.name}"/>.</div>
+                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Show location</a>.</div>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>

@@ -46,10 +46,8 @@
 }
 
 h3.order-table {
-    font-family: myriad-pro-semi-condensed;
-    font-size: 12px;
-    line-height: 16px;
-    color: #444444;
+    font: 12px prenton;
+    color: #666666;
     font-weight: 700;
     margin-bottom: 0;
 }
@@ -59,8 +57,9 @@ h3.order-table {
     background-color:#FFFFFF;
     margin: 10px 0 10px 0;
     padding: 5px 10px 5px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .order-item-wrapper, .order-item-wrapper-header {
@@ -74,9 +73,7 @@ h3.order-table {
 }
 
 .order-item-wrapper td {
-    font-family: pt-sans;
-    font-size: 12px;
-    line-height: 16px;
+    font: 12px/14px pt-sans;
 }
 
 .order-remove-item {
@@ -93,8 +90,7 @@ h3.order-table {
 }
 
 select.deliveryselect {
-    font-family: pt-sans;
-    font-size: 12px;
+    font:13px pt-sans;
 }
 
 .order-discount-wrapper {
@@ -102,8 +98,9 @@ select.deliveryselect {
     background-color:#FFFFFF;
     margin: 10px 0 10px 0;
     padding: 5px 10px 5px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .order-discount-wrapper h2 {
@@ -114,34 +111,30 @@ select.deliveryselect {
 }
 
 .order-discount-item {
-    font-family: pt-sans;
-    font-size: 12px;
+    font: 12px/14px prenton;
     padding-top: 2px;
-    font-weight:700;
+    font-weight:400;
 }
 
 .additional-information {
     border: 1px solid #CCCCCC;
+    font: 12px/15px prenton;
     background-color:#FFFFFF;
     padding: 5px 10px 5px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    font-family: pt-sans;
-    font-size: 12px;
-    line-height: 16px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 select.freeitemselect {
-    font-family: pt-sans;
-    font-size: 12px;
+    font:12px pt-sans;
     margin-top:2px;
 }
 
 #instructions {
     width: 460px;
     height: 150px;
-    font-family: pt-sans;
-    font-size: 13px;
+    font:13px/15px pt-sans;
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
     color:#444444;
@@ -168,45 +161,45 @@ select.freeitemselect {
 }
 
 .order-free-item-wrapper {
-    font-family: pt-sans;
-    font-size: 12px;
-    line-height: 16px;
+    font:12px/14px prenton;
     margin: 0;
     padding: 0 10px 0 10px;
 }
 
 .order-free-item-title {
-    font-weight:bold;
+    font-weight:500;
     color:#444444;
     margin-bottom: 6px;
 }
 
+.medium {
+    font-weight:500;
+}
+
 .delivery-warning-wrapper {
-    font-family: pt-sans;
+    font:12px/15px prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
-    font-size: 12px;
-    line-height: 16px;
     margin-top: 6px;
     padding: 5px 10px 5px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .restaurant-warning {
-    font-family: pt-sans;
+    font:12px/15px prenton;
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;
-    font-size: 12px;
-    line-height: 16px;
-    margin-top: 6px;
+    margin: 5px 0 10px 0;
     padding: 5px 10px 5px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .restaurant-warning-text {
-    padding-bottom: 5px;
+    padding-top: 5px;
 }
 
 .delivery-options-wrapper {
@@ -228,9 +221,8 @@ select.freeitemselect {
 
 a.delivery-button {
     color:#AA0000;
-    font-family: pt-sans;
-    font-weight: 700;
-    font-size: 12px;
+    font:12px prenton;
+    font-weight: 500;
     text-decoration:underline;
     cursor:pointer;
 }
@@ -239,9 +231,8 @@ a.order-button, a.order-button:active, a.order-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font-family: pt-sans;
-    font-weight: 700;
-    font-size: 12px;
+    font:12px prenton;
+    font-weight: 500;
     padding: 1px 6px 1px 6px;
     text-align: center;
     vertical-align: baseline;
@@ -271,9 +262,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-description {
-    font-family: pt-sans;
-    font-size: 14px;
-    line-height: 16px;
+    font:14px/16px prenton;
     padding: 2px 0 2px 0;
 }
 
@@ -302,13 +291,11 @@ a.order-button-large:active, a.order-button-large:hover {
 #quantity {
     width:20px;
     border:1px solid #AAAAAA;
-    font-family: pt-sans;
-    font-size:16px;
+    font: 700 16px pt-sans;
     color: #444444;
     padding: 0 5px 0 5px;
     margin-left: 5px;
     text-align:center;
-    font-weight:700;
 }
 
 #quantity:focus {
@@ -321,8 +308,9 @@ a.order-button-large:active, a.order-button-large:hover {
     border: 1px solid #BBBBBB;
     margin: 10px 0 10px 0;
     padding: 8px 15px 8px 15px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .additional-item-table {
@@ -331,9 +319,8 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-title {
-    font-family: pt-sans;
-    font-size:13px;
-    font-weight:700;
+    font: 13px prenton;
+    font-weight:500;
     padding: 4px 0 4px 0;
 }
 
@@ -342,9 +329,8 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-item-cost {
-    font-family: pt-sans;
-    font-size:13px;
-    font-weight:700;
+    font:13px prenton;
+    font-weight:500;
     padding: 4px 0 4px 0;
 }
 
@@ -379,7 +365,7 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .additional-items-wrapper h3 {
-    color: #BB0000;
+    color: #AA0000;
     font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px;
@@ -416,8 +402,9 @@ a.order-button-large:active, a.order-button-large:hover {
     width: 500px;
     padding: 10px 15px 10px 15px;
     border:1px solid #FFFFFF;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 
 }
 
@@ -435,7 +422,7 @@ a.order-button-large:active, a.order-button-large:hover {
 .warning-container {
     border: 1px solid #b64242;
     background-color: #fffece;
-    font:14px/16px pt-sans;
+    font:14px/16px prenton;
     margin-top: 6px;
     padding: 6px 10px 6px 10px;
     -moz-border-radius: 5px;
@@ -457,17 +444,26 @@ a.order-button-large:active, a.order-button-large:hover {
 }
 
 .specialofferitemtitle {
-    color: #BB0000;
+    color: #AA0000;
     font-family: MaiandraOTGD-DemiBold;
     font-size:14px;
     line-height:16px;
     color:#AA0000;
-    padding-bottom:6px;
+}
+
+.specialofferitemdescription {
+    font:12px/14px prenton;
+    color:#444444;
+    font-weight:500;
+    padding-top:3px;
+}
+
+.specialofferitemchoice {
+    padding-top:6px;
 }
 
 .specialofferitemchoice select{
-    font-family: pt-sans;
-    font-size:13px;
+    font: 13px pt-sans;
 }
 
 #checkout {

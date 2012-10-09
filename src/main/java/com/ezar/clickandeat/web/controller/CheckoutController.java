@@ -51,7 +51,7 @@ public class CheckoutController {
     private int maxRadiusMetres;
     
 
-    @RequestMapping(value="/secure/checkout.html", method= RequestMethod.GET)
+    @RequestMapping(value="/checkout.html", method= RequestMethod.GET)
     public ModelAndView checkout(HttpServletRequest request) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
@@ -82,7 +82,7 @@ public class CheckoutController {
         model.put("restaurant",restaurant);
 
         // Put the system locale on the response
-        model.put("validatorLocale", MessageFactory.getLocale().split("_")[0]);
+        model.put("validatorLocale", MessageFactory.getLocaleString().split("_")[0]);
         
         return new ModelAndView("checkout",model);
     }
@@ -130,13 +130,14 @@ public class CheckoutController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping(value="/secure/proceedToPayment.ajax", method = RequestMethod.POST )
+    @RequestMapping(value="/proceedToPayment.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> proceedToPayment(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
         
         try {
-            boolean hasValidationError = false;
+            boolean success = true;
+            String reason = null;
             
             // Extract person and address from request
             Person person = buildPerson(body);
@@ -153,33 +154,29 @@ public class CheckoutController {
             order.updateRestaurantIsOpen();
             orderRepository.saveOrder(order);
 
-            // Indicate if the restaurant is not open (only if no other errors have been found
+            // If the restaurant is not open, return an error
             if( !order.getRestaurantIsOpen()) {
-                model.put("header",MessageFactory.getMessage("checkout.restaurant-not-open", true));
-                if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                    model.put("message",MessageFactory.formatMessage("checkout.restaurant-not-open-for-delivery", true, order.getRestaurantName()));
-                }
-                else {
-                    model.put("message",MessageFactory.formatMessage("checkout.restaurant-not-open-for-collection", true, order.getRestaurantName()));
-                }
-                hasValidationError = true;
+                success = false;
+                reason = "checkout-restaurant-closed";
             }
-            else if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                GeoLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
-                if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
-                    model.put("header",MessageFactory.getMessage("checkout.location-not-found", true));
-                    model.put("message",MessageFactory.getMessage("checkout.location-not-found-text", true));
-                    hasValidationError = true;
-                }
-                else if( !restaurantRepository.willDeliverToLocationOrPostCode(order.getRestaurant(), deliveryLocation.getLocation(), deliveryAddress.getPostCode())) {
-                    model.put("header",MessageFactory.getMessage("checkout.location-restaurant-wont-deliver", true));
-                    model.put("message",MessageFactory.formatMessage("checkout.location-restaurant-wont-deliver-text", true, order.getRestaurant().getName()));
-                    hasValidationError = true;
+            else {
+                // If the order is for delivery, check that the delivery address can be determined
+                if( Order.DELIVERY.equals(order.getDeliveryType())) {
+                    GeoLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
+                    if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
+                        success = false;
+                        reason = "checkout-location-not-found";
+                    }
+                    else if( !restaurantRepository.willDeliverToLocationOrPostCode(order.getRestaurant(), deliveryLocation.getLocation(), deliveryAddress.getPostCode())) {
+                        success = false;
+                        reason = "checkout-restaurant-wont-deliver";
+                    }
                 }
             }
 
             // Indicate if the data is all valid
-            model.put("success",!hasValidationError);
+            model.put("success",success);
+            model.put("reason",reason);
         }
         
         catch( Exception ex ) {

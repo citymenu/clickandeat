@@ -31,6 +31,10 @@
                 <td width="760">
                     <div class="checkout-left">
                         <div class="checkout-wrapper">
+
+                            <!-- Validation errors -->
+                            <div id="checkout-validation"></div>
+
                             <!-- Customer details -->
                             <div class="checkout-item-wrapper">
                                 <h2><message:message key="checkout.your-details"/></h2>
@@ -148,11 +152,11 @@
                                         <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
                                     </div>
                                 </div>
+                                <div id="voucher-validation"></div>
                             </div>
 
                             <!-- Navigation buttons -->
                             <div class="checkout-navigation-wrapper">
-                                <a class="checkout-nav-button checkout-nav-button-large" onclick="updateOrder()"><message:message key="button.update-order"/></a>
                                 <a class="checkout-nav-button checkout-nav-button-large" onclick="proceedToPayment()"><message:message key="button.payment"/></a>
                             </div>
                         </div>

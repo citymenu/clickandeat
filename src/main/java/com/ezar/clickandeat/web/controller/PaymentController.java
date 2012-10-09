@@ -43,7 +43,7 @@ public class PaymentController {
     private String timeZone;
 
     
-    @RequestMapping(value="/secure/payment.html", method= RequestMethod.GET)
+    @RequestMapping(value="/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
 
         if( request.getSession(true).getAttribute("orderid") == null ) {

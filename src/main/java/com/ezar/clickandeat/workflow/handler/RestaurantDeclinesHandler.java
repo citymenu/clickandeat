@@ -2,8 +2,10 @@ package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
@@ -26,6 +28,8 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @Override
     public String getWorkflowAction() {
@@ -43,6 +47,9 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
 
         order.addOrderUpdate("Restaurant declined order");
         order.setRestaurantActionedTime(new DateTime());
+
+        // Set any voucher on this order to be unused
+        voucherRepository.markVoucherUnused(order.getVoucherId());
 
         // Update the last time the restaurant responded to the system
         Restaurant restaurant = order.getRestaurant();

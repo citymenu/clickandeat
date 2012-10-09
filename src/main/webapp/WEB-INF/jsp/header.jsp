@@ -61,7 +61,7 @@
                             <li class="active unselectable"><message:message key="workflow.4-checkout"/></li>
                         </c:when>
                         <c:when test="${cancheckout != null && cancheckout == true}">
-                            <li class="unselectable"><a href="${ctx}/secure/checkout.html"><message:message key="workflow.4-checkout"/></a></li>
+                            <li class="unselectable"><a href="${ctx}/checkout.html"><message:message key="workflow.4-checkout"/></a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><message:message key="workflow.4-checkout"/></li>

@@ -20,7 +20,7 @@
 }
 
 .header-company {
-    font-family: MaiandraOTGD-DemiBold,impact;
+    font-family: MaiandraOTGD-DemiBold;
     font-size:28px;
     line-height:28px
     height:40px;
@@ -57,7 +57,7 @@
 }
 
 .navigation-links {
-    padding-top: 6px;
+    padding-top: 5px;
     padding-left: 25px;
     clear:both;
 }
@@ -68,9 +68,9 @@
 
 .navigation-wrapper li {
     color: #999999;
-    font-family: arial, "pt-sans",'Helvetica Neue',Arial,'Lucida Grande',sans-serif;
-    font-size: 12px;
-    font-weight: 700;
+    font-family: prenton;
+    font-size: 13px;
+    font-weight:500;
     display:inline;
     float:left;
     padding-right:15px;

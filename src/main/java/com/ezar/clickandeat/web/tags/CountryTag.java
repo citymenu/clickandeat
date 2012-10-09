@@ -10,7 +10,7 @@ public class CountryTag extends SimpleTagSupport {
     
     @Override
     public void doTag() throws JspException, IOException {
-        getJspContext().getOut().write(MessageFactory.getLocale().split("_")[1]);
+        getJspContext().getOut().write(MessageFactory.getLocaleString().split("_")[1]);
     }
     
 }

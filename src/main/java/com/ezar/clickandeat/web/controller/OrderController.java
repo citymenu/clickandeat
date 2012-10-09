@@ -442,22 +442,96 @@ public class OrderController implements InitializingBean {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/order/applyVoucher.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> applyVoucher(@RequestParam(value = "orderId") String orderId, 
-                                               @RequestParam(value = "voucherId") String voucherId) throws Exception {
+    public ResponseEntity<byte[]> applyVoucher( HttpServletRequest request, @RequestParam(value = "voucherId") String voucherId) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Applying voucher to orderId: " + orderId);
+            LOGGER.debug("Applying voucher to order");
+        }
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        voucherId = voucherId == null? "": voucherId.trim();
+
+        try {
+
+            boolean success = true;
+            String reason = null;
+
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order = null;
+            if( orderId != null ) {
+                order = orderRepository.findByOrderId(orderId);
+            }
+
+            if( order != null ) {
+                if( order.getVoucher() != null ) {
+                    success = false;
+                    reason = "voucher-already-applied";
+                }
+                else {
+                    Voucher voucher = voucherRepository.findByVoucherId(voucherId);
+                    if( voucher == null ) {
+                        success = false;
+                        reason = "voucher-not-found";
+                    }
+                    else {
+                        if( voucher.isUsed()) {
+                            success = false;
+                            reason = "voucher-already-used";
+                        }
+                        else {
+                            order.setVoucher(voucher);
+                            order = orderRepository.saveOrder(order);
+                        }
+                    }
+                }
+            }
+
+            // Return processed status
+            model.put("success",success);
+            model.put("order",order);
+            model.put("reason",reason);
+
+        }
+        catch(Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("reason","error");
+            model.put("message",ex.getMessage());
+        }
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/order/removeVoucher.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> removeVoucher(HttpServletRequest request) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Removing voucher from order");
         }
 
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
-            Order order = orderRepository.findByOrderId(orderId);
-            if( order != null ) {
-                
+            HttpSession session = request.getSession(true);
+            String orderId = (String)session.getAttribute("orderid");
+            Order order = null;
+            if( orderId != null ) {
+                order = orderRepository.findByOrderId(orderId);
             }
-            
-            
+
+            if( order != null && order.getVoucher() != null ) {
+                order.setVoucherId(null);
+                order.setVoucher(null);
+                orderRepository.saveOrder(order);
+                order = orderRepository.findByOrderId(orderId);
+            }
+
+            // Return processed status
+            model.put("order",order);
+            model.put("success",true);
         }
         catch(Exception ex ) {
             LOGGER.error("",ex);
@@ -467,7 +541,6 @@ public class OrderController implements InitializingBean {
         return buildOrderResponse(model);
     }
 
-    
 
     @SuppressWarnings("unchecked")
     @ResponseBody
