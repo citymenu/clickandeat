@@ -9,7 +9,6 @@ $(document).ready(function(){
         var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder\'{0}\'/>').format(getLabel('search.watermark'));
         var searchButton = ('<input class=\'searchbutton\' type=\'button\' id=\'searchbutton\' value=\'{0}\'/>').format(getLabel('button.search'));
         var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationField,searchButton);
-        $('.location-warning').remove();
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
