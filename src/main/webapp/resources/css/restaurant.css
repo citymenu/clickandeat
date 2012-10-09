@@ -273,7 +273,7 @@ h3.menu-item-title {
 }
 
 .menu-item-cost {
-    font: 13px/15px pt-sans;
+    font: 13px/15px myriad-pro-semi-condensed;
     color: #444444;
     font-weight: 700;
     padding-right: 1px;
@@ -289,7 +289,7 @@ span.menu-item-action {
     font: 12px/14px pt-sans;
     font-weight:400;
     font-style:italic;
-    padding-right:10px;
+    padding-right:20px;
 }
 
 td.spacer {
