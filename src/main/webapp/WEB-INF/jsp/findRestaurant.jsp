@@ -60,7 +60,7 @@
                             <div class="search-filters">
                                 <table width="690">
                                     <tr valign="middle">
-                                        <td width="490">
+                                        <td width="370">
                                             <div class="search-cuisine-filter">
                                                 <message:message key="search.filter-by-cuisine"/>:
                                                 <select class="search-select" id="cuisine-select">
@@ -71,7 +71,7 @@
                                                 </select>
                                             </div>
                                         </td>
-                                        <td width="200" align="right">
+                                        <td width="320" align="right">
                                             <div class="search-cuisine-filter">
                                                 <input type="checkbox" class="search-checkbox" id="ignore-closed"/> <message:message key="search.ignore-closed"/>
                                             </div>
