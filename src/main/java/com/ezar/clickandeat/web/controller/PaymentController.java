@@ -1,11 +1,13 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +39,9 @@ public class PaymentController {
     private OrderWorkflowEngine orderWorkflowEngine;
 
     @Autowired
+    private PaymentService paymentService;
+    
+    @Autowired
     private RequestHelper requestHelper;
 
     @Autowired
@@ -45,58 +52,69 @@ public class PaymentController {
     
     @RequestMapping(value="/payment.html", method= RequestMethod.GET)
     public String payment(HttpServletRequest request) throws Exception {
-
         if( request.getSession(true).getAttribute("orderid") == null ) {
             return "redirect:/home.html";
         }
-
         return "payment";
     }
 
 
-    @ResponseBody
-    @RequestMapping(value="/secure/processCardPayment.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> processCardPayment(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+    @RequestMapping(value="/cardProcessing.html", method = RequestMethod.GET )
+    public ModelAndView processCardPayment(HttpServletRequest request) throws Exception {
+        Order order = requestHelper.getOrderFromSession(request);
+        Map<String,String> model = paymentService.buildPaymentParams(order);
+        return new ModelAndView("cardProcessing",model);
+    }
+
+
+    @RequestMapping(value="/paymentAccepted.html" )
+    public String paymentAccepted(HttpServletRequest request ) throws Exception {
         
-        Map<String,Object> model = new HashMap<String, Object>();
-        
+        LOGGER.info("Received notification of successful card payment");
+
+        // Extract payment details from response
+        String orderId = request.getParameter("Ds_MerchantData");
+        String transactionId = request.getParameter("Ds_Merchant_Order");
+        String authorisationCode = request.getParameter("Ds_AuthorisationCode");
+        String signature = request.getParameter("Ds_Signature");
+        String cardPaymentAmount = request.getParameter("Ds_Amount");
+
+        // Get order from session and update payment details
+        Order order = orderRepository.findByOrderId(orderId);
+        order.setTransactionId(transactionId);
+        order.setTransactionStatus(Order.AUTHORISED);
+        order.setAuthorisationCode(authorisationCode);
+        order.setSignature(signature);
+        order.setCardPaymentAmount(Double.valueOf(cardPaymentAmount) / 100d);
+        order = orderRepository.saveOrder(order);
+
+        // Send notification to restaurant and customer
+        orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
+
+        // Place order notification call
         try {
-            Order order = requestHelper.getOrderFromSession(request);
-
-            //TODO get credit card details and handle payment processing/result
-            order.setCardTransactionId("12345");
-            order = orderRepository.saveOrder(order);
-            
-            // Send notification to restaurant and customer
-            orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
-            
-            // Place order notification call
-            try {
-                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-            }
-            catch( Exception ex ) {
-                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
-            }
-
-            // Clear session attributes
-            HttpSession session = request.getSession(true);
-            session.setAttribute("completedorderid",order.getOrderId());
-            session.removeAttribute("orderid");
-            session.removeAttribute("orderrestaurantid");
-            session.removeAttribute("restaurantid");
-            session.removeAttribute("cancheckout");
-
-            // Set status to success
-            model.put("success",true);
+            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
         }
         catch( Exception ex ) {
-            LOGGER.error("",ex);
-            model.put("success",false);
-            model.put("message",ex.getMessage());
+            orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
         }
 
-        return responseEntityUtils.buildResponse(model);
+        // Clear session attributes
+        HttpSession session = request.getSession(true);
+        session.setAttribute("completedorderid",order.getOrderId());
+        session.removeAttribute("orderid");
+        session.removeAttribute("orderrestaurantid");
+        session.removeAttribute("restaurantid");
+        session.removeAttribute("cancheckout");
 
+        // Send redirect to order confirmation page
+        return "paymentAccepted";
+    }
+
+
+    @RequestMapping(value="/paymentRejected.html" )
+    public void processPaymentRejected(HttpServletRequest request ) throws Exception {
+        LOGGER.info("Got rejected transaction");
     }
 
 

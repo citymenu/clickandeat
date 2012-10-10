@@ -39,10 +39,8 @@
 
 .header-tagline h1 {
     color: #333333;
-    font-family: myriad-pro-semi-condensed;
-    font-size: 32px;
+    font:600 32px myriad-pro;
     font-style: normal;
-    font-weight: bold;
     letter-spacing: -0.01em;
     margin-bottom: 30px;
 }

@@ -17,10 +17,7 @@
 
 .restaurant-details-wrapper h2 {
     color: #AA0000;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 28px;
-    line-height: 30px;
-    font-style: normal;
+    font:28px/30px MaiandraOTGD-DemiBold;
     letter-spacing: -0.01em;
     margin-bottom:5px;
 }
@@ -40,9 +37,8 @@
 
 .restaurant-description {
     color: #666666;
-    font:14px/14px prenton;
+    font:12px/14px prenton;
     margin-bottom:4px;
-    font-style: italic;
 }
 
 .cuisine-summary {
@@ -81,7 +77,7 @@
 
 .opening-details {
     text-align:left;
-    font: 12px/14px pt-sans;
+    font: 12px/14px myriad-pro;
     min-height:16px;
     background: url(../images/icons-shadowless/clock.png) 0 0 no-repeat;
     color:#444444;
@@ -91,7 +87,7 @@
 
 .delivery-details {
     text-align:left;
-    font: 12px/14px pt-sans;
+    font: 12px/14px myriad-pro;
     min-height:16px;
     background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
@@ -120,15 +116,13 @@
 }
 
 .discount-details {
-    font: 12px/14px pt-sans;
-    font-weight:400;
+    font: 400 12px/14px myriad-pro;
     min-height:16px;
     color:#444444;
 }
 
 .restaurant-delivery-details {
-    font:12px/16px prenton;
-    font-weight:500;
+    font: 500 12px/16px prenton;
     color:#444444;
     padding: 5px 0;
 }
@@ -192,7 +186,7 @@
 
 .menu-launch-entry {
     color:#BB0000;
-    font: 13px/16px prenton;
+    font: 14px/16px prenton;
     text-decoration:underline;
     cursor:pointer;
     padding: 4px 0 4px 0;
@@ -205,8 +199,7 @@
 
 #menu-launch-wrapper h2 {
     text-align:left;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
+    font: 20px MaiandraOTGD-DemiBold;
     font-weight:normal;
     color:#AA0000;
     border-bottom: 1px dashed #AAAAAA;
@@ -224,9 +217,7 @@
 
 .menu-category-wrapper h2 {
     color: #AA0000;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size:18px;
-    line-height:22px
+    font:18px/22px MaiandraOTGD-DemiBold;
     font-weight:normal;
     text-shadow: 0 1px #EEEEEE;
     margin-bottom: 6px;
@@ -234,9 +225,7 @@
 
 .menu-category-summary {
     color: #444444;
-    font: 12px/14px pt-sans;
-    font-weight: 400;
-    font-style:italic;
+    font:400 12px/14px prenton;
     text-transform: none;
     border-bottom: 1px dashed #AAAAAA;
     padding-bottom: 10px;
@@ -257,7 +246,7 @@ div.even {
 
 
 h3.menu-item-title {
-    font: 13px/15px prenton;
+    font: 700 14px/16px prenton;
     color: #444444;
     font-weight: 700;
     margin-bottom: 0;
@@ -265,17 +254,14 @@ h3.menu-item-title {
 
 .menu-item-subtitle {
     color: #AA3333;
-    font: 12px/14px pt-sans;
-    font-style: italic;
-    font-weight:500;
+    font: 600 12px/14px myriad-pro;
     font-weight: normal;
     text-transform: none;
 }
 
 .menu-item-cost {
-    font: 13px/15px myriad-pro-semi-condensed;
+    font: 700 14px/16px prenton;
     color: #444444;
-    font-weight: 700;
     padding-right: 1px;
 }
 
@@ -286,10 +272,8 @@ span.menu-item-action {
 .menu-item-description {
     clear: both;
     color: #555555;
-    font: 12px/14px pt-sans;
-    font-weight:400;
-    font-style:italic;
-    padding-right:20px;
+    font: 400 12px/14px prenton;
+    padding: 4px 20px 0 0;
 }
 
 td.spacer {

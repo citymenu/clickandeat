@@ -7,6 +7,7 @@ public class NumberUtil {
 
     private static final NumberFormat formatter;
     private static final NumberFormat strictFormatter;
+    private static final NumberFormat paymentFormatter;
 
     static {
         formatter = DecimalFormat.getInstance();
@@ -17,6 +18,11 @@ public class NumberUtil {
         strictFormatter.setMinimumFractionDigits(0);
         strictFormatter.setMaximumFractionDigits(0);
         strictFormatter.setGroupingUsed(false);
+
+        paymentFormatter = DecimalFormat.getInstance();
+        paymentFormatter.setMinimumFractionDigits(0);
+        paymentFormatter.setMaximumFractionDigits(0);
+        paymentFormatter.setGroupingUsed(false);
     }
 
 
@@ -32,5 +38,8 @@ public class NumberUtil {
     public static String formatStrict(Double in) {
         return in == null? "": strictFormatter.format(in);
     }
-    
+
+    public static String formatForCardPayment(Double in) {
+        return in == null? "": paymentFormatter.format(in * 100);
+    }
 }

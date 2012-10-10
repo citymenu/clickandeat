@@ -2,7 +2,6 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <title><spring:message code="label.register"/></title>
     <script type="text/javascript" src="${resources}/script/cardProcessing.js"></script>
 </head>
 
@@ -13,6 +12,9 @@
     <input type="hidden" name="Ds_Merchant_Currency" value="${Ds_Merchant_Currency}"/>
     <input type="hidden" name="Ds_Merchant_Order" value="${Ds_Merchant_Order}"/>
     <input type="hidden" name="Ds_Merchant_ProductDescription" value="${Ds_Merchant_ProductDescription}"/>
+    <input type="hidden" name="Ds_Merchant_UrlOK" value="${Ds_Merchant_UrlOK}"/>
+    <input type="hidden" name="Ds_Merchant_UrlKO" value="${Ds_Merchant_UrlKO}"/>
+    <input type="hidden" name="Ds_Merchant_MerchantData" value="${Ds_Merchant_MerchantData}"/>
     <input type="hidden" name="Ds_Merchant_CardHolder" value="${Ds_Merchant_CardHolder}"/>
     <input type="hidden" name="Ds_Merchant_MerchantCode" value="${Ds_Merchant_MerchantCode}"/>
     <input type="hidden" name="Ds_Merchant_ConsumerLanguage" value="${Ds_Merchant_ConsumerLanguage}"/>

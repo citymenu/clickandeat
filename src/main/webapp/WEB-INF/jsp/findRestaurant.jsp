@@ -28,14 +28,6 @@
                     <div class="search-results-wrapper">
                         <div class="search-results-header-wrapper">
                             <h2><message:message key="search.search-results"/></h2>
-                            <c:choose>
-                                <c:when test="${search == null || search.location == null}">
-                                    <div class="location-warning"><message:message key="search.location-not-set-warning"/></div>
-                                </c:when>
-                                <c:when test="${search.location.radiusWarning == true}">
-                                    <div class="location-warning"><message:message key="search.location-radius-warning"/></div>
-                                </c:when>
-                            </c:choose>
                             <div class="search-location-wrapper">
                                 <div class="search-location-edit">
                                     <c:choose>
@@ -56,6 +48,14 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
+                            <c:choose>
+                                <c:when test="${search == null || search.location == null}">
+                                    <div class="location-warning"><message:message key="search.location-not-set-warning"/></div>
+                                </c:when>
+                                <c:when test="${search.location.radiusWarning == true}">
+                                    <div class="location-warning"><message:message key="search.location-radius-warning"/></div>
+                                </c:when>
+                            </c:choose>
                             <c:if test="${count > 0}">
                             <div class="search-filters">
                                 <table width="690">
@@ -139,7 +139,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr valign="top">
-                                                        <td width="380" colspan="2" align="right">
+                                                        <td width="380" colspan="2">
                                                             <div class="restaurant-opening-details">
                                                                 <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                                                 <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>

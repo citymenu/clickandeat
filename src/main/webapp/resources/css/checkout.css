@@ -40,20 +40,20 @@
 }
 
 .contact-form-label {
-    font:13px/16px pt-sans;
+    font:14px/16px prenton;
     color: #444444;
     padding-top:4px;
 }
 
 .checkout-description {
-    font:12px/15px prenton;
+    font:12px/16px prenton;
     font-weight: 500;
     color:#666666;
     padding: 5px 0 10px 0;
 }
 
 .contact-form-field input, .contact-form-field textarea {
-    font: 13px/15px pt-sans;
+    font: 14px/16px myriad-pro;
     width:460px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
@@ -68,9 +68,8 @@
 }
 
 .telephone-instructions {
-    font:12px/14px pt-sans;
+    font:12px/14px prenton;
     color:#666666;
-    font-style:italic;
     padding-top: 3px;
 }
 

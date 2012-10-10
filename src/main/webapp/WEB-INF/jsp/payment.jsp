@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/payment.js"></script>
@@ -15,78 +15,24 @@
 
 <div id="content">
     <div class="content-wrapper">
-        <div class="content-left">
-            <div id="paymentbody">
-                <div id="paymentdetails">
-                    <div class="checkoutheader"><message:message key="payment.card-details"/></div>
-                    <div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.card-type"/></div>
-                            <div class="detailsfield">
-                                <select name="cardType" class="checkoutfield">
-                                    <option value="VISA">VISA</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.card-holders-name"/></div>
-                            <div class="detailsfield"><input type="text" name="cardHoldersName" class="checkoutfield"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.card-number"/></div>
-                            <div class="detailsfield"><input type="text" name="cardNumber" class="checkoutfield"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.issue-number"/></div>
-                            <div class="detailsfield"><input type="text" name="issueNumber" class="checkoutfield" value="${order.customer.email}"/></div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.expiry-date"/></div>
-                            <div class="detailsfield">
-                                <select name="expiryMonth" class="checkoutfield">
-                                    <option value=""><message:message key="payment.month-upper"/></option>
-                                    <option value="1">01</option>
-                                    <option value="2">02</option>
-                                    <option value="3">03</option>
-                                    <option value="4">04</option>
-                                    <option value="5">05</option>
-                                    <option value="6">06</option>
-                                    <option value="7">07</option>
-                                    <option value="8">08</option>
-                                    <option value="9">09</option>
-                                    <option value="10">10</option>
-                                    <option value="11">11</option>
-                                    <option value="12">12</option>
-                                </select>
-                                <select name="expiryYear" class="checkoutfield">
-                                    <option value=""><message:message key="payment.year-upper"/></option>
-                                    <option value="2012">2012</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2014">2014</option>
-                                    <option value="2015">2015</option>
-                                    <option value="2016">2016</option>
-                                    <option value="2017">2017</option>
-                                    <option value="2018">2018</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="detailsitem">
-                            <div class="detailslabel"><message:message key="payment.security-code"/></div>
-                            <div class="detailsfield"><input type="text" name="securityCode" class="checkoutfield"/></div>
-                        </div>
+        <table width="1020">
+            <tr valign="top">
+
+                <!-- Payment form -->
+                <td width="760">
+                    <div id="paymentbody">
+                        <iframe name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
                     </div>
-                </div>
+                </td>
 
-                <div>
-                    <a href="javascript:deliveryOptions();" class="menuitem-button add-button unselectable"><message:message key="button.delivery-options"/></a>
-                    <a href="javascript:placeOrder();" class="menuitem-button add-button unselectable"><message:message key="button.place-order"/></a>
-                </div>
-
-            </div>
-        </div>
-        <div class="content-right">
-            <%@ include file="/WEB-INF/jsp/order.jsp" %>
-        </div>
+                <!-- Order panel -->
+                <td width="260">
+                    <div class="menu-right">
+                        <%@ include file="/WEB-INF/jsp/order.jsp" %>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

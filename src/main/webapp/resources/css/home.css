@@ -40,9 +40,7 @@
 }
 
 input.location {
-    font-family: "myriad-pro-semi-condensed",impact;
-    font-size: 18px;
-    line-height: 20px;
+    font:18px/20px myriad-pro;
     color:#666666;
     height: 28px;
     padding: 4px 6px;
@@ -73,9 +71,7 @@ input.location:focus {
 }
 
 div.pac-item {
-    font-family: myriad-pro-semi-condensed;
-    font-size: 18px;
-    line-height: 20px;
+    font:18px/20px myriad-pro;
     padding: 2px 5px 2px 5px;
     color:#444444;
 }

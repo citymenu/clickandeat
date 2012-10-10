@@ -212,7 +212,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><b>{0}:</b><br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -221,7 +221,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0} ({1})</td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{2}{3}</td><td width=\'20\'></td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -231,7 +231,7 @@ function doBuildOrder(order,config) {
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0}</td><td width=\'50\' align=\'right\'>-{1}{2}</td><td width=\'20\' align=\'right\'></td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'>-{1}{2}</td><td width=\'20\' align=\'right\'></td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
                 $('#order-item-contents').append(row);
             }
         });
@@ -246,7 +246,7 @@ function doBuildOrder(order,config) {
         if( order.voucher != null ) {
             var voucher = order.voucher;
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{2}{3}</td><td width=\'20\' align=\'right\'><a onclick=\"removeVoucher()\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'><span class=\'semi-bold\'>{0} (-{1}%)</span></td><td width=\'50\' align=\'right\'>-{2}{3}</td><td width=\'20\' align=\'right\'><a onclick=\"removeVoucher()\"><div class=\'order-remove-item\'></div></a></td></tr></table></div>')
                     .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
             } else {
                 var row = '<div class=\'order-item-wrapper\'><table width=\'194\'><tr valign=\'top\'><td width=\'124\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{2}{3}</td><td width=\'20\'></td></tr>'
@@ -694,7 +694,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
             itemCosts.setItem(additionalItemName, (additionalItemCost == 'null'? 0: additionalItemCost));
         }
 
-        var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/> <span id=\'{1}_span\'>{2}</span></div>')
+        var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>&nbsp;&nbsp;<span id=\'{1}_span\'>{2}</span></div>')
             .format(additionalItemName,additionalItemName.replace(' ','_').replace('###','_'), unescapeQuotes(additionalItemName));
         var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': ccy + additionalItemElements[1]));
         additionalItemChoiceContainer += ('<tr valign=\'top\'><td width=\'150\'>{0}</td><td width=\'50\' align=\'right\'>{1}</td></tr>').format(additionalItemTitleDiv,additionalItemCostDiv);

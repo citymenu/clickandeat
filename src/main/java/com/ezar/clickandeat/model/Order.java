@@ -20,6 +20,10 @@ public class Order extends PersistentObject {
     public static final String DELIVERY = "DELIVERY";
     public static final String COLLECTION = "COLLECTION";
 
+    public static final String AUTHORISED = "AUTHORISED";
+    public static final String CAPTURED = "AUTHORISED";
+    public static final String CANCELLED = "AUTHORISED";
+    
     @Indexed(unique=true)
     private String orderId;
 
@@ -64,6 +68,13 @@ public class Order extends PersistentObject {
     private Double totalCost;
     private Double restaurantCost; // Cost to restaurant (without any vouchers applied)
 
+    // Order payment details
+    private String transactionId;
+    private String transactionStatus;
+    private String authorisationCode;
+    private String signature;
+    private Double cardPaymentAmount;
+
     // Order tracking details
     private boolean canCheckout;
     private boolean restaurantIsOpen;
@@ -73,8 +84,6 @@ public class Order extends PersistentObject {
     private DateTime lastCallPlacedTime;
     private Integer orderNotificationCallCount;
     private Boolean cancellationOfferEmailSent;
-    private String cardTransactionId;
-    private String cardTransactionStatus;
     private String restaurantDeclinedReason;
     private List<OrderUpdate> orderUpdates;
 
@@ -490,6 +499,30 @@ public class Order extends PersistentObject {
         this.canCheckout = canCheckout;
     }
 
+    public String getAuthorisationCode() {
+        return authorisationCode;
+    }
+
+    public void setAuthorisationCode(String authorisationCode) {
+        this.authorisationCode = authorisationCode;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    public Double getCardPaymentAmount() {
+        return cardPaymentAmount;
+    }
+
+    public void setCardPaymentAmount(Double cardPaymentAmount) {
+        this.cardPaymentAmount = cardPaymentAmount;
+    }
+
     public boolean getRestaurantIsOpen() {
         return restaurantIsOpen;
     }
@@ -666,20 +699,20 @@ public class Order extends PersistentObject {
         return NumberUtil.format(totalCost == null? 0d: totalCost);
     }
 
-    public String getCardTransactionId() {
-        return cardTransactionId;
+    public String getTransactionId() {
+        return transactionId;
     }
 
-    public void setCardTransactionId(String cardTransactionId) {
-        this.cardTransactionId = cardTransactionId;
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
     }
 
-    public String getCardTransactionStatus() {
-        return cardTransactionStatus;
+    public String getTransactionStatus() {
+        return transactionStatus;
     }
 
-    public void setCardTransactionStatus(String cardTransactionStatus) {
-        this.cardTransactionStatus = cardTransactionStatus;
+    public void setTransactionStatus(String transactionStatus) {
+        this.transactionStatus = transactionStatus;
     }
 
     public void setTotalCost(Double totalCost) {
