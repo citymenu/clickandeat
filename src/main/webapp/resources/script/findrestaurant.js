@@ -12,7 +12,7 @@ $(document).ready(function(){
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
-        $('#locationedit').focus();
+        $('#loc').focus();
 
         // Add event handlers
         $('#loc').keydown(function(event){
