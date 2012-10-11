@@ -61,7 +61,7 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
         restaurantRepository.saveRestaurant(restaurant);
 
         try {
-            paymentService.processTransactionRequest(order,PaymentService.REFUND);
+            //paymentService.processTransactionRequest(order,PaymentService.REFUND);
         }
         catch( Exception ex ) {
             LOGGER.error("Error processing refund of order",ex);
