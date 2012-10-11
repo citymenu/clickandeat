@@ -34,7 +34,7 @@ public class PaymentService {
 
     private static final Logger LOGGER = Logger.getLogger(PaymentService.class);
 
-    public static final String AUTHORIZE = "0";
+    public static final String PRE_AUTHORIZE = "O";
     public static final String REFUND = "3";
     
     @Autowired
@@ -93,7 +93,7 @@ public class PaymentService {
         params.put("Ds_Merchant_ConsumerLanguage",customerLanguage);
         params.put("Ds_Merchant_Terminal",terminalNumber);
         params.put("Ds_Merchant_TransactionType","0");
-        params.put("Ds_Merchant_MerchantSignature",buildSignature(order, transactionId, AUTHORIZE));
+        params.put("Ds_Merchant_MerchantSignature",buildSignature(order, transactionId, PRE_AUTHORIZE));
         return params;
     }
 
