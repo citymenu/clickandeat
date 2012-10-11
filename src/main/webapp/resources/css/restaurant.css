@@ -98,7 +98,7 @@
 .restaurant-discount-details {
     border: 1px dashed #cf6e6e;
     padding: 4px 12px 4px 8px;
-    margin: 20px 30px 0 0;
+    margin: 0px 30px 20px 0;
     -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     box-shadow: 2px 2px 2px rgba(80,80,80,0.2);

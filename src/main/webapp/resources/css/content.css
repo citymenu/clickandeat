@@ -1,11 +1,12 @@
 @charset "utf-8";
 
 #content {
-    background-color: #FFFFFF;
+    background: none repeat scroll 0 0 #FFFFFF;
     border-bottom: 1px solid #B3B3B3;
 }
 
 .content-wrapper {
+    background: none repeat scroll 0 0 #FFFFFF;
     clear: both;
     margin: 0 auto;
     padding: 30px 0 60px 0;
@@ -29,12 +30,6 @@
     width: 280px;
     position:relative;
     float: left;
-}
-
-.header-tagline {
-    margin: 10px 0;
-    text-align:center;
-    position:relative;
 }
 
 .header-tagline h1 {

@@ -181,7 +181,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             double[] restaurantLocation = restaurant.getAddress().getLocation();
             DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
             if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
-                double distance = locationService.getDistance(geoLocation,restaurantLocation);
+                double distance = locationService.getDistance(geoLocation,restaurantLocation) - search.getLocation().getRadius(); // Include radius in search
                 if( LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Distance from location " + search.getLocation() + " to restaurant " + restaurant.getName() + " is " + distance);
                 }

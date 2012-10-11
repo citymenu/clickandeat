@@ -8,7 +8,7 @@ $(document).ready(function(){
         }
     });
 
-    $('#searchbutton').click(function(){
+    $('.location-button').click(function(){
         search('loc');
     });
 

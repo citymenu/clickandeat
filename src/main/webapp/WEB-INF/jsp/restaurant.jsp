@@ -62,6 +62,14 @@
                                     </div>
                                 </td>
                                 <td width="340">
+                                    <c:if test="${restaurant.hasDiscounts == true}">
+                                        <div class="restaurant-discount-details">
+                                            <div class="scissors"></div>
+                                            <c:forEach var="discount" items="${restaurant.discounts}">
+                                                <div class="discount-details"><util:escape value="${discount.title}"/></div>
+                                            </c:forEach>
+                                        </div>
+                                    </c:if>
                                     <div class="restuarant-summary-wrapper">
                                         <div class="restaurant-detail-wrapper">
                                             <div class="restaurant-opening-details">
@@ -72,14 +80,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <c:if test="${restaurant.hasDiscounts == true}">
-                                        <div class="restaurant-discount-details">
-                                            <div class="scissors"></div>
-                                            <c:forEach var="discount" items="${restaurant.discounts}">
-                                                <div class="discount-details"><util:escape value="${discount.title}"/></div>
-                                            </c:forEach>
-                                        </div>
-                                    </c:if>
                                 </td>
                                 <td width="200">
                                     <div class="restaurant-location">

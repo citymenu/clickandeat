@@ -4,6 +4,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
@@ -31,6 +32,9 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    @Autowired
+    private PaymentService paymentService;
+    
     @Override
     public String getWorkflowAction() {
         return ACTION_RESTAURANT_DECLINES;
@@ -56,7 +60,14 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
         restaurant.setLastOrderReponseTime(new DateTime());
         restaurantRepository.saveRestaurant(restaurant);
 
-
+        try {
+            paymentService.processTransactionRequest(order,PaymentService.REFUND);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Error processing refund of order",ex);
+            order.addOrderUpdate("Error processing refund of order: " + ex.getMessage());
+        }
+        
         try {
             notificationService.sendRestaurantDeclinedConfirmationToCustomer(order);
             order.addOrderUpdate("Sent confirmation of restaurant declining order to customer");

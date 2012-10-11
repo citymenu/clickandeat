@@ -2,9 +2,8 @@
 
 #footer {
     clear: both;
-    background: none repeat scroll 0 0 #666666;
-    color: #FFFFFF;
-    text-shadow: 0 2px #333333;
+    color: #837954;
+    border-top: 1px solid #b29a5a;
 }
 
 .footer-wrapper {
@@ -23,8 +22,12 @@
 }
 
 h4.footer {
-    font-size:18px;
-    color:#FFFFFF;
+    font: 18px MaiandraOTGD-DemiBold;
+    color:#837954;
+}
+
+.footer-contact ul {
+    font: 500 16px/18px prenton;
 }
 
 

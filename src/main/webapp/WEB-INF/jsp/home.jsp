@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css"/>
     <script type="text/javascript" src="${resources}/script/search.js"></script>
     <script type="text/javascript" src="${resources}/script/home.js"></script>
-    <title><message:message key="page-title.home" escape="false"/></title>
+    <title><message:message key="page-title-home" escape="false"/></title>
 </head>
 
 <body>
@@ -14,27 +14,15 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <div id="content">
-    <div class="content-wrapper">
-        <div class="header-tagline">
-            <h1><message:message key="home.tagline" escape="false"/></h1>
-        </div>
-        <div class="searchbar-wrapper">
-            <div class="searchbar">
-                <div class="outer-box">
-                    <div class="middle-box">
-                        <div class="center-box">
-                            <div class="searchelement-wrapper">
-                                <div class="search-input">
-                                    <h2><message:message key="search.where-are-you"/></h2>
-                                    <input class="location" type="text" id="loc" placeholder="<message:message key="search.watermark"/>"/>
-                                </div>
-                                <div class="search-button">
-                                    <input class="searchbutton" type="button" id="searchbutton" value="<message:message key="button.search"/>"/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <div class="main-content">
+        <div class="butler-main">
+            <div class="searchbar-wrapper">
+                <div class="searchbar-location"><message:message key="home.restaurants-where-you-are"/></div>
+                <div class="search-location-form">
+                    <div class="location-input"><input class="location" type="text" id="loc" placeholder="<message:message key="search.watermark"/>"/></div>
+                    <div class="location-button"><div class="search-container unselectable"><a class="search"><message:message key="button.search"/></a></div></div>
                 </div>
+                <div class="location-direct">O entra directament en: Madrid / Barcelona</div>
             </div>
         </div>
     </div>

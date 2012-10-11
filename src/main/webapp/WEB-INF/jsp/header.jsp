@@ -6,7 +6,8 @@
 <div id="header">
     <div class="header-wrapper">
         <div class="header-banner">
-            <div class="header-company unselectable">llamar y comer</div>
+            <div class="header-company unselectable">llamar<span class="header-company-small">y</span>comer</div>
+            <div class="header-tagline unselectable"><message:message key="home.tagline" escape="false"/></div>
         </div>
         <div class="navigation-wrapper">
             <div class="navigation-links">
