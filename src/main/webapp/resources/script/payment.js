@@ -8,7 +8,8 @@ function getOrderPanelConfig() {
         enableCheckoutButton: false,
         enablePaymentButton: false,
         showDiscountInformation: true,
-        showAdditionalInformation: false
+        showAdditionalInformation: false,
+        displayAdditionalInformation:true
     };
     return config;
 }

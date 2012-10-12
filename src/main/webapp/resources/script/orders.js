@@ -53,7 +53,8 @@ function getOrderPanelConfig() {
         enableCheckoutButton: true,
         enablePaymentButton: false,
         showDiscountInformation: true,
-        showAdditionalInformation: true
+        showAdditionalInformation: true,
+        displayAdditionalInformation:false
     };
     return config;
 }
@@ -278,6 +279,11 @@ function doBuildOrder(order,config) {
             $('#additionalinstructions').click(function(){
                 editAdditionalInstructions();
             });
+        } else if( config.displayAdditionalInformation ) {
+            // Display actual additional information in the order panel
+            var additionalInformationDisplay = ('<div class=\'additional-information\'><h2>{0}</h2><div>{1}</div></div>')
+                .format(getLabel('order.additional-instructions'),unescapeQuotesAndBreaks(order.additionalInstructions));
+            $('#additionalinstructions').append(additionalInformationDisplay);
         }
 
         // If we are either on a restaurant page or there are items in the order and the restaurant is closed, show a warning

@@ -125,6 +125,13 @@ select.deliveryselect {
             border-radius: 5px;
 }
 
+.additional-information h2 {
+    font-family: MaiandraOTGD-DemiBold;
+    font-size: 14px;
+    color:#990000;
+    margin-bottom: 2px;
+}
+
 span.semi-bold {
     font: 600 12px/14px myriad-pro;
 }

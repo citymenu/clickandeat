@@ -18,9 +18,19 @@ function unescapeQuotes(str) {
     if( !str || str == '' ) {
         return str;
     } else {
-        return str.replace("###","'");
+        return str.replace(/###/g,"'");
     }
 }
+
+/* Unescapes quotes and line breaks */
+function unescapeQuotesAndBreaks(str) {
+    if( !str || str == '' ) {
+        return str;
+    } else {
+        return str.replace(/###/g,"'").replace(/\n/g,'<br>');
+    }
+}
+
 
 function unescapeLabel(label) {
     return label.replace('&lt;','<').replace('&gt;','>').replace('&quot;','"');

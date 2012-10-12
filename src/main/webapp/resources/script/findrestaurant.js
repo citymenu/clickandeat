@@ -72,7 +72,8 @@ function getOrderPanelConfig() {
         enableCheckoutButton: true,
         enablePaymentButton: false,
         showDiscountInformation: true,
-        showAdditionalInformation: true
+        showAdditionalInformation: true,
+        displayAdditionalInformation:false
     };
     return config;
 }

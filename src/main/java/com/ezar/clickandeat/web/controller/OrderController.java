@@ -142,6 +142,18 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
+    @RequestMapping(value="/order/getCompletedOrder.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> getCompletedOrder(@RequestParam(value = "orderId") String orderId) throws Exception {
+        Map<String,Object> model = new HashMap<String, Object>();
+        Order order = orderRepository.findByOrderId(orderId);
+        model.put("success",true);
+        model.put("order",order);
+        return buildOrderResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
     @RequestMapping(value="/order/addItem.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> addToOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 

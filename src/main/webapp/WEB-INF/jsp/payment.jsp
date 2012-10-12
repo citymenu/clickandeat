@@ -2,10 +2,12 @@
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/payment.js"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
+
     <title><message:message key="page-title.payment" escape="false"/></title>
 </head>
 
