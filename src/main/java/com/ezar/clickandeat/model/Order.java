@@ -20,9 +20,10 @@ public class Order extends PersistentObject {
     public static final String DELIVERY = "DELIVERY";
     public static final String COLLECTION = "COLLECTION";
 
-    public static final String AUTHORISED = "AUTHORISED";
-    public static final String CAPTURED = "AUTHORISED";
-    public static final String CANCELLED = "AUTHORISED";
+    public static final String PAYMENT_ERROR = "ERROR";
+    public static final String PAYMENT_AUTHORISED = "AUTHORISED";
+    public static final String PAYMENT_CAPTURED = "CAPTURED";
+    public static final String PAYMENT_REFUNDED = "REFUNDED";
     
     @Indexed(unique=true)
     private String orderId;

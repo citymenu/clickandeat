@@ -6,6 +6,7 @@ function getOrderPanelConfig() {
         allowRemoveItems: false,
         allowUpdateFreeItem: false,
         enableCheckoutButton: false,
+        enablePaymentButton: false,
         showDiscountInformation: true,
         showAdditionalInformation: false
     };

@@ -27,7 +27,9 @@ public class VelocityTemplatingService implements InitializingBean {
     private static final String VELOCITY_LOGGER_NAME = "VelocityLogger";
 
     // Twilio call velocity template locations
-    public static final String NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationSMS.vm";
+    public static final String ORDER_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationSMS.vm";
+    public static final String RESTAURANT_DECLINED_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/restaurantDeclinedNotificationSMS.vm";
+    public static final String AUTO_CANCELLATION_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/autoCancellationNotificationSMS.vm";
     public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationCall.vm";
     public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCall.vm";
     public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCallResponse.vm";

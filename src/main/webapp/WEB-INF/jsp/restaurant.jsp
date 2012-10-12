@@ -3,14 +3,26 @@
 
 <head>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
-    <title>${restaurant.name}</title>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css"/>
+
+    <c:choose>
+        <c:when test="${restaurant.address.town == ''}">
+            <title>LlamaryComer | ${restaurant.name} - ${restaurant.cuisineSummary}</title>
+        </c:when>
+        <c:otherwise>
+            <title>LlamaryComer | ${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary}</title>
+        </c:otherwise>
+    </c:choose>
+
+    <meta name="description" content="${restaurant.description}">
+
 </head>
 
 <body>

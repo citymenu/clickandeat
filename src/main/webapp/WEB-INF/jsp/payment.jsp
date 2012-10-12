@@ -17,11 +17,18 @@
     <div class="content-wrapper">
         <table width="1020">
             <tr valign="top">
-
                 <!-- Payment form -->
                 <td width="760">
-                    <div id="paymentbody">
-                        <iframe name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
+                    <div class="payment-wrapper">
+                        <div class="payment-title-wrapper">
+                            <div class="payment-title"><h2><message:message key="payment.payment-title"/></h2></div>
+                            <c:if test="${error != null}">
+                                <div class="payment-error"><util:escape value="${error}" escapeNewLines="true"/></div>
+                            </c:if>
+                        </div>
+                        <div id="paymentbody">
+                            <iframe name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
+                        </div>
                     </div>
                 </td>
 

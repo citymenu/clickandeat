@@ -280,6 +280,27 @@ td.spacer {
     padding-bottom:10px;
 }
 
+.opening-time-container {
+    margin-top:10px;
+    border-top: 1px solid #EEEEEE;
+}
+
+.opening-time {
+    font:400 14px/16px myriad-pro;
+    color:#444444;
+    padding: 8px 0 8px 0;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.day-of-week {
+    display:inline-block;
+    width: 100px;
+}
+
+.opening-time-detail {
+    display:inline-block;
+}
+
 a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
     display:inline-block;
     width:16px;

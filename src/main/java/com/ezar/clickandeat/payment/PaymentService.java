@@ -34,7 +34,7 @@ public class PaymentService {
 
     private static final Logger LOGGER = Logger.getLogger(PaymentService.class);
 
-    public static final String PRE_AUTHORIZE = "O";
+    public static final String PRE_AUTHORIZE = "0";
     public static final String REFUND = "3";
     
     @Autowired

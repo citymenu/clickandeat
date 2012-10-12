@@ -3,6 +3,7 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
@@ -27,6 +28,9 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
 
     @Autowired
     private VoucherRepository voucherRepository;
+
+    @Autowired
+    private PaymentService paymentService;
 
     private int cancelCutoffMinutes;
 
@@ -63,6 +67,16 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
 
         // Set any voucher on this order to be unused
         voucherRepository.markVoucherUnused(order.getVoucherId());
+
+        try {
+            paymentService.processTransactionRequest(order, PaymentService.REFUND);
+            order.setTransactionStatus(Order.PAYMENT_REFUNDED);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Error processing refund of order",ex);
+            order.addOrderUpdate("Error processing refund of order: " + ex.getMessage());
+        }
+
 
         try {
             notificationService.sendCustomerCancelledConfirmationToRestaurant(order);

@@ -154,11 +154,6 @@
                                 </div>
                                 <div id="voucher-validation"></div>
                             </div>
-
-                            <!-- Navigation buttons -->
-                            <div class="checkout-navigation-wrapper">
-                                <a class="checkout-nav-button checkout-nav-button-large" onclick="proceedToPayment()"><message:message key="button.payment"/></a>
-                            </div>
                         </div>
                     </div>
                 </td>

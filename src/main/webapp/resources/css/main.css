@@ -26,6 +26,10 @@ body {
     padding: 0;
 }
 
+iframe {
+     background: none repeat scroll 0 0 #FFFFFF;
+}
+
 table {
     border:0;
     padding:0;

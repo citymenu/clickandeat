@@ -34,9 +34,25 @@ function showAllOpeningTimes() {
     $.post( ctx+'/restaurant/getOpeningTimes.ajax', { restaurantId: restaurantId },
         function( data ) {
             if( data.success ) {
+                var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.all-opening-times'));
+                var table = '<div class=\'opening-time-container\'>';
+                for( var key in data.openingTimes ) {
+                    table += ('<div class=\'opening-time\'><div class=\'day-of-week\'>{0}:</div><div class=\'opening-time-detail\'>{1}</div></div>').format(key, data.openingTimes[key]);
+                }
+                table += '</div>';
+                var content = ('<div class=\'dialog-content\'>{0}</div>').format(table);
+                var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
 
-            } else {
-                alert('success:' + data.success);
+                $.fancybox.open({
+                    type: 'html',
+                    content: container,
+                    modal:false,
+                    autoSize:false,
+                    width: 375,
+                    autoHeight:true,
+                    openEffect:'none',
+                    closeEffect:'none'
+                });
             }
         }
     );

@@ -2,6 +2,7 @@ package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.util.PhoneNumberUtils;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -19,10 +20,6 @@ import java.util.Map;
 public class TwilioServiceImpl implements ITwilioService {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioServiceImpl.class);
-
-    public static final String ORDER_NOTIFICATION_SMS_URL = "/twilio/orderNotificationSMS.html";
-    public static final String ORDER_NOTIFICATION_SMS_FALLBACK_URL = "/twilio/orderNotificationSMSFallback.html";
-    public static final String ORDER_NOTIFICATION_SMS_STATUS_CALLBACK_URL = "/twilio/orderNotificationSMSStatusCallback.html";
 
     public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderNotificationCall.html";
     public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderNotificationCallFallback.html";
@@ -55,12 +52,42 @@ public class TwilioServiceImpl implements ITwilioService {
 
     @Override
     public void sendOrderNotificationSMS(Order order) throws Exception {
-        
+        LOGGER.info("Sending order notification SMS to restaurant for order id: " + order.getOrderId());
         String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationSMSNumber();
-        String orderId = order.getOrderId();
+        sendSMS(order, phoneNumber, VelocityTemplatingService.ORDER_NOTIFICATION_SMS_TEMPLATE);
+    }
 
+
+    @Override
+    public void sendRestaurantDeclinedNotificationSMS(Order order) throws Exception {
+        LOGGER.info("Sending restaurant declined SMS to customer for order id: " + order.getOrderId());
+        String phoneNumber = order.getCustomer().getTelephone();
+        sendSMS(order, phoneNumber, VelocityTemplatingService.RESTAURANT_DECLINED_NOTIFICATION_SMS_TEMPLATE );
+    }
+
+    @Override
+    public void sendAutoCancelledNotificationSMS(Order order) throws Exception {
+        LOGGER.info("Sending auto cancellation SMS to customer for order id: " + order.getOrderId());
+        String phoneNumber = order.getCustomer().getTelephone();
+        sendSMS(order, phoneNumber, VelocityTemplatingService.AUTO_CANCELLATION_NOTIFICATION_SMS_TEMPLATE);
+    }
+
+
+    /**
+     * @param order
+     * @param phoneNumber
+     * @param templateLocation
+     * @throws Exception
+     */
+    
+    private void sendSMS(Order order, String phoneNumber, String templateLocation ) throws Exception {
+
+        // Build the xml
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("order",order);
+        String body = velocityTemplatingService.mergeContentIntoTemplate(templateModel, templateLocation);
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Sending SMS to " + phoneNumber + " to notify about order " + orderId);
+            LOGGER.debug("Generated body [" + body + "]");
         }
 
         // Create a rest client
@@ -69,26 +96,17 @@ public class TwilioServiceImpl implements ITwilioService {
         // Get the main account (The one we used to authenticate the client
         Account mainAccount = client.getAccount();
 
-        // Build the xml
-        Map<String,Object> templateModel = new HashMap<String, Object>();
-        templateModel.put("order",order);
-        String body = velocityTemplatingService.mergeContentIntoTemplate(templateModel,VelocityTemplatingService.NOTIFICATION_SMS_TEMPLATE);
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Generated body [" + body + "]");
-        }
-        
         // Build the SMS
         SmsFactory smsFactory = mainAccount.getSmsFactory();
         Map<String, String> callParams = new HashMap<String, String>();
-        callParams.put("From","+447881626584");
-        callParams.put("To",phoneNumber);
+        callParams.put("From", callerId);
+        callParams.put("To", PhoneNumberUtils.getInternationalNumber(phoneNumber));
         callParams.put("Body",body);
 
         // Send the sms
         smsFactory.create(callParams);
     }
-
-
+    
     /**
      * @param order
      * @return

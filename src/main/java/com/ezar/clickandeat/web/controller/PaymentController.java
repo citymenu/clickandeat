@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.OrderRepository;
@@ -68,13 +69,29 @@ public class PaymentController {
 
 
     @RequestMapping(value="/paymentAccepted.html" )
-    public String paymentAccepted(HttpServletRequest request ) throws Exception {
+    public ModelAndView paymentAccepted(HttpServletRequest request ) throws Exception {
         
         LOGGER.info("Received notification of successful card payment");
-
+        Map<String,Object> model = new HashMap<String, Object>();
+        
+        // Get response
+        String response = request.getParameter("Ds_Response");
+        Integer responseCode = Integer.valueOf(response);
+        
+        // Responses over value of 99 are errors
+        if( responseCode > 99 ) {
+            String transactionError = MessageFactory.getMessage("payment.transaction.error_" + responseCode, false);
+            if( transactionError == null ) {
+                transactionError = MessageFactory.getMessage("payment.error-transaction-declined",false);
+            }
+            String error = MessageFactory.formatMessage("payment.transaction-error", false, transactionError);
+            model.put("error",error);
+            return new ModelAndView("payment",model);
+        }
+        
         // Extract payment details from response
         String orderId = request.getParameter("Ds_MerchantData");
-        String transactionId = request.getParameter("Ds_Merchant_Order");
+        String transactionId = request.getParameter("Ds_Order");
         String authorisationCode = request.getParameter("Ds_AuthorisationCode");
         String signature = request.getParameter("Ds_Signature");
         String cardPaymentAmount = request.getParameter("Ds_Amount");
@@ -82,7 +99,7 @@ public class PaymentController {
         // Get order from session and update payment details
         Order order = orderRepository.findByOrderId(orderId);
         order.setTransactionId(transactionId);
-        order.setTransactionStatus(Order.AUTHORISED);
+        order.setTransactionStatus(Order.PAYMENT_AUTHORISED);
         order.setAuthorisationCode(authorisationCode);
         order.setSignature(signature);
         order.setCardPaymentAmount(Double.valueOf(cardPaymentAmount) / 100d);
@@ -108,13 +125,32 @@ public class PaymentController {
         session.removeAttribute("cancheckout");
 
         // Send redirect to order confirmation page
-        return "paymentAccepted";
+        return new ModelAndView("paymentAccepted",model);
     }
 
 
     @RequestMapping(value="/paymentRejected.html" )
-    public void processPaymentRejected(HttpServletRequest request ) throws Exception {
-        LOGGER.info("Got rejected transaction");
+    public String paymentRejected() {
+        return "paymentRejected";
+    }
+
+
+    @RequestMapping(value="/processPaymentRejected.html" )
+    public ModelAndView processPaymentRejected(HttpServletRequest request) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        Order order = requestHelper.getOrderFromSession(request);
+        if( order == null || !order.getCanCheckout()) {
+            return new ModelAndView("redirect:/home.html",model);
+        }
+
+        order.setTransactionStatus(Order.PAYMENT_ERROR);
+        orderRepository.saveOrder(order);
+        
+        String error = MessageFactory.getMessage("payment.general-error",false);
+        model.put("error",error);
+        return new ModelAndView("payment",model);
     }
 
 

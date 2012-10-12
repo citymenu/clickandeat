@@ -92,6 +92,7 @@ function getOrderPanelConfig() {
         allowRemoveItems: false,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,
+        enablePaymentButton: true,
         showDiscountInformation: true,
         showAdditionalInformation: false
     };
@@ -191,7 +192,7 @@ function updateOrder() {
 }
 
 // Proceed to payment
-function proceedToPayment() {
+function payment() {
     validateForm();
     if( isValid ) {
         $('.checkout-validation-error').remove();

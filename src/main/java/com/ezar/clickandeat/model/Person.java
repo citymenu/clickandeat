@@ -11,8 +11,6 @@ public class Person extends PersistentObject {
 
     private String telephone;
     
-    private String mobile;
-    
     private String email;
 
 
@@ -56,14 +54,6 @@ public class Person extends PersistentObject {
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
     }
 
     public String getEmail() {

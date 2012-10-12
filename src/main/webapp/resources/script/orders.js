@@ -51,6 +51,7 @@ function getOrderPanelConfig() {
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: true,
+        enablePaymentButton: false,
         showDiscountInformation: true,
         showAdditionalInformation: true
     };
@@ -289,16 +290,27 @@ function doBuildOrder(order,config) {
             $('#deliverycheck').append(warning);
         } else {
             // Show checkout button if enabled
-            if(order.canCheckout && config.enableCheckoutButton) {
-                $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
-                $('#checkoutbutton').click(function(){
-                    checkout();
-                });
+            if(order.canCheckout ) {
+                if( config.enableCheckoutButton ) {
+                    $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
+                    $('#checkoutbutton').click(function(){
+                        checkout();
+                    });
+                } else if (config.enablePaymentButton) {
+                    $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.payment')));
+                    $('#checkoutbutton').click(function(){
+                        payment();
+                    });
+                }
             }
         }
     } else {
         $('#ordertotal').append('<span class=\'order-totalcost\'>' + ccy + ' 0.00</span>');
     }
+}
+
+// Empty payment function (should override)
+function payment() {
 }
 
 // Displays an order item
