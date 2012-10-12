@@ -61,6 +61,7 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
 
         try {
             paymentService.processTransactionRequest(order,PaymentService.REFUND);
+            order.addOrderUpdate("Refunded customer credit card");
             order.setTransactionStatus(Order.PAYMENT_REFUNDED);
         }
         catch( Exception ex ) {

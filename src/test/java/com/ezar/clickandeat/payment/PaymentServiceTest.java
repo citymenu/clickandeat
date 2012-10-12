@@ -3,6 +3,7 @@ package com.ezar.clickandeat.payment;
 import com.ezar.clickandeat.model.Order;
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,9 @@ public class PaymentServiceTest {
 
     
     @Test
+    @Ignore
     public void testCancelTransaction() throws Exception {
-        String response = paymentService.processTransactionRequest(order,"3");
-        LOGGER.info(response);
+        paymentService.processTransactionRequest(order, "3");
     }
     
     

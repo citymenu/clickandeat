@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.util.*;
@@ -36,6 +37,8 @@ public class PaymentService {
 
     public static final String PRE_AUTHORIZE = "0";
     public static final String REFUND = "3";
+
+    private static final String RESPONSE_OK = "0";
     
     @Autowired
     private SequenceGenerator sequenceGenerator;
@@ -104,7 +107,7 @@ public class PaymentService {
      * @throws Exception
      */
 
-    public String processTransactionRequest(Order order, String transactionType) throws Exception {
+    public void processTransactionRequest(Order order, String transactionType) throws Exception {
 
         // Build XML request
         Document document = new Document(new Element("DATOSENTRADA"));
@@ -136,9 +139,20 @@ public class PaymentService {
         while ((line = rd.readLine()) != null) {
             sb.append(line);
         }
-        String outcome = sb.toString();
-        LOGGER.info("Got response: " + outcome);
-        return outcome;
+
+        // Build response xml
+        SAXBuilder builder = new SAXBuilder();
+        Document responseDocument = builder.build(new ByteArrayInputStream(sb.toString().getBytes("utf-8")));
+        Element responseRoot = responseDocument.getRootElement();
+        Element responseCodeElement = responseRoot.getChild("CODIGO");
+        String responseCode = responseCodeElement.getText();
+        
+        if( !RESPONSE_OK.equals(responseCode) ) {
+            String errorMessage = "Received response code: " + responseCode + " for transaction type " + transactionType + " for order id " + order.getOrderId();
+            throw new Exception(errorMessage); 
+        }
+        
+        LOGGER.info("Successfully processed transction type " + transactionType + " for order id " + order.getOrderId());
     }
 
 
