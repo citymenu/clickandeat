@@ -71,20 +71,19 @@
 }
 
 #loc {
-    font:16px/28px myriad-pro;
+    font:14px/16px myriad-pro;
     color:#666666;
-    height: 26px;
-    padding: 2px 6px;
+    height: 22px;
+    padding: 4px 6px;
     border-radius: 4px 4px 4px 4px;
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
     width: 400px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-}
-
-#loc:focus {
-    border: 1px solid #AA0000;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
 }
 
 .search-location-results {
@@ -269,7 +268,7 @@ a.location-button {
 }
 
 div.pac-item {
-    font:18px/20px myriad-pro;
+    font:14px/16px myriad-pro;
     padding: 2px 5px 2px 5px;
     color:#444444;
 }

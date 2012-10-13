@@ -1,17 +1,81 @@
 @charset "utf-8";
 
 .order-summary-wrapper {
-    width: 750px;
-    min-height: 450px;
-    padding-bottom: 120px;
-    background: url(../images/butler-confirmation.png) no-repeat bottom right;
+    margin: 0 30px 0 10px;
 }
 
 .order-summary-wrapper h2 {
-     font-family: MaiandraOTGD-DemiBold;
-     font-size: 28px;
-     line-height: 32px;
-     margin-bottom:10px;
+     font: 28px/32px MaiandraOTGD-DemiBold;
+     margin-bottom:20px;
+     padding-bottom: 10px;
+     border-bottom: 1px dashed #AAAAAA;
      color:#AA0000;
 }
 
+.order-overview-wrapper {
+    margin-right: 30px;
+}
+
+.order-information {
+    font: 22px/24px MaiandraOTGD-DemiBold;
+    color: #444444;
+    margin-bottom: 20px;
+}
+
+.order-restaurant {
+    font: 14px/16px myriad-pro;
+    margin-bottom: 20px;
+}
+
+.restaurant-contact {
+    font: 700 14px/16px myriad-pro;
+}
+
+.order-overview {
+    font: 14px/16px myriad-pro;
+    color:#444444;
+    margin-bottom: 20px;
+}
+
+.order-overview h2 {
+     font: 18px/20px MaiandraOTGD-DemiBold;
+     padding-bottom: 6px;
+     color:#AA0000;
+     margin:0;
+     border:0;
+}
+
+.order-overview p {
+    padding-bottom: 6px;
+}
+
+.order-delivery {
+    font: 14px/16px myriad-pro;
+    color:#444444;
+}
+
+.order-delivery p {
+    padding-bottom: 6px;
+}
+
+.order-delivery h2 {
+     font: 18px/20px MaiandraOTGD-DemiBold;
+     padding-bottom: 6px;
+     color:#AA0000;
+     margin:0;
+     border:0;
+}
+
+.delivery-address {
+    font: 700 14px/16px myriad-pro;
+}
+
+.delivery-time {
+    font: 700 14px/16px myriad-pro;
+}
+
+#restaurant-location {
+    width: 700px;
+    height: 320px;
+    margin-top: 10px;
+}

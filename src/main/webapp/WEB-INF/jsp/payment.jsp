@@ -23,7 +23,7 @@
                 <td width="760">
                     <div class="payment-wrapper">
                         <div class="payment-title-wrapper">
-                            <div class="payment-title"><h2><message:message key="payment.payment-title"/></h2></div>
+                            <div class="payment-title"><h2><message:message key="payment.payment-details"/></h2></div>
                             <c:if test="${error != null}">
                                 <div class="payment-error"><util:escape value="${error}" escapeNewLines="true"/></div>
                             </c:if>

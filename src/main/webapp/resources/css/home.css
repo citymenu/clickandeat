@@ -110,10 +110,6 @@ input.location:focus {
     content: none;
 }
 
-div.pac-container {
-    width: 300px;
-}
-
 div.pac-item {
     font:14px/16px myriad-pro;
     padding: 2px 5px 2px 5px;

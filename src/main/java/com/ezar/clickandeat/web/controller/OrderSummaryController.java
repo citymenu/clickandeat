@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
@@ -40,7 +41,7 @@ public class OrderSummaryController {
         }
         else {
             model.put("order",orderRepository.findByOrderId(completedOrderId));
-            return new ModelAndView("orderSummary",model);
+            return new ModelAndView(MessageFactory.getLocaleString() + "/orderSummary",model);
         }
     }
 

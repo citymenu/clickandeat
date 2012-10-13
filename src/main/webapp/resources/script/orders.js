@@ -279,7 +279,7 @@ function doBuildOrder(order,config) {
             $('#additionalinstructions').click(function(){
                 editAdditionalInstructions();
             });
-        } else if( config.displayAdditionalInformation ) {
+        } else if( config.displayAdditionalInformation && order.additionalInstructions != '') {
             // Display actual additional information in the order panel
             var additionalInformationDisplay = ('<div class=\'additional-information\'><h2>{0}</h2><div>{1}</div></div>')
                 .format(getLabel('order.additional-instructions'),unescapeQuotesAndBreaks(order.additionalInstructions));

@@ -49,7 +49,15 @@ public class Address extends PersistentObject {
     }
 
     public String getSummary() {
-        List<String> items = new ArrayList<String>();  
+        return StringUtils.collectionToDelimitedString(getAddressItems(), " ");
+    }
+
+    public String getDisplaySummary() {
+        return StringUtils.collectionToDelimitedString(getAddressItems(), "\n");
+    }
+    
+    private List<String> getAddressItems() {
+        List<String> items = new ArrayList<String>();
         if( StringUtils.hasText(address1)) {
             items.add(address1);
         }
@@ -68,9 +76,10 @@ public class Address extends PersistentObject {
         if(StringUtils.hasText(postCode)) {
             items.add(postCode);
         }
-        return StringUtils.collectionToDelimitedString(items, " ");
+        return items;
     }
 
+    
     public String getPostCode() {
         return postCode;
     }
