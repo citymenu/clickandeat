@@ -23,11 +23,13 @@
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order details:</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Order number is $order.orderId</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
                             #if( $order.deliveryType == 'DELIVERY' )
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Order is for delivery to:</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order is for delivery to:</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
                             #else
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Order is for collection</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Order is for collection</b></div>
                             #end
                         </div>
 
@@ -116,6 +118,10 @@
                 </tr>
                 <tr valign="top">
                     <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Customer:</b> $stringTool.escape($order.customer.firstName) $stringTool.escape($order.customer.lastName)</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Telephone:</b> ${order.customer.telephone}</div>
+                        </div>
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Please use the links below to accept or reject this order.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">

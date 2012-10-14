@@ -152,7 +152,6 @@ public class CheckoutController {
             order.setDeliveryAddress(deliveryAddress);
             order.setAdditionalInstructions(additionalInstructions);
             order.updateRestaurantIsOpen();
-            orderRepository.saveOrder(order);
 
             // If the restaurant is not open, return an error
             if( !order.getRestaurantIsOpen()) {
@@ -171,8 +170,14 @@ public class CheckoutController {
                         success = false;
                         reason = "checkout-restaurant-wont-deliver";
                     }
+                    else {
+                        order.getDeliveryAddress().setLocation(deliveryLocation.getLocation());
+                    }
                 }
             }
+
+            // Update the order object
+            orderRepository.saveOrder(order);
 
             // Indicate if the data is all valid
             model.put("success",success);
