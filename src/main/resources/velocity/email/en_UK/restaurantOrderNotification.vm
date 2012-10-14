@@ -22,7 +22,7 @@
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order details:</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Order number is $order.orderId</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Order number is $order.orderId</div>
                             #if( $order.deliveryType == 'DELIVERY' )
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Order is for delivery to:</div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
@@ -30,6 +30,13 @@
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Order is for collection</div>
                             #end
                         </div>
+
+                        #if( $order.deliveryType == 'DELIVERY' )
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Distance to address:</b> $numberTool.format("#0.0", $distance)km</div>
+                        </div>
+                        #end
+
                         <div style="margin-bottom:15px;">
                             #if( $order.deliveryType == 'DELIVERY' )
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">

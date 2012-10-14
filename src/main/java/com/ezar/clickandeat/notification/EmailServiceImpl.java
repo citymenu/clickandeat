@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
@@ -44,6 +45,9 @@ public class EmailServiceImpl implements IEmailService {
     private VelocityTemplatingService velocityTemplatingService;
 
     @Autowired
+    private GeoLocationService geoLocationService;
+    
+    @Autowired
     private SecurityUtils securityUtils;
 
     private String from;
@@ -67,6 +71,12 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        if( Order.DELIVERY.equals(order.getDeliveryType())) {
+            double[] restaurantLocatation = order.getRestaurant().getAddress().getLocation();
+            double[] customerLocation = order.getDeliveryAddress().getLocation();
+            Double distance = geoLocationService.getDistance(restaurantLocatation, customerLocation);
+            templateMap.put("distance",distance);
+        }
         String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
         String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
         String acceptWithDeliveryCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL);

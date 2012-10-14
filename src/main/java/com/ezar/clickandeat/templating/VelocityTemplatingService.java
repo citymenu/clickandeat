@@ -163,7 +163,7 @@ public class VelocityTemplatingService implements InitializingBean {
             }
             String escaped = StringEscapeUtils.escapeHtml((String)obj);
             if( escapeNewLines ) {
-                escaped = escaped.replace("\n","<br>").replace(" ","&nbsp");
+                escaped = escaped.replace("\n","<br>").replace(" ","&nbsp;");
             }
             return escaped;
         }
