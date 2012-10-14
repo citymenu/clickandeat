@@ -36,6 +36,10 @@ public class PageController {
         return "login";
     }
 
+    @RequestMapping(value="/test.html", method=RequestMethod.GET)
+    public String test() {
+        return "emailTest";
+    }
 
     @RequestMapping(value="/secure/register.html", method = RequestMethod.GET)
     public ModelAndView register() {

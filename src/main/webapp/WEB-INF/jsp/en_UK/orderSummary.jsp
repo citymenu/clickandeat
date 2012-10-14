@@ -29,7 +29,7 @@
                 <!-- Order summary -->
                 <td width="760">
                     <div class="order-summary-wrapper">
-                        <h2>Thank you for your order <util:escape value="${order.customer.firstName}"/></h2>
+                        <h2>Thank you for your order</h2>
                         <div class="order-detail-wrapper">
                             <table width="720">
                                 <tr valign="top">
@@ -37,7 +37,7 @@
                                     <td width="430">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
-                                                <div class="order-information">Your order number: ${order.orderId}</div>
+                                                <div class="order-information">Your order number is ${order.orderId}</div>
                                                 <div class="order-restaurant">
                                                     <util:escape value="${order.restaurant.name}"/> <util:escape value="${order.restaurant.address.summary}"/>
                                                     <div class="restaurant-contact">Contact: ${order.restaurant.contactTelephone}</div>
@@ -80,11 +80,7 @@
                                                     <p>You have chosen to have <util:escape value="${order.restaurant.name}"/> deliver your order to the following address:</p>
                                                     <div class="delivery-address">
                                                         <util:escape value="${order.deliveryAddress.displaySummary}" escapeNewLines="true"/>
-                                                        80 Peel Road<br>
-                                                        South Woodford<br>
-                                                        London<br>
-                                                        E18 2LG
-                                                    </div>
+                                                   </div>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <h2>Collection details</h2>

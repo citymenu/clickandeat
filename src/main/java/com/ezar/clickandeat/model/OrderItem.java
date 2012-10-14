@@ -142,7 +142,12 @@ public class OrderItem {
     public String getFormattedCost() {
         return NumberUtil.format(cost * quantity);
     }
-    
+
+    public String getSummary() {
+        return this.toString();
+    }
+
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(quantity).append(" x ").append(menuItemTitle);
@@ -153,7 +158,7 @@ public class OrderItem {
             sb.append(" (").append(menuItemSubTypeName).append(")");
         }
         for( String additionalItem: additionalItems) {
-            sb.append("\n").append(additionalItem);
+            sb.append("\n  ").append(additionalItem);
         }
         return sb.toString();
     }

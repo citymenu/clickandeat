@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.templating;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
@@ -105,6 +106,9 @@ public class VelocityTemplatingService implements InitializingBean {
         }
         
         // Add default useful objects
+        context.put("locale",MessageFactory.getLocale());
+        context.put("language", MessageFactory.getLanguage());
+        context.put("country", MessageFactory.getCountry());
         context.put("today",new LocalDate());
         context.put("baseUrl",baseUrl);
 
@@ -158,7 +162,10 @@ public class VelocityTemplatingService implements InitializingBean {
                 return null;
             }
             String escaped = StringEscapeUtils.escapeHtml((String)obj);
-            return escapeNewLines? escaped.replace("\n","<br>"): escaped;
+            if( escapeNewLines ) {
+                escaped = escaped.replace("\n","<br>").replace(" ","&nbsp");
+            }
+            return escaped;
         }
 
         public boolean hasText(Object obj) {

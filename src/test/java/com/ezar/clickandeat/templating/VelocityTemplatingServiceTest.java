@@ -175,6 +175,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.setOrderItemCost(1.355d);
         order.setTotalDiscount(2.8);
         order.setTotalCost(35.403);
+        order.setRestaurantCost(35.403);
         
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("order",order);
@@ -222,6 +223,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     public void setLocale(String locale) {
         this.locale = locale;
     }
+
 
     @Required
     @Value(value="${baseUrl}")

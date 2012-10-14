@@ -5,6 +5,7 @@ import org.springframework.context.support.StaticApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
+import javax.swing.text.StringContent;
 import java.text.MessageFormat;
 import java.util.*;
 
@@ -15,6 +16,10 @@ public class MessageFactory {
     private static final String systemLocale;
     
     private static final Locale applicationLocale;
+
+    private static final String lanugage;
+    
+    private static final String country;
     
     static {
         try {
@@ -30,6 +35,8 @@ public class MessageFactory {
             props.load(resource.getInputStream());
             systemLocale = locale;
             applicationLocale = new Locale(locale.split("_")[0],locale.split("_")[1]);
+            lanugage = systemLocale.split("_")[0];
+            country = systemLocale.split("_")[1];
             messages = new HashMap<String, String>();
             for( Object key: props.keySet()) {
                 messages.put((String)key, (String)props.get(key));
@@ -48,6 +55,14 @@ public class MessageFactory {
         return systemLocale; 
     }
 
+    public static String getLanguage() {
+        return lanugage;
+    }
+    
+    public static String getCountry() {
+        return country;
+    }
+    
     /**
      * @param key
      * @return
