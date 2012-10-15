@@ -100,10 +100,10 @@
                                         </div>
                                         <c:choose>
                                             <c:when test="${search != null && search.coordinates != null}">
-                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Get directions</a> from your location</div>
+                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.get-directions"/></a> <message:message key="restaurant.from-your-location"/></div>
                                             </c:when>
                                             <c:otherwise>
-                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')">Show location</a></div>
+                                                <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.show-location"/></a></div>
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
