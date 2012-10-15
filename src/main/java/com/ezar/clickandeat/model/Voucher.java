@@ -13,7 +13,7 @@ public class Voucher extends PersistentObject {
     
     private boolean used;
     
-    private double discount = DEFAULT_VOUCHER_DISCOUNT;
+    private double discount;
 
     public double getDiscount() {
         return discount;

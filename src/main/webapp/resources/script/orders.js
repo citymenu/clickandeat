@@ -467,7 +467,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
 
     // Add onclick event to the cancel button
     $('#deliverycancel').click(function(){
-        doBuildOrder(currentOrder,getOrderPanelConfig());
+        buildOrder(currentOrder);
     });
 
     // If a date and time are selected, apply selection now
@@ -483,6 +483,14 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
             }
         }
     }
+
+    // Run onBuildDeliveryEdit callback
+    onBuildDeliveryEdit();
+
+}
+
+// Empty build delivery edit function, can override
+function onBuildDeliveryEdit() {
 }
 
 // Updates the selected delivery type

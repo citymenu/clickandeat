@@ -72,10 +72,12 @@ public class EmailServiceImpl implements IEmailService {
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         if( Order.DELIVERY.equals(order.getDeliveryType())) {
-            double[] restaurantLocatation = order.getRestaurant().getAddress().getLocation();
+            double[] restaurantLocation = order.getRestaurant().getAddress().getLocation();
             double[] customerLocation = order.getDeliveryAddress().getLocation();
-            Double distance = geoLocationService.getDistance(restaurantLocatation, customerLocation);
-            templateMap.put("distance",distance);
+            if( restaurantLocation != null && customerLocation != null ) {
+                Double distance = geoLocationService.getDistance(restaurantLocation, customerLocation);
+                templateMap.put("distance",distance);
+            }
         }
         String acceptCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
         String declineCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
@@ -155,8 +157,12 @@ public class EmailServiceImpl implements IEmailService {
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-declined-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId(),StringEscapeUtils.unescapeHtml(order.getRestaurant().getName()));
+
+        // Create a voucher to try to keep this customer
+        Voucher voucher = voucherRepository.createVoucher(5d);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        templateMap.put("voucherId",voucher.getVoucherId());
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -218,8 +224,12 @@ public class EmailServiceImpl implements IEmailService {
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
+
+        // Create a voucher to try to keep this customer for the next order
+        Voucher voucher = voucherRepository.createVoucher(5d);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
+        templateMap.put("voucherId",voucher.getVoucherId());
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
@@ -241,7 +251,7 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
         
         // Create a voucher to try to keep this customer for the next order
-        Voucher voucher = voucherRepository.createVoucher();
+        Voucher voucher = voucherRepository.createVoucher(Voucher.DEFAULT_VOUCHER_DISCOUNT);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         templateMap.put("voucherId",voucher.getVoucherId());

@@ -162,15 +162,7 @@ public class CheckoutController {
                 // If the order is for delivery, check that the delivery address can be determined
                 if( Order.DELIVERY.equals(order.getDeliveryType())) {
                     GeoLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
-                    if( deliveryLocation == null || deliveryLocation.getRadius() > maxRadiusMetres ) {
-                        success = false;
-                        reason = "checkout-location-not-found";
-                    }
-                    else if( !restaurantRepository.willDeliverToLocationOrPostCode(order.getRestaurant(), deliveryLocation.getLocation(), deliveryAddress.getPostCode())) {
-                        success = false;
-                        reason = "checkout-restaurant-wont-deliver";
-                    }
-                    else {
+                    if( deliveryLocation != null ) {
                         order.getDeliveryAddress().setLocation(deliveryLocation.getLocation());
                     }
                 }

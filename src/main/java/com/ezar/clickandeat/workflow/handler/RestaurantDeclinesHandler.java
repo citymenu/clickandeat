@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.workflow.handler;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Voucher;
@@ -55,6 +56,15 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
         // Set any voucher on this order to be unused
         voucherRepository.markVoucherUnused(order.getVoucherId());
 
+        // Update the restaurant declined reason 
+        String reason = (String)context.get("DeclinedReason");
+        if( reason == null ) {
+            order.setRestaurantDeclinedReason(MessageFactory.formatMessage("workflow.restaurant-declined", false, order.getRestaurant().getName()));
+        }
+        else {
+            order.setRestaurantDeclinedReason(MessageFactory.formatMessage("workflow.restaurant-declined-" + reason, false, order.getRestaurant().getName()));
+        }
+        
         // Update the last time the restaurant responded to the system
         Restaurant restaurant = order.getRestaurant();
         restaurant.setLastOrderReponseTime(new DateTime());

@@ -59,8 +59,9 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
     
     
     @Override
-    public Voucher createVoucher() {
+    public Voucher createVoucher(Double discount) {
         Voucher voucher = new Voucher();
+        voucher.setDiscount(discount);
         String voucherId = generateVoucherId();
         boolean voucherAlreadyExists = findByVoucherId(voucherId) != null;
         while( voucherAlreadyExists ) {
@@ -72,6 +73,13 @@ public class VoucherRepositoryImpl implements VoucherRepositoryCustom{
         return voucher;
     }
 
+
+    @Override
+    public Voucher createVoucher() {
+        return createVoucher(Voucher.DEFAULT_VOUCHER_DISCOUNT);
+    }
+
+    
     @Override
     public void markVoucherUsed(String voucherId) {
         updateVoucherStatus(voucherId, true);

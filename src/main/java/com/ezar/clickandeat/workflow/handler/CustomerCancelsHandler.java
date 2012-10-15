@@ -44,6 +44,9 @@ public class CustomerCancelsHandler implements IWorkflowHandler {
         if( ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus())) {
             return true;
         }
+        if( ORDER_STATUS_CUSTOMER_CANCELLED.equals(order.getOrderStatus()) || ORDER_STATUS_AUTO_CANCELLED.equals(order.getOrderStatus())) {
+            return false;
+        }
         else if (order.getDeliveryTimeNonStandard()) {
             DateTime restaurantAcceptedTime = order.getRestaurantActionedTime();
             if( restaurantAcceptedTime.plusMinutes(cancelCutoffMinutes).isBefore(new DateTime())) {

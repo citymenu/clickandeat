@@ -1,21 +1,97 @@
 <html>
 
-<head>
-</head>
+<body style="background-color:#FFFFFF;">
 
-<body>
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="header-image" width="550" height="54" alt="Header-image"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">We are still working on your order</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hello $stringTool.escape($order.customer.firstName),</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>We are really sorry but $stringTool.escape($order.restaurant.name) are very busy right now
+                            and have not had a chance to deal with your order just yet.</b></div>
+                        </div>
 
-<h1>Would you like to cancel order ${order.orderId}?</h1>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">We hope to have your order confirmed very soon but if you don't want to wait any longer, please
+                            <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">click here</a> to cancel this order. You will not be charged for your order if you cancel it.</div>
+                        </div>
 
-<div>We are sorry, $stringTool.escape($order.restaurant.name) are very busy with orders today and have not had a chance to respond to your order.</div>
-<div>If you would like to cancel this order, please click on the link below.</div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order details:</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Your order number is $order.orderId</div>
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Order is for delivery</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Order is for collection</div>
+                            #end
+                        </div>
 
-<div>
-    <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancel order</a>
-</div>
-
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.restaurant.name) $stringTool.escape($order.restaurant.address.summary)</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>You have ordered:</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                    #foreach( $item in $order.orderItems )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($item.summary,true)</div>
+                                    #end
+                                    #foreach( $discount in $order.orderDiscounts )
+                                        #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
+                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
+                                        #end
+                                    #end
+                                </div>
+                                #if( $order.deliveryCost > 0 )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Delivery charge: &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                #end
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Total price: &#163;$numberTool.format("#0.00", $order.totalCost)</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Delivery address:</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Collection details:</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">You have selected to collect your order in person, <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">click here</a> to view the location of $stringTool.escape($order.restaurant.name)</div>
+                            #end
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="butler-image" width="230" height="300" alt="A picture of the butler"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>Need to speak to someone about your order?</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">This email is auto-generated so please do not reply to it. If you would like to speak to someone about your order please contact $stringTool.escape($order.restaurant.name) directly on ${order.restaurant.contactTelephone}.</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 
 </html>

@@ -33,7 +33,7 @@
                             #end
                         </div>
 
-                        #if( $order.deliveryType == 'DELIVERY' )
+                        #if( $order.deliveryType == 'DELIVERY' && $distance )
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Distance to address:</b> $numberTool.format("#0.0", $distance)km</div>
                         </div>
@@ -106,9 +106,13 @@
                         </div>
                         #end
 
-
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Total price: &#163;$numberTool.format("#0.00", $order.restaurantCost)</b></div>
+                        </div>
+
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Customer:</b> $stringTool.escape($order.customer.firstName) $stringTool.escape($order.customer.lastName)</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Telephone:</b> ${order.customer.telephone}</div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>
@@ -119,13 +123,15 @@
                 <tr valign="top">
                     <td width=550" colspan="3">
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Customer:</b> $stringTool.escape($order.customer.firstName) $stringTool.escape($order.customer.lastName)</div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Telephone:</b> ${order.customer.telephone}</div>
-                        </div>
-                        <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Please use the links below to accept or reject this order.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Please use the links below to accept or decline this order.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
                                 <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Decline</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Please use the links below if you would like to give more detail on why you are declining this order.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=address">Won't deliver to Address</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">We are closed</a>
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
@@ -135,13 +141,14 @@
                                 #else
                                     Your standard collection time is $order.restaurant.collectionTimeMinutes minutes, click below to add additional time beyond your standard collection time for this order.
                                 #end
+                                If you add additional time the customer will have ten minutes in which they can cancel the order.
                             </b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutes</a></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutes</a></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutes</a></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">+60 minutes</a></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">+90 minutes</a></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">+120 minutes</a></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutes</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutes</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutes</a>
+                            </div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">+60 minutes</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">+90 minutes</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">+120 minutes</a>
+                            </div>
                         </div>
                     </td>
                 </tr>

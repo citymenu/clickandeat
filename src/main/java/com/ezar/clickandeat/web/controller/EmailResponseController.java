@@ -47,7 +47,8 @@ public class EmailResponseController {
 
 
     @RequestMapping(value="/secure/workflow/confirmOrder.html", method= RequestMethod.GET)
-    public ModelAndView acceptOrDeclineOrder(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "minutes", required = false) Integer minutes ) throws Exception {
+    public ModelAndView acceptOrDeclineOrder(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "minutes", required = false) Integer minutes,
+                                             @RequestParam(value = "reason", required = false) String reason) throws Exception {
         
         Map<String,Object> model = new HashMap<String, Object>();
         String orderId = null;
@@ -73,10 +74,13 @@ public class EmailResponseController {
                 if( minutes != null ) {
                     context.put("DeliveryMinutes",minutes);
                 }
-                order = orderWorkflowEngine.processAction(order,action, context);
+                if( reason != null ) {
+                    context.put("DeclinedReason", reason);
+                }
+                order = orderWorkflowEngine.processAction(order, action, context);
                 model.put("success",true);
                 String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true,order.getRestaurant().getName());
-                String message = MessageFactory.formatMessage("workflow.update.message", true, order.getOrderId(), orderStatusDescription);
+                String message = MessageFactory.formatMessage("workflow.update.message", false, order.getOrderId(), orderStatusDescription);
                 model.put("message",message);
             }
             catch( WorkflowStatusException ex ) {
@@ -90,7 +94,7 @@ public class EmailResponseController {
         catch( Exception ex ) {
             LOGGER.error("Execption for orderId: " + orderId,ex);
             model.put("success",false);
-            String message = MessageFactory.formatMessage("workflow.exception.message", true, ex.getMessage());
+            String message = MessageFactory.formatMessage("workflow.exception.message", false, ex.getMessage());
             model.put("message",message);
         }
         return new ModelAndView("workflow/confirmOrder",model);
@@ -123,7 +127,7 @@ public class EmailResponseController {
                 order = orderWorkflowEngine.processAction(order,action);
                 model.put("success",true);
                 String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true,order.getRestaurant().getName());
-                String message = MessageFactory.formatMessage("workflow.update.message", true, order.getOrderId(), orderStatusDescription);
+                String message = MessageFactory.formatMessage("workflow.update.message", false, order.getOrderId(), orderStatusDescription);
                 model.put("message",message);
             }
             catch( WorkflowStatusException ex ) {
@@ -137,7 +141,7 @@ public class EmailResponseController {
         catch( Exception ex ) {
             LOGGER.error("Execption for orderId: " + orderId,ex);
             model.put("success",false);
-            String message = MessageFactory.formatMessage("workflow.exception.message", true, ex.getMessage());
+            String message = MessageFactory.formatMessage("workflow.exception.message", false, ex.getMessage());
             model.put("message",message);
         }
         return new ModelAndView("workflow/confirmOrder",model);

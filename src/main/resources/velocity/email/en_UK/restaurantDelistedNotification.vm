@@ -1,15 +1,48 @@
 <html>
 
-<head>
-</head>
+<body style="background-color:#FFFFFF;">
 
-<body>
-
-<h1>You have been delisted from our site</h1>
-
-<div>Please click <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">Here</a> to relist on our site.</div>
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="header-image" width="550" height="54" alt="Header-image"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Your have been temporarily delisted from our site</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>We have had to cancel an order because we were not able to get a response from you. To prevent
+                            any more orders coming in that we have to cancel, we have temporarily delisted you from our Website.</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Please <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">click here</a> to relist your 
+                            restaurant on our Website.</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Please do not hesitate to get in touch with us if you have any questions for us or are unclear on any of the 
+                            steps we use when relaying order details to you.</div>
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="butler-image" width="230" height="300" alt="A picture of the butler"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 
 </html>

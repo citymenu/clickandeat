@@ -88,7 +88,9 @@
 	</bean>
 
 	<!-- Default bean name is 'mongo' -->
-  	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}"/>
+  	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
+          <mongo:options connections-per-host="20" auto-connect-retry="true"/>
+    </mongo:mongo>
 
 	<!-- Mongo db factory -->
   	<mongo:db-factory dbname="#{@dbUrl.getPath().substring(1)}" mongo-ref="mongo" username="#{@dbUrl.getUserInfo().split(':')[0]}" password="#{@dbUrl.getUserInfo().split(':')[1]}"/>
