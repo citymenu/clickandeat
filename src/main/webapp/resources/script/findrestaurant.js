@@ -49,6 +49,9 @@ $(document).ready(function(){
 
 // Update visible restaurants
 function filterRestaurants() {
+
+    var displayPhoneOnlyMessage = false;
+
     $('.search-result-wrapper').each(function(index,element){
         var open = $(this).attr('isOpen');
         var cuisineSummary = $(this).attr('cuisines');
@@ -58,8 +61,17 @@ function filterRestaurants() {
             $(this).hide();
         } else {
             $(this).show();
+            if($(this).attr('isPhoneOnly') == 'true') {
+                displayPhoneOnlyMessage = true;
+            }
         }
     });
+
+    if( displayPhoneOnlyMessage ) {
+        $('.phone-orders-only-wrapper').show();
+    } else {
+        $('.phone-orders-only-wrapper').hide();
+    }
 }
 
 // Override order config

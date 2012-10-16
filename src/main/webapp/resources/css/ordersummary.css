@@ -58,6 +58,12 @@
     padding-bottom: 6px;
 }
 
+.order-image {
+    width: 290px;
+    height: 285px;
+    background-image: url(../images/order-confirmation.jpg);
+}
+
 .order-delivery h2 {
      font: 18px/20px MaiandraOTGD-DemiBold;
      padding-bottom: 6px;

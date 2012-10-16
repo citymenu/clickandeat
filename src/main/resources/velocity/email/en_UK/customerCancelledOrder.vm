@@ -9,7 +9,7 @@
                 <tr valign="top">
                     <td width="550" colspan="3">
                         <div style="margin-top:15px;">
-                            <img src="header-image" width="550" height="54" alt="Header-image"/>
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
                         </div>
                     </td>
                 </tr>
@@ -60,7 +60,7 @@
                     </td>
                     <td width="20">&nbsp;</td>
                     <td width="230">
-                        <img src="butler-image" width="230" height="300" alt="A picture of the butler"/>
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/butler.jpg" width="230" height="300"/>
                     </td>
                 </tr>
             </table>

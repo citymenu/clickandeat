@@ -240,8 +240,9 @@ a.order-button, a.order-button:active, a.order-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font: 500 12px prenton;
-    padding: 1px 6px 1px 6px;
+    font: 14px MaiandraOTGD-DemiBold;
+    padding: 2px 12px 3px 12px;
+    margin-left:4px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -250,14 +251,6 @@ a.order-button, a.order-button:active, a.order-button:hover {
 }
 
 a.order-button:active, a.order-button:hover {
-    background-color: #2c8023;
-}
-
-a.order-button-large, a.order-button-large:active, a.order-button-large:hover {
-    padding: 4px 10px 4px 10px;
-}
-
-a.order-button-large:active, a.order-button-large:hover {
     background-color: #2c8023;
 }
 

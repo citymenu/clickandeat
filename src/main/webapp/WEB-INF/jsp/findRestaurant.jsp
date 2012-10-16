@@ -89,7 +89,9 @@
                                 <c:if test="${restaurant.phoneOrdersOnly == true}">
                                     <c:if test="${phoneOrdersOnlyflag=='0'}">
                                         <c:set var="phoneOrdersOnlyflag" value="1"/>
-                                        <div class="phone-orders-only-text"><p><img class="phone-orders-only-image" src="${resources}/images/butler-sad.jpg" /><message:message key="search.phone-orders-only-text"/></p></div>
+                                        <div class="phone-orders-only-wrapper">
+                                            <div class="phone-orders-only"><message:message key="search.phone-orders-only-text"/></div>
+                                        </div>
                                     </c:if>
                                 </c:if>
                                 <div class="search-result-wrapper" isOpen="${restaurant.open}" cuisines="${restaurant.cuisineSummary}" isPhoneOnly="${restaurant.phoneOrdersOnly}">
@@ -138,7 +140,7 @@
                                                                         <c:when test="${restaurant.open == true}">
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open-call"><message:message key="search.call-now"/><img class="phone-orders-only-image" src="${resources}/images/phone-red.png" style="width:26px ; height:20px"/></a>
+                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.call-now"/></a>
                                                                                 </c:when>
                                                                                 <c:otherwise>
                                                                                     <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.order-now"/></a>
@@ -148,7 +150,7 @@
                                                                         <c:otherwise>
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <img class="phone-orders-only-image" src="${resources}/images/phone-grey.png" style="width:26px ; height:20px"/>
+                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.view-menu"/></a>
                                                                                 </c:when>
                                                                                 <c:otherwise>
                                                                                     <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>

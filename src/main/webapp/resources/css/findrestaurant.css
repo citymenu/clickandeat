@@ -305,18 +305,27 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
     cursor: pointer;
 }
 
-.phone-orders-only-text {
-    font: 500 14px/16px prenton;
-    border: 1px solid #b64242;
-    background-color: #fffece;
-    margin: 12px 0 12px 0;
-    color:#444444;
-    padding: 6px 10px 6px 10px;
+.phone-orders-only-wrapper {
+    background-color:#fffeda;
+    padding: 8px 10px 8px 10px;
+    border:1px solid #AAAAAA;
+    margin: 20px 0 20px 0;
     -webkit-border-radius: 10px;
        -moz-border-radius: 10px;
             border-radius: 10px;
-    height:65px;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
+
+.phone-orders-only {
+    background: url(../images/phone-orders.png) right top no-repeat;
+    font: 500 16px/19px prenton;
+    color:#444444;
+    padding-right:100px;
+    min-height:65px;
+}
+
 
 .phone-orders-only-image{
     float: right;

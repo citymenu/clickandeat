@@ -66,9 +66,7 @@
                                     </td>
                                     <!-- Explanation -->
                                     <td width="290">
-                                        <div class="order-image">
-                                            Put picture of butler in a chef hat here or something like that.
-                                        </div>
+                                        <div class="order-image"></div>
                                     </td>
                                 </tr>
                                 <tr valign="top">

@@ -107,6 +107,7 @@ function doBuildOrder(order,config) {
     $('.order-discount-wrapper').remove();
     $('.additional-information').remove();
     $('#checkout').remove();
+    $('#callnow').remove();
     $('.delivery-warning-wrapper').remove();
 
     // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
@@ -281,7 +282,7 @@ function doBuildOrder(order,config) {
             $('#additionalinstructions').click(function(){
                 editAdditionalInstructions();
             });
-        } else if( config.displayAdditionalInformation && order.additionalInstructions != '') {
+        } else if( config.displayAdditionalInformation && order.additionalInstructions != '' && order.additionalInstructions != null ) {
             // Display actual additional information in the order panel
             var additionalInformationDisplay = ('<div class=\'additional-information\'><h2>{0}</h2><div>{1}</div></div>')
                 .format(getLabel('order.additional-instructions'),unescapeQuotesAndBreaks(order.additionalInstructions));
@@ -590,7 +591,7 @@ function editAdditionalInstructions() {
     var header = getLabel('order.additional-instructions');
     var subheader = getLabel('order.additional-instructions.help');
     var content = ('<textarea id=\'instructions\'>{0}</textarea>').format(unescapeQuotes(additionalInstructions).replace('<br>','\n'));
-    var buttons = ('<a id=\'updatebutton\' class=\'order-button unselectable\'>{0}</a>').format(getLabel('button.save-changes'));
+    var buttons = ('<a id=\'updatebutton\' class=\'order-button order-button-large unselectable\'>{0}</a>').format(getLabel('button.save-changes'));
 
     var container = ('<div class=\'dialog-container\'><div class=\'dialog-header\'><h2>{0}</h2></div><div class=\'dialog-subheader\'>{1}</div><div class=\'dialog-content\'>{2}</div><div class=\'dialog-footer\'><div class=\'dialog-buttons\'>{3}</div></div></div>')
         .format(header,subheader,content,buttons);

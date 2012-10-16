@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    $('#loc').watermark(watermark);
+
     $('#loc').focus();
 
     $('#loc').keydown(function(event){
