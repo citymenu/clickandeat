@@ -28,7 +28,7 @@
                             <li class="active unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
                         </c:when>
                         <c:when test="${search != null}">
-                            <li class="unselectable"><a href="${ctx}/findRestaurant.html?loc=<util:escape value="${search.location.address}"/>"><message:message key="workflow.2-select-a-restaurant"/></a></li>
+                            <li class="unselectable"><a href="${ctx}/findRestaurant.html"><message:message key="workflow.2-select-a-restaurant"/></a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
