@@ -1,6 +1,8 @@
 $(document).ready(function(){
 
-    $('#loc').watermark(watermark);
+    $('#loc').watermark(watermark,{
+        use
+    });
 
     $('#loc').focus();
 

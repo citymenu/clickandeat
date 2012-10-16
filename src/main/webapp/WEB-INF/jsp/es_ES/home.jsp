@@ -5,7 +5,7 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/search.js"></script>
     <script type="text/javascript" src="${resources}/script/home.js"></script>
-
+    <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css"/>
 
     <title>LlamaryComer | Pide comida online - Barcelona and Madrid</title>
@@ -21,7 +21,7 @@
             <div class="searchbar-wrapper">
                 <div class="searchbar-location unselectable">Restaurants en tu zona</div>
                 <div class="search-location-form">
-                    <div class="location-input"><input class="location" type="text" id="loc" placeholder="<message:message key="search.watermark"/>"/></div>
+                    <div class="location-input"><input class="location" type="text" id="loc" placeholder=""/></div>
                     <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
                 </div>
                 <div class="location-direct unselectable">O entra directament en: Madrid / Barcelona</div>

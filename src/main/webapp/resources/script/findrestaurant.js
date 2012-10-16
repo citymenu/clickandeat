@@ -7,11 +7,12 @@ $(document).ready(function(){
     // Add click handler for location change link
     $('#changeLocation').click(function(){
         var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder\'{0}\'/>').format(getLabel('search.watermark'));
-        var searchButton = ('<input class=\'searchbutton\' type=\'button\' id=\'searchbutton\' value=\'{0}\'/>').format(getLabel('button.search'));
+        var searchButton = ('<input class=\'searchbutton\' type=\'button\' id=\'searchbutton\' value=\'{0}\' placeholder=\'\'/>').format(getLabel('button.search'));
         var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationField,searchButton);
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
+        $('#loc').watermark(watermark);
         $('#loc').focus();
 
         // Add event handlers

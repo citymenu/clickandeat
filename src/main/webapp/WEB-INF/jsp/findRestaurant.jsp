@@ -12,6 +12,7 @@
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
+    <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
