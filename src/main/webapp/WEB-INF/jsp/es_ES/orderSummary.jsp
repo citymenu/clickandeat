@@ -29,7 +29,7 @@
                 <!-- Order summary -->
                 <td width="760">
                     <div class="order-summary-wrapper">
-                        <h2>Thank you for your order</h2>
+                        <h2>Gracias por tu pedido <util:escape value="${order.customer.firstName}"/></h2>
                         <div class="order-detail-wrapper">
                             <table width="720">
                                 <tr valign="top">
@@ -37,26 +37,25 @@
                                     <td width="430">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
-                                                <div class="order-information">Your order number: ${order.orderId}</div>
+                                                <div class="order-information">Numero de pedido: ${order.orderId}</div>
                                                 <div class="order-restaurant">
                                                     <util:escape value="${order.restaurant.name}"/> <util:escape value="${order.restaurant.address.summary}"/>
-                                                    <div class="restaurant-contact">Contact: ${order.restaurant.contactTelephone}</div>
+                                                    <div class="restaurant-contact">Contacto: ${order.restaurant.contactTelephone}</div>
                                                 </div>
                                                 <div class="order-overview">
-                                                    <h2>What happens next?</h2>
-                                                    <p>We are passing the details of your order to <util:escape value="${order.restaurant.name}"/> right now.
-                                                    In a few moments you will receive confirmation that they have received your order.</p>
-                                                    <p>If for any reason the restaurant are not able to fulfil your order we will
-                                                    let you know straight away.</p>
-                                                    <p>If you have any queries about your order, please contact <util:escape value="${order.restaurant.name}"/> using
-                                                    the telephone number shown above, quoting your order number.</p>
+                                                    <h2>¿Que ocurre a continuación?</h2>
+                                                    <p>Acabamos de comunicar tu pedido a <util:escape value="${order.restaurant.name}"/>.
+                                                    Pronto recibirás un correo electrónico confirmando que han recibido tu orden.</p>
+                                                    <p>Si por algún motivo el restaurante no puede llevar a cabo tu pedido te lo haremos saber de manera inmediata.</p>
+                                                    <p>Si tienes alguna pregunta relacionada con tu pedido, por favor contacta <util:escape value="${order.restaurant.name}"/> utilizando
+                                                     el número de teléfono que aparece arriba y no te olvides de mencionar tu numero de pedido.</p>
                                                     <div class="delivery-time">
                                                         <c:choose>
                                                             <c:when test="${order.deliveryType == 'DELIVERY'}">
-                                                                Orders are usually delivered within ${order.restaurant.deliveryTimeMinutes} minutes.
+                                                                Normalmente los pedido se entregan en ${order.restaurant.deliveryTimeMinutes} minutos.
                                                             </c:when>
                                                             <c:otherwise>
-                                                                Orders are usually ready for collection within ${order.restaurant.collectionTimeMinutes} minutes.
+                                                                Normalmente los pedido los pedidos estan listos para recoger en ${order.restaurant.collectionTimeMinutes} minutos.
                                                             </c:otherwise>
                                                         </c:choose>
                                                     </div>
@@ -76,16 +75,20 @@
                                         <div class="order-delivery">
                                             <c:choose>
                                                 <c:when test="${order.deliveryType == 'DELIVERY'}">
-                                                    <h2>Delivery details</h2>
-                                                    <p>You have chosen to have <util:escape value="${order.restaurant.name}"/> deliver your order to the following address:</p>
+                                                    <h2>Dirección (enviar)</h2>
+                                                    <p>Has solicitado que <util:escape value="${order.restaurant.name}"/> entregue el pedido en la dirección siguiente:</p>
                                                     <div class="delivery-address">
                                                         <util:escape value="${order.deliveryAddress.displaySummary}" escapeNewLines="true"/>
-                                                   </div>
+                                                        80 Peel Road<br>
+                                                        South Woodford<br>
+                                                        London<br>
+                                                        E18 2LG
+                                                    </div>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <h2>Collection details</h2>
-                                                    <p>You have chosen to collect your order from <util:escape value="${order.restaurant.name}"/> in person.</p>
-                                                    <p>The location of <util:escape value="${order.restaurant.name}"/> is shown below.</p>
+                                                    <h2>Dirección (recoger)</h2>
+                                                    <p>Has solicitado recoger tu pedido en persona de <util:escape value="${order.restaurant.name}"/>.</p>
+                                                    <p>Abajo esta la posición de <util:escape value="${order.restaurant.name}"/>.</p>
                                                     <div id="restaurant-location"></div>
                                                 </c:otherwise>
                                             </c:choose>

@@ -17,6 +17,8 @@ var deliveryDayOfWeek;
 var deliveryTimeOfDay;
 var open;
 
+var isPhoneOrdersOnly;
+
 $(document).ready(function(){
     getOrder();
 });
@@ -298,10 +300,18 @@ function doBuildOrder(order,config) {
             // Show checkout button if enabled
             if(order.canCheckout ) {
                 if( config.enableCheckoutButton ) {
-                    $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
-                    $('#checkoutbutton').click(function(){
-                        checkout();
-                    });
+                    // For phone orders only restaurant we use a different button
+                    if( order.phoneOrdersOnly ) {
+                        $('#checkoutcontainer').append(('<div id=\'callnow\'><a id=\'callnowbutton\' class=\'callnow-button unselectable\'>{0}</a></div>').format(getLabel('button.call-now')));
+                        $('#callnowbutton').click(function(){
+                            callnow();
+                        });
+                    }else{
+                        $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
+                        $('#checkoutbutton').click(function(){
+                            checkout();
+                        });
+                    }
                 } else if (config.enablePaymentButton) {
                     $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.payment')));
                     $('#checkoutbutton').click(function(){
@@ -1095,6 +1105,11 @@ function updateFreeItem(discountId,freeItem) {
 // Proceed to checkout
 function checkout() {
     location.href = ctx + '/checkout.html';
+}
+
+// Proceed to call now page
+function callnow() {
+    location.href = ctx + '/callnow.html';
 }
 
 // Unescapes string values

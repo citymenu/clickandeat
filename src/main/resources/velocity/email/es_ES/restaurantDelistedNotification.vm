@@ -7,7 +7,7 @@
 
 <h1>Tu restaurante ha sido retirado de la lista en nuestra pagina web</h1>
 
-<div>Haz clic <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">Aqui</a> para que tu restaurante se añadido de nuevo a la lista en nuestra pagina.</div>
+<div>Haz clic <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">Aqui</a> para que tu restaurante sea aÃ±adido de nuevo a la lista en nuestra pagina.</div>
 
 </body>
 

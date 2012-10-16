@@ -289,3 +289,37 @@ a.restaurant-location {
     text-decoration:underline;
     cursor:pointer;
 }
+
+a.search-result-button-open-call, a.search-result-button-open-call:active, a.search-result-button-open-call:hover {
+    display:inline-block;
+    width: 132px;
+    background: transparent url(../images/button-grey.png) no-repeat 0 0;
+    color: #FFFFFF;
+    font: 16px MaiandraOTGD-DemiBold;
+    font-weight:normal;
+    text-align: center;
+    height:29px;
+    padding-top: 3px;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+.phone-orders-only-text {
+    font: 500 14px/16px prenton;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    margin: 12px 0 12px 0;
+    color:#444444;
+    padding: 6px 10px 6px 10px;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+    height:65px;
+}
+
+.phone-orders-only-image{
+    float: right;
+    width:46px;
+    height:65px;
+}

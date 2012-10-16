@@ -84,74 +84,95 @@
 
                         <c:if test="${count > 0}">
                         <div class="search-results-entry-wrapper">
+                            <c:set var="phoneOrdersOnlyflag" value="0"/>
                             <c:forEach var="restaurant" items="${results}">
-                            <div class="search-result-wrapper" isOpen="${restaurant.open}" cuisines="${restaurant.cuisineSummary}">
-                                <div class="search-result">
-                                    <table width="710">
-                                        <tr valign="top">
-                                            <td width="330">
-                                                <table width="330">
-                                                    <tr valign="bottom">
-                                                        <td width="85">
-                                                            <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/></td>
-                                                        </td>
-                                                        <td width="245">
-                                                            <div class="search-result-center">
-                                                                <h2><util:escape value="${restaurant.name}"/></h2>
-                                                                <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr valign="top">
-                                                        <td width="330" colspan="2">
-                                                            <div class="address-details">
-                                                                <util:escape value="${restaurant.address.summary}"/><br>
-                                                                <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                            <td width="380">
-                                                <table width="380">
-                                                    <tr valign="top">
-                                                        <td width="230">
-                                                            <c:if test="${restaurant.hasDiscounts == true}">
-                                                                <div class="restaurant-discount-details">
-                                                                    <div class="scissors"></div>
-                                                                    <c:forEach var="discount" items="${restaurant.discounts}">
-                                                                        <div class="discount-details"><util:escape value="${discount.title}"/></div>
-                                                                    </c:forEach>
+                                <c:if test="${restaurant.phoneOrdersOnly == true}">
+                                    <c:if test="${phoneOrdersOnlyflag=='0'}">
+                                        <c:set var="phoneOrdersOnlyflag" value="1"/>
+                                        <div class="phone-orders-only-text"><p><img class="phone-orders-only-image" src="${resources}/images/butler-sad.jpg" /><message:message key="search.phone-orders-only-text"/></p></div>
+                                    </c:if>
+                                </c:if>
+                                <div class="search-result-wrapper" isOpen="${restaurant.open}" cuisines="${restaurant.cuisineSummary}" isPhoneOnly="${restaurant.phoneOrdersOnly}">
+                                    <div class="search-result">
+                                        <table width="710">
+                                            <tr valign="top">
+                                                <td width="330">
+                                                    <table width="330">
+                                                        <tr valign="bottom">
+                                                            <td width="85">
+                                                                <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/></td>
+                                                            </td>
+                                                            <td width="245">
+                                                                <div class="search-result-center">
+                                                                    <h2><util:escape value="${restaurant.name}"/></h2>
+                                                                    <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                                 </div>
-                                                            </c:if>
-                                                        </td>
-                                                        <td width="150" align="right">
-                                                            <div class="menu-link">
-                                                                <c:choose>
-                                                                    <c:when test="${restaurant.open == true}">
-                                                                        <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.order-now"/></a>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
-                                                                    </c:otherwise>
-                                                                </c:choose>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr valign="top">
-                                                        <td width="380" colspan="2">
-                                                            <div class="restaurant-opening-details">
-                                                                <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
-                                                                <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr valign="top">
+                                                            <td width="330" colspan="2">
+                                                                <div class="address-details">
+                                                                    <util:escape value="${restaurant.address.summary}"/><br>
+                                                                    <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td width="380">
+                                                    <table width="380">
+                                                        <tr valign="top">
+                                                            <td width="230">
+                                                                <c:if test="${restaurant.hasDiscounts == true}">
+                                                                    <div class="restaurant-discount-details">
+                                                                        <div class="scissors"></div>
+                                                                        <c:forEach var="discount" items="${restaurant.discounts}">
+                                                                            <div class="discount-details"><util:escape value="${discount.title}"/></div>
+                                                                        </c:forEach>
+                                                                    </div>
+                                                                </c:if>
+                                                            </td>
+                                                            <td width="150" align="right">
+                                                                <div class="menu-link">
+                                                                    <c:choose>
+                                                                        <c:when test="${restaurant.open == true}">
+                                                                            <c:choose>
+                                                                                <c:when test="${restaurant.phoneOrdersOnly == true}">
+                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open-call"><message:message key="search.call-now"/><img class="phone-orders-only-image" src="${resources}/images/phone-red.png" style="width:26px ; height:20px"/></a>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.order-now"/></a>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <c:choose>
+                                                                                <c:when test="${restaurant.phoneOrdersOnly == true}">
+                                                                                    <img class="phone-orders-only-image" src="${resources}/images/phone-grey.png" style="width:26px ; height:20px"/>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <tr valign="top">
+                                                            <td width="380" colspan="2">
+                                                                <div class="restaurant-opening-details">
+                                                                    <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
+                                                                    <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
-                            </div>
                             </c:forEach>
                         </div>
                         </c:if>

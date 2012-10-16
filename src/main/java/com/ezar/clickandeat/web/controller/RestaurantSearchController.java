@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -98,6 +97,14 @@ public class RestaurantSearchController {
 
         @Override
         public int compare(Restaurant restaurant1, Restaurant restaurant2) {
+            //First deal with those restaurants that support phone orders only
+            if( !restaurant1.getPhoneOrdersOnly() && restaurant2.getPhoneOrdersOnly()) {
+                return -1;
+            }
+            else if( restaurant1.getPhoneOrdersOnly() && !restaurant2.getPhoneOrdersOnly()) {
+                return 1;
+            }
+
             if( restaurant1.getOpen() && !restaurant2.getOpen()) {
                 return -1;                
             }

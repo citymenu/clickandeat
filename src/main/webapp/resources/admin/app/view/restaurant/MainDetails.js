@@ -44,7 +44,13 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             labelAlign:'top',
             xtype:'checkbox',
             name:'listOnSite'
-        }]
+        },{
+            fieldLabel:'Only accepts phone orders',
+            labelAlign:'top',
+            xtype:'checkbox',
+            name:'phoneOrdersOnly'
+        }
+        ]
     },{
         xtype:'fieldset',
         title:'Address',

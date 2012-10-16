@@ -7,6 +7,8 @@
 
 <h1>Tu pedido $order.orderId ha sido cancelado debido a que el restaurant no ha contestado</h1>
 
+<div>Por favor danos otra oportunidad y acepta el codigo de descuento adjunto:</div>
+
 <div>$voucherId</div>
 
 </body>

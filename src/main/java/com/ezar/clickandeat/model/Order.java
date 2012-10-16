@@ -1,18 +1,18 @@
 package com.ezar.clickandeat.model;
 
-import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.DateTimeUtil;
 import com.ezar.clickandeat.util.NumberUtil;
-import com.ezar.clickandeat.util.StringUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
@@ -33,6 +33,7 @@ public class Order extends PersistentObject {
     // Restaurant details
     private String restaurantId;
     private String restaurantName;
+    private Boolean phoneOrdersOnly;
     private List<Discount> restaurantDiscounts;
 
     @Transient
@@ -433,6 +434,14 @@ public class Order extends PersistentObject {
         this.restaurantName = restaurantName;
     }
 
+    public Boolean getPhoneOrdersOnly() {
+        return phoneOrdersOnly;
+    }
+
+    public void setPhoneOrdersOnly(Boolean phoneOrdersOnly) {
+        this.phoneOrdersOnly = phoneOrdersOnly;
+    }
+
     public Restaurant getRestaurant() {
         return restaurant;
     }
@@ -441,6 +450,7 @@ public class Order extends PersistentObject {
         this.restaurant = restaurant;
         this.restaurantId = restaurant.getRestaurantId();
         this.restaurantName = restaurant.getName();
+        this.phoneOrdersOnly = restaurant.getPhoneOrdersOnly();
         this.restaurantDiscounts = restaurant.getDiscounts();
     }
 

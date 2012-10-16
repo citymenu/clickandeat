@@ -31,6 +31,8 @@ public class Restaurant extends PersistentObject {
     private String description;
     
     private Boolean listOnSite;
+
+    private Boolean phoneOrdersOnly;
     
     private String contactEmail;
 
@@ -80,6 +82,7 @@ public class Restaurant extends PersistentObject {
         this.discounts = new ArrayList<Discount>();
         this.specialOffers = new ArrayList<SpecialOffer>();
         this.listOnSite = true;
+        this.phoneOrdersOnly = false;
     }
 
 
@@ -405,6 +408,14 @@ public class Restaurant extends PersistentObject {
 
     public void setListOnSite(Boolean listOnSite) {
         this.listOnSite = listOnSite;
+    }
+
+    public Boolean getPhoneOrdersOnly() {
+        return phoneOrdersOnly;
+    }
+
+    public void setPhoneOrdersOnly(Boolean phoneOrdersOnly) {
+        this.phoneOrdersOnly = phoneOrdersOnly;
     }
 
     public String getContactEmail() {

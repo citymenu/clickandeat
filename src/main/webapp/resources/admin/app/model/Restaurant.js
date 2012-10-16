@@ -14,6 +14,7 @@ Ext.define('AD.model.Restaurant', {
         {name:'website', type:'string'},
         {name:'cuisines', type:'auto'},
         {name:'listOnSite', type:'boolean'},
+        {name:'phoneOrdersOnly', type:'boolean'},
         {name:'imageName', type:'string'}
     ]
 });
