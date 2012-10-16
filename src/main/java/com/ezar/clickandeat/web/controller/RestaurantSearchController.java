@@ -47,7 +47,6 @@ public class RestaurantSearchController {
         else {
             SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
             results.addAll(restaurantRepository.search(search));
-            Map<String,Integer> cuisineResultCount = buildCuisineResultCount(results);
             if( StringUtils.hasText(search.getCuisine())) {
                 SortedSet<Restaurant> filteredResults = new TreeSet<Restaurant>(new RestaurantSearchComparator());
                 for( Restaurant restaurant: results ) {
@@ -63,7 +62,7 @@ public class RestaurantSearchController {
                 model.put("count",results.size());
             }
 
-            model.put("resultCount", cuisineResultCount);
+            model.put("resultCount", buildCuisineResultCount(results));
             model.put("cuisines",cuisineProvider.getCuisineList());
             return new ModelAndView("findRestaurant",model);
         }
@@ -75,8 +74,8 @@ public class RestaurantSearchController {
      * @return
      */
     
-    private Map<String,Integer> buildCuisineResultCount(Set<Restaurant> results) {
-        SortedMap<String,Integer> resultMap = new TreeMap<String, Integer>();
+    private SortedSet<CuisineCount> buildCuisineResultCount(Set<Restaurant> results) {
+        Map<String,Integer> resultMap = new HashMap<String, Integer>();
         for( Restaurant restaurant: results ) {
             for( String cuisine: restaurant.getCuisines()) {
                 Integer resultCount = resultMap.get(cuisine);
@@ -86,7 +85,39 @@ public class RestaurantSearchController {
                 resultMap.put(cuisine, resultCount + 1 );
             }
         }
-        return resultMap;
+        SortedSet<CuisineCount> ret = new TreeSet<CuisineCount>();
+        for( Map.Entry<String,Integer> entry: resultMap.entrySet()) {
+            ret.add(new CuisineCount(entry.getKey(), entry.getValue()));
+        }
+        return ret;
+    }
+
+    /**
+     * Ordering of cuisine counts
+     */
+    
+    public static final class CuisineCount implements Comparable<CuisineCount> {
+        
+        final String cuisine;
+        final Integer count;
+
+        public CuisineCount(String cuisine, Integer count) {
+            this.cuisine = cuisine;
+            this.count = count;
+        }
+
+        @Override
+        public int compareTo(CuisineCount o) {
+            return cuisine.compareTo(o.cuisine);
+        }
+
+        public String getCuisine() {
+            return cuisine;
+        }
+
+        public int getCount() {
+            return count;
+        }
     }
     
     /**

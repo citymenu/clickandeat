@@ -66,8 +66,8 @@
                                                 <message:message key="search.filter-by-cuisine"/>:
                                                 <select class="search-select" id="cuisine-select">
                                                     <option value=""><message:message key="search.all"/> (${count})</option>
-                                                    <c:forEach var="entry" items="${resultCount}" varStatus="status">
-                                                    <option value="${entry.key}"><util:escape value="${entry.key}"/> (${entry.value})</option>
+                                                    <c:forEach var="entry" items="${resultCount}">
+                                                    <option value="${entry.cuisine}"><util:escape value="${entry.cuisine}"/> (${entry.count})</option>
                                                     </c:forEach>
                                                 </select>
                                             </div>
