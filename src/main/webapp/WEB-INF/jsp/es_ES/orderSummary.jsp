@@ -40,7 +40,7 @@
                                                 <div class="order-information">Numero de pedido: ${order.orderId}</div>
                                                 <div class="order-restaurant">
                                                     <util:escape value="${order.restaurant.name}"/> <util:escape value="${order.restaurant.address.summary}"/>
-                                                    <div class="restaurant-contact">Contacto: ${order.restaurant.contactTelephone}</div>
+                                                    <div class="restaurant-contact">Contacto: ${order.restaurant.notificationOptions.notificationPhoneNumber}</div>
                                                 </div>
                                                 <div class="order-overview">
                                                     <h2>¿Que ocurre a continuación?</h2>
