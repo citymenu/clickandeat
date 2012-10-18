@@ -7,7 +7,7 @@
     <script type="text/javascript" src="../resources/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
-    <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
+    <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';var locationNotSet='${locationNotSet}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>

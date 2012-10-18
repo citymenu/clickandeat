@@ -13,6 +13,9 @@ public class DeliveryOptions {
     private int deliveryTimeMinutes;
     private int collectionTimeMinutes;
 
+    // Does the restaurant do collection orders only
+    private boolean collectionOnly;
+
     // Costings around delivery
     private Double minimumOrderForDelivery;
     private Double deliveryCharge;
@@ -107,5 +110,13 @@ public class DeliveryOptions {
 
     public void setAreasDeliveredTo(List<String> areasDeliveredTo) {
         this.areasDeliveredTo = areasDeliveredTo;
+    }
+
+    public boolean isCollectionOnly() {
+        return collectionOnly;
+    }
+
+    public void setCollectionOnly(boolean collectionOnly) {
+        this.collectionOnly = collectionOnly;
     }
 }

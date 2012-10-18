@@ -31,22 +31,6 @@
                 <td width="760">
                     <div class="checkout-left">
                         <div class="checkout-wrapper">
-                            <!-- Vouchers -->
-                            <div class="checkout-item-wrapper">
-                                <h2><message:message key="checkout.apply-voucher"/></h2>
-                                <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
-                                    <div class="contact-form-entry">
-                                        <div class="contact-form-field">
-                                            <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
-                                            <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
-                                        </div>
-                                    </div>
-                                <div id="voucher-validation"></div>
-                            </div>
-
-                            <!-- Validation errors -->
-                            <div id="checkout-validation"></div>
-
                             <!-- Customer details -->
                             <div class="checkout-item-wrapper">
                                 <h2><message:message key="checkout.your-details"/></h2>
@@ -89,6 +73,33 @@
                                                 <td width="30"><span id="email-validation" class="invalid"/></td>
                                             </tr>
                                         </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Vouchers -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.apply-voucher"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
+                                    <div class="contact-form-entry">
+                                        <div class="contact-form-field">
+                                            <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
+                                            <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
+                                        </div>
+                                    </div>
+                                <div id="voucher-validation"></div>
+                            </div>
+
+                            <!-- Validation errors -->
+                            <div id="checkout-validation"></div>
+
+                            <!-- Additional instructions -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.additional-instructions"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
+                                <div class="contact-form-entry">
+                                    <div class="contact-form-field">
+                                        <textarea id="additionalInstructions">${order.additionalInstructions}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -143,16 +154,6 @@
                                 <div id="restaurant-location"></div>
                             </div>
 
-                            <!-- Additional instructions -->
-                            <div class="checkout-item-wrapper">
-                                <h2><message:message key="checkout.additional-instructions"/></h2>
-                                <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
-                                <div class="contact-form-entry">
-                                    <div class="contact-form-field">
-                                        <textarea id="additionalInstructions">${order.additionalInstructions}</textarea>
-                                    </div>
-                                </div>
-                            </div>
 
                         </div>
                     </div>

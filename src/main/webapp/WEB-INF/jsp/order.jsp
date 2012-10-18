@@ -16,11 +16,10 @@
                 <div id="deliverycheck"></div>
                 <div class="order-items-wrapper">
                     <div class="order-item-wrapper-header">
-                        <table width="194">
+                        <table width="192">
                             <tr>
-                                <td width="124" align="left"><h3 class="order-table"><message:message key="order.item"/></h3></td>
+                                <td width="142" align="left"><h3 class="order-table"><message:message key="order.item"/></h3></td>
                                 <td width="50" align="center"><h3 class="order-table"><message:message key="order.price"/></h3></td>
-                                <td width="20"></td>
                             </tr>
                             <tbody>
                             </tbody>

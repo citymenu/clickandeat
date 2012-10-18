@@ -317,10 +317,10 @@ public class Order extends PersistentObject {
      * @param quantity
      */
 
-    public void removeOrderItem(String orderItemId, int quantity) {
+    public void updateItemQuantity(String orderItemId, int quantity) {
         OrderItem orderItem = findByOrderItemId(orderItemId);
         if( orderItem != null ) {
-            int newQuantity = orderItem.getQuantity() - quantity;
+            int newQuantity = orderItem.getQuantity() + quantity;
             if( newQuantity < 1 ) {
                 getOrderItems().remove(orderItem);
             }

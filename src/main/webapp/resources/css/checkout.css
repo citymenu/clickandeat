@@ -75,7 +75,7 @@
 
 .contact-form-field textarea {
     width: 620px;
-    height: 100px;
+    height: 70px;
 }
 
 span.required {
@@ -115,9 +115,9 @@ a.checkout-nav-button, a.checkout-nav-button:active, a.checkout-nav-button:hover
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font: 12px prenton;
-    font-weight: 500;
-    padding: 1px 6px 1px 6px;
+    font: 14px MaiandraOTGD-DemiBold;
+    padding: 2px 12px 3px 12px;
+    margin-left:4px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -129,20 +129,13 @@ a.checkout-nav-button:active, a.checkout-nav-button:hover {
     background-color: #2c8023;
 }
 
-a.checkout-nav-button-large, a.checkout-nav-button-large:active, a.checkout-nav-button-large:hover {
-    padding: 4px 10px 4px 10px;
-}
-
-a.checkout-nav-button-large:active, a.checkout-nav-button-large:hover {
-    background-color: #2c8023;
-}
-
 .invalid-voucher {
     display:inline-block;
-    font:500 12px/15px prenton;
+    font:400 14px/14px myriad-pro;
+    color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
-    padding: 6px 10px 6px 10px;
+    padding: 5px 10px 5px 10px;
 }
 
 .checkout-validation-error {

@@ -6,6 +6,11 @@ $(document).ready(function(){
     updateDeliveryDisplay(deliveryType);
     validateForm();
 
+    // Change handler to remove invalid voucher warning
+    $('#voucherid').keydown(function(){
+        $('.invalid-voucher').remove();
+    });
+
     // Add validation event handlers
     validators.each(function(fieldName,validator){
         $('#' + fieldName).change(function(){
@@ -48,15 +53,6 @@ validators.setItem('firstName',new Validator({
     invalidText: getLabel('validation.firstName.invalidText')
 }));
 
-/* Request to stop making this compulsory for Spain
-//Last name validation
-validators.setItem('lastName',new Validator({
-    fieldName: 'lastName',
-    regexp: checkoutRegexps.lastName,
-    invalidText: getLabel('validation.lastName.invalidText')
-}));
-*/
-
 // Telephone number validation
 validators.setItem('telephone',new Validator({
     fieldName: 'telephone',
@@ -91,7 +87,7 @@ function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
         showBuildOrderLink: true,
-        allowRemoveItems: false,
+        allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,
         enablePaymentButton: true,

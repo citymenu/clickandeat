@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +23,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -48,7 +51,14 @@ public class CheckoutController {
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
-    private int maxRadiusMetres;
+
+    /**
+     * Mappings to auto fill delivery address
+     */
+    private String autofillAddress1;
+    private String autofillTown;
+    private String autofillRegion;
+    private String autofillPostCode;
     
 
     @RequestMapping(value="/checkout.html", method= RequestMethod.GET)
@@ -83,6 +93,9 @@ public class CheckoutController {
 
         // Put the system locale on the response
         model.put("validatorLocale", MessageFactory.getLocaleString().split("_")[0]);
+        
+        // If there is no delivery address, populate it now
+        autoPopulateDeliveryAddress(order,session);
         
         return new ModelAndView("checkout",model);
     }
@@ -185,6 +198,57 @@ public class CheckoutController {
         return responseEntityUtils.buildResponse(model);
     }
 
+
+    /**
+     * @param order
+     * @param session
+     */
+    
+    private void autoPopulateDeliveryAddress(Order order,HttpSession session) {
+        
+        if( !Order.DELIVERY.equals(order.getDeliveryType())) {
+            return;
+        }
+        
+        Search search = (Search)session.getAttribute("search");
+        if( search == null || search.getLocation() == null ) {
+            return;
+        }
+        
+        Address deliveryAddress = order.getDeliveryAddress();
+        if( StringUtils.hasText(deliveryAddress.getAddress1()) || StringUtils.hasText(deliveryAddress.getTown()) 
+                || StringUtils.hasText(deliveryAddress.getRegion()) || StringUtils.hasText(deliveryAddress.getPostCode())) {
+            return;
+        }
+
+        // Build the delivery address from the components of the geolocatio
+        Map<String,String> addressComponents = search.getLocation().getLocationComponents();
+        deliveryAddress.setAddress1(extractAddressLine(autofillAddress1,addressComponents));
+        deliveryAddress.setTown(extractAddressLine(autofillTown,addressComponents));
+        deliveryAddress.setRegion(extractAddressLine(autofillRegion,addressComponents));
+        deliveryAddress.setPostCode(extractAddressLine(autofillPostCode,addressComponents));
+        orderRepository.saveOrder(order);
+    }
+
+
+    /**
+     * @param config
+     * @param components
+     * @return
+     */
+    
+    private String extractAddressLine(String config, Map<String,String> components) {
+        List<String> elements = new ArrayList<String>();
+        for( String configElement: StringUtils.commaDelimitedListToStringArray(config)) {
+            String component = components.get(configElement);
+            if( component != null ) {
+                elements.add(component);
+            }
+        }
+        return elements.size() == 0? null: StringUtils.collectionToDelimitedString(elements,", ");
+    }
+    
+    
     
     /**
      * @param json
@@ -217,13 +281,11 @@ public class CheckoutController {
         Map<String,Object> deliveryAddressParams = (Map<String,Object>) params.get("deliveryAddress");
 
         String address1 = (String)deliveryAddressParams.get("address1");
-        String address2 = (String)deliveryAddressParams.get("address2");
-        String address3 = (String)deliveryAddressParams.get("address3");
         String town = (String)deliveryAddressParams.get("town");
         String region = (String)deliveryAddressParams.get("region");
         String postCode = (String)deliveryAddressParams.get("postCode");
 
-        return new Address(address1,address2,address3,town,region,postCode);
+        return new Address(address1,town,region,postCode);
     }
 
 
@@ -239,9 +301,26 @@ public class CheckoutController {
 
 
     @Required
-    @Value(value="${location.maxRadiusMetres}")
-    public void setMaxRadiusMetres(int maxRadiusMetres) {
-        this.maxRadiusMetres = maxRadiusMetres;
+    @Value(value="${autofill.address1}")
+    public void setAutofillAddress1(String autofillAddress1) {
+        this.autofillAddress1 = autofillAddress1;
     }
-    
+
+    @Required
+    @Value(value="${autofill.town}")
+    public void setAutofillTown(String autofillTown) {
+        this.autofillTown = autofillTown;
+    }
+
+    @Required
+    @Value(value="${autofill.region}")
+    public void setAutofillRegion(String autofillRegion) {
+        this.autofillRegion = autofillRegion;
+    }
+
+    @Required
+    @Value(value="${autofill.postCode}")
+    public void setAutofillPostCode(String autofillPostCode) {
+        this.autofillPostCode = autofillPostCode;
+    }
 }

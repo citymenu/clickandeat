@@ -100,6 +100,9 @@ public class RestaurantController {
             session.setAttribute("restaurantid", restaurantId);
         }
 
+        // Mark if we have specified a location
+        model.put("locationNotSet",session.getAttribute("search") == null);
+
         return new ModelAndView("restaurant",model);
     }
 

@@ -38,16 +38,16 @@
                     <li class="arrow">&gt&gt</li>
 
                     <c:choose>
-                        <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid}">
+                        <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
                             <li class="active unselectable"><a href="${ctx}/restaurant.html?restaurantId=${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
                         <c:when test="${path == 'restaurant.jsp'}">
                             <li class="active unselectable"><message:message key="workflow.3-build-your-order"/></li>
                         </c:when>
-                        <c:when test="${orderrestaurantid != null}">
+                        <c:when test="${orderrestaurantid != null && search != null}">
                             <li class="unselectable"><a href="${ctx}/restaurant.html?restaurantId=${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
-                        <c:when test="${restaurantid != null}">
+                        <c:when test="${restaurantid != null && search != null}">
                             <li class="unselectable"><a href="${ctx}/restaurant.html?restaurantId=${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
                         <c:otherwise>

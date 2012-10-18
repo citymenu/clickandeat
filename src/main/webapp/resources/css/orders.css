@@ -73,15 +73,37 @@ h3.order-table {
 
 .order-item-wrapper td {
     font: 12px/14px pt-sans;
+    clear:both;
 }
 
-.order-remove-item {
-    width: 16px;
-    height: 16px;
+.order-item-edit {
+    float:left;
+    margin-right:4px;
+    min-width:30px;
+}
+
+.order-item-display {
+    float:left;
+    margin-right:4px;
+}
+
+.order-add-item {
+    width: 6px;
+    height: 8px;
     display: inline-block;
-    margin-left:5px;
-    background: url(../images/icons-shadowless/cross-script.png) -1px 1px no-repeat;
+    background: url(../images/add-small.png) 0 0 no-repeat;
     cursor:pointer;
+    margin-right:3px;
+}
+
+
+.order-remove-item {
+    width: 6px;
+    height: 8px;
+    display: inline-block;
+    background: url(../images/remove-small.png) 0 0 no-repeat;
+    cursor:pointer;
+    margin-left:3px;
 }
 
 .order-cash-discount {
@@ -232,6 +254,13 @@ select.freeitemselect {
 a.delivery-button {
     color:#AA0000;
     font:500 12px prenton;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+a.delivery-button-large {
+    color:#AA0000;
+    font:600 14px/16px myriad-pro;
     text-decoration:underline;
     cursor:pointer;
 }

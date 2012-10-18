@@ -128,6 +128,7 @@ public class OrderController implements InitializingBean {
                 // Update can checkout status of order
                 session.setAttribute("cancheckout", order.getCanCheckout());
             }
+            model.put("hasLocation",session.getAttribute("search") != null);
             model.put("success",true);
             model.put("order",order);
         }
@@ -398,8 +399,8 @@ public class OrderController implements InitializingBean {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping(value="/order/removeItem.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> removeFromOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+    @RequestMapping(value="/order/updateItemQuantity.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateItemQuantity(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Removing from order: " + body);
@@ -411,6 +412,7 @@ public class OrderController implements InitializingBean {
             // Extract request parameters
             Map<String,Object> params = (Map<String,Object>)jsonUtils.deserialize(body);
             String orderItemId = (String)params.get("orderItemId");
+            Integer quantity = (Integer)params.get("quantity");
 
             HttpSession session = request.getSession(true);
             String orderId = (String)session.getAttribute("orderid");
@@ -418,7 +420,7 @@ public class OrderController implements InitializingBean {
             if( orderId != null ) {
                 order = orderRepository.findByOrderId(orderId);
                 if( order != null ) {
-                    order.removeOrderItem(orderItemId, 1);
+                    order.updateItemQuantity(orderItemId, quantity);
                     order = orderRepository.saveOrder(order);
                     // Update can checkout status of order
                     session.setAttribute("cancheckout", order.getCanCheckout());

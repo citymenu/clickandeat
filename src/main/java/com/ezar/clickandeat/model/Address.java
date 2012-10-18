@@ -12,10 +12,6 @@ public class Address extends PersistentObject {
 
     private String address1;
 
-    private String address2;
-
-    private String address3;
-
     private String town;
     
     private String region;
@@ -32,17 +28,13 @@ public class Address extends PersistentObject {
 
     /**
      * @param address1
-     * @param address2
-     * @param address3
      * @param town
      * @param region
      * @param postCode
      */
 
-    public Address(String address1, String address2, String address3, String town, String region, String postCode) {
+    public Address(String address1, String town, String region, String postCode) {
         this.address1 = address1;
-        this.address2 = address2;
-        this.address3 = address3;
         this.town = town;
         this.region = region;
         this.postCode = postCode;
@@ -60,12 +52,6 @@ public class Address extends PersistentObject {
         List<String> items = new ArrayList<String>();
         if( StringUtils.hasText(address1)) {
             items.add(address1);
-        }
-        if( StringUtils.hasText(address2)) {
-            items.add(address2);
-        }
-        if(StringUtils.hasText(address3)) {
-            items.add(address3);
         }
         if(StringUtils.hasText(town)) {
             items.add(town);
@@ -94,22 +80,6 @@ public class Address extends PersistentObject {
 
     public void setAddress1(String address1) {
         this.address1 = address1;
-    }
-
-    public String getAddress2() {
-        return address2;
-    }
-
-    public void setAddress2(String address2) {
-        this.address2 = address2;
-    }
-
-    public String getAddress3() {
-        return address3;
-    }
-
-    public void setAddress3(String address3) {
-        this.address3 = address3;
     }
 
     public String getTown() {
