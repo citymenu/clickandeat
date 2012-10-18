@@ -278,6 +278,10 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             xtype:'textarea',
             height:90
         },{
+             fieldLabel:'Collection orders only (no deliveries)',
+             name:'collectionOnly',
+             xtype:'checkbox'
+        },{
             fieldLabel:'Delivery time (minutes)',
             name:'deliveryTimeMinutes',
             xtype:'numberfield',

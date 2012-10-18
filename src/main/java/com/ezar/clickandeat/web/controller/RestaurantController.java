@@ -310,6 +310,9 @@ public class RestaurantController {
 
     private Order buildAndRegister(HttpSession session, Restaurant restaurant) {
         Order order = orderRepository.create();
+        if( restaurant.getCollectionOnly()) {
+            order.setDeliveryType(Order.COLLECTION); // Default to collection for collection-only restaurants
+        }
         order.setRestaurant(restaurant);
         order.updateCosts();
         order = orderRepository.save(order);

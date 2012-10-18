@@ -15,6 +15,7 @@ var deliveryTimes;
 var collectionTimes;
 var deliveryDayOfWeek;
 var deliveryTimeOfDay;
+var collectionOnly;
 var open;
 
 // Indicates if the current restaurant only supports phone orders
@@ -93,7 +94,6 @@ function doBuildOrder(order,config) {
     // If no location set, switch off some functionality
     if( nolocation ) {
         config.showDeliveryOptions = false;
-
     }
 
     // Indicate if we should enable additional order panel functionality and display
@@ -224,7 +224,7 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div>{2}</td><td width=\'50\' align=\'right\'>{3}{4}</td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'30\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'112\'>{2}</td><td width=\'50\' align=\'right\'>{3}{4}</td></tr></table></div>')
                     .format(orderItem.orderItemId,orderItem.quantity,buildDisplay(orderItem),ccy,orderItem.formattedCost);
             } else {
                 var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>{1}{2}</td></tr>'
@@ -394,7 +394,7 @@ function buildDisplay(orderItem) {
         display += ' (' + unescapeQuotes(orderItem.menuItemSubTypeName) + ')';
     }
     orderItem.additionalItems.forEach(function(additionalItem){
-        display += ('<div class=\'additionalitem\'>&nbsp;&nbsp;- {0}</div>').format(unescapeQuotes(additionalItem));
+        display += ('<div class=\'additionalitem\'>- {0}</div>').format(unescapeQuotes(additionalItem));
     });
     return ('<div class=\'order-item-display\'>{0}</div>').format(display);
 }
@@ -409,7 +409,7 @@ function buildStaticDisplay(orderItem) {
         display += ' (' + unescapeQuotes(orderItem.menuItemSubTypeName) + ')';
     }
     orderItem.additionalItems.forEach(function(additionalItem){
-        display += ('<div class=\'additionalitem\'>&nbsp;&nbsp;- {0}</div>').format(unescapeQuotes(additionalItem));
+        display += ('<div class=\'additionalitem\'>- {0}</div>').format(unescapeQuotes(additionalItem));
     });
     return ('<div>{0}</div>').format(display);
 }
@@ -434,7 +434,7 @@ function deliveryEdit() {
     $.post( ctx+'/order/deliveryEdit.ajax', { orderId: currentOrder.orderId },
         function( data ) {
             if( data.success ) {
-                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.open);
+                buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.open, data.collectionOnly);
             } else {
                 alert(data.success);
             }
@@ -443,7 +443,7 @@ function deliveryEdit() {
 }
 
 // Build delivery edit form
-function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, isOpen) {
+function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, isOpen, isCollectionOnly) {
 
     // Update global delivery variables
     days = daysArray;
@@ -451,6 +451,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     collectionTimes = collectionTimesArray;
     deliveryType = currentOrder.deliveryType;
     open = isOpen;
+    collectionOnly = isCollectionOnly;
 
     // Indicates if the current option is for delivery
     var isdelivery = deliveryType == 'DELIVERY';
@@ -497,7 +498,12 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     // Build delivery edit options if there are options for both delivery and collection
     var deliveryRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioDelivery\' name=\'deliveryType\' value=\'DELIVERY\'{0} {1}</span>').format((isdelivery?' CHECKED>':'>'),getLabel('order.delivery'));
     var collectionRadio = ('<span class=\'deliveryradio\'><input type=\'radio\' id=\'radioCollection\' name=\'deliveryType\' value=\'COLLECTION\'{0} {1}</span>').format((isdelivery?'>':' CHECKED>'),getLabel('order.collection'));
-    deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
+    var deliveryContainer;
+    if( collectionOnly ) {
+        deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}</div>').format(collectionRadio);
+    } else {
+        deliveryContainer = ('<div class=\'delivery-options-wrapper\'>{0}{1}</div>').format(deliveryRadio,collectionRadio);
+    }
 
     // Build selection fields for day and time based on current delivery type
     var times = (deliveryType == 'DELIVERY'? deliveryTimes: collectionTimes);
@@ -522,6 +528,12 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
         $('#radioCollection').change(function(){
             updateDeliveryType('COLLECTION',days,collectionTimes);
         });
+    }
+
+    // Default to collection only for collection only restaurants
+    if( collectionOnly ) {
+        $('#radioCollection').prop('checked',true);
+        updateDeliveryType('COLLECTION',days,collectionTimes);
     }
 
     // Add onchange event to the day select field to repopulate available times

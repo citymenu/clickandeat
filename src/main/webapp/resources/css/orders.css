@@ -84,7 +84,6 @@ h3.order-table {
 
 .order-item-display {
     float:left;
-    margin-right:4px;
 }
 
 .order-add-item {
@@ -95,7 +94,6 @@ h3.order-table {
     cursor:pointer;
     margin-right:3px;
 }
-
 
 .order-remove-item {
     width: 6px;

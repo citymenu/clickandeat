@@ -279,7 +279,7 @@ public class Order extends PersistentObject {
         
     public void updateRestaurantIsOpen() {
         if( Order.DELIVERY.equals(deliveryType)) {
-            restaurantIsOpen = restaurant.isOpen(expectedDeliveryTime == null? new DateTime(): expectedDeliveryTime);
+            restaurantIsOpen = !restaurant.getCollectionOnly() && restaurant.isOpen(expectedDeliveryTime == null ? new DateTime() : expectedDeliveryTime);
         }
         else {
             restaurantIsOpen = restaurant.isOpen(expectedCollectionTime == null ? new DateTime() : expectedCollectionTime);

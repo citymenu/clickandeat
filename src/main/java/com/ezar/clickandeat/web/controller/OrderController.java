@@ -703,6 +703,7 @@ public class OrderController implements InitializingBean {
             model.put("days", days);
             model.put("deliveryTimes", deliveryTimes);
             model.put("collectionTimes", collectionTimes);
+            model.put("collectionOnly", restaurant.getCollectionOnly());
             model.put("open", isOpen);
             model.put("success",true);
             

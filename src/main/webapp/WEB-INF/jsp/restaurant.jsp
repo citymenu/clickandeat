@@ -64,11 +64,11 @@
                                             </c:if>
                                         </div>
                                         <div class="restaurant-delivery-details">
-                                            <c:if test="${restaurant.deliveryTimeMinutes != 0}">
-                                            <message:message key="order.delivery-time"/> ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/>
+                                            <c:if test="${!restaurant.collectionOnly && restaurant.deliveryTimeMinutes != 0}">
+                                            <message:message key="order.delivery-time"/> ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/><br>
                                             </c:if>
                                             <c:if test="${restaurant.collectionTimeMinutes != 0}">
-                                            <br><message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
+                                            <message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
                                             </c:if>
                                         </div>
 
@@ -89,7 +89,16 @@
                                                 <div class="opening-details">
                                                     <message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}&nbsp;&nbsp;<a class="restaurant-text" onclick="showAllOpeningTimes()"><message:message key="restaurant.opening-show-all"/></a>
                                                 </div>
-                                                <div class="delivery-details"><util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/></div>
+                                                <div class="delivery-details">
+                                                    <c:choose>
+                                                        <c:when test="${restaurant.collectionOnly}">
+                                                            <message:message key="restaurant.collection-only"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

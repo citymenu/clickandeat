@@ -479,6 +479,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object({
             deliveryOptionsSummary: deliveryDetailValues['deliveryOptionsSummary'],
+            collectionOnly: deliveryDetailValues['collectionOnly'] == 'on',
             deliveryTimeMinutes: deliveryDetailValues['deliveryTimeMinutes'],
             collectionTimeMinutes: deliveryDetailValues['collectionTimeMinutes'],
             minimumOrderForDelivery: deliveryDetailValues['minimumOrderForDelivery'],

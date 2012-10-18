@@ -10,6 +10,7 @@ Ext.define('AD.model.DeliveryOptions', {
         {name:'collectionTimeMinutes', type:'number'},
         {name:'minimumOrderForDelivery', type:'number'},
         {name:'deliveryCharge', type:'number'},
+        {name:'collectionOnly', type:'boolean'},
         {name:'allowFreeDelivery', type:'boolean'},
         {name:'minimumOrderForFreeDelivery', type:'number'},
         {name:'allowDeliveryBelowMinimumForFreeDelivery', type:'boolean'},
