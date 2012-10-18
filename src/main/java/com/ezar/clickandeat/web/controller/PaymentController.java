@@ -59,7 +59,7 @@ public class PaymentController {
     public ModelAndView processCardPayment(HttpServletRequest request) throws Exception {
         Order order = requestHelper.getOrderFromSession(request);
         Map<String,String> model = paymentService.buildPaymentForm(order);
-        return new ModelAndView("cardProcessingTest",model);
+        return new ModelAndView("cardProcessing",model);
     }
 
 
