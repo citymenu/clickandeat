@@ -88,13 +88,13 @@ public class GeoLocationService {
             }
             
             List<Map<String,Object>> results = (List<Map<String,Object>>)json.get("results");
-            if( results.size() == 0 || results.size() > 1 ) {
-                LOGGER.warn("Did not receive a single result for address: " + address);
+            if( results.size() == 0 ) {
+                LOGGER.warn("Did not receive result for address: " + address);
                 saveInvalidGeoLocation(address);
                 return null;
             }
             
-            LOGGER.debug("Found single result for address: " + address);
+            LOGGER.debug("Found " + results.size() + " results for address: " + address);
             Map<String,Object> result = results.get(0);
             
             // Full text address

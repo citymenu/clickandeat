@@ -30,7 +30,7 @@
 }
 
 .location-warning {
-    font:400 14px/16px prenton;
+    font:400 14px/16px myriad-pro;
     border: 1px solid #b64242;
     background-color: #fffece;
     margin: 12px 0 12px 0;
@@ -79,11 +79,65 @@
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
-    width: 400px;
+    width: 290px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
+}
+
+.location-button {
+}
+
+a.search {
+    display:inline-block;
+    font: 16px MaiandraOTGD-DemiBold;
+    color:#c5171e;
+    background: url(../images/button-grey.png) 0 -2px no-repeat;
+    width: 68px;
+    height: 31px;
+    padding-top:2px;
+    margin-left:10px;
+    position:relative;
+    text-align:center;
+    cursor:pointer;
+}
+
+.no-results-wrapper {
+    border: 1px solid #AAAAAA;
+    background-color:#FFFFFF;
+    padding: 10px;
+    margin: 0 0 30px 0;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+}
+
+.no-results-content-wrapper {
+    min-height: 300px;
+    padding:10px;
+    background: url(../images/email/apology.jpg) right top no-repeat;
+}
+
+.no-results-content {
+    width: 435px;
+    padding-right:20px;
+}
+
+.no-results-content h2 {
+    font-family: MaiandraOTGD-DemiBold;
+    font-size: 20px;
+    color:#AA0000;
+    margin-bottom: 15px;
+}
+
+.no-results-text {
+    font:16px/18px myriad-pro;
+    color:#444444;
+    margin-bottom:10px;
 }
 
 .search-location-results {

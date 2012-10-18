@@ -44,19 +44,18 @@
                                     <c:when test="${count > 0}">
                                         <div class="search-location-results"><message:message key="search.restaurants-serving-your-location" format="${count}"/></div>
                                     </c:when>
-                                    <c:otherwise>
-                                        <div class="search-location-results"><message:message key="search.no-restaurants-found" format="${count}"/></div>
-                                    </c:otherwise>
                                 </c:choose>
                             </div>
-                            <c:choose>
-                                <c:when test="${search == null || search.location == null}">
-                                    <div class="location-warning"><message:message key="search.location-not-set-warning"/></div>
-                                </c:when>
-                                <c:when test="${search.location.radiusWarning == true}">
-                                    <div class="location-warning"><message:message key="search.location-radius-warning"/></div>
-                                </c:when>
-                            </c:choose>
+                            <div class="location-warning-wrapper">
+                                <c:choose>
+                                    <c:when test="${search == null || search.location == null}">
+                                        <div class="location-warning"><message:message key="search.location-not-set-warning"/></div>
+                                    </c:when>
+                                    <c:when test="${search.location.radiusWarning == true && count > 0}">
+                                        <div class="location-warning"><message:message key="search.location-radius-warning"/></div>
+                                    </c:when>
+                                </c:choose>
+                            </div>
                             <c:if test="${count > 0}">
                             <div class="search-filters">
                                 <table width="690">
@@ -82,6 +81,20 @@
                             </div>
                             </c:if>
                         </div>
+
+                        <c:if test="${count == 0}">
+                            <div class="no-results-wrapper">
+                                <div class="no-results-content-wrapper">
+                                    <div class="no-results-content">
+                                        <h2><message:message key="search.no-restaurants-found"/></h2>
+                                        <div class="no-results-text">Sorry we do not currently have any restaurants on our site which serve your location but we are constantly expanding the
+                                        areas that we cover so please check back with us in a couple of months.</div>
+                                        <div class="no-results-text">If you would like to join our mailing list, please provide us with your email address below and once we have restaurants
+                                        in your area we will send you a discount voucher entitling you to <b>10%</b> off your first online order with us.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
 
                         <c:if test="${count > 0}">
                         <div class="search-results-entry-wrapper">

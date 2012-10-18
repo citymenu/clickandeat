@@ -6,12 +6,27 @@ $(document).ready(function(){
 
     $('#loc').keydown(function(event){
         if( event.keyCode == 13 ) {
-            search('loc');
+            search();
         }
     });
 
     $('.location-button').click(function(){
-        search('loc');
+        search();
+    });
+
+    $('#madrid').click(function() {
+        $('#loc').val('Madrid');
+        search();
+    });
+
+    $('#barcelona').click(function() {
+        $('#loc').val('Barcelona');
+        search();
+    });
+
+    $('#london').click(function() {
+        $('#loc').val('London');
+        search();
     });
 
     // Enable Google autocomplete
@@ -23,4 +38,24 @@ $(document).ready(function(){
     autocomplete = new google.maps.places.Autocomplete(input, options);
 
 });
+
+// Executes search function
+function search() {
+    var location = $('#loc').val();
+    if( location != '' ) {
+        $('#search-warning').hide();
+        $.post( ctx+'/validateLocation.ajax', { loc: location },
+            function( data ) {
+                if( data.success ) {
+                    var address = unescapeQuotes(data.address);
+                    window.location.href = ctx + '/findRestaurant.html';
+                }
+                else {
+                    $('#search-warning').show();
+                }
+            }
+        );
+    }
+}
+
 

@@ -10,18 +10,18 @@
 
 .butler-main {
     clear: both;
-    margin: 0px auto 0px auto;
+    margin: 20px auto 0px auto;
     position: relative;
     width: 1020px;
-    height: 603px;
-    background: url(../images/butler-home.png) 0 0 no-repeat #FFFFFF;
+    height: 380px;
+    background: url(../images/butler-home-alt.png) 0 0 no-repeat #FFFFFF;
 }
 
 .searchbar-wrapper {
     position:absolute;
-    right: 170px;
-    top: 95px;
-    width: 250px;
+    right: 150px;
+    top: 60px;
+    width: 340px;
 }
 
 .searchbar-location {
@@ -32,21 +32,13 @@
 }
 
 .search-location-form {
-    width: 250px;
+    width: 340px;
     height: 30px;
     position:relative;
 }
 
 .location-input {
-    width: 180px;
-    height: 32px;
-    position:absolute;
-    top: 0px;
-    left: 0px;
-}
-
-.location-input {
-    width: 190px;
+    width: 280px;
     height: 32px;
     position:absolute;
     top: 0px;
@@ -60,7 +52,7 @@
     padding-top:4px;
     position:absolute;
     top: 0px;
-    left: 212px;
+    left: 302px;
     position:relative;
     text-align:center;
     cursor:pointer;
@@ -89,11 +81,28 @@ input.location {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
-    width: 190px;
+    width: 280px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
+}
+
+#search-warning {
+    display:none;
+    margin-top:15px;
+    width:320px;
+    font:14px/16px myriad-pro;
+    color:#444444;
+    border:1px solid #666666;
+    padding:5px 10px;
+    background-color: #fffece;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
 }
 
 input.watermark {
@@ -113,4 +122,10 @@ div.pac-item {
 div.pac-selected, div.pac-item:hover {
     background-color:#CCCCCC;
     color:#444444;
+}
+
+a.home {
+    color:#FFFFFF;
+    text-decoration:underline;
+    cursor:pointer;
 }
