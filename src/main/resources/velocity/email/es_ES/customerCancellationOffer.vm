@@ -1,21 +1,100 @@
+<!-- SPANISH -->
 <html>
 
-<head>
-</head>
+<body style="background-color:#FFFFFF;">
 
-<body>
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Ocupados con tu pedido</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hola $stringTool.escape($order.customer.firstName),</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Lo sentimos muchísimo pero el restaurante $stringTool.escape($order.restaurant.name) esta muy ocupado ahora mismo
+                             y no han tenido la oportunidad de atender tu pedido todavía.</b></div>
+                        </div>
 
-<h1>¿Deseas cancelar el pedido ${order.orderId}?</h1>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Esperamos poder confirmar tu pedido pronto,
+                            en caso de que no quieras esperar más tiempo haz clic <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">aqui</a> para cancelar el pedido.
+                            En caso de que cancelaras este pedido no se efectuara ningún cargo en tu tarjeta.</div>
+                        </div>
 
-<div>Lo sentimos pero en este momento el restaurante $stringTool.escape($order.restaurant.name) esta muy ocupado y no ha tenido la oportunidad de atender tu pedido.</div>
-<div>Si deseas cancelar el pedido, haz clic en el enlace de abajo.</div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-your-order"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-your-order-id"): $order.orderId</div>
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-order-for-delivery")</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-order-for-collection")</div>
+                            #end
+                        </div>
 
-<div>
-    <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">Cancelar el pedido</a>
-</div>
-
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.restaurant.name) $stringTool.escape($order.restaurant.address.summary)</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-your-order"):</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                    #foreach( $item in $order.orderItems )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($item.summary,true)</div>
+                                    #end
+                                    #foreach( $discount in $order.orderDiscounts )
+                                        #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
+                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
+                                        #end
+                                    #end
+                                </div>
+                                #if( $order.deliveryCost > 0 )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                #end
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#163;$numberTool.format("#0.00", $order.totalCost)</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-delivery-address"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-collection-address"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                            Has elegido recoger el pedido en persona, haz clic <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">aquí</a> para ver la ubicación del restaurante $stringTool.escape($order.restaurant.name)</div>
+                            #end
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/question.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-need-to-speak-to-someone")</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente teléfono ${order.restaurant.notificationOptions.notificationPhoneNumber}.</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 
 </html>

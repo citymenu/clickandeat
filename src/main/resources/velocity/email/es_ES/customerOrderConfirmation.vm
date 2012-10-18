@@ -1,83 +1,117 @@
+<!-- SPANISH -->
 <html>
 
-<head>
-</head>
+<body style="background-color:#FFFFFF;">
 
-<body>
-
-<h1>Confirmación de tu pedido con LlamarYComer</h1>
-
-<h2>Numero del pedido: ${order.orderId}</h2>
-
-<div>Tu pedido ha sido comunicado al restaurante $stringTool.escape($order.restaurant.name).  Pronto recibirás un correo electrónico confirmando si el restaurante $stringTool.escape($order.restaurant.name) ha aceptado tu pedido.</div>
-<div>En el caso improbable de que el restaurante no sea capaz de llevar a cabo tu pedido recibirás un correo electrónico de notificación y por supuesto no se efectuara ningún cargo a tu tarjeta.
-Si has proporcionado un teléfono móvil con tu pedido recibiras un SMS si tu pedido es rechazado.</div>
-
-<h3>Datos del pedido</h3>
-
-#foreach( $item in $order.orderItems )
-    #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-        <div>
-            $item.quantity x ($item.menuItemNumber) $stringTool.escape($item.menuItemTitle)
-            #if( $stringTool.hasText($item.menuItemTypeName ))
-                ($stringTool.escape($item.menuItemTypeName))
-            #end
-            #if( $stringTool.hasText($item.menuItemSubTypeName ))
-                ($stringTool.escape($item.menuItemSubTypeName))
-            #end
-        </div>
-    #else
-        <div>
-            $item.quantity x $stringTool.escape($item.menuItemTitle)
-            #if( $stringTool.hasText($item.menuItemTypeName ))
-                ($stringTool.escape($item.menuItemTypeName))
-            #end
-            #if( $stringTool.hasText($item.menuItemSubTypeName ))
-                ($stringTool.escape($item.menuItemSubTypeName))
-            #end
-        </div>
-    #end
-    #if( $item.additionalItems.size() > 0 )
-        #foreach( $additionalItem in $item.additionalItems )
-            <div>- $stringTool.escape($additionalItem)</div>
-        #end
-    #end
-#end
-
-#foreach( $discount in $order.orderDiscounts )
-    #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-        <div>1 x $stringTool.escape($discount.selectedFreeItem) (free)</div>
-    #end
-#end
-
-#if( $stringTool.hasText($order.additionalInstructions))
-    <h3>Instrucciones adicionales</h3>
-    <div>$stringTool.escape($order.additionalInstructions,true)</div>
-#end
-
-#if( $order.hasCashDiscount() )
-    <h3>Descuentos aplicados al pedido</h3>
-#end
-
-#foreach( $discount in $order.orderDiscounts )
-    #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-        <div>$stringTool.escape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
-    #end
-#end
-
-<h3>Precio del plato: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
-
-#if( $order.totalDiscount > 0 )
-    <h3>Total descuentos: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
-#end
-
-#if( $order.deliveryCost > 0 )
-    <h3>Costes de envio: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
-#end
-
-<h3>Coste Total: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Gracias por tu pedido</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hola $stringTool.escape($order.customer.firstName),</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Nuestro equipo va a ponerse en contacto con $stringTool.escape($order.restaurant.name) y les va a pasar tu pedido.</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-details"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-order-id"): $order.orderId</div>
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-order-for-delivery")</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-order-for-collection")</div>
+                            #end
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.restaurant.name) $stringTool.escape($order.restaurant.address.summary)</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-your-order"):</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                    #foreach( $item in $order.orderItems )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($item.summary,true)</div>
+                                    #end
+                                    #foreach( $discount in $order.orderDiscounts )
+                                        #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
+                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
+                                        #end
+                                    #end
+                                </div>
+                                #if( $order.deliveryCost > 0 )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                #end
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#163;$numberTool.format("#0.00", $order.totalCost)</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-delivery-address"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-collection-address"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Has elegido recoger el pedido en persona, <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">haz clic aquí</a> para ver la ubicación del restaurante $stringTool.escape($order.restaurant.name)</div>
+                            #end
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                                <b>Requested delivery time:</b>
+                                #if($order.expectedDeliveryTime)
+                                    $stringTool.formatDate($order.expectedDeliveryTime)
+                                    #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+                                        on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+                                    #end
+                                #else
+                                    ASAP
+                                #end
+                            </div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                                <b>Tiempo de recogida elegido:</b>
+                                #if($order.expectedCollectionTime)
+                                    $stringTool.formatDate($order.expectedCollectionTime)
+                                    #if(!($order.expectedCollectionTime.toLocalDate() == $today))
+                                        on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+                                    #end
+                                #else
+                                    $stringTool.getMessage("time.asap")
+                                #end
+                            </div>
+                            #end
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/order-confirmation.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-need-to-speak-to-someone")</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente teléfono ${order.restaurant.notificationOptions.notificationPhoneNumber}.</div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 
 </html>

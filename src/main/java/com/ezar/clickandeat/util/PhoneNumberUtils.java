@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.util;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.Person;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
