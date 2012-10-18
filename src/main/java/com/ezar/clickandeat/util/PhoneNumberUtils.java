@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.util;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.Person;
 import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +21,7 @@ public class PhoneNumberUtils {
     
     static {
         mobileNumberRegexpMap.put("en_UK", "07[0-9]{9}");
-        mobileNumberRegexpMap.put("es_ES", "[6|7][0-9]{8)");
+        mobileNumberRegexpMap.put("es_ES", "[6|7][0-9]{8}");
 
         internationalNumberPrefixMap.put("en_UK", "+44");
         internationalNumberPrefixMap.put("es_ES", "+34");

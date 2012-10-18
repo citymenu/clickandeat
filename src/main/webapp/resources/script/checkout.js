@@ -48,12 +48,14 @@ validators.setItem('firstName',new Validator({
     invalidText: getLabel('validation.firstName.invalidText')
 }));
 
-// Last name validation
+/* Request to stop making this compulsory for Spain
+//Last name validation
 validators.setItem('lastName',new Validator({
     fieldName: 'lastName',
     regexp: checkoutRegexps.lastName,
     invalidText: getLabel('validation.lastName.invalidText')
 }));
+*/
 
 // Telephone number validation
 validators.setItem('telephone',new Validator({

@@ -1,7 +1,8 @@
+<!-- SPANISH -->
 <%@ page language="java" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 <head>
-    <!-- SPANISH -->
+
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/validation.js"></script>

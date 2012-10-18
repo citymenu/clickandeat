@@ -178,5 +178,13 @@ public class VelocityTemplatingService implements InitializingBean {
             }
             return DateTimeFormat.forPattern("HH:mm").print(dateTime);
         }
+
+        public String formatMessage(String key, String value) {
+            return MessageFactory.formatMessage(key,true,value);
+        }
+
+        public String getMessage(String key) {
+            return MessageFactory.getMessage(key, true);
+        }
     }
 }

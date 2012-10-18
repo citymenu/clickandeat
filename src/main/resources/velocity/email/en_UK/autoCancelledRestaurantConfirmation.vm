@@ -24,7 +24,7 @@
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order details:</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Order number is $order.orderId</div>
                             #if( $order.deliveryType == 'DELIVERY' )
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order for delivery to:</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>vm-order-for-delivery-to:</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
                             #else
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Order for collection</b></div>
