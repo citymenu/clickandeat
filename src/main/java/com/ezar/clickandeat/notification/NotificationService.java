@@ -53,8 +53,13 @@ public class NotificationService {
 
         // Send SMS notification if setup
         if( notificationOptions.isReceiveSMSNotification()) {
-            twilioService.sendOrderNotificationSMS(order);
-            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
+            try {
+                twilioService.sendOrderNotificationSMS(order);
+                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
+            }
+            catch( Exception ex) {
+                LOGGER.error("Exception sending SMS",ex);
+            }
         }
     }
 
@@ -117,7 +122,12 @@ public class NotificationService {
 
         // If the user has specified a mobile number, send SMS
         if( PhoneNumberUtils.isMobileNumber(order.getCustomer().getTelephone())) {
-            twilioService.sendRestaurantDeclinedNotificationSMS(order);
+            try {
+                twilioService.sendRestaurantDeclinedNotificationSMS(order);
+            }
+            catch(Exception ex) {
+                LOGGER.error("Exception sending SMS", ex);
+            }
         }
 
     }
@@ -189,7 +199,12 @@ public class NotificationService {
 
         // If the user has specified a mobile number, send SMS
         if(PhoneNumberUtils.isMobileNumber(order.getCustomer().getTelephone())) {
-            twilioService.sendAutoCancelledNotificationSMS(order);
+            try {
+                twilioService.sendAutoCancelledNotificationSMS(order);
+            }
+            catch(Exception ex) {
+                LOGGER.error("Exception sending SMS",ex);
+            }
         }
 
     }
