@@ -1,0 +1,158 @@
+@charset "utf-8";
+
+html, body {
+    border:0;
+    padding:0;
+    margin:0;
+}
+
+body {
+    background: none repeat scroll 0 0 #FFFFFF;
+    font:400 14px/14px myriad-pro,arial;
+    color:#333333;
+    width:710px;
+    height: 600px;
+}
+
+
+.payment-form-wrapper {
+    background-color:#FCFCFC;
+    width:400px;
+    padding: 15px;
+    border:1px solid #AAAAAA;
+    position:relative;
+}
+
+.credit-card-wrapper {
+    margin-bottom: 20px;
+}
+
+.visa {
+    display:inline-block;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -40px -360px transparent;
+    height:28px;
+    width:45px;
+}
+
+.mastercard {
+    display:inline-block;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -40px -200px transparent;
+    height:28px;
+    width:45px;
+    padding-left:10px;
+}
+
+.payment-fields {
+    padding-left:20px;
+}
+
+.payment-field {
+    margin-bottom:15px;
+}
+
+.payment-header {
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+.required {
+    color:#FF0000;
+}
+
+input.card-number {
+    font:400 14px/14px myriad-pro,arial;
+    color:#000000;
+    padding:0 0 0 2px;
+    width:250px;
+}
+
+.security-code {
+    display:inline-block;
+    width:145px;
+}
+
+input.security-code {
+    font:400 14px/14px myriad-pro,arial;
+    color:#000000;
+    padding:0 0 0 2px;
+    width:70px;
+}
+
+.expiry-date {
+    display:inline-block;
+    width:140px;
+}
+
+select {
+    font:400 14px/14px myriad-pro,arial;
+    color:#000000;
+}
+
+.info {
+    display:inline-block;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -75px -520px transparent;
+    height: 12px;
+    margin-left: 15px;
+    padding: 0;
+    width: 12px;
+    cursor:pointer;
+}
+
+.payment-footer {
+    margin:20px 30px 10px 0;
+    text-align:right;
+}
+
+a.payment-button, a.payment-button:active, a.payment-button:hover {
+    background-color: #50a747;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font: 600 14px myriad-pro;
+    padding: 2px 12px 3px 12px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.payment-button:active, a.payment-button:hover {
+    background-color: #2c8023;
+}
+
+.security-help {
+    display:none;
+    background-color:#FFFFFF;
+    position:absolute;
+    top:10px;
+    left:160px;
+    margin:0;
+    padding:0;
+    z-index:100;
+    -moz-box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.5);
+    text-align:center;
+}
+
+.security-help-image {
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -110px -240px transparent;
+    margin:20px;
+    padding:0;
+    width:70px;
+    height:85px;
+    vertical-align:middle;
+
+}
+
+.error-container {
+    display:none;
+    font:400 14px/16px myriad-pro;
+    color:#333333;
+    margin:5px 30px 15px 0;
+    border:1px solid #AA0000;
+    padding:5px 10px;
+    background-color: #fffece;
+}
+
+

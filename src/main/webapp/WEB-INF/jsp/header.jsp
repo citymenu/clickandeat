@@ -13,7 +13,7 @@
             <div class="navigation-links">
                 <ul>
                     <c:choose>
-                        <c:when test="${path == 'home.jsp'}">
+                        <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
                             <li class="active unselectable"><message:message key="workflow.1-enter-your-location"/></li>
                         </c:when>
                         <c:otherwise>

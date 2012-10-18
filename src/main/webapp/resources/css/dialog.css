@@ -48,10 +48,9 @@
 }
 
 .dialog-warning-wrapper {
-    font: 14px/16px prenton;
+    font: 400 14px/16px prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
-    font-weight:500;
     color:#444444;
     margin-top: 6px;
     padding: 6px 10px 10px 10px;

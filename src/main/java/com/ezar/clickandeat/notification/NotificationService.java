@@ -1,10 +1,8 @@
 package com.ezar.clickandeat.notification;
 
-import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Person;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.util.PhoneNumberUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
@@ -12,11 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component(value="notificationService")
 public class NotificationService {
@@ -53,8 +46,13 @@ public class NotificationService {
 
         // Send SMS notification if setup
         if( notificationOptions.isReceiveSMSNotification()) {
-            twilioService.sendOrderNotificationSMS(order);
-            orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
+            try {
+                twilioService.sendOrderNotificationSMS(order);
+                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
+            }
+            catch( Exception ex) {
+                LOGGER.error("Exception sending SMS",ex);
+            }
         }
     }
 
@@ -117,7 +115,12 @@ public class NotificationService {
 
         // If the user has specified a mobile number, send SMS
         if( PhoneNumberUtils.isMobileNumber(order.getCustomer().getTelephone())) {
-            twilioService.sendRestaurantDeclinedNotificationSMS(order);
+            try {
+                twilioService.sendRestaurantDeclinedNotificationSMS(order);
+            }
+            catch(Exception ex) {
+                LOGGER.error("Exception sending SMS", ex);
+            }
         }
 
     }
@@ -189,7 +192,12 @@ public class NotificationService {
 
         // If the user has specified a mobile number, send SMS
         if(PhoneNumberUtils.isMobileNumber(order.getCustomer().getTelephone())) {
-            twilioService.sendAutoCancelledNotificationSMS(order);
+            try {
+                twilioService.sendAutoCancelledNotificationSMS(order);
+            }
+            catch(Exception ex) {
+                LOGGER.error("Exception sending SMS",ex);
+            }
         }
 
     }

@@ -6,24 +6,25 @@ $(document).ready(function(){
 
     // Add click handler for location change link
     $('#changeLocation').click(function(){
-        var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder\'{0}\'/>').format(getLabel('search.watermark'));
-        var searchButton = ('<input class=\'searchbutton\' type=\'button\' id=\'searchbutton\' value=\'{0}\' placeholder=\'\'/>').format(getLabel('button.search'));
+        var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder=\'\'/>').format(getLabel('search.watermark'));
+        var searchButton = ('<a class=\'search\'>{0}</a>').format(getLabel('button.search'));
         var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationField,searchButton);
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
+        $('#loc').attr('placeholder','');
         $('#loc').watermark(watermark);
         $('#loc').focus();
 
         // Add event handlers
         $('#loc').keydown(function(event){
             if( event.keyCode == 13 ) {
-                search('loc');
+                search();
             }
         });
 
-        $('#searchbutton').click(function(){
-            search('loc');
+        $('.search').click(function(){
+            search();
         });
 
         // Enable Google autocomplete
@@ -47,6 +48,30 @@ $(document).ready(function(){
         filterRestaurants();
     });
 });
+
+
+// Executes search function
+function search() {
+    var location = $('#loc').val();
+    if( location != '' ) {
+        $('#search-warning').hide();
+        $.post( ctx+'/validateLocation.ajax', { loc: location },
+            function( data ) {
+                if( data.success ) {
+                    var address = unescapeQuotes(data.address);
+                    window.location.href = ctx + '/findRestaurant.html';
+                }
+                else {
+                    $('.location-warning').remove();
+                    $('.location-warning-wrapper').append(('<div class=\'location-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
+                }
+            }
+        );
+    }
+}
+
+
+
 
 // Update visible restaurants
 function filterRestaurants() {
