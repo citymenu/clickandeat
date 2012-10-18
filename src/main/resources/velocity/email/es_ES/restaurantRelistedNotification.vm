@@ -1,13 +1,44 @@
+<!-- SPANISH -->
 <html>
 
-<head>
-</head>
+<body style="background-color:#FFFFFF;">
 
-<body>
-
-<h1>Tu restaurante ha sido añadido de nuevo a la lista en nuestra pagina.</h1>
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Bienvenido de nuevo</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Gracias por tu respuesta, tu restaurante ha sido añadido de nuevo a nuestra pagina.</b></div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor no dudes en ponerte en contacto con nosotros si tienes alguna pregunta o si necesitas alguna clarificación
+                            en relación a los pasos que seguimos cuando te pasamos pedidos.</div>
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/butler.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
 
 </body>
-
 
 </html>

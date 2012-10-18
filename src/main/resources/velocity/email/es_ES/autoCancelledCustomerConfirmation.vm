@@ -71,8 +71,8 @@
                 <tr valign="top">
                     <td width=550" colspan="3">
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>¿Como se aplican los cupones de descuento?</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Para aplicar un cupón de descuento en tu próximo pedido simplemente añade el número del cupón en la página de introducción de datos.</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-discount-voucher-how")</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-discount-voucher-help")</div>
                         </div>
                     </td>
                 </tr>

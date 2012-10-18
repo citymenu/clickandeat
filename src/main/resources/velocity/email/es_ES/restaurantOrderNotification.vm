@@ -1,3 +1,171 @@
+<!-- SPANISH -->
+<html>
+
+<body style="background-color:#FFFFFF;">
+
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Tienes un pedido nuevo</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-details"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">$stringTool.getMessage("vm-order-id") $order.orderId</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-delivery-to"):</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-order-for-collection")</b></div>
+                            #end
+                        </div>
+
+                        #if( $order.deliveryType == 'DELIVERY' && $distance )
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-delivery-distance"):</b> $numberTool.format("#0.0", $distance)km</div>
+                        </div>
+                        #end
+
+                        <div style="margin-bottom:15px;">
+                            #if( $order.deliveryType == 'DELIVERY' )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                                <b>Horario de entrega solicitado:</b>
+                                #if($order.expectedDeliveryTime)
+                                    $stringTool.formatDate($order.expectedDeliveryTime)
+                                    #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+                                        on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+                                    #end
+                                #else
+                                    $stringTool.getMessage("time.asap")
+                                #end
+                            </div>
+                            #else
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                                <b>Horario de recogida solicitado:</b>
+                                #if($order.expectedCollectionTime)
+                                    $stringTool.formatDate($order.expectedCollectionTime)
+                                    #if(!($order.expectedCollectionTime.toLocalDate() == $today))
+                                        on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+                                    #end
+                                #else
+                                    $stringTool.getMessage("time.asap")
+                                #end
+                            </div>
+                            #end
+                        </div>
+
+                        #if( $stringTool.hasText($order.additionalInstructions))
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Instrucciones adicionales:</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.additionalInstructions,true)</div>
+                        </div>
+                        #end
+
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-items"):</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                    #foreach( $item in $order.orderItems )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($item.summary,true)</div>
+                                    #end
+                                    #foreach( $discount in $order.orderDiscounts )
+                                        #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
+                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
+                                        #end
+                                    #end
+                                </div>
+
+                                #if( $order.deliveryCost > 0 )
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                #end
+
+                            </div>
+                        </div>
+
+                        #if( $order.hasCashDiscount() )
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Descuentos aplicados al pedido:</div>
+                                #foreach( $discount in $order.orderDiscounts )
+                                    #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+                                    #end
+                                #end
+                            </div>
+                        </div>
+                        #end
+
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#163;$numberTool.format("#0.00", $order.restaurantCost)</b></div>
+                        </div>
+
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Cliente:</b> $stringTool.escape($order.customer.firstName) $stringTool.escape($order.customer.lastName)</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Teléfono:</b> ${order.customer.telephone}</div>
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/order-confirmation.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo para aceptar o rechazar este pedido.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Aceptar</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Rechazar</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo si quieres añadir mas información sobre el motivo por el que rechazas el pedido.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=address">No hacemos entregas a esta dirección</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">Establecimiento cerrado</a>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><b>
+                                #if($order.deliveryType == 'DELIVERY')
+                                    Tu tiempo de entrega estándar es $order.restaurant.deliveryTimeMinutes minutos, haz clic en los enlaces de abajo para añadir tiempo adicional sobre tu tiempo de entrega estándar para este pedido.
+                                #else
+                                    Tu tiempo de recogida estándar es $order.restaurant.collectionTimeMinutes minutos, haz clic en los enlaces de abajo para añadir tiempo adicional sobre tu tiempo de recogida estándar para este pedido.
+                                #end
+                                En caso de anadir tiempo sobre el estándar el cliente tendrá 10 minutos para cancelar el pedido.
+                            </b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutos</a>
+                            </div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
+                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">+60 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">+90 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">+120 minutos</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+
+</html>
+
+
+
+
+
 <html>
 
 <head>
