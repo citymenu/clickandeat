@@ -2,7 +2,10 @@
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>
     </decorator>
+    <decorator name="blank" page="blank.jsp">
+        <pattern>/cardProcessing*</pattern>
+    </decorator>
     <decorator name="default" page="site.jsp">
-		<pattern>/*</pattern> 
+		<pattern>/*</pattern>
   	</decorator>
 </decorators>

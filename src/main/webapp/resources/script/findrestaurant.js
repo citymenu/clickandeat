@@ -4,6 +4,17 @@ var cuisine = '';
 // Initialize scrolling options for menu launch and order panel launch
 $(document).ready(function(){
 
+    // Hide the registered message bod
+    $('#registered').hide();
+
+    // Hide the invalid email address field
+    $('.invalid-email').hide();
+
+    // Add keydown handler to email field
+    $('#email').keydown(function(){
+        $('.invalid-email').hide();
+    });
+
     // Add click handler for location change link
     $('#changeLocation').click(function(){
         var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder=\'\'/>').format(getLabel('search.watermark'));
@@ -70,9 +81,6 @@ function search() {
     }
 }
 
-
-
-
 // Update visible restaurants
 function filterRestaurants() {
 
@@ -114,4 +122,21 @@ function getOrderPanelConfig() {
         displayAdditionalInformation:false
     };
     return config;
+}
+
+// Registers when no restaurants found
+function register() {
+    $('.invalid-email').hide();
+    var regexp = checkoutRegexps.email;
+    var email = $('#email').val();
+    if( !regexp.test(email)) {
+        $('.invalid-email').show();
+    } else {
+        $.post( ctx + '/register/registerLocation.ajax', { email: email, discount: 10 },
+            function( data ) {
+                $('#notregistered').hide();
+                $('#registered').show();
+            }
+        );
+    }
 }

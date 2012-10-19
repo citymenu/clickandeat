@@ -9,6 +9,22 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
 
     <title><message:message key="page-title.payment" escape="false"/></title>
+
+
+    <script type="text/javascript">
+    // Prevent variables from being global
+    (function () {
+        var div = document.createElement('div'),
+            ref = document.getElementsByTagName('base')[0] ||
+                  document.getElementsByTagName('script')[0];
+        div.innerHTML = '&shy;<style> iframe { visibility: hidden; } </style>';
+        ref.parentNode.insertBefore(div, ref);
+        window.onload = function() {
+            div.parentNode.removeChild(div);
+        }
+    })();
+    </script>
+
 </head>
 
 <body>
@@ -29,7 +45,7 @@
                             </c:if>
                         </div>
                         <div id="paymentbody">
-                            <iframe name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
+                            <iframe class="payment" name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
                         </div>
                     </div>
                 </td>

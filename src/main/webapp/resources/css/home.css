@@ -19,9 +19,9 @@
 
 .searchbar-wrapper {
     position:absolute;
-    right: 150px;
-    top: 60px;
-    width: 340px;
+    right: 165px;
+    top: 58px;
+    width: 310px;
 }
 
 .searchbar-location {
@@ -32,7 +32,7 @@
 }
 
 .search-location-form {
-    width: 340px;
+    width: 310px;
     height: 30px;
     position:relative;
 }
@@ -52,7 +52,7 @@
     padding-top:4px;
     position:absolute;
     top: 0px;
-    left: 302px;
+    left: 272px;
     position:relative;
     text-align:center;
     cursor:pointer;
@@ -69,6 +69,8 @@ a.search {
     color:#FFFFFF;
     text-shadow: 0 2px #333333;
     padding-top: 7px;
+    width:264px;
+    text-align:left;
 }
 
 input.location {
@@ -81,11 +83,15 @@ input.location {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
-    width: 280px;
+    width: 250px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
+}
+
+input.location:focus {
+    border: 1px solid #CCCCCC;
 }
 
 #search-warning {
@@ -128,4 +134,39 @@ a.home {
     color:#FFFFFF;
     text-decoration:underline;
     cursor:pointer;
+}
+
+.box-wrapper {
+    padding:50px 20px 30px 20px;
+}
+
+.box-large {
+    border:1px solid #999999;
+    padding:15px;
+    background-color:#FCFCFC;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-border-radius: 15px;
+       -moz-border-radius: 15px;
+            border-radius: 15px;
+    height:250px;
+    margin-left:20px;
+}
+
+.box-large h2 {
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    color:#AA0000;
+    margin-bottom: 15px;
+}
+
+
+.home-caption {
+
+}
+
+.home-caption h2 {
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    color:#AA0000;
+    margin-bottom: 15px;
 }

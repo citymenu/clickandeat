@@ -27,6 +27,22 @@
                 <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
+        <div class="box-wrapper">
+            <table width="980">
+                <tr valign="top">
+                    <td width="530">
+                        <div class="home-caption">
+                            <h2>Simply the easiest way to order fast food online</h2>
+                        </div>
+                    </td>
+                    <td width="450">
+                        <div class="box-large">
+                            <h2>Now serving the following locations</h2>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>
 

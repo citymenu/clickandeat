@@ -7,6 +7,7 @@ import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
 import com.twilio.sdk.resource.instance.Account;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -101,7 +102,7 @@ public class TwilioServiceImpl implements ITwilioService {
         Map<String, String> callParams = new HashMap<String, String>();
         callParams.put("From", callerId);
         callParams.put("To", PhoneNumberUtils.getInternationalNumber(phoneNumber));
-        callParams.put("Body",body);
+        callParams.put("Body", body);
 
         // Send the sms
         smsFactory.create(callParams);

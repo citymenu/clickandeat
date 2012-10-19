@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -62,6 +63,9 @@ public class RestaurantSearchController {
                 model.put("count",results.size());
             }
 
+            // Put the system locale on the response
+            model.put("validatorLocale", MessageFactory.getLocaleString().split("_")[0]);
+            model.put("systemLocale", MessageFactory.getLocaleString());
             model.put("resultCount", buildCuisineResultCount(results));
             model.put("cuisines",cuisineProvider.getCuisineList());
             return new ModelAndView("findRestaurant",model);

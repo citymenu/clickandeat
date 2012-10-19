@@ -22,7 +22,7 @@
 }
 
 .order-confirmation-header-wrapper {
-    font:600 16px/18px prenton;
+    font:400 16px/18px myriad-pro;
     color:#444444;
     background-color:#FFFFFF;
     padding: 8px 10px 8px 10px;
@@ -33,5 +33,6 @@
 }
 
 .butler {
-    height: 450px;
+    min-height: 450px;
+    background:url(../images/email/apology.jpg) 10px -20px no-repeat;
 }

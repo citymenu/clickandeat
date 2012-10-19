@@ -13,6 +13,7 @@
     <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
+    <script type="text/javascript" src="${resources}/script/validation/validators_${validatorLocale}.js"></script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
@@ -83,17 +84,7 @@
                         </div>
 
                         <c:if test="${count == 0}">
-                            <div class="no-results-wrapper">
-                                <div class="no-results-content-wrapper">
-                                    <div class="no-results-content">
-                                        <h2><message:message key="search.no-restaurants-found"/></h2>
-                                        <div class="no-results-text">Sorry we do not currently have any restaurants on our site which serve your location but we are constantly expanding the
-                                        areas that we cover so please check back with us in a couple of months.</div>
-                                        <div class="no-results-text">If you would like to join our mailing list, please provide us with your email address below and once we have restaurants
-                                        in your area we will send you a discount voucher entitling you to <b>10%</b> off your first online order with us.</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <jsp:include page="/WEB-INF/jsp/${systemLocale}/noResultsFound.jsp" />
                         </c:if>
 
                         <c:if test="${count > 0}">

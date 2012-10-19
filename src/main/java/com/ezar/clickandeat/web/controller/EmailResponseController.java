@@ -72,6 +72,12 @@ public class EmailResponseController {
             try {
                 Map<String,Object> context = new HashMap<String, Object>();
                 if( minutes != null ) {
+                    if( Order.DELIVERY.equals(order.getDeliveryType())) {
+                        minutes += order.getRestaurant().getDeliveryTimeMinutes();
+                    }
+                    else {
+                        minutes += order.getRestaurant().getCollectionTimeMinutes();
+                    }
                     context.put("DeliveryMinutes",minutes);
                 }
                 if( reason != null ) {

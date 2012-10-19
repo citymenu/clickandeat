@@ -24,14 +24,6 @@
     <script type="text/javascript" src="${resources}/jquery/script/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js"></script>
 
-    <!-- Watermark -->
-    <script type="text/javascript" src="${resources}/jquery/script/jquery.data.js"></script>
-    <script type="text/javascript" src="${resources}/jquery/script/jquery.watermark.min.js"></script>
-
-    <!-- Fancybox -->
-    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" />
-    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.pack.js?v=2.1.0"></script>
-
     <!-- Scripts -->
     <script type="text/javascript" src="${ctx}/script/messages.html"></script>
     <script type="text/javascript" src="${resources}/script/json2.js"></script>
@@ -51,6 +43,32 @@
 </head>
 
 <body>
+
+<!-- Watermark -->
+<script type="text/javascript" src="${resources}/jquery/script/jquery.data.js"></script>
+<script type="text/javascript" src="${resources}/jquery/script/jquery.watermark.min.js"></script>
+
+<!-- Fancybox -->
+<link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" />
+<script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.pack.js?v=2.1.0"></script>
+
+<!-- Zendesk -->
+<script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.5/zenbox.js"></script>
+<style type="text/css" media="screen, projection">
+  @import url(//assets.zendesk.com/external/zenbox/v2.5/zenbox.css);
+</style>
+<script type="text/javascript">
+  if (typeof(Zenbox) !== "undefined") {
+    Zenbox.init({
+      dropboxID:   "20108247",
+      url:         "https://llamarycomer.zendesk.com",
+      tabID:       "Feedback",
+      tabColor:    "#990000",
+      tabPosition: "Right"
+    });
+  }
+</script>
+
 <decorator:body/>
 </body>
 

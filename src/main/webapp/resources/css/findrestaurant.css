@@ -117,15 +117,82 @@ a.search {
 }
 
 .no-results-content-wrapper {
-    min-height: 300px;
     padding:10px;
-    background: url(../images/email/apology.jpg) right top no-repeat;
+    background: url(../images/email/apology.jpg) right -15px no-repeat;
+}
+
+.registration-content-wrapper {
+    padding:10px;
+    background: url(../images/email/order-confirmation.jpg) right -15px no-repeat;
 }
 
 .no-results-content {
     width: 435px;
     padding-right:20px;
 }
+
+.registration-content {
+    width: 435px;
+    min-height: 250px;
+    padding-right:20px;
+}
+
+.registration-content h2 {
+    font-family: MaiandraOTGD-DemiBold;
+    font-size: 20px;
+    color:#AA0000;
+    margin-bottom: 15px;
+}
+
+
+.email-entry {
+    margin:20px 0 20px 0;
+}
+
+.email-entry input {
+    font: 14px/16px myriad-pro;
+    width:460px;
+    background-clip: padding-box;
+    border: 1px solid #B6B6B6;
+    padding: 3px 5px 3px 5px;
+    color:#444444;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.email-entry input:focus {
+    border: 1px solid #AA0000;
+}
+
+.invalid-email {
+    display:inline-block;
+    font:400 14px/14px myriad-pro;
+    color:#444444;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    margin-top:5px;
+    padding: 5px 10px 5px 10px;
+}
+
+
+a.register-button, a.register-button:active, a.register-button:hover {
+    background-color: #50a747;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    font: 14px MaiandraOTGD-DemiBold;
+    padding: 2px 12px 3px 12px;
+    margin-left:4px;
+    text-align: center;
+    vertical-align: baseline;
+    text-decoration: none;
+    text-shadow: 0 1px #333333;
+    cursor: pointer;
+}
+
+a.register-button:active, a.register-button:hover {
+    background-color: #2c8023;
+}
+
 
 .no-results-content h2 {
     font-family: MaiandraOTGD-DemiBold;
@@ -373,10 +440,12 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
 }
 
 .phone-orders-only {
-    background: url(../images/phone-orders.png) right top no-repeat;
-    font: 500 16px/19px prenton;
+    background: url(../images/telf.png) left top no-repeat;
+    font: 500 16px/18px myriad-pro;
     color:#444444;
-    padding-right:100px;
+    margin-left:10px;
+    padding-left:70px;
+    padding-right:10px;
     min-height:65px;
 }
 

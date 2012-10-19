@@ -16,16 +16,14 @@
             <tr valign="top">
                 <td width="660">
                     <div class="order-confirmation-wrapper">
-                        <h2><message:message key="workflow.order-update-status"/></h2>
+                        <h2><message:message key="workflow.order-update-status" format="${order.orderId}"/></h2>
                         <div class="order-confirmation-header-wrapper">
                             <div><util:escape value="${message}"/></div>
                         </div>
                     </td>
                 </td>
                 <td width="360">
-                    <div class="butler">
-                    Image of the butler here
-                    </div>
+                    <div class="butler"></div>
                 </td>
             </tr>
         </table>
