@@ -28,7 +28,7 @@
 
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">We hope to have your order confirmed very soon but if you don't want to wait any longer, please
-                            <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">click here</a> to cancel this order. You will not be charged for your order if you cancel it.</div>
+                            <a href="${baseUrl}/workflow/customerCancelOrder.html?curl=$cancelCurl">click here</a> to cancel this order. You will not be charged for your order if you cancel it.</div>
                         </div>
 
                         <div style="margin-bottom:15px;">

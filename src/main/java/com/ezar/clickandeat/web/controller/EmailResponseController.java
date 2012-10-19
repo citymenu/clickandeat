@@ -46,7 +46,7 @@ public class EmailResponseController {
 
 
 
-    @RequestMapping(value="/secure/workflow/confirmOrder.html", method= RequestMethod.GET)
+    @RequestMapping(value="/workflow/confirmOrder.html", method= RequestMethod.GET)
     public ModelAndView acceptOrDeclineOrder(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "minutes", required = false) Integer minutes,
                                              @RequestParam(value = "reason", required = false) String reason) throws Exception {
         
@@ -107,7 +107,7 @@ public class EmailResponseController {
     }
 
 
-    @RequestMapping(value="/secure/workflow/customerCancelOrder.html", method= RequestMethod.GET)
+    @RequestMapping(value="/workflow/customerCancelOrder.html", method= RequestMethod.GET)
     public ModelAndView customerCancelsOrder(@RequestParam(value = "curl", required = true) String curl ) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
@@ -154,7 +154,7 @@ public class EmailResponseController {
     }
 
 
-    @RequestMapping(value="/secure/workflow/relistRestaurant.html", method= RequestMethod.GET)
+    @RequestMapping(value="/workflow/relistRestaurant.html", method= RequestMethod.GET)
     public ModelAndView restaurantRelists(@RequestParam(value = "curl", required = true) String curl ) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();

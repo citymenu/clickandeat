@@ -26,7 +26,7 @@
                              Para prevenir que se repita esta situación con otros pedidos os hemos retirado temporalmente de la página.</b></div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquí</a>  para
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquí</a>  para
                             que tu restaurante se añadido de nuevo a nuestra pagina.</div>
                         </div>
                         <div style="margin-bottom:15px;">

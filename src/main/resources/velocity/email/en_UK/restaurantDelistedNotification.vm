@@ -25,7 +25,7 @@
                             any more orders coming in that we have to cancel, we have temporarily delisted you from our Website.</b></div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Please <a href="${baseUrl}/secure/workflow/relistRestaurant.html?curl=$relistCurl">click here</a> to relist your 
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Please <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">click here</a> to relist your
                             restaurant on our Website.</div>
                         </div>
                         <div style="margin-bottom:15px;">

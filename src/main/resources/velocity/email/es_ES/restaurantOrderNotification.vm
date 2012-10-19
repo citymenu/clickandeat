@@ -126,13 +126,13 @@
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo para aceptar o rechazar este pedido.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
-                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Aceptar</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Rechazar</a>
+                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptCurl">Aceptar</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl">Rechazar</a>
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo si quieres añadir mas información sobre el motivo por el que rechazas el pedido.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
-                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=address">No hacemos entregas a esta dirección</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">Establecimiento cerrado</a>
+                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=address">No hacemos entregas a esta dirección</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">Establecimiento cerrado</a>
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
@@ -145,10 +145,10 @@
                                 En caso de anadir tiempo sobre el estándar el cliente tendrá 10 minutos para cancelar el pedido.
                             </b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
-                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutos</a>
+                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutos</a>
                             </div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
-                                <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">+60 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">+90 minutos</a> | <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">+120 minutos</a>
+                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">+60 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">+90 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">+120 minutos</a>
                             </div>
                         </div>
                     </td>
@@ -266,8 +266,8 @@
 <h3>Coste total: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
 
 <div>
-    <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>
-    <a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$declineCurl">Decline</a>
+    <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>
+    <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl">Decline</a>
 </div>
 
 #if($order.deliveryType == 'DELIVERY')
@@ -279,12 +279,12 @@
 #end
 
 <div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">15 minutos mas</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">30 minutos mas</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">45 minutos mas</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">60 minutos mas</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">90 minutos mas</a></div>
-<div><a href="${baseUrl}/secure/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">120 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">15 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">30 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">45 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=60">60 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=90">90 minutos mas</a></div>
+<div><a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=120">120 minutos mas</a></div>
 </div>
 
 </body>

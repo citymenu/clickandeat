@@ -29,7 +29,7 @@
 
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Esperamos poder confirmar tu pedido pronto,
-                            en caso de que no quieras esperar más tiempo haz clic <a href="${baseUrl}/secure/workflow/customerCancelOrder.html?curl=$cancelCurl">aqui</a> para cancelar el pedido.
+                            en caso de que no quieras esperar más tiempo haz clic <a href="${baseUrl}/workflow/customerCancelOrder.html?curl=$cancelCurl">aqui</a> para cancelar el pedido.
                             En caso de que cancelaras este pedido no se efectuara ningún cargo en tu tarjeta.</div>
                         </div>
 
