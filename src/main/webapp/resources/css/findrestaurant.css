@@ -441,8 +441,8 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
 
 .phone-orders-only {
     background: url(../images/telf.png) left top no-repeat;
-    font: 500 16px/18px myriad-pro;
-    color:#444444;
+    font: 400 16px/18px myriad-pro;
+    color:#333333;
     margin-left:10px;
     padding-left:70px;
     padding-right:10px;

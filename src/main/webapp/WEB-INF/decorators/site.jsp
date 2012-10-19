@@ -62,7 +62,7 @@
     Zenbox.init({
       dropboxID:   "20108247",
       url:         "https://llamarycomer.zendesk.com",
-      tabID:       "Feedback",
+      tabID:       "<message:message key="label.feedback"/>",
       tabColor:    "#990000",
       tabPosition: "Right"
     });
