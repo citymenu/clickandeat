@@ -1,4 +1,4 @@
-<!--English->
+<!--English -->
 <%@ page language="java" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
@@ -7,9 +7,8 @@
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/validation.js"></script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${validatorLocale}.js"></script>
-    <script type="text/javascript" src="${resources}/script/ordersummary.js"></script>
+    <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/callnowsummary.js"></script>
-
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/callnow.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/ordersummary.css"/>
@@ -23,7 +22,7 @@
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <script type="text/javascript">
-    var completedorderid = '${completedorderid}';
+    var orderid = '${order.orderId}';
     var coordinates=[${order.restaurant.coordinates}];
 </script>
 
@@ -46,28 +45,28 @@
                                                 <div class="order-information">Your order number is ${order.orderId}</div>
                                                 <div class="order-restaurant">
                                                     <util:escape value="${order.restaurant.name}"/> <util:escape value="${order.restaurant.address.summary}"/>
-                                                    <div class="restaurant-contact">Contact: ${order.restaurant.notificationOptions.notificationPhoneNumber}</div>
+                                                    <div class="restaurant-contact">Contact: ${order.restaurant.contactTelephone}</div>
                                                 </div>
-                                                <div class="order-overview">
-                                                    <h2>What happens next?</h2>
-                                                    <p><util:escape value="${order.restaurant.name}"/> does not take online payments. You can contact them on <util:escape value="${order.restaurant.notificationOptions.notificationPhoneNumber}"/> right now.</p>
-                                                    <p><message:message key="title.companyname" escape="false"/> is currently offering a discount voucher if you complete your telephone order.</p>
-                                                    <p>Enter your email address in the field below and click on <message:message key="button.call-now.send.voucher"/> button. Once your order is confirmed with <util:escape value="${order.restaurant.name}"/> you will soon receive a discount voucher.</p>
-                                                    <p>Do not forget that to receive your discount voucher you will have to mention the order id above to <util:escape value="${order.restaurant.name}"/> when you phone them.<p/>.
-
-                                                    <div class="call-now-form-entry">
-                                                        <!-- Email validation error -->
-                                                        <div id="mail-validation"></div>
-                                                        <table width="100%">
-                                                            <tr valign="top">
-                                                                <td><div class="call-now-form-label"><message:message key="user.email-address"/>:<span class="required">*</span></div></td>
-                                                                <td><div class="call-now-form-field"><input type="text" id="email" value=""/></div></td>
-                                                                <td><span id="email-validation" class="invalid"/></td>
-                                                            </tr>
-                                                        </table>
+                                                <div id="notregistered">
+                                                    <div class="order-overview">
+                                                        <h2>What happens next?</h2>
+                                                        <p><util:escape value="${order.restaurant.name}"/> does not take online payments yet but you can contact them on the number shown above right now.</p>
+                                                        <p><message:message key="title.companyname" escape="false"/> is currently offering a discount voucher if you complete your telephone order.</p>
+                                                        <p>Enter your email address in the field below and click on <message:message key="button.call-now.send.voucher"/> button. Once your order is confirmed with <util:escape value="${order.restaurant.name}"/> you will soon receive a discount voucher.</p>
+                                                        <p>Do not forget that to receive your discount voucher you will have to mention the order id above to <util:escape value="${order.restaurant.name}"/> when you phone them.</p>
                                                     </div>
-                                                    <div>
-                                                        <a class="call-now-nav-button call-now-nav-button-large" onclick="sendVoucher()"><message:message key="button.call-now.send.voucher"/></a>
+
+                                                    <div class="email-entry">
+                                                        <input type="text" id="email" style="width:200px; margin-right:10px;"/>
+                                                        <a class="call-now-nav-button" id="#register" onclick="register()"><message:message key="button.call-now.send.voucher"/></a>
+                                                        <div class="invalid-email">Please enter a valid email address</div>
+                                                    </div>
+                                                </div>
+                                                <div id="registered">
+                                                    <div class="order-overview">
+                                                        <h2>Thanks for registering with us</h2>
+                                                        <p>As soon as we receive confirmation of your order from <util:escape value="${order.restaurant.name}"/> we will send you your discount voucher
+                                                        entitling you to <b>10% off</b> your next online order with us.</p>
                                                     </div>
                                                 </div>
                                             </div>
