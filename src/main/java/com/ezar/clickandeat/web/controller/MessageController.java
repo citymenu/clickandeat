@@ -43,7 +43,7 @@ public class MessageController {
     @RequestMapping(value="/script/messages.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> getMessages(HttpServletRequest request) throws Exception {
         final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentType(new MediaType("text","javascript"));
         headers.setLastModified(started.getMillis());
         return new ResponseEntity<byte[]>(script.getBytes("utf-8"), headers, HttpStatus.OK);
     }
