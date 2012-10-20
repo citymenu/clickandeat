@@ -605,10 +605,10 @@
 			$('#fancybox-loading').remove();
 		},
 
-		showLoading: function () {
+		showLoading: function (message) {
 			var el, viewport;
-
 			F.hideLoading();
+			message = message? message: getLabel('ajax.default');
 
 			// If user will press the escape-button, the request will be canceled
 			D.bind('keypress.fb', function(e) {
@@ -618,7 +618,7 @@
 				}
 			});
 
-			el = $('<div id="fancybox-loading"><div></div></div>').click(F.cancel).appendTo('body');
+			el = $('<div id="fancybox-loading"><div class="fancybox-message">' + message + '</div></div>').click(F.cancel).appendTo('body');
 
 			if (!F.defaults.fixed) {
 				viewport = F.getViewport();

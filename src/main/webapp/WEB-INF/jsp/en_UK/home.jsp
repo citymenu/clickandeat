@@ -33,6 +33,7 @@
                     <td width="530">
                         <div class="home-caption">
                             <h2>Simply the easiest way to order fast food online</h2>
+                            <p class="triangle-isosceles left">But it could be any element you want.</p>
                         </div>
                     </td>
                     <td width="450">

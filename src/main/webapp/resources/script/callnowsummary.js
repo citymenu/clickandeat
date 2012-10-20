@@ -1,45 +1,50 @@
-
 $(document).ready(function(){
-    validateForm();
 
-    // Add validation event handlers
-    validators.each(function(fieldName,validator){
-        $('#' + fieldName).change(function(){
-            validateForm();
-        });
+    // Hide the registered panel
+    $('#registered').hide();
 
-        $('#' + fieldName).keyup(function(){
-            validateForm();
-        });
+    // Hide the invalid email address field
+    $('.invalid-email').hide();
+
+    // Add keydown handler to email field
+    $('#email').keydown(function(){
+        $('.invalid-email').hide();
     });
 
 });
 
-
-// Updates validation on all form fields
-function validateForm() {
-    isValid = true;
-    validators.each(function(fieldName,validator){
-        if( $('#' + fieldName).is(":visible")) {
-            if( !validator.validate()) {
-                isValid = false;
-            };
-        }
-    });
+// Override order config
+function getOrderPanelConfig() {
+    var config = {
+        showDeliveryOptions: false,
+        showBuildOrderLink: true,
+        allowRemoveItems: false,
+        allowUpdateFreeItem: false,
+        enableCheckoutButton: false,
+        enablePaymentButton: false,
+        showDiscountInformation: true,
+        showAdditionalInformation: false,
+        displayAdditionalInformation:true
+    };
+    return config;
 }
 
-// Validation entries
-var validators = new HashTable();
 
-// Email address validation
-validators.setItem('email',new Validator({
-    fieldName: 'email',
-    regexp: checkoutRegexps.email,
-    invalidText: getLabel('validation.email.invalidText')
-}));
-
-
-// Send an email to the user (or us) with a voucher (or voucher request)
-function sendVoucher(){
-    alert("Not implemented yet");
+// Registers when no restaurants found
+function register() {
+    $('.invalid-email').hide();
+    var regexp = checkoutRegexps.email;
+    var email = $('#email').val();
+    if( !regexp.test(email)) {
+        $('.invalid-email').show();
+    } else {
+        $.fancybox.showLoading();
+        $.post( ctx + '/register/registerCustomer.ajax', { email: email, discount: 10 },
+            function( data ) {
+                $.fancybox.hideLoading();
+                $('#notregistered').hide();
+                $('#registered').show();
+            }
+        );
+    }
 }

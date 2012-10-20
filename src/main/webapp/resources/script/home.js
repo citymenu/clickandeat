@@ -44,10 +44,13 @@ function search() {
     var location = $('#loc').val();
     if( location != '' ) {
         $('#search-warning').hide();
+        $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
+                $.fancybox.hideLoading();
                 if( data.success ) {
                     var address = unescapeQuotes(data.address);
+                    $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
                     window.location.href = ctx + '/findRestaurant.html';
                 }
                 else {

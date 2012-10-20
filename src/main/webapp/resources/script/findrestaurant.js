@@ -66,10 +66,13 @@ function search() {
     var location = $('#loc').val();
     if( location != '' ) {
         $('#search-warning').hide();
+        $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
+                $.fancybox.hideLoading();
                 if( data.success ) {
                     var address = unescapeQuotes(data.address);
+                    $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
                     window.location.href = ctx + '/findRestaurant.html';
                 }
                 else {
@@ -132,8 +135,10 @@ function register() {
     if( !regexp.test(email)) {
         $('.invalid-email').show();
     } else {
-        $.post( ctx + '/register/registerLocation.ajax', { email: email, discount: 10 },
+        $.fancybox.showLoading();
+        $.post( ctx + '/register/registerCustomer.ajax', { email: email, discount: 10 },
             function( data ) {
+                $.fancybox.hideLoading();
                 $('#notregistered').hide();
                 $('#registered').show();
             }

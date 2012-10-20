@@ -33,6 +33,7 @@ $(document).ready(function(){
 // Updates validation on all form fields
 function validateForm() {
     isValid = true;
+    $('#validation-error').hide();
     validators.each(function(fieldName,validator){
         if( $('#' + fieldName).is(":visible")) {
             if( !validator.validate()) {
@@ -40,6 +41,10 @@ function validateForm() {
             };
         }
     });
+    if(!isValid) {
+        $('#validation-error').show();
+        $.scrollTo(0);
+    }
 }
 
 
@@ -162,8 +167,10 @@ function applyVoucher() {
     var voucherId = $('#voucherid').val();
     if( voucherId != '' ) {
         $('.invalid-voucher').remove();
+        $.fancybox.showLoading();
         $.post( ctx + '/order/applyVoucher.ajax', { orderId: orderId, voucherId: voucherId },
             function(data) {
+                $.fancybox.hideLoading();
                 if( data.success ) {
                     $('#voucherid').val('');
                     buildOrder(data.order);
@@ -179,12 +186,13 @@ function applyVoucher() {
 
 // Update order
 function updateOrder() {
+    $.fancybox.showLoading();
     $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()) },
         function( data ) {
             if( data.success ) {
                 location.href = ctx + '/buildOrder.html';
             } else {
-                alert('success:' + data.success);
+                $.fancybox.hideLoading();
             }
         }
     );
@@ -196,11 +204,13 @@ function payment() {
     if( isValid ) {
         $('.checkout-validation-error').remove();
         $('.invalid-voucher').remove();
+        $.fancybox.showLoading();
         $.post( ctx + '/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
             function( data ) {
                 if( data.success ) {
                     location.href = ctx + '/payment.html';
                 } else {
+                    $.fancybox.hideLoading();
                     if( data.reason != null ) {
                         var reason = data.reason;
                         $('#checkout-validation').append(('<div class=\'checkout-validation-error\'>{0}</div>').format(getLabel('checkout.' + reason)));

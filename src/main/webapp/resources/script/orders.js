@@ -30,8 +30,10 @@ $(document).ready(function(){
 
 function getOrder() {
     if( orderid && orderid != '') {
+        $.fancybox.showLoading();
         $.post( ctx+'/order/getOrder.ajax?mgn=' + (Math.random() * 99999999),
             function( data ) {
+                $.fancybox.hideLoading();
                 if( data.success ) {
                     buildOrder(data.order);
                 } else {
@@ -41,14 +43,6 @@ function getOrder() {
         );
     }
 }
-
-$(document).ajaxStart(function(){
-    $.fancybox.showLoading();
-});
-
-$(document).ajaxComplete(function(){
-    $.fancybox.hideLoading();
-});
 
 // Returns the config for the order, can be overridden
 function getOrderPanelConfig() {
@@ -174,8 +168,10 @@ function doBuildOrder(order,config) {
             });
 
             $('#clearorder').click(function(){
+                $.fancybox.showLoading(getLabel('ajax.clearing-order'));
                 $.post( ctx+'/order/clearOrder.ajax', {orderId: currentOrder.orderId, restaurantId: restaurantId},
                     function( data ) {
+                        $.fancybox.hideLoading();
                         if( data.success ) {
                             buildOrder(data.order);
                         } else {
@@ -330,7 +326,7 @@ function doBuildOrder(order,config) {
                     if( order.phoneOrdersOnly ) {
                         $('#checkoutcontainer').append(('<div id=\'callnow\'><a id=\'callnowbutton\' class=\'callnow-button unselectable\'>{0}</a></div>').format(getLabel('button.call-now')));
                         $('#callnowbutton').click(function(){
-                            callnow();
+                            checkout();
                         });
                     }else{
                         $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
@@ -431,8 +427,10 @@ function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additio
 
 // Edit delivery options
 function deliveryEdit() {
+    $.fancybox.showLoading();
     $.post( ctx+'/order/deliveryEdit.ajax', { orderId: currentOrder.orderId },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 buildDeliveryEdit(data.days, data.deliveryTimes, data.collectionTimes, data.open, data.collectionOnly);
             } else {
@@ -553,8 +551,10 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
             dayIndex: $('#dayselect').val(),
             time: $('#timeselect').val()
         };
+        $.fancybox.showLoading(getLabel('ajax.updating-order'));
         $.post( ctx+'/order/updateOrderDelivery.ajax', { body: JSON.stringify(update) },
             function( data ) {
+                $.fancybox.hideLoading();
                 if( data.success ) {
                     buildOrder(data.order);
                 } else {
@@ -697,10 +697,12 @@ function editAdditionalInstructions() {
 
     $('#updatebutton').click(function(){
         var additionalInstructions = $('#instructions').val();
+        $.fancybox.showLoading();
         $.post( ctx+'/order/updateAdditionalInstructions.ajax', {
             orderId: currentOrder.orderId,
             additionalInstructions: $('#instructions').val()
         },function( data ) {
+                $.fancybox.hideLoading();
                 $.fancybox.close(true);
                 if( data.success ) {
                     buildOrder(data.order);
@@ -922,8 +924,10 @@ function doAddToOrder(restaurantId, itemId, itemType, itemSubType, additionalIte
         quantity: quantity || 1
     };
 
+    $.fancybox.showLoading(getLabel('ajax.adding-item'));
     $.post( ctx+'/order/addItem.ajax', { body: JSON.stringify(update) },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 buildOrder(data.order);
             } else {
@@ -948,8 +952,10 @@ function checkCanAddSpecialOfferToOrder(restaurantId, specialOfferId, specialOff
         specialOfferId: specialOfferId
     });
 
+    $.fancybox.showLoading(getLabel('ajax.checking-availability'));
     $.post( ctx+'/order/checkSpecialOffer.ajax', { body: JSON.stringify(update) },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 if( data.applicable ) {
                     addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsArray, cost );
@@ -1131,8 +1137,10 @@ function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, qua
         quantity: quantity || 1
     };
 
+    $.fancybox.showLoading(getLabel('ajax.adding-item'));
     $.post( ctx+'/order/addSpecialOffer.ajax', { body: JSON.stringify(update) },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 if( data.applicable ) {
                     buildOrder(data.order);
@@ -1154,8 +1162,11 @@ function updateQuantity(orderItemId, quantity ) {
         quantity: quantity
     };
 
+    var label = (quantity > 0? getLabel('ajax.adding-item'): getLabel('ajax.removing-item'));
+    $.fancybox.showLoading(label);
     $.post( ctx+'/order/updateItemQuantity.ajax', { body: JSON.stringify(update) },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 buildOrder(data.order);
             } else {
@@ -1167,8 +1178,10 @@ function updateQuantity(orderItemId, quantity ) {
 
 // Remove voucher from order
 function removeVoucher() {
+    $.fancybox.showLoading();
     $.post( ctx+'/order/removeVoucher.ajax', {},
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 buildOrder(data.order);
             } else {
@@ -1186,8 +1199,10 @@ function updateFreeItem(discountId,freeItem) {
         freeItem: freeItem
     };
 
+    $.fancybox.showLoading();
     $.post( ctx+'/order/updateFreeItem.ajax', { body: JSON.stringify(update) },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 buildOrder(data.order);
             } else {
@@ -1199,12 +1214,8 @@ function updateFreeItem(discountId,freeItem) {
 
 // Proceed to checkout
 function checkout() {
+    $.fancybox.showLoading();
     location.href = ctx + '/checkout.html';
-}
-
-// Proceed to call now page
-function callnow() {
-    location.href = ctx + '/callnow.html';
 }
 
 // Unescapes string values

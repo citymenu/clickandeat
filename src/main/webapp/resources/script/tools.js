@@ -1,3 +1,11 @@
+// Ajax error handler
+$(document).ready(function(){
+    // Hide loading spinny on ajax complete
+    $(document).ajaxError(function(){
+        $.fancybox.hideLoading();
+    });
+});
+
 /* Adds format method to string */
 String.prototype.format = function () {
   var args = arguments;

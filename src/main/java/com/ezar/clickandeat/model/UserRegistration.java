@@ -12,6 +12,8 @@ public class UserRegistration extends PersistentObject {
     private Double requestedDiscount;
     
     private GeoLocation location;
+    
+    private Order order;
 
     public UserRegistration() {
     }
@@ -46,5 +48,13 @@ public class UserRegistration extends PersistentObject {
 
     public void setLocation(GeoLocation location) {
         this.location = location;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }

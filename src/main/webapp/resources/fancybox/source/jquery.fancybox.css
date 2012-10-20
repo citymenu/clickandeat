@@ -75,11 +75,12 @@
 	max-height: 100%;
 }
 
-#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
-	background-image: url('fancybox_sprite.png');
+.fancybox-close, .fancybox-prev span, .fancybox-next span {
+    background-image: url('fancybox_sprite.png');
 }
 
 #fancybox-loading {
+    background-color:#333333;
 	position: fixed;
 	top: 50%;
 	left: 50%;
@@ -89,12 +90,24 @@
 	opacity: 0.8;
 	cursor: pointer;
 	z-index: 8060;
+    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
 }
 
 #fancybox-loading div {
-	width: 44px;
-	height: 44px;
-	background: url('fancybox_loading.gif') center center no-repeat;
+    display:inline-block;
+	background: url('../../images/ajax-loader.gif') center top no-repeat;
+	margin:10px;
+	padding: 38px 20px 0px 20px;
+}
+
+.fancybox-message {
+    font:14px myriad-pro;
+    color:#FFFFFF;
 }
 
 .fancybox-close {

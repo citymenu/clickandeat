@@ -96,8 +96,14 @@ public class CheckoutController {
         
         // If there is no delivery address, populate it now
         autoPopulateDeliveryAddress(order,session);
-        
-        return new ModelAndView("checkout",model);
+
+        // If the restaurant takes telephone orders only, send to call summary page
+        if( restaurant.getPhoneOrdersOnly()) {
+            return new ModelAndView(MessageFactory.getLocaleString() + "/callNowSummary",model);
+        }
+        else {
+            return new ModelAndView("checkout",model);
+        }
     }
 
 

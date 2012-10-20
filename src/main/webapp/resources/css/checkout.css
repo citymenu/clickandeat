@@ -59,8 +59,9 @@
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
     color:#444444;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
 }
 
 .contact-form-field input:focus, .contact-form-field textarea:focus {
@@ -136,13 +137,23 @@ a.checkout-nav-button:active, a.checkout-nav-button:hover {
     border: 1px solid #b64242;
     background-color: #fffece;
     padding: 5px 10px 5px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
-.checkout-validation-error {
-     font:500 13px/16px prenton;
-     border: 1px solid #b64242;
-     background-color: #fffece;
-     margin-bottom: 20px;
-     width: 608px;
-     padding: 6px 10px 6px 10px;
- }
+#validation-error {
+    display:none;
+    font:400 14px/16px myriad-pro;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    margin-bottom: 20px;
+    width: 620px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+.validation-error-text {
+    padding: 6px 10px 6px 10px;
+}

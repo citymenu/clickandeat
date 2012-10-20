@@ -31,6 +31,14 @@
                 <td width="760">
                     <div class="checkout-left">
                         <div class="checkout-wrapper">
+
+                            <!-- Validation wrapper -->
+                            <div id="validation-error">
+                                <div class="validation-error-text">
+                                    <message:message key="checkout.validation-error"/>
+                                </div>
+                            </div>
+
                             <!-- Customer details -->
                             <div class="checkout-item-wrapper">
                                 <h2><message:message key="checkout.your-details"/></h2>

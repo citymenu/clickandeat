@@ -5,10 +5,14 @@
 
 <head>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css"/>
+
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <script type="text/javascript" src="${resources}/script/search.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css"/>
+
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
@@ -95,7 +99,9 @@
                                     <c:if test="${phoneOrdersOnlyflag=='0'}">
                                         <c:set var="phoneOrdersOnlyflag" value="1"/>
                                         <div class="phone-orders-only-wrapper">
-                                            <div class="phone-orders-only"><message:message key="search.phone-orders-only-text"/></div>
+                                            <div class="phone-orders-only">
+                                                <p class="triangle-isosceles left"><message:message key="search.phone-orders-only-text"/></p>
+                                            </div>
                                         </div>
                                     </c:if>
                                 </c:if>

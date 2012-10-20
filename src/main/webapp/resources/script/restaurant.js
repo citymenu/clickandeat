@@ -87,8 +87,10 @@ function updateOrderPanelPos() {
 
 // Show all opening times for the restaurant
 function showAllOpeningTimes() {
+    $.fancybox.showLoading();
     $.post( ctx+'/restaurant/getOpeningTimes.ajax', { restaurantId: restaurantId },
         function( data ) {
+            $.fancybox.hideLoading();
             if( data.success ) {
                 var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.all-opening-times'));
                 var table = '<div class=\'opening-time-container\'>';

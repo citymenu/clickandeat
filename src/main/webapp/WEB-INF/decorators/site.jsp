@@ -50,7 +50,7 @@
 
 <!-- Fancybox -->
 <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" />
-<script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.pack.js?v=2.1.0"></script>
+<script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js?v=2.1.0"></script>
 
 <!-- Zendesk -->
 <script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.5/zenbox.js"></script>

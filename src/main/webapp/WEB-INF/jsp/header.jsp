@@ -58,7 +58,7 @@
                     <li class="arrow">&gt&gt</li>
 
                     <c:choose>
-                        <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp'}">
+                        <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
                             <li class="active unselectable"><message:message key="workflow.4-checkout"/></li>
                         </c:when>
                         <c:when test="${cancheckout != null && cancheckout == true}">

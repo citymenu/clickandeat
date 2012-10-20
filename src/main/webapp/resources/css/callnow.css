@@ -1,5 +1,10 @@
 @charset "utf-8";
 
+.order-detail {
+    font: 400 16px/18px myriad-pro;
+    color:#444444;
+}
+
 .call-now-form-entry {
     margin-bottom: 12px;
 }
@@ -52,14 +57,13 @@ span.valid {
     cursor:pointer;
 }
 
-
 a.call-now-nav-button, a.call-now-nav-button:active, a.call-now-nav-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font: 12px prenton;
-    font-weight: 500;
-    padding: 1px 6px 1px 6px;
+    font: 14px MaiandraOTGD-DemiBold;
+    padding: 2px 12px 3px 12px;
+    margin-left:4px;
     text-align: center;
     vertical-align: baseline;
     text-decoration: none;
@@ -71,26 +75,48 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
     background-color: #2c8023;
 }
 
-a.call-now-nav-button-large, a.call-now-nav-button-large:active, a.call-now-nav-button-large:hover {
-    padding: 4px 10px 4px 10px;
+.email-entry {
+    margin:20px 0 20px 0;
 }
 
-a.call-now-nav-button-large:active, a.call-now-nav-button-large:hover {
-    background-color: #2c8023;
+.email-entry input {
+    font: 14px/16px myriad-pro;
+    width:460px;
+    background-clip: padding-box;
+    border: 1px solid #B6B6B6;
+    padding: 3px 5px 3px 5px;
+    color:#444444;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+    border-radius: 3px;
 }
 
+.email-entry input:focus {
+    border: 1px solid #AA0000;
+}
 
-.call-now-validation-error {
-     font:500 13px/16px prenton;
-     border: 1px solid #b64242;
-     background-color: #fffece;
-     margin-bottom: 20px;
-     width: 608px;
-     padding: 6px 10px 6px 10px;
- }
+.invalid-email {
+    display:inline-block;
+    font:400 14px/14px myriad-pro;
+    color:#444444;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    margin-top:5px;
+    padding: 5px 10px 5px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
 
 .call-now-image {
     width: 290px;
     height: 285px;
     background-image: url(../images/order-confirmation.jpg);
+}
+
+.registration-detail {
+    font:400 14px/16px myriad-pro;
+    color:#444444;
 }
