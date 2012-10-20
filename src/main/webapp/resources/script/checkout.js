@@ -3,6 +3,9 @@ var isValid = false;
 var mapRendered = false;
 
 $(document).ready(function(){
+
+    $('#validation-error').hide();
+
     updateDeliveryDisplay(deliveryType);
     validateForm();
 
@@ -33,7 +36,6 @@ $(document).ready(function(){
 // Updates validation on all form fields
 function validateForm() {
     isValid = true;
-    $('#validation-error').hide();
     validators.each(function(fieldName,validator){
         if( $('#' + fieldName).is(":visible")) {
             if( !validator.validate()) {
@@ -41,10 +43,6 @@ function validateForm() {
             };
         }
     });
-    if(!isValid) {
-        $('#validation-error').show();
-        $.scrollTo(0);
-    }
 }
 
 
@@ -204,6 +202,7 @@ function payment() {
     if( isValid ) {
         $('.checkout-validation-error').remove();
         $('.invalid-voucher').remove();
+        $('#validation-error').hide();
         $.fancybox.showLoading();
         $.post( ctx + '/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
             function( data ) {
@@ -221,7 +220,11 @@ function payment() {
                 }
             }
         );
+    } else {
+        $('#validation-error').show();
+        $.scrollTo(0);
     }
+
 }
 
 // Builds a warning dialog
