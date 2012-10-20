@@ -37,18 +37,18 @@
                                     <td width="430">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
-                                                <div class="order-information">Numero de pedido: ${order.orderId}</div>
+                                                <div class="order-information">N&#250;mero de pedido: ${order.orderId}</div>
                                                 <div class="order-restaurant">
                                                     <util:escape value="${order.restaurant.name}"/> <util:escape value="${order.restaurant.address.summary}"/>
                                                     <div class="restaurant-contact">Contacto: ${order.restaurant.notificationOptions.notificationPhoneNumber}</div>
                                                 </div>
                                                 <div class="order-overview">
-                                                    <h2>¿Que ocurre a continuación?</h2>
+                                                    <h2>&#191;Que ocurre a continuaci&#243;n?</h2>
                                                     <p>Acabamos de comunicar tu pedido a <util:escape value="${order.restaurant.name}"/>.
-                                                    Pronto recibirás un correo electrónico confirmando que han recibido tu orden.</p>
-                                                    <p>Si por algún motivo el restaurante no puede llevar a cabo tu pedido te lo haremos saber de manera inmediata.</p>
+                                                    Pronto recibir&#225;s un correo electr&#243;nico confirmando que han recibido tu orden.</p>
+                                                    <p>Si por alg&#250;n motivo el restaurante no puede llevar a cabo tu pedido te lo haremos saber de manera inmediata.</p>
                                                     <p>Si tienes alguna pregunta relacionada con tu pedido, por favor contacta <util:escape value="${order.restaurant.name}"/> utilizando
-                                                     el número de teléfono que aparece arriba y no te olvides de mencionar tu numero de pedido.</p>
+                                                    el n&#250;mero de tel&#233;fono que aparece arriba y no te olvides de mencionar tu numero de pedido.</p>
                                                     <div class="delivery-time">
                                                         <c:choose>
                                                             <c:when test="${order.deliveryType == 'DELIVERY'}">
@@ -88,7 +88,7 @@
                                                 <c:otherwise>
                                                     <h2>Dirección (recoger)</h2>
                                                     <p>Has solicitado recoger tu pedido en persona de <util:escape value="${order.restaurant.name}"/>.</p>
-                                                    <p>Abajo esta la posición de <util:escape value="${order.restaurant.name}"/>.</p>
+                                                    <p>Abajo esta la posici&#243;n de <util:escape value="${order.restaurant.name}"/>.</p>
                                                     <div id="restaurant-location"></div>
                                                 </c:otherwise>
                                             </c:choose>

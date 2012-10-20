@@ -1,1 +1,1 @@
-Lo sentimos mucho pero $order.restaurant.name no puede servir tu pedido, te hemos mandado un cupón de descuento para que utilices con tu próximo pedido.
+Lo sentimos mucho pero tu pedido $order.orderId no puede ser atendido, te hemos mandado un vale de descuento para utilizar con otro pedido.

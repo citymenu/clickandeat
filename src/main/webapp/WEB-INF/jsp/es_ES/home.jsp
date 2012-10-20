@@ -18,7 +18,7 @@
     <div class="main-content">
         <div class="butler-main">
             <div class="searchbar-wrapper">
-                <div class="searchbar-location unselectable">Restaurants en tu zona</div>
+                <div class="searchbar-location unselectable">Restaurantes en tu zona</div>
                 <div class="search-location-form">
                     <div class="location-input"><input class="location" type="text" id="loc" placeholder=""/></div>
                     <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
