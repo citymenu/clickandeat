@@ -30,6 +30,11 @@ public class PageController {
 		return new ModelAndView( MessageFactory.getLocaleString() + "/home",model);
 	}
 
+    @RequestMapping(value="/termsAndConditions.html", method = RequestMethod.GET )
+    public String termsAndConditions() {
+        return MessageFactory.getLocaleString() + "/termsAndConditions";
+    }
+
 
     @RequestMapping(value="/secure/login.html", method=RequestMethod.GET)
     public String login() {

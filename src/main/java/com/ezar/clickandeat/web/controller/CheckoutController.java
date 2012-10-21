@@ -107,6 +107,7 @@ public class CheckoutController {
     }
 
 
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/updateOrder.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> updateOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
@@ -114,10 +115,14 @@ public class CheckoutController {
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(body);
+            
             // Extract person and address from request
-            Person person = buildPerson(body);
-            Address deliveryAddress = buildDeliveryAddress(body);
-            String additionalInstructions = buildAdditionalInstructions(body);
+            Person person = buildPerson(params);
+            Address deliveryAddress = buildDeliveryAddress(params);
+            String additionalInstructions = (String)params.get("additionalInstructions");
+            Boolean termsAndConditionsAccepted = (Boolean)params.get("termsAndConditionsAccepted"); 
 
             // Get the order out of the session
             Order order = requestHelper.getOrderFromSession(request);
@@ -126,6 +131,7 @@ public class CheckoutController {
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
             order.setAdditionalInstructions(additionalInstructions);
+            order.setTermsAndConditionsAccepted(termsAndConditionsAccepted);
             orderRepository.save(order);
 
             // Update can checkout status of order
@@ -155,13 +161,17 @@ public class CheckoutController {
         Map<String,Object> model = new HashMap<String, Object>();
         
         try {
+            // Extract request parameters
+            Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(body);
+
             boolean success = true;
             String reason = null;
             
             // Extract person and address from request
-            Person person = buildPerson(body);
-            Address deliveryAddress = buildDeliveryAddress(body);
-            String additionalInstructions = buildAdditionalInstructions(body); 
+            Person person = buildPerson(params);
+            Address deliveryAddress = buildDeliveryAddress(params);
+            String additionalInstructions = (String)params.get("additionalInstructions");
+            Boolean termsAndConditionsAccepted = (Boolean)params.get("termsAndConditionsAccepted");
 
             // Get the order out of the session
             Order order = requestHelper.getOrderFromSession(request);
@@ -170,6 +180,7 @@ public class CheckoutController {
             order.setCustomer(person);
             order.setDeliveryAddress(deliveryAddress);
             order.setAdditionalInstructions(additionalInstructions);
+            order.setTermsAndConditionsAccepted(termsAndConditionsAccepted);
             order.updateRestaurantIsOpen();
 
             // If the restaurant is not open, return an error
@@ -257,13 +268,12 @@ public class CheckoutController {
     
     
     /**
-     * @param json
+     * @param params
      * @return
      */
     @SuppressWarnings("unchecked")    
-    private Person buildPerson(String json) {
+    private Person buildPerson(Map<String,Object> params) {
 
-        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         Map<String,Object> personParams = (Map<String,Object>) params.get("person");
 
         // Extract person details
@@ -277,13 +287,12 @@ public class CheckoutController {
 
 
     /**
-     * @param json
+     * @param params
      * @return
      */
     @SuppressWarnings("unchecked")
-    private Address buildDeliveryAddress(String json) {
+    private Address buildDeliveryAddress(Map<String,Object> params) {
 
-        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
         Map<String,Object> deliveryAddressParams = (Map<String,Object>) params.get("deliveryAddress");
 
         String address1 = (String)deliveryAddressParams.get("address1");
@@ -292,17 +301,6 @@ public class CheckoutController {
         String postCode = (String)deliveryAddressParams.get("postCode");
 
         return new Address(address1,town,region,postCode);
-    }
-
-
-    /**
-     * @param json
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    private String buildAdditionalInstructions(String json) {
-        Map<String,Object> params = (Map<String,Object>) jsonUtils.deserialize(json);
-        return (String)params.get("additionalInstructions");
     }
 
 

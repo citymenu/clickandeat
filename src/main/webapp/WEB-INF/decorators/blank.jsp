@@ -5,6 +5,7 @@
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/dialog.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
 	<decorator:head/>

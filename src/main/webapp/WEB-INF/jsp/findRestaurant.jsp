@@ -7,12 +7,11 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css"/>
-
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
-    <script type="text/javascript" src="${resources}/script/search.js"></script>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css"/>
 
+    <script type="text/javascript" src="${resources}/script/search.js"></script>
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js"></script>

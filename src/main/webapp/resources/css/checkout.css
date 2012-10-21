@@ -15,11 +15,11 @@
 }
 
 .checkout-wrapper {
-    padding: 10px;
+    padding: 0 10px;
 }
 
 .checkout-item-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     width:630px;
 }
 
@@ -130,30 +130,37 @@ a.checkout-nav-button:active, a.checkout-nav-button:hover {
     background-color: #2c8023;
 }
 
-.invalid-voucher {
-    display:inline-block;
-    font:400 14px/14px myriad-pro;
-    color:#444444;
-    border: 1px solid #b64242;
-    background-color: #fffece;
-    padding: 5px 10px 5px 10px;
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
-}
-
 #validation-error {
-    display:none;
+    display:inline-block;
     font:400 14px/16px myriad-pro;
-    border: 1px solid #b64242;
-    background-color: #fffece;
     margin-bottom: 20px;
-    width: 620px;
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
 }
 
-.validation-error-text {
-    padding: 6px 10px 6px 10px;
+.validation-message {
+    background:url(../images/invalid.png) 0 0 no-repeat;
+    padding-left:65px;
+    min-height:65px;
+}
+
+input.checkbox {
+    vertical-align: bottom;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
+#termsAndConditions {
+    font:16px myriad-pro;
+    width:14px;
+}
+
+.terms-and-conditions {
+    font:14px/16px myriad-pro;
+    color: #444444;
+}
+
+a.terms {
+    color:#AA0000;
+    text-decoration:underline;
+    cursor:pointer;
 }

@@ -34,7 +34,6 @@ function showDirections(restaurantLat,restaurantLng,userLat,userLng, restaurantN
         // Add restaurant marker
         var restaurantMarker = new google.maps.Marker({
             position: restaurantLatlng,
-            icon: resources + '/images/markers/blue_MarkerB.png',
             map: map
         });
 

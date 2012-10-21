@@ -3,8 +3,11 @@
 
 <head>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/checkout.css"/>
+
     <script type="text/javascript" src="${resources}/script/orders.js"></script>
     <script type="text/javascript" src="${resources}/script/validation.js"></script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${validatorLocale}.js"></script>
@@ -34,8 +37,8 @@
 
                             <!-- Validation wrapper -->
                             <div id="validation-error">
-                                <div class="validation-error-text">
-                                    <message:message key="checkout.validation-error"/>
+                                <div class="validation-message">
+                                    <p class="triangle-isosceles left" id="validation-message-wrapper"></p>
                                 </div>
                             </div>
 
@@ -89,17 +92,29 @@
                             <div class="checkout-item-wrapper">
                                 <h2><message:message key="checkout.apply-voucher"/></h2>
                                 <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
-                                    <div class="contact-form-entry">
-                                        <div class="contact-form-field">
-                                            <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
-                                            <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
-                                        </div>
-                                    </div>
-                                <div id="voucher-validation"></div>
+                                <div class="contact-form-field">
+                                    <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
+                                    <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
+                                </div>
                             </div>
 
-                            <!-- Validation errors -->
-                            <div id="checkout-validation"></div>
+                            <!-- Terms and conditions -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.terms-and-conditions"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.terms-and-conditions-help"/></div>
+                                <div class="contact-form-field">
+                                    <c:choose>
+                                        <c:when test="${order.termsAndConditionsAccepted == true}">
+                                            <input type="checkbox" id="termsAndConditions" checked="checked" style="margin-right:10px;"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="checkbox" id="termsAndConditions" style="margin-right:10px;"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <span class="terms-and-conditions"><message:message key="checkout.accept-terms-and-conditions" escape="false"/></span>
+                                </div>
+
+                            </div>
 
                             <!-- Additional instructions -->
                             <div class="checkout-item-wrapper">

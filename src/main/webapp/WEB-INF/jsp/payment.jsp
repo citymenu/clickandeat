@@ -10,7 +10,6 @@
 
     <title><message:message key="page-title.payment" escape="false"/></title>
 
-
     <script type="text/javascript">
     // Prevent variables from being global
     (function () {

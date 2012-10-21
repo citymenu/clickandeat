@@ -2,6 +2,8 @@ var orderId;
 var isValid = false;
 var mapRendered = false;
 
+var defaultValidationError = getLabel('checkout.validation-error');
+
 $(document).ready(function(){
 
     $('#validation-error').hide();
@@ -29,6 +31,19 @@ $(document).ready(function(){
     if( deliveryType == 'COLLECTION' ) {
         initializeMap();
     }
+
+    // Add click event handler for terms and conditions
+    $('.terms').click(function(){
+        $.fancybox.open({
+            href: ctx + '/termsAndConditions.html',
+            type:'iframe',
+            width:600,
+            autoHeight:true,
+            modal:false,
+            openEffect:'none',
+            closeEffect:'none'
+        });
+    });
 
 });
 
@@ -164,7 +179,8 @@ function initializeMap() {
 function applyVoucher() {
     var voucherId = $('#voucherid').val();
     if( voucherId != '' ) {
-        $('.invalid-voucher').remove();
+        $('#validation-error').hide();
+        $('#validation-message').remove();
         $.fancybox.showLoading();
         $.post( ctx + '/order/applyVoucher.ajax', { orderId: orderId, voucherId: voucherId },
             function(data) {
@@ -173,8 +189,9 @@ function applyVoucher() {
                     $('#voucherid').val('');
                     buildOrder(data.order);
                 } else {
-                    var reason = data.reason;
-                    $('#voucher-validation').append(('<div class=\'invalid-voucher\'>{0}</div>').format(getLabel('checkout.' + reason)));
+                    $('#validation-message-wrapper').append(('<span id=\'validation-message\'>{0}</div>').format(getLabel('checkout.' + data.reason)));
+                    $('#validation-error').show();
+                    $.scrollTo(0);
                 }
             }
         );
@@ -198,11 +215,20 @@ function updateOrder() {
 
 // Proceed to payment
 function payment() {
+
+    $('#validation-error').hide();
+    $('#validation-message').remove();
     validateForm();
     if( isValid ) {
-        $('.checkout-validation-error').remove();
-        $('.invalid-voucher').remove();
-        $('#validation-error').hide();
+
+        // Confirm terms and conditions accepted
+        if(!$('#termsAndConditions').attr('checked')) {
+            $('#validation-message-wrapper').append(('<span id=\'validation-message\'>{0}</div>').format(getLabel('checkout.validate-terms-and-conditions')));
+            $('#validation-error').show();
+            $.scrollTo(0);
+            return;
+        }
+
         $.fancybox.showLoading();
         $.post( ctx + '/proceedToPayment.ajax', { body: JSON.stringify(buildUpdate()) },
             function( data ) {
@@ -212,15 +238,16 @@ function payment() {
                     $.fancybox.hideLoading();
                     if( data.reason != null ) {
                         var reason = data.reason;
-                        $('#checkout-validation').append(('<div class=\'checkout-validation-error\'>{0}</div>').format(getLabel('checkout.' + reason)));
+                        $('#validation-message-wrapper').append(('<span id=\'validation-message\'>{0}</div>')
+                            .format(getLabel('checkout.' + data.reason)));
+                        $('#validation-error').show();
                         $.scrollTo(0);
-                    } else {
-                        alert(data.success);
                     }
                 }
             }
         );
     } else {
+        $('#validation-message-wrapper').append(('<span id=\'validation-message\'>{0}</div>').format(defaultValidationError));
         $('#validation-error').show();
         $.scrollTo(0);
     }
@@ -264,9 +291,13 @@ function buildUpdate() {
 
     var additionalInstructions = $('#additionalInstructions').val()
 
+    var termsAndConditionsAccepted = $('#termsAndConditions').attr('checked')? true: false;
+
     return {
         person: person,
         deliveryAddress: deliveryAddress,
-        additionalInstructions: additionalInstructions
+        additionalInstructions: additionalInstructions,
+        termsAndConditionsAccepted: termsAndConditionsAccepted
     };
 }
+

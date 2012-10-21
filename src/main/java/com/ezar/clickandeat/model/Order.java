@@ -50,6 +50,7 @@ public class Order extends PersistentObject {
     private Address deliveryAddress;
     private Address billingAddress;
     private String additionalInstructions;
+    private boolean termsAndConditionsAccepted;
 
     // Order timing details
     private DateTime orderCreatedTime;
@@ -500,6 +501,14 @@ public class Order extends PersistentObject {
 
     public void setAdditionalInstructions(String additionalInstructions) {
         this.additionalInstructions = additionalInstructions;
+    }
+
+    public boolean getTermsAndConditionsAccepted() {
+        return termsAndConditionsAccepted;
+    }
+
+    public void setTermsAndConditionsAccepted(boolean termsAndConditionsAccepted) {
+        this.termsAndConditionsAccepted = termsAndConditionsAccepted;
     }
 
     public boolean getCanCheckout() {
