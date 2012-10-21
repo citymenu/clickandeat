@@ -64,9 +64,9 @@
                                                 </div>
                                                 <div id="registered">
                                                     <div class="order-overview">
-                                                        <h2>Thanks for registering with us</h2>
-                                                        <p>As soon as we receive confirmation of your order from <util:escape value="${order.restaurant.name}"/> we will send you your discount voucher
-                                                        entitling you to <b>10% off</b> your next online order with us.</p>
+                                                        <h2>Gracias por registrarte con nosotros</h2>
+                                                        <p>Una vez hayamos confirmado tu pedido con <util:escape value="${order.restaurant.name}"/> te enviaremos un correo electr&#243;nico con tu cup&#243;n de descuento
+                                                        para que lo uses con tu pr&#243;ximo pedido online</p>
                                                     </div>
                                                 </div>
                                             </div>
