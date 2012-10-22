@@ -77,6 +77,7 @@ public class Restaurant extends PersistentObject {
         this.deliveryOptions = new DeliveryOptions();
         this.mainContact = new Person();
         this.notificationOptions = new NotificationOptions();
+        this.notificationOptions.setReceiveNotificationCall(true);
         this.menu = new Menu();
         this.cuisines = new ArrayList<String>();
         this.discounts = new ArrayList<Discount>();
