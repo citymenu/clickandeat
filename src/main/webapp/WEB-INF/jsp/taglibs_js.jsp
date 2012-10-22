@@ -26,8 +26,6 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="resources" value="${ctx}/resources"/>
-
 <script type="text/javascript">
 var ctx = "${ctx}";
 var locale = "${locale}";
@@ -36,4 +34,3 @@ var country="<locale:country/>";
 var ccy = "<message:message key="config.currency" escape="false"/>";
 var resources = "${resources}";
 </script>
-
