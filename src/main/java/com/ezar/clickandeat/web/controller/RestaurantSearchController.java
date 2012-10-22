@@ -13,6 +13,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +40,11 @@ public class RestaurantSearchController {
     @Autowired
     private CuisineProvider cuisineProvider;
 
+    @InitBinder
+    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+        //request.setCharacterEncoding("utf-8");
+        // initialize the binder
+    }
 
     @RequestMapping(value="/*/loc/{address}", method = RequestMethod.GET)
     public ModelAndView search(HttpServletRequest request, @PathVariable("address") String address ) {

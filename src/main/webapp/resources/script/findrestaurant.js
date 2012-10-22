@@ -71,10 +71,9 @@ function search() {
             function( data ) {
                 $.fancybox.hideLoading();
                 if( data.success ) {
+                    var address = unescapeQuotes(data.address);
                     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-                    var url = ctx + '/app/' + getLabel('url.find-takeaway') + '/loc/' + location;
-                    window.location.href = url;
-                }
+                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';                }
                 else {
                     $('.location-warning').remove();
                     $('.location-warning-wrapper').append(('<div class=\'location-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
