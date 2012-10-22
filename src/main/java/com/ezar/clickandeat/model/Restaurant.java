@@ -106,9 +106,9 @@ public class Restaurant extends PersistentObject {
         if( StringUtils.hasText(cuisineSummary)) {
             components.add(cuisineSummary);
         }
-        components.add(name);
+        components.add(" - " + name);
 
-        return StringUtils.collectionToDelimitedString(components, " ") + "/restaurant/" + restaurantId;
+        return "app/" + StringUtils.collectionToDelimitedString(components, " ") + "/restaurant/" + restaurantId;
     }
     
     
