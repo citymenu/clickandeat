@@ -42,6 +42,7 @@ public class Restaurant extends PersistentObject {
 
     private String website;
 
+    @Indexed
     private List<String> cuisines;
     
     private Person mainContact;

@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
@@ -43,6 +44,7 @@ public class RestaurantSearchTest {
         
         Address address = new Address();
         address.setPostCode("E18 2LG");
+        address.setTown("London");
         restaurant.setAddress(address);
 
         restaurant.getCuisines().add("Mexican");
@@ -66,8 +68,6 @@ public class RestaurantSearchTest {
     @After
     public void tearDown() throws Exception {
         removeRestaurant(restaurantId);        
-        // Let message listener clean up
-        Thread.sleep(1000);
     }
     
     
@@ -79,26 +79,18 @@ public class RestaurantSearchTest {
     }
 
 
-    @Ignore
     @Test
-    public void testFindRestaurantsServingLocation() throws Exception {
-        
-        // Check for restaurants serving Mexican food in E18 ordered by name
-        try {
-            GeoLocation location = locationService.getLocation("E18");
-            Search search = new Search(location, "Italian","name","asc");
-            List<Restaurant> restaurants = repository.search(search);
-            Assert.assertEquals("Should return one restaurant",1,restaurants.size());
-            Restaurant restaurant = restaurants.get(0);
-            restaurant.setListOnSite(true);
-            repository.saveRestaurant(restaurant);
-            Assert.assertEquals("Restaurant should be closed", RestaurantOpenStatus.CLOSED, restaurant.isOpen(new DateTime()));
-            LOGGER.info("Distance from restaurant to location is: " + restaurant.getDistanceToSearchLocation());
-        }
-        catch( Exception ex ) {
-            LOGGER.error("",ex);
-        }
+    public void testGetCuisineCountByLocation() throws Exception {
+        Map<String,Integer> results = repository.getCuisineCountByLocation("London");
+        Assert.assertTrue(results.size() > 0);
+    }
 
+
+    @Test
+    @Ignore
+    public void testGetLocationCountByCuisine() throws Exception {
+        Map<String,Integer> results = repository.getLocationCountByCuisine("Mexican");
+        Assert.assertTrue(results.size() > 0);
     }
     
     

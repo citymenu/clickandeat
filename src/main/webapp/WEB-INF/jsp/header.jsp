@@ -46,10 +46,6 @@
 
                     <li class="arrow">&gt&gt</li>
 
-/app/restaurant/
-
-/**/restaurant/{restaurantId}
-
                     <c:choose>
                         <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
                             <li class="active unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>

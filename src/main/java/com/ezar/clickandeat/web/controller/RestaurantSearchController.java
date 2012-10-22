@@ -1,14 +1,17 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
+import com.ezar.clickandeat.model.ValueObject;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,7 +50,7 @@ public class RestaurantSearchController {
             GeoLocation geoLocation = geoLocationService.getLocation(address);
             if( geoLocation == null ) {
                 LOGGER.warn("Could not resolve location for address: " + address);
-                return new ModelAndView("home",null);
+                return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
             }
 
             Search search = new Search();
@@ -59,7 +62,7 @@ public class RestaurantSearchController {
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
-            return new ModelAndView("home",null);
+            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
         }
     }
 
@@ -69,12 +72,24 @@ public class RestaurantSearchController {
 
         Search search = (Search)request.getSession(true).getAttribute("search");
         if( search == null ) {
-            return new ModelAndView("home",null);
+            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
         }
         return buildSearchResults(search);
     }
 
 
+    @RequestMapping(value="/**/browse/loc/${location}", method = RequestMethod.GET)
+    public ModelAndView getCuisineCountByLocation(HttpServletRequest request, @PathVariable("location") String location ) {
+        
+        Map<String,Object> model = new HashMap<String, Object>();
+        Map<String,Integer> cuisineCount = restaurantRepository.getCuisineCountByLocation(location);
+        model.put("location",location);
+        model.put("cuisineCount",cuisineCount);
+        model.put("type","browse");
+        return new ModelAndView("findRestaurant",model);
+    }
+    
+    
     /**
      * @param search
      * @return
@@ -92,6 +107,7 @@ public class RestaurantSearchController {
         // Put the system locale on the response
         model.put("resultCount", buildCuisineResultCount(results));
         model.put("cuisines",cuisineProvider.getCuisineList());
+        model.put("type","search");
         return new ModelAndView("findRestaurant",model);
 
     }

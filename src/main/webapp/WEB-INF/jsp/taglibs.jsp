@@ -12,11 +12,13 @@
 <%@ taglib uri="/WEB-INF/tld/selectbox.tld" prefix="select" %>
 <%@ taglib uri="/WEB-INF/tld/message.tld" prefix="message" %>
 <%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
+<%@ taglib uri="/WEB-INF/tld/cuisine.tld" prefix="cuisine" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
 <c:set var="user" value="${pageContext.request.remoteUser}"/>
 <locale:locale/>
+<cuisine:cuisines/>
 
 <c:choose>
     <c:when test="${secure != null && secure}">

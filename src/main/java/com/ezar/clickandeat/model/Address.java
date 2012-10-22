@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -12,6 +13,7 @@ public class Address extends PersistentObject {
 
     private String address1;
 
+    @Indexed
     private String town;
     
     private String region;

@@ -14,12 +14,16 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -214,6 +218,39 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
 
+    /**
+     * @param location
+     * @return
+     */
+
+    public Map<String,Integer> getCuisineCountByLocation(String location) {
+        Map<String,Integer> ret = new HashMap<String,Integer>();
+        Query query = new Query(where("address.town").is(location));
+        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/locationmap.js", "classpath:/mapreduce/reduce.js", ValueObject.class);
+        for (ValueObject valueObject : results) {
+            ret.put(valueObject.getId(),valueObject.getValue());
+        }
+        return ret;
+    }
+
+
+    /**
+     * @param cuisine
+     * @return
+     */
+
+    public Map<String,Integer> getLocationCountByCuisine(String cuisine) {
+        Map<String,Integer> ret = new HashMap<String,Integer>();
+        Query query = new Query(where("cuisine").elemMatch(new Criteria().is(cuisine)));
+        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/cuisinemap.js", "classpath:/mapreduce/reduce.js", ValueObject.class);
+        for (ValueObject valueObject : results) {
+            ret.put(valueObject.getId(),valueObject.getValue());
+        }
+        return ret;
+    }
+
+
+    
 
     /**
      * @param restaurant
