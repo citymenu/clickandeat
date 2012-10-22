@@ -1,6 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <script type="text/javascript">
     var orderid = '${orderid}';

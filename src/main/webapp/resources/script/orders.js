@@ -147,7 +147,7 @@ function doBuildOrder(order,config) {
 
             // Add link to continue building existing order
             $('#buildorder').click(function(){
-                location.href = ctx + '/restaurant.html?restaurantId=' + order.restaurantId;
+                location.href = ctx + '/app/restaurant/' + order.restaurantId;
             });
         } else if ( orderIsForAnotherRestaurant ) {
             var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
@@ -164,7 +164,7 @@ function doBuildOrder(order,config) {
 
             // Add link to continue building existing order
             $('#buildorder').click(function(){
-                location.href = ctx + '/restaurant.html?restaurantId=' + order.restaurantId;
+                location.href = ctx + '/app/restaurant/' + order.restaurantId;
             });
 
             $('#clearorder').click(function(){

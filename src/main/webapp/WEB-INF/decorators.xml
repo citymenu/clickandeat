@@ -1,4 +1,7 @@
 <decorators defaultdir="/WEB-INF/decorators">
+    <excludes>
+        <pattern>*.js</pattern>
+    </excludes>
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>
     </decorator>
@@ -8,4 +11,5 @@
     <decorator name="default" page="site.jsp">
 		<pattern>/*</pattern>
   	</decorator>
+
 </decorators>

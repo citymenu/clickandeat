@@ -64,14 +64,9 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             name:'address1',
             allowBlank: false
         },{
-            fieldLabel:'Address 2',
-            name:'address2'
-        },{
-            fieldLabel:'Address 3',
-            name:'address3'
-        },{
             fieldLabel:'Town',
-            name:'town'
+            name:'town',
+            allowBlank: false
         },{
             fieldLabel:'Region',
             name:'region'

@@ -49,9 +49,9 @@ function search() {
             function( data ) {
                 $.fancybox.hideLoading();
                 if( data.success ) {
-                    var address = unescapeQuotes(data.address);
                     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-                    window.location.href = ctx + '/findRestaurant.html';
+                    var url = ctx + '/app/' + getLabel('url.find-takeaway') + '/loc/' + location;
+                    window.location.href = url;
                 }
                 else {
                     $('#search-warning').show();

@@ -9,10 +9,10 @@
 .footer-wrapper {
     clear: both;
     margin: 0 auto;
-    padding: 40px 0 80px;
+    padding: 40px 20px 80px 20px;
     position: relative;
     text-align: left;
-    width: 1020px;
+    width: 980px;
 }
 
 .footer-contact {

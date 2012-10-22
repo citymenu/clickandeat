@@ -30,27 +30,10 @@ public class PageController {
 		return new ModelAndView( MessageFactory.getLocaleString() + "/home",model);
 	}
 
+
     @RequestMapping(value="/termsAndConditions.html", method = RequestMethod.GET )
     public String termsAndConditions() {
         return MessageFactory.getLocaleString() + "/termsAndConditions";
-    }
-
-
-    @RequestMapping(value="/secure/login.html", method=RequestMethod.GET)
-    public String login() {
-        return "login";
-    }
-
-    @RequestMapping(value="/test.html", method=RequestMethod.GET)
-    public String test() {
-        return "emailTest";
-    }
-
-    @RequestMapping(value="/secure/register.html", method = RequestMethod.GET)
-    public ModelAndView register() {
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("user",new User());
-        return new ModelAndView("register",map);
     }
 
 

@@ -1,9 +1,11 @@
-<!--English -->
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
+<!doctype html>
+
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/termsandconditions.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/termsandconditions.css" charset="utf-8"/>
 </head>
 
 <body>

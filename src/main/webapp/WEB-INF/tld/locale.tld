@@ -12,4 +12,9 @@
         <tag-class>com.ezar.clickandeat.web.tags.LanguageTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>locale</name>
+        <tag-class>com.ezar.clickandeat.web.tags.LocaleTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 </taglib>

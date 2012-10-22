@@ -1,21 +1,28 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
+<%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
+
+<!doctype html>
+
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta charset="utf-8"/>
     <meta name="robots" content="all" />
+    <meta http-equiv="expires" content="0">
+    <%@ include file="/WEB-INF/jsp/taglibs_js.jsp" %>
+
 	<link rel="shortcut icon" href="${resources}/images/favico.png">
-	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/overrides.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/overrides.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css" charset="utf-8"/>
     <!-- JQuery -->
-    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js" charset="utf-8"></script>
 	<!-- ExtJS -->
-	<script type="text/javascript" src="${resources}/ext/ext-all-debug.js"></script>
-	<script type="text/javascript" src="${resources}/ext/bootstrap.js"></script>
-	<script type="text/javascript" src="${resources}/script/admin/extoverrides.js"></script>
-	<script type="text/javascript" src="${resources}/script/admin/util.js"></script>
+	<script type="text/javascript" src="${resources}/ext/ext-all-debug.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${resources}/ext/bootstrap.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${resources}/script/admin/extoverrides.js" charset="utf-8"></script>
+	<script type="text/javascript" src="${resources}/script/admin/util.js" charset="utf-8"></script>
     <decorator:head/>
     <title><decorator:title/></title>
 </head>

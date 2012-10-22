@@ -23,10 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -60,10 +57,10 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantValidator restaurantValidator;
-    
-            
-    @RequestMapping(value="/restaurant.html", method = RequestMethod.GET )
-    public ModelAndView get(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
+
+
+    @RequestMapping(value="/**/restaurant/{restaurantId}", method = RequestMethod.GET)
+    public ModelAndView get(@PathVariable("restaurantId") String restaurantId, HttpServletRequest request) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Retrieving restaurant with id [" + restaurantId + "]");

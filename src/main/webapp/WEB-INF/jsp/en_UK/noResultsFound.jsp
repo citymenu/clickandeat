@@ -1,4 +1,5 @@
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <div class="no-results-wrapper" id="notregistered">

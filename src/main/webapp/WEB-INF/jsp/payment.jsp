@@ -1,12 +1,15 @@
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
-<head>
-    <script type="text/javascript" src="${resources}/script/orders.js"></script>
-    <script type="text/javascript" src="${resources}/script/payment.js"></script>
+<!doctype html>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
+<head>
+    <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/payment.js" charset="utf-8"></script>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
 
     <title><message:message key="page-title.payment" escape="false"/></title>
 
@@ -60,8 +63,7 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
-
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

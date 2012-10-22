@@ -40,7 +40,7 @@ public class MessageController {
 
     @SuppressWarnings("unchecked")
     @ResponseBody
-    @RequestMapping(value="/script/messages.html", method = RequestMethod.GET )
+    @RequestMapping(value="/script/messages.js", method = RequestMethod.GET )
     public ResponseEntity<byte[]> getMessages(HttpServletRequest request) throws Exception {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("text","javascript"));

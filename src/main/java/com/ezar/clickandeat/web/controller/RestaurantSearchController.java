@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.maps.GeoLocationService;
+import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -9,7 +10,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,9 @@ public class RestaurantSearchController {
     private static final Logger LOGGER = Logger.getLogger(RestaurantSearchController.class);
 
     @Autowired
+    private GeoLocationService geoLocationService;
+
+    @Autowired
     private RestaurantRepository restaurantRepository;
 
     @Autowired
@@ -32,46 +36,66 @@ public class RestaurantSearchController {
     private CuisineProvider cuisineProvider;
 
 
-    @RequestMapping(value="/findRestaurant.html", method = RequestMethod.GET)
-    public ModelAndView search(HttpServletRequest request ) {
+    @RequestMapping(value="/*/loc/{address}", method = RequestMethod.GET)
+    public ModelAndView search(HttpServletRequest request, @PathVariable("address") String address ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants");
         }
 
-        Map<String,Object> model = new HashMap<String,Object>();
+        try {
+            GeoLocation geoLocation = geoLocationService.getLocation(address);
+            if( geoLocation == null ) {
+                LOGGER.warn("Could not resolve location for address: " + address);
+                return new ModelAndView("home",null);
+            }
 
-        Search search = (Search)request.getSession(true).getAttribute("search");
-        if( search == null ) {
-            return new ModelAndView("redirect:/home.html");
+            Search search = new Search();
+            search.setLocation(geoLocation);
+            request.getSession(true).setAttribute("search", search);
+    
+            return buildSearchResults(search);
+
         }
-        else {
-            SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
-            results.addAll(restaurantRepository.search(search));
-            if( StringUtils.hasText(search.getCuisine())) {
-                SortedSet<Restaurant> filteredResults = new TreeSet<Restaurant>(new RestaurantSearchComparator());
-                for( Restaurant restaurant: results ) {
-                    if( restaurant.getCuisines().contains(search.getCuisine())) {
-                        filteredResults.add(restaurant);
-                    }
-                    model.put("results",filteredResults);
-                    model.put("count",filteredResults.size());
-                }
-            }
-            else {
-                model.put("results",results);
-                model.put("count",results.size());
-            }
-
-            // Put the system locale on the response
-            model.put("validatorLocale", MessageFactory.getLocaleString().split("_")[0]);
-            model.put("systemLocale", MessageFactory.getLocaleString());
-            model.put("resultCount", buildCuisineResultCount(results));
-            model.put("cuisines",cuisineProvider.getCuisineList());
-            return new ModelAndView("findRestaurant",model);
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            return new ModelAndView("home",null);
         }
     }
 
+
+    @RequestMapping(value="/*/session/loc", method = RequestMethod.GET)
+    public ModelAndView savedSearch(HttpServletRequest request ) {
+
+        Search search = (Search)request.getSession(true).getAttribute("search");
+        if( search == null ) {
+            return new ModelAndView("home",null);
+        }
+        return buildSearchResults(search);
+    }
+
+
+    /**
+     * @param search
+     * @return
+     */
+    
+    private ModelAndView buildSearchResults(Search search) {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
+        results.addAll(restaurantRepository.search(search));
+        model.put("results",results);
+        model.put("count",results.size());
+
+        // Put the system locale on the response
+        model.put("resultCount", buildCuisineResultCount(results));
+        model.put("cuisines",cuisineProvider.getCuisineList());
+        return new ModelAndView("findRestaurant",model);
+
+    }
+    
 
     /**
      * @param results

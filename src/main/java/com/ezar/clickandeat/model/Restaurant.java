@@ -88,6 +88,22 @@ public class Restaurant extends PersistentObject {
 
 
     /**
+     * Builds a url link to open this restaurant
+     */
+    
+    public String getUrl() {
+        StringBuilder sb = new StringBuilder("app/");
+        sb.append(MessageFactory.getMessage("url.find-takeaway",false)).append("/");
+        sb.append(address.getTown()).append(" - ");
+        sb.append(address.getPostCode()).append("/");
+        sb.append(getCuisineSummary()).append("/");
+        sb.append(name).append("/");
+        sb.append("restaurant/").append(restaurantId);
+        return sb.toString();
+    }
+    
+    
+    /**
      * Returns true if this restaurant is currently open based on the given date and time
      * @param now
      * @return

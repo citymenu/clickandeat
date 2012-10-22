@@ -1,8 +1,11 @@
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
+<!doctype html>
+
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/workflow.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/workflow.css" charset="utf-8"/>
     <title>LlamaryComer | <message:message key="workflow.order-confirmation"/></title>
 </head>
 
@@ -30,6 +33,6 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>

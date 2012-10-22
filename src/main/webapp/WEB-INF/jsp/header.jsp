@@ -1,4 +1,5 @@
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <c:set var="path" value="${fn:substringAfter(pageContext.request.servletPath,'/WEB-INF/jsp/')}"/>
@@ -36,7 +37,7 @@
                             <li class="active unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
                         </c:when>
                         <c:when test="${search != null}">
-                            <li class="unselectable"><a href="${ctx}/findRestaurant.html"><message:message key="workflow.2-select-a-restaurant"/></a></li>
+                            <li class="unselectable"><a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
@@ -45,18 +46,22 @@
 
                     <li class="arrow">&gt&gt</li>
 
+/app/restaurant/
+
+/**/restaurant/{restaurantId}
+
                     <c:choose>
                         <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
-                            <li class="active unselectable"><a href="${ctx}/restaurant.html?restaurantId=${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                            <li class="active unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
                         <c:when test="${path == 'restaurant.jsp'}">
                             <li class="active unselectable"><message:message key="workflow.3-build-your-order"/></li>
                         </c:when>
                         <c:when test="${orderrestaurantid != null && search != null}">
-                            <li class="unselectable"><a href="${ctx}/restaurant.html?restaurantId=${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                            <li class="unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
                         <c:when test="${restaurantid != null && search != null}">
-                            <li class="unselectable"><a href="${ctx}/restaurant.html?restaurantId=${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                            <li class="unselectable"><a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><message:message key="workflow.3-build-your-order"/></li>

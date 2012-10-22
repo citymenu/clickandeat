@@ -427,8 +427,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update address details for the restaurant
         restaurantObj.address = new Object({
             address1: mainDetailValues['address1'],
-            address2: mainDetailValues['address2'],
-            address3: mainDetailValues['address3'],
             town: mainDetailValues['town'],
             region: mainDetailValues['region'],
             postCode: mainDetailValues['postCode']

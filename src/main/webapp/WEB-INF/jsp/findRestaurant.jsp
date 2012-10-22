@@ -1,22 +1,22 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <%@ page language="java" %>
+<%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
+<!doctype html>
 
 <head>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css" charset="utf-8"/>
 
-    <script type="text/javascript" src="${resources}/script/search.js"></script>
-    <script type="text/javascript" src="${resources}/script/orders.js"></script>
-    <script type="text/javascript" src="${resources}/script/findrestaurant.js"></script>
-    <script type="text/javascript" src="${resources}/script/googlemap.js"></script>
+    <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/findrestaurant.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
-    <script type="text/javascript" src="${resources}/script/validation/validators_${validatorLocale}.js"></script>
+    <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
@@ -150,20 +150,20 @@
                                                                         <c:when test="${restaurant.open == true}">
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.call-now"/></a>
+                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-open"><message:message key="search.call-now"/></a>
                                                                                 </c:when>
                                                                                 <c:otherwise>
-                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-open"><message:message key="search.order-now"/></a>
+                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-open"><message:message key="search.order-now"/></a>
                                                                                 </c:otherwise>
                                                                             </c:choose>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.view-menu"/></a>
+                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-closed"><message:message key="search.view-menu"/></a>
                                                                                 </c:when>
                                                                                 <c:otherwise>
-                                                                                    <a href="${ctx}/restaurant.html?restaurantId=${restaurant.restaurantId}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
+                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
                                                                                 </c:otherwise>
                                                                             </c:choose>
                                                                         </c:otherwise>
@@ -212,7 +212,7 @@
     </div>
 </div>
 
-<%@ include file="/WEB-INF/jsp/footer.jsp" %>
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

@@ -16,7 +16,6 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <c:set var="locale" value="${pageContext.response.locale}"/>
 <c:set var="user" value="${pageContext.request.remoteUser}"/>
-<locale:locale/>
 
 <c:choose>
     <c:when test="${secure != null && secure}">
@@ -26,4 +25,15 @@
         <c:set var="resources" value="http://clickandeat.s3-external-3.amazonaws.com/resources"/>
     </c:otherwise>
 </c:choose>
+
+<c:set var="resources" value="${ctx}/resources"/>
+
+<script type="text/javascript">
+var ctx = "${ctx}";
+var locale = "${locale}";
+var language="<locale:language/>";
+var country="<locale:country/>";
+var ccy = "<message:message key="config.currency" escape="false"/>";
+var resources = "${resources}";
+</script>
 

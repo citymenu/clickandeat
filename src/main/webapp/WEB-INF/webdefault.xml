@@ -1,8 +1,5 @@
 <?xml version="1.0"  encoding="UTF-8" ?>
 
-  <!-- encoding="ISO-8859-1" -->
-
-
   <!-- ===================================================================== -->
   <!-- This file contains the default descriptor for web applications.       -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -281,7 +278,11 @@
       <param-name>xpoweredBy</param-name>
       <param-value>false</param-value>
     </init-param>
-    <!--  
+    <init-param>
+      <param-name>javaEncoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+    <!--
     <init-param>
         <param-name>classpath</param-name>
         <param-value>?</param-value>
@@ -359,159 +360,159 @@
   <locale-encoding-mapping-list>
     <locale-encoding-mapping>
       <locale>ar</locale>
-      <encoding>ISO-8859-6</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>be</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>bg</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>ca</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>cs</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>da</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>de</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>el</locale>
-      <encoding>ISO-8859-7</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>en</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>es</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>et</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>fi</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>fr</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>hr</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>hu</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>is</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>it</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>iw</locale>
-      <encoding>ISO-8859-8</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>ja</locale>
-      <encoding>Shift_JIS</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>ko</locale>
-      <encoding>EUC-KR</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>lt</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>lv</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>mk</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>nl</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>no</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>pl</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>pt</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>ro</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>ru</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sh</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sk</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sl</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sq</locale>
-      <encoding>ISO-8859-2</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sr</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>sv</locale>
-      <encoding>ISO-8859-1</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>tr</locale>
-      <encoding>ISO-8859-9</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>uk</locale>
-      <encoding>ISO-8859-5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>zh</locale>
-      <encoding>GB2312</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
     <locale-encoding-mapping>
       <locale>zh_TW</locale>
-      <encoding>Big5</encoding>
+      <encoding>utf-8</encoding>
     </locale-encoding-mapping>
   </locale-encoding-mapping-list>
 
