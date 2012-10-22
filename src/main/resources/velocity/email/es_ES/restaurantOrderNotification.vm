@@ -89,7 +89,7 @@
                                 </div>
 
                                 #if( $order.deliveryCost > 0 )
-                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#8364;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
                                 #end
 
                             </div>
@@ -100,7 +100,7 @@
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Descuentos aplicados al pedido:</div>
                                 #foreach( $discount in $order.orderDiscounts )
                                     #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.title): -&#8364;$numberTool.format("#0.00", $discount.discountAmount)</div>
                                     #end
                                 #end
                             </div>
@@ -108,7 +108,7 @@
                         #end
 
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#163;$numberTool.format("#0.00", $order.restaurantCost)</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#8364;$numberTool.format("#0.00", $order.restaurantCost)</b></div>
                         </div>
 
                         <div style="margin-bottom:15px;">
@@ -249,21 +249,21 @@
 
 #foreach( $discount in $order.orderDiscounts )
     #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-        <div>$stringTool.escape($discount.title): -&#163;$numberTool.format("#0.00", $discount.discountAmount)</div>
+        <div>$stringTool.escape($discount.title): -&#8364;$numberTool.format("#0.00", $discount.discountAmount)</div>
     #end
 #end
 
-<h3>Coste del plato: &#163;$numberTool.format("#0.00", $order.orderItemCost)</h3>
+<h3>Coste del plato: &#8364;$numberTool.format("#0.00", $order.orderItemCost)</h3>
 
 #if( $order.totalDiscount > 0 )
-    <h3>Total descuentos: &#163;$numberTool.format("#0.00", $order.totalDiscount)</h3>
+    <h3>Total descuentos: &#8364;$numberTool.format("#0.00", $order.totalDiscount)</h3>
 #end
 
 #if( $order.deliveryCost > 0 )
-    <h3>Costes de envio: &#163;$numberTool.format("#0.00", $order.deliveryCost)</h3>
+    <h3>Costes de envio: &#8364;$numberTool.format("#0.00", $order.deliveryCost)</h3>
 #end
 
-<h3>Coste total: &#163;$numberTool.format("#0.00", $order.totalCost)</h3>
+<h3>Coste total: &#8364;$numberTool.format("#0.00", $order.totalCost)</h3>
 
 <div>
     <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptCurl">Accept</a>

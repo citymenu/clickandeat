@@ -11,38 +11,38 @@
 <h2>Aviso legal</h2>
 
 <p>En cumplimiento de la Ley 34/2002, del 11 de julio, de Servicios de
-la Sociedad de la Información y de Comercio Electrónico (LSSI), a
-través de este Aviso Legal se informa a los usuarios que el titular de
-este sitio Web es CITYMENU, S.L., con CIF B-57764904, inscrita en el
-Registro Mercantil de Menorca, hoja IM-5746, tomo 136, folio 221, y
-con domicilio social en la Calle San Fernando número 20 de 07702 Mahón
-(Islas Baleares).</p>
+   la Sociedad de la Informaci&#243;n y de Comercio Electr&#243;nico (LSSI), a
+   trav&#233;s de este Aviso Legal se informa a los usuarios que el titular de
+   este sitio Web es CITYMENU, S.L., con CIF B-57764904, inscrita en el
+   Registro Mercantil de Menorca, hoja IM-5746, tomo 136, folio 221, y
+   con domicilio social en la Calle San Fernando n&#250;mero 20 de 07702 Mah&#243;n
+   (Islas Baleares).</p>
 
-<h2>Compromiso de confidencialidad y protección de datos</h2>
+<h2>Compromiso de confidencialidad y protecci&#243;n de datos</h2>
 
-<p>A los efectos de la Ley Orgánica 15/1999, de 13 de diciembre, de
-Protección de Datos de Carácter Personal (LOPD), le informamos que los
-datos recabados en nuestros formularios serán incluidos en un fichero
-automatizado cuya única finalidad es poder servir a sus peticiones. No
-se destinarán en ningún caso a otra finalidad, ni se entregarán a
-terceras partes para otras finalidades, de acuerdo con los principios
-de protección de datos de carácter personal de la LOPD.</p>
+<p>A los efectos de la Ley Org&#225;nica 15/1999, de 13 de diciembre, de
+   Protecci&#243;n de Datos de Car&#225;cter Personal (LOPD), le informamos que los
+   datos recabados en nuestros formularios ser&#225;n incluidos en un fichero
+   automatizado cuya &#250;nica finalidad es poder servir a sus peticiones. No
+   se destinar&#225;n en ning&#250;n caso a otra finalidad, ni se entregar&#225;n a
+   terceras partes para otras finalidades, de acuerdo con los principios
+   de protecci&#243;n de datos de car&#225;cter personal de la LOPD.</p>
 
-<p>Derechos de acceso, modificación, cancelación y oposición
-Según el art. 5 de la Ley Orgánica 15/1999 de Protección de Datos de
-Carácter Personal, a la persona física titular de los datos requeridos
-en este documento se le informa de la existencia de una base de datos
-propiedad de CITYMENU, S.L., de la cual formará parte. Por medio del
-envío de nuestros formularios, vd. consiente expresamente la
-comunicación de sus datos a CITYMENU, S.L. así como a quien colabore
-con CITYMENU, S.L. en la prestación de servicios.</p>
+<p>Derechos de acceso, modificaci&#243;n, cancelaci&#243;n y oposici&#243;n
+   Seg&#250;n el art. 5 de la Ley Org&#225;nica 15/1999 de Protecci&#243;n de Datos de
+   Car&#225;cter Personal, a la persona f&#237;sica titular de los datos requeridos
+   en este documento se le informa de la existencia de una base de datos
+   propiedad de CITYMENU, S.L., de la cual formar&#225; parte. Por medio del
+   env&#237;o de nuestros formularios, vd. consiente expresamente la
+   comunicaci&#243;n de sus datos a CITYMENU, S.L. as&#237; como a quien colabore
+   con CITYMENU, S.L. en la prestaci&#243;n de servicios.</p>
 
-<p>Los derechos de acceso, rectificación, cancelación y oposición, podrán
-ser ejercitados remitiéndose a CITYMENU, S.L., responsable del
-tratamiento en base a lo establecido en la legislación vigente,
-mediante un escrito a nuestro Departamento Legal en la Calle San
-Fernando número 20 de 07702 Mahón (Islas Baleares), o bien por correo
-electrónico a lopd@citymenu.es</p>
+<p>Los derechos de acceso, rectificaci&#243;n, cancelaci&#243;n y oposici&#243;n, podr&#225;n
+   ser ejercitados remiti&#233;ndose a CITYMENU, S.L., responsable del
+   tratamiento en base a lo establecido en la legislaci&#243;n vigente,
+   mediante un escrito a nuestro Departamento Legal en la Calle San
+   Fernando n&#250;mero 20 de 07702 Mah&#243;n (Islas Baleares), o bien por correo
+   electr&#243;nico a lopd@citymenu.es</p>
 
 </body>
 </html>

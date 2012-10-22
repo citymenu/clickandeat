@@ -49,12 +49,12 @@
                                     #end
                                 </div>
                                 #if( $order.deliveryCost > 0 )
-                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#163;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#8364;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
                                 #end
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("total-price"): &#163;$numberTool.format("#0.00", $order.totalCost)</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("total-price"): &#8364;$numberTool.format("#0.00", $order.totalCost)</b></div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>
