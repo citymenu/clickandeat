@@ -30,5 +30,3 @@
     </c:otherwise>
 </c:choose>
 
-<c:set var="resources" value="${ctx}/resources"/>
-
