@@ -5,16 +5,13 @@ import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
-import com.ezar.clickandeat.model.ValueObject;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
+import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.ServletRequestDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,137 +37,83 @@ public class RestaurantSearchController {
     @Autowired
     private CuisineProvider cuisineProvider;
 
-    @InitBinder
-    public void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-        //request.setCharacterEncoding("utf-8");
-        // initialize the binder
-    }
 
-    @RequestMapping(value="/*/loc/{address}", method = RequestMethod.GET)
-    public ModelAndView search(HttpServletRequest request, @PathVariable("address") String address ) {
+    @RequestMapping(value="/**/loc/{address}/csn/{cuisine}", method = RequestMethod.GET)
+    public ModelAndView searchByLocationAndCuisine(HttpServletRequest request, @PathVariable("address") String address, @PathVariable("cuisine") String cuisine ) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Searching for restaurants");
         }
 
         try {
-            GeoLocation geoLocation = geoLocationService.getLocation(address);
-            if( geoLocation == null ) {
-                LOGGER.warn("Could not resolve location for address: " + address);
-                return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+            GeoLocation geoLocation = null;
+            if( address != null ) {
+                geoLocation = geoLocationService.getLocation(address);
+                if( geoLocation == null ) {
+                    LOGGER.warn("Could not resolve location for address: " + address);
+                    return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+                }
             }
 
+            // Build new search session object
             Search search = new Search();
             search.setLocation(geoLocation);
+            search.setCuisine(cuisine);
             request.getSession(true).setAttribute("search", search);
-    
-            return buildSearchResults(search);
-
+            return search(search);
+            
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
             return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
         }
+
     }
 
 
-    @RequestMapping(value="/*/session/loc", method = RequestMethod.GET)
-    public ModelAndView savedSearch(HttpServletRequest request ) {
+    @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
+    public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
+        return searchByLocationAndCuisine(request,address,null);
+    }
 
+
+    @RequestMapping(value="/**/csn/{cuisine}", method = RequestMethod.GET)
+    public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine ) {
+        return searchByLocationAndCuisine(request,null,cuisine);
+    }
+
+
+    @RequestMapping(value="/**/session/loc", method = RequestMethod.GET)
+    public ModelAndView savedSearch(HttpServletRequest request ) {
         Search search = (Search)request.getSession(true).getAttribute("search");
         if( search == null ) {
             return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
         }
-        return buildSearchResults(search);
+        return search(search);
     }
 
 
-    @RequestMapping(value="/**/browse/loc/${location}", method = RequestMethod.GET)
-    public ModelAndView getCuisineCountByLocation(HttpServletRequest request, @PathVariable("location") String location ) {
-        
-        Map<String,Object> model = new HashMap<String, Object>();
-        Map<String,Integer> cuisineCount = restaurantRepository.getCuisineCountByLocation(location);
-        model.put("location",location);
-        model.put("cuisineCount",cuisineCount);
-        model.put("type","browse");
-        return new ModelAndView("findRestaurant",model);
-    }
-    
-    
     /**
      * @param search
      * @return
      */
-    
-    private ModelAndView buildSearchResults(Search search) {
 
-        Map<String,Object> model = new HashMap<String,Object>();
-        
+    private ModelAndView search(Search search) {
+
+        Pair<List<Restaurant>,Map<String,Integer>> pair = restaurantRepository.search(search);
         SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
-        results.addAll(restaurantRepository.search(search));
+        results.addAll(pair.first);
+
+        Map<String,Object> model = new HashMap<String, Object>();
         model.put("results",results);
         model.put("count",results.size());
+        model.put("cuisineCount",pair.second);
 
         // Put the system locale on the response
-        model.put("resultCount", buildCuisineResultCount(results));
-        model.put("cuisines",cuisineProvider.getCuisineList());
-        model.put("type","search");
         return new ModelAndView("findRestaurant",model);
-
     }
     
 
-    /**
-     * @param results
-     * @return
-     */
-    
-    private SortedSet<CuisineCount> buildCuisineResultCount(Set<Restaurant> results) {
-        Map<String,Integer> resultMap = new HashMap<String, Integer>();
-        for( Restaurant restaurant: results ) {
-            for( String cuisine: restaurant.getCuisines()) {
-                Integer resultCount = resultMap.get(cuisine);
-                if( resultCount == null ) {
-                    resultCount = 0;
-                }
-                resultMap.put(cuisine, resultCount + 1 );
-            }
-        }
-        SortedSet<CuisineCount> ret = new TreeSet<CuisineCount>();
-        for( Map.Entry<String,Integer> entry: resultMap.entrySet()) {
-            ret.add(new CuisineCount(entry.getKey(), entry.getValue()));
-        }
-        return ret;
-    }
-
-    /**
-     * Ordering of cuisine counts
-     */
-    
-    public static final class CuisineCount implements Comparable<CuisineCount> {
-        
-        final String cuisine;
-        final Integer count;
-
-        public CuisineCount(String cuisine, Integer count) {
-            this.cuisine = cuisine;
-            this.count = count;
-        }
-
-        @Override
-        public int compareTo(CuisineCount o) {
-            return cuisine.compareTo(o.cuisine);
-        }
-
-        public String getCuisine() {
-            return cuisine;
-        }
-
-        public int getCount() {
-            return count;
-        }
-    }
-    
     /**
      * Custom ordering for restaurant search results 
      */

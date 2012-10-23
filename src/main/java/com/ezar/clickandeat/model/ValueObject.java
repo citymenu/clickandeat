@@ -1,10 +1,12 @@
 package com.ezar.clickandeat.model;
 
+import java.util.Map;
+
 public class ValueObject {
     
     private String id;
     
-    private int value;
+    private Map<String,Object> value;
 
     public ValueObject() {
     }
@@ -17,11 +19,11 @@ public class ValueObject {
         this.id = id;
     }
 
-    public int getValue() {
+    public Map<String, Object> getValue() {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(Map<String, Object> value) {
         this.value = value;
     }
 }

@@ -94,21 +94,14 @@ public class Restaurant extends PersistentObject {
     
     public String getUrl() {
 
-        List<String> components = new ArrayList<String>();
-        components.add(MessageFactory.getMessage("url.find-takeaway",false));
-        if( StringUtils.hasText(address.getTown())) {
-            components.add(address.getTown());
-        }
-        if( StringUtils.hasText(address.getPostCode())) {
-            components.add(address.getPostCode());
-        }
-        String cuisineSummary = getCuisineSummary();
-        if( StringUtils.hasText(cuisineSummary)) {
-            components.add(cuisineSummary);
-        }
-        components.add(" - " + name);
-
-        return "app/" + StringUtils.collectionToDelimitedString(components, " ") + "/restaurant/" + restaurantId;
+        StringBuilder sb = new StringBuilder("app/");
+        sb.append(MessageFactory.getMessage("url.find-takeaway",false));
+        sb.append("-").append(address.getTown());
+        sb.append("-").append(address.getPostCode());
+        sb.append("-").append(StringUtils.collectionToDelimitedString(cuisines,"-"));
+        sb.append("-").append(name.replace(" ","-"));
+        sb.append("/restaurant/").append(restaurantId);
+        return sb.toString();
     }
     
     

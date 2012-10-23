@@ -2,6 +2,7 @@ package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.util.Pair;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -81,17 +82,15 @@ public class RestaurantSearchTest {
 
     @Test
     public void testGetCuisineCountByLocation() throws Exception {
-        Map<String,Integer> results = repository.getCuisineCountByLocation("London");
-        Assert.assertTrue(results.size() > 0);
+        Search search = new Search();
+        //search.setLocation(locationService.getLocation("E18 2LG"));
+        //search.setCuisine("Mexican");
+        Pair<List<Restaurant>,Map<String,Integer>> pair = repository.search(search);
+        List<Restaurant> restaurants = pair.first;
+        Map<String,Integer> cuisineCount = pair.second;
+        Assert.assertTrue(restaurants.size() > 0);
     }
 
 
-    @Test
-    @Ignore
-    public void testGetLocationCountByCuisine() throws Exception {
-        Map<String,Integer> results = repository.getLocationCountByCuisine("Mexican");
-        Assert.assertTrue(results.size() > 0);
-    }
-    
     
 }

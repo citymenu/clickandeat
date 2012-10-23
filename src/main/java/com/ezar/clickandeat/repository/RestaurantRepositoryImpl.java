@@ -3,6 +3,7 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.cache.ClusteredCache;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -14,9 +15,8 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
@@ -44,14 +44,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private SequenceGenerator sequenceGenerator;
 
     @Autowired
-    private GeoLocationRepository addressLocationRepository;
-
-    @Autowired
     private ClusteredCache clusteredCache;
 
     private double maxDistance;
 
-    private String timeZone;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -137,142 +133,54 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
 
     @Override
-    public List<Restaurant> search(Search search) {
+    public Pair<List<Restaurant>,Map<String,Integer>> search(Search search) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving matching search: " + search);
         }
 
-        // Build geolocation query
-        double[] geoLocation = search.getLocation().getLocation();
-        if( geoLocation == null ) {
-            LOGGER.warn("No geolocation passed");
-            return new ArrayList<Restaurant>();
-        }
+        // Return values
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        Map<String,Integer> cuisineCount = new HashMap<String, Integer>();
 
-        Query query = new Query(where("address.location").nearSphere(new Point(geoLocation[0], geoLocation[1]))
-                .maxDistance(maxDistance / DIVISOR));
-
-        // Only include restaurants listed on the site
+        // Build the query including location if set
+        GeoLocation geoLocation = search.getLocation();
+        Query query = geoLocation != null? new Query(where("address.location").nearSphere(
+                new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(maxDistance / DIVISOR)):
+                new Query();
         query.addCriteria(where("listOnSite").is(true));
-        
-        // Specify sort order if specified
-        String sort = search.getSort();
-        String dir = search.getDir();
-        if( StringUtils.hasText(sort) && StringUtils.hasLength(dir)) {
-            query.sort().on(sort, "asc".equals(dir)?Order.ASCENDING: Order.DESCENDING );
-        }
 
-        // Exclude menu from results
-        query.fields().exclude("menu");
+        // Add scope variables to the map/reduce query
+        Map<String,Object> scopeVariables = new HashMap<String,Object>();
+        scopeVariables.put("cuisine",search.getCuisine() == null? null: search.getCuisine());
+        scopeVariables.put("address", search.getLocation() == null? null: search.getLocation().getAddress());
+        scopeVariables.put("lat1",search.getLocation() == null? null: search.getLocation().getLocation()[0]);
+        scopeVariables.put("lon1",search.getLocation() == null? null: search.getLocation().getLocation()[1]);
+        scopeVariables.put("radius", search.getLocation() == null? null: search.getLocation().getRadius());
+        MapReduceOptions options = MapReduceOptions.options();
+        options.scopeVariables(scopeVariables);
+        options.outputTypeInline(); // Important!
 
-        // Execute the query
-        List<Restaurant> restaurants = operations.find(query,Restaurant.class);
-        if( restaurants.size() == 0 ) {
-            return restaurants;
-        }
+        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/map.js", "classpath:/mapreduce/reduce.js", options, ValueObject.class);
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Returned " + restaurants.size() + " restaurants, now checking delivery options");
-        }
-
-        // Get the current time and date to determine if restaurants are open
+        // Build results
         DateTime now = new DateTime();
-
-        // Iterate over the results to determine which restaurants will serve the location
-        List<Restaurant> availableRestaurants = new ArrayList<Restaurant>();
-        for( Restaurant restaurant: restaurants ) {
-            double[] restaurantLocation = restaurant.getAddress().getLocation();
-            DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
-            if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
-                double distance = locationService.getDistance(geoLocation,restaurantLocation) - search.getLocation().getRadius(); // Include radius in search
-                if( LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Distance from location " + search.getLocation() + " to restaurant " + restaurant.getName() + " is " + distance);
-                }
-                // Set transient distance to location property for search result ordering
-                restaurant.setDistanceToSearchLocation(distance);
-
-                if( distance <= deliveryOptions.getDeliveryRadiusInKilometres()) {
-                    // Set transient open for delivery property for search result ordering
-                    restaurant.setOpen(restaurant.isOpen(now));
-                    availableRestaurants.add(restaurant);
-                    continue;
-                }
-                String lookupLocationAddress = search.getLocation().getAddress().toUpperCase();
-                for( String deliveryLocation: deliveryOptions.getAreasDeliveredTo()) {
-                    if(lookupLocationAddress.contains(deliveryLocation.toUpperCase())) {
-                        // Set transient open for delivery property for search result ordering
-                        restaurant.setOpen(restaurant.isOpen(now));
-                        availableRestaurants.add(restaurant);
-                        break;
-                    }
-                }
-            }
-        }
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Returning list of " + availableRestaurants.size() + " available restaurants");
-        }
-
-        return availableRestaurants;
-    }
-
-
-    /**
-     * @param location
-     * @return
-     */
-
-    public Map<String,Integer> getCuisineCountByLocation(String location) {
-        Map<String,Integer> ret = new HashMap<String,Integer>();
-        Query query = new Query(where("address.town").is(location));
-        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/locationmap.js", "classpath:/mapreduce/reduce.js", ValueObject.class);
         for (ValueObject valueObject : results) {
-            ret.put(valueObject.getId(),valueObject.getValue());
-        }
-        return ret;
-    }
-
-
-    /**
-     * @param cuisine
-     * @return
-     */
-
-    public Map<String,Integer> getLocationCountByCuisine(String cuisine) {
-        Map<String,Integer> ret = new HashMap<String,Integer>();
-        Query query = new Query(where("cuisine").elemMatch(new Criteria().is(cuisine)));
-        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/cuisinemap.js", "classpath:/mapreduce/reduce.js", ValueObject.class);
-        for (ValueObject valueObject : results) {
-            ret.put(valueObject.getId(),valueObject.getValue());
-        }
-        return ret;
-    }
-
-
-    
-
-    /**
-     * @param restaurant
-     * @param location
-     * @param postCode
-     * @return
-     */
-
-    public boolean willDeliverToLocationOrPostCode(Restaurant restaurant, double[] location, String postCode ) {
-        if( restaurant.getAddress().getLocation() != null ) {
-            Double distance = locationService.getDistance(restaurant.getAddress().getLocation(), location);
-            Double deliveryRadius = restaurant.getDeliveryOptions().getDeliveryRadiusInKilometres();
-            if( deliveryRadius != null && distance <= deliveryRadius ) {
-                return true;
+            Map<String,Object> values = valueObject.getValue();
+            if( values.get("restaurant") != null ) {
+                Restaurant restaurant = (Restaurant)values.get("restaurant");
+                restaurant.setOpen(restaurant.isOpen(now));
+                restaurants.add((Restaurant)values.get("restaurant"));
+            }
+            else {
+                int count = ((Double)values.get("count")).intValue();
+                cuisineCount.put(valueObject.getId(), count);
             }
         }
-        for( String deliveryLocation: restaurant.getDeliveryOptions().getAreasDeliveredTo()) {
-            if(deliveryLocation.toUpperCase().contains(postCode.toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
+
+        // Return the results
+        return new Pair<List<Restaurant>, Map<String, Integer>>(restaurants, cuisineCount);
+
     }
 
 
@@ -282,11 +190,5 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         this.maxDistance = maxDistance;
     }
 
-
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
 
 }
