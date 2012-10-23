@@ -184,4 +184,59 @@ public class EmailResponseController {
         return new ModelAndView("workflow/confirmRelistRestaurant",model);
     }
 
+
+    @RequestMapping(value="/workflow/confirmContent.html", method= RequestMethod.GET)
+    public ModelAndView acceptOrDeclineMenu(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "reason", required = false) String reason) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        String restaurantId = null;
+        String action;
+
+        try {
+            String unencoded = URLDecoder.decode(curl,"utf-8");
+            String decrypted = securityUtils.decrypt(unencoded);
+            String[] params = decrypted.split("#");
+            restaurantId = params[0].split("=")[1];
+            action = params[1].split("=")[1];
+
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+            if( restaurant == null ) {
+                throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
+            }
+
+            model.put("restaurant",restaurant);
+            /*
+        // Process the action
+        try {
+            Map<String,Object> context = new HashMap<String, Object>();
+
+            order = orderWorkflowEngine.processAction(order, action, context);
+            model.put("success",true);
+            String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true,order.getRestaurant().getName());
+            String message = MessageFactory.formatMessage("workflow.update.message", false, order.getOrderId(), orderStatusDescription);
+            model.put("message",message);
+
+        }
+        catch( WorkflowStatusException ex ) {
+            LOGGER.error("Workflow exception: " + ex.getMessage());
+            model.put("success",false);
+            String message = workflowStatusExceptionMessageResolver.getWorkflowStatusExceptionMessage(ex);
+            model.put("message",message);
+        }
+            */
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Execption for restaurantId: " + restaurantId,ex);
+            model.put("success",false);
+            String message = MessageFactory.formatMessage("workflow.exception.message", false, ex.getMessage());
+            model.put("message",message);
+        }
+        return new ModelAndView("workflow/confirmOrder",model);
+    }
+
+
+
+
+
+
 }

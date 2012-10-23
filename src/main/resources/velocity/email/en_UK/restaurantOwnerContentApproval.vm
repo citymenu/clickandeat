@@ -1,0 +1,65 @@
+<!-- ENGLISH -->
+<html>
+
+<body style="background-color:#FFFFFF;">
+
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Solicitud de aprobación del contenido de la pagina del restaurante</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
+                            <p>El contenido de la página de tu restaurante ha sido actualizado, por favor accede a la página de tu restaurante utilizando este <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">enlace</a>
+                             y comprueba toda la información en la página. Presta especial atención a los siguientes elementos:</p>
+                             <p>
+                               <ul>
+                               <li>Horarios de apertura</li>
+                               <li>Gastos de entrega</li>
+                               <li>Todas las categorías del menú</li>
+                               <li>Todos los precios</li>
+                               <li>Ofertas especiales</li>
+                               <li>etc.</li>
+                               </ul>
+                            </p>
+                            <p> Utiliza los botones en la barra de herramientas para aprobar o rechazar el contenido.
+                            No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o no estas satisfecho con el contenido.</p>
+                            <p><b>Hemos retirado tu restaurante de la página de manera temporal hasta que apruebes el contenido, una vez recibamos tu notificacion lo añadiremos de nuevo.</b>
+                             </p>
+                             </div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquí</a>  para
+                            que tu restaurante se añadido de nuevo a nuestra pagina.</div>
+                        </div>
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor no dudes en ponerte en contacto con nosotros si tienes alguna pregunta o si necesitas alguna clarificación
+                             en relación a los pasos que seguimos cuando te pasamos pedidos</div>
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/apology.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+
+</html>

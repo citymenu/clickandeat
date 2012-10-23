@@ -348,6 +348,24 @@ public class EmailServiceImpl implements IEmailService {
     }
 
 
+    @Override
+    public void sendForOwnerApproval(Restaurant restaurant) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending email to restaurant for owner approval id: " + restaurant.getRestaurantId());
+        }
+
+        String emailAddress = restaurant.getNotificationOptions().getNotificationEmailAddress();
+        String subject = MessageFactory.getMessage("email-subject.owner-content-approval-subject",false);
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        //templateMap.put("restaurant",restaurant);
+        String restCurl = "restaurantId=" + restaurant.getRestaurantId();
+        templateMap.put("restCurl", restCurl);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.OWNER_CONTENT_APPROVAL_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
+
+
     /**
      * @param to
      * @param subject

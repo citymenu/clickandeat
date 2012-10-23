@@ -99,7 +99,9 @@ Ext.define('AD.controller.RestaurantEdit', {
             'restaurantedit button[action=saverestaurant]': {
                 click:this.saveRestaurant
             },
-
+            'restaurantedit button[action=sendForOwnerApproval]': {
+                click: this.sendForOwnerApproval
+            },
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -385,7 +387,37 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     },
 
-    saveRestaurant: function(button) {
+    sendForOwnerApproval: function(button) {
+        this.saveRestaurant(button , this.sendForOwnerApprovalCallBack)
+    },
+
+    sendForOwnerApprovalCallBack: function() {
+        Ext.Ajax.request({
+            url: ctx + '/admin/restaurants/sendForApproval.ajax',
+            method:'POST',
+            params: {
+                body: JSON.stringify(restaurantObj)
+            },
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+                if( obj.success ) {
+                    //restaurantObj.id = obj.id;
+                    //this.initializeRestaurant(obj.restaurant);
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Sent','Menu sent for owner Approval successfully');
+                } else {
+                    showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+                }
+            },
+            failure: function(response) {
+                var obj = Ext.decode(response.responseText);
+                showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+            },
+            scope:this
+        });
+    },
+
+
+    saveRestaurant: function(button , callback) {
 
         // Check if the main details form is invalid`
         if(!this.getMainDetailsForm().getForm().isValid()) {
@@ -409,7 +441,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.description = mainDetailValues['description'];
         restaurantObj.imageName = mainDetailValues['imageName'];
         restaurantObj.listOnSite = mainDetailValues['listOnSite'] == 'on';
-        restaurantObj.phoneOrdersOnly = mainDetailValues['phoneOrdersOnly'] == 'on';
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
         restaurantObj.contactMobile = mainDetailValues['contactMobile'];
@@ -427,6 +458,8 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Update address details for the restaurant
         restaurantObj.address = new Object({
             address1: mainDetailValues['address1'],
+            address2: mainDetailValues['address2'],
+            address3: mainDetailValues['address3'],
             town: mainDetailValues['town'],
             region: mainDetailValues['region'],
             postCode: mainDetailValues['postCode']
@@ -477,7 +510,6 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object({
             deliveryOptionsSummary: deliveryDetailValues['deliveryOptionsSummary'],
-            collectionOnly: deliveryDetailValues['collectionOnly'] == 'on',
             deliveryTimeMinutes: deliveryDetailValues['deliveryTimeMinutes'],
             collectionTimeMinutes: deliveryDetailValues['collectionTimeMinutes'],
             minimumOrderForDelivery: deliveryDetailValues['minimumOrderForDelivery'],
@@ -638,9 +670,14 @@ Ext.define('AD.controller.RestaurantEdit', {
                     restaurantObj.id = obj.id;
                     this.initializeRestaurant(obj.restaurant);
                     showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
+                    //If a callback function has been provided we execute it
+                    if(!(typeof callback === 'undefined')){
+                        callback.call();
+                    }
                 } else {
                     showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
                 }
+
             },
             failure: function(response) {
                 var obj = Ext.decode(response.responseText);
