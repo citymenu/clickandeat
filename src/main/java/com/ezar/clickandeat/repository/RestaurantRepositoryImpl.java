@@ -169,6 +169,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             Map<String,Object> values = valueObject.getValue();
             if( values.get("restaurant") != null ) {
                 Restaurant restaurant = (Restaurant)values.get("restaurant");
+                restaurant.setDistanceToSearchLocation((Double)values.get("distance"));
                 restaurant.setOpen(restaurant.isOpen(now));
                 restaurants.add((Restaurant)values.get("restaurant"));
             }

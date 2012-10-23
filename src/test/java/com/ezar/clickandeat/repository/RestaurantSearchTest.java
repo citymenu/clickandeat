@@ -83,7 +83,7 @@ public class RestaurantSearchTest {
     @Test
     public void testGetCuisineCountByLocation() throws Exception {
         Search search = new Search();
-        //search.setLocation(locationService.getLocation("E18 2LG"));
+        search.setLocation(locationService.getLocation("E18 2LG"));
         //search.setCuisine("Mexican");
         Pair<List<Restaurant>,Map<String,Integer>> pair = repository.search(search);
         List<Restaurant> restaurants = pair.first;
