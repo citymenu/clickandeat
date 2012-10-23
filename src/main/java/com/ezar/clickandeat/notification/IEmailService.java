@@ -29,4 +29,6 @@ import com.ezar.clickandeat.model.Restaurant;
 
     void sendOrderCancellationOfferToCustomer(Order order) throws Exception;
 
+    void sendForOwnerApproval(Restaurant restaurant) throws Exception;
+
 }

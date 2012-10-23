@@ -5,6 +5,7 @@ import com.ezar.clickandeat.model.OpeningTime;
 import com.ezar.clickandeat.model.OpeningTimes;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.notification.IEmailService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
@@ -57,6 +58,9 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantValidator restaurantValidator;
+
+    @Autowired
+    private IEmailService emailService;
 
 
     @RequestMapping(value="/**/restaurant/{restaurantId}", method = RequestMethod.GET)
@@ -283,6 +287,62 @@ public class RestaurantController {
         }
         return responseEntityUtils.buildResponse(model);
     }
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/sendForApproval.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> sendForOwnerApproval(@RequestParam(value = "body") String body) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Restaurant restaurant = jsonUtils.deserialize(Restaurant.class, body);
+            // Get the restaurant email address
+            String restaurantEmail = restaurant.getNotificationOptions().getNotificationEmailAddress();
+            if( null == restaurantEmail || restaurantEmail.equals("")) {
+                model.put("success",false);
+                model.put("message","The restaurant is missing the Notification Email");
+            }
+            else {
+                // Here we send the email to the restaurant
+                emailService.sendForOwnerApproval(restaurant);
+                //restaurant = repository.saveRestaurant(restaurant);
+                model.put("success",true);
+                model.put("id",restaurant.getId());
+                model.put("restaurant",restaurant);
+            }
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+    @RequestMapping(value="/approval/restaurant/approveContent.html", method = RequestMethod.GET )
+    public ModelAndView getForContentApproval(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending notification email to LlamarYComer approving menu content for restaurant [" + restaurantId + "]");
+        }
+
+        Map<String,Object> model = getModel();
+        HttpSession session = request.getSession(true);
+        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        try {
+            emailService.sendForOwnerApproval(restaurant);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        model.put("restaurant",restaurant);
+        return new ModelAndView("restaurantContent",model);
+
+    }
+
+
 
 
     /**
