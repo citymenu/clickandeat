@@ -26,7 +26,7 @@ public class GeoLocationServiceTest {
 
     @Test
     public void testLocateValidAddress() throws Exception {
-        String address = "Calle de Bailén, 56 08009";
+        String address = "Barcelona";
         GeoLocation location = geoLocationService.getLocation(address);
         LOGGER.info("Resolved location: " + location );
     }
