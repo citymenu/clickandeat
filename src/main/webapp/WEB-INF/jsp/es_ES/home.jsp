@@ -5,10 +5,13 @@
 <!doctype html>
 
 <head>
+
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+    <script type="text/javascript">var notfound = '${notfound}';</script>
 
     <title>LlamaryComer | Pide comida online - Barcelona y Madrid</title>
 </head>
