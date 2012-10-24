@@ -6,19 +6,21 @@
     <div class="footer-wrapper">
         <table width="980">
             <tr valign="top">
-                <td width="490"></td>
-                <td width="245"></td>
-                <td width="245">
-                    <h3>Serving locations</h3>
-                    <div class="location-list">
+                <td width="455"></td>
+                <td width="175">
+                    <h3 class="footer">Contact</h3>
+                </td>
+                <td width="175">
+                    <h3 class="footer">Company</h3>
+                </td>
+                <td width="175">
+                    <h3 class="footer">Now Serving</h3>
                     <div class="location-list">
                     <c:forEach var="location" items="${locations}">
-                    <p><a href="${ctx}/app/find-takeaway-food-in-${location}/loc/${location}">${location}</a></p>
+                    <p><a class="location" href="${ctx}/app/find-takeaway-food-in-${location}/loc/${location}">${location} Takeaway</a></p>
                     </c:forEach>
-                    </div>
-                    <h3>Cuisines</h3>
                     <c:forEach var="cuisine" items="${cuisines}">
-                    <p><a href="${ctx}/app/find-${cuisine}-takeaway-food/csn/${cuisine}">${cuisine}</a></p>
+                    <p><a class="location" href="${ctx}/app/find-${cuisine}-takeaway-food/csn/${cuisine}">${cuisine} Takeaway</a></p>
                     </c:forEach>
                     </div>
                 </td>

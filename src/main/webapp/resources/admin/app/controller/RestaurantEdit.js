@@ -441,6 +441,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.description = mainDetailValues['description'];
         restaurantObj.imageName = mainDetailValues['imageName'];
         restaurantObj.listOnSite = mainDetailValues['listOnSite'] == 'on';
+        restaurantObj.phoneOrdersOnly = mainDetailValues['phoneOrdersOnly'] == 'on';
         restaurantObj.contactEmail = mainDetailValues['contactEmail'];
         restaurantObj.contactTelephone = mainDetailValues['contactTelephone'];
         restaurantObj.contactMobile = mainDetailValues['contactMobile'];

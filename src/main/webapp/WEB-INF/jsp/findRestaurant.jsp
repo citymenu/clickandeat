@@ -17,6 +17,7 @@
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
+    <script type="text/javascript">var address="${address}";</script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
@@ -68,9 +69,18 @@
                                             <div class="search-cuisine-filter">
                                                 <message:message key="search.filter-by-cuisine"/>:
                                                 <select class="search-select" id="cuisine-select">
-                                                    <option value=""><message:message key="search.all"/> (${count})</option>
+                                                    <c:if test="${address != ''}">
+                                                        <option value=""><message:message key="search.all"/> (${count})</option>
+                                                    </c:if>
                                                     <c:forEach var="entry" items="${cuisineCount}">
-                                                    <option value="${entry.key}"><util:escape value="${entry.key}"/> (${entry.value})</option>
+                                                        <c:choose>
+                                                            <c:when test="${entry.key == cuisine}">
+                                                                <option value="${entry.key}" selected><util:escape value="${entry.key}"/> (${entry.value})</option>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <option value="${entry.key}"><util:escape value="${entry.key}"/> (${entry.value})</option>
+                                                            </c:otherwise>
+                                                        </c:choose>
                                                     </c:forEach>
                                                 </select>
                                             </div>

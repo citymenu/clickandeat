@@ -108,6 +108,8 @@ public class RestaurantSearchController {
         results.addAll(pair.first);
 
         Map<String,Object> model = new HashMap<String, Object>();
+        model.put("address",search.getLocation() == null? "": search.getLocation().getAddress());
+        model.put("cuisine",search.getCuisine() == null? "": search.getCuisine());
         model.put("results",results);
         model.put("count",results.size());
         model.put("cuisineCount",pair.second);

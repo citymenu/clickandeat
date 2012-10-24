@@ -4,18 +4,28 @@
 
 <div id="footer">
     <div class="footer-wrapper">
-        <div class="footer-contact">
-            <div class="third left">
-                <h4 class="footer">General contact</h4>
-                <ul>
-                    <li>Phone:
-                    <br>+44(208)5057191
-                    </li>
-                </ul>
-            </div>
-            <div class="third left"><h4 class="footer">Sales and customer support</h4></div>
-            <div class="third left last"><h4 class="footer">Stay in touch</h4></div>
-        </div>
+        <table width="980">
+            <tr valign="top">
+                <td width="455"></td>
+                <td width="175">
+                    <h3 class="footer">Contact</h3>
+                </td>
+                <td width="175">
+                    <h3 class="footer">Company</h3>
+                </td>
+                <td width="175">
+                    <h3 class="footer">Now Serving</h3>
+                    <div class="location-list">
+                    <c:forEach var="location" items="${locations}">
+                    <p><a class="location" href="${ctx}/app/find-takeaway-food-in-${location}/loc/${location}">${location} Takeaway</a></p>
+                    </c:forEach>
+                    <c:forEach var="cuisine" items="${cuisines}">
+                    <p><a class="location" href="${ctx}/app/find-${cuisine}-takeaway-food/csn/${cuisine}">${cuisine} Takeaway</a></p>
+                    </c:forEach>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 

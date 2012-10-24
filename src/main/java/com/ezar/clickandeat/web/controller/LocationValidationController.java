@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,7 +37,6 @@ public class LocationValidationController {
     @ResponseBody
     @RequestMapping(value="/validateLocation.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> validateLocation(@RequestParam(value = "loc", required = false) String address, @RequestParam(value = "c", required = false ) String cuisine,
-                                                   @RequestParam(value = "s", required = false) String sort, @RequestParam(value = "d", required = false) String dir,
                                                    HttpServletRequest request) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
@@ -50,8 +50,6 @@ public class LocationValidationController {
                 Search search = new Search();
                 search.setLocation(geoLocation);
                 search.setCuisine(cuisine);
-                search.setDir(dir);
-                search.setSort(sort);
                 request.getSession(true).setAttribute("search", search);
                 model.put("success",true);
             }
@@ -63,6 +61,28 @@ public class LocationValidationController {
     }
 
 
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/updateLocation.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateLocation(@RequestParam(value = "loc", required = false) String address, @RequestParam(value = "c", required = false ) String cuisine,
+                                           HttpServletRequest request) throws Exception {
+        
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Search search = new Search();
+            search.setLocation(StringUtils.hasText(address)? geoLocationService.getLocation(address): null);
+            search.setCuisine(StringUtils.hasText(cuisine)? cuisine: null);
+            request.getSession(true).setAttribute("search", search);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            model.put("success",false);
+        }
+        return buildResponse(model);
+    }
+
+    
     /**
      * @param model
      * @return

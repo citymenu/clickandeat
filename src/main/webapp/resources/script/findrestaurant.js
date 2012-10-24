@@ -55,9 +55,15 @@ $(document).ready(function(){
 
     // Change handler for select box
     $('#cuisine-select').change(function(){
-        cuisine = $('#cuisine-select').val();
-        filterRestaurants();
+        var cuisine = $('#cuisine-select').val();
+        $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
+        $.post( ctx+'/updateLocation.ajax', { loc: address, c: cuisine },
+            function( data ) {
+                var address = unescapeQuotes(data.address);
+                window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
+        });
     });
+
 });
 
 
