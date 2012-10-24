@@ -4,16 +4,18 @@
 
 <div id="footer">
     <div class="footer-wrapper">
-        <table width="980">
+        <table width="1020">
             <tr valign="top">
-                <td width="455"></td>
-                <td width="175">
+                <td width="465">
+                    <h3 class="footer">Simply the easiest way to order takeaway food onlin</h3>
+                </td>
+                <td width="185">
                     <h3 class="footer">Contact</h3>
                 </td>
-                <td width="175">
+                <td width="185">
                     <h3 class="footer">Company</h3>
                 </td>
-                <td width="175">
+                <td width="185">
                     <h3 class="footer">Now Serving</h3>
                     <div class="location-list">
                     <c:forEach var="location" items="${locations}">
