@@ -50,6 +50,8 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String RESTAURANT_DELISTED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantDelistedNotification.vm";
     public static final String RESTAURANT_RELISTED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantRelistedNotification.vm";
     public static final String OWNER_CONTENT_APPROVAL_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantOwnerContentApproval.vm";
+    public static final String OWNER_CONTENT_APPROVED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantContentApproved.vm";
+    public static final String OWNER_CONTENT_REJECTED_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantContentRejected.vm";
 
     // Velocity tools to be added to all contexts
     private Map<String,Object> velocityTools = new HashMap<String, Object>();

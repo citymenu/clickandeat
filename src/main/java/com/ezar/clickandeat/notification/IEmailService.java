@@ -31,4 +31,8 @@ import com.ezar.clickandeat.model.Restaurant;
 
     void sendForOwnerApproval(Restaurant restaurant) throws Exception;
 
+    void sendContentApproved(Restaurant restaurant) throws Exception;
+
+    void sendContentRejected(Restaurant restaurant) throws Exception;
+
 }

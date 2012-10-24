@@ -85,7 +85,7 @@
                                             </c:forEach>
                                         </div>
                                     </c:if>
-                                    <div class="restuarant-summary-wrapper">
+                                    <div class="restaurant-summary-wrapper">
                                         <div class="restaurant-detail-wrapper">
                                             <div class="restaurant-opening-details">
                                                 <div class="opening-details">

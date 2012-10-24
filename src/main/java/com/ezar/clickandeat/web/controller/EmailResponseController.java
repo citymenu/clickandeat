@@ -185,8 +185,38 @@ public class EmailResponseController {
     }
 
 
-    @RequestMapping(value="/workflow/confirmContent.html", method= RequestMethod.GET)
-    public ModelAndView acceptOrDeclineMenu(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "reason", required = false) String reason) throws Exception {
+    @RequestMapping(value="/workflow/contentApproved.html", method= RequestMethod.GET)
+    public ModelAndView approveContent(@RequestParam(value = "restaurantId", required = true) String restaurantId) throws Exception {
+
+        System.out.println("GOT HERE");
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        try {
+            System.out.println("GOT HERE - 1");
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
+            if( restaurant == null ) {
+                throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
+            }
+            System.out.println("GOT HERE - 2");
+            model.put("restaurant",restaurant);
+            model.put("message",MessageFactory.getMessage("workflow.restaurant-content-approved",true));
+            model.put("success",true);
+            System.out.println("GOT HERE - 3");
+        }
+        catch( Exception ex ) {
+            System.out.println("GOT HERE - 4");
+            LOGGER.error("Exception: " + ex.getMessage());
+            model.put("success",false);
+            String message = ex.getMessage();
+            model.put("message",message);
+        }
+        System.out.println("GOT HERE - 5");
+        return new ModelAndView("workflow/approveContent",model);
+    }
+
+
+    @RequestMapping(value="/workflow/contentRejected.html", method= RequestMethod.POST)
+    public ModelAndView rejectContent(@RequestParam(value = "curl", required = true) String curl, @RequestParam(value = "reason", required = false) String reason) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
         String restaurantId = null;
@@ -205,6 +235,7 @@ public class EmailResponseController {
             }
 
             model.put("restaurant",restaurant);
+            model.put("message",MessageFactory.getMessage("workflow.restaurant-content-approved",true));
             /*
         // Process the action
         try {
@@ -231,7 +262,7 @@ public class EmailResponseController {
             String message = MessageFactory.formatMessage("workflow.exception.message", false, ex.getMessage());
             model.put("message",message);
         }
-        return new ModelAndView("workflow/confirmOrder",model);
+        return new ModelAndView("workflow/approveContent",model);
     }
 
 

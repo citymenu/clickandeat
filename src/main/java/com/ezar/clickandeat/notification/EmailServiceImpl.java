@@ -52,6 +52,8 @@ public class EmailServiceImpl implements IEmailService {
 
     private String from;
 
+    private String adminEmailAddress;
+
     private int cancelCutoffMinutes;
 
     /**
@@ -365,6 +367,39 @@ public class EmailServiceImpl implements IEmailService {
         sendEmail(emailAddress, subject, emailContent);
     }
 
+    @Override
+    public void sendContentApproved(Restaurant restaurant) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending email to confirm that owner has approved content. id: " + restaurant.getRestaurantId());
+        }
+
+        String subject = MessageFactory.getMessage("email-subject.owner-content-approved-subject",false);
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("restaurant",restaurant);
+        String restCurl = "restaurantId=" + restaurant.getRestaurantId();
+        templateMap.put("restCurl", restCurl);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.OWNER_CONTENT_APPROVED_EMAIL_TEMPLATE);
+        sendEmail(adminEmailAddress , subject, emailContent);
+    }
+
+    @Override
+    public void sendContentRejected(Restaurant restaurant) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending email to notify that the restaurant content has been rejected by the owner. id: " + restaurant.getRestaurantId());
+        }
+
+        String subject = MessageFactory.getMessage("email-subject.owner-content-rejected-subject",false);
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+        templateMap.put("restaurant",restaurant);
+        String restCurl = "restaurantId=" + restaurant.getRestaurantId();
+        templateMap.put("restCurl", restCurl);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.OWNER_CONTENT_REJECTED_EMAIL_TEMPLATE);
+        sendEmail(adminEmailAddress, subject, emailContent);
+    }
+
+
 
     /**
      * @param to
@@ -391,6 +426,12 @@ public class EmailServiceImpl implements IEmailService {
     @Value(value="${email.from}")
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    @Required
+    @Value(value="${email.adminaddress}")
+    public void setAdminEmailAddress(String adminEmailAddress) {
+        this.adminEmailAddress = adminEmailAddress;
     }
 
     @Required

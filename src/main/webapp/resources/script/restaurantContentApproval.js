@@ -6,8 +6,8 @@ $(document).ready(function(){
     $('.menu-right').hide();
 
     // Build the new buttons to approve or reject the content
-     var approveButton = "<li class='unselectable'><a href='#' onclick='javascript:approveContentStatus()'>"+getLabel('button.approve-content')+"</a></li>";
-     var rejectButton = "<li class='unselectable'><a href='#' onclick='javascript:rejectContentStatus()'>"+getLabel('button.reject-content')+"</a></li>";
+     var approveButton = "<li class='unselectable'><a href='#' onclick='javascript:approveContent()'>"+getLabel('button.approve-content')+"</a></li>";
+     var rejectButton = "<li class='unselectable'><a href='#' onclick='javascript:rejectContent()'>"+getLabel('button.reject-content')+"</a></li>";
 
     // Remove the current links from the action bar
     //$('.navigation-links').replaceWith( '<ul>'+approveButton + rejectButton +'</ul>');
@@ -18,8 +18,8 @@ $(document).ready(function(){
 });
 
 
-function rejectContentStatus() {
-   $.post( ctx+'/changeContentStatus.ajax?contentStatus='+contentStatus+'&restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999),
+function rejectContent() {
+   $.post( ctx+'/workflow/contentRejected.html?contentStatus='+contentStatus+'&restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999),
        function( data ) {
            if( data.success ) {
                 buildOrder(data.order);
@@ -31,6 +31,10 @@ function rejectContentStatus() {
 
 }
 
-function approveContentStatus() {
+function approveContent() {
+
+    alert("They have clicked on approve new no AJAX");
+
+    location.href = ctx + '/workflow/contentApproved.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
 
 }
