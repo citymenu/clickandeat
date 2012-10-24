@@ -40,6 +40,7 @@
                     <props>
                         <prop key="/**/*.css">31536000</prop>
                         <prop key="/**/webfonts/*">31536000</prop>
+                        <prop key="/**/messages.js">3600</prop>
                         <prop key="/**">0</prop>
                     </props>
                 </property>
