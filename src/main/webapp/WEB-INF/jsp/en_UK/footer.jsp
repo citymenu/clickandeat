@@ -13,12 +13,12 @@
                     <div class="location-list">
                     <div class="location-list">
                     <c:forEach var="location" items="${locations}">
-                    <p><a href="${ctx}/app/find takeaway in ${location}/browse/loc/${location}">${location}</a></p>
+                    <p><a href="${ctx}/app/find-takeaway-food-in-${location}/loc/${location}">${location}</a></p>
                     </c:forEach>
                     </div>
                     <h3>Cuisines</h3>
                     <c:forEach var="cuisine" items="${cuisines}">
-                    <p><a href="${ctx}/app/find ${cuisine} takeaway/browse/cuisine/${cuisine}">${cuisine}</a></p>
+                    <p><a href="${ctx}/app/find-${cuisine}-takeaway-food/csn/${cuisine}">${cuisine}</a></p>
                     </c:forEach>
                     </div>
                 </td>

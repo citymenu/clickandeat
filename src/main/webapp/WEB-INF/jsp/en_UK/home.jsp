@@ -5,10 +5,12 @@
 <!doctype html>
 
 <head>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+    <script type="text/javascript">var notfound = '${notfound}';</script>
 
     <title>LlamaryComer | Order Takeaway Food Online - London</title>
 </head>
@@ -23,7 +25,7 @@
             <div class="searchbar-wrapper">
                 <div class="searchbar-location unselectable">Restaurants in your area</div>
                 <div class="search-location-form">
-                    <div class="location-input"><input class="location" type="text" id="loc" placeholder=""/></div>
+                    <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
                     <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
                 </div>
                 <div class="location-direct unselectable">Or search directly in: <a class="home" id="london">London</a></div>

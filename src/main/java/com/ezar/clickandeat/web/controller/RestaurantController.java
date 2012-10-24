@@ -1,10 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.OpeningTime;
-import com.ezar.clickandeat.model.OpeningTimes;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.IEmailService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -100,9 +97,6 @@ public class RestaurantController {
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
             session.setAttribute("restaurantid", restaurantId);
         }
-
-        // Mark if we have specified a location
-        model.put("locationNotSet",session.getAttribute("search") == null);
 
         return new ModelAndView("restaurant",model);
     }

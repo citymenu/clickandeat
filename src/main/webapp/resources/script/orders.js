@@ -35,9 +35,8 @@ function getOrder() {
             function( data ) {
                 $.fancybox.hideLoading();
                 if( data.success ) {
+                    nolocation = data.nolocation; // Update if a location is set
                     buildOrder(data.order);
-                } else {
-                    alert('success:' + data.success);
                 }
             }
         );
@@ -81,9 +80,6 @@ function doBuildOrder(order,config) {
 
     // Update current order object
     currentOrder = order;
-
-    // Update details of whether a location has been chosen by the user
-    nolocation = typeof(locationNotSet) != 'undefined' && locationNotSet == 'true'
 
     // If no location set, switch off some functionality
     if( nolocation ) {

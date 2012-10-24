@@ -146,7 +146,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         // Build the query including location if set
         GeoLocation geoLocation = search.getLocation();
         Query query = geoLocation != null? new Query(where("address.location").nearSphere(
-                new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(maxDistance / DIVISOR)):
+                new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR)):
                 new Query();
         query.addCriteria(where("listOnSite").is(true));
 
@@ -160,9 +160,14 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         MapReduceOptions options = MapReduceOptions.options();
         options.scopeVariables(scopeVariables);
         options.outputTypeInline(); // Important!
+        options.finalizeFunction("classpath:/mapreduce/finalize.js");
 
         MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/map.js", "classpath:/mapreduce/reduce.js", options, ValueObject.class);
-
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Executed map reduce query in: " + results.getTiming().getTotalTime() + "ms");
+        }
+        
+        
         // Build results
         DateTime now = new DateTime();
         for (ValueObject valueObject : results) {

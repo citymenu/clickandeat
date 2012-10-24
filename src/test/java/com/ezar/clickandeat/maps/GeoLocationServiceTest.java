@@ -32,6 +32,13 @@ public class GeoLocationServiceTest {
     }
     
     
+    @Test
+    public void testGetDistance() throws Exception {
+        GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
+        GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
+        Double distance = geoLocationService.getDistance(location1.getLocation(), location2.getLocation());
+        LOGGER.info("Distance: " + distance);
+    }
 
 
     

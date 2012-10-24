@@ -1,5 +1,10 @@
 $(document).ready(function(){
 
+    // If error in model, show location warning
+    if( notfound == 'true' ) {
+        $('#search-warning').show();
+    }
+
     $('#loc').watermark(watermark);
 
     $('#loc').focus();

@@ -128,7 +128,11 @@ public class OrderController implements InitializingBean {
                 // Update can checkout status of order
                 session.setAttribute("cancheckout", order.getCanCheckout());
             }
-            model.put("hasLocation",session.getAttribute("search") != null);
+
+            // Mark if we have specified a location
+            Search search = (Search)session.getAttribute("search");
+            model.put("nolocation",search == null || search.getLocation() == null);
+
             model.put("success",true);
             model.put("order",order);
         }

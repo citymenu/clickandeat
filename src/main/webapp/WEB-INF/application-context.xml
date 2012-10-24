@@ -5,20 +5,14 @@
        xmlns:security="http://www.springframework.org/schema/security"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:task="http://www.springframework.org/schema/task"
-       xmlns:util="http://www.springframework.org/schema/util"
-       xsi:schemaLocation=
-               "http://www.springframework.org/schema/context
-          http://www.springframework.org/schema/context/spring-context-3.0.xsd
-          http://www.springframework.org/schema/security
-          http://www.springframework.org/schema/security/spring-security-3.0.3.xsd
-          http://www.springframework.org/schema/data/mongo
-          http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
-          http://www.springframework.org/schema/task
-          http://www.springframework.org/schema/task/spring-task-3.0.xsd
-          http://www.springframework.org/schema/util
-          http://www.springframework.org/schema/util/spring-util-3.0.xsd
-          http://www.springframework.org/schema/beans
-          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+          http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd
+          http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
+          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
 	<!-- Placeholder for annotated configuration classes -->
 	<context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
@@ -33,10 +27,25 @@
     <task:scheduler id="scheduler" pool-size="1"/>
     <task:annotation-driven scheduler="scheduler"/>
 
-	<!-- Disable HTTP request caching -->
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="cacheSeconds" value="0" />
-    </bean>
+    <!-- Configure request caching -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+                <property name="cacheSeconds" value="0"/>
+                <property name="useExpiresHeader" value="true"/>
+                <property name="useCacheControlHeader" value="true"/>
+                <property name="useCacheControlNoStore" value="true"/>
+                <property name="cacheMappings">
+                    <props>
+                        <prop key="/**/*.css">31536000</prop>
+                        <prop key="/**/webfonts/*">31536000</prop>
+                        <prop key="/**">0</prop>
+                    </props>
+                </property>
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
 	<!--  HTTP security config -->
 	<security:http disable-url-rewriting="true" security-context-repository-ref="simpleSecurityContextRepository" create-session="always">

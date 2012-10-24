@@ -45,18 +45,34 @@ function onBuildDeliveryEdit() {
 function ensureHeight() {
     orderheight = $('#order-wrapper').outerHeight();
     $('.menu-right').css('min-height',orderheight);
+    launchheight = $('#menu-launch-wrapper').outerHeight();
+    $('.menu-left').css('min-height',launchheight);
 }
 
 // Updates the position of the menu launch object
 function updateLaunchPos() {
     var y = $(this).scrollTop();
-    if( y > launchtop ) {
+
+    var launchpaddingtop = parseInt($('.menu-left').css('padding-top').replace('px',''));
+    var launchheight = $('#menu-launch-wrapper').outerHeight() + launchpaddingtop;
+    var launchbottom = launchheight + y + 20;
+
+    var contenttop = $('.menu-center').offset().top;
+    var contentheight = $('.menu-center').outerHeight();
+    var contentbottom = contenttop + contentheight;
+
+    if( launchbottom >= contentbottom ) {
+        var newtop = contentbottom - launchheight - launchtop - 20;
+        $('#menu-launch-wrapper').css('top',(newtop < 0? 0: newtop));
+        $('#menu-launch-wrapper').removeClass('fixed');
+    } else if (y >= launchtop) {
+        $('#menu-launch-wrapper').css('top',0);
         $('#menu-launch-wrapper').addClass('fixed');
     } else {
+        $('#menu-launch-wrapper').css('top',0);
         $('#menu-launch-wrapper').removeClass('fixed');
     }
 }
-
 
 
 // Set the order panel fixed or floating

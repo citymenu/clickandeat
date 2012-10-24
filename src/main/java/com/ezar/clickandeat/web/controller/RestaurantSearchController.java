@@ -51,7 +51,10 @@ public class RestaurantSearchController {
                 geoLocation = geoLocationService.getLocation(address);
                 if( geoLocation == null ) {
                     LOGGER.warn("Could not resolve location for address: " + address);
-                    return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+                    Map<String,Object> model = new HashMap<String, Object>();
+                    model.put("address", address);
+                    model.put("notfound",true);
+                    return new ModelAndView(MessageFactory.getLocaleString() + "/home",model);
                 }
             }
 
