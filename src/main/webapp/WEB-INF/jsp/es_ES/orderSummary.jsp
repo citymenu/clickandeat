@@ -68,9 +68,7 @@
                                     </td>
                                     <!-- Explanation -->
                                     <td width="290">
-                                        <div class="order-image">
-                                            Put picture of butler in a chef hat here or something like that.
-                                        </div>
+                                        <div class="order-image"></div>
                                     </td>
                                 </tr>
                                 <tr valign="top">
@@ -82,10 +80,6 @@
                                                     <p>Has solicitado que <util:escape value="${order.restaurant.name}"/> entregue el pedido en la dirección siguiente:</p>
                                                     <div class="delivery-address">
                                                         <util:escape value="${order.deliveryAddress.displaySummary}" escapeNewLines="true"/>
-                                                        80 Peel Road<br>
-                                                        South Woodford<br>
-                                                        London<br>
-                                                        E18 2LG
                                                     </div>
                                                 </c:when>
                                                 <c:otherwise>

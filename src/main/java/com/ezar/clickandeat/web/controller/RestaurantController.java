@@ -322,26 +322,14 @@ public class RestaurantController {
     @RequestMapping(value="/approval/restaurant/approveContent.html", method = RequestMethod.GET )
     public ModelAndView getForContentApproval(@RequestParam(value = "restaurantId") String restaurantId, HttpServletRequest request) {
 
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Sending notification email to LlamarYComer approving menu content for restaurant [" + restaurantId + "]");
-        }
-
         Map<String,Object> model = getModel();
         HttpSession session = request.getSession(true);
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
-        try {
-            emailService.sendForOwnerApproval(restaurant);
-        }
-        catch( Exception ex ) {
-            LOGGER.error("",ex);
-            model.put("success",false);
-            model.put("message",ex.getMessage());
-        }
+
         model.put("restaurant",restaurant);
         return new ModelAndView("restaurantContent",model);
 
     }
-
 
 
 
