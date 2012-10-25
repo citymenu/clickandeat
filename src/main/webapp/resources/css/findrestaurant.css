@@ -30,7 +30,7 @@
 }
 
 .location-warning {
-    font:400 14px/16px myriad-pro;
+    font:400 14px/17px myriad-pro;
     border: 1px solid #b64242;
     background-color: #fffece;
     margin: 12px 0 12px 0;
@@ -450,5 +450,12 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
 a.blank, a.blank:visited, a.blank:hover, a.blank:active {
     color:#AA0000;
     text-decoration:none;
+    cursor:pointer;
+}
+
+a.search-return, a.search-return:visited, a.search-return:active, a.search-return:hover {
+    color:#AA0000;
+    text-decoration:underline;
+    font-weight:700;
     cursor:pointer;
 }

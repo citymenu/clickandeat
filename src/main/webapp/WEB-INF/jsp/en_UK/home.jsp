@@ -29,7 +29,7 @@
                     <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
                     <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
                 </div>
-                <div class="location-direct unselectable">Or search directly in: <a class="home" id="london">London</a></div>
+                <div class="location-direct unselectable">Or search directly in: <a class="location" href="${ctx}/app/find-takeaway-food-in-london/loc/London"/>London</a></div>
                 <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                     <li>
                         <div class="restaurant-panel">
                             <a href="${ctx}/${restaurant.url}" class="blank" title="<util:escape value="${restaurant.name}"/>">
-                                <img src="${resources}/images/restaurant/${restaurant.imageName}" height="100" alt="<util:escape value="${restaurant.name}"/>"/>
+                                <img src="${resources}/images/restaurant/${restaurant.imageName}" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
                                 <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                 <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
                             </a>

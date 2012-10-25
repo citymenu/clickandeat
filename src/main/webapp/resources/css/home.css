@@ -173,8 +173,13 @@ a.home {
 
 #carousel {
     margin:60px 0 40px 0;
-    padding:0 20px;
+    padding:10px 20px;
     text-align:center;
+    background-color:#F7F4EC;
+    border:2px solid #AAAAAA;
+    -webkit-border-radius: 15px;
+       -moz-border-radius: 15px;
+            border-radius: 15px;
 }
 
 #carousel h2 {
@@ -188,12 +193,12 @@ a.home {
 }
 
 .restaurant-panel {
-    width:193px;
-    min-height:160px;
+    width:183px;
+    min-height:135px;
     padding:10px;
-    background-color:FFFFFF;
+    background-color:#FFFDF9;
     border:1px solid #DDDDDD;
-    margin:10px 15px;
+    margin:10px 20px;
     -webkit-border-radius: 15px;
        -moz-border-radius: 15px;
             border-radius: 15px;
@@ -218,4 +223,9 @@ a.blank, a.blank:visited, a.blank:hover, a.blank:active {
     color:#AA0000;
     text-decoration:none;
     cursor:pointer;
+}
+
+a.location, a.location:visited, a.location:hover, a.location:active {
+    color:#FFFFFF;
+    text-decoration:underline;
 }

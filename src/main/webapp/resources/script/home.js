@@ -29,21 +29,6 @@ $(document).ready(function(){
         search();
     });
 
-    $('#madrid').click(function() {
-        $('#loc').val('Madrid');
-        search();
-    });
-
-    $('#barcelona').click(function() {
-        $('#loc').val('Barcelona');
-        search();
-    });
-
-    $('#london').click(function() {
-        $('#loc').val('London');
-        search();
-    });
-
     // Enable Google autocomplete
     var input = document.getElementById('loc');
     var options = {

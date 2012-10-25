@@ -23,17 +23,17 @@
 
 .header-company {
     background:none;
-    font:36px/36px MaiandraOTGD-DemiBold;
+    font:40px/40px MaiandraOTGD-DemiBold;
     color:#FFFFFF;
     text-shadow: 0 2px #333333;
     text-transform: uppercase;
     position:absolute;
-    bottom: 45px;
+    bottom: 35px;
     left: 20px;
 }
 
 .header-company-small {
-    font:28px/28px MaiandraOTGD-DemiBold;
+    font:32px/32px MaiandraOTGD-DemiBold;
     color:#e5a38d;
     padding: 0 1px 0 1px;
 }
@@ -54,9 +54,9 @@
 }
 
 .help-link-wrapper {
-    background-color:#AAAAAA;
+    background-color:#A4A5AB;
     display:inline-block;
-    padding:2px;
+    padding:1px;
     margin-left:5px;
     -webkit-border-radius:5px;
        -moz-border-radius:5px;
@@ -67,7 +67,7 @@
 }
 
 .help-link-content {
-    background-color:#FFFFFF;
+    background-color:#FCFBF5;
     padding:5px 10px;
     color:#990000;
     font:14px MaiandraOTGD-DemiBold;

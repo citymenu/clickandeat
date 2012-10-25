@@ -12,12 +12,14 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
@@ -47,7 +49,7 @@ public class RestaurantSearchController {
 
         try {
             GeoLocation geoLocation = null;
-            if( address != null ) {
+            if( StringUtils.hasText(address) ) {
                 geoLocation = geoLocationService.getLocation(address);
                 if( geoLocation == null ) {
                     LOGGER.warn("Could not resolve location for address: " + address);
@@ -59,11 +61,17 @@ public class RestaurantSearchController {
             }
 
             // Build new search session object
-            Search search = new Search();
-            search.setLocation(geoLocation);
+            HttpSession session = request.getSession(true);
+            Search search = (Search)session.getAttribute("search"); 
+            if( search == null ) {
+                search = new Search();
+            }
+            if( geoLocation != null ) {
+                search.setLocation(geoLocation);
+            }
             search.setCuisine(cuisine);
             request.getSession(true).setAttribute("search", search);
-            return search(search);
+            return search(search,address);
             
         }
         catch( Exception ex ) {
@@ -92,7 +100,30 @@ public class RestaurantSearchController {
         if( search == null ) {
             return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
         }
-        return search(search);
+        String address = search.getLocation() == null? null: search.getLocation().getAddress();
+        return search(search, address);
+    }
+
+
+    @RequestMapping(value="/**/session/noloc", method = RequestMethod.GET)
+    public ModelAndView savedSearchWithoutAddress(HttpServletRequest request ) {
+        Search search = (Search)request.getSession(true).getAttribute("search");
+        if( search == null ) {
+            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+        }
+        return search(search, null);
+    }
+
+    
+    @RequestMapping(value="/**/session/reloc", method = RequestMethod.GET)
+    public ModelAndView savedSearchClearingCuisine(HttpServletRequest request ) {
+        Search search = (Search)request.getSession(true).getAttribute("search");
+        if( search == null ) {
+            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+        }
+        search.setCuisine(null);
+        String address = search.getLocation() == null? null: search.getLocation().getAddress();
+        return search(search, address);
     }
 
 
@@ -101,14 +132,14 @@ public class RestaurantSearchController {
      * @return
      */
 
-    private ModelAndView search(Search search) {
+    private ModelAndView search(Search search, String address) {
 
         Pair<List<Restaurant>,Map<String,Integer>> pair = restaurantRepository.search(search);
         SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
         results.addAll(pair.first);
 
         Map<String,Object> model = new HashMap<String, Object>();
-        model.put("address",search.getLocation() == null? "": search.getLocation().getAddress());
+        model.put("address",address == null? "": address);
         model.put("cuisine",search.getCuisine() == null? "": search.getCuisine());
         model.put("results",results);
         model.put("count",results.size());

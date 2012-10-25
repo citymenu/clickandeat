@@ -59,9 +59,13 @@ $(document).ready(function(){
         $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
         $.post( ctx+'/updateLocation.ajax', { loc: address, c: cuisine },
             function( data ) {
-                var address = unescapeQuotes(data.address);
-                window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
-        });
+                if( address == null || address == '' ) {
+                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/noloc';
+                } else {
+                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
+                }
+            }
+        );
     });
 
 });

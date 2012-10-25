@@ -30,7 +30,7 @@
                     <div class="location-input"><input class="location" type="text" id="loc" placeholder=""/></div>
                     <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
                 </div>
-                <div class="location-direct unselectable">O entra directament en: <a class="home" id="madrid">Madrid</a> / <a class="home" id="barcelona">Barcelona</a></div>
+                <div class="location-direct unselectable">O entra directament en: <a class="location" href="${ctx}/app/find-takeaway-food-in-madrid/loc/Matrid"/>Madrid</a> / <a class="location" href="${ctx}/app/find-takeaway-food-in-barcelona/loc/Barcelona"/>Barcelona</a></div>
                 <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>

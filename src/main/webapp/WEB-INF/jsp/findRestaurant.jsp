@@ -46,13 +46,23 @@
                                     </c:choose>
                                 </div>
                                 <c:choose>
-                                    <c:when test="${count > 0}">
-                                        <div class="search-location-results"><message:message key="search.restaurants-serving-your-location" format="${count}"/></div>
+                                    <c:when test="${address == '' && cuisine != ''}">
+                                    <div class="search-location-results"><message:message key="search.restaurants-by-cuisine" format="${cuisine}"/></div>
                                     </c:when>
+                                    <c:otherwise>
+                                    <div class="search-location-results"><message:message key="search.restaurants-serving-your-location" format="${count}"/></div>
+                                    </c:otherwise>
                                 </c:choose>
                             </div>
                             <div class="location-warning-wrapper">
                                 <c:choose>
+                                    <c:when test="${search != null && search.location != null && address == ''}">
+                                        <div class="location-warning">
+                                            <message:message key="search.showing-all-cuisine" format="${cuisine}"/>
+                                            <br><a class="search-return" href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/reloc"><message:message key="button.click-here"/></a>
+                                            <message:message key="search.return-to-location"/>
+                                        </div>
+                                    </c:when>
                                     <c:when test="${search == null || search.location == null}">
                                         <div class="location-warning"><message:message key="search.location-not-set-warning"/></div>
                                     </c:when>

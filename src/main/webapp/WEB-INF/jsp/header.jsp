@@ -8,7 +8,6 @@
     <div class="header-wrapper">
         <div class="header-banner">
             <div class="header-company unselectable">llamar<span class="header-company-small">y</span>comer</div>
-            <div class="header-tagline unselectable"><message:message key="home.tagline" escape="false"/></div>
             <div class="help-links">
                 <div class="help-link-wrapper unselectable">
                     <div class="help-link-content"><message:message key="label.help"/></div>

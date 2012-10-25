@@ -116,7 +116,7 @@ function doBuildOrder(order,config) {
     if( order ) {
 
         // If a location has not been set, display a warning about that
-        if( nolocation ) {
+        if( nolocation && typeof(restaurantId) != 'undefined' ) {
             var warningMessage1 = getLabel('order.no-location-warning-1');
             var warningMessage2 = getLabel('order.no-location-warning-2');
             var enterLocationLink = ('<a id=\'enterlocation\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
