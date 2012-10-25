@@ -40,7 +40,7 @@
                     <c:forEach var="restaurant" items="${recommendations}">
                     <li>
                         <div class="restaurant-panel">
-                            <a href="${ctx}/${restaurant.url}" class="blank">
+                            <a href="${ctx}/${restaurant.url}" class="blank" title="<util:escape value="${restaurant.name}"/>">
                                 <img src="${resources}/images/restaurant/${restaurant.imageName}" height="100" alt="<util:escape value="${restaurant.name}"/>"/>
                                 <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                 <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
