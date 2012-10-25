@@ -21,7 +21,7 @@
                     <c:forEach var="location" items="${locations}">
                     <p><a class="location" href="${ctx}/app/find-takeaway-food-in-${location}/loc/${location}">${location} Takeaway</a></p>
                     </c:forEach>
-                    <c:forEach var="cuisine" items="${cuisines}">
+                    <c:forEach var="cuisine" items="${footerCuisines}">
                     <p><a class="location" href="${ctx}/app/find-${cuisine}-takeaway-food/csn/${cuisine}">${cuisine} Takeaway</a></p>
                     </c:forEach>
                     </div>
