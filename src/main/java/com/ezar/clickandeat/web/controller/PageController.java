@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,15 @@ public class PageController {
     @Autowired
     private CuisineProvider cuisineProvider;
 
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
+    
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
-	public ModelAndView home(HttpServletRequest request) {
+	public ModelAndView home() {
         Map<String,Object> model = new HashMap<String, Object>();
-    	return new ModelAndView( MessageFactory.getLocaleString() + "/home",model);
+        model.put("recommendations", restaurantRepository.getRecommended());
+    	return new ModelAndView(MessageFactory.getLocaleString() + "/home", model);
 	}
 
 

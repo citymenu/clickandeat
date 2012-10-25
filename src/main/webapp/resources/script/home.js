@@ -1,5 +1,15 @@
 $(document).ready(function(){
 
+    // Add carousel
+    $(".carousel-items").jCarouselLite({
+        auto: 2000,
+        speed: 1200,
+        circular:true,
+        visible:4
+
+    });
+
+
     // If error in model, show location warning
     if( notfound == 'true' ) {
         $('#search-warning').show();

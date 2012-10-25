@@ -15,6 +15,8 @@ public interface RestaurantRepositoryCustom {
 
     Restaurant saveRestaurant(Restaurant restaurant);
 
+    List<Restaurant> getRecommended();
+    
     void deleteRestaurant(Restaurant restaurant);
 
     Pair<List<Restaurant>,Map<String,Integer>> search(Search search);

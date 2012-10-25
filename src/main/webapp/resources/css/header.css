@@ -54,21 +54,23 @@
 }
 
 .help-link-wrapper {
-    background-color:#FFFFFF;
+    background-color:#AAAAAA;
     display:inline-block;
     padding:2px;
     margin-left:5px;
     -webkit-border-radius:5px;
        -moz-border-radius:5px;
             border-radius:5px;
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+       -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
 }
 
 .help-link-content {
-    background-color:#990000;
+    background-color:#FFFFFF;
     padding:5px 10px;
-    color:#FFFFFF;
+    color:#990000;
     font:14px MaiandraOTGD-DemiBold;
-    text-shadow: 0 2px #333333;
     cursor:pointer;
     -webkit-border-radius:5px;
        -moz-border-radius:5px;

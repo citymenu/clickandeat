@@ -70,7 +70,7 @@
                                                 <message:message key="search.filter-by-cuisine"/>:
                                                 <select class="search-select" id="cuisine-select">
                                                     <c:if test="${address != ''}">
-                                                        <option value=""><message:message key="search.all"/> (${count})</option>
+                                                        <option value=""><message:message key="search.all"/></option>
                                                     </c:if>
                                                     <c:forEach var="entry" items="${cuisineCount}">
                                                         <c:choose>
@@ -122,11 +122,13 @@
                                                     <table width="330">
                                                         <tr valign="bottom">
                                                             <td width="85">
-                                                                <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/></td>
+                                                                <a href="${ctx}/${restaurant.url}" class="blank">
+                                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                                </a>
                                                             </td>
                                                             <td width="245">
                                                                 <div class="search-result-center">
-                                                                    <h2><util:escape value="${restaurant.name}"/></h2>
+                                                                    <h2><a href="${ctx}/${restaurant.url}" class="blank"><util:escape value="${restaurant.name}"/></a></h2>
                                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                                 </div>
                                                             </td>

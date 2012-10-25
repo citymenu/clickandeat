@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery.carousel.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript">var notfound = '${notfound}';</script>
@@ -32,22 +33,23 @@
                 <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
-        <div class="box-wrapper">
-            <table width="980">
-                <tr valign="top">
-                    <td width="530">
-                        <div class="home-caption">
-                            <h2>Simply the easiest way to order fast food online</h2>
-                            <p class="triangle-isosceles left">But it could be any element you want.</p>
+        <div id="carousel">
+            <h2>Why not try something from one of our recommended restaurants?</h2>
+            <div class="carousel-items">
+                <ul>
+                    <c:forEach var="restaurant" items="${recommendations}">
+                    <li>
+                        <div class="restaurant-panel">
+                            <a href="${ctx}/${restaurant.url}" class="blank">
+                                <img src="${resources}/images/restaurant/${restaurant.imageName}" height="100" alt="<util:escape value="${restaurant.name}"/>"/>
+                                <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
+                                <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
+                            </a>
                         </div>
-                    </td>
-                    <td width="450">
-                        <div class="box-large">
-                            <h2>Now serving the following locations</h2>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+                    </li>
+                    </c:forEach>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

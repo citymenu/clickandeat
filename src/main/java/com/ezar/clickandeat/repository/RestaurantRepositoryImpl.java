@@ -34,6 +34,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
+    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60 * 2; // Refresh recommendations list every 2 hours
+    
+    
     @Autowired
     private MongoOperations operations;
 
@@ -48,18 +51,32 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private double maxDistance;
 
+    private long lastRefreshed = 0l;    
+    
+    private List<Restaurant> recommendations;
+    
 
     @Override
     public void afterPropertiesSet() throws Exception {
         operations.ensureIndex(new GeospatialIndex("address.location"), Restaurant.class);
     }
-
+     
 
     @Override
     public Restaurant create() {
         Restaurant restaurant = new Restaurant();
         restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
         return restaurant;
+    }
+
+    @Override
+    public List<Restaurant> getRecommended() {
+        long now = System.currentTimeMillis();
+        if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
+            recommendations = operations.findAll(Restaurant.class);
+            lastRefreshed = now;
+        }
+        return recommendations;
     }
 
     @Override

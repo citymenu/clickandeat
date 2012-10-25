@@ -446,3 +446,9 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
     width:46px;
     height:65px;
 }
+
+a.blank, a.blank:visited, a.blank:hover, a.blank:active {
+    color:#AA0000;
+    text-decoration:none;
+    cursor:pointer;
+}
