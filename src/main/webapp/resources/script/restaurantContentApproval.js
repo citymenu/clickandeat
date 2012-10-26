@@ -35,6 +35,6 @@ function approveContent() {
 
     alert("They have clicked on approve new no AJAX");
 
-    location.href = ctx + '/workflow/contentApproved.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
+    location.href = ctx + '/approval/restaurant/contentApproved.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
 
 }

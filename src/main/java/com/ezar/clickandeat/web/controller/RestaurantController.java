@@ -326,6 +326,30 @@ public class RestaurantController {
     }
 
 
+    @RequestMapping(value="/approval/restaurant/contentApproved.html", method= RequestMethod.GET)
+    public ModelAndView approveContent(@RequestParam(value = "restaurantId", required = true) String restaurantId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            if( restaurant == null ) {
+                throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
+            }
+            model.put("restaurant",restaurant);
+            model.put("message",MessageFactory.getMessage("workflow.restaurant-content-approved",true));
+            //Email the admin people to let them know the content has been approved
+            emailService.sendContentApproved(restaurant);
+
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Exception: " + ex.getMessage());
+            String message = ex.getMessage();
+            model.put("message",message);
+        }
+
+        return new ModelAndView("workflow/approveContent",model);
+    }
+
 
     /**
      * Returns standard model

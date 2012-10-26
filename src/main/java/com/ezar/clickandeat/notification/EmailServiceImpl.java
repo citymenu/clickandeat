@@ -377,8 +377,8 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFactory.getMessage("email-subject.owner-content-approved-subject",false);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("restaurant",restaurant);
-        String restCurl = "restaurantId=" + restaurant.getRestaurantId();
-        templateMap.put("restCurl", restCurl);
+        String relistCurl = securityUtils.encrypt("restaurantId=" + restaurant.getRestaurantId());
+        templateMap.put("relistCurl", relistCurl);
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.OWNER_CONTENT_APPROVED_EMAIL_TEMPLATE);
         sendEmail(adminEmailAddress , subject, emailContent);
     }

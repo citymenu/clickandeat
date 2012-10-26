@@ -388,6 +388,11 @@ Ext.define('AD.controller.RestaurantEdit', {
     },
 
     sendForOwnerApproval: function(button) {
+        // Change the list on Site field so that the restaurant is not displayed
+        // on the site until the content is approved by the Restaurant owner
+        this.getMainDetailsForm().getForm().findField('listOnSite').setValue(false);
+
+        // Now save
         this.saveRestaurant(button , this.sendForOwnerApprovalCallBack)
     },
 
