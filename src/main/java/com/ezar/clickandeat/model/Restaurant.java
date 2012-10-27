@@ -96,11 +96,16 @@ public class Restaurant extends PersistentObject {
 
         StringBuilder sb = new StringBuilder("app/");
         sb.append(MessageFactory.getMessage("url.find-takeaway",false));
-        sb.append("-").append(address.getTown());
-        sb.append("-").append(address.getPostCode());
-        sb.append("-").append(StringUtils.collectionToDelimitedString(cuisines,"-"));
-        sb.append("-").append(name.replace(" ","-"));
-        sb.append("/restaurant/").append(restaurantId);
+        if( address != null || address.getTown() != null )
+            sb.append("-").append(address.getTown());
+        if( address != null || address.getTown() != null )
+            sb.append("-").append(address.getPostCode());
+        if( cuisines != null )
+            sb.append("-").append(StringUtils.collectionToDelimitedString(cuisines,"-"));
+        if( name != null )
+            sb.append("-").append(name.replace(" ","-"));
+        if( restaurantId != null )
+            sb.append("/restaurant/").append(restaurantId);
         return sb.toString();
     }
     
