@@ -5,6 +5,7 @@
 <!doctype html>
 
 <head>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
@@ -33,8 +34,10 @@
                 <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
+        <div class="recommendations">
+            <p class="triangle-isosceles left">Why not try something from one of our recommended restaurants?</p>
+        </div>
         <div id="carousel">
-            <h2>Why not try something from one of our recommended restaurants?</h2>
             <div class="carousel-items">
                 <ul>
                     <c:forEach var="restaurant" items="${recommendations}">
