@@ -24,12 +24,13 @@ function onRestaurantLoaded() {
         launch: function() {
             Ext.create('Ext.container.Viewport',{
                 layout:'border',
-                layout:'border',
                 items:[{
                     region: 'north',
-                    title: 'North Panel',
+                    contentEl: 'north',
                     collapsible: false,
-                    height: 120
+                    height: 133,
+                    frame: false,
+                    border:false
                 },{
                     region:'center',
                     xtype:'restaurantedit'

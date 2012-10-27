@@ -13,9 +13,16 @@
 
 	<link rel="shortcut icon" href="${resources}/images/favico.png">
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css" charset="utf-8"/>
+
+    <!-- Typekit -->
+    <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/overrides.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/MyFontsWebfontsKit.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header-admin.css" charset="utf-8"/>
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js" charset="utf-8"></script>
 	<!-- ExtJS -->

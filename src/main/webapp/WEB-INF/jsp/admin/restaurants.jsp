@@ -7,5 +7,11 @@
 </head>
 
 <body>
+
+<div id="north">
+    <%@ include file="/WEB-INF/jsp/admin/header.jsp" %>
+</div>
+
 <div id="main-content"></div>
+
 </body>

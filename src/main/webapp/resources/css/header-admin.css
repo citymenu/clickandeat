@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+#header {
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.header-wrapper {
+    background-color:#FFFFFF;
+    clear: both;
+    margin: 0 auto;
+    position: relative;
+    text-align: left;
+}
+
+.header-banner {
+    background-image: url(../images/pattern.jpg);
+    background-repeat: repeat;
+    height:105px;
+    border:0;
+    position:relative;
+}
+
+.header-company {
+    background:none;
+    font:40px/40px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-transform: uppercase;
+    position:absolute;
+    bottom: 35px;
+    left: 20px;
+}
+
+.header-company-small {
+    font:32px/32px MaiandraOTGD-DemiBold;
+    color:#e5a38d;
+    padding: 0 1px 0 1px;
+}
+
+.navigation-wrapper {
+    background-color: none;
+    background: url(../images/nav-background.png) 0 0 repeat-x;
+    height:28px;
+}
+
+.navigation-links {
+    padding-top: 5px;
+    padding-left: 25px;
+    clear:both;
+}
+
+.navigation-wrapper ul {
+    list-style:none outside none;
+}
+
+.navigation-wrapper li {
+    color: #999999;
+    font-family: prenton;
+    font-size: 13px;
+    font-weight:500;
+    display:inline;
+    float:left;
+    padding-right:15px;
+}
+
+.navigation-wrapper li.active {
+    color:#FFFFFF;
+}
+
+.arrow {
+    font-weight: 700;
+}
+
+.navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {
+    color: #999999;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.navigation-links li.active a, .navigation-links li.active a:visited, .navigation-links li.active a:active, .navigation-links li.active a:hover {
+    color: #FFFFFF;
+}
+
+
+.navigation-links a:active, .navigation-links a:hover {
+   color:#FFFFFF;
+   text-decoration:underline;
+}
