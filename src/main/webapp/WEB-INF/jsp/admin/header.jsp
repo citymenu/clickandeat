@@ -21,7 +21,7 @@
                         </c:otherwise>
                     </c:choose>
 
-                    <li class="arrow">&gt&gt</li>
+                    <li class="arrow">|</li>
 
                     <c:choose>
                         <c:when test="${path == 'admin/orders.jsp'}">
