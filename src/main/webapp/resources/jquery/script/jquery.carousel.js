@@ -200,6 +200,8 @@
  * @author Ganeshji Marwaha/ganeshread@gmail.com
  */
 
+var paused = false;
+
 (function($) {                                          // Compliant with jquery.noConflict()
 $.fn.jCarouselLite = function(o) {
     o = $.extend({
@@ -281,7 +283,7 @@ $.fn.jCarouselLite = function(o) {
         };
 
         function go(to) {
-            if(!running) {
+            if(!running && !paused) {
 
                 if(o.beforeStart)
                     o.beforeStart.call(this, vis());
@@ -311,6 +313,7 @@ $.fn.jCarouselLite = function(o) {
                         running = false;
                     }
                 );
+
                 // Disable buttons when the carousel reaches the last/first, and enable when not
                 if(!o.circular) {
                     $(o.btnPrev + "," + o.btnNext).removeClass("disabled");

@@ -63,6 +63,10 @@ public class Restaurant extends PersistentObject {
     
     private String imageName;
 
+    // Admin
+    private Long created;
+    private Long lastUpdated;
+
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
     
@@ -597,5 +601,21 @@ public class Restaurant extends PersistentObject {
 
     public void setOpen(boolean open) {
         this.open = open;
+    }
+
+    public Long getCreated() {
+        return created;
+    }
+
+    public void setCreated(Long created) {
+        this.created = created;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

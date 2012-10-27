@@ -156,8 +156,6 @@ public class RestaurantController {
     }
 
 
-    
-    
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )

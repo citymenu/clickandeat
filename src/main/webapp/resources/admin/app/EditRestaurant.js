@@ -33,7 +33,8 @@ function onRestaurantLoaded() {
                     border:false
                 },{
                     region:'center',
-                    xtype:'restaurantedit'
+                    xtype:'restaurantedit',
+                    frame:true
                 }]
             });
         }

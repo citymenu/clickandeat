@@ -10,6 +10,7 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.Pair;
+import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
@@ -21,6 +22,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +39,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+
+import static org.springframework.data.domain.Sort.Direction.ASC;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Controller
 public class OrderController implements InitializingBean {
@@ -55,6 +61,9 @@ public class OrderController implements InitializingBean {
     private SequenceGenerator sequenceGenerator;
 
     @Autowired
+    private ResponseEntityUtils responseEntityUtils;
+
+    @Autowired
     private JSONUtils jsonUtils;
 
     private JSONSerializer serializer;
@@ -71,6 +80,35 @@ public class OrderController implements InitializingBean {
                 .transform(new NullIdStringTransformer(), String.class)
                 .include("order.restaurant.name")
                 .exclude("order.restaurant.*");
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/admin/orders/list.ajax", method = RequestMethod.GET )
+    public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
+                                       @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort,
+                                       @RequestParam(value = "query", required = false) String query) throws Exception {
+
+        PageRequest request;
+
+
+        if( StringUtils.hasText(sort)) {
+            List<Map<String,String>> sortParams = (List<Map<String,String>>)jsonUtils.deserialize(sort);
+            Map<String,String> sortProperties = sortParams.get(0);
+            String direction = sortProperties.get("direction");
+            String property = sortProperties.get("property");
+            request = new PageRequest(page - 1, limit - start, ( "ASC".equals(direction)? ASC : DESC ), property );
+        }
+        else {
+            request = new PageRequest(page - 1, limit - start );
+        }
+
+        List<Order> orders = orderRepository.pageByOrderId(request,query);
+        Map<String,Object> model = new HashMap<String,Object>();
+        model.put("orders",orders);
+        model.put("count",orderRepository.count());
+        return responseEntityUtils.buildResponse(model);
     }
 
 

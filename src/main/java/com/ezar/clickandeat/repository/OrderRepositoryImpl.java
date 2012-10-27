@@ -10,10 +10,15 @@ import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.repository.query.QueryUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -57,6 +62,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
             }
         }
         return order;
+    }
+
+    @Override
+    public List<Order> pageByOrderId(Pageable pageable, String orderId) {
+        Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId)): new Query();
+        QueryUtils.applyPagination(query,pageable);
+        return operations.find(query,Order.class);
     }
 
 

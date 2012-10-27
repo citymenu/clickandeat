@@ -3,7 +3,7 @@
 
 <head>
 	<script type="text/javascript" src="${resources}/admin/app/EditRestaurant.js"></script>
-    <title>ClickAndEat - Restaurants</title>
+    <title>LlamaryComer - Restaurant</title>
 
     <script type="text/javascript">
         var restaurantObj;

@@ -172,11 +172,11 @@ a.home {
 }
 
 .recommendations {
-    font: 16px/16px MaiandraOTGD-DemiBold;
+    font:700 14px myriad-pro;
     color: #FFFFFF;
     text-shadow: 0 2px #333333;
     margin:60px 0 15px 0;
-    padding:0 20px 0 20px;
+    padding:0 20px 0 0;
     text-align:left;
     display:inline-block;
 }
@@ -188,21 +188,30 @@ a.home {
 }
 
 .carousel-items {
-}
-
-.restaurant-panel {
-    width:173px;
-    min-height:120px;
-    padding:10px;
-    border:1px solid #CCCCCC;
-    background-color:#FEFEF2;
-    margin:10px 25px;
+    padding:10px 0 10px 0;
+    background-color:#FCFbF5;
+    border:1px solid #AAAAAA;
     -webkit-border-radius: 15px;
        -moz-border-radius: 15px;
             border-radius: 15px;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+}
+
+.restaurant-panel {
+    width:183px;
+    min-height:120px;
+    padding:10px;
+    border:1px solid #CCCCCC;
+    background-color:#FFFFFF;
+    margin:10px 20px;
+    -webkit-border-radius: 15px;
+       -moz-border-radius: 15px;
+            border-radius: 15px;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
 }
 
 .restaurant-name {
@@ -230,12 +239,13 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 
 .triangle-isosceles {
 	background:#c5171e; /* default background for browsers without gradient support */
-	padding:13px 20px 13px 20px;
+	padding:8px 20px 8px 20px;
 }
 
 .triangle-isosceles.left {
     color:#FFFFFF;
 	background:#c5171e;
+    margin-left:30px;
 	background:-webkit-gradient(linear, 0 0, 0 100%, from(#c5171e), to(#720d11));
 	background:-moz-linear-gradient(#c5171e, #720d11);
 	background:-o-linear-gradient(#c5171e, #720d11);
@@ -247,7 +257,9 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 
 .triangle-isosceles.left:after {
 	border-color:transparent #9c1218;
-    top:12px; /* value = - border-top-width - border-bottom-width */
+    top:10px; /* value = - border-top-width - border-bottom-width */
+    border-width:8px 30px 8px 0;
+    left:-30px;
     bottom:auto;
 
 }

@@ -3,7 +3,7 @@
 
 <head>
 	<script type="text/javascript" src="${resources}/admin/app/ListRestaurants.js"></script>
-    <title>ClickAndEat - Restaurants</title>
+    <title>LlamaryComer - Restaurants</title>
 </head>
 
 <body>

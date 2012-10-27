@@ -2,7 +2,6 @@
 function reloadListStore(listWidgetName) {
 	var store = Ext.widget(listWidgetName).store;
 	store.loadPage(store.currentPage);
-
 }
 
 /* Formats a date from a numeric value */ 
@@ -52,6 +51,16 @@ function arrayToString(value, record) {
         return unescapeQuotes(value.join('\n'));
     } else {
         return value;
+    }
+}
+
+// Parse out order status
+function convertOrderStatus(value,record) {
+    if( !value || value == '' ) {
+        return value;
+    }
+    else {
+        return value.replace('ORDER_STATUS_','').replace('_',' ');
     }
 }
 

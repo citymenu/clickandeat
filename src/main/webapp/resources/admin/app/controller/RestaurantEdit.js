@@ -97,7 +97,9 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
 
             'restaurantedit button[action=saverestaurant]': {
-                click:this.saveRestaurant
+                click:function() {
+                    this.saveRestaurant(null,null);
+                }
             },
             'restaurantedit button[action=sendForOwnerApproval]': {
                 click: this.sendForOwnerApproval
@@ -672,13 +674,12 @@ Ext.define('AD.controller.RestaurantEdit', {
                     this.initializeRestaurant(obj.restaurant);
                     showSuccessMessage(Ext.get('restauranteditpanel'),'Saved','Restaurant details updated successfully');
                     //If a callback function has been provided we execute it
-                    if(!(typeof callback === 'undefined')){
+                    if(!(typeof callback === 'undefined') && callback != null ){
                         callback.call();
                     }
                 } else {
                     showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
                 }
-
             },
             failure: function(response) {
                 var obj = Ext.decode(response.responseText);

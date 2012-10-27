@@ -17,7 +17,8 @@ Ext.application({
                 border:false
             },{
                 region:'center',
-                xtype:'restaurantlist'
+                xtype:'restaurantlist',
+                frame:true
             }]
         });
     }

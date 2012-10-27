@@ -52,6 +52,8 @@ public class EmailServiceImpl implements IEmailService {
 
     private String from;
 
+    private String bcc;
+
     private String adminEmailAddress;
 
     private int cancelCutoffMinutes;
@@ -412,6 +414,7 @@ public class EmailServiceImpl implements IEmailService {
             public void prepare(MimeMessage mimeMessage) throws Exception {
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
                 message.setTo(to);
+                message.setBcc(bcc);
                 message.setFrom(from);
                 message.getMimeMessage().setSubject(subject, "utf-8");
                 message.setText(text,true);
@@ -428,6 +431,11 @@ public class EmailServiceImpl implements IEmailService {
         this.from = from;
     }
 
+    @Required
+    @Value(value="${email.bcc}")
+    public void setBcc(String bcc) {
+        this.bcc = bcc;
+    }
     @Required
     @Value(value="${email.adminaddress}")
     public void setAdminEmailAddress(String adminEmailAddress) {

@@ -1,0 +1,10 @@
+@charset "utf-8";
+
+.order-nav-item {
+    font:12px tahoma,arial,verdana,sans-serif;
+    margin:5px 0 5px 0;
+    padding:2px 5px 2px 5px;
+    background-color:#F7F7F7;
+    border:1px solid #CCCCCC;
+    cursor:pointer;
+}

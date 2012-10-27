@@ -73,6 +73,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
+            Query query = new Query(where("listOnSite").is(true));
             recommendations = operations.findAll(Restaurant.class);
             lastRefreshed = now;
         }
@@ -136,6 +137,15 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
 
         clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        
+        // Update created and last update times
+        long now = new DateTime().getMillis();
+        if( restaurant.getCreated() == null ) {
+            restaurant.setCreated(now);
+        }
+        restaurant.setLastUpdated(now);
+
+        // Save the restaurant
         operations.save(restaurant);
         return restaurant;
     }

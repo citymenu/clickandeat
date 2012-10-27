@@ -6,9 +6,12 @@ $(document).ready(function(){
         speed: 1200,
         circular:true,
         visible:4
-
+    })
+    .hover(function() {
+        paused = true;
+    }, function() {
+        paused = false;
     });
-
 
     // If error in model, show location warning
     if( notfound == 'true' ) {
