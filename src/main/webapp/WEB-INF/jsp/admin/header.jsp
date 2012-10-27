@@ -13,7 +13,7 @@
             <div class="navigation-links">
                 <ul>
                     <c:choose>
-                        <c:when test="${path == 'admin/restaurants.jsp' || path == 'admin/restaurants.jsp'}">
+                        <c:when test="${path == 'admin/restaurants.jsp' || path == 'admin/editRestaurant.jsp'}">
                             <li class="active unselectable">Restaurants</li>
                         </c:when>
                         <c:otherwise>
