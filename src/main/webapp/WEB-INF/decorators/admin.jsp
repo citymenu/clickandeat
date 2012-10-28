@@ -37,6 +37,17 @@
 	<script type="text/javascript" src="${resources}/ext/bootstrap.js" charset="utf-8"></script>
 	<script type="text/javascript" src="${resources}/script/admin/extoverrides.js" charset="utf-8"></script>
 	<script type="text/javascript" src="${resources}/script/admin/util.js" charset="utf-8"></script>
+
+    <!-- Messages -->
+    <script type="text/javascript" src="${ctx}/app/script/messages.js" charset="utf-8"></script>
+
+    <!-- Apply fancybox -->
+    <script type="text/javascript">
+	    $(document).ready(function() {
+    		$(".fancybox").fancybox();
+    	});
+    </script>
+
     <decorator:head/>
     <title><decorator:title/></title>
 </head>

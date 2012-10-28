@@ -79,7 +79,7 @@ Ext.message = function(){
     }
     return {
         msg : function(target, cls, title, format, delay){
-			if (msgCt){ msgCt.remove(); }
+			if (msgCt){ msgCt.destroy(); }
 			msgCt = Ext.DomHelper.insertFirst(document.body, {id: 'msg-div'}, true);
 			msgCt.setWidth(250);
            	msgCt.alignTo(target, 'tr-tr',[-15,15]);

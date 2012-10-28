@@ -47,7 +47,14 @@ Ext.define('AD.controller.OrderList', {
                 handler:function(){
                     ctrl.amendOrder();
                 }
-            }]
+            }],
+            listeners:{
+                'hide': {
+                    fn:function(){
+                        this.destroy();
+                    }
+                }
+            }
 	    });
 	    menu.showAt(e.getXY());
 	},
@@ -62,6 +69,7 @@ Ext.define('AD.controller.OrderList', {
             closable:false,
             fn:function(result) {
                 if(result == 'yes') {
+                    $.fancybox.showLoading();
                     Ext.Ajax.request({
                         url: ctx + '/admin/orders/cancel.ajax',
                         method:'POST',
@@ -69,24 +77,24 @@ Ext.define('AD.controller.OrderList', {
                             orderId: order.get('orderId')
                         },
                         success: function(response) {
+                            $.fancybox.hideLoading();
                             var obj = Ext.decode(response.responseText);
                             if( obj.success ) {
                                 showSuccessMessage(Ext.get('orderlist'),'Cancelled','Order has been cancelled');
-                                var store = this.getOrderlist().getStore();
+                                var store = Ext.getCmp('orderlist').getStore();
                                 store.loadPage(store.currentPage);
                             } else {
                                 showErrorMessage(Ext.get('orderlist'),'Error',obj.message);
                             }
                         },
                         failure: function(response) {
+                            $.fancybox.hideLoading();
                             var obj = Ext.decode(response.responseText);
                             showErrorMessage(Ext.get('orderlist'),'Error',obj.message);
-                        },
-                        scope:this
+                        }
                     });
                 }
-            },
-            scope:this
+            }
         });
 	}
 
