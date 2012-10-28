@@ -35,7 +35,7 @@
             </div>
         </div>
         <div id="carousel">
-            <h2>Why not try something from one of our recommended restaurants?</h2>
+            <h2>¿Porque no pruebas uno de nuestros restaurantes recomendados?</h2>
             <div class="carousel-items">
                 <ul>
                     <c:forEach var="restaurant" items="${recommendations}">
