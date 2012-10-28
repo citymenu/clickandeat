@@ -22,16 +22,10 @@
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hello $stringTool.escape($order.customer.firstName),</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>We are really sorry but $stringTool.escape($order.restaurant.name) will not be able to complete your order and
-                            unfortunately we have had to cancel your order.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>We have cancelled your order with $stringTool.escape($order.restaurant.name).</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>You have not been charged for this order.</b></div>
                         </div>
                         
-                        <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color=#AA0000"><b>We really appreciate your business and want to make it up to you. Please accept 
-                            discount voucher $voucherId from us which entitles you to 10% off your next order with us.</b></div>
-                        </div>
-
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Order details:</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Your order number is $order.orderId</div>
@@ -65,14 +59,6 @@
                     <td width="20">&nbsp;</td>
                     <td width="230">
                         <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/apology.jpg" width="230" height="300"/>
-                    </td>
-                </tr>
-                <tr valign="top">
-                    <td width=550" colspan="3">
-                        <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>How do I apply a discount voucher?</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">To apply a discount voucher to your next online order just add the voucher id on the checkout page.</div>
-                        </div>
                     </td>
                 </tr>
             </table>

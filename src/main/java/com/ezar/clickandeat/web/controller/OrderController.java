@@ -12,6 +12,7 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -54,6 +55,9 @@ public class OrderController implements InitializingBean {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private OrderWorkflowEngine orderWorkflowEngine;
+    
     @Autowired
     private VoucherRepository voucherRepository;
 
@@ -111,6 +115,25 @@ public class OrderController implements InitializingBean {
         return responseEntityUtils.buildResponse(model);
     }
 
+
+    @ResponseBody
+    @RequestMapping(value="/admin/orders/cancel.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> cancelOrder(@RequestParam(value = "orderId") String orderId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_SYSTEM_CANCELS);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
 
 
     @RequestMapping(value="/buildOrder.html", method = RequestMethod.GET )

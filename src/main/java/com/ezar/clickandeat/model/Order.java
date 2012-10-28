@@ -90,6 +90,9 @@ public class Order extends PersistentObject {
     private String restaurantDeclinedReason;
     private List<OrderUpdate> orderUpdates;
 
+    // Order amendments
+    private List<OrderAmendment> orderAmendments;
+
     // Order voucher details
     private String voucherId;
     
@@ -112,10 +115,11 @@ public class Order extends PersistentObject {
         this.orderNotificationCallCount = 0;
         
         this.orderItems = new ArrayList<OrderItem>();
-        this.orderUpdates = new ArrayList<OrderUpdate>();
         this.orderDiscounts = new ArrayList<OrderDiscount>();
-
         this.restaurantDiscounts = new ArrayList<Discount>();
+
+        this.orderUpdates = new ArrayList<OrderUpdate>();
+        this.orderAmendments = new ArrayList<OrderAmendment>();
     }
 
 
@@ -777,6 +781,14 @@ public class Order extends PersistentObject {
 
     public void setOrderUpdates(List<OrderUpdate> orderUpdates) {
         this.orderUpdates = orderUpdates;
+    }
+
+    public List<OrderAmendment> getOrderAmendments() {
+        return orderAmendments;
+    }
+
+    public void setOrderAmendments(List<OrderAmendment> orderAmendments) {
+        this.orderAmendments = orderAmendments;
     }
 
     public List<OrderDiscount> getOrderDiscounts() {

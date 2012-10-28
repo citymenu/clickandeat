@@ -219,22 +219,20 @@ public class EmailServiceImpl implements IEmailService {
      */
 
     @Override
-    public void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception {
+    public void sendSystemCancelledConfirmationToCustomer(Order order) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Sending restaurant cancelled confirmation email to customer for order id: " + order.getOrderId());
+            LOGGER.debug("Sending system operator cancelled confirmation email to customer for order id: " + order.getOrderId());
         }
 
         String emailAddress = order.getCustomer().getEmail();
-        String subjectFormat = MessageFactory.getMessage("email-subject.restaurant-order-cancelled-confirmation-subject",false);
+        String subjectFormat = MessageFactory.getMessage("email-subject.system-order-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
 
         // Create a voucher to try to keep this customer for the next order
-        Voucher voucher = voucherRepository.createVoucher(5d);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
-        templateMap.put("voucherId",voucher.getVoucherId());
-        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE);
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.SYSTEM_CANCELLED_ORDER_EMAIL_TEMPLATE);
         sendEmail(emailAddress, subject, emailContent);
     }
 

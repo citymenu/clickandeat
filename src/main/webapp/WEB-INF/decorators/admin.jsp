@@ -27,6 +27,11 @@
 
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js" charset="utf-8"></script>
+
+    <!-- Fancybox -->
+    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" charset="utf-8"/>
+    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js?v=2.1.0" charset="utf-8"></script>
+
 	<!-- ExtJS -->
 	<script type="text/javascript" src="${resources}/ext/ext-all-debug.js" charset="utf-8"></script>
 	<script type="text/javascript" src="${resources}/ext/bootstrap.js" charset="utf-8"></script>

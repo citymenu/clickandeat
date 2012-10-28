@@ -43,7 +43,7 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantDeclinedOrderConfirmation.vm";
     public static final String CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancelledOrder.vm";
     public static final String CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancelledOrderConfirmation.vm";
-    public static final String RESTAURANT_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/restaurantCancelledOrderConfirmation.vm";
+    public static final String SYSTEM_CANCELLED_ORDER_EMAIL_TEMPLATE = "/velocity/email/{locale}/systemCancelledOrderConfirmation.vm";
     public static final String AUTO_CANCELLED_RESTAURANT_EMAIL_TEMPLATE = "/velocity/email/{locale}/autoCancelledRestaurantConfirmation.vm";
     public static final String AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE = "/velocity/email/{locale}/autoCancelledCustomerConfirmation.vm";
     public static final String CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerCancellationOffer.vm";

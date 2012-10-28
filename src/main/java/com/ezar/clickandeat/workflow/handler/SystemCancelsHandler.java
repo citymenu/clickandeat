@@ -7,20 +7,21 @@ import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
-import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
-public class RestaurantCancelsHandler implements IWorkflowHandler {
+public class SystemCancelsHandler implements IWorkflowHandler {
     
-    private static final Logger LOGGER = Logger.getLogger(RestaurantCancelsHandler.class);
+    private static final Logger LOGGER = Logger.getLogger(SystemCancelsHandler.class);
 
     @Autowired
     private NotificationService notificationService;
@@ -34,22 +35,33 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
     @Autowired
     private VoucherRepository voucherRepository;
 
+    /**
+     * List of status values that this handler is invalid for
+     */
+    private final List<String> invalidStatusList = Arrays.asList(
+            ORDER_STATUS_BASKET,
+            ORDER_STATUS_CUSTOMER_CANCELLED,
+            ORDER_STATUS_SYSTEM_CANCELLED,
+            ORDER_STATUS_RESTAURANT_DECLINED,
+            ORDER_STATUS_AUTO_CANCELLED
+    );
+
     @Override
     public String getWorkflowAction() {
-        return ACTION_RESTAURANT_CANCELS;
+        return ACTION_SYSTEM_CANCELS;
     }
 
 
     @Override
     public boolean isActionValidForOrder(Order order) {
-        return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
+        return !invalidStatusList.contains(order.getOrderStatus());
     }
 
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
-        order.addOrderUpdate("Customer cancelled order");
+        order.addOrderUpdate("Order cancelled by system operator");
 
         // Set any voucher on this order to be unused
         voucherRepository.markVoucherUnused(order.getVoucherId());
@@ -60,9 +72,11 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
         restaurantRepository.saveRestaurant(restaurant);
 
         try {
-            paymentService.processTransactionRequest(order,PaymentService.REFUND);
-            order.addOrderUpdate("Refunded customer credit card");
-            order.setTransactionStatus(Order.PAYMENT_REFUNDED);
+            if( Order.PAYMENT_AUTHORISED.equals(order.getTransactionStatus()) || Order.PAYMENT_CAPTURED.equals(order.getTransactionStatus())) {
+                paymentService.processTransactionRequest(order,PaymentService.REFUND);
+                order.addOrderUpdate("Refunded customer credit card");
+                order.setTransactionStatus(Order.PAYMENT_REFUNDED);
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("Error processing refund of order",ex);
@@ -70,15 +84,15 @@ public class RestaurantCancelsHandler implements IWorkflowHandler {
         }
 
         try {
-            notificationService.sendRestaurantCancelledConfirmationToCustomer(order);
-            order.addOrderUpdate("Sent confirmation of restaurant cancelling order to customer");
+            notificationService.sendSystemCancelledConfirmationToCustomer(order);
+            order.addOrderUpdate("Sent confirmation of system operator cancelling order to customer");
         }
         catch (Exception ex ) {
-            LOGGER.error("Error sending confirmation of restaurant cancelling order to customer",ex);
-            order.addOrderUpdate("Error sending confirmation of restaurant cancelling order to customer: " + ex.getMessage());
+            LOGGER.error("Error sending confirmation of system operator cancelling order to customer",ex);
+            order.addOrderUpdate("Error sending confirmation of system operator cancelling order to customer: " + ex.getMessage());
         }
 
-        order.setOrderStatus(ORDER_STATUS_RESTAURANT_CANCELLED);
+        order.setOrderStatus(ORDER_STATUS_SYSTEM_CANCELLED);
         return order;
     }
 

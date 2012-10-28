@@ -17,7 +17,7 @@ import com.ezar.clickandeat.model.Restaurant;
 
     void sendCustomerCancelledConfirmationToCustomer(Order order) throws Exception;
 
-    void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception;
+    void sendSystemCancelledConfirmationToCustomer(Order order) throws Exception;
 
     void sendAutoCancelledConfirmationToCustomer(Order order) throws Exception;
 

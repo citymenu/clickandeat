@@ -78,12 +78,12 @@ public class OrderWorkflowEngineTest {
      * @throws Exception
      */
     @Test
-    public void testRestaurantAttemptsToCancelAcceptedOrder() throws Exception {
+    public void testSystemAttemptsToCancelCancelledOrder() throws Exception {
 
-        order.setOrderStatus(ORDER_STATUS_RESTAURANT_ACCEPTED);
+        order.setOrderStatus(ORDER_STATUS_AUTO_CANCELLED);
 
         try {
-            orderWorkflowEngine.processAction(order,ACTION_RESTAURANT_CANCELS);
+            orderWorkflowEngine.processAction(order,ACTION_SYSTEM_CANCELS);
             fail("WorkflowStatusException should be thrown");
         }
         catch( Exception ex ) {

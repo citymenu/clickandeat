@@ -28,7 +28,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String ORDER_STATUS_AWAITING_RESTAURANT = "ORDER_STATUS_AWAITING_RESTAURANT";
     public static final String ORDER_STATUS_RESTAURANT_ACCEPTED = "ORDER_STATUS_RESTAURANT_ACCEPTED";
     public static final String ORDER_STATUS_RESTAURANT_DECLINED = "ORDER_STATUS_RESTAURANT_DECLINED";
-    public static final String ORDER_STATUS_RESTAURANT_CANCELLED = "ORDER_STATUS_RESTAURANT_CANCELLED";
+    public static final String ORDER_STATUS_SYSTEM_CANCELLED = "ORDER_STATUS_SYSTEM_CANCELLED";
     public static final String ORDER_STATUS_CUSTOMER_CANCELLED = "ORDER_STATUS_CUSTOMER_CANCELLED";
     public static final String ORDER_STATUS_AUTO_CANCELLED = "ORDER_STATUS_AUTO_CANCELLED";
     public static final String ORDER_STATUS_CANCEL_CUTOFF_EXPIRED = "ORDER_STATUS_CANCEL_CUTOFF_EXPIRED";
@@ -42,7 +42,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String ACTION_RESTAURANT_ACCEPTS = "ACTION_RESTAURANT_ACCEPTS";
     public static final String ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL = "ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL";
     public static final String ACTION_RESTAURANT_DECLINES = "ACTION_RESTAURANT_DECLINES";
-    public static final String ACTION_RESTAURANT_CANCELS = "ACTION_RESTAURANT_CANCELS";
+    public static final String ACTION_SYSTEM_CANCELS = "ACTION_SYSTEM_CANCELS";
     public static final String ACTION_CUSTOMER_CANCELS = "ACTION_CUSTOMER_CANCELS";
     public static final String ACTION_AUTO_CANCEL = "ACTION_AUTO_CANCEL";
 

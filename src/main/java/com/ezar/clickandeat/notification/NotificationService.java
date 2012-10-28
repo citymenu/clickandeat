@@ -165,13 +165,13 @@ public class NotificationService {
      * @throws Exception
      */
 
-    public void sendRestaurantCancelledConfirmationToCustomer(Order order) throws Exception {
+    public void sendSystemCancelledConfirmationToCustomer(Order order) throws Exception {
 
-        LOGGER.info("Sending restaurant cancelled confirmation to customer for orderId [" + order.getOrderId() + "]");
+        LOGGER.info("Sending system operator cancelled confirmation to customer for orderId [" + order.getOrderId() + "]");
 
         // Send email notification to customer
         if( StringUtils.hasText(order.getCustomer().getEmail())) {
-            emailService.sendRestaurantCancelledConfirmationToCustomer(order);
+            emailService.sendSystemCancelledConfirmationToCustomer(order);
         }
     }
 
