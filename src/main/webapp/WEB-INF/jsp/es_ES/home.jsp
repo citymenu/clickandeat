@@ -25,18 +25,22 @@
 <div id="content">
     <div class="main-content">
         <div class="butler-main">
-            <div class="searchbar-wrapper">
-                <div class="searchbar-location unselectable">Restaurantes en tu zona</div>
-                <div class="search-location-form">
-                    <div class="location-input"><input class="location" type="text" id="loc" placeholder=""/></div>
-                    <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
+            <div id="searchbar-wrapper">
+                <div class="triangle-right left">
+                    <div class="searchbar-content">
+                        <div class="searchbar-location unselectable">Restaurants in your area</div>
+                        <div class="search-location-form">
+                            <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
+                            <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
+                        </div>
+                        <div class="location-direct unselectable">Or search directly in: <a class="location" href="${ctx}/app/find-takeaway-food-in-london/loc/London"/>London</a></div>
+                        <div id="search-warning"><message:message key="search.location-not-found"/></div>
+                    </div>
                 </div>
-                <div class="location-direct unselectable">O entra directament en: <a class="location" href="${ctx}/app/find-takeaway-food-in-madrid/loc/Matrid"/>Madrid</a> / <a class="location" href="${ctx}/app/find-takeaway-food-in-barcelona/loc/Barcelona"/>Barcelona</a></div>
-                <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
         <div class="recommendations">
-            <p class="triangle-isosceles left">Why not try something from one of our recommended restaurants?</p>
+            <p class="triangle-isosceles left">¿Porque no pruebas uno de nuestros restaurantes recomendados?</p>
         </div>
         <div id="carousel">
             <div class="carousel-items">
@@ -47,7 +51,7 @@
                             <div class="restaurant-panel">
                                 <img src="${resources}/images/restaurant/${restaurant.imageName}" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                 <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
-                                <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
+                                <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/> sdfa asdf ;lksajdf ;lkjas df</div>
                             </div>
                         </a>
                     </li>
