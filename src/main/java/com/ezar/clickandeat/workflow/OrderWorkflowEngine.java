@@ -90,7 +90,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
 
     public Order processAction(Order order, String action) throws WorkflowException {
-        return processAction(order,action,null);
+        return processAction(order,action,new HashMap<String, Object>());
     }
     
     

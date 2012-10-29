@@ -35,6 +35,7 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCall.vm";
     public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCallResponse.vm";
     public static final String FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE = "/velocity/twilio/{locale}/fullOrderErrorResponse.vm";
+    public static final String ORDER_CALL_ERROR_TEMPLATE = "/velocity/twilio/{locale}/errorResponse.vm";
 
     // Email velocity template locations
     public static final String CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE = "/velocity/email/{locale}/customerOrderConfirmation.vm";

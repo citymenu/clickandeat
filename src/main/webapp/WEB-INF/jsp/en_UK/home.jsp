@@ -24,14 +24,18 @@
 <div id="content">
     <div class="main-content">
         <div class="butler-main">
-            <div class="searchbar-wrapper">
-                <div class="searchbar-location unselectable">Restaurants in your area</div>
-                <div class="search-location-form">
-                    <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
-                    <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
+            <div id="searchbar-wrapper">
+                <div class="triangle-right left">
+                    <div class="searchbar-content">
+                        <div class="searchbar-location unselectable">Restaurants in your area</div>
+                        <div class="search-location-form">
+                            <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
+                            <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
+                        </div>
+                        <div class="location-direct unselectable">Or search directly in: <a class="location" href="${ctx}/app/find-takeaway-food-in-london/loc/London"/>London</a></div>
+                        <div id="search-warning"><message:message key="search.location-not-found"/></div>
+                    </div>
                 </div>
-                <div class="location-direct unselectable">Or search directly in: <a class="location" href="${ctx}/app/find-takeaway-food-in-london/loc/London"/>London</a></div>
-                <div id="search-warning"><message:message key="search.location-not-found"/></div>
             </div>
         </div>
         <div class="recommendations">

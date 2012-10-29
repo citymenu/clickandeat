@@ -79,7 +79,10 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 orderItem.setOrderItemId(sequenceGenerator.getNextSequence());
             }
         }
-        order.updateCosts();
+        // Only update order costs if we have not started amending the order directly
+        if( order.getOrderAmendments().size() == 0 ) {
+            order.updateCosts();
+        }
         operations.save(order);
         return order;
     }

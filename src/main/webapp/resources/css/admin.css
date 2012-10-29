@@ -1,5 +1,9 @@
 @charset "utf-8";
 
+.x-grid-rowbody-tr {
+    background-color:#CCCCCC;
+}
+
 .order-nav-item {
     font:12px tahoma,arial,verdana,sans-serif;
     margin:5px 0 5px 0;
@@ -7,4 +11,45 @@
     background-color:#F7F7F7;
     border:1px solid #CCCCCC;
     cursor:pointer;
+}
+
+.order-summary {
+    margin:10px;
+    padding:10px;
+    background-color:#FFFFFF;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+.order-updates {
+    font:400 12px prenton;
+    color:#444444;
+}
+
+.order-updates h2 {
+    font:700 12px prenton;
+    color:#444444;
+    padding-bottom:2px;
+}
+
+.order-update {
+    padding-top:2px;
+    padding-bottom:2px;
+    clear:both;
+    overflow:hidden;
+    border-top:1px solid #EEEEEE
+}
+
+.order-update b {
+    font-weight:500;
+}
+
+.order-update-element {
+    float:left;
+    background:transparent;
+}
+
+.even {
+    background-color:#FAFAFA;
 }

@@ -2,7 +2,7 @@ Ext.define('AD.controller.OrderList', {
     extend: 'Ext.app.Controller',
     stores:['Orders'],
     models: ['Order'],
-    views:['order.List'],
+    views:['order.List','order.OrderAmendment'],
 
     refs: [{
         ref:'orderList',
@@ -17,8 +17,6 @@ Ext.define('AD.controller.OrderList', {
                 itemcontextmenu:this.onContextMenu
             }
 		});
-
-
 	},
 
 	onGridRendered: function(grid) {
@@ -96,6 +94,62 @@ Ext.define('AD.controller.OrderList', {
                 }
             }
         });
+	},
+
+	amendOrder:function() {
+        var order = this.getSelectedRecord();
+        var win = Ext.create('widget.window', {
+            title:'Amend Order',
+            id:'amendmentwindow',
+            closable: true,
+            closeAction:'destroy',
+            width: 600,
+            autoHeight:true,
+            modal:true,
+
+            dockedItems:[{
+                xtype:'toolbar',
+                dock:'top',
+                items:[{
+                    xtype:'button',
+                    text:'Save Amendment',
+                    handler:function() {
+                        var formPanel = Ext.getCmp('orderamendment');
+                        var form = formPanel.getForm();
+                        if( form.isValid()) {
+                            formPanel.submit({
+                                url:ctx + '/admin/orders/addOrderAmendment.ajax',
+                                success: function(form,action) {
+                                    var obj = Ext.decode(action.response.responseText);
+                                    if( obj.success ) {
+                                        showSuccessMessage(Ext.get('orderlist'),'Amended','Order has been amended');
+                                        var store = Ext.getCmp('orderlist').getStore();
+                                        store.loadPage(store.currentPage);
+                                        Ext.getCmp('amendmentwindow').close();
+                                    } else {
+                                        showErrorMessage(Ext.get('orderlist'),'Error',obj.message);
+                                    }
+                                },
+                                failure: function(form,action) {
+                                    var obj = Ext.decode(action.response.responseText);
+                                    showErrorMessage(Ext.get('orderlist'),'Error',obj.message);
+                                }
+                            });
+                        }
+                    }
+                }]
+            }],
+            layout: {
+                type: 'fit',
+            },
+            items: [{
+                xtype:'orderamendmentedit'
+            }]
+        });
+        win.show();
+        win.down('form').getForm().findField('orderId').setValue(order.get('orderId'));
+        win.down('form').getForm().findField('restaurantCost').setValue(order.get('restaurantCost'));
+        win.down('form').getForm().findField('totalCost').setValue(order.get('totalCost'));
 	}
 
 });

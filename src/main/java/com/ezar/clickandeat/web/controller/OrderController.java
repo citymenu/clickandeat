@@ -136,6 +136,41 @@ public class OrderController implements InitializingBean {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value="/admin/orders/addOrderAmendment.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> addOrderAmendment(@RequestParam(value = "orderId") String orderId, @RequestParam(value = "description", required = false) String description,
+                                                    @RequestParam(value = "restaurantCost") Double restaurantCost, @RequestParam(value = "totalCost", required = false) Double totalCost ) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Order order = orderRepository.findByOrderId(orderId);
+            
+            // Build new amendment object
+            OrderAmendment amendment = new OrderAmendment();
+            amendment.setCreated(new DateTime());
+            amendment.setDescription(description);
+            amendment.setPreviousRestaurantCost(order.getRestaurantCost());
+            amendment.setPreviousTotalCost(order.getTotalCost());
+            amendment.setRestaurantCost(restaurantCost);
+            amendment.setTotalCost(totalCost);
+            
+            // Add amendment to order and update order costs
+            order.getOrderAmendments().add(amendment);
+            order.setRestaurantCost(restaurantCost);
+            order.setTotalCost(totalCost);
+            orderRepository.saveOrder(order);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+
     @RequestMapping(value="/buildOrder.html", method = RequestMethod.GET )
     public ModelAndView get(HttpServletRequest request) {
 

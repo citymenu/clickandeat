@@ -147,7 +147,7 @@ public class TwilioController implements InitializingBean {
      */
     @ResponseBody
     @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
-    public void orderNotificationCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
+    public ResponseEntity<byte[]> orderNotificationCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
                                                     @RequestParam(value = "authKey", required = true) String authKey,
                                                     HttpServletResponse response) throws Exception {
 
@@ -163,7 +163,11 @@ public class TwilioController implements InitializingBean {
 
         // Process error update for call
         orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-        response.sendError(HttpServletResponse.SC_OK);
+
+        // Build response to call
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
+        return responseEntityUtils.buildXmlResponse(xml);
     }
 
 
@@ -230,7 +234,7 @@ public class TwilioController implements InitializingBean {
      */
     @ResponseBody
     @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
-    public void fullOrderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
+    public ResponseEntity<byte[]> fullOrderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
                                               @RequestParam(value = "authKey", required = true) String authKey,
                                               HttpServletResponse response) throws Exception {
 
@@ -246,7 +250,11 @@ public class TwilioController implements InitializingBean {
 
         // Process error update for call
         orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-        response.sendError(HttpServletResponse.SC_OK);
+
+        // Build response to call
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
+        return responseEntityUtils.buildXmlResponse(xml);
     }
 
 

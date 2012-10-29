@@ -8,7 +8,35 @@ Ext.define('AD.view.order.List' ,{
     plugins: [{
         ptype: 'rowexpander',
         rowBodyTpl : [
-            '<p><b>Order id:</b> {orderId}</p>'
+            '<tpl for=".">',
+                '<div class="order-summary">',
+                    '<div class="order-updates">',
+                        '<h2>Order activity</h2>',
+                        '<tpl for="orderUpdates">',
+                            '<div class="{[xindex % 2 === 0 ? "order-update even" : "order-update odd"]}">',
+                                '{updateTime} - <b>{text}</b>',
+                            '</div>',
+                        '</tpl>',
+                    '</div>',
+                '</div>',
+                '<tpl if="orderAmendments.length &gt; 0">',
+                    '<div class="order-summary">',
+                        '<div class="order-updates">',
+                            '<h2>Order amendments</h2>',
+                            '<tpl for="orderAmendments">',
+                                '<div class="{[xindex % 2 === 0 ? "order-update even" : "order-update odd"]}">',
+                                    '<div class="order-update-element">{created}&nbsp;-&nbsp;</div>',
+                                    '<div class="order-update-element">',
+                                        '<b>{description}</b><br>',
+                                        'Restaurant cost updated from &#128;{previousRestaurantCost:number("0.00")} to &#128;{restaurantCost:number("0.00")}<br>',
+                                        'Total cost updated from &#128;{previousTotalCost:number("0.00")} to &#128;{totalCost:number("0.00")}',
+                                    '</div>',
+                                '</div>',
+                            '</tpl>',
+                        '</div>',
+                    '</div>',
+                '</tpl>',
+            '</tpl>'
         ]
     }],
 
@@ -32,6 +60,7 @@ Ext.define('AD.view.order.List' ,{
             {header:'Discount', dataIndex:'totalDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Voucher Discount', dataIndex:'voucherDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Total Cost', dataIndex:'totalCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
+            {header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Transaction Id', dataIndex:'transactionId',flex:.1},
             {header:'Transaction Status', dataIndex:'transactionStatus',flex:.1}
 

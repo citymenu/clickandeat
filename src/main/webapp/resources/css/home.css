@@ -17,11 +17,15 @@
     background: url(../images/butler-home-alt.png) 0 0 no-repeat #FFFFFF;
 }
 
-.searchbar-wrapper {
+#searchbar-wrapper {
     position:absolute;
     right: 205px;
     top: 58px;
-    width: 310px;
+    width: 460px;
+}
+
+.searchbar-content {
+    padding:10px 5px 10px 5px;
 }
 
 .searchbar-location {
@@ -32,28 +36,26 @@
 }
 
 .search-location-form {
-    width: 310px;
     height: 30px;
     position:relative;
 }
 
 .location-input {
-    width: 280px;
+    width: 290px;
     height: 32px;
     position:absolute;
-    top: 0px;
-    left: 0px;
+    top:0;
+    left:0;
 }
 
 .location-button {
     background: url(../images/button-grey.png) 0 0 no-repeat;
     width: 68px;
     height: 32px;
-    padding-top:4px;
     position:absolute;
-    top: 0px;
-    left: 272px;
-    position:relative;
+    top:0;
+    left:300px;
+    padding-top:4px;
     text-align:center;
     cursor:pointer;
 }
@@ -83,7 +85,7 @@ input.location {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
-    width: 250px;
+    width: 270px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -103,9 +105,6 @@ input.location:focus {
     border:1px solid #666666;
     padding:5px 10px;
     background-color: #fffece;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     -webkit-border-radius: 10px;
        -moz-border-radius: 10px;
             border-radius: 10px;
@@ -256,10 +255,42 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 }
 
 .triangle-isosceles.left:after {
-	border-color:transparent #9c1218;
-    top:10px; /* value = - border-top-width - border-bottom-width */
-    border-width:8px 30px 8px 0;
-    left:-30px;
-    bottom:auto;
+	top:10px;
+	left:-30px; /* value = - border-left-width - border-right-width */
+	bottom:auto;
+	border-width:15px 30px 0 0; /* vary these values to change the angle of the vertex */
+	border-color:transparent #b1151b;
+}
 
+
+.triangle-right {
+	position:relative;
+	padding:8px 20px 8px 20px;
+	color:#fff;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+	-webkit-border-radius:20px;
+	-moz-border-radius:20px;
+	border-radius:20px;
+}
+
+
+.triangle-right.left {
+	margin-left:40px;
+	background:#c5171e; /* default background for browsers without gradient support */
+	/* css3 */
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#c5171e), to(#720d11));
+	background:-moz-linear-gradient(#c5171e, #720d11);
+	background:-o-linear-gradient(#c5171e, #720d11);
+	background:linear-gradient(#c5171e, #720d11);
+}
+
+
+.triangle-right.left:after {
+	top:20px;
+	left:-40px; /* value = - border-left-width - border-right-width */
+	bottom:auto;
+	border-width:15px 40px 0 0; /* vary these values to change the angle of the vertex */
+	border-color:transparent #b1151b;
 }

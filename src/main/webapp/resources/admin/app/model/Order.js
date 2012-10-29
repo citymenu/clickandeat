@@ -11,6 +11,7 @@ Ext.define('AD.model.Order', {
         {name:'restaurantId', type:'string'},
         {name:'restaurantName', type:'string',convert: unescapeQuotes},
         {name:'voucherId', type:'string'},
+        {name:'restaurantCost', type:'number'},
         {name:'totalCost', type:'number'},
         {name:'deliveryCost', type:'number'},
         {name:'totalDiscount', type:'number'},
@@ -21,7 +22,9 @@ Ext.define('AD.model.Order', {
         {name:'restaurantActionedTime', type:'date'},
         {name:'restaurantConfirmedTime', type:'date'},
         {name:'transactionId', type:'string'},
-        {name:'transactionStatus', type:'string'}
+        {name:'transactionStatus', type:'string'},
+        {name:'orderUpdates', type:'auto'},
+        {name:'orderAmendments', type:'auto'}
     ]
 });
 
