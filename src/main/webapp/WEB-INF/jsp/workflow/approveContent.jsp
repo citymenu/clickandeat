@@ -24,7 +24,15 @@
                     </td>
                 </td>
                 <td width="360">
-                    <div class="butler"></div>
+                    <c:choose>
+                        <c:when test="${restaurant.contentApproved}">
+                            <div class="butler-smile"></div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="butler"></div>
+                        </c:otherwise>
+                    </c:choose>
+
                 </td>
             </tr>
         </table>

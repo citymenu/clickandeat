@@ -23,8 +23,8 @@
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                            <p>El contenido de la página de tu restaurante ha sido actualizado, por favor accede a la página de tu restaurante utilizando este <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">enlace</a>
-                             y comprueba toda la información en la página. Presta especial atención a los siguientes elementos:</p>
+                            <p>El contenido de la página de tu restaurante ha sido actualizado, por favor utiliza este <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">enlace</a>
+                            para ver los cambios y confirma que la informacion en la página es correcta. Presta especial atención a los siguientes elementos:</p>
                              <p>
                                <ul>
                                <li>Horarios de apertura</li>
@@ -36,18 +36,13 @@
                                </ul>
                             </p>
                             <p> Utiliza los botones en la barra de herramientas para aprobar o rechazar el contenido.
-                            No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o no estas satisfecho con el contenido.</p>
-                            <p><b>Hemos retirado tu restaurante de la página de manera temporal hasta que apruebes el contenido, una vez recibamos tu notificacion lo añadiremos de nuevo.</b>
+                                No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o el contenido en la página no es correcto.</p>
+                            <p>
+                               <b>Hemos retirado tu restaurante de la página de manera temporal. Una vez recibamos la notificación confirmando el contenido,
+                                el restaurante será añadido a la página otra vez.
+                               </b>
                              </p>
                              </div>
-                        </div>
-                        <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquí</a>  para
-                            que tu restaurante se añadido de nuevo a nuestra pagina.</div>
-                        </div>
-                        <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor no dudes en ponerte en contacto con nosotros si tienes alguna pregunta o si necesitas alguna clarificación
-                             en relación a los pasos que seguimos cuando te pasamos pedidos</div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>

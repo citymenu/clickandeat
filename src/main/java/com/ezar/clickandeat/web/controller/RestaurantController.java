@@ -11,6 +11,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -297,7 +298,14 @@ public class RestaurantController {
             else {
                 // Here we send the email to the restaurant
                 emailService.sendForOwnerApproval(restaurant);
-                //restaurant = repository.saveRestaurant(restaurant);
+                // Change the contentApproved field
+                restaurant.setContentApproved(false);
+                // Update the LastContentApprovalStatusUpdated field
+                restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+
+                //Save the changes
+                repository.saveRestaurant(restaurant);
+
                 model.put("success",true);
                 model.put("id",restaurant.getId());
                 model.put("restaurant",restaurant);
@@ -338,6 +346,14 @@ public class RestaurantController {
             //Email the admin people to let them know the content has been approved
             emailService.sendContentApproved(restaurant);
 
+            // Approve the content
+            restaurant.setContentApproved(true);
+            // Remove any reasons why the content may have been rejected
+            restaurant.setRejectionReasons("");
+            // Update the LastContentApprovalStatusUpdated field
+            restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+            //Save the changes
+            repository.saveRestaurant(restaurant);
         }
         catch( Exception ex ) {
             LOGGER.error("Exception: " + ex.getMessage());
@@ -383,12 +399,17 @@ public class RestaurantController {
                 throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
             }
             restaurant.setRejectionReasons(rejectionReasons);
+            restaurant.setContentApproved(false);
+            // Update the LastContentApprovalStatusUpdated field
+            restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+            //Save the changes
+            repository.saveRestaurant(restaurant);
+
             model.put("restaurant",restaurant);
 
             //Email the admin people to let them know the content has been rejected
             emailService.sendContentRejected(restaurant);
             model.put("success",true);
-
         }
         catch( Exception ex ) {
             LOGGER.error("Exception: " + ex.getMessage());
