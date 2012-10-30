@@ -349,6 +349,59 @@ public class RestaurantController {
     }
 
 
+    @RequestMapping(value="/approval/restaurant/contentRejected.html", method= RequestMethod.GET)
+    public ModelAndView rejectContent(@RequestParam(value = "restaurantId", required = true) String restaurantId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            if( restaurant == null ) {
+                throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
+            }
+            model.put("restaurant",restaurant);
+            model.put("message",MessageFactory.getMessage("workflow.restaurant-content-rejected",true));
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Exception: " + ex.getMessage());
+            String message = ex.getMessage();
+            model.put("message",message);
+        }
+
+        return new ModelAndView("workflow/approveContent",model);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/approval/restaurant/contentRejected.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> contentRejectedSendEmail(@RequestParam(value = "restaurantId") String restaurantId,
+                                                           @RequestParam(value = "rejectionReasons") String rejectionReasons) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            if( restaurant == null ) {
+                throw new IllegalArgumentException("Could not find restaurant by restaurantId: " + restaurantId );
+            }
+            restaurant.setRejectionReasons(rejectionReasons);
+            model.put("restaurant",restaurant);
+
+            //Email the admin people to let them know the content has been rejected
+            emailService.sendContentRejected(restaurant);
+            model.put("success",true);
+
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Exception: " + ex.getMessage());
+            String message = ex.getMessage();
+            model.put("success",false);
+            model.put("message",message);
+
+        }
+        return responseEntityUtils.buildResponse(model);
+
+    }
+
+
     /**
      * Returns standard model
      * @return

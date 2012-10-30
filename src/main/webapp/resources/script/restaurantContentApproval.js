@@ -1,6 +1,6 @@
 
 
-// Here we are going to hide the your order panel etc and present the buttons to approve
+// Here we are going to hide the your order panel etc and present the buttons to approve or reject
 $(document).ready(function(){
     // Hide the Your Order panel
     $('.menu-right').hide();
@@ -10,39 +10,16 @@ $(document).ready(function(){
      var rejectButton = "<li class='unselectable'><a href='#' onclick='javascript:rejectContent()'>"+getLabel('button.reject-content')+"</a></li>";
 
     // Remove the current links from the action bar
-    //$('.navigation-links').replaceWith( '<ul>'+approveButton + rejectButton +'</ul>');
     $('.navigation-links').html( '<ul>'+approveButton + rejectButton +'</ul>');
-    // Add the approve/reject content buttons to the action bar
-
-
 });
 
 
-function rejectContentOLD() {
-   $.post( ctx+'/workflow/contentRejected.html?contentStatus='+contentStatus+'&restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999),
-       function( data ) {
-           if( data.success ) {
-                buildOrder(data.order);
-           } else {
-                alert('success:' + data.success);
-           }
-       }
-   );
-
-}
-
 function approveContent() {
-
-    alert("They have clicked on approve new no AJAX");
-
     location.href = ctx + '/approval/restaurant/contentApproved.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
-
 }
 
-// Reject content. Present a bot to enter the reasons why the content is being rejected
+// Reject content. Present a box to enter the reasons why the content is being rejected
 function rejectContent() {
-
-alert("NEWWW");
 
     var header = getLabel('content.approval.reject.title');
     var subheader = getLabel('content.approval.reject.help');
@@ -66,14 +43,16 @@ alert("NEWWW");
     $('#rejectbutton').click(function(){
         var rejectionReasons = $('#reasons').val();
         $.fancybox.showLoading();
-        $.post( ctx+'/order/updateAdditionalInstructions.ajax', {
-            orderId: currentOrder.orderId,
-            additionalInstructions: $('#instructions').val()
+        $.post( ctx+'/approval/restaurant/contentRejected.ajax', {
+            restaurantId: restaurantId,
+            rejectionReasons: $('#reasons').val()
         },function( data ) {
                 $.fancybox.hideLoading();
                 $.fancybox.close(true);
                 if( data.success ) {
-                    buildOrder(data.order);
+                    // Open the url that displays the message to the restaurant owned
+                    location.href = ctx + '/approval/restaurant/contentRejected.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
+
                 } else {
                     alert('success:' + data.success);
                 }

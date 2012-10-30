@@ -75,7 +75,11 @@ public class Restaurant extends PersistentObject {
 
     @Transient
     private boolean open;
-    
+
+    @Transient
+    private String rejectionReasons;
+
+
     public Restaurant() {
         this.uuid = UUID.randomUUID().toString();
         this.openingTimes = new OpeningTimes();
@@ -617,5 +621,13 @@ public class Restaurant extends PersistentObject {
 
     public void setLastUpdated(Long lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public String getRejectionReasons() {
+        return rejectionReasons;
+    }
+
+    public void setRejectionReasons(String rejectionReasons) {
+        this.rejectionReasons = rejectionReasons;
     }
 }
