@@ -239,6 +239,7 @@ a.home {
     -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     position:relative;
+    text-align:left;
 }
 
 .scissors {
@@ -256,6 +257,7 @@ a.home {
     font: 400 12px/14px prenton;
     min-height:16px;
     color:#444444;
+    text-align:left;
 }
 
 a.blank, a.blank:visited, a.blank:hover, a.blank:active {
