@@ -15,6 +15,7 @@
             #else
                 Lo m&#225;s pronto posible
             #end
+            .
             </Say>
         #else
             <Say language="es">Tienes un pedido para recoger
@@ -26,6 +27,7 @@
             #else
                 Cuanto antes
             #end
+            .
             </Say>
         #end
         <Say language="es">El pedido es el siguiente.</Say>
@@ -36,19 +38,22 @@
             #else
                 $stringTool.escapeXml($item.menuItemTitle)
             #end
+            .
             #if( $stringTool.hasText($item.menuItemTypeName ))
                 $stringTool.escapeXml($item.menuItemTypeName)
             #end
+            .
             #if( $stringTool.hasText($item.menuItemSubTypeName ))
                 $stringTool.escapeXml($item.menuItemSubTypeName)
             #end
+            .
             #if( $item.additionalItems.size() > 0 )
                 con
                 #foreach( $additionalItem in $item.additionalItems )
                     #if( $item.additionalItems.size() > 1 && $velocityCount == $item.additionalItems.size())
                         y
                     #end
-                    $stringTool.escapeXml($additionalItem)
+                    $stringTool.escapeXml($additionalItem).
                 #end
             #end
             </Say>
@@ -56,13 +61,13 @@
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="es">1 $stringTool.escapeXml($discount.selectedFreeItem) gratis</Say>
+                <Say language="es">1 $stringTool.escapeXml($discount.selectedFreeItem) gratis.</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="es">El cliente ha añadido las siguientes instrucciones a este pedido.</Say>
-            <Say>$stringTool.escapeXml($order.additionalInstructions)</Say>
+            <Say language="es">$stringTool.escapeXml($order.additionalInstructions).</Say>
         #end
         <Say language="es">Para aceptar el pedido pulsa el 1 seguido de la tecla de almohadilla, para rechazar el pedido pulsa el 2 seguido de la tecla de almohadilla, para aceptar este pedido y especificar un tiempo de entrega pulsa 3 seguido del numero de minutos y a continuaci&#243;n pulsa la tecla de almohadilla. Para repetir este mensaje pulsa 4 seguido de la tecla de almohadilla. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla 5 seguido de la tecla de almohadilla.</Say>
     </Gather>

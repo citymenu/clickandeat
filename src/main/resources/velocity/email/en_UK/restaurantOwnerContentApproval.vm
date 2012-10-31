@@ -16,30 +16,29 @@
                 </tr>
                 <tr valign="top">
                     <td width="550" colspan="3">
-                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Solicitud de aprobación del contenido de la pagina del restaurante</h1>
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Restaurant content approval request</h1>
                     </td>
                 </tr>
                 <tr valign="top">
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                            <p>El contenido de la página de tu restaurante ha sido actualizado, por favor utiliza este <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">enlace</a>
-                            para ver los cambios y confirma que la informacion en la página es correcta. Presta especial atención a los siguientes elementos:</p>
+                            <p>The content of your restaurant page has been updated, please use this <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">link</a>
+                            to see the changes and confirm that the content in the page is correct. Pay attention to the following elements:</p>
                              <p>
                                <ul>
-                               <li>Horarios de apertura</li>
-                               <li>Gastos de entrega</li>
-                               <li>Todas las categorías del menú</li>
-                               <li>Todos los precios</li>
-                               <li>Ofertas especiales</li>
+                               <li>Opening times</li>
+                               <li>Delivery costs</li>
+                               <li>Menu categories</li>
+                               <li>Menu item prices</li>
+                               <li>Special offers</li>
                                <li>etc.</li>
                                </ul>
                             </p>
-                            <p> Utiliza los botones en la barra de herramientas para aprobar o rechazar el contenido.
-                                No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o el contenido en la página no es correcto.</p>
+                            <p> Use the buttons in the tool bar to approve or reject the content.
+                                Don't hesitate to contact us if you have any queries or the content in the page is not correct.</p>
                             <p>
-                               <b>Hemos retirado tu restaurante de la página de manera temporal. Una vez recibamos la notificación confirmando el contenido,
-                                el restaurante será añadido a la página otra vez.
+                               <b> we have temporarily delisted you from our Website. Once we receive your approval we will relist you again on the website.
                                </b>
                              </p>
                              </div>
