@@ -524,3 +524,12 @@ a.callnow-button, a.callnow-button:active, a.callnow-button:hover {
     text-shadow: 0 1px #333333;
     cursor: pointer;
 }
+
+#reasons {
+    width: 460px;
+    height: 150px;
+    font:14px/16px myriad-pro;
+    border: 1px solid #B6B6B6;
+    padding: 3px 5px 3px 5px;
+    color:#444444;
+}

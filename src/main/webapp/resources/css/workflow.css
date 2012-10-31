@@ -36,3 +36,8 @@
     min-height: 450px;
     background:url(../images/email/apology.jpg) 10px -20px no-repeat;
 }
+
+.butler-smile {
+    min-height: 450px;
+    background:url(../images/email/butler.jpg) 10px -20px no-repeat;
+}

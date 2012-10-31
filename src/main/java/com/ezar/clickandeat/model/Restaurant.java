@@ -66,6 +66,8 @@ public class Restaurant extends PersistentObject {
     // Admin
     private Long created;
     private Long lastUpdated;
+    private Long lastContentApprovalStatusUpdated;
+
 
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
@@ -75,7 +77,14 @@ public class Restaurant extends PersistentObject {
 
     @Transient
     private boolean open;
-    
+
+    // Determines if the restaurant owner has approved or not the restaurant content
+    private boolean contentApproved;
+
+    // Specify the reasons why the content has been rejected
+    private String rejectionReasons;
+
+
     public Restaurant() {
         this.uuid = UUID.randomUUID().toString();
         this.openingTimes = new OpeningTimes();
@@ -89,6 +98,7 @@ public class Restaurant extends PersistentObject {
         this.specialOffers = new ArrayList<SpecialOffer>();
         this.listOnSite = true;
         this.phoneOrdersOnly = false;
+        this.contentApproved = false;
     }
 
 
@@ -621,5 +631,29 @@ public class Restaurant extends PersistentObject {
 
     public void setLastUpdated(Long lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    public boolean isContentApproved() {
+        return contentApproved;
+    }
+
+    public void setContentApproved(boolean contentApproved) {
+        this.contentApproved = contentApproved;
+    }
+
+    public String getRejectionReasons() {
+        return rejectionReasons;
+    }
+
+    public void setRejectionReasons(String rejectionReasons) {
+        this.rejectionReasons = rejectionReasons;
+    }
+
+    public Long getLastContentApprovalStatusUpdated() {
+        return lastContentApprovalStatusUpdated;
+    }
+
+    public void setLastContentApprovalStatusUpdated(Long lastContentApprovalStatusUpdated) {
+        this.lastContentApprovalStatusUpdated = lastContentApprovalStatusUpdated;
     }
 }
