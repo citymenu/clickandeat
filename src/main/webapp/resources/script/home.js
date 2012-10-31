@@ -1,11 +1,12 @@
 $(document).ready(function(){
 
     // Add carousel
-    $(".carousel-items").jCarouselLite({
-        auto: 2000,
+    $("#carousel").jCarouselLite({
+        auto: 5000,
         speed: 1200,
+        vertical: true,
         circular:true,
-        visible:4
+        visible:3
     })
     .hover(function() {
         paused = true;

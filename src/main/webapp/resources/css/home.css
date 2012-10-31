@@ -10,18 +10,18 @@
 
 .butler-main {
     clear: both;
-    margin: 20px auto 0px auto;
+    margin: 20px auto 40px auto;
     position: relative;
     width: 1020px;
-    height: 380px;
+    height: 300px;
     background: url(../images/butler-home-alt.png) 0 0 no-repeat #FFFFFF;
 }
 
 #searchbar-wrapper {
     position:absolute;
-    right: 205px;
-    top: 58px;
-    width: 460px;
+    right: 165px;
+    top: 40px;
+    width: 550px;
 }
 
 .searchbar-content {
@@ -41,7 +41,7 @@
 }
 
 .location-input {
-    width: 290px;
+    width: 350px;
     height: 32px;
     position:absolute;
     top:0;
@@ -54,7 +54,7 @@
     height: 32px;
     position:absolute;
     top:0;
-    left:300px;
+    left:390px;
     padding-top:4px;
     text-align:center;
     cursor:pointer;
@@ -85,7 +85,7 @@ input.location {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
     background-clip: padding-box;
-    width: 270px;
+    width: 360px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
@@ -170,58 +170,91 @@ a.home {
     margin-bottom: 15px;
 }
 
-.recommendations {
+.caption {
     font:700 14px myriad-pro;
     color: #FFFFFF;
     text-shadow: 0 2px #333333;
-    margin:60px 0 15px 0;
+    margin:15px 0 25px 10px;
     padding:0 20px 0 0;
     text-align:left;
     display:inline-block;
 }
 
+.recommendations {
+    margin:15px 0 25px 10px;
+    padding:0 20px 0 0;
+}
+
 #carousel {
-    margin:0 0 50px 0;
-    padding:0 20px 15px 20px;
-    text-align:center;
+    margin:0 0 35px 0;
+    padding:0 0 0 20px;
+    text-align:left;
+    border-bottom: 1px dashed #CCCCCC;
 }
 
-.carousel-items {
-    padding:10px 0 10px 0;
-    background-color:#FCFbF5;
-    border:1px solid #AAAAAA;
-    -webkit-border-radius: 15px;
-       -moz-border-radius: 15px;
-            border-radius: 15px;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+.divider {
+    border-top:1px dashed #CCCCCC;
+    padding-top:10px;
 }
 
-.restaurant-panel {
-    width:183px;
-    min-height:120px;
-    padding:10px;
-    border:1px solid #CCCCCC;
-    background-color:#FFFFFF;
-    margin:10px 20px;
-    -webkit-border-radius: 15px;
-       -moz-border-radius: 15px;
-            border-radius: 15px;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.3);
+.restaurant-panel-left {
+    display:inline-block;
+    height:100px;
+    width:470px;
+    padding-bottom:10px;
+}
+
+.restaurant-panel-right {
+    display:inline-block;
+    height:100px;
+    width:470px;
+    padding-left:40px;
+    padding-bottom:10px;
 }
 
 .restaurant-name {
     padding:5px 0 2px 0;
-    font: 14px/16px MaiandraOTGD-DemiBold;
+    font: 16px MaiandraOTGD-DemiBold;
     color:#AA0000;
-
 }
 
 .restaurant-summary {
     font:700 12px/14px prenton;
+    color:#444444;
+}
+
+.opening-details {
+    text-align:left;
+    font: 12px/14px myriad-pro;
+    color:#444444;
+    margin-top: 3px;
+}
+
+.restaurant-discount-details {
+    display:inline-block;
+    border: 1px dashed #cf6e6e;
+    padding: 4px 12px 4px 8px;
+    margin: 0 0 6px 0;
+    -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+    box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+    position:relative;
+}
+
+.scissors {
+    width: 16px;
+    height: 16px;
+    background:url(../images/scissors.png) 0 0 no-repeat;
+    position:absolute;
+    top:-8px;
+    right: 2px;
+    z-index:100;
+}
+
+.discount-details {
+    display:inline-block;
+    font: 400 12px/14px prenton;
+    min-height:16px;
     color:#444444;
 }
 
@@ -234,6 +267,62 @@ a.blank, a.blank:visited, a.blank:hover, a.blank:active {
 a.location, a.location:visited, a.location:hover, a.location:active {
     color:#FFFFFF;
     text-decoration:underline;
+}
+
+.help {
+    margin:0 20px 50px 20px;
+}
+
+.help h2 {
+    font: 16px MaiandraOTGD-DemiBold;
+    color:#AA0000;
+    margin:0 0 20px 0;
+}
+
+.step {
+    width: 210px;
+    height: 230px;
+    border: 2px solid #DDDDDD;
+    -webkit-border-radius: 20px;
+       -moz-border-radius: 20px;
+            border-radius: 20px;
+    position:relative;
+    text-align:center;
+
+}
+
+.step-number {
+    position:absolute;
+    top:15px;
+    left:20px;
+    font: 20px MaiandraOTGD-DemiBold;
+    color:#AA0000;
+}
+
+.step-detail {
+    position:absolute;
+    bottom:20px;
+    left:20px;
+    width:170px;
+    text-align:center;
+    font:700 12px/14px prenton;
+    color:#444444;
+}
+
+.step-1 {
+    background: url(../images/help/step-1.png) 0 0 no-repeat #FFFFFF;
+}
+
+.step-2 {
+    background: url(../images/help/step-2.png) 0 0 no-repeat #FFFFFF;
+}
+
+.step-3 {
+    background: url(../images/help/step-3.png) 0 0 no-repeat #FFFFFF;
+}
+
+.step-4 {
+    background: url(../images/help/step-4.png) 0 0 no-repeat #FFFFFF;
 }
 
 .triangle-isosceles {
@@ -294,3 +383,4 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 	border-width:15px 40px 0 0; /* vary these values to change the angle of the vertex */
 	border-color:transparent #b1151b;
 }
+

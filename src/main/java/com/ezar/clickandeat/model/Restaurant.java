@@ -562,6 +562,10 @@ public class Restaurant extends PersistentObject {
     public List<Discount> getDiscounts() {
         return discounts;
     }
+    
+    public Discount getFirstDiscount() {
+        return discounts.get(0);
+    }
 
     public void setDiscounts(List<Discount> discounts) {
         this.discounts = discounts;
