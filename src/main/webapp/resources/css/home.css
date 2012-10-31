@@ -135,61 +135,61 @@ a.home {
     cursor:pointer;
 }
 
-.box-wrapper {
-    padding:50px 20px 30px 20px;
+.box-large-middle {
+    background-color:#FDFDFD;
+    border:2px solid #DDDDDD;
+    padding:40px 20px 0 20px;
+    margin:50px 0 50px 0;
+    -webkit-border-radius: 20px;
+       -moz-border-radius: 20px;
+            border-radius: 20px;
+    position:relative;
+    text-align:center;
 }
 
-.box-large {
-    border:1px solid #999999;
-    padding:15px;
-    background-color:#FCFCFC;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-border-radius: 15px;
-       -moz-border-radius: 15px;
-            border-radius: 15px;
-    height:250px;
-    margin-left:20px;
-}
-
-.box-large h2 {
-    font: 18px/20px MaiandraOTGD-DemiBold;
-    color:#AA0000;
-    margin-bottom: 15px;
-}
-
-
-.home-caption {
-
-}
-
-.home-caption h2 {
-    font: 18px/20px MaiandraOTGD-DemiBold;
-    color:#AA0000;
-    margin-bottom: 15px;
+.box-large-bottom {
+    background-color:#FDFDFD;
+    border:2px solid #DDDDDD;
+    padding:45px 20px 30px 20px;
+    margin:0 0 50px 0;
+    -webkit-border-radius: 20px;
+       -moz-border-radius: 20px;
+            border-radius: 20px;
+    position:relative;
+    text-align:center;
 }
 
 .caption {
     font:700 14px myriad-pro;
     color: #FFFFFF;
+	background:#c5171e;
     text-shadow: 0 2px #333333;
-    margin:15px 0 25px 10px;
-    padding:0 20px 0 0;
     text-align:left;
     display:inline-block;
+    padding:5px 15px 5px 15px;
+    position:absolute;
+    left:15px;
+    top:-17px;
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#c5171e), to(#720d11));
+	background:-moz-linear-gradient(#c5171e, #720d11);
+	background:-o-linear-gradient(#c5171e, #720d11);
+	background:linear-gradient(#c5171e, #720d11);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
 }
 
 .recommendations {
     margin:15px 0 25px 10px;
-    padding:0 20px 0 0;
 }
 
 #carousel {
-    margin:0 0 35px 0;
-    padding:0 0 0 20px;
+    margin:0;
+    padding:0;
     text-align:left;
-    border-bottom: 1px dashed #CCCCCC;
 }
 
 .divider {
@@ -200,14 +200,14 @@ a.home {
 .restaurant-panel-left {
     display:inline-block;
     height:100px;
-    width:470px;
+    width:458px;
     padding-bottom:10px;
 }
 
 .restaurant-panel-right {
     display:inline-block;
     height:100px;
-    width:470px;
+    width:458px;
     padding-left:40px;
     padding-bottom:10px;
 }
@@ -231,6 +231,7 @@ a.home {
 }
 
 .restaurant-discount-details {
+    background-color:#FFFFFF;
     display:inline-block;
     border: 1px dashed #cf6e6e;
     padding: 4px 12px 4px 8px;
@@ -272,7 +273,7 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 }
 
 .help {
-    margin:0 20px 50px 20px;
+    margin:0;
 }
 
 .help h2 {
@@ -284,7 +285,7 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 .step {
     width: 210px;
     height: 230px;
-    border: 2px solid #DDDDDD;
+    border: 2px solid #CCCCCC;
     -webkit-border-radius: 20px;
        -moz-border-radius: 20px;
             border-radius: 20px;
@@ -327,33 +328,6 @@ a.location, a.location:visited, a.location:hover, a.location:active {
     background: url(../images/help/step-4.png) 0 0 no-repeat #FFFFFF;
 }
 
-.triangle-isosceles {
-	background:#c5171e; /* default background for browsers without gradient support */
-	padding:8px 20px 8px 20px;
-}
-
-.triangle-isosceles.left {
-    color:#FFFFFF;
-	background:#c5171e;
-    margin-left:30px;
-	background:-webkit-gradient(linear, 0 0, 0 100%, from(#c5171e), to(#720d11));
-	background:-moz-linear-gradient(#c5171e, #720d11);
-	background:-o-linear-gradient(#c5171e, #720d11);
-	background:linear-gradient(#c5171e, #720d11);
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
-}
-
-.triangle-isosceles.left:after {
-	top:10px;
-	left:-30px; /* value = - border-left-width - border-right-width */
-	bottom:auto;
-	border-width:15px 30px 0 0; /* vary these values to change the angle of the vertex */
-	border-color:transparent #b1151b;
-}
-
-
 .triangle-right {
 	position:relative;
 	padding:8px 20px 8px 20px;
@@ -362,10 +336,9 @@ a.location, a.location:visited, a.location:hover, a.location:active {
        -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
             box-shadow: 2px 2px 2px rgba(0,0,0,0.5);
 	-webkit-border-radius:20px;
-	-moz-border-radius:20px;
-	border-radius:20px;
+  	   -moz-border-radius:20px;
+	        border-radius:20px;
 }
-
 
 .triangle-right.left {
 	margin-left:40px;

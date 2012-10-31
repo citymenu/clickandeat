@@ -33,7 +33,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final int MAX_RECOMMENDATIONS = 12;
     
-    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60 * 2; // Refresh recommendations list every 2 hours
+    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60; // Refresh recommendations list every hour
     
     
     @Autowired
@@ -81,8 +81,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 List<Restaurant> randomList = new ArrayList<Restaurant>();
                 Random random = new Random();
                 for( int i = 0; i < MAX_RECOMMENDATIONS; i++ ) {
-                    int nextIndex = random.nextInt(restaurants.size() + 1);
-                    randomList.add(restaurants.remove(nextIndex));
+                    int nextIndex = random.nextInt(restaurants.size());
+                    randomList.add(restaurants.get(nextIndex));
                 }
                 recommendations = randomList;
             }
