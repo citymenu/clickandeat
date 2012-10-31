@@ -52,6 +52,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
 
         // Update order placed time
         order.setOrderPlacedTime(new DateTime());
+        order.addOrderUpdate("Order placed by customer");
 
         // Set any voucher on this order to be unused
         voucherRepository.markVoucherUsed(order.getVoucherId());
@@ -59,9 +60,11 @@ public class OrderPlacedHandler implements IWorkflowHandler {
         // Send notifications to restaurant and customer
         try {
             notificationService.sendOrderNotificationToRestaurant(order);
+            order.addOrderUpdate("Sent order notification to restaurant");
 
             // Send notification email to customer
             notificationService.sendOrderConfirmationToCustomer(order);
+            order.addOrderUpdate("Sent order notification to customer");
         }
         catch( Exception ex ) {
             LOGGER.error("Error sending notifications to restaurant and customer");

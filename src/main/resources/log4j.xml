@@ -9,6 +9,21 @@
         </layout>
     </appender>
 
+    <!-- Send all error logs to email address -->
+    <appender name="MAIL" class="org.apache.log4j.net.SMTPAppender">
+        <param name="SMTPHost" value="email-smtp.us-east-1.amazonaws.com" />
+        <param name="SMTPUsername" value="AKIAJ26L6IFSXMZRPXLA" />
+        <param name="SMTPPassword" value="AmdyjQ1ymi5roMzbzgphBIbl36v2vdKin5Hsbb3RjmGL" />
+        <param name="From" value="noreply@llamarycomer.com" />
+        <param name="To" value="system@llamarycomer.com" />
+        <param name="Subject" value="Application Error" />
+        <!-- send only Errors per email -->
+        <param name="threshold" value="error" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p [%t] | %d{ISO8601} | %F | %L | %m%n"/>
+        </layout>
+    </appender>
+
     <logger name="com.ezar">
         <level value="DEBUG"/>
     </logger>
@@ -48,6 +63,7 @@
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="MAIL"/>
     </root>
 
 </log4j:configuration>
