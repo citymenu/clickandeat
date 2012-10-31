@@ -116,7 +116,7 @@
                     <td width="245" align="center">
                         <div class="step step-3">
                             <div class="step-number">3.</div>
-                            <div class="step-detail">Build your order</div>
+                            <div class="step-detail">Build and pay for your order</div>
                         </div>
                     </td>
                     <td width="245" align="center">
