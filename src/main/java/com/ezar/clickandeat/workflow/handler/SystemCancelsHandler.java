@@ -72,8 +72,9 @@ public class SystemCancelsHandler implements IWorkflowHandler {
         restaurantRepository.saveRestaurant(restaurant);
 
         try {
-            if( Order.PAYMENT_AUTHORISED.equals(order.getTransactionStatus()) || Order.PAYMENT_CAPTURED.equals(order.getTransactionStatus())) {
-                paymentService.processTransactionRequest(order,PaymentService.REFUND);
+            if( Order.PAYMENT_PRE_AUTHORISED.equals(order.getTransactionStatus()) || Order.PAYMENT_CAPTURED.equals(order.getTransactionStatus())) {
+                String transactionType = order.getTransactionStatus().equals(Order.PAYMENT_PRE_AUTHORISED)? PaymentService.REVERSE: PaymentService.REFUND;
+                paymentService.processTransactionRequest(order,transactionType);
                 order.addOrderUpdate("Refunded customer credit card");
                 order.setTransactionStatus(Order.PAYMENT_REFUNDED);
             }

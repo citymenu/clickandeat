@@ -75,8 +75,7 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
         }
 
         try {
-            //TODO implement once the gateway is set up properly
-            //paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
+            paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
             order.addOrderUpdate("Captured credit card payment");
             order.setTransactionStatus(Order.PAYMENT_CAPTURED);
         }

@@ -21,8 +21,8 @@ public class WorkflowStatusExceptionMessageResolver {
         String attemptedAction = ex.getAttemptedAction();
 
         String actionVerb = MessageFactory.getMessage("verb." + attemptedAction,true);
-        String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true, order.getRestaurant().getName());
-        String exceptionMessage = MessageFactory.formatMessage("error.workflow.detail", true, actionVerb,orderStatusDescription);
+        String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), false, order.getRestaurant().getName());
+        String exceptionMessage = MessageFactory.formatMessage("error.workflow.detail", false, actionVerb,orderStatusDescription);
         
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Generated exception message: " + exceptionMessage);

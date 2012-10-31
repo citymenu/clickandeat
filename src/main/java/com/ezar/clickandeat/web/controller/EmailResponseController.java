@@ -85,7 +85,7 @@ public class EmailResponseController {
                 }
                 order = orderWorkflowEngine.processAction(order, action, context);
                 model.put("success",true);
-                String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), true,order.getRestaurant().getName());
+                String orderStatusDescription = MessageFactory.formatMessage("order-status-description." + order.getOrderStatus(), false, order.getRestaurant().getName());
                 String message = MessageFactory.formatMessage("workflow.update.message", false, order.getOrderId(), orderStatusDescription);
                 model.put("message",message);
             }

@@ -47,7 +47,7 @@
                         #if ($allowCancel)
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;margin-bottom:5px;">If you don't want to wait this long for your order,
-                            please <a href="${baseUrl}workflow/customerCancelOrder.html?curl=$cancelCurl">click here</a> to cancel this order.</div>
+                            please <a href="${baseUrl}/workflow/customerCancelOrder.html?curl=$cancelCurl">click here</a> to cancel this order.</div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
                                 You until $stringTool.formatDate($cancelCutoffTime)
                                 #if(!($cancelCutoffTime.toLocalDate() == $today))

@@ -94,7 +94,7 @@ public class PaymentController {
         // Get order from session and update payment details
         Order order = orderRepository.findByOrderId(orderId);
         order.setTransactionId(transactionId);
-        order.setTransactionStatus(Order.PAYMENT_AUTHORISED);
+        order.setTransactionStatus(Order.PAYMENT_PRE_AUTHORISED);
         order.setAuthorisationCode(authorisationCode);
         order.setSignature(signature);
         order.setCardPaymentAmount(Double.valueOf(cardPaymentAmount) / 100d);

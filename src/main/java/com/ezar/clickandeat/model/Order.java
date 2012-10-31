@@ -21,7 +21,7 @@ public class Order extends PersistentObject {
     public static final String COLLECTION = "COLLECTION";
 
     public static final String PAYMENT_ERROR = "ERROR";
-    public static final String PAYMENT_AUTHORISED = "AUTHORISED";
+    public static final String PAYMENT_PRE_AUTHORISED = "PREAUTHORISED";
     public static final String PAYMENT_CAPTURED = "CAPTURED";
     public static final String PAYMENT_REFUNDED = "REFUNDED";
     

@@ -35,8 +35,9 @@ public class PaymentService {
 
     private static final Logger LOGGER = Logger.getLogger(PaymentService.class);
 
-    public static final String PRE_AUTHORIZE = "0";
-    public static final String CAPTURE = "P";
+    public static final String PRE_AUTHORIZE = "1";
+    public static final String REVERSE = "9";
+    public static final String CAPTURE = "2";
     public static final String REFUND = "3";
 
     private static final String RESPONSE_OK = "0";
@@ -96,7 +97,7 @@ public class PaymentService {
         params.put("Ds_Merchant_MerchantCode",merchantCode);
         params.put("Ds_Merchant_ConsumerLanguage",customerLanguage);
         params.put("Ds_Merchant_Terminal",terminalNumber);
-        params.put("Ds_Merchant_TransactionType","0");
+        params.put("Ds_Merchant_TransactionType",PRE_AUTHORIZE);
         params.put("Ds_Merchant_MerchantSignature",buildSignature(order, transactionId, PRE_AUTHORIZE));
         return params;
     }
