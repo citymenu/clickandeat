@@ -49,8 +49,12 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             labelAlign:'top',
             xtype:'checkbox',
             name:'phoneOrdersOnly'
-        }
-        ]
+        },{
+             fieldLabel:'Appear in recommendations on home page',
+             labelAlign:'top',
+             xtype:'checkbox',
+             name:'recommended'
+         }]
     },{
         xtype:'fieldset',
         title:'Address',
@@ -85,7 +89,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
         defaultType: 'textfield',
         items:[{
             fieldLabel:'Telephone',
-            name:'contactTelephone'
+            name:'contactTelephone',
+            allowBlank:false,
         },{
             fieldLabel:'Mobile',
             name:'contactMobile'

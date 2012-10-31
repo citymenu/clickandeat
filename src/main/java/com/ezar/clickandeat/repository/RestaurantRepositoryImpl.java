@@ -20,10 +20,7 @@ import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -34,6 +31,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
+    private static final int MAX_RECOMMENDATIONS = 12;
+    
     private static final int REFRESH_TIMEOUT = 1000 * 60 * 60 * 2; // Refresh recommendations list every 2 hours
     
     
@@ -73,8 +72,20 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
-            Query query = new Query(where("listOnSite").is(true));
-            recommendations = operations.findAll(Restaurant.class);
+            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true));
+            List<Restaurant> restaurants = recommendations = operations.find(query,Restaurant.class);
+            if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
+                recommendations = restaurants;
+            }
+            else {
+                List<Restaurant> randomList = new ArrayList<Restaurant>();
+                Random random = new Random();
+                for( int i = 0; i < MAX_RECOMMENDATIONS; i++ ) {
+                    int nextIndex = random.nextInt(restaurants.size() + 1);
+                    randomList.add(restaurants.remove(nextIndex));
+                }
+                recommendations = randomList;
+            }
             lastRefreshed = now;
         }
         return recommendations;

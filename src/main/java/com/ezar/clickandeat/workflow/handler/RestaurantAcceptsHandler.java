@@ -3,6 +3,7 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import com.ezar.clickandeat.workflow.WorkflowStatusException;
@@ -25,6 +26,9 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
     
     @Autowired
     private RestaurantRepository restaurantRepository;
+
+    @Autowired
+    private PaymentService paymentService;
     
     @Override
     public String getWorkflowAction() {
@@ -56,6 +60,17 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
         // Update expected collection time for the restaurant (if the user has not requested a specific time and date)
         if( Order.COLLECTION.equals(order.getDeliveryType()) && order.getExpectedCollectionTime() == null ) {
             order.setRestaurantConfirmedTime(new DateTime().plusMinutes(restaurant.getCollectionTimeMinutes()));
+        }
+
+        try {
+            //TODO implement once the gateway is set up properly
+            //paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
+            order.addOrderUpdate("Captured credit card payment");
+            order.setTransactionStatus(Order.PAYMENT_CAPTURED);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("Error capturing paymayment of order",ex);
+            order.addOrderUpdate("Error capturing paymayment of order: " + ex.getMessage());
         }
 
         try {
