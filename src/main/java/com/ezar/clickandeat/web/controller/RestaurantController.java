@@ -157,6 +157,15 @@ public class RestaurantController {
     }
 
 
+    @RequestMapping(value="/**/contact/{restaurantId}/**", method = RequestMethod.GET )
+    public ModelAndView getContactTelephone(@PathVariable("restaurantId") String restaurantId ) throws Exception {
+        Map<String,Object> model = new HashMap<String, Object>();
+        Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        model.put("telephone",restaurant.getContactTelephone());
+        return new ModelAndView(MessageFactory.getLocaleString() + "/contactTelephone",model);
+    }
+
+
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )

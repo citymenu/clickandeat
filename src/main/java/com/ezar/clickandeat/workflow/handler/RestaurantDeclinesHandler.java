@@ -71,7 +71,7 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
         restaurantRepository.saveRestaurant(restaurant);
 
         try {
-            paymentService.processTransactionRequest(order,PaymentService.REFUND);
+            paymentService.processTransactionRequest(order,PaymentService.REVERSE);
             order.addOrderUpdate("Refunded customer credit card");
             order.setTransactionStatus(Order.PAYMENT_REFUNDED);
         }

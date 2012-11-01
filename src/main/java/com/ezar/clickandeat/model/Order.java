@@ -171,7 +171,9 @@ public class Order extends PersistentObject {
             boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
 
             if( !allowFreeDelivery ) {
-                this.deliveryCost = deliveryCharge;
+                if( deliveryCharge != null ) {
+                    this.deliveryCost = deliveryCharge;
+                }
                 if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
                     this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
                 }
@@ -181,7 +183,7 @@ public class Order extends PersistentObject {
                     this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
                 }
                 if( minimumOrderForFreeDelivery != null && this.orderItemCost < minimumOrderForFreeDelivery ) {
-                    if( allowDeliveryBelowMinimumForFreeDelivery ) {
+                    if( allowDeliveryBelowMinimumForFreeDelivery && deliveryCharge != null ) {
                         this.deliveryCost = deliveryCharge;
                     }
                     else {

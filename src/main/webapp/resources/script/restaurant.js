@@ -100,6 +100,19 @@ function updateOrderPanelPos() {
     }
 }
 
+// Show the telephone number for a restaurant
+function showContactTelephone() {
+    $.fancybox.open({
+        href: ctx + '/app/contact/' + restaurantId + '/' + restaurantName,
+        type:'iframe',
+        width:320,
+        autoHeight:true,
+        modal:false,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+}
+
 
 // Show all opening times for the restaurant
 function showAllOpeningTimes() {
@@ -130,7 +143,6 @@ function showAllOpeningTimes() {
             }
         }
     );
-
 }
 
 

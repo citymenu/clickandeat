@@ -49,6 +49,7 @@ Ext.define('AD.view.order.List' ,{
             {header:'ID', dataIndex:'orderId',flex:.1},
             {header:'Status', dataIndex:'orderStatus',flex:.1},
             {header:'Type', dataIndex:'deliveryType',flex:.1},
+            {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Restaurant Name', dataIndex:'restaurantName',flex:.1},
             {header:'Order Placed', dataIndex:'orderPlacedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Expected Delivery', dataIndex:'expectedDeliveryTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},

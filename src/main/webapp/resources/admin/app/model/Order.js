@@ -16,6 +16,7 @@ Ext.define('AD.model.Order', {
         {name:'deliveryCost', type:'number'},
         {name:'totalDiscount', type:'number'},
         {name:'voucherDiscount', type:'number'},
+        {name:'orderCreatedTime', type:'date'},
         {name:'orderPlacedTime', type:'date'},
         {name:'expectedDeliveryTime', type:'date'},
         {name:'expectedCollectionTime', type:'date'},

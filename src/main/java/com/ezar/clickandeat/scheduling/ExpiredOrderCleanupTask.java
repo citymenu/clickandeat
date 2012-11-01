@@ -44,7 +44,7 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
         try {
             if(lock.acquire()) {
 
-                LOGGER.info("Checking for any orders with status 'BASKET' which are over 2 days old");
+                LOGGER.info("Checking for any orders with status 'BASKET' which contain no itema and are over 2 days old");
                 DateTime cutoff = new DateTime().minusDays(2);
                 List<Order> orders = operations.find(new Query(where("orderStatus").is(ORDER_STATUS_BASKET)), Order.class);
                 LOGGER.info("Found " + orders.size() + " orders with status 'BASKET'");
@@ -53,7 +53,7 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 Set<String> orderIds = new HashSet<String>();
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
-                    if( orderCreatedTime.isBefore(cutoff)) {
+                    if( orderCreatedTime.isBefore(cutoff) && order.getOrderItems().size() == 0) {
                         orderIds.add(order.getOrderId());
                         if( LOGGER.isDebugEnabled()) {
                             LOGGER.debug("Order id: " + order.getOrderId() + " has expired, will remove from database");

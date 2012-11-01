@@ -61,9 +61,7 @@
                                     <div class="restaurant-summary">
                                         <div class="restaurant-details">
                                             <util:escape value="${restaurant.address.summary}"/>
-                                            <c:if test="${restaurant.contactTelephone != ''}">
-                                            <br>${restaurant.contactTelephone}
-                                            </c:if>
+                                            <br><a class="restaurant-text" onclick="showContactTelephone()"><message:message key="restaurant.show-telephone-number"/></a>
                                         </div>
                                         <div class="restaurant-delivery-details">
                                             <c:if test="${!restaurant.collectionOnly && restaurant.deliveryTimeMinutes != 0}">

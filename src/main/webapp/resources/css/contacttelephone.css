@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+h2.telephone-header {
+    border-bottom: 1px dashed #AAAAAA;
+    margin-bottom: 12px;
+    padding-bottom:6px;
+    color: #BB0000;
+    font-family: MaiandraOTGD-DemiBold;
+    font-size:18px;
+    line-height:22px;
+    text-shadow: 0 1px #EEEEEE;
+}
+
+.contact-telephone {
+    background: url(../images/telf.png) left top no-repeat;
+    font: 22px/22px MaiandraOTGD-DemiBold;
+    color:#444444;
+    margin:0 0 0 10px;
+    padding:20px 10px 0 70px;
+    height:70px;
+}
