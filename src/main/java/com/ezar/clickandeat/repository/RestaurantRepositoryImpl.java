@@ -5,6 +5,7 @@ import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -17,7 +18,9 @@ import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
+import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -227,12 +230,20 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     }
 
-
     @Required
     @Value(value="${location.maxDistance}")
     public void setMaxDistance(double maxDistance) {
         this.maxDistance = maxDistance;
     }
 
+
+    @Override
+    public void addRestaurantUpdate(String restaurantId, String text) {
+        RestaurantUpdate restaurantUpdate = new RestaurantUpdate();
+        restaurantUpdate.setText(text);
+        restaurantUpdate.setUpdateTime(new DateTime());
+        Update update = new BasicUpdate(new BasicDBObject()).push("restaurantUpdates",restaurantUpdate);
+        operations.updateFirst(query(where("restaurantId").is(restaurantId)),update,Restaurant.class);
+    }
 
 }

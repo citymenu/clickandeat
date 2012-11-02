@@ -311,6 +311,8 @@ public class RestaurantController {
                 restaurant.setContentApproved(false);
                 // Update the LastContentApprovalStatusUpdated field
                 restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+                // Add an update to the restaurant
+                restaurant.addRestaurantUpdate("Send to restaurant for content approval.");
 
                 //Save the changes
                 repository.saveRestaurant(restaurant);
@@ -361,6 +363,8 @@ public class RestaurantController {
             restaurant.setRejectionReasons("");
             // Update the LastContentApprovalStatusUpdated field
             restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+            // Add a restaurant update entry
+            restaurant.addRestaurantUpdate("Restaurant content approved by owner.");
             //Save the changes
             repository.saveRestaurant(restaurant);
         }
@@ -411,6 +415,8 @@ public class RestaurantController {
             restaurant.setContentApproved(false);
             // Update the LastContentApprovalStatusUpdated field
             restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
+            // Add a restaurant update entry
+            restaurant.addRestaurantUpdate("Restaurant content rejected by owner. Reasons[" + rejectionReasons +"]");
             //Save the changes
             repository.saveRestaurant(restaurant);
 

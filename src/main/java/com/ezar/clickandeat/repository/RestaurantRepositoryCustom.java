@@ -15,6 +15,8 @@ public interface RestaurantRepositoryCustom {
 
     Restaurant saveRestaurant(Restaurant restaurant);
 
+    void addRestaurantUpdate(String restaurantId, String restaurantUpdate);
+
     List<Restaurant> getRecommended();
     
     void deleteRestaurant(Restaurant restaurant);
