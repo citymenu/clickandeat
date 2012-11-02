@@ -28,8 +28,8 @@
     <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js" charset="utf-8"></script>
 
     <!-- Fancybox -->
-    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" charset="utf-8"/>
-    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js?v=2.1.0" charset="utf-8"></script>
+    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" charset="utf-8"/>
+    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js" charset="utf-8"></script>
 
     <!-- Watermark -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery.data.js" charset="utf-8"></script>
