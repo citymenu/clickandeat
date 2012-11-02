@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.converter.DateTimeTransformer;
 import com.ezar.clickandeat.converter.LocalDateTransformer;
 import com.ezar.clickandeat.converter.LocalTimeTransformer;
@@ -196,7 +197,10 @@ public class OrderController implements InitializingBean {
             }
         }
         else {
-            return new ModelAndView("redirect:/restaurant.html?restaurantId=" + restaurantid);
+            Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantid);
+            String redirect = "redirect:/app/" + MessageFactory.getMessage("url.find-takeaway",false)
+                    + restaurant.getUrl() + "/restaurant/" + restaurant.getRestaurantId();
+            return new ModelAndView("redirect:/" + restaurant.getUrl());
         }
     }
 

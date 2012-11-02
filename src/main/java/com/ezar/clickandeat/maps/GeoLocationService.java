@@ -19,6 +19,7 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component(value = "locationService")
 public class GeoLocationService {
@@ -29,6 +30,10 @@ public class GeoLocationService {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
+    private static final int MAX_REQUESTS_PER_SECOND = 5; // Throttle requests to geolocation api
+    
+    private static final long CONCURRENT_REQUEST_WAIT = 1000 / MAX_REQUESTS_PER_SECOND;
+    
     @Autowired
     private GeoLocationRepository geoLocationRepository;
 
@@ -44,6 +49,7 @@ public class GeoLocationService {
 
     private List<String> commaBeforeComponents = new ArrayList<String>();
     
+    private final AtomicInteger concurrentRequests = new AtomicInteger();
     
     /**
      * Gets a matching address location for a query
@@ -76,6 +82,18 @@ public class GeoLocationService {
         }
 
         try {
+            
+            // Throttle requests to maximum of 5 per second so we don't overload Google
+            int concurrentRequestCount = concurrentRequests.incrementAndGet();
+            if( concurrentRequestCount > MAX_REQUESTS_PER_SECOND ) {
+                try {
+                    Thread.sleep(CONCURRENT_REQUEST_WAIT);
+                }
+                catch( InterruptedException ignore ) {
+                    // Ignore on purpose
+                }
+            }
+
             URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
             LOGGER.debug("Constructed url: " + url);
             URLConnection conn = url.openConnection();
@@ -188,6 +206,9 @@ public class GeoLocationService {
         catch( Exception ex ) {
             LOGGER.error("",ex);
             return null;
+        }
+        finally {
+            concurrentRequests.decrementAndGet();
         }
     }
 

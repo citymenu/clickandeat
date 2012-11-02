@@ -15,7 +15,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
     <!-- Have to load locally because of @font-face declaration -->
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${ctx}/resources/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/header.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/content.css"/>
@@ -28,8 +28,8 @@
     <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js" charset="utf-8"></script>
 
     <!-- Fancybox -->
-    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css?v=2.1.0" type="text/css" media="screen" charset="utf-8"/>
-    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js?v=2.1.0" charset="utf-8"></script>
+    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" charset="utf-8"/>
+    <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js" charset="utf-8"></script>
 
     <!-- Watermark -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery.data.js" charset="utf-8"></script>

@@ -162,7 +162,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         discount2.setSelectedFreeItem("Red wine");
         order.getOrderDiscounts().add(discount2);
 
-        order.setAdditionalInstructions("Some new stuff\nMore new stuff");
+        order.setAdditionalInstructions("Some new stuff now lets see how far across the line it goes. Some new stuff now lets see how far across the line it goes. Some new stuff now lets see how far across the line it goes. Some new stuff now lets see how far across the line it goes. ");
         
         // Build a restaurant for the order
         Restaurant restaurant = new Restaurant();
@@ -173,6 +173,7 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.setRestaurant(restaurant);
         
         order.setOrderItemCost(1.355d);
+        order.setDeliveryCost(0d);
         order.setTotalDiscount(2.8);
         order.setTotalCost(35.403);
         order.setRestaurantCost(35.403);
