@@ -59,9 +59,12 @@ public class AutoCancelledHandler implements IWorkflowHandler {
         voucherRepository.markVoucherUnused(order.getVoucherId());
 
         try {
-            paymentService.processTransactionRequest(order, PaymentService.REFUND);
-            order.addOrderUpdate("Refunded customer credit card");
-            order.setTransactionStatus(Order.PAYMENT_REFUNDED);
+            if( Order.PAYMENT_PRE_AUTHORISED.equals(order.getTransactionStatus()) || Order.PAYMENT_CAPTURED.equals(order.getTransactionStatus())) {
+                String transactionType = order.getTransactionStatus().equals(Order.PAYMENT_PRE_AUTHORISED)? PaymentService.REVERSE: PaymentService.REFUND;
+                paymentService.processTransactionRequest(order,transactionType);
+                order.addOrderUpdate("Refunded customer credit card");
+                order.setTransactionStatus(Order.PAYMENT_REFUNDED);
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("Error processing refund of order",ex);
