@@ -70,7 +70,7 @@
                         #if( $stringTool.hasText($order.additionalInstructions))
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Additional instructions:</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.additionalInstructions,true)</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.additionalInstructions,false)</div>
                         </div>
                         #end
 

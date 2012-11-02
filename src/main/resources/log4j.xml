@@ -17,6 +17,7 @@
         <param name="From" value="noreply@llamarycomer.com" />
         <param name="To" value="system@llamarycomer.com" />
         <param name="Subject" value="Application Error" />
+        <param name="bufferSize" value="5"/>
         <!-- send only Errors per email -->
         <param name="threshold" value="error" />
         <layout class="org.apache.log4j.PatternLayout">
