@@ -23,14 +23,14 @@
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hola $stringTool.escape($order.customer.firstName),</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Lo sentimos muchísimo pero el restaurante $stringTool.escape($order.restaurant.name) esta muy ocupado ahora mismo
-                             y no han tenido la oportunidad de atender tu pedido todavía.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Lo sentimos much&#237;simo pero el restaurante $stringTool.escape($order.restaurant.name) esta muy ocupado ahora mismo
+                             y no han tenido la oportunidad de atender tu pedido todav&#237;a.</b></div>
                         </div>
 
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">Esperamos poder confirmar tu pedido pronto,
-                            en caso de que no quieras esperar más tiempo haz clic <a href="${baseUrl}/workflow/customerCancelOrder.html?curl=$cancelCurl">aqui</a> para cancelar el pedido.
-                            En caso de que cancelaras este pedido no se efectuara ningún cargo en tu tarjeta.</div>
+                            en caso de que no quieras esperar m&#225;s tiempo haz clic <a href="${baseUrl}/workflow/customerCancelOrder.html?curl=$cancelCurl">aqu&#237;</a> para cancelar el pedido.
+                            En caso de que cancelaras este pedido no se efectuara ning&#250;n cargo en tu tarjeta.</div>
                         </div>
 
                         <div style="margin-bottom:15px;">
@@ -73,7 +73,7 @@
                             #else
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-collection-address"):</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                            Has elegido recoger el pedido en persona, haz clic <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">aquí</a> para ver la ubicación del restaurante $stringTool.escape($order.restaurant.name)</div>
+                            Has elegido recoger el pedido en persona, haz clic <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">aqu&#237;</a> para ver la ubicaci&#243;n del restaurante $stringTool.escape($order.restaurant.name)</div>
                             #end
                         </div>
                     </td>
@@ -86,7 +86,7 @@
                     <td width=550" colspan="3">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-need-to-speak-to-someone")</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente teléfono ${order.restaurant.contactTelephone}.</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente tel&#233;fono ${order.restaurant.contactTelephone}.</div>
                         </div>
                     </td>
                 </tr>

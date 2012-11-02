@@ -113,7 +113,7 @@
 
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Cliente:</b> $stringTool.escape($order.customer.firstName) $stringTool.escape($order.customer.lastName)</div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Teléfono:</b> ${order.customer.telephone}</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Tel&#233;fono:</b> ${order.customer.telephone}</div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>
@@ -130,19 +130,19 @@
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo si quieres añadir mas información sobre el motivo por el que rechazas el pedido.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Por favor utiliza los enlaces de abajo si quieres a&#241;adir m&#225;s informaci&#243;n sobre el motivo por el que rechazas el pedido.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
-                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=address">No hacemos entregas a esta dirección</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">Establecimiento cerrado</a>
+                                <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=address">No hacemos entregas a esta direcci&#243;n</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$declineCurl&reason=closed">Establecimiento cerrado</a>
                             </div>
                         </div>
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:10px;"><b>
                                 #if($order.deliveryType == 'DELIVERY')
-                                    Tu tiempo de entrega estándar es $order.restaurant.deliveryTimeMinutes minutos, haz clic en los enlaces de abajo para añadir tiempo adicional sobre tu tiempo de entrega estándar para este pedido.
+                                    Tu tiempo de entrega est&#225;ndar es $order.restaurant.deliveryTimeMinutes minutos, haz clic en los enlaces de abajo para a&#241;adir tiempo adicional sobre tu tiempo de entrega estÃ¡ndar para este pedido.
                                 #else
-                                    Tu tiempo de recogida estándar es $order.restaurant.collectionTimeMinutes minutos, haz clic en los enlaces de abajo para añadir tiempo adicional sobre tu tiempo de recogida estándar para este pedido.
+                                    Tu tiempo de recogida est&#225;ndar es $order.restaurant.collectionTimeMinutes minutos, haz clic en los enlaces de abajo para a&#241;adir tiempo adicional sobre tu tiempo de recogida estÃ¡ndar para este pedido.
                                 #end
-                                En caso de anadir tiempo sobre el estándar el cliente tendrá 10 minutos para cancelar el pedido.
+                                En caso de a&#241;adir tiempo sobre el est&#225;ndar el cliente tendr&#225; 10 minutos para cancelar el pedido.
                             </b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:20px;">
                                 <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=15">+15 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=30">+30 minutos</a> | <a href="${baseUrl}/workflow/confirmOrder.html?curl=$acceptWithDeliveryCurl&minutes=45">+45 minutos</a>
