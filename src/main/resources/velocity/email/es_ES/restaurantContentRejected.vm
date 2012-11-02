@@ -24,12 +24,12 @@
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
                             <p>El contenido de la p&#225;gina del restaurante ${restaurant.name} ha sido rechazado.
-                               El dueÃ±o del restaurante a indicado los siguientes motivos por los que ha rechazado el contenido:</p>
+                               El dueÃƒÂ±o del restaurante a indicado los siguientes motivos por los que ha rechazado el contenido:</p>
                             <p>
                                ${restaurant.rejectionReasons}
                             </p>
                             <p>
-                               Utiliza este <a href="${baseUrl}/admin/restaurants/edit.html?restaurantId=${restaurant.restaurantId}">enlace</a> para acceder al documento de administración del restaurante.
+                               Utiliza este <a href="${baseUrl}/admin/restaurants/edit.html?restaurantId=${restaurant.restaurantId}">enlace</a> para acceder al documento de administraci&#243;n del restaurante.
                             </p>
                             </div>
                         </div>

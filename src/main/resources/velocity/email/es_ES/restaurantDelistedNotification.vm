@@ -16,22 +16,22 @@
                 </tr>
                 <tr valign="top">
                     <td width="550" colspan="3">
-                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Tu restaurante ha sido retirado temporalmente de nuestra pagina web</h1>
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Tu restaurante ha sido retirado temporalmente de nuestra p&#225;gina web</h1>
                     </td>
                 </tr>
                 <tr valign="top">
                     <td width="300">
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Hemos tenido que cancelar un pedido al no recibir ningún tipo de respuesta por tu parte.
-                             Para prevenir que se repita esta situación con otros pedidos os hemos retirado temporalmente de la página.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>Hemos tenido que cancelar un pedido al no recibir ning&#250;n tipo de respuesta por tu parte.
+                             Para prevenir que se repita esta situaci&#243;n con otros pedidos os hemos retirado temporalmente de la p&#225;gina.</b></div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquí</a>  para
-                            que tu restaurante se añadido de nuevo a nuestra pagina.</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor <a href="${baseUrl}/workflow/relistRestaurant.html?curl=$relistCurl">haz clic aquÃ­</a>  para
+                            que tu restaurante se a&#241;adido de nuevo a nuestra p&#225;gina.</div>
                         </div>
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor no dudes en ponerte en contacto con nosotros si tienes alguna pregunta o si necesitas alguna clarificación
-                             en relación a los pasos que seguimos cuando te pasamos pedidos</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Por favor no dudes en ponerte en contacto con nosotros si tienes alguna pregunta o si necesitas alguna clarificaci&#243;n
+                             en relaci&#243;n a los pasos que seguimos cuando te pasamos pedidos</div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>

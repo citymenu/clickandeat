@@ -23,7 +23,7 @@
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hola $stringTool.escape($order.customer.firstName),</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hemos llevado a cabo la cancelación solicitada del pedido.</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Hemos llevado a cabo la cancelaci&#243;n solicitada del pedido.</b></div>
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-account-not-charged")</b></div>
                         </div>
                         <div style="margin-bottom:15px;">

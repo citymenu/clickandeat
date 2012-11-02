@@ -63,7 +63,7 @@
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($order.deliveryAddress.summary)</div>
                             #else
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-order-for-collection-address"):</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Has elegido recoger el pedido en persona, <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">haz clic aquí</a> para ver la ubicación del restaurante $stringTool.escape($order.restaurant.name)</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">Has elegido recoger el pedido en persona, <a href="https://maps.google.com/?ll=${order.restaurant.coordinates}&z=16&hl=${language}">haz clic aqu&#237;</a> para ver la ubicaci&#243;n del restaurante $stringTool.escape($order.restaurant.name)</div>
                             #end
                         </div>
                         <div style="margin-bottom:15px;">
@@ -103,7 +103,7 @@
                     <td width=550" colspan="3">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-need-to-speak-to-someone")</b></div>
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente teléfono ${order.restaurant.contactTelephone}.</div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-automated-email-message"). Si quieres hablar con alguien sobre tu pedido por favor contacta directamente al restaurante $stringTool.escape($order.restaurant.name) en el siguiente telÃ©fono ${order.restaurant.contactTelephone}.</div>
                         </div>
                     </td>
                 </tr>
