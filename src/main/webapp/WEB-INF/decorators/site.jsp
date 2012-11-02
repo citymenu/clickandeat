@@ -15,7 +15,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
     <!-- Have to load locally because of @font-face declaration -->
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${ctx}/resources/css/MyFontsWebfontsKit.css"/>
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/header.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/content.css"/>
