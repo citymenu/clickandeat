@@ -161,6 +161,10 @@ select.freeitemselect {
     margin-top:2px;
 }
 
+option.freeitemselect {
+    font:12px myriad-pro;
+}
+
 #instructions {
     width: 460px;
     height: 150px;
@@ -477,10 +481,6 @@ a.order-button:active, a.order-button:hover {
 }
 
 .specialofferitemchoice select {
-    font: 14px myriad-pro;
-}
-
-.specialofferitemchoice option {
     font: 14px myriad-pro;
 }
 

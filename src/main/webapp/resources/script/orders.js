@@ -230,12 +230,12 @@ function doBuildOrder(order,config) {
             if( orderDiscount.discountType == 'DISCOUNT_FREE_ITEM' ) {
                 if( config.allowUpdateFreeItem ) {
                     var selectBox = ('<select class=\'freeitemselect\' id=\'{0}\'>').format(orderDiscount.discountId);
-                    selectBox += ('<option value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
+                    selectBox += ('<option class=\'freeitemselect\' value = \'\'>{0}</option>').format(getLabel('order.no-thanks'));
                     orderDiscount.freeItems.forEach(function(freeItem) {
                         if( orderDiscount.selectedFreeItem == freeItem ) {
-                            selectBox += ('<option value=\'{0}\' selected>{0}</option>').format(freeItem);
+                            selectBox += ('<option class=\'freeitemselect\' value=\'{0}\' selected>{0}</option>').format(freeItem);
                         } else {
-                            selectBox += ('<option value=\'{0}\'>{0}</option>').format(freeItem);
+                            selectBox += ('<option class=\'freeitemselect\' value=\'{0}\'>{0}</option>').format(freeItem);
                         }
                     });
                     selectBox += '</select>';
