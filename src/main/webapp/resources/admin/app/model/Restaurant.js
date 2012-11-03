@@ -17,8 +17,8 @@ Ext.define('AD.model.Restaurant', {
         {name:'phoneOrdersOnly', type:'boolean'},
         {name:'recommended', type:'boolean'},
         {name:'imageName', type:'string'},
-        {name:'created', type:'number'},
-        {name:'lastUpdated', type:'number'},
+        {name:'created', type:'number',convert: buildDate},
+        {name:'lastUpdated', type:'number',convert: buildDate},
         {name:'restaurantUpdates', type:'auto'}
     ]
 });

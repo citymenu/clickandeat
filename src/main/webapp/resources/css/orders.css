@@ -476,9 +476,14 @@ a.order-button:active, a.order-button:hover {
     padding-top:6px;
 }
 
-.specialofferitemchoice select{
+.specialofferitemchoice select {
     font: 14px myriad-pro;
 }
+
+.specialofferitemchoice option {
+    font: 14px myriad-pro;
+}
+
 
 #checkout {
     text-align:center;
