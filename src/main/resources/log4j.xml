@@ -64,7 +64,7 @@
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="MAIL"/>
+        <!--<appender-ref ref="MAIL"/>-->
     </root>
 
 </log4j:configuration>

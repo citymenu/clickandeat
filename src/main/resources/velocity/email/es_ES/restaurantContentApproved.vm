@@ -16,7 +16,7 @@
                 </tr>
                 <tr valign="top">
                     <td width="550" colspan="3">
-                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Contenido de la pagina del restaurante ha sido aprobado</h1>
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">El contenido de la p&#225;gina del restaurante ha sido aprobado</h1>
                     </td>
                 </tr>
                 <tr valign="top">
@@ -24,14 +24,14 @@
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
                             <p>El contenido de la p&#225;gina del restaurante ${restaurant.name} ha sido aprobado.
-                               Utiliza este <a href="${baseUrl}/workflow/relistRestaurant.html?curl=${relistCurl}">enlace</a> para listarlo de nuevo en la pagina.
+                               Utiliza este <a href="${baseUrl}/workflow/relistRestaurant.html?curl=${relistCurl}">enlace</a> para listarlo de nuevo en la p&#225;gina.
                             </p>
                             </div>
                         </div>
                     </td>
                     <td width="20">&nbsp;</td>
                     <td width="230">
-                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/apology.jpg" width="230" height="300"/>
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/butler-smile.jpg" width="230" height="300"/>
                     </td>
                 </tr>
             </table>

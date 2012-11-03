@@ -69,6 +69,7 @@ public class Restaurant extends PersistentObject {
     private Long created;
     private Long lastUpdated;
     private Long lastContentApprovalStatusUpdated;
+    private List<RestaurantUpdate> restaurantUpdates;
 
 
     // The last time the restaurant responded in any way to an order
@@ -102,6 +103,7 @@ public class Restaurant extends PersistentObject {
         this.phoneOrdersOnly = false;
         this.contentApproved = false;
         this.recommended = false;
+        this.restaurantUpdates = new ArrayList<RestaurantUpdate>();
     }
 
 
@@ -666,5 +668,23 @@ public class Restaurant extends PersistentObject {
 
     public void setLastContentApprovalStatusUpdated(Long lastContentApprovalStatusUpdated) {
         this.lastContentApprovalStatusUpdated = lastContentApprovalStatusUpdated;
+    }
+
+    public List<RestaurantUpdate> getRestaurantUpdates() {
+        return restaurantUpdates;
+    }
+
+    public void setRestaurantUpdates(List<RestaurantUpdate> restaurantUpdates) {
+        this.restaurantUpdates = restaurantUpdates;
+    }
+
+    /**
+     * @param text
+     */
+    public void addRestaurantUpdate(String text) {
+        RestaurantUpdate restaurantUpdate = new RestaurantUpdate();
+        restaurantUpdate.setText(text);
+        restaurantUpdate.setUpdateTime(new DateTime());
+        restaurantUpdates.add(restaurantUpdate);
     }
 }
