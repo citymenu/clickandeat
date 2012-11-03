@@ -5,7 +5,9 @@ import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.OrderItem;
 import com.ezar.clickandeat.model.OrderUpdate;
+import com.ezar.clickandeat.repository.util.FilterUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.web.controller.helper.Filter;
 import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -65,10 +67,19 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public List<Order> pageByOrderId(Pageable pageable, String orderId) {
+    public List<Order> pageByOrderId(Pageable pageable, String orderId, List<Filter> filters) {
         Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId)): new Query();
+        FilterUtils.applyFilters(query,filters);
         QueryUtils.applyPagination(query,pageable);
         return operations.find(query,Order.class);
+    }
+
+
+    @Override
+    public long count(String orderId, List<Filter> filters) {
+        Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId)): new Query();
+        FilterUtils.applyFilters(query,filters);
+        return operations.count(query,Order.class);
     }
 
 

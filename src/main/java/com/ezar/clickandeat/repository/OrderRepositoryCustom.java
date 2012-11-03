@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.web.controller.helper.Filter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ public interface OrderRepositoryCustom {
     
     List<Order> findByOrderStatus(String orderStatus);
     
-    List<Order> pageByOrderId(Pageable pageable, String orderId);
+    List<Order> pageByOrderId(Pageable pageable, String orderId, List<Filter> filters);
     
+    long count(String orderId, List<Filter> filters);
 }

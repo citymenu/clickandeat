@@ -3,7 +3,8 @@ Ext.Loader.setPath('Ext.ux', '../resources/ext/src/ux');
 
 Ext.require([
     'Ext.ux.RowExpander',
-    'Ext.ux.form.SearchField'
+    'Ext.ux.form.SearchField',
+    'Ext.ux.grid.FiltersFeature'
 ]);
 
 Ext.application({

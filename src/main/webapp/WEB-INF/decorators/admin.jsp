@@ -13,6 +13,8 @@
 
 	<link rel="shortcut icon" href="${resources}/images/favico.png">
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/resources/css/ext-all.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/src/ux/grid/css/GridFilters.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/ext/src/ux/grid/css/RangeMenu.css" charset="utf-8"/>
 
     <!-- Typekit -->
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>

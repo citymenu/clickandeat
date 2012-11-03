@@ -40,16 +40,21 @@ Ext.define('AD.view.order.List' ,{
         ]
     }],
 
+    features:[{
+        ftype: 'filters',
+        encode: false
+    }],
+
     initComponent: function() {
 
         var store = Ext.widget('orderstore');
         this.store = store;
 
         this.columns = [
-            {header:'ID', dataIndex:'orderId',flex:.1},
+            {header:'ID', dataIndex:'orderId', flex:.1, filter:{type:'string'}},
             {header:'Status', dataIndex:'orderStatus',flex:.1},
-            {header:'Type', dataIndex:'deliveryType',flex:.1},
-            {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
+            {header:'Type', dataIndex:'deliveryType',flex:.1,filter:{type:'list',options:['DELIVERY','COLLECTION']}},
+            {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Restaurant Name', dataIndex:'restaurantName',flex:.1},
             {header:'Order Placed', dataIndex:'orderPlacedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Expected Delivery', dataIndex:'expectedDeliveryTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
@@ -60,7 +65,7 @@ Ext.define('AD.view.order.List' ,{
             {header:'Delivery Cost', dataIndex:'deliveryCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Discount', dataIndex:'totalDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Voucher Discount', dataIndex:'voucherDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
-            {header:'Total Cost', dataIndex:'totalCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
+            {header:'Total Cost', dataIndex:'totalCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
             {header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
             {header:'Transaction Id', dataIndex:'transactionId',flex:.1},
             {header:'Transaction Status', dataIndex:'transactionStatus',flex:.1}

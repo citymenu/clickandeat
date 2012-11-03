@@ -13,6 +13,8 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.web.controller.helper.Filter;
+import com.ezar.clickandeat.web.controller.helper.FilterUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
@@ -93,7 +95,7 @@ public class OrderController implements InitializingBean {
     @RequestMapping(value="/admin/orders/list.ajax", method = RequestMethod.GET )
     public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
                                        @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort,
-                                       @RequestParam(value = "query", required = false) String query) throws Exception {
+                                       @RequestParam(value = "query", required = false) String query, HttpServletRequest req) throws Exception {
 
         PageRequest request;
 
@@ -109,10 +111,11 @@ public class OrderController implements InitializingBean {
             request = new PageRequest(page - 1, limit - start );
         }
 
-        List<Order> orders = orderRepository.pageByOrderId(request,query);
+        List<Filter> filters = FilterUtils.extractFilters(req);
+        List<Order> orders = orderRepository.pageByOrderId(request,query,filters);
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("orders",orders);
-        model.put("count",orderRepository.count());
+        model.put("count",orderRepository.count(query, filters));
         return responseEntityUtils.buildResponse(model);
     }
 
