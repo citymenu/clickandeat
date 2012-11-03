@@ -2,24 +2,50 @@
 
 #footer {
     clear: both;
-    color: #B56C2B;
     border-top: 1px solid #B56C2B;
 }
 
 .footer-wrapper {
     clear: both;
+    color:#837954;
     margin: 0 auto;
-    padding: 25px 0 20px 0;
+    padding: 25px 0 30px 0;
     position: relative;
     text-align: left;
     width: 1020px;
 }
 
-.footer-contact {
-    clear: both;
-    font-family: MaiandraOTGD-DemiBold;
-    padding-bottom: 40px;
+.company-details {
+    padding-right:60px;
 }
+
+h1.footer {
+    font: 24px MaiandraOTGD-DemiBold;
+    color:#837954;
+    padding:0;
+    margin-bottom:3px;
+}
+
+.h1-small {
+    font-size:18px;
+    color:#A39974;
+}
+
+h2.footer {
+    font: 500 16px prenton;
+    color:#837954;
+    padding:0;
+    margin-bottom:6px;
+}
+
+.h2-bright {
+    color:#A39974;
+}
+
+h2.spacer {
+    padding-top:15px;
+}
+
 
 h3.footer {
     font: 16px MaiandraOTGD-DemiBold;
@@ -28,15 +54,16 @@ h3.footer {
     margin-bottom:10px;
 }
 
-.location-list {
+.footer-list {
     font:400 14px/16px myriad-pro;
 }
 
-.location-list p {
+.footer-list p {
     padding-bottom: 5px;
 }
 
-a.location, a.location:visited, a.location:hover, a.location:active {
+a.direct, a.direct:visited, a.direct:hover, a.direct:active {
+    font:400 13px/15px myriad-pro;
     color:#837954;
     text-decoration:none;
     cursor:pointer;
@@ -51,6 +78,49 @@ h4.footer {
     font: 500 16px/18px prenton;
 }
 
+.footer-wrapper p {
+    font:400 13px/15px myriad-pro;
+    color:#837954;
+}
 
+.bolder {
+    font-weight:700;
+}
 
+.credit-cards {
+    margin:20px 0 20px 0;
+}
 
+div.credit-card {
+    display:inline-block;
+    width:39px;
+    height:27px;
+    margin-right:6px;
+}
+
+.visa {
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -360px transparent;
+}
+
+.mastercard {
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -200px transparent;
+}
+
+.maestro {
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -160px transparent;
+}
+
+.amex {
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px 0px transparent;
+}
+
+.copyright {
+    font:400 12px/14px myriad-pro;
+}
+
+.icon-email {
+    display:inline-block;
+    background: url(../images/icon-email.png) 0 5px no-repeat;
+    padding-left:22px;
+
+}

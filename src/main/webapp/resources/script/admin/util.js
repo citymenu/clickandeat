@@ -18,6 +18,11 @@ function unescapeQuotes(str) {
     }
 }
 
+/* Builds a date object */
+function buildDate(val) {
+    return new Date(val);
+}
+
 /* Converts a newline delimited string into an array */
 function delimitedStringToArray(str,delim) {
     var arr = [];
