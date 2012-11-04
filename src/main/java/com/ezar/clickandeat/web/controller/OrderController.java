@@ -15,6 +15,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
 import com.ezar.clickandeat.web.controller.helper.Filter;
 import com.ezar.clickandeat.web.controller.helper.FilterUtils;
+import com.ezar.clickandeat.web.controller.helper.FilterValueDecorator;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
@@ -77,6 +78,21 @@ public class OrderController implements InitializingBean {
 
     private String timeZone;
 
+    private final Map<String,FilterValueDecorator> filterDecoratorMap = new HashMap<String, FilterValueDecorator>();
+    
+    
+    public OrderController() {
+        filterDecoratorMap.put("orderStatus",new FilterValueDecorator() {
+            @Override
+            public String[] decorateValues(String[] values) {
+                List<String> ret = new ArrayList<String>();
+                for( String value: values ) {
+                    ret.add(("ORDER STATUS " + value).replaceAll(" ","_"));
+                }
+                return ret.toArray(new String[ret.size()]);
+            }
+        });
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -111,7 +127,7 @@ public class OrderController implements InitializingBean {
             request = new PageRequest(page - 1, limit - start );
         }
 
-        List<Filter> filters = FilterUtils.extractFilters(req);
+        List<Filter> filters = FilterUtils.extractFilters(req,filterDecoratorMap);
         List<Order> orders = orderRepository.pageByOrderId(request,query,filters);
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("orders",orders);

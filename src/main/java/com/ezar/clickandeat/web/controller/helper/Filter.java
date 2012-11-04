@@ -1,21 +1,17 @@
 package com.ezar.clickandeat.web.controller.helper;
 
-/**
- * Created by IntelliJ IDEA.
- * User: Joe Pugh
- * Date: 03/11/12
- * Time: 23:37
- * To change this template use File | Settings | File Templates.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class Filter {
     
     private String field;
     
     private String type;
 
-    private String comparison;
+    private List<String> comparisons = new ArrayList<String>();
 
-    private String[] values;
+    private List<String> values = new ArrayList<String>();
 
     public String getField() {
         return field;
@@ -33,19 +29,19 @@ public class Filter {
         this.type = type;
     }
 
-    public String getComparison() {
-        return comparison;
+    public List<String> getComparisons() {
+        return comparisons;
     }
 
-    public void setComparison(String comparison) {
-        this.comparison = comparison;
+    public void setComparisons(List<String> comparisons) {
+        this.comparisons = comparisons;
     }
 
-    public String[] getValues() {
+    public List<String> getValues() {
         return values;
     }
 
-    public void setValues(String[] values) {
+    public void setValues(List<String> values) {
         this.values = values;
     }
 }
