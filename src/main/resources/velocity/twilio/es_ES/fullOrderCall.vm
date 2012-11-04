@@ -6,7 +6,7 @@
         #end
 
         #if($order.deliveryType == 'DELIVERY')
-            <Say language="es">Tiene un pedido para entregar en la direcci&#243;n $stringTool.escapeXml($order.deliveryAddress.summary)
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direcci&#243;n $stringTool.escapeXml($order.deliveryAddress.summary)
             #if($order.expectedDeliveryTime)
                 A las $stringTool.formatDate($order.expectedDeliveryTime)
                 #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
