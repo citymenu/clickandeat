@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/contacttelephone.css" charset="utf-8"/>
 </head>
 
-<h2 class="telephone-header">Contact Telephone</h2>
+<h2 class="telephone-header">Teléfono</h2>
 
 <div class="contact-telephone">${telephone}</div>
 
