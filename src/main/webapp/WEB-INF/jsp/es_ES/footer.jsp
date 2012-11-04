@@ -8,13 +8,13 @@
             <tr valign="top">
                 <td width="500">
                     <div class="company-details">
-                        <h2 class="footer">Simply the easiest way to order takeaway food online</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur <span class="bolder">take away</span> adipisicing <span class="bolder">collection</span>
-                        elit, sed do eiusmod tempor <span class="bolder">Madrid</span> ut labore et <span class="bolder">Barcelona</span> magna aliqua.Ut
-                        enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                        in reprehenderit in voluptate.</p>
-                        <h2 class="footer spacer">Italian, Chinese takeaway, Pizza delivery</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                        <h2 class="footer">La manera más sencilla de pedir comida a domicilio.</h2>
+                        <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span>  trae a tu hogar la manera mas sencilla de  de disfrutar de una
+                         comida por ahí desde el confort de tu casa. Elije tu comida favorita de entre la multitud de opciones que te ofrecemos.</p>
+                         <p>Ahora mismo solo tenemos establecimientos en <span class="bolder">Barcelona</span> y <span class="bolder">Madrid</span>, pero estar atentos porque estamos añadiendo nuevos
+                         establecimientos constantemente.</p>
+                        <h2 class="footer spacer">Italiano, Chino, Pizzeria, etc.</h2>
+                        <p>LlamarYComer te ofrece una variedad extensa de las cocinas disponibles en tu zona.
                         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
                         in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
                         sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -25,7 +25,7 @@
                             <div class="credit-card amex"></div>
                         </div>
                         <div class="copyright">
-                            &copy;2012 llamarycomer | registered address of company
+                                LlamarYcomer.com &copy;2012 - CITYMENU, S.L.
                         </div>
                     </div>
                 </td>
@@ -38,9 +38,9 @@
                             <p><a class="direct">Restaurant owners</a></p>
                             <p><a class="direct">Magazine</a></p>
                         </div>
-                        <h2 class="footer spacer">Contact Us</h2>
+                        <h2 class="footer spacer">Contactanos Us</h2>
                         <div class="footer-list">
-                            <p>120 Street Name<br>Barcelona 08009<br>91 665 432</p>
+                            <p>Calle San Fernando 20<br>Mahón 07701<br>Menorca</p>
                             <p><a class="icon-email direct">contact@llamarycomer.com</a></p>
                         </div>
                     </div>
@@ -51,6 +51,9 @@
                     <c:forEach var="location" items="${locations}">
                     <p><a class="direct" href="${ctx}/app/find-takeaway-food-in-${location}/loc/<util:escape value="${location}"/>">${location} Takeaway</a></p>
                     </c:forEach>
+                    </d>
+                    <h2 class="footer">Cocinas</h2>
+                    <div class="footer-list">
                     <c:forEach var="cuisine" items="${footerCuisines}">
                     <p><a class="direct" href="${ctx}/app/find-${cuisine}-takeaway-food/csn/<util:escape value="${cuisine}"/>">${cuisine} Takeaway</a></p>
                     </c:forEach>

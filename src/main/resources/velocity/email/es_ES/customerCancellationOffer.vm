@@ -48,20 +48,19 @@
                         </div>
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-your-order"):</b></div>
-                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
-                                    #foreach( $item in $order.orderItems )
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                                #foreach( $item in $order.orderItems )
                                     <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($item.summary,true)</div>
-                                    #end
-                                    #foreach( $discount in $order.orderDiscounts )
-                                        #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
-                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
-                                        #end
-                                    #end
-                                </div>
-                                #if( $order.deliveryCost > 0 )
-                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#8364;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
                                 #end
-                            </div>
+                                #foreach( $discount in $order.orderDiscounts )
+                                    #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.freeItem) )
+                                        <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.freeItem)</div>
+                                    #end
+                                #end
+                             </div>
+                             #if( $order.deliveryCost > 0 )
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#8364;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                             #end
                         </div>
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#8364;$numberTool.format("#0.00", $order.totalCost)</b></div>
