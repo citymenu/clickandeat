@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="es">$error</Say>
-    <Say language="es">Por favor mira tu correo electr&#243;nico para obtener m&#225;s informaci&#243;n.</Say>
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$error</Say>
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Por favor mira tu correo electr&#243;nico para obtener m&#225;s informaci&#243;n.</Say>
 </Response>

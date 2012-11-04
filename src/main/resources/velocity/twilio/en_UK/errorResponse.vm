@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="en-gb">An error occurred processing your response, please use your email to process this order.</Say>
+    <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">An error occurred processing your response, please use your email to process this order.</Say>
 </Response>

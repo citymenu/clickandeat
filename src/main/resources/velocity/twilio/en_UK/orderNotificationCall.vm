@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Gather action="$url" timeout="10" numDigits="1">
-        <Say language="en-gb">Hello, this is a call from click and eat. You have received a new order for
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">Hello, this is a call from $stringTool.getMessage("title.companyname"). You have received a new order for
          #if($order.deliveryType == 'DELIVERY')
             delivery
         #else

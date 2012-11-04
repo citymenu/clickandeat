@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="es">Gracias por su respuesta.</Say>
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por su respuesta.</Say>
 </Response>

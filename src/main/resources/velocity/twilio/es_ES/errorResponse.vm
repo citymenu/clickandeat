@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="es">Lo sentimos mucho, ha habido un error en la aplicación, por favor utiliza el correo electrónico para procesar el pedido.</Say>
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Lo sentimos mucho, ha habido un error en la aplicación, por favor utiliza el correo electrónico para procesar el pedido.</Say>
 </Response>

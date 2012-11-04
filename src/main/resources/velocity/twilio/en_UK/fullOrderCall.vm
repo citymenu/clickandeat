@@ -2,11 +2,11 @@
 <Response>
     <Gather action="$url" finishOnKey="#">
         #if($error)
-            <Say language="en-gb">I'm sorry, I didn't understand that response</Say>
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">I'm sorry, I didn't understand that response</Say>
         #end
 
         #if($order.deliveryType == 'DELIVERY')
-            <Say language="en-gb">You have an order for delivery to $stringTool.escape($order.deliveryAddress.summary) to be delivered
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">You have an order for delivery to $stringTool.escape($order.deliveryAddress.summary) to be delivered
             #if($order.expectedDeliveryTime)
                 at $stringTool.formatDate($order.expectedDeliveryTime)
                 #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
@@ -17,7 +17,7 @@
             #end
             </Say>
         #else
-            <Say language="en-gb">You have an order for collection
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">You have an order for collection
             #if($order.expectedCollectionTime)
                 at $stringTool.formatDate($order.expectedCollectionTime)
                 #if(!$order.expectedCollectionTime.toLocalDate() == $today)
@@ -28,9 +28,9 @@
             #end
             </Say>
         #end
-        <Say language="en-gb">The order items are as follows.</Say>
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">The order items are as follows.</Say>
         #foreach( $item in $order.orderItems )
-            <Say language="en-gb">$item.quantity of
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity of
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 number $item.menuItemNumber
             #else
@@ -56,15 +56,15 @@
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
-                <Say language="en-gb">1 free $stringTool.escapeXml($discount.selectedFreeItem)</Say>
+                <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">1 free $stringTool.escapeXml($discount.selectedFreeItem)</Say>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
-            <Say language="en-gb">The customer has added the following instructions for this order.</Say>
-            <Say language="en-gb">$stringTool.escapeXml($order.additionalInstructions)</Say>
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">The customer has added the following instructions for this order.</Say>
+            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.additionalInstructions)</Say>
         #end
-        <Say language="en-gb">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">To accept this order press 1 followed by the hash key, to reject this order press 2 followed by the hash key, to accept this
         order and specify the delivery time in minutes press 3 followed by the number of minutes then the hash key. To repeat this message
         press 4 followed by the hash key. If you do not want to accept or reject this order at this time press 5 followed by the hash key.</Say>
     </Gather>
