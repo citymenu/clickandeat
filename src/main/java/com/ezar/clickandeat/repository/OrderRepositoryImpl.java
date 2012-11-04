@@ -68,7 +68,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public List<Order> pageByOrderId(Pageable pageable, String orderId, List<Filter> filters) {
-        Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId)): new Query();
+        Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId,"i")): new Query();
         FilterUtils.applyFilters(query,filters);
         QueryUtils.applyPagination(query,pageable);
         return operations.find(query,Order.class);

@@ -53,7 +53,7 @@ Ext.define('AD.view.order.List' ,{
         this.store = store;
 
         this.columns = [
-            {header:'ID', dataIndex:'orderId', flex:.1, filter:{type:'string'}},
+            {header:'ID', dataIndex:'orderId', flex:.1, filterable: false},
             {header:'Status', dataIndex:'orderStatus',flex:.1,filter:{type:'list',options:['AUTO CANCELLED','AWAITING RESTAURANT','BASKET','CUSTOMER CANCELLED','RESTAURANT ACCEPTED','RESTAURANT DECLINED','SYSTEM CANCELLED']}},
             {header:'Type', dataIndex:'deliveryType',flex:.1,filter:{type:'list',options:['DELIVERY','COLLECTION']}},
             {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
@@ -77,9 +77,22 @@ Ext.define('AD.view.order.List' ,{
             xtype:'toolbar',
             dock:'top',
             items:[{
-                width:250,
-                fieldLabel:'Search',
-                labelWidth:50,
+               text:'Refresh',
+               icon: resources + '/images/refresh.gif',
+               handler:function() {
+                   var store = Ext.getCmp('orderlist').getStore();
+                   store.loadPage(store.currentPage);
+               }
+            },'-',{
+                text:'Clear Filters',
+                icon: resources + '/images/icons-shadowless/cross.png',
+                handler:function() {
+                    Ext.getCmp('orderlist').filters.clearFilters();
+                }
+            },'->',{
+                width:300,
+                fieldLabel:'Search by OrderId',
+                labelWidth:100,
                 xtype:'searchfield',
                 store:store
             }]
