@@ -32,14 +32,14 @@
                 </td>
                 <td width="240">
                     <div class="company-details">
-                        <h2 class="footer">About Us</h2>
+                        <h2 class="footer">Información</h2>
                         <div class="footer-list">
-                            <p><a class="direct">Help/FAQ</a></p>
-                            <p><a class="direct">Terms &amp; conditions</a></p>
-                            <p><a class="direct">Restaurant owners</a></p>
-                            <p><a class="direct">Magazine</a></p>
+                            <p><a class="direct">Ayuda y preguntas frecuentes</a></p>
+                            <p><a class="direct">Términos y Condiciones</a></p>
+                            <p><a class="direct">Dueños de restaurantes</a></p>
+                            <p><a class="direct">Revista</a></p>
                         </div>
-                        <h2 class="footer spacer">Contactanos Us</h2>
+                        <h2 class="footer spacer">Contactanos</h2>
                         <div class="footer-list">
                             <p>Calle San Fernando 20<br>Mahón 07701<br>Menorca</p>
                             <p><a class="icon-email direct">contact@llamarycomer.com</a></p>
