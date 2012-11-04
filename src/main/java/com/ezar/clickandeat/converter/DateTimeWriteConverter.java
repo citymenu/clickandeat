@@ -16,6 +16,7 @@ public class DateTimeWriteConverter implements Converter<DateTime, DBObject> {
         dbo.put("hour", source.getHourOfDay());
         dbo.put("minute", source.getMinuteOfHour());
         dbo.put("second", source.getSecondOfMinute());
+        dbo.put("millis", source.getMillis());
         return dbo;
     }
 }

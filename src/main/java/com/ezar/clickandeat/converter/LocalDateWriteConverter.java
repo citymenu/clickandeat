@@ -13,6 +13,7 @@ public class LocalDateWriteConverter implements Converter<LocalDate, DBObject> {
         dbo.put("year", source.getYear());
         dbo.put("month", source.getMonthOfYear());
         dbo.put("day", source.getDayOfMonth());
+        dbo.put("millis", source.toDate().getTime());
         return dbo;
     }
 }

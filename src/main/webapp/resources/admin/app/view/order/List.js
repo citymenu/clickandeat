@@ -42,7 +42,9 @@ Ext.define('AD.view.order.List' ,{
 
     features:[{
         ftype: 'filters',
-        encode: false
+        encode: false,
+        stateful: true,
+        stateId: 'orderListFilters'
     }],
 
     initComponent: function() {
@@ -51,34 +53,46 @@ Ext.define('AD.view.order.List' ,{
         this.store = store;
 
         this.columns = [
-            {header:'ID', dataIndex:'orderId', flex:.1, filter:{type:'string'}},
-            {header:'Status', dataIndex:'orderStatus',flex:.1},
+            {header:'ID', dataIndex:'orderId', flex:.1, filterable: false},
+            {header:'Status', dataIndex:'orderStatus',flex:.1,filter:{type:'list',options:['AUTO CANCELLED','AWAITING RESTAURANT','BASKET','CUSTOMER CANCELLED','RESTAURANT ACCEPTED','RESTAURANT DECLINED','SYSTEM CANCELLED']}},
             {header:'Type', dataIndex:'deliveryType',flex:.1,filter:{type:'list',options:['DELIVERY','COLLECTION']}},
             {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
-            {header:'Restaurant Name', dataIndex:'restaurantName',flex:.1},
-            {header:'Order Placed', dataIndex:'orderPlacedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
-            {header:'Expected Delivery', dataIndex:'expectedDeliveryTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
-            {header:'Expected Collection', dataIndex:'expectedCollectionTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
-            {header:'Restaurant Actioned', dataIndex:'restaurantActionedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
-            {header:'Confirmed Time', dataIndex:'restaurantConfirmedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
-            {header:'Voucher Id', dataIndex:'voucherId',flex:.1},
-            {header:'Delivery Cost', dataIndex:'deliveryCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
-            {header:'Discount', dataIndex:'totalDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
-            {header:'Voucher Discount', dataIndex:'voucherDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
+            {header:'Restaurant Name', dataIndex:'restaurantName',flex:.1, filter:{type:'string'}},
+            {header:'Order Placed', dataIndex:'orderPlacedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {header:'Expected Delivery', dataIndex:'expectedDeliveryTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {header:'Expected Collection', dataIndex:'expectedCollectionTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {header:'Restaurant Actioned', dataIndex:'restaurantActionedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {header:'Confirmed Time', dataIndex:'restaurantConfirmedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {header:'Voucher Id', dataIndex:'voucherId',flex:.1, filter:{type:'string'}},
+            {header:'Delivery Cost', dataIndex:'deliveryCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
+            {header:'Discount', dataIndex:'totalDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
+            {header:'Voucher Discount', dataIndex:'voucherDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
             {header:'Total Cost', dataIndex:'totalCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
-            {header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1},
-            {header:'Transaction Id', dataIndex:'transactionId',flex:.1},
-            {header:'Transaction Status', dataIndex:'transactionStatus',flex:.1}
-
+            {header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
+            {header:'Transaction Id', dataIndex:'transactionId',flex:.1, filter:{type:'string'}},
+            {header:'Transaction Status', dataIndex:'transactionStatus',flex:.1,filter:{type:'list',options:['CAPTURED','ERROR','PREAUTHORISED','REFUNDED']}}
         ];
 
         this.dockedItems = [{
             xtype:'toolbar',
             dock:'top',
             items:[{
-                width:250,
-                fieldLabel:'Search',
-                labelWidth:50,
+               text:'Refresh',
+               icon: resources + '/images/refresh.gif',
+               handler:function() {
+                   var store = Ext.getCmp('orderlist').getStore();
+                   store.loadPage(store.currentPage);
+               }
+            },'-',{
+                text:'Clear Filters',
+                icon: resources + '/images/icons-shadowless/cross.png',
+                handler:function() {
+                    Ext.getCmp('orderlist').filters.clearFilters();
+                }
+            },'->',{
+                width:300,
+                fieldLabel:'Search by OrderId',
+                labelWidth:100,
                 xtype:'searchfield',
                 store:store
             }]
