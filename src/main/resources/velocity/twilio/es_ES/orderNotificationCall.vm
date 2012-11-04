@@ -7,7 +7,6 @@
         #else
             recoger.
         #end
-         Por favor compruebe su correo electr&#243;nico para obtener los detalles del pedido.
-        Pulse cualquier tecla en su tel&#233;fono para escuchar el pedido completo, alternativamente cuelgue ahora.</Say>
+         Pulse cualquier tecla en el telefono para escuchar el pedido completo. Otra alternativa es colgar y ver los detalles del pedido en su correo electronico.</Say>
     </Gather>
 </Response>

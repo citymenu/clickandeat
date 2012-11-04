@@ -6,7 +6,7 @@
         #end
 
         #if($order.deliveryType == 'DELIVERY')
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direcci&#243;n $stringTool.escapeXml($order.deliveryAddress.summary)
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direccion $stringTool.escapeXml($order.deliveryAddress.summary)
             #if($order.expectedDeliveryTime)
                 A las $stringTool.formatDate($order.expectedDeliveryTime)
                 #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
@@ -15,8 +15,8 @@
             #else
                 Lo m&#225;s pronto posible
             #end
-            .
             </Say>
+            <Pause length="1"/>
         #else
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tienes un pedido para recoger
             #if($order.expectedCollectionTime)
@@ -27,8 +27,8 @@
             #else
                 Cuanto antes
             #end
-            .
             </Say>
+            <Pause length="1"/>
         #end
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El pedido es el siguiente.</Say>
         #foreach( $item in $order.orderItems )
@@ -54,17 +54,20 @@
                 #end
             #end
             </Say>
+            <Pause length="2"/>
         #end
 
         #foreach( $discount in $order.orderDiscounts )
             #if( $discount.discountType == 'DISCOUNT_FREE_ITEM' && $stringTool.hasText($discount.selectedFreeItem ))
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Uno $stringTool.escapeXml($discount.selectedFreeItem) gratis.</Say>
+                <Pause length="2"/>
             #end
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El cliente ha añadido las siguientes instrucciones a este pedido.</Say>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.additionalInstructions).</Say>
+            <Pause length="2"/>
         #end
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Para aceptar el pedido pulsa el uno seguido de la tecla de almohadilla, para rechazar el pedido pulsa el dos seguido de la tecla de almohadilla, para aceptar este pedido y especificar un tiempo de entrega pulsa tres seguido del numero de minutos y a continuaci&#243;n pulsa la tecla de almohadilla. Para repetir este mensaje pulsa cuatro seguido de la tecla de almohadilla. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla cinco seguido de la tecla de almohadilla.</Say>
     </Gather>
