@@ -7,6 +7,6 @@
         #else
             recoger.
         #end
-         Pulse cualquier tecla en el telefono para escuchar el pedido completo. Otra alternativa es colgar y ver los detalles del pedido en su correo electronico.</Say>
+         Para escuchar el pedido completo pulse cualquier tecla en el telefono. Otra alternativa es colgar y ver los detalles del pedido en su correo electronico.</Say>
     </Gather>
 </Response>
