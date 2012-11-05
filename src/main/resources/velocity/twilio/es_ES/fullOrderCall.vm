@@ -45,13 +45,13 @@
                 $stringTool.escapeXml($item.menuItemTypeName)
             #end
             </Say>
-            <Pause length="2"/>
+            <Pause length="1"/>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             #if( $stringTool.hasText($item.menuItemSubTypeName ))
                 $stringTool.escapeXml($item.menuItemSubTypeName)
             #end
             </Say>
-            <Pause length="2"/>
+            <Pause length="1"/>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             #if( $item.additionalItems.size() > 0 )
                 con
