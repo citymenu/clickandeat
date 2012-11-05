@@ -27,6 +27,38 @@
     <task:scheduler id="scheduler" pool-size="1"/>
     <task:annotation-driven scheduler="scheduler"/>
 
+    <!-- Configure log4j email logging -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject"><bean factory-method="getRootLogger" class="org.apache.log4j.Logger"/></property>
+        <property name="targetMethod"><value>addAppender</value></property>
+        <property name="arguments">
+            <list>
+                <bean init-method="activateOptions" class="org.apache.log4j.net.SMTPAppender">
+                    <property name="SMTPHost" value="${smtp.host}"/>
+                    <property name="from" value="${email.from}"/>
+                    <property name="to" value="${email.erroraddress}"/>
+                    <property name="subject" value="Application Error"/>
+                    <property name="layout">
+                        <bean class="org.apache.log4j.PatternLayout">
+                            <constructor-arg><value>%-5p [%t] | %d{ISO8601} | %F | %L | %m%n</value></constructor-arg>
+                        </bean>
+                    </property>
+                    <property name="threshold">
+                        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+                            <property name="targetClass" value="org.apache.log4j.Level"/>
+                            <property name="targetMethod" value="toLevel"/>
+                            <property name="arguments">
+                                <list>
+                                    <value>${email.log.level}</value>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
     <!-- Configure request caching -->
     <mvc:interceptors>
         <mvc:interceptor>
