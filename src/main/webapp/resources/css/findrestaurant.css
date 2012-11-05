@@ -156,8 +156,9 @@ a.search {
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
     color:#444444;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
 }
 
 .email-entry input:focus {
@@ -242,6 +243,10 @@ option {
     color:#444444;
 }
 
+.search-result {
+    position:relative;
+}
+
 .search-results-detail {
     font:16px/18px prenton;
     color:#444444;
@@ -273,6 +278,21 @@ option {
 .menu-link {
     display:block;
     height: 35px;
+}
+
+.phone-orders-description {
+    display:inline-block;
+    position:absolute;
+    top:-5px;
+    left:40px;
+    padding:1px 8px 1px 8px;
+    color:#FFFFFF;
+    font:500 10px prenton;
+    background: rgb(170 ,0, 0);
+    background: rgba(170, 0, 0, 0.75);
+    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+       -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+            box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
 }
 
 .restaurant-opening-details {
@@ -308,9 +328,9 @@ option {
     border: 1px dashed #cf6e6e;
     padding: 4px 12px 4px 8px;
     margin: 0 0 6px 0;
-    -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-    box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+       -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+            box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     position:relative;
 }
 
