@@ -44,6 +44,7 @@
                 $stringTool.escapeXml($item.menuItemTypeName)
             #end
             </Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             #if( $stringTool.hasText($item.menuItemSubTypeName ))
                 $stringTool.escapeXml($item.menuItemSubTypeName)
             #end
@@ -74,6 +75,6 @@
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.additionalInstructions).</Say>
             <Pause length="2"/>
         #end
-        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Para aceptar el pedido pulsa el uno seguido de la tecla de almohadilla, para rechazar el pedido pulsa el dos seguido de la tecla de almohadilla, para aceptar este pedido y especificar un tiempo de entrega pulsa tres seguido del numero de minutos y a continuaci&#243;n pulsa la tecla de almohadilla. Para repetir este mensaje pulsa cuatro seguido de la tecla de almohadilla. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla cinco seguido de la tecla de almohadilla.</Say>
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pulse 1 seguido de almohadilla para aceptar el pedido. Pulse dos seguido de almohadilla para rechazar el pedido. Pulse tres seguido del numero de minutos y a continuacion almohadilla para aceptar el pedido y especificar un tiempo de entrega. Pulse cuatro y almohadill para repetir este mensaje. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla cinco seguido de la tecla de almohadilla.</Say>
     </Gather>
 </Response>
