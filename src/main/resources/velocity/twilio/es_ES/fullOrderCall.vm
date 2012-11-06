@@ -44,7 +44,7 @@
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity de </Say>
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
-                <!--<Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>-->
+                <Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>
             #else
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($item.menuItemTitle)</Say>
                 <Pause length="$twilioTool.getPauseValue($item.menuItemTitle)"/>
