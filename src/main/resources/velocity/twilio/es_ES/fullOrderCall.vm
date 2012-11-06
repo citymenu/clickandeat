@@ -2,7 +2,7 @@
 <Response>
     <Gather action="$url" finishOnKey="#">
         #if($error)
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Lo siento, no entend&#237; la respuesta</Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Lo siento, no entendi la respuesta</Say>
         #end
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido numero $twilioTool.getOrderId($order.orderId)</Say>
         #if($order.deliveryType == 'DELIVERY')
@@ -14,6 +14,7 @@
             <Pause length="1"/>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.postCode)</Say>
             <Pause length="1"/>
+
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             #if($order.expectedDeliveryTime)
                 A las $stringTool.formatDate($order.expectedDeliveryTime)
@@ -24,7 +25,6 @@
                 Lo mas pronto posible
             #end
             </Say>
-            <Pause length="1"/>
         #else
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tienes un pedido para recoger
             #if($order.expectedCollectionTime)
@@ -36,20 +36,19 @@
                 Cuanto antes
             #end
             </Say>
-            <Pause length="1"/>
         #end
+        <Pause length="1"/>
+
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El pedido es el siguiente.</Say>
         #foreach( $item in $order.orderItems )
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity de </Say>
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">n&#250;mero $item.menuItemNumber</Say>
-                <Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>
+                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
+                <!--<Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>-->
             #else
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($item.menuItemTitle)</Say>
                 <Pause length="$twilioTool.getPauseValue($item.menuItemTitle)"/>
             #end
-
-
             #if( $stringTool.hasText($item.menuItemTypeName ))
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($item.menuItemTypeName)</Say>
                 <Pause length="$twilioTool.getPauseValue($item.menuItemTypeName)"/>
