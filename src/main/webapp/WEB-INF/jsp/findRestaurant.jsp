@@ -133,7 +133,7 @@
                                                         <tr valign="bottom">
                                                             <td width="85">
                                                                 <a href="${ctx}/${restaurant.url}" class="blank">
-                                                                    <c:if test="${restaurant.phoneOrdersOnly == false}">
+                                                                    <c:if test="${restaurant.phoneOrdersOnly == true}">
                                                                     <div class="phone-orders-description"><message:message key="search.phone-orders-only"/></div>
                                                                     </c:if>
                                                                     <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
