@@ -83,6 +83,7 @@ public class VelocityTemplatingService implements InitializingBean {
         numberTool.configure(params);
         velocityTools.put("numberTool", numberTool);
         velocityTools.put("stringTool", new StringTool());
+        velocityTools.put("twilioTool", new TwilioTool());
     }
 
 
@@ -145,6 +146,37 @@ public class VelocityTemplatingService implements InitializingBean {
         this.baseUrl = baseUrl;
     }
 
+    // Twilio util class.
+    public static final class TwilioTool {
+
+        // Amount of characters a waiter can write per second
+        Integer charsPerSec = new Integer( MessageFactory.getMessage("twilio.chars-per-sec", true));
+
+        // Seconds we want Twilio to pause for based on the length of the text read
+        public String getPauseValue(Object obj) {
+
+            if( obj == null ) {
+                return null;
+            }
+
+            Integer pauseLength = new Integer(Math.round(((String) obj).length() / charsPerSec.intValue()));
+            if (pauseLength==0) {
+                pauseLength = 1;
+            }
+            return pauseLength.toString();
+        }
+
+        public String getOrderId(Object obj){
+            String orderId = (String)obj;
+            // remove the leading zeros
+            //orderId.replaceAll("^0*", "");
+
+            orderId = StringUtils.arrayToDelimitedString(orderId.split("")," ");
+
+            return orderId;
+        }
+
+    }
 
 
     public static final class StringTool {
