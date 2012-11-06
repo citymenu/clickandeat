@@ -11,7 +11,6 @@
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/ordersummary.js" charset="utf-8"></script>
-    <script type="text/javascript">var orderid = '${orderid}';</script>
 
     <title>LlamaryComer | <message:message key="page-title.order-confirmation" escape="false"/></title>
 </head>

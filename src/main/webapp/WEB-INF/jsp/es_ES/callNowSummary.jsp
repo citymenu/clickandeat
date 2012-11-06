@@ -16,7 +16,6 @@
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/callnowsummary.js" charset="utf-8"></script>
-    <script type="text/javascript">var orderid = '${orderid}';</script>
 
     <title>LlamaryComer | <message:message key="page-title.call-now-order" escape="false"/></title>
 </head>

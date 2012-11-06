@@ -11,7 +11,6 @@
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
-    <script type="text/javascript">var orderid = '${orderid}';</script>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css" charset="utf-8"/>

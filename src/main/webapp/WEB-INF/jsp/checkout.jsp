@@ -18,7 +18,6 @@
 
     <title><message:message key="page-title.checkout" escape="false"/></title>
     <script type="text/javascript">
-        var orderid = '${orderid}';
         var deliveryType='${order.deliveryType}';
         var canCheckout=${order.canCheckout};
         var coordinates=[${order.restaurant.coordinates}];
