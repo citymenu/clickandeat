@@ -24,6 +24,8 @@ Ext.define('AD.model.Order', {
         {name:'restaurantConfirmedTime', type:'date'},
         {name:'transactionId', type:'string'},
         {name:'transactionStatus', type:'string'},
+        {name:'orderNotificationStatus', type:'string',convert:convertOrderNotificationStatus},
+        {name:'orderNotificationCallCount', type:'number'},
         {name:'orderUpdates', type:'auto'},
         {name:'orderAmendments', type:'auto'}
     ]

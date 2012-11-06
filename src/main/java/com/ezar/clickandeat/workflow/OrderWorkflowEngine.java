@@ -59,7 +59,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
      */
 
     public static final String NOTIFICATION_STATUS_NO_CALL_MADE = "NO_CALL_MADE";
-    public static final String NOTIFICATION_STATUS_CALL_IN_PROGRESS = "NOTIFICATION_STATUS_CALL_IN_PROGRESS";
+    public static final String NOTIFICATION_STATUS_CALL_IN_PROGRESS = "CALL_IN_PROGRESS";
     public static final String NOTIFICATION_STATUS_RESTAURANT_ANSWERED = "ANSWERED";
     public static final String NOTIFICATION_STATUS_RESTAURANT_NO_ANSWER = "NO_ANSWER";
     public static final String NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND = "FAILED_TO_RESPOND";

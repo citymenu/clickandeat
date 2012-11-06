@@ -31,7 +31,6 @@ Ext.application({
             },{
                 region:'center',
                 xtype:'orderlist',
-                autoScroll:true,
                 frame:true
             }]
         });

@@ -11,6 +11,18 @@ var cp = Ext.create('Ext.state.CookieProvider', {
 
 Ext.state.Manager.setProvider(cp);
 
+/** Fix scrolling bug **/
+Ext.override(Ext.grid.Scroller, {
+    onAdded: function() {
+        this.callParent(arguments);
+        var me = this;
+        if (me.scrollEl) {
+            me.mun(me.scrollEl, 'scroll', me.onElScroll, me);
+            me.mon(me.scrollEl, 'scroll', me.onElScroll, me);
+        }
+    }
+});
+
 /* Global ajax error handler */
 Ext.Ajax.on('requestexception', 
 	function(conn,response,options) {

@@ -69,6 +69,16 @@ function convertOrderStatus(value,record) {
     }
 }
 
+// Parse out order notification status
+function convertOrderNotificationStatus(value,record) {
+    if( !value || value == '' ) {
+        return value;
+    }
+    else {
+        return value.replace(/_/g,' ');
+    }
+}
+
 //Messaging
 Ext.message = function(){
 
