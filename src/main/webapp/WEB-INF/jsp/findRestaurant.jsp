@@ -17,7 +17,7 @@
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
-    <script type="text/javascript">var address="${address}";</script>
+    <script type="text/javascript">var address="${address}"; var orderid = '${orderid}';</script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
