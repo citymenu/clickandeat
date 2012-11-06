@@ -4,7 +4,7 @@
         #if($error)
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Lo siento, no entend&#237; la respuesta</Say>
         #end
-
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido numero $twilioTool.getOrderId($order.orderId)</Say>
         #if($order.deliveryType == 'DELIVERY')
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direccion</Say>
             <!-- The address needs to be split so that it can be read slowly -->
