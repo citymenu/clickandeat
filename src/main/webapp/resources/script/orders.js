@@ -1038,7 +1038,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     var specialOfferItemIndex = 0;
     specialOfferItems.forEach(function(specialOfferItem){
         var specialOfferItemContent = ('<div class=\'specialofferitemtitle\'>{0}</div>').format(unescapeQuotes(specialOfferItem.title));
-        if( specialOfferItem.description != '' ) {
+        if( specialOfferItem.description && specialOfferItem.description != '' ) {
             specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
         }
         var selectOptions = '';
