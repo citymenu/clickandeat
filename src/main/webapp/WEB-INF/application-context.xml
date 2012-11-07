@@ -35,8 +35,11 @@
             <list>
                 <bean init-method="activateOptions" class="org.apache.log4j.net.SMTPAppender">
                     <property name="SMTPHost" value="${smtp.host}"/>
+                    <property name="SMTPUsername" value="${smtp.username}"/>
+                    <property name="SMTPPassword" value="${smtp.password}"/>
                     <property name="from" value="${email.from}"/>
                     <property name="to" value="${email.erroraddress}"/>
+
                     <property name="subject" value="Application Error"/>
                     <property name="layout">
                         <bean class="org.apache.log4j.PatternLayout">
