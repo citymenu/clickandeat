@@ -42,14 +42,14 @@
 
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El pedido es el siguiente.</Say>
         #foreach( $item in $order.orderItems )
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity , </Say>
+            <!--For the quantity number translate the one to just 'un' instead of 'uno' -->
+            #if( $item.quantity == 1 ){
+                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> un </Say>
+            #else
+                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity , </Say>
+            #end
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-                <!--For the number one translate to just un instead of uno -->
-                #if( $item.menuItemNumber == 1 ){
-                    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> un </Say>
-                #else
-                    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
-                #end
+                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
                 <Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>
             #else
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($item.menuItemTitle)</Say>
