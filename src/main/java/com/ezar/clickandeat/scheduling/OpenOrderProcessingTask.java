@@ -40,6 +40,8 @@ public class OpenOrderProcessingTask implements InitializingBean {
     private int secondsBeforeRetryCall;
     
     private int minutesBeforeSendCancellationEmail;
+
+    private int minutesBeforeCallAgainEvenIfAnswered;
     
     private int minutesBeforeAutoCancelOrder;
 
@@ -71,7 +73,10 @@ public class OpenOrderProcessingTask implements InitializingBean {
                     Restaurant restaurant = order.getRestaurant();
                     DateTime now = new DateTime();
                     LOGGER.info("Current time is: " + now);
-    
+
+                    String notificationStatus = order.getOrderNotificationStatus();
+                    String orderStatus = order.getOrderStatus();
+                    
                     // Get the time the restaurant opened
                     DateTime restaurantOpenedTime = restaurant.getEarlyOpeningTime(now);
     
@@ -95,7 +100,7 @@ public class OpenOrderProcessingTask implements InitializingBean {
                         }
                         continue;
                     }
-    
+
                     // Send email to customer giving them the option to cancel the order if it has been awaiting confirmation for too long
                     DateTime cancellationOfferCutoff = new DateTime().minusMinutes(minutesBeforeSendCancellationEmail);
                     LOGGER.info("Cancellation offer cutoff time is: " + cancellationOfferCutoff);
@@ -110,8 +115,8 @@ public class OpenOrderProcessingTask implements InitializingBean {
                     }
     
                     // Attempt to call restaurant again
-                    String notificationStatus = order.getOrderNotificationStatus();
-                    if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus) && !NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus)) {
+                    if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus) && !NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus)
+                            && !NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
                         DateTime lastCallTime = order.getLastCallPlacedTime();
                         DateTime lastCallCutoff = new DateTime().minusSeconds(secondsBeforeRetryCall);
                         if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
@@ -123,7 +128,22 @@ public class OpenOrderProcessingTask implements InitializingBean {
                             }
                         }
                     }
+
+                    // If the notification call was answered over 3 minutes ago but the order has not been accepted or rejected/call again
+                    DateTime callAgainCutoff = new DateTime().minusMinutes(minutesBeforeCallAgainEvenIfAnswered);
+                    if( NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
+                        DateTime lastCallTime = order.getLastCallPlacedTime();
+                        if( lastCallTime == null || lastCallTime.isBefore(callAgainCutoff)) {
+                            try {
+                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                            }
+                            catch( Exception ex ) {
+                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
+                            }
+                        }
+                    }
                 }
+
             }
         }
         catch (Exception ex) {
@@ -145,6 +165,12 @@ public class OpenOrderProcessingTask implements InitializingBean {
     @Value(value="${twilio.minutesBeforeSendCancellationEmail}")
     public void setMinutesBeforeSendCancellationEmail(int minutesBeforeSendCancellationEmail) {
         this.minutesBeforeSendCancellationEmail = minutesBeforeSendCancellationEmail;
+    }
+
+    @Required
+    @Value(value="${twilio.minutesBeforeCallAgainEvenIfAnswered}")
+    public void setMinutesBeforeCallAgainEvenIfAnswered(int minutesBeforeCallAgainEvenIfAnswered) {
+        this.minutesBeforeCallAgainEvenIfAnswered = minutesBeforeCallAgainEvenIfAnswered;
     }
 
     @Required
