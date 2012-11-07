@@ -7,7 +7,7 @@
 
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido numero $twilioTool.getOrderId($order.orderId)</Say>
         #if($order.deliveryType == 'DELIVERY')
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direccion</Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido para entregar en la direccion</Say>
             <!-- The address needs to be split so that it can be read slowly -->
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.address1)</Say>
             <Pause length="1"/>
@@ -27,7 +27,7 @@
             #end
             </Say>
         #else
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tienes un pedido para recoger
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido para recoger
             #if($order.expectedCollectionTime)
                 A las $stringTool.formatDate($order.expectedCollectionTime)
                 #if(!($order.expectedCollectionTime.toLocalDate() == $today))
@@ -90,6 +90,6 @@
             $stringTool.escapeXml($order.additionalInstructions).</Say>
             <Pause length="$twilioTool.getPauseValue($order.additionalInstructions)"/>
         #end
-        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pulse zero y almohadilla para rechazar el pedido. Pulse uno y almohadilla para aceptar el pedido. Pulse dos seguido del numero de minutos y almohadilla para aceptar el pedido y especificar un tiempo de entrega. Pulse tres y almohadill para repetir este mensaje.</Say>
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pulse zero y almohadilla para rechazar el pedido. Pulse uno y almohadilla para aceptar el pedido. Pulse dos seguido del numero de minutos y almohadilla para aceptar el pedido y especificar un tiempo de entrega. Pulse tres y almohadilla para repetir este mensaje.</Say>
     </Gather>
 </Response>
