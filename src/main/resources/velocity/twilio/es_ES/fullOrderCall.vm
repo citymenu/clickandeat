@@ -4,6 +4,7 @@
         #if($error)
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Lo siento, no entendi la respuesta</Say>
         #end
+
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido numero $twilioTool.getOrderId($order.orderId)</Say>
         #if($order.deliveryType == 'DELIVERY')
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Tiene un pedido para entregar en la direccion</Say>
@@ -33,7 +34,7 @@
                     el $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
                 #end
             #else
-                Cuanto antes
+                Lo mas pronto posible
             #end
             </Say>
         #end
@@ -41,7 +42,7 @@
 
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El pedido es el siguiente.</Say>
         #foreach( $item in $order.orderItems )
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity de </Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity , </Say>
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
                 <Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>
