@@ -33,7 +33,9 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String AUTO_CANCELLATION_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/autoCancellationNotificationSMS.vm";
     public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationCall.vm";
     public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCall.vm";
-    public static final String FULL_ORDER_CALL_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCallResponse.vm";
+    public static final String ORDER_DECLINED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderDeclinedResponse.vm";
+    public static final String ORDER_ACCEPTED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderAcceptedResponse.vm";
+    public static final String ORDER_ACCEPTED_WITH_DELIVERY_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderAcceptedWithDeliveryResponse.vm";
     public static final String FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE = "/velocity/twilio/{locale}/fullOrderErrorResponse.vm";
     public static final String ORDER_CALL_ERROR_TEMPLATE = "/velocity/twilio/{locale}/errorResponse.vm";
 

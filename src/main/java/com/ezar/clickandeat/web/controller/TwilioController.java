@@ -303,14 +303,13 @@ public class TwilioController implements InitializingBean {
         // Process response
         char firstDigit = digits.toCharArray()[0];
         switch(firstDigit) {
-            
-            // Order accepted
-            case '1':
 
+            // Order declined
+            case '0':
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
-                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+                    return responseEntityUtils.buildXmlResponse(buildDeclinedResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
@@ -318,12 +317,13 @@ public class TwilioController implements InitializingBean {
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
 
-            // Order rejected
-            case '0':
+            // Order accepted
+            case '1':
+
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
-                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
+                    return responseEntityUtils.buildXmlResponse(buildAcceptedResponseXml());
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
@@ -350,7 +350,7 @@ public class TwilioController implements InitializingBean {
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
-                    return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
+                    return responseEntityUtils.buildXmlResponse(buildAcceptedWithDeliveryResponseXml(deliveryMinutes));
                 }
                 catch( WorkflowStatusException ex ) {
                     LOGGER.error(ex.getMessage(),ex);
@@ -362,11 +362,6 @@ public class TwilioController implements InitializingBean {
             // Repeat the call
             case '3':
                 return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
-
-            // No response at this time
-            case '5':
-                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                return responseEntityUtils.buildXmlResponse(buildOrderCallResponseXml());
 
             // Invalid input
             default:
@@ -433,12 +428,42 @@ public class TwilioController implements InitializingBean {
      * @return
      * @throws Exception
      */
-
-    private String buildOrderCallResponseXml() throws Exception {
+    
+    private String buildDeclinedResponseXml() throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        //templateModel.put("","");
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_DECLINED_RESPONSE_TEMPLATE);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Generated xml [" + xml + "]");
+        }
+        return xml;
+    }
 
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_RESPONSE_TEMPLATE);
+
+    /**
+     * @return
+     * @throws Exception
+     */
+
+    private String buildAcceptedResponseXml() throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ACCEPTED_RESPONSE_TEMPLATE);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Generated xml [" + xml + "]");
+        }
+        return xml;
+    }
+
+
+    /**
+     * @param deliveryMinutes
+     * @return
+     * @throws Exception
+     */
+    
+    private String buildAcceptedWithDeliveryResponseXml(Integer deliveryMinutes) throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        templateModel.put("DeliveryMinutes",deliveryMinutes);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ACCEPTED_WITH_DELIVERY_RESPONSE_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }
