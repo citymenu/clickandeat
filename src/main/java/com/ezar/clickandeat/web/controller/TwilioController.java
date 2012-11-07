@@ -319,7 +319,7 @@ public class TwilioController implements InitializingBean {
                 }
 
             // Order rejected
-            case '2':
+            case '0':
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
@@ -332,7 +332,7 @@ public class TwilioController implements InitializingBean {
                 }
 
             // Order accepted with non-standard delivery time
-            case '3':
+            case '2':
                 String deliveryMinutesText = digits.substring(1);
 
                 // Try to extract the delivery minutes from the input
@@ -360,7 +360,7 @@ public class TwilioController implements InitializingBean {
 
 
             // Repeat the call
-            case '4':
+            case '3':
                 return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
 
             // No response at this time
@@ -435,7 +435,10 @@ public class TwilioController implements InitializingBean {
      */
 
     private String buildOrderCallResponseXml() throws Exception {
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(null, VelocityTemplatingService.FULL_ORDER_CALL_RESPONSE_TEMPLATE);
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        //templateModel.put("","");
+
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_RESPONSE_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }

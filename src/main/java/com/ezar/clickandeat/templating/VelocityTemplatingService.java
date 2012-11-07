@@ -167,13 +167,13 @@ public class VelocityTemplatingService implements InitializingBean {
         }
 
         public String getOrderId(Object obj){
-            String orderId = (String)obj;
-            // remove the leading zeros
-            //orderId.replaceAll("^0*", "");
+            return (((String)obj).replaceFirst("^0+(?!$)", "")).replaceAll("\\B", ", ");
+        }
 
-            orderId = StringUtils.arrayToDelimitedString(orderId.split("")," ");
-
-            return orderId;
+        // This is needed to read numbers as digits.
+        // Used for Spanish telephones and postcodes
+        public String getDigits(Object obj){
+            return ((String)obj).replaceAll("\\B", ", ");
         }
 
     }
