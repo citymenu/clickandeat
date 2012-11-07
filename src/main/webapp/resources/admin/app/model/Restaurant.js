@@ -16,6 +16,7 @@ Ext.define('AD.model.Restaurant', {
         {name:'listOnSite', type:'boolean'},
         {name:'phoneOrdersOnly', type:'boolean'},
         {name:'recommended', type:'boolean'},
+        {name:'testMode', type:'boolean'},
         {name:'imageName', type:'string'},
         {name:'created', type:'number',convert: buildDate},
         {name:'lastUpdated', type:'number',convert: buildDate},

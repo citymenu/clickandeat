@@ -70,7 +70,7 @@ public class Restaurant extends PersistentObject {
     private Long lastUpdated;
     private Long lastContentApprovalStatusUpdated;
     private List<RestaurantUpdate> restaurantUpdates;
-
+    private Boolean testMode;
 
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
@@ -100,6 +100,7 @@ public class Restaurant extends PersistentObject {
         this.discounts = new ArrayList<Discount>();
         this.specialOffers = new ArrayList<SpecialOffer>();
         this.listOnSite = true;
+        this.testMode = false;
         this.phoneOrdersOnly = false;
         this.contentApproved = false;
         this.recommended = false;
@@ -676,6 +677,14 @@ public class Restaurant extends PersistentObject {
 
     public void setRestaurantUpdates(List<RestaurantUpdate> restaurantUpdates) {
         this.restaurantUpdates = restaurantUpdates;
+    }
+
+    public Boolean getTestMode() {
+        return testMode;
+    }
+
+    public void setTestMode(Boolean testMode) {
+        this.testMode = testMode;
     }
 
     /**

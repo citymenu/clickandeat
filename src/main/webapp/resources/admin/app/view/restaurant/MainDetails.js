@@ -54,7 +54,12 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
              labelAlign:'top',
              xtype:'checkbox',
              name:'recommended'
-         }]
+         },{
+            fieldLabel:'Is in test mode (skip payment options)',
+            labelAlign:'top',
+            xtype:'checkbox',
+            name:'testMode'
+        }]
     },{
         xtype:'fieldset',
         title:'Address',

@@ -41,6 +41,40 @@
         </div>
 
         <div class="box-large-middle">
+            <div class="caption">La manera más sencilla de pedir comida a domicilio</div>
+            <div class="help">
+                <table width="976">
+                    <tr>
+                        <td width="244" align="center">
+                            <div class="step step-1">
+                                <div class="step-number">1.</div>
+                                <div class="step-detail">Dinos donde estas</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-2">
+                                <div class="step-number">2.</div>
+                                <div class="step-detail">Elije tu comida preferida</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-3">
+                                <div class="step-number">3.</div>
+                                <div class="step-detail">Construye tu pedido</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-4">
+                                <div class="step-number">4.</div>
+                                <div class="step-detail">Tu comida está de camino</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box-large-bottom">
             <div class="caption">¿Porque no pruebas uno de nuestros restaurantes recomendados?</div>
             <div id="carousel">
                 <div class="carousel-items">
@@ -93,40 +127,6 @@
                         </c:forEach>
                     </ul>
                 </div>
-            </div>
-        </div>
-
-        <div class="box-large-bottom">
-            <div class="caption">La manera más sencilla de pedir comida a domicilio</div>
-            <div class="help">
-                <table width="976">
-                    <tr>
-                        <td width="244" align="center">
-                            <div class="step step-1">
-                                <div class="step-number">1.</div>
-                                <div class="step-detail">Dinos donde estas</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-2">
-                                <div class="step-number">2.</div>
-                                <div class="step-detail">Elije tu comida preferida</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-3">
-                                <div class="step-number">3.</div>
-                                <div class="step-detail">Construye tu pedido</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-4">
-                                <div class="step-number">4.</div>
-                                <div class="step-detail">Tu comida está de camino</div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
 

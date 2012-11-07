@@ -51,7 +51,41 @@ public class PaymentController {
         if( request.getSession(true).getAttribute("orderid") == null ) {
             return "redirect:/home.html";
         }
-        return "payment";
+        Order order = requestHelper.getOrderFromSession(request);
+        if( !order.getRestaurant().getTestMode()) {
+            return "payment";
+        }
+        else {
+            // Restaurant is in test mode, skip card payment
+            order.setTransactionId("DUMMY");
+            order.setTransactionStatus(Order.PAYMENT_PRE_AUTHORISED);
+            order.setAuthorisationCode("DUMMY");
+            order.setSignature("DUMMY");
+            order.setCardPaymentAmount(order.getTotalCost());
+            order = orderRepository.saveOrder(order);
+
+            // Send notification to restaurant and customer
+            orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
+
+            // Place order notification call
+            try {
+                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+            }
+            catch( Exception ex ) {
+                orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+            }
+
+            // Clear session attributes
+            HttpSession session = request.getSession(true);
+            session.setAttribute("completedorderid",order.getOrderId());
+            session.removeAttribute("orderid");
+            session.removeAttribute("orderrestaurantid");
+            session.removeAttribute("restaurantid");
+            session.removeAttribute("cancheckout");
+
+            // Send redirect to order confirmation page
+            return "redirect:/orderSummary.html";
+        }
     }
 
 

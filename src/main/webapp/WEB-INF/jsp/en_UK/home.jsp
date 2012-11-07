@@ -40,7 +40,41 @@
         </div>
 
         <div class="box-large-middle">
-            <div class="caption">Or why not try one of our recommended restaurants?</div>
+            <div class="caption">Simply the easiest way to order takeaway food online</div>
+            <div class="help">
+                <table width="976">
+                    <tr>
+                        <td width="244" align="center">
+                            <div class="step step-1">
+                                <div class="step-number">1.</div>
+                                <div class="step-detail">Tell us where you are</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-2">
+                                <div class="step-number">2.</div>
+                                <div class="step-detail">Browse menus from our wide range of restaurants</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-3">
+                                <div class="step-number">3.</div>
+                                <div class="step-detail">Build and pay for your order</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-4">
+                                <div class="step-number">4.</div>
+                                <div class="step-detail">Your food is on its way</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box-large-bottom">
+            <div class="caption">Why not try one of our recommended restaurants?</div>
             <div id="carousel">
                 <div class="carousel-items">
                     <ul>
@@ -95,39 +129,7 @@
             </div>
         </div>
 
-        <div class="box-large-bottom">
-            <div class="caption">Simply the easiest way to order takeaway food online</div>
-            <div class="help">
-                <table width="976">
-                    <tr>
-                        <td width="244" align="center">
-                            <div class="step step-1">
-                                <div class="step-number">1.</div>
-                                <div class="step-detail">Tell us where you are</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-2">
-                                <div class="step-number">2.</div>
-                                <div class="step-detail">Browse menus from our wide range of restaurants</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-3">
-                                <div class="step-number">3.</div>
-                                <div class="step-detail">Build and pay for your order</div>
-                            </div>
-                        </td>
-                        <td width="244" align="center">
-                            <div class="step step-4">
-                                <div class="step-number">4.</div>
-                                <div class="step-detail">Your food is on its way</div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+
     </div>
 </div>
 
