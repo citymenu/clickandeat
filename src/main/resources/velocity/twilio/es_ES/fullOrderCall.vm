@@ -44,7 +44,12 @@
         #foreach( $item in $order.orderItems )
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$item.quantity , </Say>
             #if( $item.menuItemNumber && $item.menuItemNumber != 0 )
-                <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
+                <!--For the number one translate to just un instead of uno -->
+                #if( $item.menuItemNumber == 1 ){
+                    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> un </Say>
+                #else
+                    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">numero $item.menuItemNumber</Say>
+                #end
                 <Pause length="$stringTool.getMessage('twilio.pause-after-item-number')"/>
             #else
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($item.menuItemTitle)</Say>

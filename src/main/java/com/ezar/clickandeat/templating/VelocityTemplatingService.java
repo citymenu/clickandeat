@@ -167,7 +167,7 @@ public class VelocityTemplatingService implements InitializingBean {
         }
 
         public String getOrderId(Object obj){
-            return (((String)obj).replaceFirst("^0+(?!$)", "")).replaceAll("\\B", ",");
+            return (((String)obj).replaceFirst("^0+(?!$)", "")).replaceAll("\\B", ", ");
         }
 
     }
