@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">Thank you for accepting this order with a
+    <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por aceptar el pedido un tiempo de
     #if($order.deliveryType == 'DELIVERY')
-        delivery
+        entrega
     #else
-        collection
+        recogida
     #end
-    time of $DeliveryMinutes minutes.
+     de $DeliveryMinutes minutos.
     </Say>
 </Response>
