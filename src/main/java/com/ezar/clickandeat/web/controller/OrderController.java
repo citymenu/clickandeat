@@ -92,6 +92,16 @@ public class OrderController implements InitializingBean {
                 return ret.toArray(new String[ret.size()]);
             }
         });
+        filterDecoratorMap.put("orderNotificationStatus",new FilterValueDecorator() {
+            @Override
+            public String[] decorateValues(String[] values) {
+                List<String> ret = new ArrayList<String>();
+                for( String value: values ) {
+                    ret.add(value.replaceAll(" ","_"));
+                }
+                return ret.toArray(new String[ret.size()]);
+            }
+        });
     }
 
     @Override

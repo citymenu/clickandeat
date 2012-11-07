@@ -28,7 +28,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/admin.css" charset="utf-8"/>
 
     <!-- JQuery -->
-    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.2.min.js" charset="utf-8"></script>
 
     <!-- Fancybox -->
     <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" charset="utf-8"/>

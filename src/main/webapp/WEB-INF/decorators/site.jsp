@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/dialog.css"/>
 
     <!-- JQuery -->
-    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.0.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.2.min.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.mousewheel-3.0.6.pack.js"charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js" charset="utf-8"></script>
 

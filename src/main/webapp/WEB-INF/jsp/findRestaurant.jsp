@@ -17,7 +17,7 @@
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
-    <script type="text/javascript">var address="${address}";</script>
+    <script type="text/javascript">var address="${address}"; var orderid = '${orderid}';</script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
 </head>
 
@@ -133,6 +133,9 @@
                                                         <tr valign="bottom">
                                                             <td width="85">
                                                                 <a href="${ctx}/${restaurant.url}" class="blank">
+                                                                    <c:if test="${restaurant.phoneOrdersOnly == true}">
+                                                                    <div class="phone-orders-description"><message:message key="search.phone-orders-only"/></div>
+                                                                    </c:if>
                                                                     <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                                                 </a>
                                                             </td>

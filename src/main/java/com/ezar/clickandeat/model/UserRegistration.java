@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import org.joda.time.DateTime;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection="registrations")
@@ -15,6 +16,8 @@ public class UserRegistration extends PersistentObject {
     
     private Order order;
 
+    private DateTime created;
+    
     public UserRegistration() {
     }
 
@@ -56,5 +59,13 @@ public class UserRegistration extends PersistentObject {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public DateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(DateTime created) {
+        this.created = created;
     }
 }

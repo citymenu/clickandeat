@@ -3,6 +3,7 @@ Ext.define('AD.view.order.List' ,{
     alias:'widget.orderlist',
     id:'orderlist',
     layout:'fit',
+    autoScroll:true,
     loadMask:true,
 
     plugins: [{
@@ -58,6 +59,8 @@ Ext.define('AD.view.order.List' ,{
             {header:'Type', dataIndex:'deliveryType',flex:.1,filter:{type:'list',options:['DELIVERY','COLLECTION']}},
             {header:'Created', dataIndex:'orderCreatedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Restaurant Name', dataIndex:'restaurantName',flex:.1, filter:{type:'string'}},
+            {header:'Notification Status', dataIndex:'orderNotificationStatus',flex:.1, filter:{type:'list',options:['ANSWERED','CALL IN PROGRESS','ERROR','FAILED TO RESPOND','NO ANSWER','NO CALL MADE']}},
+            {header:'Call Count', dataIndex:'orderNotificationCallCount',flex:.1, filter:{type:'numeric'}},
             {header:'Order Placed', dataIndex:'orderPlacedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Expected Delivery', dataIndex:'expectedDeliveryTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Expected Collection', dataIndex:'expectedCollectionTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},

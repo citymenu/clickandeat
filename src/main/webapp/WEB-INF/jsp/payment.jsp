@@ -14,6 +14,7 @@
     <title><message:message key="page-title.payment" escape="false"/></title>
 
     <script type="text/javascript">
+    var orderid = '${orderid}';
     // Prevent variables from being global
     (function () {
         var div = document.createElement('div'),
