@@ -435,7 +435,10 @@ public class TwilioController implements InitializingBean {
      */
 
     private String buildOrderCallResponseXml() throws Exception {
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(null, VelocityTemplatingService.FULL_ORDER_CALL_RESPONSE_TEMPLATE);
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        //templateModel.put("","");
+
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_RESPONSE_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }

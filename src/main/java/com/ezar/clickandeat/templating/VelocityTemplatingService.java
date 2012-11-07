@@ -170,6 +170,12 @@ public class VelocityTemplatingService implements InitializingBean {
             return (((String)obj).replaceFirst("^0+(?!$)", "")).replaceAll("\\B", ", ");
         }
 
+        // This is only needed for Spanish post codes because they are numbers
+        // and they get read too fast
+        public String getPostCodeES(Object obj){
+            return ((String)obj).replaceAll("\\B", ", ");
+        }
+
     }
 
 

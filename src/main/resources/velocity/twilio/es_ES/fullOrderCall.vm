@@ -13,7 +13,7 @@
             <Pause length="1"/>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.town)</Say>
             <Pause length="1"/>
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.postCode)</Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> $twilioTool.getPostCodeES($order.deliveryAddress.postCode)</Say>
             <Pause length="1"/>
 
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
@@ -86,8 +86,8 @@
         #end
 
         #if($stringTool.hasText($order.additionalInstructions))
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El cliente ha añadido las siguientes instrucciones a este pedido.</Say>
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.additionalInstructions).</Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')" loop="2">El cliente ha añadido las siguientes instrucciones a este pedido.
+            $stringTool.escapeXml($order.additionalInstructions).</Say>
             <Pause length="$twilioTool.getPauseValue($order.additionalInstructions)"/>
         #end
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pulse uno seguido de almohadilla para aceptar el pedido. Pulse dos seguido de almohadilla para rechazar el pedido. Pulse tres seguido del numero de minutos y a continuacion almohadilla para aceptar el pedido y especificar un tiempo de entrega. Pulse cuatro y almohadill para repetir este mensaje. Si no quieres aceptar ni rechazar este pedido ahora mismo pulsa la tecla cinco seguido de la tecla de almohadilla.</Say>
