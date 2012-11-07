@@ -63,7 +63,7 @@
     </filter-mapping>
 
 	<session-config>
-  		<session-timeout>240</session-timeout>
+  		<session-timeout>120</session-timeout>
 	</session-config>
 	
 	<welcome-file-list>
