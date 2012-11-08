@@ -178,6 +178,12 @@ public class VelocityTemplatingService implements InitializingBean {
             return ((String)obj).replaceAll("\\B", ", ");
         }
 
+        // Same than above but with the chance of making the
+        // pause between digits bigger
+        public String getDigits(Object obj, Object pauseParam){
+            return ((String)obj).replaceAll("\\B", (String) pauseParam);
+        }
+
     }
 
 

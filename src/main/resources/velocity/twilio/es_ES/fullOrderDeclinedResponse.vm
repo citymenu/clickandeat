@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por notificarnos el rechazo del peddo.</Say>
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por notificarnos el rechazo del peddo.</Say>
 </Response>

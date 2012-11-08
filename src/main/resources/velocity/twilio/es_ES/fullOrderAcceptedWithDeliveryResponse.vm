@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por aceptar el pedido un tiempo de
+    <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Gracias por aceptar el pedido un tiempo de
     #if($order.deliveryType == 'DELIVERY')
         entrega
     #else
