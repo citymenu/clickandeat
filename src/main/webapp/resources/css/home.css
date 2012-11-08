@@ -65,9 +65,8 @@ a.search {
     color:#c5171e;
 }
 
-
 .location-direct {
-    font: 500 12px/14px prenton;
+    font:500 12px/14px "prenton-n5", "prenton";
     color:#FFFFFF;
     text-shadow: 0 2px #333333;
     padding-top: 7px;
@@ -76,7 +75,7 @@ a.search {
 }
 
 input.location {
-    font:14px/16px myriad-pro;
+    font:14px/16px "myriad-pro-n4", "myriad-pro";
     color:#666666;
     height: 22px;
     padding: 4px 6px;
@@ -100,7 +99,7 @@ input.location:focus {
     display:none;
     margin-top:15px;
     width:320px;
-    font:14px/16px myriad-pro;
+    font:14px/16px "myriad-pro-n4", "myriad-pro";
     color:#444444;
     border:1px solid #666666;
     padding:5px 10px;
@@ -119,7 +118,7 @@ input.watermark {
 }
 
 div.pac-item {
-    font:14px/16px myriad-pro;
+    font:14px/16px "myriad-pro-n4", "myriad-pro";
     padding: 2px 5px 2px 5px;
     color:#444444;
 }
@@ -138,7 +137,7 @@ a.home {
 .box-large-middle {
     background-color:#FDFDFD;
     border:2px solid #DDDDDD;
-    padding:40px 20px 0 20px;
+    padding:45px 20px 30px 20px;
     margin:60px 0 70px 0;
     -webkit-border-radius: 20px;
        -moz-border-radius: 20px;
@@ -150,7 +149,7 @@ a.home {
 .box-large-bottom {
     background-color:#FDFDFD;
     border:2px solid #DDDDDD;
-    padding:45px 20px 30px 20px;
+    padding:40px 20px 0 20px;
     margin:0 0 50px 0;
     -webkit-border-radius: 20px;
        -moz-border-radius: 20px;
@@ -160,7 +159,7 @@ a.home {
 }
 
 .caption {
-    font:700 14px myriad-pro;
+    font:14px/16px "myriad-pro-n7", "myriad-pro";
     color: #FFFFFF;
 	background:#c5171e;
     text-shadow: 0 2px #333333;
@@ -219,13 +218,13 @@ a.home {
 }
 
 .restaurant-summary {
-    font:700 12px/14px prenton;
+    font:700 12px/14px "prenton-n7", "prenton";
     color:#444444;
 }
 
 .opening-details {
     text-align:left;
-    font: 12px/14px myriad-pro;
+    font: 12px/14px "myriad-pro-n4", "myriad-pro";
     color:#444444;
     margin-top: 3px;
 }
@@ -241,6 +240,8 @@ a.home {
     box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     position:relative;
     text-align:left;
+    zoom: 1;
+    *display: inline;
 }
 
 .scissors {
@@ -255,10 +256,12 @@ a.home {
 
 .discount-details {
     display:inline-block;
-    font: 400 12px/14px prenton;
+    font: 400 12px/14px "prenton-n4", "prenton";
     min-height:16px;
     color:#444444;
     text-align:left;
+    zoom: 1;
+    *display: inline;
 }
 
 a.blank, a.blank:visited, a.blank:hover, a.blank:active {
@@ -291,7 +294,6 @@ a.location, a.location:visited, a.location:hover, a.location:active {
             border-radius: 20px;
     position:relative;
     text-align:center;
-
 }
 
 .step-number {
@@ -308,7 +310,7 @@ a.location, a.location:visited, a.location:hover, a.location:active {
     left:20px;
     width:170px;
     text-align:center;
-    font:700 12px/14px prenton;
+    font:700 12px/14px "prenton-n7", "prenton";
     color:#444444;
 }
 

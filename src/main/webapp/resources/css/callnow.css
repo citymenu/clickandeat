@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 .order-detail {
-    font: 400 16px/18px myriad-pro;
+    font: 400 16px/18px myriad-pro-n4,myriad-pro;
     color:#444444;
 }
 
@@ -14,13 +14,13 @@
 }
 
 .call-now-form-label {
-    font:14px/16px myriad-pro;
+    font:14px/16px myriad-pro-n4,myriad-pro;
     color: #444444;
     padding-top:4px;
 }
 
 .call-now-form-field input, .call-now-form-field textarea {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     width:260px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
@@ -55,6 +55,8 @@ span.valid {
     width:16px;
     height:16px;
     cursor:pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 a.call-now-nav-button, a.call-now-nav-button:active, a.call-now-nav-button:hover {
@@ -80,7 +82,7 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
 }
 
 .email-entry input {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     width:460px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
@@ -98,7 +100,7 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
 
 .invalid-email {
     display:inline-block;
-    font:400 14px/14px myriad-pro;
+    font:400 14px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
@@ -107,6 +109,8 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
     -webkit-border-radius: 5px;
        -moz-border-radius: 5px;
             border-radius: 5px;
+    zoom: 1;
+    *display: inline;
 }
 
 
@@ -117,6 +121,6 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
 }
 
 .registration-detail {
-    font:400 14px/16px myriad-pro;
+    font:400 14px/16px myriad-pro-n4,myriad-pro;
     color:#444444;
 }

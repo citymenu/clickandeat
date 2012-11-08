@@ -28,6 +28,8 @@
 .restaurant-logo {
     display:inline-block;
     vertical-align:top;
+    zoom: 1;
+    *display: inline;
 }
 
 .restaurant-title {
@@ -37,12 +39,12 @@
 
 .restaurant-description {
     color: #666666;
-    font:12px/14px prenton;
+    font:12px/14px prenton-n4,prenton;
     margin-bottom:4px;
 }
 
 .cuisine-summary {
-    font: 16px/18px prenton;
+    font: 16px/18px prenton-n7,prenton;
     font-weight:700;
     color:#444444;
 }
@@ -52,7 +54,7 @@
 }
 
 .restaurant-details {
-    font: 12px/14px prenton;
+    font: 12px/14px prenton-n4,prenton;
     margin-top: 6px;
 }
 
@@ -77,7 +79,7 @@
 
 .opening-details {
     text-align:left;
-    font: 12px/14px myriad-pro;
+    font: 12px/14px myriad-pro-n4,myriad-pro;
     min-height:16px;
     background: url(../images/icons-shadowless/clock.png) 0 0 no-repeat;
     color:#444444;
@@ -87,7 +89,7 @@
 
 .delivery-details {
     text-align:left;
-    font: 12px/14px myriad-pro;
+    font: 12px/14px myriad-pro-n4,myriad-pro;
     min-height:16px;
     background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
@@ -116,13 +118,13 @@
 }
 
 .discount-details {
-    font: 400 12px/14px myriad-pro;
+    font: 400 12px/14px myriad-pro-n4,myriad-pro;
     min-height:16px;
     color:#444444;
 }
 
 .restaurant-delivery-details {
-    font: 500 12px/16px prenton;
+    font: 500 12px/16px prenton-n5,prenton;
     color:#444444;
     padding: 5px 0;
 }
@@ -180,14 +182,14 @@
 }
 
 .menu-launch-description {
-    font: 12px/14px prenton;
+    font: 12px/14px prenton-n4,prenton;
     color:#444444;
     padding: 0 5px 0 5px;
 }
 
 .menu-launch-entry {
     color:#BB0000;
-    font: 14px/16px prenton;
+    font: 14px/16px prenton-n7,prenton;
     text-decoration:underline;
     cursor:pointer;
     padding: 4px 0 4px 0;
@@ -226,7 +228,7 @@
 
 .menu-category-summary {
     color: #444444;
-    font:400 12px/14px prenton;
+    font:400 12px/14px prenton-n4,prenton;
     text-transform: none;
     border-bottom: 1px dashed #AAAAAA;
     padding-bottom: 10px;
@@ -247,20 +249,20 @@ div.even {
 
 
 h3.menu-item-title {
-    font: 700 14px/16px prenton;
+    font: 700 14px/16px prenton-n7,prenton;
     color: #444444;
     margin-bottom: 0;
 }
 
 .menu-item-subtitle {
     color: #AA3333;
-    font: 600 12px/14px myriad-pro;
+    font: 600 12px/14px myriad-pro-n6,myriad-pro;
     font-weight: normal;
     text-transform: none;
 }
 
 .menu-item-cost {
-    font: 700 14px/16px prenton;
+    font: 700 14px/16px prenton-n7,prenton;
     color: #444444;
     padding-right: 1px;
 }
@@ -272,7 +274,7 @@ span.menu-item-action {
 .menu-item-description {
     clear: both;
     color: #555555;
-    font: 400 12px/14px prenton;
+    font: 400 12px/14px prenton-n4,prenton;
     padding: 4px 20px 0 0;
 }
 
@@ -286,7 +288,7 @@ td.spacer {
 }
 
 .opening-time {
-    font:400 14px/16px myriad-pro;
+    font:400 14px/16px myriad-pro-n4,myriad-pro;
     color:#444444;
     padding: 8px 0 8px 0;
     border-bottom: 1px solid #EEEEEE;
@@ -295,10 +297,14 @@ td.spacer {
 .day-of-week {
     display:inline-block;
     width: 100px;
+    zoom: 1;
+    *display: inline;
 }
 
 .opening-time-detail {
     display:inline-block;
+    zoom: 1;
+    *display: inline;
 }
 
 a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
@@ -306,6 +312,8 @@ a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
     width:16px;
     height:14px;
     cursor: pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 
@@ -314,7 +322,7 @@ a.menuitem-button:active, a.menuitem-button:hover {
 
 a.restaurant-text {
     color:#AA0000;
-    font:12px/14px prenton;
+    font:12px/14px prenton-n5,prenton;
     font-weight: 500;
     text-decoration:underline;
     cursor:pointer;

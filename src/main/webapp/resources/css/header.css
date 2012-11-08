@@ -64,6 +64,8 @@
     -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
        -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
             box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    zoom: 1;
+    *display: inline;
 }
 
 .help-link-content {
@@ -104,7 +106,7 @@
 
 .navigation-wrapper li {
     color: #999999;
-    font-family: prenton;
+    font-family: "prenton-n5", "prenton";
     font-size: 13px;
     font-weight:500;
     display:inline;

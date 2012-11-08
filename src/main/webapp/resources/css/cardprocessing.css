@@ -8,7 +8,7 @@ html, body {
 
 body {
     background: none repeat scroll 0 0 #FFFFFF;
-    font:400 14px/14px myriad-pro,arial;
+    font:400 14px/14px myriad-pro-n4,myriad-pro,arial;
     color:#333333;
     width:710px;
     height: 600px;
@@ -32,6 +32,8 @@ body {
     background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -40px -360px transparent;
     height:28px;
     width:45px;
+    zoom: 1;
+    *display: inline;
 }
 
 .mastercard {
@@ -40,6 +42,8 @@ body {
     height:28px;
     width:45px;
     padding-left:10px;
+    zoom: 1;
+    *display: inline;
 }
 
 .payment-fields {
@@ -60,7 +64,7 @@ body {
 }
 
 input.card-number {
-    font:400 14px/14px myriad-pro,arial;
+    font:400 14px/14px myriad-pro-n4,myriad-pro,arial;
     color:#000000;
     padding:0 0 0 2px;
     width:250px;
@@ -69,6 +73,8 @@ input.card-number {
 .security-code {
     display:inline-block;
     width:145px;
+    zoom: 1;
+    *display: inline;
 }
 
 input.security-code {
@@ -81,10 +87,12 @@ input.security-code {
 .expiry-date {
     display:inline-block;
     width:140px;
+    zoom: 1;
+    *display: inline;
 }
 
 select {
-    font:400 14px/14px myriad-pro,arial;
+    font:400 14px/14px myriad-pro-n4,myriad-pro,arial;
     color:#000000;
 }
 
@@ -96,6 +104,8 @@ select {
     padding: 0;
     width: 12px;
     cursor:pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 .payment-footer {
@@ -107,7 +117,7 @@ a.payment-button, a.payment-button:active, a.payment-button:hover {
     background-color: #50a747;
     border: 1px solid #333333;
     color: #FFFFFF;
-    font: 600 14px myriad-pro;
+    font: 600 14px myriad-pro-n6,myriad-pro;
     padding: 2px 12px 3px 12px;
     text-align: center;
     vertical-align: baseline;
@@ -142,17 +152,14 @@ a.payment-button:active, a.payment-button:hover {
     width:70px;
     height:85px;
     vertical-align:middle;
-
 }
 
 .error-container {
     display:none;
-    font:400 14px/16px myriad-pro;
+    font:400 14px/16px myriad-pro-n4,myriad-pro;
     color:#333333;
     margin:5px 30px 15px 0;
     border:1px solid #AA0000;
     padding:5px 10px;
     background-color: #fffece;
 }
-
-

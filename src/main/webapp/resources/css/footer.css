@@ -32,7 +32,9 @@ h1.footer {
 }
 
 h2.footer {
-    font: 500 16px prenton;
+    font-family: "prenton-n5", "prenton";
+    font-weight:500;
+    font-size:16px;
     color:#837954;
     padding:0;
     margin-bottom:6px;
@@ -63,7 +65,10 @@ h3.footer {
 }
 
 a.direct, a.direct:visited, a.direct:hover, a.direct:active {
-    font:400 13px/15px myriad-pro;
+    font-family:"myriad-pro-n4", "myriad-pro";
+    font-weight:400;
+    font-size:13px;
+    line-height:15px;
     color:#837954;
     text-decoration:none;
     cursor:pointer;
@@ -79,7 +84,10 @@ h4.footer {
 }
 
 .footer-wrapper p {
-    font:400 13px/15px myriad-pro;
+    font-family:"myriad-pro-n4", "myriad-pro";
+    font-weight:400;
+    font-size:13px;
+    line-height:15px;
     color:#837954;
 }
 
@@ -96,6 +104,8 @@ div.credit-card {
     width:39px;
     height:27px;
     margin-right:6px;
+    zoom: 1;
+    *display: inline;
 }
 
 .visa {
@@ -115,7 +125,10 @@ div.credit-card {
 }
 
 .copyright {
-    font:400 12px/14px myriad-pro;
+    font-family:"myriad-pro-n4", "myriad-pro";
+    font-weight:400;
+    font-size:12px;
+    line-height:14px;
 }
 
 .icon-email {

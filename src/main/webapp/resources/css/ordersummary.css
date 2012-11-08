@@ -23,17 +23,17 @@
 }
 
 .order-restaurant {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     margin-bottom: 20px;
 }
 
 .restaurant-contact {
-    font: 700 14px/16px myriad-pro;
+    font: 700 14px/16px myriad-pro-n7,myriad-pro;
     margin-top:5px;
 }
 
 .order-overview {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     color:#444444;
     margin-bottom: 20px;
 }
@@ -51,7 +51,7 @@
 }
 
 .order-delivery {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     color:#444444;
 }
 
@@ -74,11 +74,11 @@
 }
 
 .delivery-address {
-    font: 700 14px/16px myriad-pro;
+    font: 700 14px/16px myriad-pro-n7,myriad-pro;
 }
 
 .delivery-time {
-    font: 700 14px/16px myriad-pro;
+    font: 700 14px/16px myriad-pro-n7,myriad-pro;
 }
 
 #restaurant-location {

@@ -20,7 +20,7 @@
 }
 
 .payment-error {
-    font: 500 14px/16px myriad-pro;
+    font: 500 14px/16px myriad-pro-n5,myriad-pro;
     border: 1px solid #b64242;
     background-color: #fffece;
     margin: 12px 0 12px 0;

@@ -15,7 +15,7 @@ html {
 
 body {
     background: none repeat scroll 0 0 #FCFbF5;
-    font-family: pt-sans;
+    font-family: pt-sans-n4,pt-sans;
     font-size: 12px;
     line-height: 16px;
     color: #333333;
@@ -40,7 +40,7 @@ table {
 
 h1, h2, h3, h4, h5, h6 {
     color: #333333;
-    font-family: myriad-pro;
+    font-family: myriad-pro-n4,myriad-pro;
     font-weight: normal;
 }
 
@@ -104,7 +104,7 @@ div.boxcontent { padding: 8px;}
 }
 
 .location-match {
-    font-family: pt-sans;
+    font-family: pt-sans-n4,pt-sans;
     font-size: 16px;
     line-height:18px;
     padding-bottom:6px;

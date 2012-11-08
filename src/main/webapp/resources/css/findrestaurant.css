@@ -30,7 +30,7 @@
 }
 
 .location-warning {
-    font:400 14px/17px myriad-pro;
+    font:400 14px/17px myriad-pro-n4,myriad-pro;
     border: 1px solid #b64242;
     background-color: #fffece;
     margin: 12px 0 12px 0;
@@ -56,12 +56,12 @@
 }
 
 .search-cuisine-filter {
-    font: 12px/14px prenton;
+    font: 12px/14px prenton-n4,prenton;
     color:#000000;
 }
 
 .search-location, .search-location-empty {
-    font:600 16px/18px prenton;
+    font:600 16px/18px prenton-n6,prenton;
     color:#444444;
     margin-bottom: 6px;
 }
@@ -71,7 +71,7 @@
 }
 
 #loc {
-    font:14px/16px myriad-pro;
+    font:14px/16px myriad-pro-n4,myriad-pro;
     color:#666666;
     height: 22px;
     padding: 4px 6px;
@@ -150,7 +150,7 @@ a.search {
 }
 
 .email-entry input {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     width:460px;
     background-clip: padding-box;
     border: 1px solid #B6B6B6;
@@ -167,7 +167,7 @@ a.search {
 
 .invalid-email {
     display:inline-block;
-    font:400 14px/14px myriad-pro;
+    font:400 14px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
@@ -203,20 +203,20 @@ a.register-button:active, a.register-button:hover {
 }
 
 .no-results-text {
-    font:16px/18px myriad-pro;
+    font:16px/18px myriad-pro-n4,myriad-pro;
     color:#444444;
     margin-bottom:10px;
 }
 
 .search-location-results {
-    font:14px/16px prenton;
+    font:14px/16px prenton-n4,prenton;
     color:#444444;
 }
 
 .search-checkbox {
     padding: 0;
     margin:0;
-    font:600 14px/16px prenton;
+    font:600 14px/16px prenton-n6,prenton;
     color:#666666;
     vertical-align: bottom;
     position: relative;
@@ -228,7 +228,7 @@ a.register-button:active, a.register-button:hover {
 .search-select {
     padding: 0;
     margin:0;
-    font: 600 14px/16px prenton;
+    font: 600 14px/16px prenton-n6,prenton;
     letter-spacing: 0.02em;
     color:#444444;
     border:1px solid #AAAAAA;
@@ -238,7 +238,7 @@ a.register-button:active, a.register-button:hover {
 }
 
 option {
-    font: 600 14px/16px prenton;
+    font: 600 14px/16px prenton-n6,prenton;
     letter-spacing: 0.02em;
     color:#444444;
 }
@@ -248,7 +248,7 @@ option {
 }
 
 .search-results-detail {
-    font:16px/18px prenton;
+    font:16px/18px prenton-n4,prenton;
     color:#444444;
     padding: 8px 0 0 0;
 }
@@ -270,7 +270,7 @@ option {
 }
 
 .address-details {
-    font: 12px/14px prenton;
+    font: 12px/14px prenton-n4,prenton;
     color:#444444;
     margin: 6px 20px 0 0;
 }
@@ -287,12 +287,14 @@ option {
     left:40px;
     padding:1px 8px 1px 8px;
     color:#FFFFFF;
-    font:500 10px prenton;
+    font:500 10px prenton-n5,prenton;
     background: rgb(170 ,0, 0);
     background: rgba(170, 0, 0, 0.75);
     -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
        -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
             box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+    zoom: 1;
+    *display: inline;
 }
 
 .restaurant-opening-details {
@@ -301,7 +303,7 @@ option {
 
 .opening-details {
     text-align:left;
-    font: 12px/14px myriad-pro;
+    font: 12px/14px myriad-pro-n4,myriad-pro;
     min-height:16px;
     background: url(../images/icons-shadowless/clock.png) 0 0 no-repeat;
     color:#444444;
@@ -311,7 +313,7 @@ option {
 
 .delivery-details {
     text-align:left;
-    font: 12px/14px myriad-pro;
+    font: 12px/14px myriad-pro-n4,myriad-pro;
     min-height:16px;
     background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
@@ -320,7 +322,7 @@ option {
 }
 
 .restaurant-delivery-details {
-    font:12px/14px myriad-pro;
+    font:12px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
 }
 
@@ -345,13 +347,13 @@ option {
 }
 
 .discount-details {
-    font: 400 12px/14px prenton;
+    font: 400 12px/14px prenton-n4,prenton;
     min-height:16px;
     color:#444444;
 }
 
 .cuisine-summary {
-    font: 700 14px/16px prenton;
+    font: 700 14px/16px prenton-n7,prenton;
     color:#444444;
     margin-bottom:3px;
 }
@@ -381,6 +383,8 @@ a.search-result-button-open, a.search-result-button-open:active, a.search-result
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 a.search-result-button-closed, a.search-result-button-closed:active, a.search-result-button-closed:hover {
@@ -396,11 +400,13 @@ a.search-result-button-closed, a.search-result-button-closed:active, a.search-re
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 a.location-button {
     color:#AA0000;
-    font:700 12px/14px prenton;
+    font:700 12px/14px prenton-n7,prenton;
     text-decoration:underline;
     cursor:pointer;
 }
@@ -410,7 +416,7 @@ a.location-button {
 }
 
 div.pac-item {
-    font:14px/16px myriad-pro;
+    font:14px/16px myriad-pro-n4,myriad-pro;
     padding: 2px 5px 2px 5px;
     color:#444444;
 }
@@ -427,7 +433,7 @@ div.pac-selected, div.pac-item:hover {
 
 a.restaurant-location {
     color:#AA0000;
-    font:500 12px/14px prenton;
+    font:500 12px/14px prenton-n5,prenton;
     text-decoration:underline;
     cursor:pointer;
 }
@@ -445,6 +451,8 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
     text-decoration: none;
     text-shadow: 0 1px #333333;
     cursor: pointer;
+    zoom: 1;
+    *display: inline;
 }
 
 .phone-orders-only-wrapper {
@@ -454,7 +462,7 @@ a.search-result-button-open-call, a.search-result-button-open-call:active, a.sea
 
 .phone-orders-only {
     background: url(../images/telf.png) 15px top no-repeat;
-    font: 400 16px/18px myriad-pro;
+    font: 400 16px/18px myriad-pro-n4,myriad-pro;
     color:#333333;
     margin:0 0 0 10px;
     padding:0 10px 0 70px;

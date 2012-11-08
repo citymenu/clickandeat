@@ -20,13 +20,13 @@
 }
 
 .dialog-subheader {
-    font: 14px/16px myriad-pro;
+    font: 14px/16px myriad-pro-n4,myriad-pro;
     color: #444444;
     padding: 0 5px 12px 5px;
 }
 
 .dialog-content {
-    font: 13px/15px prenton;
+    font: 13px/15px prenton-n4,prenton;
     color: #444444;
     padding: 0 5px 0 5px;
 }
@@ -47,7 +47,7 @@
 }
 
 .dialog-warning-wrapper {
-    font: 400 14px/16px myriad-pro;
+    font: 400 14px/16px myriad-pro-n4,myriad-pro;
     border: 1px solid #b64242;
     background-color: #fffece;
     color:#444444;
