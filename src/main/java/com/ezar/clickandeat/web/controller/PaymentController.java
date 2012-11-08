@@ -1,7 +1,9 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Person;
 import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
@@ -180,6 +182,55 @@ public class PaymentController {
         model.put("error",error);
         return new ModelAndView("payment",model);
     }
+
+
+    @RequestMapping(value="/approval/restaurant/testPhoneCall.html", method= RequestMethod.GET)
+    public String testPhoneCall(HttpServletRequest request) throws Exception {
+        if( request.getSession(true).getAttribute("orderid") == null ) {
+            return "redirect:/home.html";
+        }
+
+        System.out.println("TESTTTTTT");
+        Order order = requestHelper.getOrderFromSession(request);
+
+
+        // Update order delivery details
+        order.setCustomer(new Person("Test","User","6987857438","test@test.com"));
+        order.setDeliveryAddress(new Address("Calle Corsega 256","Barcelona","Catalunya","08037"));
+        order.setAdditionalInstructions("Estas son las instrucciones para testear el sistema");
+        order.setTermsAndConditionsAccepted(true);
+
+        // Restaurant is in test mode, skip card payment
+        order.setTransactionId("DUMMY");
+        order.setTransactionStatus(Order.PAYMENT_PRE_AUTHORISED);
+        order.setAuthorisationCode("DUMMY");
+        order.setSignature("DUMMY");
+        order.setCardPaymentAmount(order.getTotalCost());
+        order = orderRepository.saveOrder(order);
+
+        // Send notification to restaurant and customer
+        orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
+
+        // Place order notification call
+        try {
+            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+        }
+        catch( Exception ex ) {
+            orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+        }
+
+        // Clear session attributes
+        HttpSession session = request.getSession(true);
+        session.setAttribute("completedorderid",order.getOrderId());
+        session.removeAttribute("orderid");
+        session.removeAttribute("orderrestaurantid");
+        session.removeAttribute("restaurantid");
+        session.removeAttribute("cancheckout");
+
+        // Send redirect to order confirmation page
+        return "redirect:/orderSummary.html";
+    }
+
 
 
     @Required

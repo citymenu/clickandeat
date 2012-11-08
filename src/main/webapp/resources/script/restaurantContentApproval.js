@@ -2,17 +2,23 @@
 
 // Here we are going to hide the your order panel etc and present the buttons to approve or reject
 $(document).ready(function(){
-    // Hide the Your Order panel
-    $('.menu-right').hide();
+    // Hide the Your Order panel. We don't hide it anymore so that the restaurant owner can test the phone call.
+    //$('.menu-right').hide();
 
     // Build the new buttons to approve or reject the content
      var approveButton = "<li class='unselectable'><a href='#' onclick='javascript:approveContent()'>"+getLabel('button.approve-content')+"</a></li>";
      var rejectButton = "<li class='unselectable'><a href='#' onclick='javascript:rejectContent()'>"+getLabel('button.reject-content')+"</a></li>";
+     var testPhoneCallButton = "<li class='unselectable'><a href='#' onclick='javascript:testPhoneCall()'>"+getLabel('button.test-phone-call')+"</a></li>";
+
 
     // Remove the current links from the action bar
-    $('.navigation-links').html( '<ul>'+approveButton + rejectButton +'</ul>');
+    $('.navigation-links').html( '<ul>'+approveButton + rejectButton + testPhoneCallButton +'</ul>');
 });
 
+
+function testPhoneCall() {
+    location.href = ctx + '/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999);
+}
 
 function approveContent() {
     location.href = ctx + '/approval/restaurant/contentApproved.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
