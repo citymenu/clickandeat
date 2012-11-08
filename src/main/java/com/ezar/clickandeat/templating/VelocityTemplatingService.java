@@ -120,7 +120,9 @@ public class VelocityTemplatingService implements InitializingBean {
         context.put("baseUrl",baseUrl);
 
         StringWriter sw = new StringWriter();
+        long now = System.currentTimeMillis();
         engine.mergeTemplate(getLocaleTemplate(templateLocation),"utf-8",context,sw);
+        LOGGER.debug("Took " + (System.currentTimeMillis() - now) + "ms to generate output");
         return sw.toString();
     }
 
