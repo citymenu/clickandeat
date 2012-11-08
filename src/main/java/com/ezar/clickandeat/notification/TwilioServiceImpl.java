@@ -151,7 +151,7 @@ public class TwilioServiceImpl implements ITwilioService {
         callParams.put("From", callerId);
         callParams.put("Url", buildTwilioUrl(url,orderId));
         callParams.put("Method", "POST");
-        callParams.put("IfMachine","Hangup");
+        //callParams.put("IfMachine","Hangup");
         callParams.put("Timeout", callTimeout);
 
         // Add the callback urls
