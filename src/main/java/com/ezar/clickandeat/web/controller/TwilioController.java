@@ -129,10 +129,9 @@ public class TwilioController implements InitializingBean {
         String callStatus = request.getParameter("CallStatus");
         String callDurationParameter = request.getParameter("CallDuration");
         Integer callDuration = StringUtils.hasText(callDurationParameter)? Integer.valueOf(callDurationParameter): 0;
-        String answeredBy = request.getParameter("AnsweredBy");
 
         // If no answer or answered by is 'Machine' send NO_ANSWER upate
-        if( !callStatus.equals("completed") || callDuration == 0 || "machine".equals(answeredBy)) {
+        if( !callStatus.equals("completed") || callDuration == 0 ) {
             orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
         }
         else {
