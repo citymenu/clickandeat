@@ -89,6 +89,7 @@ public class Order extends PersistentObject {
     private Boolean cancellationOfferEmailSent;
     private String restaurantDeclinedReason;
     private List<OrderUpdate> orderUpdates;
+    private Boolean testOrder;
 
     // Order amendments
     private List<OrderAmendment> orderAmendments;
@@ -120,6 +121,8 @@ public class Order extends PersistentObject {
 
         this.orderUpdates = new ArrayList<OrderUpdate>();
         this.orderAmendments = new ArrayList<OrderAmendment>();
+
+        this.testOrder = false;
     }
 
 
@@ -810,6 +813,13 @@ public class Order extends PersistentObject {
         return null;
     }
 
+    public Boolean getTestOrder() {
+        return testOrder;
+    }
+
+    public void setTestOrder(Boolean testOrder) {
+        this.testOrder = testOrder;
+    }
 
     public String getVoucherId() {
         return voucherId;

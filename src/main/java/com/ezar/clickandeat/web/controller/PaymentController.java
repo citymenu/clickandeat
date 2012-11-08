@@ -59,6 +59,7 @@ public class PaymentController {
         }
         else {
             // Restaurant is in test mode, skip card payment
+            order.setTestOrder(true);
             order.setTransactionId("DUMMY");
             order.setTransactionStatus(Order.PAYMENT_PRE_AUTHORISED);
             order.setAuthorisationCode("DUMMY");
