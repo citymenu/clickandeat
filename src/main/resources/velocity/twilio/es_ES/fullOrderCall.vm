@@ -9,7 +9,7 @@
         <Pause length="1"/>
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Para $stringTool.escapeXml($order.customer.firstName)</Say>
         <Pause length="1"/>
-        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Telefono $twilioTool.getDigits($order.customer.telephone, ', , ,')</Say>
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Telefono $twilioTool.getDigits($order.customer.telephone, ' . ')</Say>
         <Pause length="1"/>
 
         #if($order.deliveryType == 'DELIVERY')
@@ -19,7 +19,7 @@
             <Pause length="1"/>
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.town)</Say>
             <Pause length="1"/>
-            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> $twilioTool.getDigits($order.deliveryAddress.postCode  , ', , ,')</Say>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> $twilioTool.getDigits($order.deliveryAddress.postCode  , ' . ')</Say>
             <Pause length="1"/>
 
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
