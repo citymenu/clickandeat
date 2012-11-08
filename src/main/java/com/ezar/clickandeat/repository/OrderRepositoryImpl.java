@@ -53,6 +53,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public Order findByOrderId(String orderId) {
+        long now = System.currentTimeMillis();
         Query query = query(where("orderId").is(orderId));
         Order order = operations.findOne(query,Order.class);
         if( order != null ) {
@@ -63,6 +64,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 order.setVoucher(voucherRepository.findByVoucherId(order.getVoucherId()));
             }
         }
+        LOGGER.debug("Retrieving order id " + orderId + " took " + ( System.currentTimeMillis() - now) + " ms");
         return order;
     }
 
