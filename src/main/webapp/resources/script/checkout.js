@@ -205,7 +205,7 @@ function updateOrder() {
     $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()) },
         function( data ) {
             if( data.success ) {
-                location.href = ctx + '/buildOrder.html';
+                location.href = ctx + '/app/restaurant/' + data.restaurantId;
             } else {
                 $.fancybox.hideLoading();
             }

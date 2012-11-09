@@ -10,6 +10,7 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
+import com.opensymphony.module.sitemesh.RequestConstants;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -158,10 +159,11 @@ public class RestaurantController {
 
 
     @RequestMapping(value="/**/contact/{restaurantId}/**", method = RequestMethod.GET )
-    public ModelAndView getContactTelephone(@PathVariable("restaurantId") String restaurantId ) throws Exception {
+    public ModelAndView getContactTelephone(@PathVariable("restaurantId") String restaurantId, HttpServletRequest request ) throws Exception {
         Map<String,Object> model = new HashMap<String, Object>();
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("telephone",restaurant.getContactTelephone());
+        request.setAttribute(RequestConstants.DECORATOR, "blank");
         return new ModelAndView(MessageFactory.getLocaleString() + "/contactTelephone",model);
     }
 

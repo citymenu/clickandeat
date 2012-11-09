@@ -227,8 +227,6 @@ public class OrderController implements InitializingBean {
         }
         else {
             Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantid);
-            String redirect = "redirect:/app/" + MessageFactory.getMessage("url.find-takeaway",false)
-                    + restaurant.getUrl() + "/restaurant/" + restaurant.getRestaurantId();
             return new ModelAndView("redirect:/" + restaurant.getUrl());
         }
     }

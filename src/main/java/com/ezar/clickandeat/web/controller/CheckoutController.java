@@ -137,9 +137,10 @@ public class CheckoutController {
             // Update can checkout status of order
             HttpSession session = request.getSession(true);
             session.setAttribute("cancheckout", order.getCanCheckout());
-
+            
             // Mark order updated successfully
             model.put("success",true);
+            model.put("restaurantId",order.getRestaurantId());
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);

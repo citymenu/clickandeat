@@ -159,12 +159,14 @@
     border: 1px solid #AAAAAA;
     padding:10px;
     background-color: #FCFCFC;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+       -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=3);
     -webkit-border-radius: 10px;
        -moz-border-radius: 10px;
             border-radius: 10px;
+
 }
 
 #menu-launch-wrapper.fixed {
