@@ -17,7 +17,18 @@ $(document).ready(function(){
 
 
 function testPhoneCall() {
-    location.href = ctx + '/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999);
+    $.get( ctx+'/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999),
+        function( data ) {
+            if( data.success ) {
+                alert( data.message);
+                buildOrder(data.order);
+            } else {
+                alert('Error: ' + data.message);
+            }
+        }
+    );
+
+    //location.href = ctx + '/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999);
 }
 
 function approveContent() {
@@ -50,19 +61,20 @@ function rejectContent() {
         var rejectionReasons = $('#reasons').val();
         $.fancybox.showLoading();
         $.post( ctx+'/approval/restaurant/contentRejected.ajax', {
-            restaurantId: restaurantId,
-            rejectionReasons: $('#reasons').val()
-        },function( data ) {
-                $.fancybox.hideLoading();
-                $.fancybox.close(true);
-                if( data.success ) {
-                    // Open the url that displays the message to the restaurant owned
-                    location.href = ctx + '/approval/restaurant/contentRejected.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
+                restaurantId: restaurantId,
+                rejectionReasons: $('#reasons').val()
+                },
+                function( data ) {
+                    $.fancybox.hideLoading();
+                    $.fancybox.close(true);
+                    if( data.success ) {
+                        // Open the url that displays the message to the restaurant owned
+                        location.href = ctx + '/approval/restaurant/contentRejected.html?restaurantId='+restaurantId+'&mgn=' + (Math.random() * 99999999);
 
-                } else {
-                    alert('success:' + data.success);
+                    } else {
+                        alert('success:' + data.success);
+                    }
                 }
-            }
         );
     });
 }

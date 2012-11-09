@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -186,14 +187,18 @@ public class PaymentController {
 
 
     @RequestMapping(value="/approval/restaurant/testPhoneCall.html", method= RequestMethod.GET)
-    public String testPhoneCall(HttpServletRequest request) throws Exception {
+    //public String testPhoneCall(HttpServletRequest request) throws Exception {
+    public ResponseEntity<byte[]> testPhoneCall(HttpServletRequest request) throws Exception {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+
         if( request.getSession(true).getAttribute("orderid") == null ) {
-            return "redirect:/home.html";
+            model.put("success",false);
+            model.put("message","No order has been created");
+            return responseEntityUtils.buildResponse(model);
         }
 
-        System.out.println("TESTTTTTT");
         Order order = requestHelper.getOrderFromSession(request);
-
 
         // Update order delivery details
         order.setCustomer(new Person("Test","User","6987857438","test@test.com"));
@@ -215,9 +220,15 @@ public class PaymentController {
         // Place order notification call
         try {
             orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+            model.put("success",true);
+            model.put("message","Phone call has been made.");
+            // Reset the order
+            model.put("order",new Order());
         }
         catch( Exception ex ) {
             orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
         }
 
         // Clear session attributes
@@ -228,8 +239,14 @@ public class PaymentController {
         session.removeAttribute("restaurantid");
         session.removeAttribute("cancheckout");
 
+        orderRepository.delete(order);
+
+
+
+        return responseEntityUtils.buildResponse(model);
+
         // Send redirect to order confirmation page
-        return "redirect:/orderSummary.html";
+        //return "redirect:/orderSummary.html";
     }
 
 

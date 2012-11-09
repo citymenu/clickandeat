@@ -104,6 +104,9 @@ Ext.define('AD.controller.RestaurantEdit', {
             'restaurantedit button[action=sendForOwnerApproval]': {
                 click: this.sendForOwnerApproval
             },
+            'restaurantedit button[action=openToTestPhoneCall]': {
+                click: this.openToTestPhoneCall
+            },
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -389,10 +392,18 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     },
 
+    openToTestPhoneCall: function(button) {
+        // Open the document in the approveContent jsp
+        location.href = ctx + '/approval/restaurant/approveContent.html?';
+    },
+
+
     sendForOwnerApproval: function(button) {
         // Change the list on Site field so that the restaurant is not displayed
         // on the site until the content is approved by the Restaurant owner
         this.getMainDetailsForm().getForm().findField('listOnSite').setValue(false);
+        // Set the restaurant to test mode so that the phone calls can be tested
+        this.getMainDetailsForm().getForm().findField('testMode').setValue(true);
 
         // Now save
         this.saveRestaurant(button , this.sendForOwnerApprovalCallBack)
