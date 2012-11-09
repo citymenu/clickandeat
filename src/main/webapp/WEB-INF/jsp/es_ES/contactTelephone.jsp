@@ -7,6 +7,7 @@
 <body>
 
 <head>
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/contacttelephone.css" charset="utf-8"/>
 </head>
 
