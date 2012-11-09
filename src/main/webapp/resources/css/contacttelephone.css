@@ -12,7 +12,7 @@ h2.telephone-header {
 }
 
 .contact-telephone {
-    background-image: url(../images/telf.png);
+    background: url(../images/telf.png) left top no-repeat;
     font: 22px/22px MaiandraOTGD-DemiBold;
     color:#444444;
     margin:0 0 0 10px;
