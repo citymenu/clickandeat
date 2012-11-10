@@ -5,11 +5,12 @@
 <!doctype html>
 
 <head>
-    <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
-    <script type="text/javascript" src="${resources}/script/payment.js" charset="utf-8"></script>
-
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
+
+    <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/payment.js" charset="utf-8"></script>
+    <script type="text/javascript">var error='<util:escape value="${error}" escapeNewLines="true"/>';</script>
 
     <title><message:message key="page-title.payment" escape="false"/></title>
 
@@ -31,6 +32,7 @@
 
 <body>
 
+
 <%@ include file="/WEB-INF/jsp/header.jsp" %>
 
 <div id="content">
@@ -42,9 +44,6 @@
                     <div class="payment-wrapper">
                         <div class="payment-title-wrapper">
                             <div class="payment-title"><h2><message:message key="payment.payment-details"/></h2></div>
-                            <c:if test="${error != null}">
-                                <div class="payment-error"><util:escape value="${error}" escapeNewLines="true"/></div>
-                            </c:if>
                         </div>
                         <div id="paymentbody">
                             <iframe class="payment" name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>

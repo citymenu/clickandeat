@@ -94,15 +94,22 @@ h3.order-table {
     background: url(../images/add-small.png) 0 0 no-repeat;
     cursor:pointer;
     margin-right:3px;
+    zoom: 1;
+    *display: inline;
+    position:relative;
+    vertical-align:middle;
 }
 
 .order-remove-item {
-    width: 6px;
+    width: 9px;
     height: 8px;
     display: inline-block;
-    background: url(../images/remove-small.png) 0 0 no-repeat;
+    background: url(../images/remove-small.png) 3px 0 no-repeat;
     cursor:pointer;
-    margin-left:3px;
+    zoom: 1;
+    *display: inline;
+    position:relative;
+    vertical-align:middle;
 }
 
 .order-cash-discount {
@@ -167,7 +174,7 @@ option.freeitemselect {
 }
 
 #instructions {
-    width: 460px;
+    width: 450px;
     height: 150px;
     font:14px/16px myriad-pro-n4,myriad-pro;
     border: 1px solid #B6B6B6;
