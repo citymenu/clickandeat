@@ -21,14 +21,12 @@ function testPhoneCall() {
         function( data ) {
             if( data.success ) {
                 alert( data.message);
-                buildOrder(data.order);
             } else {
                 alert('Error: ' + data.message);
             }
+            buildOrder(data.order);
         }
     );
-
-    //location.href = ctx + '/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999);
 }
 
 function approveContent() {

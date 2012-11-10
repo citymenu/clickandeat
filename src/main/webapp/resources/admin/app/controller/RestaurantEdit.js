@@ -393,8 +393,14 @@ Ext.define('AD.controller.RestaurantEdit', {
     },
 
     openToTestPhoneCall: function(button) {
-        // Open the document in the approveContent jsp
-        location.href = ctx + '/approval/restaurant/approveContent.html?';
+        // Check if the document has been saved. Otherwise we don't open it
+        if(restaurantObj.created==null){
+             alert("The document must be saved before you can open it for testing");
+        }else{
+            // Open the document in the approveContent jsp
+            location.href = ctx + '/approval/restaurant/approveContent.html?restaurantId='+restaurantObj.restaurantId;
+        }
+
     },
 
 

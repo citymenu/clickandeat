@@ -19,6 +19,10 @@ Ext.define('AD.view.restaurant.Edit' ,{
             xtype:'button',
             text:'Send for Owner Approval',
             action:'sendForOwnerApproval'
+        },{
+            xtype:'button',
+            text:'Open to test phone call',
+            action:'openToTestPhoneCall'
         }]
     }],
 
