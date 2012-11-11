@@ -270,7 +270,7 @@ h3.menu-item-title {
 }
 
 span.menu-item-action {
-    background:transparent url(../images/plus.png) no-repeat 0 3px;
+    background:transparent url(../images/plus.png) no-repeat right bottom;
 }
 
 .menu-item-description {
