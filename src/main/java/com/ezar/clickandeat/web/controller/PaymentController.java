@@ -225,8 +225,9 @@ public class PaymentController {
             orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
             model.put("success",true);
             model.put("message","Phone call has been made.");
-            // Reset the order
-            model.put("order",new Order());
+            // Reset the order. I am not resetting the order because it will be handy to
+            // be able to compare the phone call against the order
+            // model.put("order",new Order());
         }
         catch( Exception ex ) {
             orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
