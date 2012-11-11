@@ -529,6 +529,59 @@ public class TwilioController implements InitializingBean {
     }
 
 
+    /**
+     * Callback for order call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
+    public void orderCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
+                                            @RequestParam(value = "authKey", required = true) String authKey,
+                                            HttpServletResponse response) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received status callback for order call for order id: " + orderId);
+        }
+
+        // Check authentication key passed
+        checkAuthKey(authKey, response);
+        response.sendError(HttpServletResponse.SC_OK);
+    }
+
+
+    /**
+     * Failure callback for order call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
+    public ResponseEntity<byte[]> orderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
+                                                        @RequestParam(value = "authKey", required = true) String authKey,
+                                                        HttpServletResponse response) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received error fallback for order call for order id: " + orderId);
+        }
+
+        // Check authentication key passed
+        checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Process error update for call
+        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
+
+        // Build response to call
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
+        return responseEntityUtils.buildXmlResponse(xml);
+    }
+
 
     /**
      * @param authKey
