@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+        <Gather action="$url" timeout="30" finishOnKey="#">
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+            #if($error)
+                I'm sorry, I didn't understand that response.
+            #else
+                Hi, this is a call from $stringTool.getMessage("title.companyname").
+            #end
+
+            You have an order for $numberTool.format("#0.00", $order.restaurantCost)
+
+            #if($order.deliveryType == 'DELIVERY')
+                for delivery to $stringTool.escape($order.deliveryAddress.summary). To be delivered
+                #if($order.expectedDeliveryTime)
+                    at $stringTool.formatDate($order.expectedDeliveryTime)
+                    #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+                        on $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+                    #end
+                #else
+                    as soon as possible
+                #end
+            #else
+                for collection
+                #if($order.expectedCollectionTime)
+                    at $stringTool.formatDate($order.expectedCollectionTime)
+                    #if(!$order.expectedCollectionTime.toLocalDate() == $today)
+                        on $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+                    #end
+                #else
+                    as soon as possible
+                #end
+            #end
+        </Say>
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+            To decline this order press 0 followed by the hash key.
+            To hear the order details press 1 followed by the hash key.
+            To repeat the delivery details press 2 followed by the hash key.
+            To accept this order press 3 followed by the hash key.
+            To accept this order and specify the delivery time in minutes press 4 followed by the number of minutes then the hash key.
+            To accept or decline this order from your email press 5.
+        </Say>
+    </Gather>
+</Response>

@@ -369,7 +369,167 @@ public class TwilioController implements InitializingBean {
         }
     }
 
-    
+
+
+    /**
+     * Initiate order call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value= TwilioServiceImpl.ORDER_INTRODUCTION_CALL_URL, method = RequestMethod.POST )
+    public ResponseEntity<byte[]> orderCallRequest(@RequestParam(value = "orderId", required = true) String orderId,
+                                                @RequestParam(value = "authKey", required = true) String authKey,
+                                                HttpServletResponse response) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received request for order call for order id: " + orderId);
+        }
+
+        // Check authentication key passed
+        checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Build template options to return
+        String xml = buildOrderIntroductionXml(order,false);
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Generated xml response [" + xml + "]");
+        }
+
+        return responseEntityUtils.buildXmlResponse(xml);
+    }
+
+
+
+    /**
+     * Callback for processing result of full order call
+     * @param orderId
+     * @return
+     * @throws Exception
+     */
+    @ResponseBody
+    @RequestMapping(value= TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, method = RequestMethod.POST )
+    public ResponseEntity<byte[]> orderCallProcess(@RequestParam(value = "orderId", required = true) String orderId,
+                                                       @RequestParam(value = "authKey", required = true) String authKey,
+                                                       @RequestParam(value="Digits", required = true ) String digits,
+                                                       HttpServletResponse response, HttpServletRequest request) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received processing callback for order call for order id: " + orderId);
+        }
+
+        // Check authentication key passed
+        checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Examine the digits returned from the call
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Received digits " + digits + " as response to full order call");
+        }
+
+        // Check that a valid response was returned
+        if( !StringUtils.hasText(digits)) {
+            LOGGER.error("Did not receive keypad input from call");
+            orderRepository.addOrderUpdate(orderId, "Did not receive any keypad input from full order call");
+
+            // Generate the order call with an error
+            String xml = buildOrderIntroductionXml(order, true);
+            return responseEntityUtils.buildXmlResponse(xml);
+        }
+
+        // Process response
+        char firstDigit = digits.toCharArray()[0];
+        switch(firstDigit) {
+
+            // Order declined
+            case '0':
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
+                    return responseEntityUtils.buildXmlResponse(buildDeclinedResponseXml());
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                }
+
+            // Hear order item details
+            case '1':
+                return responseEntityUtils.buildXmlResponse(buildOrderItemsXml(order));
+
+            // Hear order delivery details
+            case '2':
+                return responseEntityUtils.buildXmlResponse(buildOrderDeliveryXml(order));
+
+            // Order accepted
+            case '3':
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
+                    return responseEntityUtils.buildXmlResponse(buildAcceptedResponseXml());
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                }
+
+            // Order accepted with non-standard delivery time
+            case '4':
+                String deliveryMinutesText = digits.substring(1);
+
+                // Try to extract the delivery minutes from the input
+                int deliveryMinutes;
+                try {
+                    deliveryMinutes = Integer.valueOf(deliveryMinutesText);
+                }
+                catch( Exception ex ) {
+                    LOGGER.error("Could not parse delivery time minutes: " + ex.getMessage());
+                    return responseEntityUtils.buildXmlResponse(buildOrderIntroductionXml(order, true));
+                }
+
+                Map<String,Object> context = new HashMap<String, Object>();
+                context.put("DeliveryMinutes",deliveryMinutes);
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
+                    return responseEntityUtils.buildXmlResponse(buildAcceptedWithDeliveryResponseXml(deliveryMinutes));
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                }
+
+
+            // Call acknowledged
+            case '5':
+                try {
+                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
+                    return responseEntityUtils.buildXmlResponse(buildAnsweredResponseXml());
+                }
+                catch( WorkflowStatusException ex ) {
+                    LOGGER.error(ex.getMessage(),ex);
+                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
+                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
+                }
+
+            // Invalid input
+            default:
+                LOGGER.error("Invalid response to full order call");
+                return responseEntityUtils.buildXmlResponse(buildOrderIntroductionXml(order, true));
+        }
+    }
+
+
+
     /**
      * @param authKey
      * @param response
@@ -400,6 +560,58 @@ public class TwilioController implements InitializingBean {
         else {
             return order;
         }
+    }
+
+
+    /**
+     * @param order
+     * @param hasError
+     * @return
+     */
+
+    private String buildOrderIntroductionXml(Order order, boolean hasError) throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
+        templateModel.put("locale",systemLocale);
+        templateModel.put("today",new LocalDate());
+        templateModel.put("order",order);
+        if(hasError) {
+            templateModel.put("error",true);
+        }
+        return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_INTRODUCTION_CALL_TEMPLATE);
+    }
+
+
+    /**
+     * @param order
+     * @return
+     */
+
+    private String buildOrderItemsXml(Order order) throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
+        templateModel.put("locale",systemLocale);
+        templateModel.put("today",new LocalDate());
+        templateModel.put("order",order);
+        return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ITEM_DETAILS_CALL_TEMPLATE);
+    }
+
+
+    /**
+     * @param order
+     * @return
+     */
+
+    private String buildOrderDeliveryXml(Order order) throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
+        templateModel.put("locale",systemLocale);
+        templateModel.put("today",new LocalDate());
+        templateModel.put("order",order);
+        return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_DELIVERY_DETAILS_CALL_TEMPLATE);
     }
 
 
@@ -463,6 +675,21 @@ public class TwilioController implements InitializingBean {
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("DeliveryMinutes",deliveryMinutes);
         String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ACCEPTED_WITH_DELIVERY_RESPONSE_TEMPLATE);
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Generated xml [" + xml + "]");
+        }
+        return xml;
+    }
+
+
+    /**
+     * @return
+     * @throws Exception
+     */
+
+    private String buildAnsweredResponseXml() throws Exception {
+        Map<String,Object> templateModel = new HashMap<String, Object>();
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ANSWERED_RESPONSE_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }

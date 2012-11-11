@@ -31,6 +31,12 @@ public class TwilioServiceImpl implements ITwilioService {
     public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback.html";
     public static final String FULL_ORDER_CALL_PROCESS_URL = "/twilio/processFullOrderCall.html";
 
+    public static final String ORDER_INTRODUCTION_CALL_URL = "/twilio/orderIntroduction.html";
+    public static final String ORDER_INTRODUCTION_CALL_PROCESS_URL = "/twilio/processOrderIntroduction.html";
+    public static final String ORDER_INTRODUCTION_CALL_STATUS_CALLBACK_URL = "/twilio/orderIntroductionCallStatusCallback.html";
+    public static final String ORDER_INTRODUCTION_CALL_FALLBACK_URL = "/twilio/orderIntroductionCallFallback.html";
+
+
     @Autowired
     private VelocityTemplatingService velocityTemplatingService;
     
