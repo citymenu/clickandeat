@@ -779,6 +779,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     var itemCount = additionalItemArray.length;
     var defaultBreak = 6;
     var rowBreak = Math.max(itemCount / 2, defaultBreak );
+    var tableWidth = (itemCount <= defaultBreak)? 400:200;
 
     // Build the total cost item and quantity
     var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel('order.additional-item-limit-description').format(itemLimit)): '');
@@ -804,7 +805,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
             if( i > 0 ) {
                 additionalItemChoiceContainer += '</table></div>';
             }
-            additionalItemChoiceContainer += '<div class=\'additional-item-table\'><table width=\'200\'>'
+            additionalItemChoiceContainer += ('<div class=\'additional-item-table\'><table width=\'{0}\'>').format(tableWidth);
         }
 
         var additionalItemElements = additionalItemArray[i].split('%%%');
@@ -818,7 +819,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
         }
 
         var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>&nbsp;&nbsp;<span id=\'{1}_span\'>{2}</span></div>')
-            .format(additionalItemName,additionalItemName.replace(' ','_').replace('###','_'), unescapeQuotes(additionalItemName));
+            .format(additionalItemName,additionalItemName.replace(/\s/g,'_').replace('###','_'), unescapeQuotes(additionalItemName));
         var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': ccy + additionalItemElements[1]));
         additionalItemChoiceContainer += ('<tr valign=\'top\'><td width=\'150\'>{0}</td><td width=\'50\' align=\'right\'>{1}</td></tr>').format(additionalItemTitleDiv,additionalItemCostDiv);
 
@@ -889,11 +890,11 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     $('.itemcheckbox').change(function(){
         if($(this).is(':checked')) {
             selectedItems.setItem($(this).attr('id'), "");
-            $('#' + $(this).attr('id').replace(' ','_').replace('###','_') + '_span').addClass('red');
+            $('#' + $(this).attr('id').replace(/\s/g,'_').replace('###','_') + '_span').addClass('red');
             currentCost += parseFloat(itemCosts.getItem($(this).attr('id')));
         } else {
             selectedItems.removeItem($(this).attr('id'));
-            $('#' + $(this).attr('id').replace(' ','_').replace('###','_') + '_span').removeClass('red');
+            $('#' + $(this).attr('id').replace(/\s/g,'_').replace('###','_') + '_span').removeClass('red');
             currentCost -= parseFloat(itemCosts.getItem($(this).attr('id')));
         }
         $('#itemtotalcost').remove();
