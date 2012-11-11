@@ -242,14 +242,11 @@ public class PaymentController {
         session.removeAttribute("restaurantid");
         session.removeAttribute("cancheckout");
 
-        //orderRepository.delete(order);
-
-
+        // Flag the order as a test order
+        order.setTestOrder(true);
+        orderRepository.saveOrder(order);
 
         return responseEntityUtils.buildResponse(model);
-
-        // Send redirect to order confirmation page
-        //return "redirect:/orderSummary.html";
     }
 
 
