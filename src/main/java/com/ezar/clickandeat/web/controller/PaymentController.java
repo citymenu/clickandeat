@@ -10,7 +10,6 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -207,8 +206,7 @@ public class PaymentController {
         order.setAdditionalInstructions("Estas son las instrucciones para testear el sistema");
         order.setTermsAndConditionsAccepted(true);
 
-        //
-        /*Restaurant is in test mode, skip card payment
+        /* Restaurant is in test mode, skip card payment
         order.setTransactionId("DUMMY");
         order.setTransactionStatus(Order.PAYMENT_PRE_AUTHORISED);
         order.setAuthorisationCode("DUMMY");
@@ -218,30 +216,23 @@ public class PaymentController {
         */
 
         // Send notification to restaurant and customer
-        //orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
-
+        // orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
         // Don't send the notification but change the order status to the value expected by the
         // next step in the workflow
         order.setOrderStatus(orderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT);
         // Place order notification call
         try {
             orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-            if(order.getRestaurant().isOpen(DateTime.now())){
-                model.put("success",true);
-                model.put("message","Phone call has been placed.");
-            }else{
-                model.put("success",true);
-                model.put("message","Restaurant is not opened. Phone call has not been placed.");
-            }
+            model.put("success",true);
+            model.put("message","Phone call has been made.");
+            // Reset the order
+            model.put("order",new Order());
         }
         catch( Exception ex ) {
-            //orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
+            orderWorkflowEngine.processAction(order, ACTION_CALL_ERROR);
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
-
-        // Reset the order
-        model.put("order",new Order());
 
         // Clear session attributes
         HttpSession session = request.getSession(true);
@@ -251,7 +242,7 @@ public class PaymentController {
         session.removeAttribute("restaurantid");
         session.removeAttribute("cancheckout");
 
-        orderRepository.delete(order);
+        //orderRepository.delete(order);
 
 
 
