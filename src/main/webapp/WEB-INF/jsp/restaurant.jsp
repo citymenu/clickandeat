@@ -188,14 +188,14 @@
                                                             <c:set var="style" value="spacer"/>
                                                         </c:if>
                                                         <c:if test="${status.count == 1}">
-                                                        <td width="250" rowspan="${menuItem.menuItemSubTypeCount}">
+                                                        <td width="230" rowspan="${menuItem.menuItemSubTypeCount}">
                                                             <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                             <c:if test="${menuItem.description != null }">
                                                                 <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                             </c:if>
                                                         </td>
                                                         </c:if>
-                                                        <td width="170" class="${style}">
+                                                        <td width="190" class="${style}">
                                                             <h3 class="menu-item-title"><util:escape value="${menuItemSubType.type}" escapeNewLines="true"/></h3>
                                                         </td>
                                                         <td width="100" align="right">
