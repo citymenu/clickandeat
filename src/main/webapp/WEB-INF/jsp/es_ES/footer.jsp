@@ -9,7 +9,7 @@
                 <td width="500">
                     <div class="company-details">
                         <h2 class="footer">La manera más sencilla de pedir comida a domicilio.</h2>
-                        <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span> trae a tu hogar la manera más sencilla
+                        <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span> te trae la manera más sencilla
                          de disfrutar de tu comida favorita en la oficina, desde el confort de tu casa o cualquier ubicación que tu elijas.
                          Elije tu comida favorita de entre la multitud de opciones que te ofrecemos.</p>
                          <p>Ahora mismo solo tenemos establecimientos en <span class="bolder">Barcelona</span> y <span class="bolder">
