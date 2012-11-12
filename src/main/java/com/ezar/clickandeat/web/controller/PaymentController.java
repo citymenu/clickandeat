@@ -187,7 +187,6 @@ public class PaymentController {
 
 
     @RequestMapping(value="/approval/restaurant/testPhoneCall.html", method= RequestMethod.GET)
-    //public String testPhoneCall(HttpServletRequest request) throws Exception {
     public ResponseEntity<byte[]> testPhoneCall(HttpServletRequest request) throws Exception {
 
         Map<String,Object> model = new HashMap<String,Object>();
@@ -203,7 +202,7 @@ public class PaymentController {
         // Update order delivery details
         order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438","test@llamarycomer.com"));
         order.setDeliveryAddress(order.getRestaurant().getAddress());
-        order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-success-message",false));
+        order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-additional-instructions",false));
         order.setTermsAndConditionsAccepted(true);
         order.setOrderPlacedTime(new DateTime());
         order.addOrderUpdate("Order placed for testing");
