@@ -9,13 +9,13 @@ $(document).ready(function(){
      var approveButton = "<li class='unselectable'><a href='#' onclick='javascript:approveContent()'>"+getLabel('button.approve-content')+"</a></li>";
      var rejectButton = "<li class='unselectable'><a href='#' onclick='javascript:rejectContent()'>"+getLabel('button.reject-content')+"</a></li>";
      var testPhoneCallButton = "<li class='unselectable'><a href='#' onclick='javascript:testPhoneCall()'>"+getLabel('button.test-phone-call')+"</a></li>";
-
+     var clearOrderTestsButton = "<li class='unselectable'><a href='#' onclick='javascript:clearTheOrderTests()'>"+getLabel('button.test-clear-order')+"</a></li>";
 
     // Remove the current links from the action bar
-    $('.navigation-links').html( '<ul>'+approveButton + rejectButton + testPhoneCallButton +'</ul>');
+    $('.navigation-links').html( '<ul>'+approveButton + rejectButton + testPhoneCallButton + clearOrderTestsButton +'</ul>');
 });
 
-
+// function to test how the menu elements sound in the phone call
 function testPhoneCall() {
     $.get( ctx+'/approval/restaurant/testPhoneCall.html?mgn=' + (Math.random() * 99999999),
         function( data ) {
@@ -24,9 +24,25 @@ function testPhoneCall() {
             } else {
                 alert('Error: ' + data.message);
             }
-            buildOrder(data.order);
         }
     );
+}
+
+
+// function clickly clear an existing order
+function clearTheOrderTests(){
+    $.fancybox.showLoading(getLabel('ajax.clearing-order'));
+    $.post( ctx+'/order/clearOrder.ajax', {orderId: currentOrder.orderId, restaurantId: restaurantId},
+        function( data ) {
+            $.fancybox.hideLoading();
+                if( data.success ) {
+                    buildOrder(data.order);
+                    } else {
+                        alert('success:' + data.success);
+                    }
+                }
+     );
+
 }
 
 function approveContent() {

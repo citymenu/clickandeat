@@ -1,13 +1,11 @@
 package com.ezar.clickandeat.workflow.handler;
 
-import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,9 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_RESTAURANT;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.NOTIFICATION_STATUS_CALL_IN_PROGRESS;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.*;
 
 @Component
 public class RestaurantNotificationCallHandler implements IWorkflowHandler {
@@ -51,7 +47,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             return order;
         }
                         
-        if( !restaurant.isOpen(new DateTime())) {
+        if( !order.isIgnoreOpen() && !restaurant.isOpen(new DateTime())) {
             if( LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open, not placing call");
             }

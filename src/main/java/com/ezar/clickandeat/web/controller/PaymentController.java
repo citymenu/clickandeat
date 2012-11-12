@@ -201,9 +201,9 @@ public class PaymentController {
         Order order = requestHelper.getOrderFromSession(request);
 
         // Update order delivery details
-        order.setCustomer(new Person("Test","User","6987857438","test@test.com"));
+        order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438","test@llamarycomer.com"));
         order.setDeliveryAddress(order.getRestaurant().getAddress());
-        order.setAdditionalInstructions("Estas son las instrucciones para testear el sistema");
+        order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-success-message",false));
         order.setTermsAndConditionsAccepted(true);
         order.setOrderPlacedTime(new DateTime());
         order.addOrderUpdate("Order placed for testing");
@@ -224,9 +224,11 @@ public class PaymentController {
         order.setOrderStatus(orderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT);
         // Place order notification call
         try {
+            // flag the order to ignore the bit about the restaurant being open or not
+            order.setIgnoreOpen(true);
             orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
             model.put("success",true);
-            model.put("message","Phone call has been made.");
+            model.put("message",MessageFactory.getMessage("twilio-test-success-message",false));
             // Reset the order. I am not resetting the order because it will be handy to
             // be able to compare the phone call against the order
             // model.put("order",new Order());

@@ -99,6 +99,9 @@ public class Order extends PersistentObject {
     
     @Transient
     private Voucher voucher;
+
+    @Transient
+    private boolean ignoreOpen;
     
     public Order() {
 
@@ -123,6 +126,7 @@ public class Order extends PersistentObject {
         this.orderAmendments = new ArrayList<OrderAmendment>();
 
         this.testOrder = false;
+        this.ignoreOpen = false;
     }
 
 
@@ -838,5 +842,13 @@ public class Order extends PersistentObject {
             this.voucherId = voucher.getVoucherId();
             this.voucher = voucher;
         }
+    }
+
+    public boolean isIgnoreOpen() {
+        return ignoreOpen;
+    }
+
+    public void setIgnoreOpen(boolean ignoreOpen) {
+        this.ignoreOpen = ignoreOpen;
     }
 }

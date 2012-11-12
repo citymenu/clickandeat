@@ -398,7 +398,7 @@ Ext.define('AD.controller.RestaurantEdit', {
              alert("The document must be saved before you can open it for testing");
         }else{
             // Open the document in the approveContent jsp
-            location.href = ctx + '/approval/restaurant/approveContent.html?restaurantId='+restaurantObj.restaurantId;
+            window.open( ctx + '/approval/restaurant/approveContent.html?restaurantId='+restaurantObj.restaurantId , "_blank");
         }
 
     },
