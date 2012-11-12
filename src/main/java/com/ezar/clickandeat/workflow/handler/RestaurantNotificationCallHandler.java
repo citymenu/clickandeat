@@ -3,6 +3,7 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
+import com.ezar.clickandeat.util.MapUtil;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -46,8 +47,9 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             }
             return order;
         }
-                        
-        if( !order.isIgnoreOpen() && !restaurant.isOpen(new DateTime())) {
+                   
+        boolean ignoreOpen = MapUtil.getBooleanMapValue(context,"ignoreOpen");
+        if( !ignoreOpen && !restaurant.isOpen(new DateTime())) {
             if( LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open, not placing call");
             }

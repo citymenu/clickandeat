@@ -7,7 +7,6 @@ import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.CallFactory;
 import com.twilio.sdk.resource.factory.SmsFactory;
 import com.twilio.sdk.resource.instance.Account;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -22,19 +21,10 @@ public class TwilioServiceImpl implements ITwilioService {
 
     private static final Logger LOGGER = Logger.getLogger(TwilioServiceImpl.class);
 
-    public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderNotificationCall.html";
-    public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderNotificationCallFallback.html";
-    public static final String ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL = "/twilio/orderNotificationCallStatusCallback.html";
-
-    public static final String FULL_ORDER_CALL_URL = "/twilio/fullOrderCall.html";
-    public static final String FULL_ORDER_CALL_FALLBACK_URL = "/twilio/fullOrderCallFallbackv";
-    public static final String FULL_ORDER_CALL_STATUS_CALLBACK_URL = "/twilio/fullOrderCallStatusCallback.html";
-    public static final String FULL_ORDER_CALL_PROCESS_URL = "/twilio/processFullOrderCall.html";
-
-    public static final String ORDER_INTRODUCTION_CALL_URL = "/twilio/orderIntroduction.html";
-    public static final String ORDER_INTRODUCTION_CALL_PROCESS_URL = "/twilio/processOrderIntroduction.html";
-    public static final String ORDER_INTRODUCTION_CALL_STATUS_CALLBACK_URL = "/twilio/orderIntroductionCallStatusCallback.html";
-    public static final String ORDER_INTRODUCTION_CALL_FALLBACK_URL = "/twilio/orderIntroductionCallFallback.html";
+    public static final String ORDER_NOTIFICATION_CALL_URL = "/twilio/orderIntroduction.html";
+    public static final String ORDER_NOTIFICATION_CALL_PROCESS_URL = "/twilio/processOrderIntroduction.html";
+    public static final String ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL = "/twilio/orderIntroductionCallStatusCallback.html";
+    public static final String ORDER_NOTIFICATION_CALL_FALLBACK_URL = "/twilio/orderIntroductionCallFallback.html";
 
 
     @Autowired
@@ -119,17 +109,17 @@ public class TwilioServiceImpl implements ITwilioService {
      * @return
      * @throws Exception
      */
-    
+
     @Override
     public void makeOrderNotificationCall(Order order) throws Exception {
 
         String phoneNumber = order.getRestaurant().getNotificationOptions().getNotificationPhoneNumber();
         String orderId = order.getOrderId();
-        
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Calling " + phoneNumber + " to notify about order " + orderId);
         }
-        
+
         placeOrderCall(orderId, phoneNumber, ORDER_NOTIFICATION_CALL_URL, ORDER_NOTIFICATION_CALL_FALLBACK_URL, ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL);
     }
 

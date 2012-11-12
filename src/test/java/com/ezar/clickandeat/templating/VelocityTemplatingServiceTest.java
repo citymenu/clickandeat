@@ -59,10 +59,10 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("order",order);
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_INTRODUCTION_CALL_TEMPLATE);
         Assert.assertNotNull(xml);
         LOGGER.info("Generated xml [" + xml + "]");
     }
@@ -110,12 +110,12 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         order.getOrderDiscounts().add(discount);
 
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("order",order);
         templateModel.put("today",new LocalDate());
         templateModel.put("locale",systemLocale);
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_INTRODUCTION_CALL_TEMPLATE);
         Assert.assertNotNull(xml);
         LOGGER.info("Generated xml:\n" + xml );
     }

@@ -36,9 +36,6 @@ public class RestaurantSearchController {
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
-    @Autowired
-    private CuisineProvider cuisineProvider;
-
 
     @RequestMapping(value="/**/loc/{address}/csn/{cuisine}", method = RequestMethod.GET)
     public ModelAndView searchByLocationAndCuisine(HttpServletRequest request, @PathVariable("address") String address, @PathVariable("cuisine") String cuisine ) {
@@ -84,13 +81,13 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
     public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
-        return searchByLocationAndCuisine(request,address,null);
+        return searchByLocationAndCuisine(request,CuisineProvider.getFooterLocationMap().get(address),null);
     }
 
 
     @RequestMapping(value="/**/csn/{cuisine}", method = RequestMethod.GET)
     public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine ) {
-        return searchByLocationAndCuisine(request,null,cuisine);
+        return searchByLocationAndCuisine(request,null, CuisineProvider.getFooterCuisineMap().get(cuisine));
     }
 
 

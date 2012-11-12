@@ -1,7 +1,10 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.model.OpeningTime;
+import com.ezar.clickandeat.model.OpeningTimes;
+import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.IEmailService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -46,9 +49,6 @@ public class RestaurantController {
     @Autowired
     private OrderRepository orderRepository;
     
-    @Autowired
-    private CuisineProvider cuisineProvider;
-
     @Autowired
     private JSONUtils jsonUtils;
 
@@ -447,7 +447,7 @@ public class RestaurantController {
 
     private Map<String,Object> getModel() {
         Map<String,Object> model = new HashMap<String, Object>();
-        Set<String> cuisines = cuisineProvider.getCuisineList();
+        Set<String> cuisines = CuisineProvider.getCuisineList();
         String cuisineArrayList = StringUtils.collectionToDelimitedString(cuisines,"','");
         model.put("cuisinesArray","'" + cuisineArrayList + "'");
         return model;

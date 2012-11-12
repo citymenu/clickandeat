@@ -48,11 +48,11 @@
                 <td width="180">
                     <h2 class="footer">Now Serving</h2>
                     <div class="footer-list">
-                    <c:forEach var="location" items="${locations}">
-                    <p><a class="direct" href="${ctx}/app/find-takeaway-food-in-${location}/loc/<util:escape value="${location}"/>">${location} Takeaway</a></p>
+                    <c:forEach var="entry" items="${locations}">
+                    <p><a class="direct" href="${ctx}/app/find-takeaway-food-in-${entry.value}/loc/<util:escape value="${entry.key}"/>">${entry.value} Takeaway</a></p>
                     </c:forEach>
-                    <c:forEach var="cuisine" items="${footerCuisines}">
-                    <p><a class="direct" href="${ctx}/app/find-${cuisine}-takeaway-food/csn/<util:escape value="${cuisine}"/>">${cuisine} Takeaway</a></p>
+                    <c:forEach var="entry" items="${footerCuisines}">
+                    <p><a class="direct" href="${ctx}/app/find-${entry.value}-takeaway-food/csn/<util:escape value="${entry.key}"/>">${entry.value} Takeaway</a></p>
                     </c:forEach>
                     </div>
                 </td>

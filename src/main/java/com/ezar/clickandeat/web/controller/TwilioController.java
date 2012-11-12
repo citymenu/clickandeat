@@ -66,310 +66,6 @@ public class TwilioController implements InitializingBean {
         this.systemLocale = new Locale(localeArray[0],localeArray[1]);
     }
 
-    /**
-     * Receives request to make order notification
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.POST )
-    public ResponseEntity<byte[]> orderNotificationCall(@RequestParam(value = "orderId", required = true) String orderId, 
-                                                @RequestParam(value = "authKey", required = true) String authKey,
-                                                HttpServletResponse response) throws Exception {
-        
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received request for order notification call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Build template options to return
-        Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_URL, orderId);
-        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
-        templateModel.put("order",order);
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.NOTIFICATION_CALL_TEMPLATE);
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Generated xml response [" + xml + "]");
-        }
-        
-        return responseEntityUtils.buildXmlResponse(xml);
-    }
-
-
-    /**
-     * Callback for order notification call
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
-    public void orderNotificationCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
-                                                   @RequestParam(value = "authKey", required = true) String authKey,
-                                                   HttpServletResponse response, HttpServletRequest request) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received status callback for order notification call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Get call status and duration
-        String callStatus = request.getParameter("CallStatus");
-        String callDurationParameter = request.getParameter("CallDuration");
-        Integer callDuration = StringUtils.hasText(callDurationParameter)? Integer.valueOf(callDurationParameter): 0;
-
-        // If no answer or answered by is 'Machine' send NO_ANSWER upate
-        if( !callStatus.equals("completed") || callDuration == 0 ) {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
-        }
-        else {
-            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-        }
-
-        response.sendError(HttpServletResponse.SC_OK);
-    }
-
-
-    /**
-     * Failure callback for order notification call
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
-    public ResponseEntity<byte[]> orderNotificationCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
-                                                    @RequestParam(value = "authKey", required = true) String authKey,
-                                                    HttpServletResponse response) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received error fallback for order notification call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Process error update for call
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-
-        // Build response to call
-        Map<String,Object> templateModel = new HashMap<String, Object>();
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
-        return responseEntityUtils.buildXmlResponse(xml);
-    }
-
-
-    /**
-     * Receives request to read out full order over the phone
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_URL, method = RequestMethod.POST )
-    public ResponseEntity<byte[]> fullOrderCall(@RequestParam(value = "orderId", required = true) String orderId,
-                                                        @RequestParam(value = "authKey", required = true) String authKey,
-                                                        HttpServletResponse response) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received request for full order call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Build template options to return
-        String xml = buildFullOrderXml(order,false);
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Generated xml response [" + xml + "]");
-        }
-
-        return responseEntityUtils.buildXmlResponse(xml);
-    }
-
-
-    /**
-     * Callback for full order call
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
-    public void fullOrderCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
-                                                    @RequestParam(value = "authKey", required = true) String authKey,
-                                                    HttpServletResponse response, HttpServletRequest request) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received status callback for full order call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-        response.sendError(HttpServletResponse.SC_OK);
-    }
-
-
-    /**
-     * Failure callback for order notification call
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
-    public ResponseEntity<byte[]> fullOrderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
-                                              @RequestParam(value = "authKey", required = true) String authKey,
-                                              HttpServletResponse response) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received error fallback for full order call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Process error update for call
-        orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ERROR);
-
-        // Build response to call
-        Map<String,Object> templateModel = new HashMap<String, Object>();
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
-        return responseEntityUtils.buildXmlResponse(xml);
-    }
-
-
-    /**
-     * Callback for processing result of full order call
-     * @param orderId
-     * @return
-     * @throws Exception
-     */
-    @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, method = RequestMethod.POST )
-    public ResponseEntity<byte[]> fullOrderCallProcess(@RequestParam(value = "orderId", required = true) String orderId,
-                                            @RequestParam(value = "authKey", required = true) String authKey,
-                                            @RequestParam(value="Digits", required = true ) String digits,
-                                            HttpServletResponse response, HttpServletRequest request) throws Exception {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received processing callback for full order call for order id: " + orderId);
-        }
-
-        // Check authentication key passed
-        checkAuthKey(authKey, response);
-
-        // Get order from the request
-        Order order = getOrder(orderId,response);
-
-        // Examine the digits returned from the call
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Received digits " + digits + " as response to full order call");
-        }
-        
-        // Check that a valid response was returned
-        if( !StringUtils.hasText(digits)) {
-            LOGGER.error("Did not receive keypad input from call");
-            orderRepository.addOrderUpdate(orderId, "Did not receive any keypad input from full order call");
-            
-            // Generate the order call with an error
-            String xml = buildFullOrderXml(order, true);
-            return responseEntityUtils.buildXmlResponse(xml);
-        }
-        
-        // Process response
-        char firstDigit = digits.toCharArray()[0];
-        switch(firstDigit) {
-
-            // Order declined
-            case '0':
-                try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_DECLINES);
-                    return responseEntityUtils.buildXmlResponse(buildDeclinedResponseXml());
-                }
-                catch( WorkflowStatusException ex ) {
-                    LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
-                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
-                }
-
-            // Order accepted
-            case '1':
-
-                try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
-                    return responseEntityUtils.buildXmlResponse(buildAcceptedResponseXml());
-                }
-                catch( WorkflowStatusException ex ) {
-                    LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
-                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
-                }
-
-            // Order accepted with non-standard delivery time
-            case '2':
-                String deliveryMinutesText = digits.substring(1);
-
-                // Try to extract the delivery minutes from the input
-                int deliveryMinutes;
-                try {
-                    deliveryMinutes = Integer.valueOf(deliveryMinutesText);
-                }
-                catch( Exception ex ) {
-                    LOGGER.error("Could not parse delivery time minutes: " + ex.getMessage());
-                    return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
-                }
-
-                Map<String,Object> context = new HashMap<String, Object>();
-                context.put("DeliveryMinutes",deliveryMinutes);
-                try {
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
-                    orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS_WITH_DELIVERY_DETAIL,context);
-                    return responseEntityUtils.buildXmlResponse(buildAcceptedWithDeliveryResponseXml(deliveryMinutes));
-                }
-                catch( WorkflowStatusException ex ) {
-                    LOGGER.error(ex.getMessage(),ex);
-                    String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
-                    return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
-                }
-
-
-            // Repeat the call
-            case '3':
-                return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, false));
-
-            // Invalid input
-            default:
-                LOGGER.error("Invalid response to full order call");
-                return responseEntityUtils.buildXmlResponse(buildFullOrderXml(order, true));
-        }
-    }
-
-
 
     /**
      * Initiate order call
@@ -378,7 +74,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.ORDER_INTRODUCTION_CALL_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> orderCallRequest(@RequestParam(value = "orderId", required = true) String orderId,
                                                 @RequestParam(value = "authKey", required = true) String authKey,
                                                 HttpServletResponse response) throws Exception {
@@ -404,7 +100,6 @@ public class TwilioController implements InitializingBean {
     }
 
 
-
     /**
      * Callback for processing result of full order call
      * @param orderId
@@ -412,7 +107,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> orderCallProcess(@RequestParam(value = "orderId", required = true) String orderId,
                                                        @RequestParam(value = "authKey", required = true) String authKey,
                                                        @RequestParam(value="Digits", required = true ) String digits,
@@ -436,7 +131,7 @@ public class TwilioController implements InitializingBean {
         // Check that a valid response was returned
         if( !StringUtils.hasText(digits)) {
             LOGGER.error("Did not receive keypad input from call");
-            orderRepository.addOrderUpdate(orderId, "Did not receive any keypad input from full order call");
+            orderRepository.addOrderUpdate(orderId, "Did not receive any keypad input from order notification call");
 
             // Generate the order call with an error
             String xml = buildOrderIntroductionXml(order, true);
@@ -489,6 +184,9 @@ public class TwilioController implements InitializingBean {
                 int deliveryMinutes;
                 try {
                     deliveryMinutes = Integer.valueOf(deliveryMinutesText);
+                    if(deliveryMinutes <= 0) {
+                        throw new IllegalArgumentException("Invalid delivery minutes: " + deliveryMinutes);
+                    }
                 }
                 catch( Exception ex ) {
                     LOGGER.error("Could not parse delivery time minutes: " + ex.getMessage());
@@ -536,7 +234,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
     public void orderCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
                                             @RequestParam(value = "authKey", required = true) String authKey,
                                             HttpServletResponse response) throws Exception {
@@ -558,7 +256,7 @@ public class TwilioController implements InitializingBean {
      * @throws Exception
      */
     @ResponseBody
-    @RequestMapping(value= TwilioServiceImpl.FULL_ORDER_CALL_FALLBACK_URL, method = RequestMethod.POST )
+    @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_FALLBACK_URL, method = RequestMethod.POST )
     public ResponseEntity<byte[]> orderCallFallback(@RequestParam(value = "orderId", required = true) String orderId,
                                                         @RequestParam(value = "authKey", required = true) String authKey,
                                                         HttpServletResponse response) throws Exception {
@@ -578,7 +276,7 @@ public class TwilioController implements InitializingBean {
 
         // Build response to call
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ERROR_TEMPLATE);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ERROR_TEMPLATE);
         return responseEntityUtils.buildXmlResponse(xml);
     }
 
@@ -624,7 +322,7 @@ public class TwilioController implements InitializingBean {
 
     private String buildOrderIntroductionXml(Order order, boolean hasError) throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("locale",systemLocale);
         templateModel.put("today",new LocalDate());
@@ -643,7 +341,7 @@ public class TwilioController implements InitializingBean {
 
     private String buildOrderItemsXml(Order order) throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("locale",systemLocale);
         templateModel.put("today",new LocalDate());
@@ -659,32 +357,12 @@ public class TwilioController implements InitializingBean {
 
     private String buildOrderDeliveryXml(Order order) throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_INTRODUCTION_CALL_PROCESS_URL, order.getOrderId());
+        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.ORDER_NOTIFICATION_CALL_PROCESS_URL, order.getOrderId());
         templateModel.put("url", StringEscapeUtils.escapeHtml(url));
         templateModel.put("locale",systemLocale);
         templateModel.put("today",new LocalDate());
         templateModel.put("order",order);
         return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_DELIVERY_DETAILS_CALL_TEMPLATE);
-    }
-
-
-    /**
-     * @param order
-     * @param hasError
-     * @return
-     */
-    
-    private String buildFullOrderXml(Order order, boolean hasError) throws Exception {
-        Map<String,Object> templateModel = new HashMap<String, Object>();
-        String url = twilioService.buildTwilioUrl(TwilioServiceImpl.FULL_ORDER_CALL_PROCESS_URL, order.getOrderId());
-        templateModel.put("url", StringEscapeUtils.escapeHtml(url));
-        templateModel.put("locale",systemLocale);
-        templateModel.put("today",new LocalDate());
-        templateModel.put("order",order);
-        if(hasError) {
-            templateModel.put("error",true);
-        }
-        return velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_TEMPLATE);
     }
 
 
@@ -742,7 +420,7 @@ public class TwilioController implements InitializingBean {
 
     private String buildAnsweredResponseXml() throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_CALL_ANSWERED_RESPONSE_TEMPLATE);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_ANSWERED_RESPONSE_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }
@@ -758,7 +436,7 @@ public class TwilioController implements InitializingBean {
     private String buildErrorResponseXml(String error) throws Exception {
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("error",error);
-        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE);
+        String xml = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.ORDER_WORKFLOW_ERROR_TEMPLATE);
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug("Generated xml [" + xml + "]");
         }

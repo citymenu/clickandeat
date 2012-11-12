@@ -31,19 +31,16 @@ public class VelocityTemplatingService implements InitializingBean {
     public static final String ORDER_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationSMS.vm";
     public static final String RESTAURANT_DECLINED_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/restaurantDeclinedNotificationSMS.vm";
     public static final String AUTO_CANCELLATION_NOTIFICATION_SMS_TEMPLATE = "/velocity/twilio/{locale}/autoCancellationNotificationSMS.vm";
-    public static final String NOTIFICATION_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderNotificationCall.vm";
-    public static final String FULL_ORDER_CALL_TEMPLATE = "/velocity/twilio/{locale}/fullOrderCall.vm";
-    public static final String FULL_ORDER_CALL_WORKFLOW_ERROR_TEMPLATE = "/velocity/twilio/{locale}/fullOrderErrorResponse.vm";
-    public static final String ORDER_CALL_ERROR_TEMPLATE = "/velocity/twilio/{locale}/errorResponse.vm";
 
     public static final String ORDER_INTRODUCTION_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderIntroduction.vm";
     public static final String ORDER_DELIVERY_DETAILS_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderDeliveryDetails.vm";
     public static final String ORDER_ITEM_DETAILS_CALL_TEMPLATE = "/velocity/twilio/{locale}/orderItemDetails.vm";
-
-    public static final String ORDER_DECLINED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderDeclinedResponse.vm";
-    public static final String ORDER_ACCEPTED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderAcceptedResponse.vm";
-    public static final String ORDER_ACCEPTED_WITH_DELIVERY_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderAcceptedWithDeliveryResponse.vm";
-    public static final String ORDER_CALL_ANSWERED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/fullOrderAnsweredResponse.vm";
+    public static final String ORDER_DECLINED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/orderDeclinedResponse.vm";
+    public static final String ORDER_ACCEPTED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/orderAcceptedResponse.vm";
+    public static final String ORDER_ACCEPTED_WITH_DELIVERY_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/orderAcceptedWithDeliveryResponse.vm";
+    public static final String ORDER_ANSWERED_RESPONSE_TEMPLATE = "/velocity/twilio/{locale}/orderAnsweredResponse.vm";
+    public static final String ORDER_WORKFLOW_ERROR_TEMPLATE = "/velocity/twilio/{locale}/orderErrorResponse.vm";
+    public static final String ORDER_ERROR_TEMPLATE = "/velocity/twilio/{locale}/errorResponse.vm";
 
     
     // Email velocity template locations

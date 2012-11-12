@@ -2,24 +2,19 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.repository.RestaurantRepository;
-import com.ezar.clickandeat.util.CuisineProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller 
+
+@Controller
 public class PageController {
 	
-    @Autowired
-    private CuisineProvider cuisineProvider;
-
     @Autowired
     private RestaurantRepository restaurantRepository;
 

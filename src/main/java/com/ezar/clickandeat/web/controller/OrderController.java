@@ -119,8 +119,8 @@ public class OrderController implements InitializingBean {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/admin/orders/list.ajax", method = RequestMethod.GET )
-    public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
-                                       @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort,
+    public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "limit") int limit,
+                                       @RequestParam(value="sort", required = false) String sort,
                                        @RequestParam(value = "query", required = false) String query, HttpServletRequest req) throws Exception {
 
         PageRequest request;
@@ -131,10 +131,10 @@ public class OrderController implements InitializingBean {
             Map<String,String> sortProperties = sortParams.get(0);
             String direction = sortProperties.get("direction");
             String property = sortProperties.get("property");
-            request = new PageRequest(page - 1, limit - start, ( "ASC".equals(direction)? ASC : DESC ), property );
+            request = new PageRequest(page - 1, limit, ( "ASC".equals(direction)? ASC : DESC ), property );
         }
         else {
-            request = new PageRequest(page - 1, limit - start );
+            request = new PageRequest(page - 1, limit );
         }
 
         List<Filter> filters = FilterUtils.extractFilters(req,filterDecoratorMap);

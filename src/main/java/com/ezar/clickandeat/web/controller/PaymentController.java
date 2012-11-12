@@ -220,12 +220,13 @@ public class PaymentController {
         // orderWorkflowEngine.processAction(order, ACTION_PLACE_ORDER);
         // Don't send the notification but change the order status to the value expected by the
         // next step in the workflow
-        order.setOrderStatus(orderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT);
+        order.setOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
         // Place order notification call
         try {
             // flag the order to ignore the bit about the restaurant being open or not
-            order.setIgnoreOpen(true);
-            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+            Map<String,Object> context = new HashMap<String,Object>();
+            context.put("ignoreOpen",Boolean.TRUE);
+            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT,context);
             model.put("success",true);
             model.put("message",MessageFactory.getMessage("twilio-test-success-message",false));
             // Reset the order. I am not resetting the order because it will be handy to

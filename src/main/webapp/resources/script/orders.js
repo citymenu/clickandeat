@@ -779,7 +779,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     var itemCount = additionalItemArray.length;
     var defaultBreak = 6;
     var rowBreak = Math.max(itemCount / 2, defaultBreak );
-    var tableWidth = (itemCount <= defaultBreak)? 400:200;
+    var tableWidth = (itemCount <= defaultBreak)? 300:200;
 
     // Build the total cost item and quantity
     var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel('order.additional-item-limit-description').format(itemLimit)): '');

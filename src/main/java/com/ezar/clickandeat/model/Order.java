@@ -100,9 +100,6 @@ public class Order extends PersistentObject {
     @Transient
     private Voucher voucher;
 
-    @Transient
-    private boolean ignoreOpen;
-    
     public Order() {
 
         this.orderStatus = OrderWorkflowEngine.ORDER_STATUS_BASKET;
@@ -126,7 +123,6 @@ public class Order extends PersistentObject {
         this.orderAmendments = new ArrayList<OrderAmendment>();
 
         this.testOrder = false;
-        this.ignoreOpen = false;
     }
 
 
@@ -844,11 +840,4 @@ public class Order extends PersistentObject {
         }
     }
 
-    public boolean isIgnoreOpen() {
-        return ignoreOpen;
-    }
-
-    public void setIgnoreOpen(boolean ignoreOpen) {
-        this.ignoreOpen = ignoreOpen;
-    }
 }
