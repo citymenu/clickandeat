@@ -41,8 +41,6 @@ public class OpenOrderProcessingTask implements InitializingBean {
     
     private int minutesBeforeSendCancellationEmail;
 
-    private int minutesBeforeCallAgainEvenIfAnswered;
-    
     private int minutesBeforeAutoCancelOrder;
 
     private DistributedLock lock;
@@ -128,22 +126,7 @@ public class OpenOrderProcessingTask implements InitializingBean {
                             }
                         }
                     }
-
-                    // If the notification call was answered over 3 minutes ago but the order has not been accepted or rejected/call again
-                    DateTime callAgainCutoff = new DateTime().minusMinutes(minutesBeforeCallAgainEvenIfAnswered);
-                    if( NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
-                        DateTime lastCallTime = order.getLastCallPlacedTime();
-                        if( lastCallTime == null || lastCallTime.isBefore(callAgainCutoff)) {
-                            try {
-                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-                            }
-                            catch( Exception ex ) {
-                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
-                            }
-                        }
-                    }
                 }
-
             }
         }
         catch (Exception ex) {
@@ -165,12 +148,6 @@ public class OpenOrderProcessingTask implements InitializingBean {
     @Value(value="${twilio.minutesBeforeSendCancellationEmail}")
     public void setMinutesBeforeSendCancellationEmail(int minutesBeforeSendCancellationEmail) {
         this.minutesBeforeSendCancellationEmail = minutesBeforeSendCancellationEmail;
-    }
-
-    @Required
-    @Value(value="${twilio.minutesBeforeCallAgainEvenIfAnswered}")
-    public void setMinutesBeforeCallAgainEvenIfAnswered(int minutesBeforeCallAgainEvenIfAnswered) {
-        this.minutesBeforeCallAgainEvenIfAnswered = minutesBeforeCallAgainEvenIfAnswered;
     }
 
     @Required
