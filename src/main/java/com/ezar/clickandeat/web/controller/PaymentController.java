@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Person;
 import com.ezar.clickandeat.payment.PaymentService;
@@ -10,6 +9,7 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.RequestHelper;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -202,9 +202,11 @@ public class PaymentController {
 
         // Update order delivery details
         order.setCustomer(new Person("Test","User","6987857438","test@test.com"));
-        order.setDeliveryAddress(new Address("Calle Corsega 256","Barcelona","Catalunya","08037"));
+        order.setDeliveryAddress(order.getRestaurant().getAddress());
         order.setAdditionalInstructions("Estas son las instrucciones para testear el sistema");
         order.setTermsAndConditionsAccepted(true);
+        order.setOrderPlacedTime(new DateTime());
+        order.addOrderUpdate("Order placed for testing");
 
         /* Restaurant is in test mode, skip card payment
         order.setTransactionId("DUMMY");

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Gather action="$url" timeout="30" finishOnKey="#">
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+                El pedido es
+        </Say>
+        #if($order.deliveryType == 'DELIVERY')
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> para entregar en la direccion</Say>
+            <!-- The address needs to be split so that it can be read slowly -->
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.address1)</Say>
+            <Pause length="1"/>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">$stringTool.escapeXml($order.deliveryAddress.town)</Say>
+            <Pause length="1"/>
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> $twilioTool.getDigits($order.deliveryAddress.postCode  , ' . ')</Say>
+            <Pause length="1"/>
+
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
+                #if($order.expectedDeliveryTime)
+                    a las $stringTool.formatDate($order.expectedDeliveryTime)
+                    #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
+                        el $order.expectedDeliveryTime.dayOfWeek().getAsText($locale)
+                    #end
+                #else
+                    lo antes posible
+                #end
+            </Say>
+        #else
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> para recoger
+                #if($order.expectedCollectionTime)
+                    a las $stringTool.formatDate($order.expectedCollectionTime)
+                    #if(!$order.expectedCollectionTime.toLocalDate() == $today)
+                        el $order.expectedCollectionTime.dayOfWeek().getAsText($locale)
+                    #end
+                #else
+                    lo antes posible
+                #end
+            </Say>
+        #end
+
+        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+            Pulsa zero y almohadilla para rechazar el pedido.
+            Pulsa uno y almohadilla para escuchar los detalles del pedido.
+            Pulsa dos y almohadilla para escuchar la direccion de entrega.
+            Pulsa tres y almohadilla para aceptar el pedido.
+            Pulse cuatro seguido del numero de minutos y almohadilla para aceptar el pedido y especificar un tiempo de entrega.
+            Pulsa cinco y almohadilla para aceptar o rechazar el pedido usando el correo electronico
+        </Say>
+
+    </Gather>
+</Response>
