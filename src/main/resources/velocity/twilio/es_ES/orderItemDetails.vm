@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Gather action="$url" timeout="30" finishOnKey="#">
+    <Gather action="$url" finishOnKey="#">
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Pedido numero $twilioTool.getOrderId($order.orderId)</Say>
         <Pause length="1"/>
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">Para $stringTool.escapeXml($order.customer.firstName)</Say>

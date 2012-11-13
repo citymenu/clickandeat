@@ -183,14 +183,8 @@
         <property name="hostName" value="#{@redisUrl.getHost()}"/>
         <property name="port" value="#{@redisUrl.getPort()}"/>
         <property name="password" value="#{@redisUrl.getUserInfo().split(':')[1]}"/>
-        <property name="usePool" value="true"/>
+        <property name="usePool" value="false"/>
         <property name="timeout" value="${redis.pool.timeout}"/>
-        <property name="poolConfig">
-            <bean class="redis.clients.jedis.JedisPoolConfig">
-                <property name="testOnBorrow" value="${redis.pool.testOnBorrow}"/>
-                <property name="maxActive" value="${redis.pool.maxActive}"/>
-            </bean>
-        </property>
     </bean>
 
     <!-- Redis default template -->
