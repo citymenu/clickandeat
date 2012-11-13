@@ -10,7 +10,7 @@
             </Say>
 
             <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
-                Tienes un pedido de $numberTool.format("#0.00", $order.restaurantCost) euros
+                Tienes un pedido por un valor de $numberTool.format("#0.00", $order.restaurantCost) euros
             </Say>
 
             #if($order.deliveryType == 'DELIVERY')

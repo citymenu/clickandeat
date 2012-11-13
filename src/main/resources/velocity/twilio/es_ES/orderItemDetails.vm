@@ -11,7 +11,6 @@
 
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">El pedido es el siguiente.</Say>
         #foreach( $item in $order.orderItems )
-            <!--For the quantity number translate the one to just 'un' instead of 'uno' -->
             #if( $item.quantity == 1 ){
                 <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')"> un </Say>
             #else
