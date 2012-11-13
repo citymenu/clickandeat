@@ -60,7 +60,7 @@
             <Pause length="$twilioTool.getPauseValue($order.additionalInstructions)"/>
         #end
 
-        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             Pulsa zero y almohadilla para rechazar el pedido.
             Pulsa uno y almohadilla para escuchar los detalles del pedido.
             Pulsa dos y almohadilla para escuchar la direccion de entrega.

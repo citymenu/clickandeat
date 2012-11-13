@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Gather action="$url" timeout="30" finishOnKey="#">
-            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
                 #if($error)
                     Lo siento, no entendi la respuesta
                 #else
@@ -9,7 +9,7 @@
                 #end
             </Say>
 
-            <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+            <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
                 Tienes un pedido de $numberTool.format("#0.00", $order.restaurantCost) euros
             </Say>
 
@@ -46,7 +46,7 @@
                 </Say>
             #end
 
-        <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
+        <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
             Pulsa zero y almohadilla para rechazar el pedido.
             Pulsa uno y almohadilla para escuchar los detalles del pedido.
             Pulsa dos y almohadilla para escuchar la direccion de entrega.
