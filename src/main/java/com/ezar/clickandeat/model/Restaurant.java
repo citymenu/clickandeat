@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.util.DateUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -261,15 +262,24 @@ public class Restaurant extends PersistentObject {
 
         int currentDayOfWeek = now.getDayOfWeek();
 
+        boolean isBankHoliday = DateUtil.isBankHoliday(now.toLocalDate());
+        OpeningTime bankHolidayOpeningTime = openingTimes.getBankHolidayOpeningTimes();
+
         // Iterate through open dates
         for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+
+            // Check if this date is a bank holiday
+            int dayOfWeek = openingTime.getDayOfWeek();
+
+            if( isBankHoliday ) {
+                openingTime = bankHolidayOpeningTime;
+            }
 
             // If the openingTime is not open at all, continue
             if( !openingTime.isOpen()) {
                 continue;
             }
-            
-            int dayOfWeek = openingTime.getDayOfWeek();
+
             LocalTime earlyOpen = openingTime.getEarlyOpeningTime();
             LocalTime earlyClose = openingTime.getEarlyClosingTime();
             LocalTime lateOpen = openingTime.getLateOpeningTime();

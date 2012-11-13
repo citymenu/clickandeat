@@ -13,9 +13,12 @@ public class OpeningTimes {
     
     private List<LocalDate> closedDates;
 
+    private OpeningTime bankHolidayOpeningTimes;
+    
     public OpeningTimes() {
         this.openingTimes = new ArrayList<OpeningTime>();
         this.closedDates = new ArrayList<LocalDate>();
+        this.bankHolidayOpeningTimes = new OpeningTime();
     }
 
     @Override
@@ -56,5 +59,13 @@ public class OpeningTimes {
     
     public void addClosedDate(LocalDate closedDate) {
         this.closedDates.add(closedDate);
+    }
+
+    public OpeningTime getBankHolidayOpeningTimes() {
+        return bankHolidayOpeningTimes;
+    }
+
+    public void setBankHolidayOpeningTimes(OpeningTime bankHolidayOpeningTimes) {
+        this.bankHolidayOpeningTimes = bankHolidayOpeningTimes;
     }
 }

@@ -117,7 +117,9 @@ public class RestaurantController {
             Map<String,String> dailyOpeningTimes = new LinkedHashMap<String, String>();
             MutableDateTime dateTime = new MutableDateTime();
             for( OpeningTime openingTime: openingTimes.getOpeningTimes() ) {
+                
                 int dayOfWeek = openingTime.getDayOfWeek();
+                boolean open = openingTime.isOpen();
                 dateTime.setDayOfWeek(dayOfWeek);
 
                 LocalTime earlyOpeningTime = openingTime.getEarlyOpeningTime();
@@ -130,7 +132,7 @@ public class RestaurantController {
 
                 String openingTimeSummary;
                 
-                if( !hasEarlyTimes && !hasLateTimes ) {
+                if( !open || (!hasEarlyTimes && !hasLateTimes) ) {
                     openingTimeSummary = MessageFactory.getMessage("restaurant.closed",false);
                 }
                 else if( hasEarlyTimes && !hasLateTimes ) {
@@ -147,6 +149,34 @@ public class RestaurantController {
                 dailyOpeningTimes.put(weekDay, openingTimeSummary);
             }
             
+            OpeningTime bankHolidayOpeningTime = openingTimes.getBankHolidayOpeningTimes();
+
+            boolean open = bankHolidayOpeningTime.isOpen();
+            LocalTime earlyOpeningTime = bankHolidayOpeningTime.getEarlyOpeningTime();
+            LocalTime earlyClosingTime = bankHolidayOpeningTime.getEarlyClosingTime();
+            LocalTime lateOpeningTime = bankHolidayOpeningTime.getLateOpeningTime();
+            LocalTime lateClosingTime = bankHolidayOpeningTime.getLateClosingTime();
+
+            boolean hasEarlyTimes = (earlyOpeningTime != null && earlyClosingTime != null);
+            boolean hasLateTimes = (lateOpeningTime != null && lateClosingTime != null);
+
+            String openingTimeSummary;
+
+            if( !open || (!hasEarlyTimes && !hasLateTimes) ) {
+                openingTimeSummary = MessageFactory.getMessage("restaurant.closed",false);
+            }
+            else if( hasEarlyTimes && !hasLateTimes ) {
+                openingTimeSummary = earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter);
+            }
+            else if( !hasEarlyTimes ) {
+                openingTimeSummary = lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
+            }
+            else {
+                openingTimeSummary = earlyOpeningTime.toString(formatter) + "-" + earlyClosingTime.toString(formatter) + " | " + lateOpeningTime.toString(formatter) + "-" + lateClosingTime.toString(formatter);
+            }
+            String bankHolidays = MessageFactory.getMessage("weekday.bankHoliday",false);
+            dailyOpeningTimes.put(bankHolidays, openingTimeSummary);
+
             model.put("success",true);
             model.put("openingTimes",dailyOpeningTimes);
         }

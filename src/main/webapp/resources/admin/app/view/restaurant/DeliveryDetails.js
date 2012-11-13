@@ -256,6 +256,38 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
                 name:'lateClosingTime_7'
             }]
         },{
+             xtype:'fieldcontainer',
+             fieldLabel:'Bank Holidays',
+             layout:'hbox',
+
+             defaults:{
+                 padding:'0 15 0 0'
+             },
+
+             fieldDefaults: {
+                 msgTarget:'under',
+                 labelAlign:'top',
+                 format:'H:i'
+             },
+
+             items:[{
+                 xtype:'checkbox',
+                 name:'open_bankHoliday',
+                 width:60
+             },{
+                 xtype:'timefield',
+                 name:'earlyOpeningTime_bankHoliday'
+             },{
+                 xtype:'timefield',
+                 name:'earlyClosingTime_bankHoliday'
+             },{
+                 xtype:'timefield',
+                 name:'lateOpeningTime_bankHoliday'
+             },{
+                 xtype:'timefield',
+                 name:'lateClosingTime_bankHoliday'
+             }]
+        },{
             name:'closedDates',
             fieldLabel:'Closed dates (enter one per line in format dd/mm/yyyy)',
             xtype:'textareafield',

@@ -534,6 +534,15 @@ Ext.define('AD.controller.RestaurantEdit', {
         restaurantObj.openingTimes.openingTimes = openingTimes;
         restaurantObj.openingTimes.closedDates = delimitedStringToArray(deliveryDetailValues['closedDates'],'\n');
 
+        var bankHolidayOpeningTimes = new Object({
+            open: deliveryDetailValues['open_bankHoliday'] == 'on',
+            earlyOpeningTime: deliveryDetailValues['earlyOpeningTime_bankHoliday'],
+            earlyClosingTime: deliveryDetailValues['earlyClosingTime_bankHoliday'],
+            lateOpeningTime: deliveryDetailValues['lateOpeningTime_bankHoliday'],
+            lateClosingTime: deliveryDetailValues['lateClosingTime_bankHoliday']
+        });
+        restaurantObj.openingTimes.bankHolidayOpeningTimes = bankHolidayOpeningTimes;
+
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object({
             deliveryOptionsSummary: deliveryDetailValues['deliveryOptionsSummary'],
@@ -740,6 +749,7 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Get the opening times from the restaurant
         var openingTimes = restaurantObj.openingTimes;
+        var bankHolidayOpeningTimes = openingTimes.bankHolidayOpeningTimes;
 
         // Build opening times onto form
         var form = formPanel.getForm();
@@ -755,6 +765,13 @@ Ext.define('AD.controller.RestaurantEdit', {
             form.findField('lateOpeningTime_' + day).setValue(openingTime.lateOpeningTime);
             form.findField('lateClosingTime_' + day).setValue(openingTime.lateClosingTime);
         });
+
+        // Populate bank holiday opening times
+        form.findField('open_bankHoliday').setValue(bankHolidayOpeningTimes.open);
+        form.findField('earlyOpeningTime_bankHoliday').setValue(bankHolidayOpeningTimes.earlyOpeningTime);
+        form.findField('earlyClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.earlyClosingTime);
+        form.findField('lateOpeningTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateOpeningTime);
+        form.findField('lateClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateClosingTime);
 
         // Populate form values from delivery options record
         formPanel.loadRecord(deliveryOptions);
