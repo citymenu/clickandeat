@@ -6,6 +6,7 @@ import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
+import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -92,6 +93,11 @@ public class OpenOrderProcessingTask implements InitializingBean {
                         try {
                             LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
                             orderWorkflowEngine.processAction(order, ACTION_AUTO_CANCEL);
+                        }
+                        catch( WorkflowException e ) {
+                            LOGGER.error("Exception sending auto cancel email for orderId: " + order.getOrderId(),e);
+                            order.setOrderStatus(ORDER_STATUS_AUTO_CANCELLED);
+                            orderRepository.saveOrder(order);
                         }
                         catch( Exception ex ) {
                             exceptionHandler.handleException(ex);
