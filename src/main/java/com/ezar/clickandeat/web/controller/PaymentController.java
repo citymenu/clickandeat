@@ -200,7 +200,7 @@ public class PaymentController {
         Order order = requestHelper.getOrderFromSession(request);
 
         // Update order delivery details
-        order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438","test@llamarycomer.com"));
+        order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438",MessageFactory.getMessage("twilio-test-user-email", false)));
         order.setDeliveryAddress(order.getRestaurant().getAddress());
         order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-additional-instructions",false));
         order.setTermsAndConditionsAccepted(true);
