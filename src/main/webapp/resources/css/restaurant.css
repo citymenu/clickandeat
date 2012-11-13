@@ -298,7 +298,7 @@ td.spacer {
 
 .day-of-week {
     display:inline-block;
-    width: 120px;
+    width: 100px;
     zoom: 1;
     *display: inline;
 }
