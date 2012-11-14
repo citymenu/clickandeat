@@ -18,7 +18,7 @@ Ext.define('AD.view.restaurant.List' ,{
            }
     	},{
     		text:'Create New',
-    		icon:'../resources/images/icons-shadowless/document-plus.png',
+    		icon:'../resources/images/icons-shadowless/document--plus.png',
     		action:'create'
     	}]
     },{
@@ -48,5 +48,4 @@ Ext.define('AD.view.restaurant.List' ,{
     		return null;
     	}
     }
-
 });
