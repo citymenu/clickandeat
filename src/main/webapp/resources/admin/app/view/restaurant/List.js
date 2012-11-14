@@ -10,12 +10,15 @@ Ext.define('AD.view.restaurant.List' ,{
     	xtype:'toolbar',
     	dock:'top',
     	items:[{
-    		xtype:'button',
-    		text:'Refresh',
-    		action:'refresh'
+           text:'Refresh',
+           icon: resources + '/images/refresh.gif',
+           handler:function() {
+               var store = Ext.getCmp('restaurantlist').getStore();
+               store.loadPage(store.currentPage);
+           }
     	},{
-    		xtype:'button',
     		text:'Create New',
+    		icon:'../resources/images/icons-shadowless/document-plus.png',
     		action:'create'
     	}]
     },{

@@ -19,10 +19,6 @@ Ext.define('AD.controller.RestaurantList', {
                 itemcontextmenu:this.onContextMenu
             },
 
-            'restaurantlist button[action=refresh]': {
-            	click:this.refresh
-            },
-	
             'restaurantlist button[action=create]': {
             	click:this.create
             },
