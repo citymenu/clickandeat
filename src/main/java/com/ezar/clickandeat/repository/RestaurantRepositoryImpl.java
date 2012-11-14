@@ -12,6 +12,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
@@ -21,6 +22,7 @@ import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -71,11 +73,26 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return restaurant;
     }
 
+
+    @Override
+    public List<Restaurant> getPage(Pageable pageable) {
+        Query query = new Query(where("deleted").ne(true));
+        QueryUtils.applyPagination(query, pageable);
+        return operations.find(query,Restaurant.class);
+    }
+
+    
+    @Override
+    public long countActive() {
+        Query query = new Query(where("deleted").ne(true));
+        return operations.count(query,Restaurant.class);
+    }
+
     @Override
     public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
-            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true));
+            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true));
             List<Restaurant> restaurants = recommendations = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
                 recommendations = restaurants;
@@ -164,7 +181,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return restaurant;
     }
 
-
+    
     @Override
     @SuppressWarnings("unchecked")
     public void deleteRestaurant(Restaurant restaurant) {
@@ -189,7 +206,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         Query query = geoLocation != null? new Query(where("address.location").nearSphere(
                 new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR)):
                 new Query();
-        query.addCriteria(where("listOnSite").is(true));
+        query.addCriteria(where("listOnSite").is(true).and("deleted").ne(true));
 
         // Add scope variables to the map/reduce query
         Map<String,Object> scopeVariables = new HashMap<String,Object>();

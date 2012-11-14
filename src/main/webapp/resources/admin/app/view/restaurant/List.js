@@ -17,14 +17,6 @@ Ext.define('AD.view.restaurant.List' ,{
     		xtype:'button',
     		text:'Create New',
     		action:'create'
-    	},{
-    		xtype:'button',
-    		text:'Edit Selected',
-    		action:'edit'
-    	},{
-    		xtype:'button',
-    		text:'Delete Selected',
-    		action:'delete'
     	}]
     },{
         xtype:'pagingtoolbar',
@@ -37,8 +29,8 @@ Ext.define('AD.view.restaurant.List' ,{
         this.columns = [
             {header:'ID', dataIndex:'restaurantId',flex:.1},
             {header:'Name', dataIndex:'name',flex:.1},
-            {header:'Recommended', type:'boolean',flex:.1},
-            {header:'List on site', dataIndex:'listOnSite',flex:.1},
+            {header:'Recommended', dataIndex:'recommended', renderer:booleanToString, type:'boolean',flex:.1},
+            {header:'List on site', dataIndex:'listOnSite', renderer:booleanToString, flex:.1},
             {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
         ];
 

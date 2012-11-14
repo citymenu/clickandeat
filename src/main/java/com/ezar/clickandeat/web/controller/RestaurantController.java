@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -218,11 +219,11 @@ public class RestaurantController {
             request = new PageRequest(page - 1, limit - start );
         }
 
-        Page<Restaurant> restaurants = repository.findAll(request);
+        List<Restaurant> restaurants = repository.getPage(request);
 
         Map<String,Object> model = new HashMap<String,Object>();
-        model.put("restaurants",restaurants.getContent());
-        model.put("count",repository.count());
+        model.put("restaurants",restaurants);
+        model.put("count",repository.countActive());
         return responseEntityUtils.buildResponse(model);
     }
 
@@ -304,14 +305,19 @@ public class RestaurantController {
 
 
     @ResponseBody
-    @RequestMapping(value="/admin/restaurants/delete.ajax", method = RequestMethod.GET )
-    public ResponseEntity<byte[]> delete(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+    @RequestMapping(value="/admin/restaurants/updateAttribute.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateAttribute(@RequestParam(value = "restaurantId") String restaurantId,
+                                                  @RequestParam(value = "attribute") String attribute,
+                                                  @RequestParam(value = "value") Boolean value) throws Exception {
 
         Map<String,Object> model = new HashMap<String, Object>();
 
         try {
             Restaurant restaurant = repository.findByRestaurantId(restaurantId);
-            repository.delete(restaurant);
+            Field field = Restaurant.class.getDeclaredField(attribute);
+            field.setAccessible(true);
+            field.set(restaurant,value);
+            repository.saveRestaurant(restaurant);
             model.put("success",true);
         }
         catch( Exception ex ) {
@@ -321,6 +327,7 @@ public class RestaurantController {
         }
         return responseEntityUtils.buildResponse(model);
     }
+
 
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/sendForApproval.ajax", method = RequestMethod.POST )

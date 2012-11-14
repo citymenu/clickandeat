@@ -91,6 +91,9 @@ public class Order extends PersistentObject {
     private List<OrderUpdate> orderUpdates;
     private Boolean testOrder;
 
+    // Indicates the order is deleted
+    private boolean deleted;
+
     // Order amendments
     private List<OrderAmendment> orderAmendments;
 
@@ -840,4 +843,11 @@ public class Order extends PersistentObject {
         }
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

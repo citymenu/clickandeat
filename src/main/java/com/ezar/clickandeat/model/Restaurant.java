@@ -88,6 +88,10 @@ public class Restaurant extends PersistentObject {
     // Specify the reasons why the content has been rejected
     private String rejectionReasons;
 
+    // Indicates if the restaurant is deleted
+    @Indexed
+    private boolean deleted;
+
 
     public Restaurant() {
         this.uuid = UUID.randomUUID().toString();
@@ -705,5 +709,13 @@ public class Restaurant extends PersistentObject {
         restaurantUpdate.setText(text);
         restaurantUpdate.setUpdateTime(new DateTime());
         restaurantUpdates.add(restaurantUpdate);
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

@@ -23,6 +23,11 @@ function buildDate(val) {
     return new Date(val);
 }
 
+function booleanToString(val) {
+    return val && val == true? 'Y':'N';
+}
+
+
 /* Converts a newline delimited string into an array */
 function delimitedStringToArray(str,delim) {
     var arr = [];

@@ -4,6 +4,9 @@ Ext.BLANK_IMAGE_URL = ctx + '/resources/images/s.gif';
 // Extend Ajax timeout
 Ext.Ajax.timeout = 1000 * 60 * 2;
 
+// Disable caching
+Ext.Loader.config.disableCaching = false;
+
 // Cookie provider
 var cp = Ext.create('Ext.state.CookieProvider', {
     expires: new Date(new Date().getTime()+(1000*60*60*24)) // 1 day

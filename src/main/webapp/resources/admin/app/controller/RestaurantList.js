@@ -15,7 +15,8 @@ Ext.define('AD.controller.RestaurantList', {
 		this.control({
 		    'restaurantlist': {
                 render:this.onGridRendered,
-                itemdblclick:this.onGridDblClick
+                itemdblclick:this.onGridDblClick,
+                itemcontextmenu:this.onContextMenu
             },
 
             'restaurantlist button[action=refresh]': {
@@ -52,31 +53,120 @@ Ext.define('AD.controller.RestaurantList', {
         }
     },
 
-    deleteSelected: function(button) {
-        var record = this.getSelectedRecord();
-        if( record ) {
-            Ext.Ajax.request({
-                url: ctx + '/admin/restaurants/delete.ajax',
-                method:'GET',
-                params: {
-                    restaurantId: record.get('restaurantId')
-                },
-                success: function(response) {
-                    var obj = Ext.decode(response.responseText);
-                    if( obj.success ) {
-                        showSuccessMessage(Ext.get('restaurantlist'),'Deleted','Restaurant deleted successfully');
-                        this.getRestaurantsStore().loadPage(1);
-                    } else {
-                        showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+
+	onContextMenu: function(view, record, item, index, e ) {
+	    e.stopEvent();
+	    this.getRestaurantList().getSelectionModel().select(record);
+	    var restaurantId = record.get('restaurantId');
+	    var ctrl = this;
+	    var menu = Ext.create('Ext.menu.Menu',{
+	        id:'restaurant-menu',
+            items:[{
+                text:'Edit restaurant',
+                icon:'../resources/images/icons-shadowless/document-text.png',
+                handler:function(){
+                    ctrl.editSelected();
+                }
+            }],
+            listeners:{
+                'hide': {
+                    fn:function(){
+                        this.destroy();
                     }
-                },
-                failure: function(response) {
-                    var obj = Ext.decode(response.responseText);
+                }
+            }
+	    });
+
+        // Add list/unlist buttons
+	    if(record.get('listOnSite') == true) {
+	        menu.add({
+	            text:'Delist from site',
+	            icon:'../resources/images/icons-shadowless/minus-shield.png',
+	            handler:function() {
+	                ctrl.updateAttribute(restaurantId,'listOnSite',false);
+	            }
+	        });
+	    } else {
+	        menu.add({
+	            text:'List on site',
+	            icon:'../resources/images/icons-shadowless/tick-shield.png',
+	            handler:function() {
+	                ctrl.updateAttribute(restaurantId,'listOnSite',true);
+	            }
+	        });
+	    }
+
+        // Add recommend button
+	    if(record.get('recommended') == true) {
+	        menu.add({
+	            text:'Remove from recommendations',
+	            icon:'../resources/images/icons-shadowless/thumb.png',
+	            handler:function() {
+	                ctrl.updateAttribute(restaurantId,'recommended',false);
+	            }
+	        });
+	    } else {
+	        menu.add({
+	            text:'Add to recommendations',
+	            icon:'../resources/images/icons-shadowless/thumb-up.png',
+	            handler:function() {
+	                ctrl.updateAttribute(restaurantId,'recommended',true);
+	            }
+	        });
+	    }
+        menu.add('-');
+        menu.add({
+            text:'Delete restaurant',
+            icon:'../resources/images/icons-shadowless/cross-button.png',
+            handler:function() {
+                ctrl.deleteRestaurant(restaurantId);
+            }
+        });
+
+	    menu.showAt(e.getXY());
+	},
+
+    updateAttribute:function(restaurantId, attribute, value ) {
+        Ext.Ajax.request({
+            url: ctx + '/admin/restaurants/updateAttribute.ajax',
+            method:'POST',
+            params: {
+                restaurantId: restaurantId,
+                attribute: attribute,
+                value: value
+            },
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+                if( obj.success ) {
+                    showSuccessMessage(Ext.get('restaurantlist'),'Updated','Restaurant updated successfully');
+                    var store = Ext.getCmp('restaurantlist').getStore();
+                    store.loadPage(store.currentPage);
+                } else {
                     showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
-                },
-                scope:this
-            });
-        }
+                }
+            },
+            failure: function(response) {
+                var obj = Ext.decode(response.responseText);
+                showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+            },
+            scope:this
+        });
+    },
+
+    deleteRestaurant: function(restaurantId) {
+        Ext.MessageBox.show({
+            title:'Delete restaurant',
+            msg:'Are you sure you want to delete this restaurant?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    this.updateAttribute(restaurantId,'deleted',true);
+                }
+            },
+            scope:this
+        });
     },
 
 	onGridRendered: function(grid) {
