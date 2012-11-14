@@ -73,7 +73,7 @@
                 <property name="useCacheControlNoStore" value="true"/>
                 <property name="cacheMappings">
                     <props>
-                        <prop key="/**/messages.js">3600</prop>
+                        <prop key="/**/*.js">3600</prop>
                         <prop key="/**">0</prop>
                     </props>
                 </property>
