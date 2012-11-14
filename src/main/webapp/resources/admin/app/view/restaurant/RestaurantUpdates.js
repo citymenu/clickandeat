@@ -22,8 +22,9 @@ Ext.define('AD.view.restaurant.RestaurantUpdates' ,{
         store:'RestaurantUpdates',
 
         columns:[
-            {text:'Date',dataIndex:'text',sortable:true,hideable:false,draggable:false,flex:1},
-            {text:'Update',dataIndex:'updateTime',sortable:true,hideable:false,draggable:false,flex:1}
+            {header:'Date', dataIndex:'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
+            {text:'Action',dataIndex:'text',sortable:true,hideable:false,draggable:false,flex:1}
+
 
         ]
     }]

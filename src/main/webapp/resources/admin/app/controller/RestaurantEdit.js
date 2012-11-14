@@ -23,7 +23,7 @@ var specialOfferItemEditForm;
 
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
-    stores:['Restaurants','MenuCategories','MenuItems','Discounts','SpecialOffers','SpecialOfferItems'],
+    stores:['Restaurants','MenuCategories','MenuItems','Discounts','SpecialOffers','SpecialOfferItems','RestaurantUpdates'],
     models: [
         'Restaurant',
         'Person',
@@ -38,7 +38,8 @@ Ext.define('AD.controller.RestaurantEdit', {
         'DiscountApplicableTime',
         'SpecialOffer',
         'SpecialOfferApplicableTime',
-        'SpecialOfferItem'
+        'SpecialOfferItem',
+        'RestaurantUpdates'
     ],
     views:[
     	'restaurant.Edit',
@@ -46,7 +47,9 @@ Ext.define('AD.controller.RestaurantEdit', {
     	'restaurant.DeliveryDetails',
     	'restaurant.Menu',
     	'restaurant.Discounts',
-    	'restaurant.SpecialOffers'
+    	'restaurant.SpecialOffers',
+    	'restaurant.RestaurantUpdates'
+
     ],
 
     refs: [{
@@ -85,6 +88,9 @@ Ext.define('AD.controller.RestaurantEdit', {
     },{
         ref:'specialOfferItemEditForm',
         selector:'#specialofferitemeditform'
+    },{
+        ref:'restaurantUpdatesGrid',
+        selector:'#restaurantupdatesgrid'
     }],
 
 	init: function() {
@@ -249,8 +255,10 @@ Ext.define('AD.controller.RestaurantEdit', {
 
             'restaurantspecialofferitemedit': {
                 render:this.specialOfferItemEditRendered
+            },
+            'restaurantupdates': {
+                render:this.restaurantUpdatesRendered
             }
-
 
         });
 
@@ -1541,6 +1549,11 @@ Ext.define('AD.controller.RestaurantEdit', {
             icon:Ext.MessageBox.WARNING,
             closable:false
         });
-    }
+    },
+
+     // Fires when the discounts grid is rendered
+     restaurantUpdatesRendered: function(panel) {
+        this.getRestaurantUpdatesStore().loadData(restaurantObj.restaurantUpdates);
+     }
 
 });
