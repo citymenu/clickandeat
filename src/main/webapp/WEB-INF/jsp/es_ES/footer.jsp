@@ -44,7 +44,7 @@
                         <h2 class="footer spacer">Contactanos</h2>
                         <div class="footer-list">
                             <p>Calle San Fernando 20<br>Mahón 07701<br>Menorca</p>
-                            <p><a class="icon-email direct">contact@llamarycomer.com</a></p>
+                            <p><a class="icon-email direct">contact@llamarYcomer.com</a></p>
                         </div>
                     </div>
                 </td>
