@@ -49,7 +49,7 @@
                     </div>
                 </td>
                 <td width="180">
-                    <h2 class="footer">Ahora Servimos</h2>
+                    <h2 class="footer">Nuestras ciudades</h2>
                     <div class="footer-list">
                     <c:forEach var="entry" items="${locations}">
                     <p><a class="direct" href="${ctx}/app/find-takeaway-food-in-${entry.value}/loc/<util:escape value="${entry.key}"/>">${entry.value} Takeaway</a></p>

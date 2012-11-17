@@ -41,14 +41,14 @@
         </div>
 
         <div class="box-large-middle">
-            <div class="caption">La manera más sencilla de pedir comida a domicilio</div>
+            <div class="caption">La manera más cómoda de pedir comida a domicilio</div>
             <div class="help">
                 <table width="976">
                     <tr>
                         <td width="244" align="center">
                             <div class="step step-1">
                                 <div class="step-number">1.</div>
-                                <div class="step-detail">Dinos donde estas</div>
+                                <div class="step-detail">Dinos dónde estás</div>
                             </div>
                         </td>
                         <td width="244" align="center">
@@ -75,7 +75,7 @@
         </div>
 
         <div class="box-large-bottom">
-            <div class="caption">¿Porque no pruebas uno de nuestros restaurantes recomendados?</div>
+            <div class="caption">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
             <div id="carousel">
                 <div class="carousel-items">
                     <ul>
