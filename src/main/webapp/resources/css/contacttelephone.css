@@ -1,10 +1,15 @@
 @charset "utf-8";
 
+iframe {
+    background-color:#FFFFFF;
+}
+
 h2.telephone-header {
     border-bottom: 1px dashed #AAAAAA;
     margin-bottom: 12px;
     padding-bottom:6px;
     color: #BB0000;
+    background-color:#FFFFFF;
     font-family: MaiandraOTGD-DemiBold;
     font-size:18px;
     line-height:22px;
@@ -12,7 +17,7 @@ h2.telephone-header {
 }
 
 .contact-telephone {
-    background: url(../images/telf.png) left top no-repeat;
+    background: url(../images/telf.png) left top no-repeat #FFFFFF;
     font: 22px/22px MaiandraOTGD-DemiBold;
     color:#444444;
     margin:0 0 0 10px;
