@@ -9,17 +9,17 @@
                 <td width="500">
                     <div class="company-details">
                         <h2 class="footer">La manera más sencilla de pedir comida a domicilio.</h2>
-                        <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span> te trae la manera más sencilla
-                         de disfrutar de tu comida favorita en la oficina, desde el confort de tu casa o cualquier ubicación que tu elijas.
-                         Elije tu comida favorita de entre la multitud de opciones que te ofrecemos.</p>
-                         <p>Ahora mismo solo tenemos establecimientos en <span class="bolder">Barcelona</span> y <span class="bolder">
-                         Madrid</span>, pero estar atentos porque estamos añadiendo nuevos establecimientos constantemente.</p>
+                        <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span>te trae la mejor variedad de comida a domicilio
+                        para que la disfrutes en la oficina, en tu casa o donde más te plazca. Tan sólo entra en uno de nuestros restaurantes,
+                        elige tus platos preferidos de entre la amplia gamma que te ofrecemos y en unos minutos los recibirás
+                         en el lugar que nos hayas indicado. ¡Así de fácil!</p>
+                         <p>Ahora mismo sólo tenemos algunos establecimientos seleccionados de <span class="bolder">Barcelona</span> y de <span class="bolder">
+                         Madrid</span>, pero estate atento a nuestra web porque constantemente vamos añadiendo nuevos restaurantes.</p>
 
-                        <h2 class="footer spacer">Italiano, Chino, Pizzeria, etc.</h2>
-                        <p>LlamarYComer te ofrece una variedad extensa de las cocinas disponibles en tu zona.
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                        in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                        sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        <h2 class="footer spacer">¿Qué te apetece comer hoy?</h2>
+                        <p>Cocina china, mejicana... ¿italiana quizá? No te lo pienses más, en LlamarYComer tenemos los mejores restaurantes de
+                        comida a domicilio presentes en tu zona. Una gran selección de cocina nacional e internacional que ponemos a tu disposición
+                        para cuando no te apetezca cocinar. Además, en nuestra web encontrarás ofertas y promociones exclusivas sólo disponibles <span class="bolder">on line</span>. ¡Bon appétit!
                         </p>
                         <div class="credit-cards">
                             <div class="credit-card visa"></div>
