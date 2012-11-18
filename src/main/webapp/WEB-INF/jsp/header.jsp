@@ -7,7 +7,7 @@
 <div id="header">
     <div class="header-wrapper">
         <div class="header-banner">
-            <div class="header-company unselectable" onclick="location.href='${ctx}/home.html'">llamar<span class="header-company-small">y</span>comer</a></div>
+            <a href="${ctx}/home.html"><div class="header-company unselectable">llamar<span class="header-company-small">y</span>comer</div></a>
             <div class="help-links">
                 <div class="help-link-wrapper unselectable">
                     <div class="help-link-content"><message:message key="label.help"/></div>
