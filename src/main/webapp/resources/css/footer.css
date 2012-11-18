@@ -64,6 +64,14 @@ h3.footer {
     padding-bottom: 5px;
 }
 
+p.locationlink {
+    padding-bottom:3px;
+}
+
+.cuisineLocation {
+    margin-bottom:15px;
+}
+
 a.direct, a.direct:visited, a.direct:hover, a.direct:active {
     font-family:"myriad-pro-n4", "myriad-pro";
     font-weight:400;

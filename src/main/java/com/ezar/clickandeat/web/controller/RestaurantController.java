@@ -62,6 +62,8 @@ public class RestaurantController {
     @Autowired
     private IEmailService emailService;
 
+    @Autowired
+    private CuisineProvider cuisineProvider;
 
     @RequestMapping(value="/**/restaurant/{restaurantId}", method = RequestMethod.GET)
     public ModelAndView get(@PathVariable("restaurantId") String restaurantId, HttpServletRequest request) {
@@ -484,7 +486,7 @@ public class RestaurantController {
 
     private Map<String,Object> getModel() {
         Map<String,Object> model = new HashMap<String, Object>();
-        Set<String> cuisines = CuisineProvider.getCuisineList();
+        Set<String> cuisines = cuisineProvider.getCuisineList();
         String cuisineArrayList = StringUtils.collectionToDelimitedString(cuisines,"','");
         model.put("cuisinesArray","'" + cuisineArrayList + "'");
         return model;

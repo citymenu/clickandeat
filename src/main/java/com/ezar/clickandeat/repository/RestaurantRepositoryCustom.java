@@ -28,4 +28,6 @@ public interface RestaurantRepositoryCustom {
 
     Pair<List<Restaurant>,Map<String,Integer>> search(Search search);
 
+    Map<String,List<String>> getCuisinesByLocation();
+    
 }

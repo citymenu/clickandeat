@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.repository.query.QueryUtils;
@@ -36,7 +37,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_RECOMMENDATIONS = 12;
+    private static final int MAX_RECOMMENDATIONS = 18;
     
     private static final int REFRESH_TIMEOUT = 1000 * 60 * 60; // Refresh recommendations list every hour
     
@@ -93,17 +94,47 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
             Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true));
-            List<Restaurant> restaurants = recommendations = operations.find(query,Restaurant.class);
+            List<Restaurant> restaurants = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
-                recommendations = restaurants;
+                if( restaurants.size() % 2 == 1 ) {
+                    recommendations = restaurants.subList(0,restaurants.size() -1 ); // Must be an even number
+                }
+                else {
+                    recommendations = restaurants;
+                }
             }
             else {
+                List<Restaurant> candidates = new ArrayList<Restaurant>();
+                // Add more instances of a restaurant depending on search ranking (0 - 100)
+                for( Restaurant restaurant: restaurants ) {
+                    int rankCount = restaurant.getSearchRanking() / 9 + 1; // 1 to 10
+                    for( int j = 0; j <= rankCount; j++ ) {
+                        candidates.add(restaurant);
+                    }
+                }
                 List<Restaurant> randomList = new ArrayList<Restaurant>();
                 Random random = new Random();
                 for( int i = 0; i < MAX_RECOMMENDATIONS; i++ ) {
-                    int nextIndex = random.nextInt(restaurants.size());
-                    randomList.add(restaurants.get(nextIndex));
+                    int nextIndex = random.nextInt(candidates.size());
+                    Restaurant candidate = candidates.get(nextIndex);
+                    if( !randomList.contains(candidate)) {
+                        randomList.add(candidate);
+                    }
                 }
+                Collections.sort(randomList, new Comparator<Restaurant>() {
+                    public int compare(Restaurant r1, Restaurant r2) {
+                        int rankingDifference = r1.getSearchRanking() - r2.getSearchRanking();
+                        if( rankingDifference == 0 ) {
+                            return r1.getCreated().compareTo(r2.getCreated());
+                        }
+                        else if( rankingDifference < 0 ) {
+                            return 1;
+                        }
+                        else {
+                            return -1;
+                        }
+                    }
+                });
                 recommendations = randomList;
             }
             lastRefreshed = now;
@@ -246,6 +277,35 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return new Pair<List<Restaurant>, Map<String, Integer>>(restaurants, cuisineCount);
 
     }
+
+
+    /**
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String,List<String>> getCuisinesByLocation() {
+        
+        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true));
+
+        // Add scope variables to the map/reduce query
+        MapReduceOptions options = MapReduceOptions.options();
+        options.outputTypeInline(); // Important!
+
+        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/footermap.js", "classpath:/mapreduce/footerreduce.js", options, ValueObject.class);
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Executed map reduce query in: " + results.getTiming().getTotalTime() + "ms");
+        }
+
+        // Build results
+        Map<String,List<String>> cuisinesByLocation = new HashMap<String, List<String>>();
+        for (ValueObject valueObject : results) {
+            String location = valueObject.getId();
+            List<String> cuisines = (List<String>)valueObject.getValue().get("cuisines");
+            cuisinesByLocation.put(location, cuisines);
+        }
+        return cuisinesByLocation;
+    }
+    
 
     @Required
     @Value(value="${location.maxDistance}")

@@ -10,4 +10,12 @@ public class Pair<X,Y> {
         this.first = first;
         this.second = second;
     }
+    
+    public X getFirst() {
+        return first;
+    }
+    
+    public Y getSecond() {
+        return second;
+    }
 }

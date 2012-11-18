@@ -51,18 +51,14 @@
                     </div>
                 </td>
                 <td width="180">
-                    <h2 class="footer">Nuestras ciudades</h2>
-                    <div class="footer-list">
-                    <c:forEach var="entry" items="${locations}">
-                    <p><a class="direct" href="${ctx}/app/find-takeaway-food-in-${entry.value}/loc/<util:escape value="${entry.key}"/>">${entry.value} Takeaway</a></p>
+                    <c:forEach var="entry" items="${cuisineLocations}">
+                        <div class="cuisineLocation">
+                            <a class="direct" href="${ctx}/app/encontrar-comida-para-llevar-en-${entry.key.second}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
+                            <c:forEach var="list" items="${entry.value}">
+                                <p class="locationlink"><a class="direct" href="${ctx}/app/encontrar-${list.second}-comida-para-llevar-en-${entry.key.second}/csn/${list.first}/${entry.key.first}">${list.second} Takeaway</a></p>
+                            </c:forEach>
+                        </div>
                     </c:forEach>
-                    </d>
-                    <h2 class="footer">Cocinas</h2>
-                    <div class="footer-list">
-                    <c:forEach var="entry" items="${footerCuisines}">
-                    <p><a class="direct" href="${ctx}/app/find-${entry.value}-takeaway-food/csn/<util:escape value="${entry.key}"/>">${entry.value} Takeaway</a></p>
-                    </c:forEach>
-                    </div>
                 </td>
             </tr>
         </table>

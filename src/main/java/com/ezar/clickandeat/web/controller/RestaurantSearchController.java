@@ -36,6 +36,8 @@ public class RestaurantSearchController {
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
+    @Autowired
+    private CuisineProvider cuisineProvider;
 
     @RequestMapping(value="/**/loc/{address}/csn/{cuisine}", method = RequestMethod.GET)
     public ModelAndView searchByLocationAndCuisine(HttpServletRequest request, @PathVariable("address") String address, @PathVariable("cuisine") String cuisine ) {
@@ -81,13 +83,28 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
     public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
-        return searchByLocationAndCuisine(request,CuisineProvider.getFooterLocationMap().get(address),null);
+        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocations().keySet()) {
+            if(locationPair.first.equals(address)) {
+                return searchByLocationAndCuisine(request,locationPair.second,null);        
+            }
+        }
+        return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
     }
 
 
-    @RequestMapping(value="/**/csn/{cuisine}", method = RequestMethod.GET)
-    public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine ) {
-        return searchByLocationAndCuisine(request,null, CuisineProvider.getFooterCuisineMap().get(cuisine));
+    @RequestMapping(value="/**/csn/{cuisine}/{address}", method = RequestMethod.GET)
+    public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine, @PathVariable("address") String address ) {
+        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocations().entrySet()) {
+            Pair<String,String> locationPair = entry.getKey();
+            if( locationPair.first.equals(address)) {
+                for( Pair<String,String> cuisinePair: entry.getValue()) {
+                    if( cuisinePair.first.equals(cuisine)) {
+                        return searchByLocationAndCuisine(request,locationPair.second,cuisinePair.second);
+                    }
+                }
+            }
+        }
+        return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
     }
 
 

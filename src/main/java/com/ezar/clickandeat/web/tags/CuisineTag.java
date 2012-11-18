@@ -1,18 +1,29 @@
 package com.ezar.clickandeat.web.tags;
 
 import com.ezar.clickandeat.util.CuisineProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.tags.RequestContextAwareTag;
 
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
-import java.io.IOException;
+@Configurable
+public class CuisineTag extends RequestContextAwareTag {
 
-public class CuisineTag extends SimpleTagSupport {
+    @Autowired
+    private CuisineProvider cuisineProvider;
 
     @Override
-    public void doTag() throws JspException, IOException {
-        getJspContext().setAttribute("cuisines", CuisineProvider.getCuisineList());
-        getJspContext().setAttribute("footerCuisines", CuisineProvider.getFooterCuisineMap());
-        getJspContext().setAttribute("locations", CuisineProvider.getFooterLocationMap());
+    protected int doStartTagInternal() throws Exception {
+        if( cuisineProvider == null ) {
+            WebApplicationContext ctx = getRequestContext().getWebApplicationContext();
+            AutowireCapableBeanFactory factory = ctx.getAutowireCapableBeanFactory();
+            factory.autowireBean(this);
+        }
+        
+        pageContext.setAttribute("cuisines", cuisineProvider.getCuisineList());
+        pageContext.setAttribute("cuisineLocations", cuisineProvider.getCuisineLocations());
+        return SKIP_BODY;
     }
 
 }

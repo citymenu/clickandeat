@@ -92,6 +92,12 @@ public class RestaurantSearchTest {
         LOGGER.info("Found " + restaurants.size() + " restaurants");
     }
 
+    
+    @Test
+    public void testGetCuisinesByLocation() throws Exception {
+        Map<String,List<String>> cuisinesByLocation = repository.getCuisinesByLocation();
+        Assert.assertTrue(cuisinesByLocation.size() > 0);
+    }
 
     
 }
