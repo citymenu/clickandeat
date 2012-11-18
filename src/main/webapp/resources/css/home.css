@@ -10,17 +10,17 @@
 
 .butler-main {
     clear: both;
-    margin: 20px auto 40px auto;
+    margin: 20px auto 20px auto;
     position: relative;
     width: 1020px;
-    height: 300px;
+    height: 250px;
     background: transparent url(../images/butler-home-alt.png) 0 0 no-repeat;
 }
 
 #searchbar-wrapper {
     position:absolute;
-    right: 165px;
-    top: 40px;
+    right: 210px;
+    top: 25px;
     width: 550px;
 }
 
@@ -287,7 +287,7 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 
 .step {
     width: 210px;
-    height: 230px;
+    height: 175px;
     border: 2px solid #CCCCCC;
     -webkit-border-radius: 20px;
        -moz-border-radius: 20px;
@@ -315,19 +315,19 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 }
 
 .step-1 {
-    background: url(../images/help/step-1.png) 0 0 no-repeat #FFFFFF;
+    background: url(../images/help/step-1.png) center top no-repeat #FFFFFF;
 }
 
 .step-2 {
-    background: url(../images/help/step-2.png) 0 0 no-repeat #FFFFFF;
+    background: url(../images/help/step-2.png) center top no-repeat #FFFFFF;
 }
 
 .step-3 {
-    background: url(../images/help/step-3.png) 0 0 no-repeat #FFFFFF;
+    background: url(../images/help/step-3.png) center top no-repeat #FFFFFF;
 }
 
 .step-4 {
-    background: url(../images/help/step-4.png) 0 0 no-repeat #FFFFFF;
+    background: url(../images/help/step-4.png) center top no-repeat #FFFFFF;
 }
 
 .triangle-right {
