@@ -34,11 +34,13 @@ public class CuisineProvider implements InitializingBean {
 
         for( Map.Entry<String,List<String>> entry: cuisinesByLocation.entrySet()) {
             String location = entry.getKey();
+            String escapedLocation = StringEscapeUtils.escapeJavaScript(location).replace("\\","-");
             List<String> cuisineList = entry.getValue();
-            Pair<String,String> locationPair = new Pair<String, String>(StringEscapeUtils.escapeJavaScript(location),location);
+            Pair<String,String> locationPair = new Pair<String, String>(escapedLocation,location);
             List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
             for( String cuisine: cuisineList ) {
-                Pair<String,String> cuisinePair = new Pair<String, String>(StringEscapeUtils.escapeJavaScript(cuisine), cuisine);
+                String escapedCuisine = StringEscapeUtils.escapeJavaScript(cuisine).replace("\\","-");
+                Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
                 cuisinesPairList.add(cuisinePair);
             }
             cuisineLocations.put(locationPair, cuisinesPairList);
