@@ -72,6 +72,7 @@ public class Restaurant extends PersistentObject {
     private Long lastContentApprovalStatusUpdated;
     private List<RestaurantUpdate> restaurantUpdates;
     private Boolean testMode;
+    private int searchRanking; // Indicates where it should appear in the search results
 
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
@@ -699,6 +700,14 @@ public class Restaurant extends PersistentObject {
 
     public void setTestMode(Boolean testMode) {
         this.testMode = testMode;
+    }
+
+    public int getSearchRanking() {
+        return searchRanking;
+    }
+
+    public void setSearchRanking(int searchRanking) {
+        this.searchRanking = searchRanking;
     }
 
     /**

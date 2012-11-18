@@ -59,6 +59,11 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             labelAlign:'top',
             xtype:'checkbox',
             name:'testMode'
+        },{
+            fieldLabel:'Ranking score for display in search results (0-100)',
+            labelAlign:'top',
+            xtype:'numberfield',
+            name:'searchRanking'
         }]
     },{
         xtype:'fieldset',
