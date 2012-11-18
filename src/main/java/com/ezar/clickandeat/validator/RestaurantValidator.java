@@ -62,6 +62,15 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> imp
             else if( addressLocation.getRadius() > maxRadiusMetres ) {
                 errors.addError("Unable to determine precise location, please check address");
             }
+            else {
+                String postCode = addressLocation.getLocationComponents().get("postal_code");
+                if( postCode == null ) {
+                    errors.addError("Unable to determine location, please check address");
+                }
+                else if( !postCode.equals(address.getPostCode())) {
+                    errors.addError("Google lookup returned address with postal code: " + postCode);
+                }
+            }
         }
     }
 

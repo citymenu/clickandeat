@@ -647,6 +647,10 @@ public class Order extends PersistentObject {
         return orderItemCost;
     }
 
+    public String getFormattedOrderItemCost() {
+        return NumberUtil.format(orderItemCost == null? 0d: orderItemCost);
+    }
+
     public void setOrderItemCost(Double orderItemCost) {
         this.orderItemCost = orderItemCost;
     }

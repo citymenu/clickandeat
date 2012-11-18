@@ -34,7 +34,8 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'Name', dataIndex:'name',flex:.1},
             {header:'Recommended', dataIndex:'recommended', renderer:booleanToString, type:'boolean',flex:.1},
             {header:'List on site', dataIndex:'listOnSite', renderer:booleanToString, flex:.1},
-            {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
+            {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
+            {header:'Last updated', dataIndex:'lastUpdated',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
         ];
 
         this.callParent(arguments);
