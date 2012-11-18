@@ -11,16 +11,18 @@
                         <h2 class="footer">La manera más sencilla de pedir comida a domicilio.</h2>
                         <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span>te trae la mejor variedad de comida a domicilio
                         para que la disfrutes en la oficina, en tu casa o donde más te plazca. Tan sólo entra en uno de nuestros restaurantes,
-                        elige tus platos preferidos de entre la amplia gamma que te ofrecemos y en unos minutos los recibirás
-                         en el lugar que nos hayas indicado. ¡Así de fácil!</p>
-                         <p>Ahora mismo sólo tenemos algunos establecimientos seleccionados de <span class="bolder">Barcelona</span> y de <span class="bolder">
-                         Madrid</span>, pero estate atento a nuestra web porque constantemente vamos añadiendo nuevos restaurantes.</p>
+                        elige tus platos preferidos de entre los muchos que te ofrecemos y en unos minutos
+                        los recibirás en el lugar que nos hayas indicado.¡Así de fácil!</p>
+
+                         <p>Ahora mismo sólo tenemos algunos establecimientos seleccionados de <span class="bolder">Barcelona</span>
+                          y de <span class="bolder">Madrid</span>, pero estate atento a nuestra web porque constantemente vamos añadiendo
+                          nuevos restaurantes.</p>
 
                         <h2 class="footer spacer">¿Qué te apetece comer hoy?</h2>
                         <p>Cocina china, mejicana... ¿italiana quizá? No te lo pienses más, en LlamarYComer tenemos los mejores restaurantes de
-                        comida a domicilio presentes en tu zona. Una gran selección de cocina nacional e internacional que ponemos a tu disposición
-                        para cuando no te apetezca cocinar. Además, en nuestra web encontrarás ofertas y promociones exclusivas sólo disponibles <span class="bolder">on line</span>. ¡Bon appétit!
-                        </p>
+                        comida a domicilio presentes en tu zona. Una gran selección de gastronomía nacional e internacional que ponemos a tu
+                        disposición para cuando no te apetezca cocinar. Además, en nuestra web encontrarás ofertas y
+                        promociones exclusivas sólo disponibles <span class="bolder">on line</span>. ¡Bon appétit!</p>
                         <div class="credit-cards">
                             <div class="credit-card visa"></div>
                             <div class="credit-card mastercard"></div>
