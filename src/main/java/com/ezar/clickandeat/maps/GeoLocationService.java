@@ -221,9 +221,11 @@ public class GeoLocationService {
     public GeoLocation getLocation(Address address) {
         StringBuilder sb = new StringBuilder();
         if( StringUtils.hasText(address.getAddress1())) {
-            sb.append(address.getAddress1());
+            sb.append(address.getAddress1()).append(" ");
         }
-        sb.append(" ");
+        if( StringUtils.hasText(address.getTown())) {
+            sb.append(address.getTown()).append(" ");
+        }
         if( StringUtils.hasText(address.getPostCode())) {
             sb.append(address.getPostCode());
         }

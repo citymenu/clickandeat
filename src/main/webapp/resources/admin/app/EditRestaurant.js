@@ -1,4 +1,10 @@
 Ext.Loader.setConfig({enabled:true});
+Ext.Loader.setPath('Ext.ux', resources + '/ext/src/ux');
+
+Ext.require([
+    'Ext.window.*',
+    'Ext.ux.GMapPanel'
+]);
 
 // Load the restaurant object on startup
 Ext.onReady(function(){

@@ -1,7 +1,7 @@
 var gallery_photo_create_map_check = 0;
 
 // Build directions map to restaurant
-function showDirections(restaurantLat,restaurantLng,userLat,userLng, restaurantName) {
+function showDirections(restaurantLat,restaurantLng,userLat,userLng,restaurantName) {
 
     var hasUserLocation = (userLat != null && userLng != null);
     var headerMessage = hasUserLocation? getLabel('restaurant.directions'): getLabel('restaurant.location');

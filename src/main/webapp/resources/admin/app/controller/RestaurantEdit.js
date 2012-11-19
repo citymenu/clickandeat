@@ -113,6 +113,9 @@ Ext.define('AD.controller.RestaurantEdit', {
             'restaurantedit button[action=openToTestPhoneCall]': {
                 click: this.openToTestPhoneCall
             },
+            'restaurantedit button[action=showLocation]': {
+                click: this.showLocation
+            },
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -448,6 +451,32 @@ Ext.define('AD.controller.RestaurantEdit', {
         });
     },
 
+    showLocation: function(button) {
+        var mainDetailsForm = this.getMainDetailsForm().getForm();
+        var address1 = mainDetailsForm.findField('address1').getValue();
+        var town = mainDetailsForm.findField('town').getValue();
+        var postCode = mainDetailsForm.findField('postCode').getValue();
+        if(address1 == '' || town == '' || postCode == '' ) {
+            showErrorMessage(Ext.get('restauranteditpanel'),'Error','Please enter values in address1, town and postCode fields');
+        } else {
+            Ext.Ajax.request({
+                url: ctx + '/admin/restaurants/showLocation.ajax',
+                method:'POST',
+                params: {
+                    address: address1 + ' ' + town + ' ' + postCode
+                },
+                success: function(response) {
+                    var obj = Ext.decode(response.responseText);
+                    if( obj.success ) {
+                        showDirections(obj.lng,obj.lat,null,null,'restaurant');
+                    } else {
+                        showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+                    }
+                },
+                scope:this
+            });
+        }
+    },
 
     saveRestaurant: function(button , callback) {
 
