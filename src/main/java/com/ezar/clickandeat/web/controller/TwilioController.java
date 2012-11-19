@@ -154,17 +154,8 @@ public class TwilioController implements InitializingBean {
                     String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
-
-            // Hear order item details
-            case '1':
-                return responseEntityUtils.buildXmlResponse(buildOrderItemsXml(order));
-
-            // Hear order delivery details
-            case '2':
-                return responseEntityUtils.buildXmlResponse(buildOrderDeliveryXml(order));
-
             // Order accepted
-            case '3':
+            case '1':
                 try {
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_CALL_ANSWERED);
                     orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_RESTAURANT_ACCEPTS);
@@ -175,6 +166,13 @@ public class TwilioController implements InitializingBean {
                     String workflowError = resolver.getWorkflowStatusExceptionMessage(ex);
                     return responseEntityUtils.buildXmlResponse(buildErrorResponseXml(workflowError));
                 }
+                // Hear order item details
+            case '2':
+                return responseEntityUtils.buildXmlResponse(buildOrderItemsXml(order));
+
+            // Hear order delivery details
+            case '3':
+                return responseEntityUtils.buildXmlResponse(buildOrderDeliveryXml(order));
 
             // Order accepted with non-standard delivery time
             case '4':
