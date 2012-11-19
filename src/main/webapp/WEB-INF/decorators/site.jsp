@@ -1,7 +1,8 @@
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
 
-<!doctype html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="<locale:language/>">
 
 <head>
     <meta charset="utf-8"/>
@@ -14,7 +15,7 @@
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-    <!-- Have to load locally because of @font-face declaration -->
+    <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css"/>
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/header.css"/>

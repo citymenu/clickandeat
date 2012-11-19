@@ -37,6 +37,7 @@ public class RestaurantSearchTest {
         Restaurant restaurant = repository.create();
         restaurant.setRestaurantId(restaurantId);
         restaurant.setName("Test Restaurant");
+        restaurant.setListOnSite(true);
         
         Person mainContact = new Person();
         mainContact.setFirstName("test");
