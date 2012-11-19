@@ -27,9 +27,9 @@
         </Say>
         <Say language="en-gb" voice="$stringTool.getMessage('twilio.voice-gender')">
             To decline this order press 0 followed by the hash key.
-            To hear the order details press 1 followed by the hash key.
-            To repeat the delivery details press 2 followed by the hash key.
-            To accept this order press 3 followed by the hash key.
+            To accept this order press 1 followed by the hash key.
+            To hear the order details press 2 followed by the hash key.
+            To repeat the delivery details press 3 followed by the hash key.
             To accept this order and specify the delivery time in minutes press 4 followed by the number of minutes then the hash key.
             To accept or decline this order from your email press 5.
         </Say>
