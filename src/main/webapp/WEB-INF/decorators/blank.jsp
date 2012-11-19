@@ -19,7 +19,7 @@
 	<decorator:head/>
 </head>
 
-<body>
+<body style="background-color:#FFFFFF">
 <decorator:body/>
 </body>
 
