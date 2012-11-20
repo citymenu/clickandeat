@@ -30,7 +30,7 @@ public class GeoLocationService {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_REQUESTS_PER_SECOND = 5; // Throttle requests to geolocation api
+    private static final int MAX_REQUESTS_PER_SECOND = 1; // Throttle requests to geolocation api
     
     private static final long CONCURRENT_REQUEST_WAIT = 1000 / MAX_REQUESTS_PER_SECOND;
     
