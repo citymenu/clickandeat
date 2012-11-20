@@ -31,7 +31,7 @@ public class GeoLocationService {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final long CONCURRENT_WAIT_INTERVAL = 500;
+    private static final long CONCURRENT_WAIT_INTERVAL = 1000;
     
     @Autowired
     private GeoLocationRepository geoLocationRepository;
