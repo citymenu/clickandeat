@@ -20,6 +20,7 @@ import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component(value = "locationService")
 public class GeoLocationService {
@@ -30,9 +31,7 @@ public class GeoLocationService {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_REQUESTS_PER_SECOND = 1; // Throttle requests to geolocation api
-    
-    private static final long CONCURRENT_REQUEST_WAIT = 1000 / MAX_REQUESTS_PER_SECOND;
+    private static final long CONCURRENT_WAIT_INTERVAL = 500;
     
     @Autowired
     private GeoLocationRepository geoLocationRepository;
@@ -49,8 +48,11 @@ public class GeoLocationService {
 
     private List<String> commaBeforeComponents = new ArrayList<String>();
     
-    private final AtomicInteger concurrentRequests = new AtomicInteger();
-    
+    private boolean cacheLocations = true;
+
+    private final AtomicLong lastRequestTime = new AtomicLong(System.currentTimeMillis());
+
+
     /**
      * Gets a matching address location for a query
      * @param address
@@ -68,147 +70,158 @@ public class GeoLocationService {
 
         // Clean up the input
         address = address.trim();
-        
-        GeoLocation savedLocation = geoLocationRepository.findByAddress(address);
-        if( savedLocation != null ) {
-            LOGGER.debug("Found saved location for address: " + address);
-            if( !savedLocation.isValid()) {
-                LOGGER.warn("Saved location is not valid");
-                return null;
-            }
-            else {
-                return savedLocation;
+
+        if( cacheLocations ) {
+            GeoLocation savedLocation = geoLocationRepository.findByAddress(address);
+            if( savedLocation != null ) {
+                LOGGER.debug("Found saved location for address: " + address);
+                if( !savedLocation.isValid()) {
+                    LOGGER.warn("Saved location is not valid");
+                    return null;
+                }
+                else {
+                    return savedLocation;
+                }
             }
         }
 
         try {
-            
-            // Throttle requests to maximum of 5 per second so we don't overload Google
-            int concurrentRequestCount = concurrentRequests.incrementAndGet();
-            if( concurrentRequestCount > MAX_REQUESTS_PER_SECOND ) {
-                try {
-                    Thread.sleep(CONCURRENT_REQUEST_WAIT);
-                }
-                catch( InterruptedException ignore ) {
-                    // Ignore on purpose
-                }
-            }
 
-            URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
-            LOGGER.debug("Constructed url: " + url);
-            URLConnection conn = url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
-            Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
-            String status = (String)json.get("status");
-            if( !"OK".equals(status)) {
-                LOGGER.error("Received status: " + status);
-                return null;
-            }
-            
-            List<Map<String,Object>> results = (List<Map<String,Object>>)json.get("results");
-            if( results.size() == 0 ) {
-                LOGGER.warn("Did not receive result for address: " + address);
-                saveInvalidGeoLocation(address);
-                return null;
-            }
-            
-            LOGGER.debug("Found " + results.size() + " results for address: " + address);
-            Map<String,Object> result = results.get(0);
-            
-            // Full text address
-            String fullAddress = (String)result.get("formatted_address");
+            synchronized (this) {
 
-            // Extract address components
-            Map<String,String> locationAddressComponents = new HashMap<String, String>();
-            List addressComponents = (List)result.get("address_components");
-            if( addressComponents != null ) {
-                for( Object entry: addressComponents ) {
-                    Map<String,Object> addressComponent = (Map<String,Object>)entry;
-                    List typesList = (List)addressComponent.get("types");
-                    String type = (String)typesList.get(0);
-                    String value = (String)addressComponent.get("long_name");
-                    locationAddressComponents.put(type,value);
-                }
-            }
+                // Throttle requests to maximum of 2 per second so we don't overload Google
+                long lastRequestedTime = lastRequestTime.get();
+                long now = System.currentTimeMillis();
+                lastRequestTime.set(now);
+                long difference = now - lastRequestedTime;
 
-            // Determine the geometry
-            Map<String,Object> geometry = (Map<String,Object>)result.get("geometry");
-            Map<String,Object> geolocation = (Map<String,Object>)geometry.get("location");
-            double[] coordinates = new double[2];
-            coordinates[0] = (Double)geolocation.get("lng");
-            coordinates[1] = (Double)geolocation.get("lat");
-
-            // Build the display address
-            StringBuilder sb = new StringBuilder();
-            String delim = "";
-            int componentCount = 0;
-            for( String componentPreference: componentPreferences ) {
-                String component = locationAddressComponents.get(componentPreference);
-                if( component != null ) {
-                    if( commaBeforeComponents.contains(componentPreference)) {
-                        sb.append(",");
+                if( difference < CONCURRENT_WAIT_INTERVAL ) {
+                    try {
+                        long wait = CONCURRENT_WAIT_INTERVAL - difference;
+                        LOGGER.debug("Waiting " + wait + "ms before executing search");
+                        Thread.sleep( wait );
                     }
-                    sb.append(delim).append(component);
-                    delim = " ";
-                    componentCount++;
-                    if( componentCount >= minComponentMatches ) {
-                        break;
+                    catch( InterruptedException ignore ) {
+                        // Ignore on purpose
                     }
                 }
-            }
-            String concatenated = sb.toString();
-            if( concatenated.endsWith(",")) {
-                concatenated = concatenated.substring(0,concatenated.length() - 1 );
-            }
-            String displayAddress = concatenated;
-            if( !StringUtils.hasText(displayAddress)) {
-                LOGGER.warn("Address not specific enough to calculate display address");
-                saveInvalidGeoLocation(address);
-                return null;
-            }
-            
-            LOGGER.debug("Constructed display address: " + displayAddress + " for address: " + address);
+                
 
-            // Build address location object
-            GeoLocation geoLocation = new GeoLocation();
-            geoLocation.setAddress(address);
-            geoLocation.setDisplayAddress(displayAddress);
-            geoLocation.setFullAddress(fullAddress);
-            geoLocation.setLocationComponents(locationAddressComponents);
-            geoLocation.setLocation(coordinates);
+                URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
+                LOGGER.debug("Constructed url: " + url);
+                URLConnection conn = url.openConnection();
+                BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+                Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
+                String status = (String)json.get("status");
+                if( !"OK".equals(status)) {
+                    LOGGER.error("Received status: " + status);
+                    return null;
+                }
 
-            // Determine the geometry
-            Map<String,Object> bounds = (Map<String,Object>)geometry.get("bounds");
-            if( bounds == null ) {
-                geoLocation.setRadius(0d);
+                List<Map<String,Object>> results = (List<Map<String,Object>>)json.get("results");
+                if( results.size() == 0 ) {
+                    LOGGER.warn("Did not receive result for address: " + address);
+                    saveInvalidGeoLocation(address);
+                    return null;
+                }
+
+                LOGGER.debug("Found " + results.size() + " results for address: " + address);
+                Map<String,Object> result = results.get(0);
+
+                // Full text address
+                String fullAddress = (String)result.get("formatted_address");
+
+                // Extract address components
+                Map<String,String> locationAddressComponents = new HashMap<String, String>();
+                List addressComponents = (List)result.get("address_components");
+                if( addressComponents != null ) {
+                    for( Object entry: addressComponents ) {
+                        Map<String,Object> addressComponent = (Map<String,Object>)entry;
+                        List typesList = (List)addressComponent.get("types");
+                        String type = (String)typesList.get(0);
+                        String value = (String)addressComponent.get("long_name");
+                        locationAddressComponents.put(type,value);
+                    }
+                }
+
+                // Determine the geometry
+                Map<String,Object> geometry = (Map<String,Object>)result.get("geometry");
+                Map<String,Object> geolocation = (Map<String,Object>)geometry.get("location");
+                double[] coordinates = new double[2];
+                coordinates[0] = (Double)geolocation.get("lng");
+                coordinates[1] = (Double)geolocation.get("lat");
+
+                // Build the display address
+                StringBuilder sb = new StringBuilder();
+                String delim = "";
+                int componentCount = 0;
+                for( String componentPreference: componentPreferences ) {
+                    String component = locationAddressComponents.get(componentPreference);
+                    if( component != null ) {
+                        if( commaBeforeComponents.contains(componentPreference)) {
+                            sb.append(",");
+                        }
+                        sb.append(delim).append(component);
+                        delim = " ";
+                        componentCount++;
+                        if( componentCount >= minComponentMatches ) {
+                            break;
+                        }
+                    }
+                }
+                String concatenated = sb.toString();
+                if( concatenated.endsWith(",")) {
+                    concatenated = concatenated.substring(0,concatenated.length() - 1 );
+                }
+                String displayAddress = concatenated;
+                if( !StringUtils.hasText(displayAddress)) {
+                    LOGGER.warn("Address not specific enough to calculate display address");
+                    saveInvalidGeoLocation(address);
+                    return null;
+                }
+
+                LOGGER.debug("Constructed display address: " + displayAddress + " for address: " + address);
+
+                // Build address location object
+                GeoLocation geoLocation = new GeoLocation();
+                geoLocation.setAddress(address);
+                geoLocation.setDisplayAddress(displayAddress);
+                geoLocation.setFullAddress(fullAddress);
+                geoLocation.setLocationComponents(locationAddressComponents);
+                geoLocation.setLocation(coordinates);
+
+                // Determine the geometry
+                Map<String,Object> bounds = (Map<String,Object>)geometry.get("bounds");
+                if( bounds == null ) {
+                    geoLocation.setRadius(0d);
+                }
+                else {
+                    Map<String,Object> northeast = (Map<String,Object>)bounds.get("northeast");
+                    double[] northeastcorner = new double[2];
+                    northeastcorner[0] = (Double)northeast.get("lng");
+                    northeastcorner[1] = (Double)northeast.get("lat");
+
+                    Map<String,Object> southwest = (Map<String,Object>)bounds.get("southwest");
+                    double[] southwestcorner = new double[2];
+                    southwestcorner[0] = (Double)southwest.get("lng");
+                    southwestcorner[1] = (Double)southwest.get("lat");
+
+                    double radius = getDistance(northeastcorner, southwestcorner) / 2;
+                    geoLocation.setRadius(radius);
+                    geoLocation.setRadiusWarning(radius > warningRadius);
+                }
+
+                // Save the location and return
+                geoLocation.setValid(true);
+                if( cacheLocations ) {
+                    geoLocationRepository.saveGeoLocation(geoLocation);
+                }
+                return geoLocation;
             }
-            else {
-                Map<String,Object> northeast = (Map<String,Object>)bounds.get("northeast");
-                double[] northeastcorner = new double[2];
-                northeastcorner[0] = (Double)northeast.get("lng");
-                northeastcorner[1] = (Double)northeast.get("lat");
-
-                Map<String,Object> southwest = (Map<String,Object>)bounds.get("southwest");
-                double[] southwestcorner = new double[2];
-                southwestcorner[0] = (Double)southwest.get("lng");
-                southwestcorner[1] = (Double)southwest.get("lat");
-
-                double radius = getDistance(northeastcorner, southwestcorner) / 2;
-                geoLocation.setRadius(radius);
-                geoLocation.setRadiusWarning(radius > warningRadius);
-            }
-
-            // Save the location and return
-            geoLocation.setValid(true);
-            geoLocationRepository.saveGeoLocation(geoLocation);
-            return geoLocation;
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
             return null;
-        }
-        finally {
-            concurrentRequests.decrementAndGet();
         }
     }
 
@@ -270,7 +283,9 @@ public class GeoLocationService {
         GeoLocation geoLocation = new GeoLocation();
         geoLocation.setAddress(address);
         geoLocation.setValid(false);
-        geoLocationRepository.saveGeoLocation(geoLocation);
+        if( cacheLocations ) {
+            geoLocationRepository.saveGeoLocation(geoLocation);
+        }
     }
     
     
@@ -306,5 +321,8 @@ public class GeoLocationService {
         Collections.addAll(this.commaBeforeComponents, commaBeforeComponents.split(","));
     }
 
+    public void setCacheLocations(boolean cacheLocations) {
+        this.cacheLocations = cacheLocations;
+    }
 }
 

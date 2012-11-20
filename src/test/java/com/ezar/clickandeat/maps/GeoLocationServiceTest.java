@@ -2,7 +2,9 @@ package com.ezar.clickandeat.maps;
 
 import com.ezar.clickandeat.model.GeoLocation;
 import org.apache.log4j.Logger;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class GeoLocationServiceTest {
     @Test
     public void testLocateValidAddress() throws Exception {
         geoLocationService.setLocale("es_ES");
+        geoLocationService.setCacheLocations(true);
         String address = "Barcelona";
         GeoLocation location = geoLocationService.getLocation(address);
         LOGGER.info("Resolved location: " + location );
@@ -30,12 +33,28 @@ public class GeoLocationServiceTest {
     @Test
     public void testGetDistance() throws Exception {
         geoLocationService.setLocale("en_UK");
+        geoLocationService.setCacheLocations(true);
         GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
         GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
         Double distance = geoLocationService.getDistance(location1.getLocation(), location2.getLocation());
         LOGGER.info("Distance: " + distance);
     }
 
+
+    @Test
+    @Ignore
+    public void testRequestsToHitQueryLimit() throws Exception {
+        int requestCount = 100;
+        geoLocationService.setLocale("en_UK");
+        geoLocationService.setCacheLocations(false);
+        String address = "80 Peel Road E18 2LG";
+        for( int i = 0; i < requestCount; i++ ) {
+            LOGGER.info("Executed geolocation search: " + requestCount);
+            GeoLocation location = geoLocationService.getLocation(address);
+            Assert.assertNotNull(location);
+        }
+
+    }
 
     
 }
