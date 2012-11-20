@@ -18,14 +18,9 @@ public class GeoLocationServiceTest {
     @Autowired
     private GeoLocationService geoLocationService;
 
-    @Before
-    public void setup() throws Exception {
-        geoLocationService.setLocale("es_ES");
-    }
-
-
     @Test
     public void testLocateValidAddress() throws Exception {
+        geoLocationService.setLocale("es_ES");
         String address = "Barcelona";
         GeoLocation location = geoLocationService.getLocation(address);
         LOGGER.info("Resolved location: " + location );
@@ -34,6 +29,7 @@ public class GeoLocationServiceTest {
     
     @Test
     public void testGetDistance() throws Exception {
+        geoLocationService.setLocale("en_UK");
         GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
         GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
         Double distance = geoLocationService.getDistance(location1.getLocation(), location2.getLocation());

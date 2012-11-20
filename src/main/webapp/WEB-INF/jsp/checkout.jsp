@@ -37,7 +37,7 @@
                         <div class="checkout-wrapper">
 
                             <!-- Validation wrapper -->
-                            <div id="validation-error">
+                            <div id="validation-error" style="display:none;">
                                 <div class="validation-message">
                                     <p class="triangle-isosceles left" id="validation-message-wrapper"></p>
                                 </div>

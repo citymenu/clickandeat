@@ -1,10 +1,8 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.OpeningTime;
-import com.ezar.clickandeat.model.OpeningTimes;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.maps.GeoLocationService;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.IEmailService;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -58,6 +56,9 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantValidator restaurantValidator;
+
+    @Autowired
+    private GeoLocationService geoLocationService;
 
     @Autowired
     private IEmailService emailService;
@@ -321,6 +322,33 @@ public class RestaurantController {
             field.set(restaurant,value);
             repository.saveRestaurant(restaurant);
             model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/showLocation.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> showLocation(@RequestParam(value = "address") String address) throws Exception {
+        
+        Map<String,Object> model = new HashMap<String, Object>();
+        try {
+            GeoLocation geoLocation = geoLocationService.getLocation(address);
+            if( geoLocation == null ) {
+                throw new IllegalArgumentException("Could not get location from google for address");
+            }
+            else if( !address.toUpperCase().contains(geoLocation.getLocationComponents().get("postal_code"))) {
+                throw new IllegalArgumentException("Google lookup returned address with postal code: " + geoLocation.getLocationComponents().get("postal_code"));
+            }
+            else {
+                model.put("success",true);
+                model.put("lat",geoLocation.getLocation()[0]);
+                model.put("lng",geoLocation.getLocation()[1]);
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);

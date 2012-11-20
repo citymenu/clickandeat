@@ -51,9 +51,7 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> imp
                 errors.addError("Please ensure a valid postcode is entered");
             }
         }
-            
-            
-        
+
         if( !errors.hasErrors()) {
             GeoLocation addressLocation = locationService.getLocation(address);
             if( addressLocation == null ) {

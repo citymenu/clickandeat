@@ -24,6 +24,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/MyFontsWebfontsKit.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/dialog.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header-admin.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/admin.css" charset="utf-8"/>
 
@@ -40,8 +41,10 @@
 	<script type="text/javascript" src="${resources}/script/admin/extoverrides.js" charset="utf-8"></script>
 	<script type="text/javascript" src="${resources}/script/admin/util.js" charset="utf-8"></script>
 
-    <!-- Messages -->
+    <!-- Scripts -->
     <script type="text/javascript" src="${ctx}/app/script/messages.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/json2.js" charset="utf-8"></script>
+    <script type="text/javascript" src="${resources}/script/tools.js" charset="utf-8"></script>
 
     <!-- Apply fancybox -->
     <script type="text/javascript">
