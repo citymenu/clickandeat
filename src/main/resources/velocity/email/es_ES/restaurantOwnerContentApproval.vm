@@ -16,30 +16,33 @@
                 </tr>
                 <tr valign="top">
                     <td width="550" colspan="3">
-                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Solicitud de aprobaci&#243;n del contenido de la pagina del restaurante</h1>
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Solicitud de aprobaci&#243;n del contenido de tu restaurante</h1>
                     </td>
                 </tr>
                 <tr valign="top">
                     <td width="300">
                         <div style="margin-bottom:15px;">
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                            <p>El contenido de la p&#225;gina de tu restaurante ha sido actualizado, por favor utiliza este <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}">enlace</a>
-                            para ver los cambios y confirma que la informacion en la p&#225;gina es correcta. Presta especial atenci&#243;n a los siguientes elementos:</p>
+                            <p>El contenido de la p&#225;gina de tu restaurante ha sido actualizado. Por favor, utiliza el <a href="${baseUrl}/approval/restaurant/approveContent.html?${restCurl}" style="font-weight:bolder;color: red; ">este enlace</a>
+                            para validar los cambios y confirmar que la informaci&#243;n es correcta. Presta especial atenci&#243;n a los siguiente elementos:</p>
                              <p>
                                <ul>
                                <li>Horarios de apertura</li>
                                <li>Gastos de entrega</li>
-                               <li>Todas las categor&#237;as del menÃº</li>
+                               <li>Todas las categor&#237;as del menu</li>
                                <li>Todos los precios</li>
                                <li>Ofertas especiales</li>
                                <li>etc.</li>
                                </ul>
                             </p>
-                            <p> Utiliza los botones en la barra de herramientas para aprobar o rechazar el contenido.
-                                No dudes en ponerte en contacto con nosotros si tienes alguna pregunta o el contenido en la p&#225;gina no es correcto.</p>
+                            <p> Utiliza los botones en la barra de herramientas para aprobar o rechazar el contenido, verificar la
+                            llamada o eliminar el pedido de prueba. No dudes en ponerte en contacto con nosotros enviando un mail
+                            a restaurante@llamarycomer.com si tienes alguna pregunta o el contenido en la p&#225;gina no es correcto.
+                            </p>
                             <p>
-                               <b>Hemos retirado tu restaurante de la p&#225;gina de manera temporal. Una vez recibamos la notificaci&#243;n confirmando el contenido,
-                                el restaurante ser&#225; a&#241;adido a la p&#225;gina otra vez.
+                               <b>Tu restaurante est&#225; temporalmente fuera de l&#237;nea en nuestra p&#225;gina web. Una vez
+                               recibamos la confirmaci&#243;n del contenido por tu parte, el restaurante ser&#225; publicado en
+                               nuestra p&#225;gina web.
                                </b>
                              </p>
                              </div>
