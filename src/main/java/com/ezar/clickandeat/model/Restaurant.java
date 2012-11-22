@@ -623,7 +623,7 @@ public class Restaurant extends PersistentObject {
     }
 
     public String getImageName() {
-        return StringUtils.hasText(imageName)? imageName: "default-logo.jsp";
+        return StringUtils.hasText(imageName)? imageName: "default-logo.jpg";
     }
 
     public void setImageName(String imageName) {
