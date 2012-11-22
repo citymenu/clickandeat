@@ -46,7 +46,7 @@
                             <div class="payment-title"><h2><message:message key="payment.payment-details"/></h2></div>
                         </div>
                         <div id="paymentbody">
-                            <iframe class="payment" name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%;"></iframe>
+                            <iframe class="payment" name="paymentForm" src="${ctx}/cardProcessing.html" frameborder="0" border="0" cellspacing="0" style="border-style: none;width: 100%; height: 100%; overflow-x:hidden;"></iframe>
                         </div>
                     </div>
                 </td>

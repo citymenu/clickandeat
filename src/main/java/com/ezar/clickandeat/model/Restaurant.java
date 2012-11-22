@@ -710,6 +710,20 @@ public class Restaurant extends PersistentObject {
         this.searchRanking = searchRanking;
     }
 
+    public boolean getHasMenuItemIcon() {
+        for( MenuCategory category: menu.getMenuCategories()) {
+            if( StringUtils.hasText(category.getIconClass())) {
+                return true;
+            }
+            for( MenuItem item: category.getMenuItems()) {
+                if( StringUtils.hasText(item.getIconClass())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * @param text
      */

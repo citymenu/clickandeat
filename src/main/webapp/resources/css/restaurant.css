@@ -334,3 +334,50 @@ a.restaurant-text {
     width: 450px;
     height: 400px;
 }
+
+.spicy1 {
+    padding-right: 24px;
+    background: transparent url(../images/spicy1.png) right center no-repeat;
+}
+
+.spicy2 {
+    padding-right: 42px;
+    background: transparent url(../images/spicy2.png) right center no-repeat;
+}
+
+.spicy3 {
+    padding-right: 60px;
+    background: transparent url(../images/spicy3.png) right center no-repeat;
+}
+
+.vegetarian {
+    padding-right: 24px;
+    background: transparent url(../images/vegetarian.png) right center no-repeat;
+}
+
+.contains-nuts {
+    padding-right: 24px;
+    background: transparent url(../images/contains-nuts.png) right center no-repeat;
+}
+
+.restaurant-label-guide {
+    font: 12px/14px prenton-n4,prenton;
+    padding-bottom:10px;
+    text-align:right;
+    color:#444444;
+}
+
+.spicy-left {
+    padding-left: 28px;
+    background: transparent url(../images/spicy1.png) 8px center no-repeat;
+}
+
+.vegetarian-left {
+    padding-left: 28px;
+    background: transparent url(../images/vegetarian.png) 8px center no-repeat;
+}
+
+.contains-nuts-left {
+    padding-left: 28px;
+    background: transparent url(../images/contains-nuts.png) 8px center no-repeat;
+}

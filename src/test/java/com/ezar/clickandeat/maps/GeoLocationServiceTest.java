@@ -20,6 +20,7 @@ public class GeoLocationServiceTest {
     @Autowired
     private GeoLocationService geoLocationService;
 
+
     @Test
     public void testLocateValidAddress() throws Exception {
         geoLocationService.setLocale("es_ES");

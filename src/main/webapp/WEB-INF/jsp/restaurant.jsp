@@ -149,6 +149,15 @@
                 <!-- Menu -->
                 <td width="580">
                     <div class="menu-center">
+
+                        <c:if test="${restaurant.hasMenuItemIcon == true}">
+                            <div class="restaurant-label-guide">
+                                <span class="spicy-left"><message:message key="restaurant.spicy"/></span>
+                                <span class="vegetarian-left"><message:message key="restaurant.vegetarian"/></span>
+                                <span class="contains-nuts-left"><message:message key="restaurant.contains-nuts"/></span>
+                            </div>
+                        </c:if>
+
                         <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
                         <div class="menu-category-wrapper" id="${menuCategory.categoryId}">
                             <h2><span class="${menuCategory.iconClass}"><util:escape value="${menuCategory.name}"/></span></h2>
