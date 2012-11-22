@@ -152,9 +152,18 @@
 
                         <c:if test="${restaurant.hasMenuItemIcon == true}">
                             <div class="restaurant-label-guide">
-                                <span class="spicy-left"><message:message key="restaurant.spicy"/></span>
-                                <span class="vegetarian-left"><message:message key="restaurant.vegetarian"/></span>
-                                <span class="contains-nuts-left"><message:message key="restaurant.contains-nuts"/></span>
+                                <c:if test="${restaurant.hasSpicyItemIcon == true}">
+                                    <span class="spicy-left"><message:message key="restaurant.spicy"/></span>
+                                </c:if>
+                                <c:if test="${restaurant.hasVegetarianItemIcon == true}">
+                                    <span class="vegetarian-left"><message:message key="restaurant.vegetarian"/></span>
+                                </c:if>
+                                <c:if test="${restaurant.hasContainsNutsItemIcon == true}">
+                                    <span class="contains-nuts-left"><message:message key="restaurant.contains-nuts"/></span>
+                                </c:if>
+                                <c:if test="${restaurant.hasGlutenFreeItemIcon == true}">
+                                    <span class="gluten-free-left"><message:message key="restaurant.gluten-free"/></span>
+                                </c:if>
                             </div>
                         </c:if>
 

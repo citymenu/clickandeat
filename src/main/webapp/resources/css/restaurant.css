@@ -360,6 +360,11 @@ a.restaurant-text {
     background: transparent url(../images/contains-nuts.png) right center no-repeat;
 }
 
+.gluten-free {
+    padding-right: 24px;
+    background: transparent url(../images/gluten-free.png) right center no-repeat;
+}
+
 .restaurant-label-guide {
     font: 12px/14px prenton-n4,prenton;
     padding-bottom:10px;
@@ -380,4 +385,9 @@ a.restaurant-text {
 .contains-nuts-left {
     padding-left: 28px;
     background: transparent url(../images/contains-nuts.png) 8px center no-repeat;
+}
+
+.gluten-free-left {
+    padding-left: 28px;
+    background: transparent url(../images/gluten-free.png) 8px center no-repeat;
 }

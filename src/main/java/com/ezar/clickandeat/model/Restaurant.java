@@ -723,7 +723,44 @@ public class Restaurant extends PersistentObject {
         }
         return false;
     }
+    
+    
+    public boolean getHasSpicyItemIcon() {
+        return getHasIconClass("spicy");
+    }
 
+    public boolean getHasVegetarianItemIcon() {
+        return getHasIconClass("vegetarian");
+    }
+
+    public boolean getHasContainsNutsItemIcon() {
+        return getHasIconClass("contains-nuts");
+    }
+
+    public boolean getHasGlutenFreeItemIcon() {
+        return getHasIconClass("gluten-free");
+    }
+
+
+    /**
+     * @param iconClass
+     * @return
+     */
+    
+    public boolean getHasIconClass(String iconClass) {
+        for( MenuCategory category: menu.getMenuCategories()) {
+            if( category.getIconClass() != null && category.getIconClass().startsWith(iconClass)) {
+                return true;
+            }
+            for( MenuItem item: category.getMenuItems()) {
+                if( item.getIconClass() != null && item.getIconClass().startsWith(iconClass)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
     /**
      * @param text
      */
