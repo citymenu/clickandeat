@@ -48,7 +48,7 @@ public class NotificationService {
         if( notificationOptions.isReceiveSMSNotification()) {
             try {
                 twilioService.sendOrderNotificationSMS(order);
-                orderWorkflowEngine.processAction(order,OrderWorkflowEngine.ACTION_SEND_SMS);
+                order.addOrderUpdate("Sent notification SMS to restaurant");
             }
             catch( Exception ex) {
                 LOGGER.error("Exception sending SMS",ex);
