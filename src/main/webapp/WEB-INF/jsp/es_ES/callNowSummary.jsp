@@ -63,7 +63,7 @@
                                                     <div class="email-entry">
                                                         <input type="text" id="email" style="width:200px; margin-right:10px;"/>
                                                         <a class="call-now-nav-button" id="#register" onclick="register()"><message:message key="button.call-now.send.voucher"/></a>
-                                                        <div class="invalid-email">Please enter a valid email address</div>
+                                                        <div class="invalid-email">Por favor introduce un correo electr&#243;nico v&#225;lido</div>
                                                     </div>
                                                 </div>
                                                 <div id="registered">
