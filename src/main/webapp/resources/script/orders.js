@@ -219,7 +219,7 @@ function doBuildOrder(order,config) {
                 var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'30\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'112\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
                     .format(orderItem.orderItemId,orderItem.quantity,buildDisplay(orderItem),ccy,orderItem.formattedCost);
             } else {
-                var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>{1}{2}</td></tr>'
+                var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>{1} {2}</td></tr>'
                     .format(buildStaticDisplay(orderItem),ccy,orderItem.formattedCost);
             }
             $('#order-item-contents').prepend(row);
@@ -248,7 +248,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{2}{3}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -318,7 +318,7 @@ function doBuildOrder(order,config) {
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
             $('#deliverycheck').append(warning);
          } else if( order.extraSpendNeededForDelivery && order.extraSpendNeededForDelivery > 0 ) {
-            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + getLabel('order.delivery-warning') + '</div></div>' ).format(ccy,order.formattedExtraSpendNeededForDelivery);
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + getLabel('order.delivery-warning') + '</div></div>' ).format(order.formattedExtraSpendNeededForDelivery,ccy);
             $('#deliverycheck').append(warning);
         } else {
             // Show checkout button if enabled
@@ -789,7 +789,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
     // Build the total cost item and quantity
     var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel('order.additional-item-limit-description').format(itemLimit)): '');
-    var itemDefaultCostDescription = (defaultItemCost > 0? ('<div class=\'additional-item-description\'>{0} <b>{1}</b></div>').format(getLabel('order.additional-item-cost-description'), ccy + defaultItemCost.toFixed(2)): '');
+    var itemDefaultCostDescription = (defaultItemCost > 0? ('<div class=\'additional-item-description\'>{0} <b>{1}</b></div>').format(getLabel('order.additional-item-cost-description'), defaultItemCost.toFixed(2) + ' ' + ccy): '');
     var itemDescriptionContainer = '';
     if( itemLimitDescription != '' || itemDefaultCostDescription != '' ) {
         itemDescriptionContainer = ('<div class=\'additional-item-description-wrapper\'>{0}{1}</div>').format(itemLimitDescription,itemDefaultCostDescription);
@@ -797,7 +797,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
     // Build the container for showing the quantity and total cost
     var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
-    var itemTotalField = ('<div class=\'additional-item-total-cost\'>{0}<span id=\'itemcost\'></span></div>').format(ccy);
+    var itemTotalField = ('<div class=\'additional-item-total-cost\'><span id=\'itemcost\'></span> {0}</div>').format(ccy);
     var itemCostContainer = ('<div class=\'additional-item-cost-wrapper\'>{0}{1}</div>').format(itemQuantityField,itemTotalField);
 
     // Build warning div for additional item limit
@@ -826,7 +826,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
 
         var additionalItemTitleDiv = ('<div class=\'additional-item-title\'><input type=\'checkbox\' class=\'itemcheckbox\' id=\'{0}\'/>&nbsp;&nbsp;<span id=\'{1}_span\'>{2}</span></div>')
             .format(additionalItemName,additionalItemName.replace(/\s/g,'_').replace('###','_'), unescapeQuotes(additionalItemName));
-        var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': ccy + additionalItemElements[1]));
+        var additionalItemCostDiv = ('<div class = \'additional-item-cost\'>{0}</div').format((additionalItemCost == 'null'? '': additionalItemElements[1] + ccy));
         additionalItemChoiceContainer += ('<tr valign=\'top\'><td width=\'150\'>{0}</td><td width=\'50\' align=\'right\'>{1}</td></tr>').format(additionalItemTitleDiv,additionalItemCostDiv);
 
     }
