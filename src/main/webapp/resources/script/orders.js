@@ -216,7 +216,7 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'30\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'112\'>{2}</td><td width=\'50\' align=\'right\'>{3}{4}</td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'30\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'112\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
                     .format(orderItem.orderItemId,orderItem.quantity,buildDisplay(orderItem),ccy,orderItem.formattedCost);
             } else {
                 var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>{1}{2}</td></tr>'
@@ -239,7 +239,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{2}{3}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -257,34 +257,34 @@ function doBuildOrder(order,config) {
 
         // If there are any items in the order, show the total order amount
         if( order.orderItemCost && order.orderItemCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{1}{2}</span></td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
+            var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{2} {1}</span></td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
             $('#order-item-contents').append(row);
         };
 
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>-{1}{2}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0}</td><td width=\'50\' align=\'right\'>-{2} {1}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
                 $('#order-item-contents').append(row);
             }
         });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'192\'><tr valign=\'top\'><td width=\'142\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{0}{1}</td></tr>').format(ccy,order.formattedDeliveryCost);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'192\'><tr valign=\'top\'><td width=\'142\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{1} {0}</td></tr>').format(ccy,order.formattedDeliveryCost);
             $('#order-item-contents').append(row);
         }
 
         // Add voucher if applicable
         if( order.voucher != null ) {
             var voucher = order.voucher;
-            var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{2}{3}</td></tr>'
+            var row = '<div class=\'order-item-wrapper\'><table width=\'192\'><tr valign=\'top\'><td width=\'142\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{3} {2}</td></tr>'
                 .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
             $('#order-item-contents').append(row);
         }
 
         // Build total item cost
-        $('#ordertotal').append('<span class=\'order-totalcost\'>{0}{1}</span>'.format(ccy,order.formattedTotalCost));
+        $('#ordertotal').append('<span class=\'order-totalcost\'>{1} {0}</span>'.format(ccy,order.formattedTotalCost));
 
         // Show details of discounts if available and if we are either on a menu page or there are items
         if( advancedDisplay && config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
@@ -1037,7 +1037,7 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
 
     // Build the container for showing the quantity and total cost
     var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
-    var itemTotalField = ('<div class=\'additional-item-total-cost\'>{0}<span id=\'itemcost\'></span></div>').format(ccy);
+    var itemTotalField = ('<div class=\'additional-item-total-cost\'><span id=\'itemcost\'></span> {0}</div>').format(ccy);
     var itemCostContainer = ('<div class=\'additional-item-cost-wrapper\'>{0}{1}</div>').format(itemQuantityField,itemTotalField);
 
     // Build dialog to display items and choices

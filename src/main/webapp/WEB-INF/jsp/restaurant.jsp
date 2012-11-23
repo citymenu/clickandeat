@@ -183,7 +183,7 @@
                                                         <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                     </td>
                                                     <td width="100" align="right">
-                                                        <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItem.formattedCost}</span>
+                                                        <span class="menu-item-cost">${menuItem.formattedCost} <message:message key="config.currency" escape="false"/></span>
                                                         <span class="menu-item-action">
                                                             <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost}, ${menuItem.cost})" class="menuitem-button add-button unselectable"></a>
                                                         </span>
@@ -217,7 +217,7 @@
                                                             <h3 class="menu-item-title"><util:escape value="${menuItemSubType.type}" escapeNewLines="true"/></h3>
                                                         </td>
                                                         <td width="100" align="right">
-                                                            <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemSubType.formattedCost}</span>
+                                                            <span class="menu-item-cost">${menuItemSubType.formattedCost} <message:message key="config.currency" escape="false"/></span>
                                                             <span class="menu-item-action">
                                                                 <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}',null,'<util:escape value="${menuItemSubType.type}" escapeComments="true"/>',${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItem.nullSafeAdditionalItemCost},${menuItemSubType.cost})" class="menuitem-button add-button unselectable"></a>
                                                             </span>
@@ -252,7 +252,7 @@
                                             <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
                                             <td align="right" width="${colwidth}">
                                                 <c:if test="${menuItemTypeCost.cost != null}">
-                                                <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${menuItemTypeCost.formattedCost}</span>
+                                                <span class="menu-item-cost">${menuItemTypeCost.formattedCost}<message:message key="config.currency" escape="false"/></span>
                                                 <span class="menu-item-action">
                                                     <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost},${menuItemTypeCost.cost})" class="menuitem-button add-button unselectable"></a>
                                                 </span>
@@ -289,7 +289,7 @@
                                             <h3 class="menu-item-title"><util:escape value="${specialOffer.title}"/></h3>
                                         </td>
                                         <td width="120" align="right">
-                                            <span class="menu-item-cost"><message:message key="config.currency" escape="false"/>${specialOffer.formattedCost}</span>
+                                            <span class="menu-item-cost">${specialOffer.formattedCost} <message:message key="config.currency" escape="false"/></span>
                                             <span class="menu-item-action">
                                                 <a onclick="checkCanAddSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray},${specialOffer.cost})" class="menuitem-button add-button unselectable">&nbsp;</a>
                                             </span>
