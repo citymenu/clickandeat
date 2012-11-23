@@ -89,13 +89,18 @@
                                                 <div class="opening-details">
                                                     <message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}&nbsp;&nbsp;<a class="restaurant-text" onclick="showAllOpeningTimes()"><message:message key="restaurant.opening-show-all"/></a>
                                                 </div>
-                                                <div class="delivery-details">
                                                     <c:choose>
                                                         <c:when test="${restaurant.collectionOnly}">
-                                                            <message:message key="restaurant.collection-only"/>
+                                                            <div class="delivery-details">
+                                                                <message:message key="restaurant.collection-only"/>
+                                                            </div>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                                            <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
+                                                                <div class="delivery-details">
+                                                                    <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                                                </div>
+                                                            </c:if>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
@@ -252,7 +257,7 @@
                                             <c:forEach var="menuItemTypeCost" items="${menuItem.menuItemTypeCosts}">
                                             <td align="right" width="${colwidth}">
                                                 <c:if test="${menuItemTypeCost.cost != null}">
-                                                <span class="menu-item-cost">${menuItemTypeCost.formattedCost}<message:message key="config.currency" escape="false"/></span>
+                                                <span class="menu-item-cost">${menuItemTypeCost.formattedCost} <message:message key="config.currency" escape="false"/></span>
                                                 <span class="menu-item-action">
                                                     <a onclick="addMultipleToOrder('${restaurant.restaurantId}','${menuItem.itemId}','<util:escape value="${menuItemTypeCost.type}" escapeComments="true"/>',null,${menuItem.additionalItemChoiceArray},${menuItem.nullSafeChoiceLimit},${menuItemTypeCost.nullSafeAdditionalItemCost},${menuItemTypeCost.cost})" class="menuitem-button add-button unselectable"></a>
                                                 </span>

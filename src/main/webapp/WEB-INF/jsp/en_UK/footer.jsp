@@ -41,7 +41,7 @@
                         <h2 class="footer spacer">Contact Us</h2>
                         <div class="footer-list">
                             <p>120 Street Name<br>Barcelona 08009<br>91 665 432</p>
-                            <p><a class="icon-email direct">contact@llamarycomer.com</a></p>
+                            <p><a class="icon-email direct" href="mailto:contact@llamarYcomer.com">contact@llamarycomer.com</a></p>
                         </div>
                     </div>
                 </td>

@@ -200,13 +200,18 @@
                                                             <td width="380" colspan="2">
                                                                 <div class="restaurant-opening-details">
                                                                     <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
-                                                                    <div class="delivery-details">
                                                                         <c:choose>
                                                                             <c:when test="${restaurant.collectionOnly}">
-                                                                                <message:message key="restaurant.collection-only"/>
+                                                                                <div class="delivery-details">
+                                                                                    <message:message key="restaurant.collection-only"/>
+                                                                                </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                                                                <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
+                                                                                    <div class="delivery-details">
+                                                                                        <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
+                                                                                    </div>
+                                                                                </c:if>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </div>
