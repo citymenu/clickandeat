@@ -89,7 +89,7 @@
                                 </div>
 
                                 #if( $order.deliveryCost > 0 )
-                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): &#8364;$numberTool.format("#0.00", $order.deliveryCost)</b></div>
+                                <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;"><b>$stringTool.getMessage("vm-delivery-cost"): $numberTool.format("#0.00", $order.deliveryCost) &#8364;</b></div>
                                 #end
 
                             </div>
@@ -100,7 +100,7 @@
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>Descuentos aplicados al pedido:</div>
                                 #foreach( $discount in $order.orderDiscounts )
                                     #if( $discount.discountType != 'DISCOUNT_FREE_ITEM' )
-                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.title): -&#8364;$numberTool.format("#0.00", $discount.discountAmount)</div>
+                                    <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.escape($discount.title): -$numberTool.format("#0.00", $discount.discountAmount) &#8364;</div>
                                     #end
                                 #end
                             </div>
@@ -108,7 +108,7 @@
                         #end
 
                         <div style="margin-bottom:15px;">
-                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): &#8364;$numberTool.format("#0.00", $order.restaurantCost)</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;"><b>$stringTool.getMessage("vm-total-price"): $numberTool.format("#0.00", $order.restaurantCost) &#8364;</b></div>
                         </div>
 
                         <div style="margin-bottom:15px;">
