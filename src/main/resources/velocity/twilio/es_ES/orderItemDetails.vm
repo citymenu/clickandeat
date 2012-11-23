@@ -55,13 +55,13 @@
         #end
 
         <Say language="es" voice="$stringTool.getMessage('twilio.voice-gender')">
-            Selecciona una opcion y a continuacion pulsa almohadilla.
-            Pulsa zero para rechazar el pedido.
-            Pulsa uno para aceptar el pedido.
-            Pulsa dos para escuchar los detalles del pedido.
-            Pulsa tres para escuchar la direccion de entrega.
-            Pulse cuatro seguido del numero de minutos para aceptar el pedido y especificar un tiempo de entrega.
-            Pulsa cinco para aceptar o rechazar el pedido usando el correo electronico
+            Selecciona una opcion
+            Pulsa zero y almohadilla para rechazar el pedido.
+            Pulsa uno y almohadilla para aceptar el pedido.
+            Pulsa dos y almohadilla para escuchar los detalles del pedido.
+            Pulsa tres y almohadilla para escuchar la direccion de entrega.
+            Pulse cuatro seguido del numero de minutos y almohadilla para aceptar el pedido y especificar un tiempo de entrega.
+            Pulsa cinco y almohadilla para aceptar o rechazar el pedido usando el correo electronico
         </Say>
 
     </Gather>
