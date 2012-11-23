@@ -68,7 +68,7 @@
                         <div style="margin-bottom:15px;">
                             #if( $order.deliveryType == 'DELIVERY' )
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                                <b>Hora de entrega solicitada:</b>
+                                <b>Hora estimada de entrega:</b>
                                 #if($order.expectedDeliveryTime)
                                     $stringTool.formatDate($order.expectedDeliveryTime)
                                     #if(!($order.expectedDeliveryTime.toLocalDate() == $today))
@@ -80,7 +80,7 @@
                             </div>
                             #else
                             <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">
-                                <b>Hora de recogida solicitada:</b>
+                                <b>Hora estimada de recogida:</b>
                                 #if($order.expectedCollectionTime)
                                     $stringTool.formatDate($order.expectedCollectionTime)
                                     #if(!($order.expectedCollectionTime.toLocalDate() == $today))
