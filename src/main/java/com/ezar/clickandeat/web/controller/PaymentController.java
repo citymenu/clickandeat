@@ -193,7 +193,7 @@ public class PaymentController {
 
         if( request.getSession(true).getAttribute("orderid") == null ) {
             model.put("success",false);
-            model.put("message","No order has been created");
+            model.put("message",MessageFactory.getMessage("twilio-test-no-order-message", false));
             return responseEntityUtils.buildResponse(model);
         }
 
@@ -202,7 +202,7 @@ public class PaymentController {
         // Update order delivery details
         order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438",MessageFactory.getMessage("twilio-test-user-email", false)));
         order.setDeliveryAddress(order.getRestaurant().getAddress());
-        order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-additional-instructions",false));
+        //order.setAdditionalInstructions(MessageFactory.getMessage("twilio-test-additional-instructions",false));
         order.setTermsAndConditionsAccepted(true);
         order.setOrderPlacedTime(new DateTime());
         order.addOrderUpdate("Order placed for testing");
