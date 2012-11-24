@@ -53,7 +53,7 @@
 
                                                 <div id="notregistered">
                                                     <div class="order-overview">
-                                                        <h2>¿Y ahora que?</h2>
+                                                        <h2>¿Y ahora qué?</h2>
                                                         <p>El restaurante <util:escape value="${order.restaurant.name}"/> no acepta pagos on-line. Para solicitar tu pedido llama al <util:escape value="${order.restaurant.contactTelephone}"/> ahora mismo.</p>
                                                         <p>En estos momentos <message:message key="title.companyname" escape="false"/> esta ofreciendo una promoci&#243;n cuando completas tu pedido telef&#243;nico.</p>
                                                         <p>Introduce tu correo electr&#243;nico y pincha en el bot&#243;n <message:message key="button.call-now.send.voucher"/>. Una vez hayamos confirmado tu pedido con <util:escape value="${order.restaurant.name}"/> te enviaremos un correo electr&#243;nico con tu cup&#243;n de descuento.</p>
