@@ -39,7 +39,7 @@
                         <h2 class="footer">Información</h2>
                         <div class="footer-list">
                             <p><a class="direct">Ayuda y preguntas frecuentes</a></p>
-                            <p><a class="direct">Términos y Condiciones</a></p>
+                            <p><a class="direct" href="${ctx}/legal.html">Términos y Condiciones</a></p>
                             <p><a class="direct">Dueños de restaurantes</a></p>
                             <p><a class="direct">Revista</a></p>
                         </div>
