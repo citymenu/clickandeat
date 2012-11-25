@@ -6,8 +6,15 @@ import com.ovea.jetty.session.redis.RedisSessionManager;
 import com.ovea.jetty.session.serializer.JdkSerializer;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.SecurityHandler;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.joda.time.DateTimeZone;
 import redis.clients.jedis.JedisPool;
@@ -33,6 +40,21 @@ public class Main {
         Server server = new Server(Integer.valueOf(port));
         server.setStopAtShutdown(true);
         server.setGracefulShutdown(5000);
+
+        // Build security constraint
+        final String realmUrlString = "src/main/webapp/WEB-INF/realm.properties";
+        Constraint constraint = new Constraint();
+        constraint.setName(Constraint.__BASIC_AUTH);
+        constraint.setRoles(new String[]{"admin"});
+        constraint.setAuthenticate(true);
+
+        ConstraintMapping cm = new ConstraintMapping();
+        cm.setConstraint(constraint);
+        cm.setPathSpec("/admin/*");
+
+        ConstraintSecurityHandler sh = new ConstraintSecurityHandler();
+        sh.setLoginService(new HashLoginService("llamarycomer", realmUrlString));
+        sh.setConstraintMappings(new ConstraintMapping[]{cm});
 
         // Set the default time zone for the whole system
         String timezone = System.getenv("timezone");
@@ -74,6 +96,7 @@ public class Main {
         context.setParentLoaderPriority(true);
         context.setDistributable(true);
         context.setSessionHandler(sessionHandler);
+        context.setSecurityHandler(getAuthHandler());
         server.setHandler(context);
 
         // Start the server
@@ -102,5 +125,31 @@ public class Main {
 
         return new JedisPool(config,hostname,port, timeout, password);
     }
+
+    private static SecurityHandler getAuthHandler() {
+
+        HashLoginService l = new HashLoginService();
+        l.putUser("admin", Credential.getCredential("menucha0s"), new String[] {"admin"});
+        l.setName("clickandeat");
+
+        Constraint constraint = new Constraint();
+        constraint.setName(Constraint.__BASIC_AUTH);
+        constraint.setRoles(new String[]{"admin"});
+        constraint.setAuthenticate(true);
+
+        ConstraintMapping cm = new ConstraintMapping();
+        cm.setConstraint(constraint);
+        cm.setPathSpec("/admin/*");
+
+        ConstraintSecurityHandler csh = new ConstraintSecurityHandler();
+        csh.setAuthenticator(new BasicAuthenticator());
+        csh.setRealmName("realm");
+        csh.addConstraintMapping(cm);
+        csh.setLoginService(l);
+
+        return csh;
+
+    }
+
 
 }
