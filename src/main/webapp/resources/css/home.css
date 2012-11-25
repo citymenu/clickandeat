@@ -148,7 +148,7 @@ a.home {
        -moz-border-radius: 20px;
             border-radius: 20px;
     position:relative;
-    min-height:200px;
+    min-height:190px;
 }
 
 .promotions-content {
@@ -156,11 +156,11 @@ a.home {
 }
 
 .image-baby {
-    background:url(../images/baby-butler.png) 15px 15px no-repeat #FFFFDD;
+    background:url(../images/baby-butler.png) 15px 15px no-repeat #FFFFE3;
 }
 
 .image-ham {
-    background:url(../images/ham.png) 15px 15px no-repeat #FFFFDD;
+    background:url(../images/ham.png) 15px 15px no-repeat #FFFFE3;
 }
 
 .promotions-content h2 {
@@ -170,7 +170,7 @@ a.home {
 }
 
 .promotions-text {
-    font:400 16px/18px prenton "myriad-pro-n4", "myriad-pro";
+    font:400 15px/18px "prenton-n4", "prenton";
     color:#666666;
 }
 
