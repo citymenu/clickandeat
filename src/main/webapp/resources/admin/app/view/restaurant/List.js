@@ -35,6 +35,9 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'Recommended', dataIndex:'recommended', renderer:booleanToString, type:'boolean',flex:.1},
             {header:'List on site', dataIndex:'listOnSite', renderer:booleanToString, flex:.1},
             {header:'Search ranking', dataIndex:'searchRanking', flex:.1},
+            {header:'Phone orders only', dataIndex:'phoneOrdersOnly', renderer:booleanToString, type:'boolean',flex:.1},
+            {header:'In test mode', dataIndex:'testMode', renderer:booleanToString, type:'boolean',flex:.1},
+            {header:'Receive Call', dataIndex:'testMode', renderer:booleanToString, type:'boolean',flex:.1},
             {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Last updated', dataIndex:'lastUpdated',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
         ];
