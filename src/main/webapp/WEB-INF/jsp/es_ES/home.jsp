@@ -41,6 +41,7 @@
             </div>
         </div>
 
+        <!--
         <div class="promotions">
             <div class="promotions-box box-left image-baby">
                 <div class="promotions-content">
@@ -68,6 +69,7 @@
                 </div>
             </div>
         </div>
+        -->
 
         <div class="box-large-middle">
             <div class="caption">La manera más cómoda de pedir comida a domicilio</div>
