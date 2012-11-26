@@ -41,6 +41,34 @@
             </div>
         </div>
 
+        <div class="promotions">
+            <div class="promotions-box box-left image-baby">
+                <div class="promotions-content">
+                    <div style="padding-left:135px;">
+                        <h2>Welcome to LlamarYComer</h2>
+                        <div class="promotions-text">
+                            Lorem ipsum dolors sit amet.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="promotions-box box-right image-ham">
+                <div class="promotions-content">
+                    <div style="padding-left:135px;">
+                        <h2>Order now to enter our raffle</h2>
+                        <div class="promotions-text" style="padding-bottom:12px;">
+                            SORTEAMOS UN JAMÓN IBÉRICO SELECCÓN MONTESANO
+                            DE 6,5 KILOS CADA 100 PEDIDOS QUE SE HAGAN ON LINE
+                        </div>
+                        <div class="promotions-text">
+                            POR CADA PEDIDO QUE HAGAS EN NUESTRA WEB
+                            TIENES UN 1% DE POSIBILIDADES DE QUE TE TOQUE A TI!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="box-large-middle">
             <div class="caption">La manera más cómoda de pedir comida a domicilio</div>
             <div class="help">

@@ -34,7 +34,7 @@
                         <h2 class="footer">About Us</h2>
                         <div class="footer-list">
                             <p><a class="direct">Help/FAQ</a></p>
-                            <p><a class="direct">Terms &amp; conditions</a></p>
+                            <p><a class="direct" href="${ctx}/legal.html">Terms &amp; conditions</a></p>
                             <p><a class="direct">Restaurant owners</a></p>
                             <p><a class="direct">Magazine</a></p>
                         </div>

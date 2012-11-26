@@ -32,6 +32,16 @@ public class PageController {
         return MessageFactory.getLocaleString() + "/termsAndConditions";
     }
 
+    @RequestMapping(value="/legal.html", method = RequestMethod.GET )
+    public String legal() {
+        return MessageFactory.getLocaleString() + "/legal";
+    }
+
+
+    @RequestMapping(value="/dataConfidentiality.html", method = RequestMethod.GET )
+    public String dataConfidentiality() {
+        return MessageFactory.getLocaleString() + "/dataConfidentiality";
+    }
 
     @RequestMapping(value="/admin/dashboard.html", method = RequestMethod.GET)
     public String dashboard() {

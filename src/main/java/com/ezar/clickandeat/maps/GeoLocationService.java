@@ -5,25 +5,26 @@ import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.repository.GeoLocationRepository;
 import flexjson.JSONDeserializer;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import sun.misc.BASE64Encoder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component(value = "locationService")
-public class GeoLocationService {
+public class GeoLocationService  {
 
     private static final Logger LOGGER = Logger.getLogger(GeoLocationService.class);
 
@@ -105,11 +106,15 @@ public class GeoLocationService {
                         // Ignore on purpose
                     }
                 }
-                
 
                 URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
+                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy-23-21-47-211.proximo.io", 80));
+                String auth = new BASE64Encoder().encode("proxy:5bcb3356fcea-4d4a-b708-6bde3d886fa4".getBytes());
                 LOGGER.debug("Constructed url: " + url);
-                URLConnection conn = url.openConnection();
+                URLConnection conn = url.openConnection(proxy);
+                conn.setRequestProperty("Proxy-Connection","Keep-Alive");
+                conn.setRequestProperty("Proxy-Authorization",auth);
+
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
                 Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
                 String status = (String)json.get("status");

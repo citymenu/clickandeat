@@ -32,9 +32,10 @@ public class GeoLocationServiceTest {
     
     
     @Test
+    @Ignore
     public void testGetDistance() throws Exception {
         geoLocationService.setLocale("en_UK");
-        geoLocationService.setCacheLocations(true);
+        geoLocationService.setCacheLocations(false);
         GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
         GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
         Double distance = geoLocationService.getDistance(location1.getLocation(), location2.getLocation());
