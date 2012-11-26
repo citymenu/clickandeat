@@ -60,9 +60,15 @@ public class AutoCancelledHandler implements IWorkflowHandler {
 
         try {
             if( Order.PAYMENT_PRE_AUTHORISED.equals(order.getTransactionStatus()) || Order.PAYMENT_CAPTURED.equals(order.getTransactionStatus())) {
-                String transactionType = order.getTransactionStatus().equals(Order.PAYMENT_PRE_AUTHORISED)? PaymentService.REVERSE: PaymentService.REFUND;
-                paymentService.processTransactionRequest(order,transactionType);
-                order.addOrderUpdate("Refunded customer credit card");
+                //If the order is a test order we don't call the payment gateway
+                if(order.getTestOrder()){
+                    // If it is a test order only enter an Order update
+                    order.addOrderUpdate("Test order. No real refund of customer credit card payment");
+                }else{
+                    String transactionType = order.getTransactionStatus().equals(Order.PAYMENT_PRE_AUTHORISED)? PaymentService.REVERSE: PaymentService.REFUND;
+                    paymentService.processTransactionRequest(order,transactionType);
+                    order.addOrderUpdate("Refunded customer credit card");
+                }
                 order.setTransactionStatus(Order.PAYMENT_REFUNDED);
             }
         }

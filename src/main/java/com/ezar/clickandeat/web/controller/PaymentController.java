@@ -199,6 +199,9 @@ public class PaymentController {
 
         Order order = requestHelper.getOrderFromSession(request);
 
+        // Flag the order as a test order
+        order.setTestOrder(true);
+
         // Update order delivery details
         order.setCustomer(new Person( MessageFactory.getMessage("twilio-test-user-name", false),"","6987857438",MessageFactory.getMessage("twilio-test-user-email", false)));
         order.setDeliveryAddress(order.getRestaurant().getAddress());

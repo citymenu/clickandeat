@@ -6,7 +6,6 @@ import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
-import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +62,14 @@ public class RestaurantAcceptsHandler implements IWorkflowHandler {
         }
 
         try {
-            paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
-            order.addOrderUpdate("Captured credit card payment");
+            //If the order is a test order we don't call the payment gateway
+            if(order.getTestOrder()){
+                // If it is a test order only enter an Order update
+                order.addOrderUpdate("Test order. No real capture of credit card payment");
+            }else{
+                paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
+                order.addOrderUpdate("Captured credit card payment");
+            }
             order.setTransactionStatus(Order.PAYMENT_CAPTURED);
         }
         catch( Exception ex ) {

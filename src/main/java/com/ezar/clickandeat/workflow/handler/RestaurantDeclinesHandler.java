@@ -3,13 +3,11 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
 import com.ezar.clickandeat.payment.PaymentService;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
-import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +69,14 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
         restaurantRepository.saveRestaurant(restaurant);
 
         try {
-            paymentService.processTransactionRequest(order,PaymentService.REVERSE);
-            order.addOrderUpdate("Refunded customer credit card");
+            //If the order is a test order we don't call the payment gateway
+            if(order.getTestOrder()){
+                // If it is a test order only enter an Order update
+                order.addOrderUpdate("Test order. No real refund of customer credit card");
+            }else{
+                paymentService.processTransactionRequest(order,PaymentService.REVERSE);
+                order.addOrderUpdate("Refunded customer credit card");
+            }
             order.setTransactionStatus(Order.PAYMENT_REFUNDED);
         }
         catch( Exception ex ) {
