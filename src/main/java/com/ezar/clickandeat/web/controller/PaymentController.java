@@ -209,8 +209,6 @@ public class PaymentController {
         order.setTermsAndConditionsAccepted(true);
         order.setOrderPlacedTime(new DateTime());
         order.addOrderUpdate("Order placed for testing");
-        //Save here so that we can use the field in the handlers
-        orderRepository.saveOrder(order);
 
         /* Restaurant is in test mode, skip card payment
         order.setTransactionId("DUMMY");
@@ -253,7 +251,6 @@ public class PaymentController {
         session.removeAttribute("cancheckout");
 
         // Flag the order as a test order
-        order.setTestOrder(true);
         orderRepository.saveOrder(order);
 
         return responseEntityUtils.buildResponse(model);
