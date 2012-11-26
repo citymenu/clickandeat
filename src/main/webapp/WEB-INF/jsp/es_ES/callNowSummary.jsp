@@ -59,6 +59,12 @@
                                                         <p>Introduce tu correo electr&#243;nico y pincha en el bot&#243;n <message:message key="button.call-now.send.voucher"/>. Una vez hayamos confirmado tu pedido con <util:escape value="${order.restaurant.name}"/> te enviaremos un correo electr&#243;nico con tu cup&#243;n de descuento.</p>
                                                         <p>No te olvides que para recibir tu cup&#243;n de descuento debes mencionar el nombre <message:message key="title.companyname" escape="false"/> y el n&#250;mero de pedido cuando hables con <util:escape value="${order.restaurant.name}"/>.<p/>.
                                                     </div>
+                                                    <div class="order-overview">
+                                                        <h2 >¡Promoción de lanzamiento!</h2>
+                                                        <p>Acuérdate, sorteamos un Jamón Ibérico Selección Montesano de 6,5 kilos cada 100 pedidos on-line</p>
+                                                        <p>Por cada pedido que hagas en nuestra web tienes un 1% de posibilidades de que te toque a ti!</p>
+                                                        <p>No te olvides de introducir tu dirección de correo electrónico abajo para aprovecharte de esta promoción.</p>
+                                                    </div>
 
                                                     <div class="email-entry">
                                                         <input type="text" id="email" style="width:200px; margin-right:10px;"/>
