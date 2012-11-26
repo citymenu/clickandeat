@@ -141,22 +141,20 @@ a.home {
 }
 
 .promotions-box {
-    width:490px;
-    background-color:#FFFFCC;
     border:2px solid #DDDDDD;
     -webkit-border-radius: 20px;
        -moz-border-radius: 20px;
             border-radius: 20px;
     position:relative;
-    min-height:190px;
+    min-height:150px;
 }
 
 .promotions-content {
     padding:15px;
 }
 
-.image-baby {
-    background:url(../images/baby-butler.png) 15px 15px no-repeat #FFFFE3;
+.image-magazine {
+    background:url(../images/magazine.png) 15px 47px no-repeat #FFFFE3;
 }
 
 .image-ham {
@@ -171,14 +169,17 @@ a.home {
 
 .promotions-text {
     font:400 15px/18px "prenton-n4", "prenton";
-    color:#666666;
+    color:#837954;
+    padding-bottom:12px;
 }
 
 .box-left {
+    width:640px;
     float:left;
 }
 
 .box-right {
+    width:340px;
     float:right;
 }
 

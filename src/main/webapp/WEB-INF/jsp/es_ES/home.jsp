@@ -41,35 +41,36 @@
             </div>
         </div>
 
-        <!--
         <div class="promotions">
-            <div class="promotions-box box-left image-baby">
+            <div class="promotions-box box-left image-ham">
                 <div class="promotions-content">
-                    <div style="padding-left:135px;">
-                        <h2>Welcome to LlamarYComer</h2>
+                    <div style="padding-left:118px;">
+                        <h2>Pide ahora y participa en el sorteo</h2>
                         <div class="promotions-text">
-                            Lorem ipsum dolors sit amet.
+                            Sorteamos un jamón ibérico seleccón montesano
+                            de 6,5 kilos cada 100 pedidos que se hagan on line.
+                        </div>
+                        <div class="promotions-text">
+                            Por cada pedido que hagas en nuestra web
+                            tienes us 1% de posibilidades de que te toque a ti!
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="promotions-box box-right image-ham">
+            <div class="promotions-box box-right image-magazine">
                 <div class="promotions-content">
-                    <div style="padding-left:135px;">
-                        <h2>Order now to enter our raffle</h2>
-                        <div class="promotions-text" style="padding-bottom:12px;">
-                            SORTEAMOS UN JAMÓN IBÉRICO SELECCÓN MONTESANO
-                            DE 6,5 KILOS CADA 100 PEDIDOS QUE SE HAGAN ON LINE
+                    <div>
+                        <h2>Dueños de restaurantes</h2>
+                        <div class="promotions-text" style="padding-left:73px;">
+                            Si tienes un restaurante, ahora puedes estar con nostros y aparecer en nuestra revista.
                         </div>
-                        <div class="promotions-text">
-                            POR CADA PEDIDO QUE HAGAS EN NUESTRA WEB
-                            TIENES UN 1% DE POSIBILIDADES DE QUE TE TOQUE A TI!
+                        <div class="promotions-text" style="padding-left:73px;">
+                            <a class="icon-email direct" href="mailto:marketing@llamarycomer.com">marketing@llamarYcomer.com</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        -->
 
         <div class="box-large-middle">
             <div class="caption">La manera más cómoda de pedir comida a domicilio</div>
