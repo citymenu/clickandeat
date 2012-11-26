@@ -209,6 +209,8 @@ public class PaymentController {
         order.setTermsAndConditionsAccepted(true);
         order.setOrderPlacedTime(new DateTime());
         order.addOrderUpdate("Order placed for testing");
+        //Save here so that we can use the field in the handlers
+        orderRepository.saveOrder(order);
 
         /* Restaurant is in test mode, skip card payment
         order.setTransactionId("DUMMY");
