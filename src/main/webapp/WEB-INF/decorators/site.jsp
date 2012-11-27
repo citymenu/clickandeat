@@ -77,8 +77,7 @@
 <!-- Google Tracking -->
 <script type="text/javascript">
 var _gaq = _gaq || [];
-//_gaq.push(['_setAccount', 'UA-34980612-1']);
-_gaq.push(['_setAccount', 'UA-36045848-1']);
+_gaq.push(['_setAccount', 'UA-34980612-1']);
 _gaq.push(['_trackPageview']);
 
 (function() {
@@ -89,6 +88,7 @@ _gaq.push(['_trackPageview']);
     s.parentNode.insertBefore(ga, s);
 })();
 </script>
+
 
 </body>
 
