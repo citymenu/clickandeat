@@ -22,11 +22,10 @@ Ext.define('AD.model.Restaurant', {
         {name:'lastUpdated', type:'number',convert: buildDate},
         {name:'searchRanking', type:'int'},
         {name:'restaurantUpdates', type:'auto'}
-    ]
-    ,
-        hasMany:{
-            model:'AD.model.NotificationOptions',
-            name:'notificationOptions'
-        }
+    ],
+    hasMany:{
+        model:'AD.model.NotificationOptions',
+        name:'notificationOptions'
+    }
 });
 

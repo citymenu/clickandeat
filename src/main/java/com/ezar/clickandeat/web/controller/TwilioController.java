@@ -235,7 +235,7 @@ public class TwilioController implements InitializingBean {
     @RequestMapping(value= TwilioServiceImpl.ORDER_NOTIFICATION_CALL_STATUS_CALLBACK_URL, method = RequestMethod.POST )
     public void orderCallStatusCallback(@RequestParam(value = "orderId", required = true) String orderId,
                                             @RequestParam(value = "authKey", required = true) String authKey,
-                                            HttpServletResponse response) throws Exception {
+                                            HttpServletResponse response, HttpServletRequest request) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Received status callback for order call for order id: " + orderId);
@@ -243,6 +243,23 @@ public class TwilioController implements InitializingBean {
 
         // Check authentication key passed
         checkAuthKey(authKey, response);
+
+        // Get order from the request
+        Order order = getOrder(orderId,response);
+
+        // Get call status and duration
+        String callStatus = request.getParameter("CallStatus");
+        String callDurationParameter = request.getParameter("CallDuration");
+        Integer callDuration = StringUtils.hasText(callDurationParameter)? Integer.valueOf(callDurationParameter): 0;
+
+        // Mark call answered or unanswered
+        if( !callStatus.equals("completed") || callDuration == 0 ) {
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
+        }
+        else {
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_ANSWERED);
+        }
+
         response.sendError(HttpServletResponse.SC_OK);
     }
 

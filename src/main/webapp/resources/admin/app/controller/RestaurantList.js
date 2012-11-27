@@ -1,7 +1,7 @@
 Ext.define('AD.controller.RestaurantList', {
     extend: 'Ext.app.Controller',
     stores:['Restaurants'],
-    models: ['Restaurant'],
+    models: ['Restaurant','NotificationOptions'],
     views:[
     	'restaurant.List'
     ],

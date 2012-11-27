@@ -32,11 +32,13 @@ public class GeoLocationService  {
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final long CONCURRENT_WAIT_INTERVAL = 1000;
+    private static final long CONCURRENT_WAIT_INTERVAL = 250;
     
     @Autowired
     private GeoLocationRepository geoLocationRepository;
 
+    private String proxyUrl;
+    
     private String locale;
     
     private String country;
@@ -108,12 +110,9 @@ public class GeoLocationService  {
                 }
 
                 URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
-                Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("proxy-23-21-47-211.proximo.io", 80));
-                String auth = new BASE64Encoder().encode("proxy:5bcb3356fcea-4d4a-b708-6bde3d886fa4".getBytes());
+                Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(proxyUrl, 1080));
                 LOGGER.debug("Constructed url: " + url);
                 URLConnection conn = url.openConnection(proxy);
-                conn.setRequestProperty("Proxy-Connection","Keep-Alive");
-                conn.setRequestProperty("Proxy-Authorization",auth);
 
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
                 Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
@@ -292,8 +291,14 @@ public class GeoLocationService  {
             geoLocationRepository.saveGeoLocation(geoLocation);
         }
     }
-    
-    
+
+
+    @Required
+    @Value(value="${location.proxyUrl}")
+    public void setProxyUrl(String proxyUrl) {
+        this.proxyUrl = proxyUrl;
+    }
+
 
     @Required
     @Value(value="${locale}")

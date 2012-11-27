@@ -27,6 +27,23 @@ function booleanToString(val) {
     return val && val == true? 'Y':'N';
 }
 
+function renderNotificationCall(value, metaData, record) {
+    var associatedData = record.getAssociatedData();
+    var notificationOptions = associatedData.notificationOptions[0];
+    return booleanToString(notificationOptions.receiveNotificationCall);
+}
+
+function renderSMSNotification(value, metaData, record) {
+    var associatedData = record.getAssociatedData();
+    var notificationOptions = associatedData.notificationOptions[0];
+    return booleanToString(notificationOptions.receiveSMSNotification);
+}
+
+function renderNotificationCall(value, metaData, record) {
+    var associatedData = record.getAssociatedData();
+    var notificationOptions = associatedData.notificationOptions[0];
+    return booleanToString(notificationOptions.receiveNotificationCall);
+}
 
 /* Converts a newline delimited string into an array */
 function delimitedStringToArray(str,delim) {

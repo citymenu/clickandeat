@@ -11,7 +11,6 @@ Ext.define('AD.model.NotificationOptions', {
         {name:'notificationSMSNumber', type:'string'},
         {name:'notificationEmailAddress', type:'string'},
         {name:'printerEmailAddress', type:'string'}
-    ],
-    belongsTo: 'AD.model.Restaurant'
+    ]
 });
 

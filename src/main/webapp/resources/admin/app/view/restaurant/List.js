@@ -37,20 +37,15 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'Search ranking', dataIndex:'searchRanking', flex:.1},
             {header:'Phone orders only', dataIndex:'phoneOrdersOnly', renderer:booleanToString, type:'boolean',flex:.1},
             {header:'In test mode', dataIndex:'testMode', renderer:booleanToString, type:'boolean',flex:.1},
-            {header:'Receive Call', dataIndex:'notificationOptions', renderer:booleanToString, type:'boolean',flex:.1},
-            {header:'Notification Phone',
-                renderer:function(value, metadata, record, rowIndex, colIndex, store, view){
-                                 alert('got here value'+JSON.stringify(record));
-                               return record.get('notificationOptions').get('notificationPhoneNumber');
-                        },
-                flex:.1},
+            {header:'Receive Call', dataIndex:'notificationOptions.receiveNotificationCall', renderer:renderNotificationCall, type:'boolean',flex:.1},
+            {header:'Receive SMS', dataIndex:'notificationOptions.receiveSMSNotification', renderer:renderSMSNotification, type:'boolean',flex:.1},
             {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Last updated', dataIndex:'lastUpdated',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
         ];
 
         this.callParent(arguments);
     },
-    
+
     getSelectedRecord: function() {
     	if(this.getSelectionModel().hasSelection()) {
     		return this.getSelectionModel().getLastSelected();
