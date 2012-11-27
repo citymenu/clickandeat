@@ -5,7 +5,7 @@ Ext.define('AD.view.restaurant.List' ,{
     id:'restaurantlist',
     layout:'fit',
     loadMask:true,
-    
+
     dockedItems:[{
     	xtype:'toolbar',
     	dock:'top',
@@ -37,7 +37,13 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'Search ranking', dataIndex:'searchRanking', flex:.1},
             {header:'Phone orders only', dataIndex:'phoneOrdersOnly', renderer:booleanToString, type:'boolean',flex:.1},
             {header:'In test mode', dataIndex:'testMode', renderer:booleanToString, type:'boolean',flex:.1},
-            {header:'Receive Call', dataIndex:'testMode', renderer:booleanToString, type:'boolean',flex:.1},
+            {header:'Receive Call', dataIndex:'notificationOptions', renderer:booleanToString, type:'boolean',flex:.1},
+            {header:'Notification Phone',
+                renderer:function(value, metadata, record, rowIndex, colIndex, store, view){
+                                 alert('got here value'+JSON.stringify(record));
+                               return record.get('notificationOptions').get('notificationPhoneNumber');
+                        },
+                flex:.1},
             {header:'Created', dataIndex:'created',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1},
             {header:'Last updated', dataIndex:'lastUpdated',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1}
         ];
@@ -54,3 +60,4 @@ Ext.define('AD.view.restaurant.List' ,{
     	}
     }
 });
+
