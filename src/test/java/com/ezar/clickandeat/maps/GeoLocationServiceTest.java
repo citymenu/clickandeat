@@ -44,7 +44,7 @@ public class GeoLocationServiceTest {
 
 
     @Test
-    //@Ignore
+    @Ignore
     public void testRequestsToHitQueryLimit() throws Exception {
         int requestCount = 100;
         geoLocationService.setLocale("en_UK");
