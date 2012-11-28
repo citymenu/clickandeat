@@ -45,6 +45,11 @@ function renderNotificationCall(value, metaData, record) {
     return booleanToString(notificationOptions.receiveNotificationCall);
 }
 
+function renderOrderId(value, metaData, record) {
+    var order = record.get('order');
+    return order? order.orderId: '';
+}
+
 /* Converts a newline delimited string into an array */
 function delimitedStringToArray(str,delim) {
     var arr = [];

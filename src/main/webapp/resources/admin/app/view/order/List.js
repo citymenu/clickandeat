@@ -92,6 +92,12 @@ Ext.define('AD.view.order.List' ,{
                 handler:function() {
                     Ext.getCmp('orderlist').filters.clearFilters();
                 }
+            },'-',{
+                text:'Download to Excel',
+                icon:'../resources/images/icons-shadowless/report-excel.png',
+                handler:function(){
+                    ctrl.downloadToExcel();
+                }
             },'->',{
                 width:300,
                 fieldLabel:'Search by OrderId',

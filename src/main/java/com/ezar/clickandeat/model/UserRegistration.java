@@ -19,6 +19,7 @@ public class UserRegistration extends PersistentObject {
     private DateTime created;
     
     public UserRegistration() {
+        created = new DateTime();
     }
 
     public String getEmailAddress() {
