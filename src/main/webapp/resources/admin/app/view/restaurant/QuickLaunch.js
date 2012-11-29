@@ -11,7 +11,6 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
     collapsed:true,
     resizable:true,
     stateful:false,
-    resizeHandles:'e',
 
     viewConfig: {
         loadMask: false
