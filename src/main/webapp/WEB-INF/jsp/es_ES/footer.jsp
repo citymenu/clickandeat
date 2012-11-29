@@ -43,11 +43,13 @@
                             <p><a class="direct" href="${ctx}/resources/docs/promotions/es_ES/bases-legales-sorteo-jamon.pdf">Bases Legales: Sorteo de un jamón</a></p>
                             <p><a class="direct">Dueños de restaurantes</a></p>
                         </div>
+
+
                         <h2 class="footer-spacer">Revista - Barcelona</h2>
                         <div class="footer-list">
                             <p><a class="direct" href="${ctx}/resources/docs/magazine/es_ES/BCN_Zona1_num01.pdf">Zona1 - numero 1</a></p>
                             <p><a class="direct" href="${ctx}/resources/docs/magazine/es_ES/BCN_Zona2_num01.pdf">Zona2 - numero 1</a></p>
-                            <p><a class="direct">Revista</a></p>
+
                         </div>
 
                         <h2 class="footer spacer">Contáctanos</h2>
