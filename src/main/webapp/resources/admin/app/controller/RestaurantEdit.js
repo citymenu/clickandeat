@@ -23,7 +23,7 @@ var specialOfferItemEditForm;
 
 Ext.define('AD.controller.RestaurantEdit', {
     extend: 'Ext.app.Controller',
-    stores:['Restaurants','MenuCategories','MenuItems','Discounts','SpecialOffers','SpecialOfferItems','RestaurantUpdates'],
+    stores:['Restaurants','MenuCategories','MenuItems','Discounts','SpecialOffers','SpecialOfferItems','RestaurantUpdates','RestaurantLinks'],
     models: [
         'Restaurant',
         'Person',
@@ -48,8 +48,8 @@ Ext.define('AD.controller.RestaurantEdit', {
     	'restaurant.Menu',
     	'restaurant.Discounts',
     	'restaurant.SpecialOffers',
-    	'restaurant.RestaurantUpdates'
-
+    	'restaurant.RestaurantUpdates',
+    	'restaurant.QuickLaunch'
     ],
 
     refs: [{
@@ -91,12 +91,19 @@ Ext.define('AD.controller.RestaurantEdit', {
     },{
         ref:'restaurantUpdatesGrid',
         selector:'#restaurantupdatesgrid'
+    },{
+         ref:'restaurantQuickLaunch',
+         selector:'#restaurantquicklaunch'
     }],
 
 	init: function() {
 
         // Set up event handlers
         this.control({
+
+		    'restaurantquicklaunch': {
+                itemdblclick:this.onGridDblClick
+            },
 
             'restaurantedit button[action=close]': {
                 click:this.close
@@ -107,6 +114,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                     this.saveRestaurant(null,null);
                 }
             },
+
             'restaurantedit button[action=sendForOwnerApproval]': {
                 click: this.sendForOwnerApproval
             },
@@ -269,6 +277,11 @@ Ext.define('AD.controller.RestaurantEdit', {
         this.initializeRestaurant(restaurantObj);
 
     },
+
+	onGridDblClick: function(view,record,item,index,eventObj,options) {
+        var restaurantId = record.get('restaurantId');
+        location.href = ctx + '/admin/restaurants/edit.html?restaurantId=' + restaurantId;
+	},
 
 	close: function(button) {
 	    location.href = ctx + '/admin/restaurants.html';

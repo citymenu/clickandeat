@@ -212,7 +212,15 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return restaurant;
     }
 
-    
+
+    @Override
+    public List<Restaurant> quickLaunch() {
+        Query query = new Query();
+        query.fields().include("restaurantId").include("name");
+        return operations.find(query, Restaurant.class);
+    }
+
+
     @Override
     @SuppressWarnings("unchecked")
     public void deleteRestaurant(Restaurant restaurant) {

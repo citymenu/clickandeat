@@ -4,6 +4,7 @@ import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.util.PhoneNumberUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -70,6 +71,31 @@ public class RestaurantValidator extends AbstractObjectValidator<Restaurant> imp
                 }
             }
         }
+
+        if( !errors.hasErrors()) {
+            if( StringUtils.hasText(restaurant.getContactTelephone())) {
+                if(PhoneNumberUtils.isInternationalNumber(restaurant.getContactTelephone())) {
+                    errors.addError("The contact phone number should not start with the international prefix");
+                }
+            }
+        }
+
+        if( !errors.hasErrors()) {
+            if( StringUtils.hasText(restaurant.getNotificationOptions().getNotificationPhoneNumber())) {
+                if(!PhoneNumberUtils.isInternationalNumber(restaurant.getNotificationOptions().getNotificationPhoneNumber())) {
+                    errors.addError("The notification phone number must start with the international prefix");
+                }
+            }
+        }
+
+        if( !errors.hasErrors()) {
+            if( StringUtils.hasText(restaurant.getNotificationOptions().getNotificationSMSNumber())) {
+                if(!PhoneNumberUtils.isInternationalNumber(restaurant.getNotificationOptions().getNotificationSMSNumber())) {
+                    errors.addError("The notification SMS number must start with the international prefix");
+                }
+            }
+        }
+
     }
 
 

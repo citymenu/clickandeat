@@ -76,4 +76,10 @@ public class PhoneNumberUtils {
         return internationalNumber;
     }
 
+    
+    public static boolean isInternationalNumber(String number) {
+        String locale = MessageFactory.getLocaleString();
+        String prefix = internationalNumberPrefixMap.get(locale);
+        return number.startsWith(prefix);
+    }
 }

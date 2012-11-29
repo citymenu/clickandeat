@@ -41,6 +41,10 @@ function onRestaurantLoaded() {
                     region:'center',
                     xtype:'restaurantedit',
                     frame:true
+                },{
+                    region:'west',
+                    xtype:'restaurantquicklaunch',
+                    frame:false
                 }]
             });
         }

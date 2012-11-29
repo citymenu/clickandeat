@@ -24,6 +24,8 @@ public interface RestaurantRepositoryCustom {
 
     List<Restaurant> getPage(Pageable pageable);
 
+    List<Restaurant> quickLaunch();
+
     long countActive();
 
     Pair<List<Restaurant>,Map<String,Integer>> search(Search search);

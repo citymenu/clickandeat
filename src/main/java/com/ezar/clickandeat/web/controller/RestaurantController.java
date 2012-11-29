@@ -231,6 +231,18 @@ public class RestaurantController {
     }
 
 
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/quickLaunch.ajax", method = RequestMethod.GET )
+    public ResponseEntity<byte[]> quickLaunch() throws Exception {
+        List<Restaurant> restaurants = repository.quickLaunch();
+        Map<String,Object> model = new HashMap<String,Object>();
+        model.put("restaurants",restaurants);
+        model.put("count",restaurants.size());
+        return responseEntityUtils.buildResponse(model);
+    }
+
+    
     @RequestMapping(value="/admin/restaurants/edit.html", method = RequestMethod.GET )
     public ModelAndView edit(@RequestParam(value = "restaurantId", required = false) String restaurantId) {
 

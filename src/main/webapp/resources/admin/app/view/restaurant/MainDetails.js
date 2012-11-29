@@ -172,7 +172,8 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             name:'notificationPhoneNumber'
         },{
             fieldLabel:'SMS number',
-            name:'notificationSMSNumber'
+            name:'notificationSMSNumber',
+            vtype:'notification'
         },{
             fieldLabel:'Email address',
             name:'notificationEmailAddress',
