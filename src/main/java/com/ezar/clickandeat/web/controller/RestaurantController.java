@@ -311,7 +311,7 @@ public class RestaurantController {
             }
         }
         catch( Exception ex ) {
-            LOGGER.error("",ex);
+            LOGGER.error("Error occurred saving restaurant:\n" + body,ex);
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
