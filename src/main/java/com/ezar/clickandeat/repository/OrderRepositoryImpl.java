@@ -86,6 +86,14 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
 
     @Override
+    public List<Order> export() {
+        Query query = new Query(where("deleted").ne(true));
+        query.sort().on("created", org.springframework.data.mongodb.core.query.Order.ASCENDING);
+        return operations.find(query, Order.class);
+    }
+
+    
+    @Override
     public Order saveOrder(Order order) {
         for( OrderItem orderItem: order.getOrderItems()) {
             if( orderItem.getOrderItemId() == null ) {

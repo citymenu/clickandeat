@@ -19,6 +19,8 @@ public interface OrderRepositoryCustom {
     void addOrderUpdate(String orderId, String orderUpdate);
     
     List<Order> findByOrderStatus(String orderStatus);
+
+    List<Order> export();
     
     List<Order> pageByOrderId(Pageable pageable, String orderId, List<Filter> filters);
     

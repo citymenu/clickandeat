@@ -140,19 +140,6 @@
             <version>0.9.0</version>
         </dependency>
 
-        <!-- Authorize.net -->
-        <dependency>
-            <groupId>net.authorize</groupId>
-            <artifactId>anet-java-sdk</artifactId>
-            <version>1.4.6</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
-            <version>1.1.1</version>
-            <scope>compile</scope>
-        </dependency>
-
         <!-- JSON -->
         <dependency>
             <groupId>net.sf.flexjson</groupId>
@@ -165,14 +152,6 @@
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
             <version>2.0.2</version>
-        </dependency>
-
-        <!-- Drools -->
-        <dependency>
-            <groupId>org.drools</groupId>
-            <artifactId>drools</artifactId>
-            <version>4.0.7</version>
-            <type>pom</type>
         </dependency>
 
         <!-- Velocity -->
@@ -264,6 +243,34 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- JXLS -->
+        <dependency>
+            <groupId>net.sf.jxls</groupId>
+            <artifactId>jxls-core</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.jxls</groupId>
+            <artifactId>jxls-reader</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>3.6</version>
+        </dependency>
+
     </dependencies>
 
     <build>

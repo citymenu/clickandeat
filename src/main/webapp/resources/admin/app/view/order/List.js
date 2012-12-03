@@ -95,9 +95,7 @@ Ext.define('AD.view.order.List' ,{
             },'-',{
                 text:'Download to Excel',
                 icon:'../resources/images/icons-shadowless/report-excel.png',
-                handler:function(){
-                    ctrl.downloadToExcel();
-                }
+                action:'export'
             },'->',{
                 width:300,
                 fieldLabel:'Search by OrderId',

@@ -15,6 +15,9 @@ Ext.define('AD.controller.OrderList', {
                 render:this.onGridRendered,
                 itemdblclick:this.onGridDblClick,
                 itemcontextmenu:this.onContextMenu
+            },
+            'orderlist button[action=export]': {
+                click:this.export
             }
 		});
 	},
@@ -150,6 +153,10 @@ Ext.define('AD.controller.OrderList', {
         win.down('form').getForm().findField('orderId').setValue(order.get('orderId'));
         win.down('form').getForm().findField('restaurantCost').setValue(order.get('restaurantCost'));
         win.down('form').getForm().findField('totalCost').setValue(order.get('totalCost'));
+	},
+
+	export:function() {
+	    window.location = ctx + "/admin/orders/export.html";
 	}
 
 });

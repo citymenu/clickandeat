@@ -1,6 +1,5 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.converter.DateTimeTransformer;
 import com.ezar.clickandeat.converter.LocalDateTransformer;
 import com.ezar.clickandeat.converter.LocalTimeTransformer;
@@ -18,6 +17,8 @@ import com.ezar.clickandeat.web.controller.helper.FilterUtils;
 import com.ezar.clickandeat.web.controller.helper.FilterValueDecorator;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import flexjson.JSONSerializer;
+import net.sf.jxls.transformer.XLSTransformer;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -27,7 +28,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
@@ -143,6 +146,25 @@ public class OrderController implements InitializingBean {
         model.put("orders",orders);
         model.put("count",orderRepository.count(query, filters));
         return responseEntityUtils.buildResponse(model);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/admin/orders/export.html", method = RequestMethod.GET )
+    public ResponseEntity<byte[]> export() throws Exception {
+        Map<String,Object> model = new HashMap<String, Object>();
+        List<Order> orders = orderRepository.export();
+        model.put("orders",orders);
+        XLSTransformer transformer = new XLSTransformer();
+        Resource resource = new ClassPathResource("/template/OrderExport.xlsx");
+        Workbook workbook = transformer.transformXLS(resource.getInputStream(), model);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.set("Content-Disposition","attachment;Filename=OrderExport.xlsx");
+        headers.setCacheControl("no-cache");
+        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
     }
 
 
