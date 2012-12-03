@@ -293,6 +293,10 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @SuppressWarnings("unchecked")
     public Map<String,List<String>> getCuisinesByLocation() {
         
+        if( countActive() == 0 ) {
+            return new HashMap<String, List<String>>();
+        }
+        
         Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true));
 
         // Add scope variables to the map/reduce query
