@@ -55,7 +55,7 @@
                         <td width="244" align="center">
                             <div class="step step-2">
                                 <div class="step-number">2.</div>
-                                <div class="step-detail">Elije tu comida preferida</div>
+                                <div class="step-detail">Elige tu comida preferida</div>
                             </div>
                         </td>
                         <td width="244" align="center">
