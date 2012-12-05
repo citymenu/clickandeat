@@ -17,10 +17,10 @@
 
     <c:choose>
         <c:when test="${restaurant.address.town == ''}">
-            <title>LlamaryComer | ${restaurant.name} - ${restaurant.cuisineSummary}</title>
+            <title>${restaurant.name} - ${restaurant.cuisineSummary} | LlamaryComer</title>
         </c:when>
         <c:otherwise>
-            <title>LlamaryComer | ${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary}</title>
+            <title>${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary} | LlamaryComer</title>
         </c:otherwise>
     </c:choose>
 
