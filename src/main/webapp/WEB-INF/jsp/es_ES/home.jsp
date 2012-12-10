@@ -5,7 +5,6 @@
 <!doctype html>
 
 <head>
-
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
@@ -15,7 +14,11 @@
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript">var notfound = '${notfound}';</script>
 
-    <title>LlamaryComer | Pide comida online - Barcelona y Madrid</title>
+    <title>Comida a domicilio | Restaurantes on line en Llamarycomer.com</title>
+    <meta name="keywords" content="comida a domicilio - comida en casa - restaurantes on line - comida para llevar - llamar y comer" />
+    <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición" />
+    <meta http-equiv="Content-Language" content="es"/>
+
 </head>
 
 <body>
