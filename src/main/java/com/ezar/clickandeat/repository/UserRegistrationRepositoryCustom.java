@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.UserRegistration;
 import com.ezar.clickandeat.web.controller.helper.Filter;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ public interface UserRegistrationRepositoryCustom {
 
     UserRegistration saveUserRegistration(UserRegistration userRegistration);
 
+    UserRegistration findByRegistrationId(String registrationId);
 
     List<UserRegistration> page(Pageable pageable, List<Filter> filters);
 

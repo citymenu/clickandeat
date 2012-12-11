@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.repository;
 
+import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.UserRegistration;
 import com.ezar.clickandeat.repository.util.FilterUtils;
 import com.ezar.clickandeat.web.controller.helper.Filter;
@@ -12,6 +13,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.query.QueryUtils;
 
 import java.util.List;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 public class UserRegistrationRepositoryImpl implements UserRegistrationRepositoryCustom {
 
@@ -27,6 +31,12 @@ public class UserRegistrationRepositoryImpl implements UserRegistrationRepositor
         }
         operations.save(userRegistration);
         return userRegistration;
+    }
+
+
+    @Override
+    public UserRegistration findByRegistrationId(String registrationId) {
+        return operations.findOne(query(where("id").is(registrationId)),UserRegistration.class);
     }
 
 

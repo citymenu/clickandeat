@@ -17,7 +17,9 @@ public class UserRegistration extends PersistentObject {
     private Order order;
 
     private DateTime created;
-    
+
+    private boolean emailSent = false;
+
     public UserRegistration() {
         created = new DateTime();
     }
@@ -68,5 +70,13 @@ public class UserRegistration extends PersistentObject {
 
     public void setCreated(DateTime created) {
         this.created = created;
+    }
+
+    public boolean isEmailSent() {
+        return emailSent;
+    }
+
+    public void setEmailSent(boolean emailSent) {
+        this.emailSent = emailSent;
     }
 }

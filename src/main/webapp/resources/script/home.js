@@ -1,5 +1,17 @@
 $(document).ready(function(){
 
+    $('.location-button').click(function(){
+        search();
+    });
+
+    // Enable Google autocomplete
+    var input = document.getElementById('loc');
+    var options = {
+      types: ['geocode'],
+      componentRestrictions: {country: country}
+    };
+    autocomplete = new google.maps.places.Autocomplete(input, options);
+
     // Add carousel
     $("#carousel").jCarouselLite({
         auto: 5000,
@@ -28,18 +40,6 @@ $(document).ready(function(){
             search();
         }
     });
-
-    $('.location-button').click(function(){
-        search();
-    });
-
-    // Enable Google autocomplete
-    var input = document.getElementById('loc');
-    var options = {
-      types: ['geocode'],
-      componentRestrictions: {country: country}
-    };
-    autocomplete = new google.maps.places.Autocomplete(input, options);
 
 });
 
