@@ -64,7 +64,7 @@
                         <div class="cuisineLocation">
                             <a class="direct" href="${ctx}/app/encontrar-comida-para-llevar-en-${entry.key.second}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
                             <c:forEach var="list" items="${entry.value}">
-                                <p class="locationlink"><a class="direct" href="${ctx}/app/encontrar-${list.second}-comida-para-llevar-en-${entry.key.second}/csn/${list.first}/${entry.key.first}">${list.second} Takeaway</a></p>
+                                <p class="locationlink"><a class="direct" href="${ctx}/app/encontrar-${list.second}-comida-para-llevar-en-${entry.key.second}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></p>
                             </c:forEach>
                         </div>
                     </c:forEach>
