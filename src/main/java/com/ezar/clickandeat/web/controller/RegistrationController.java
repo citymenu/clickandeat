@@ -2,8 +2,10 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.Search;
 import com.ezar.clickandeat.model.UserRegistration;
+import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.UserRegistrationRepository;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.web.controller.helper.Filter;
@@ -41,6 +43,9 @@ public class RegistrationController {
 
     @Autowired
     private OrderRepository orderRepository;
+
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     @Autowired
     private JSONUtils jsonUtils;
@@ -112,5 +117,51 @@ public class RegistrationController {
         headers.setCacheControl("no-cache");
         return new ResponseEntity<byte[]>("".getBytes("utf-8"), headers, HttpStatus.OK);    
     }
-    
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/admin/registrations/generateEmail.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> registerLocation(@RequestParam(value="registrationId") String registrationId ) throws Exception {
+        
+        Map<String,Object> model = new HashMap<String,Object>();
+        
+        try {
+            UserRegistration userRegistration = userRegistrationRepository.findByRegistrationId(registrationId);
+            Double discount = userRegistration.getRequestedDiscount();
+            Voucher voucher = voucherRepository.createVoucher(discount);
+            
+            model.put("success",true);
+            model.put("email",userRegistration.getEmailAddress());
+            model.put("voucher",voucher.getVoucherId());
+            model.put("discount",discount);
+        }
+        catch( Exception ex ) {
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/admin/registrations/markEmailSent.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> markEmailSent(@RequestParam(value="registrationId") String registrationId ) throws Exception {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        try {
+            UserRegistration userRegistration = userRegistrationRepository.findByRegistrationId(registrationId);
+            userRegistration.setEmailSent(true);
+            userRegistrationRepository.saveUserRegistration(userRegistration);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
 }
