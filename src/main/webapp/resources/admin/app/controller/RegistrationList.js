@@ -32,19 +32,15 @@ Ext.define('AD.controller.RegistrationList', {
 	    var ctrl = this;
 	    var menu = Ext.create('Ext.menu.Menu',{
 	        id:'order-menu',
-            items:[{
-                text:'Generate email',
+            items:[
+            {
+                text:'Send voucher email',
                 icon:'../resources/images/icons-shadowless/mail.png',
                 handler:function(){
-                    ctrl.generateEmail();
+                    ctrl.sendVoucherEmail();
                 }
-            },'-',{
-                text:'Mark email sent',
-                icon:'../resources/images/icons-shadowless/tick-circle.png',
-                handler:function(){
-                    ctrl.markEmailSent();
-                }
-            }],
+            }
+            ],
             listeners:{
                 'hide': {
                     fn:function(){
@@ -56,57 +52,36 @@ Ext.define('AD.controller.RegistrationList', {
 	    menu.showAt(e.getXY());
 	},
 
-	generateEmail:function() {
-	    var registration = this.getSelectedRecord();
-        Ext.Ajax.request({
-            url: ctx + '/admin/registrations/generateEmail.ajax',
-            method:'POST',
-            params: {
-                registrationId: registration.get('id')
-            },
-            success: function(response) {
-                var obj = Ext.decode(response.responseText);
-                if( obj.success ) {
-                    var email = obj.email;
-                    var voucher = obj.voucher;
-                    var discount = obj.discount;
-                    window.location = 'mailto:' + email + '?subject=Your discount coupon for ' + discount + '% off your next online order&body=' + voucher;
-                } else {
-                    showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
-                }
-            },
-            failure: function(response) {
-                var obj = Ext.decode(response.responseText);
-                showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
-            },
-            scope:this
-        });
-	},
+	sendVoucherEmail:function() {
+    	    var registration = this.getSelectedRecord();
 
-	markEmailSent:function() {
-	    var registration = this.getSelectedRecord();
-        Ext.Ajax.request({
-            url: ctx + '/admin/registrations/markEmailSent.ajax',
-            method:'POST',
-            params: {
-                registrationId: registration.get('id')
-            },
-            success: function(response) {
-                var obj = Ext.decode(response.responseText);
-                if( obj.success ) {
-                    showSuccessMessage(Ext.get('registrationlist'),'Updated','Email marked as sent');
-                    var store = Ext.getCmp('registrationlist').getStore();
-                    store.loadPage(store.currentPage);
-                } else {
-                    showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
-                }
-            },
-            failure: function(response) {
-                var obj = Ext.decode(response.responseText);
-                showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
-            },
-            scope:this
-        });
-	}
+    	    if(registration.get('emailSent')){
+                showErrorMessage(Ext.get('registrationlist'),'Error', "A voucher has already been sent to this customer");
+    	    }else{
+                Ext.Ajax.request({
+                    url: ctx + '/admin/registrations/generateEmail2.ajax',
+                    method:'POST',
+                    params: {
+                        registrationId: registration.get('id')
+                    },
+                    success: function(response) {
+                        var obj = Ext.decode(response.responseText);
+                        if( obj.success ) {
+                            showSuccessMessage(Ext.get('registrationlist'),'Updated','Email with voucher sent to customer');
+                            var store = Ext.getCmp('registrationlist').getStore();
+                            store.loadPage(store.currentPage);
+                        } else {
+                            showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
+                        }
+                    },
+                    failure: function(response) {
+                        var obj = Ext.decode(response.responseText);
+                        showErrorMessage(Ext.get('registrationlist'),'Error',obj.message);
+                    },
+                    scope:this
+                });
+            }
+
+    }
 
 });

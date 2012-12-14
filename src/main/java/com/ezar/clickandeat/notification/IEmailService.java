@@ -2,8 +2,9 @@ package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
+import com.ezar.clickandeat.model.UserRegistration;
 
- public interface IEmailService {
+public interface IEmailService {
 
     void sendOrderNotificationToRestaurant(Order order) throws Exception;
 
@@ -34,5 +35,7 @@ import com.ezar.clickandeat.model.Restaurant;
     void sendContentApproved(Restaurant restaurant) throws Exception;
 
     void sendContentRejected(Restaurant restaurant) throws Exception;
+
+    void sendVoucherToCustomer(UserRegistration userRegistration) throws Exception;
 
 }

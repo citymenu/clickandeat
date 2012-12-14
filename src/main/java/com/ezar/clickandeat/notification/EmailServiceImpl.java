@@ -2,10 +2,7 @@ package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.maps.GeoLocationService;
-import com.ezar.clickandeat.model.NotificationOptions;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.Voucher;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
@@ -398,6 +395,33 @@ public class EmailServiceImpl implements IEmailService {
         String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.OWNER_CONTENT_REJECTED_EMAIL_TEMPLATE);
         sendEmail(adminEmailAddress, subject, emailContent);
     }
+
+
+    /**
+     * @param userRegistration
+     */
+
+    @Override
+    public void sendVoucherToCustomer(UserRegistration userRegistration) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending voucher to registered user: " + userRegistration.getEmailAddress());
+        }
+
+        String emailAddress = userRegistration.getEmailAddress();
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-voucher",false);
+        String subject = MessageFormat.format(subjectFormat, MessageFactory.getMessage("title.companyname" , false ));
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+
+        // Create the voucher
+        Voucher voucher = voucherRepository.createVoucher(userRegistration.getRequestedDiscount());
+        templateMap.put("voucherId",voucher.getVoucherId());
+        templateMap.put("discount",userRegistration.getRequestedDiscount());
+
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_VOUCHER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
+
 
 
 

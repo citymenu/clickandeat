@@ -1,0 +1,69 @@
+<html>
+
+<body style="background-color:#FFFFFF;">
+
+<table width="580" cellpadding="0" cellspacing="0" border="1" border-color="#CCCCCC">
+    <tr>
+        <td width="580" align="center">
+            <table width="550">
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <div style="margin-top:15px;">
+                            <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/header.jpg" width="550" height="54"/>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="550" colspan="3">
+                        <h1 style="font:16px/18px tahoma,verdana,arial,sans-serif; color:#AA0000; font-weight:bold;margin:0;margin-top:15px;">Tu cupón de descuento</h1>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width="300">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                            &#161;Gracias por tu inter&#233;s!
+                            </div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                            Aqu&#237; tienes tu cup&#243;n $voucherid con un descuento de $discount% en tu pr&#243;ximo pedido en nuestra web.
+                            </div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;">
+                            Nos vemos en www.llamarycomer.com
+                            </div>
+                        </div>
+                    </td>
+                    <td width="20">&nbsp;</td>
+                    <td width="230">
+                        <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/email/butler.jpg" width="230" height="300"/>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#AA0000"><b>$stringTool.getMessage("vm-discount-voucher-how")</b></div>
+                            <div style="font:12px/14px tahoma,verdana,arial,sans-serif; font-weight:normal;">$stringTool.getMessage("vm-discount-voucher-help")</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr valign="top">
+                    <td width=550" colspan="3">
+                        <div style="margin-bottom:15px;">
+                            <div style="font:10px/12px tahoma,verdana,arial,sans-serif; font-weight:normal; margin-bottom:5px;color:#878787">
+                            En cumplimiento de la Ley Org&#225;nica 15/1999, de 13 de diciembre, de Protecci&#243;n de Datos de Car&#225;cter Personal,
+                            le comunicamos que sus datos personales ser&#225;n incorporados en nuestro fichero bajo la responsabilidad de
+                            CITYMENU, S.L., NIF: B-57764904, inscrita en el Registro Mercantil de Menorca,
+                            tomo 136, folio 221, hoja IM-5746. Esta informaci&#243;n no ser&#225; transmitida a terceras partes.
+                            Si desea ejercer sus derechos de acceso, rectificaci&#243;n, cancelaci&#243;n u oposici&#243;n, puede dirigirse a:
+                            CITYMENU, S.L., C/San Fernando, 20 - 07702 Ma&#243; - Menorca (Illes Balears)
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</body>
+
+</html>
