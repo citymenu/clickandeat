@@ -127,6 +127,7 @@ function onBeforeBuildOrder(order) {
 // Override after build order
 function onAfterBuildOrder(order) {
     // Override build order click event
+    $('#buildorder').off('click');
     $('#buildorder').click(function(){
         updateOrder();
     });
