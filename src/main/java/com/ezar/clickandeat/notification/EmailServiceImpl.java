@@ -1,10 +1,8 @@
 package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.model.NotificationOptions;
-import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.model.Voucher;
+import com.ezar.clickandeat.maps.GeoLocationService;
+import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
@@ -29,7 +27,7 @@ import java.util.Map;
 
 @Component(value="emailService")
 public class EmailServiceImpl implements IEmailService {
-    
+
     private static final Logger LOGGER = Logger.getLogger(EmailServiceImpl.class);
 
     @Autowired
@@ -37,12 +35,15 @@ public class EmailServiceImpl implements IEmailService {
 
     @Autowired
     private VoucherRepository voucherRepository;
-    
+
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private VelocityTemplatingService velocityTemplatingService;
+
+    @Autowired
+    private GeoLocationService geoLocationService;
 
     @Autowired
     private SecurityUtils securityUtils;
@@ -58,10 +59,10 @@ public class EmailServiceImpl implements IEmailService {
     /**
      * @param order
      */
-    
+
     @Override
     public void sendOrderNotificationToRestaurant(Order order) throws Exception {
-    
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Sending order notification email to restaurant for order id: " + order.getOrderId());
         }
@@ -95,7 +96,7 @@ public class EmailServiceImpl implements IEmailService {
     /**
      * @param order
      */
-    
+
     @Override
     public void sendOrderConfirmationToCustomer(Order order) throws Exception {
 
@@ -120,7 +121,7 @@ public class EmailServiceImpl implements IEmailService {
 
     @Override
     public void sendRestaurantAcceptedConfirmationToCustomer(Order order) throws Exception {
-        
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Sending restaurant accepted confirmation email to customer for order id: " + order.getOrderId());
         }
@@ -131,7 +132,7 @@ public class EmailServiceImpl implements IEmailService {
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         if( order.getDeliveryTimeNonStandard()) {
-            
+
             // Give the customer an opportunity to cancel the order
             templateMap.put("allowCancel", true);
             templateMap.put("cancelCutoffTime", new DateTime().plusMinutes(cancelCutoffMinutes));
@@ -248,7 +249,7 @@ public class EmailServiceImpl implements IEmailService {
         String emailAddress = order.getCustomer().getEmail();
         String subjectFormat = MessageFactory.getMessage("email-subject.customer-auto-cancelled-confirmation-subject",false);
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
-        
+
         // Create a voucher to try to keep this customer for the next order
         Voucher voucher = voucherRepository.createVoucher(Voucher.DEFAULT_VOUCHER_DISCOUNT);
         Map<String,Object> templateMap = new HashMap<String, Object>();
@@ -302,7 +303,7 @@ public class EmailServiceImpl implements IEmailService {
         sendEmail(emailAddress, subject, emailContent);
     }
 
-    
+
     /**
      * @param restaurant
      */
@@ -323,7 +324,7 @@ public class EmailServiceImpl implements IEmailService {
         sendEmail(emailAddress, subject, emailContent);
     }
 
-    
+
     /**
      * @param order
      */
@@ -397,13 +398,40 @@ public class EmailServiceImpl implements IEmailService {
     }
 
 
+    /**
+     * @param userRegistration
+     */
+
+    @Override
+    public void sendVoucherToCustomer(UserRegistration userRegistration) throws Exception {
+
+        if( LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Sending voucher to registered user: " + userRegistration.getEmailAddress());
+        }
+
+        String emailAddress = userRegistration.getEmailAddress();
+        String subjectFormat = MessageFactory.getMessage("email-subject.customer-voucher",false);
+        String subject = MessageFormat.format(subjectFormat, MessageFactory.getMessage("title.companyname" , false ));
+        Map<String,Object> templateMap = new HashMap<String, Object>();
+
+        // Create the voucher
+        Voucher voucher = voucherRepository.createVoucher(userRegistration.getRequestedDiscount());
+        templateMap.put("voucherId",voucher.getVoucherId());
+        templateMap.put("discount",userRegistration.getRequestedDiscount());
+
+        String emailContent = velocityTemplatingService.mergeContentIntoTemplate(templateMap, VelocityTemplatingService.CUSTOMER_VOUCHER_EMAIL_TEMPLATE);
+        sendEmail(emailAddress, subject, emailContent);
+    }
+
+
+
 
     /**
      * @param to
      * @param subject
      * @param text
      */
-    
+
     private void sendEmail(final String to, final String subject, final String text ) {
         MimeMessagePreparator preparator = new MimeMessagePreparator() {
             public void prepare(MimeMessage mimeMessage) throws Exception {
@@ -416,7 +444,7 @@ public class EmailServiceImpl implements IEmailService {
             }
         };
         mailSender.send(preparator);
-        
+
     }
 
 
