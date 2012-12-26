@@ -52,7 +52,7 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Controller
-public class OrderController implements InitializingBean {
+public class OrderController {
     
     private static final Logger LOGGER = Logger.getLogger(OrderController.class);
 
@@ -77,12 +77,9 @@ public class OrderController implements InitializingBean {
     @Autowired
     private JSONUtils jsonUtils;
 
-    private JSONSerializer serializer;
-
-    private String timeZone;
-
     private final Map<String,FilterValueDecorator> filterDecoratorMap = new HashMap<String, FilterValueDecorator>();
-    
+
+    private final String[] excludes = new String[]{"order.restaurant.name","order.restaurant.*"};
     
     public OrderController() {
         filterDecoratorMap.put("orderStatus",new FilterValueDecorator() {
@@ -106,18 +103,6 @@ public class OrderController implements InitializingBean {
             }
         });
     }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        this.serializer = new JSONSerializer()
-                .transform(new DateTimeTransformer(), DateTime.class)
-                .transform(new LocalDateTransformer(), LocalDate.class)
-                .transform(new LocalTimeTransformer(), LocalTime.class)
-                .transform(new NullIdStringTransformer(), String.class)
-                .include("order.restaurant.name")
-                .exclude("order.restaurant.*");
-    }
-
 
     @SuppressWarnings("unchecked")
     @ResponseBody
@@ -145,7 +130,8 @@ public class OrderController implements InitializingBean {
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("orders",orders);
         model.put("count",orderRepository.count(query, filters));
-        return responseEntityUtils.buildResponse(model);
+        String[] excludes = new String[]{"orders.orderDiscounts"};
+        return responseEntityUtils.buildResponse(model,excludes);
     }
 
 
@@ -1052,19 +1038,7 @@ public class OrderController implements InitializingBean {
      */
 
     private ResponseEntity<byte[]> buildOrderResponse(Map<String,Object> model) throws Exception {
-        String json = serializer.deepSerialize(model);
-        String escaped = jsonUtils.escapeQuotes(json);
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setCacheControl("no-cache");
-        return new ResponseEntity<byte[]>(escaped.getBytes("utf-8"), headers, HttpStatus.OK);
+        return responseEntityUtils.buildResponse(model,excludes);
     }
 
-
-    @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
-    }
-    
 }

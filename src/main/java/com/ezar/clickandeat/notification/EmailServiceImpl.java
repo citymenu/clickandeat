@@ -1,7 +1,6 @@
 package com.ezar.clickandeat.notification;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
@@ -9,6 +8,7 @@ import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
+import com.ezar.clickandeat.util.LocationUtils;
 import com.ezar.clickandeat.util.SecurityUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.commons.lang.StringEscapeUtils;
@@ -45,9 +45,6 @@ public class EmailServiceImpl implements IEmailService {
     private VelocityTemplatingService velocityTemplatingService;
 
     @Autowired
-    private GeoLocationService geoLocationService;
-    
-    @Autowired
     private SecurityUtils securityUtils;
 
     private String from;
@@ -79,7 +76,7 @@ public class EmailServiceImpl implements IEmailService {
             double[] restaurantLocation = order.getRestaurant().getAddress().getLocation();
             double[] customerLocation = order.getDeliveryAddress().getLocation();
             if( restaurantLocation != null && customerLocation != null ) {
-                Double distance = geoLocationService.getDistance(restaurantLocation, customerLocation);
+                Double distance = LocationUtils.getDistance(restaurantLocation, customerLocation);
                 templateMap.put("distance",distance);
             }
         }

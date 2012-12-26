@@ -10,4 +10,5 @@ public interface UserRepositoryCustom {
 
     void updatePassword (String username, String password );
 
+    boolean authenticate(String username, String password ) throws SecurityException;
 }

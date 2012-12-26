@@ -40,37 +40,6 @@
                 <td width="1020" colspan="3">
                     <div class="restaurant-details-wrapper">
                         <table width="1000">
-                            <c:if test="${restaurant.deliveryOptions.collectionOnly == false}">
-                                <tr valign="top">
-                                    <td width="1000" colspan="3">
-                                        <div class="search-location-wrapper">
-                                            <div class="search-location-edit">
-                                                <c:choose>
-                                                    <c:when test="${search == null || search.location == null}">
-                                                        <div class="search-location" id="locationedit">
-                                                            <message:message key="search.location-not-set"/>
-                                                        </div>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <div class="search-location" id="locationdisplay">
-                                                            <message:message key="search.your-location"/> "${search.location.displayAddress}"
-                                                            <a class="location-button" id="changeLocation"><message:message key="button.change"/></a>.
-                                                            <c:choose>
-                                                                <c:when test="${restaurantWillDeliver == true}">
-                                                                    <message:message key="restaurant.restaurant-will-deliver" escape="false"/>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <message:message key="restaurant.restaurant-wont-deliver" escape="false"/>
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </div>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </c:if>
                             <tr valign="top">
                                 <td width="460">
                                     <table width="460">

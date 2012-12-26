@@ -1,6 +1,10 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
+import com.ezar.clickandeat.converter.DateTimeTransformer;
+import com.ezar.clickandeat.converter.LocalDateTransformer;
+import com.ezar.clickandeat.converter.LocalTimeTransformer;
+import com.ezar.clickandeat.converter.NullIdStringTransformer;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.IEmailService;
@@ -12,8 +16,10 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
 import com.opensymphony.module.sitemesh.RequestConstants;
+import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -102,6 +108,12 @@ public class RestaurantController {
         // Update the restaurant session id
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
             session.setAttribute("restaurantid", restaurantId);
+        }
+
+        // Get the current location out of the session and check if the restaurant will deliver
+        Search search = (Search)session.getAttribute("search");
+        if( search != null && search.getLocation() != null ) {
+            model.put("restaurantWillDeliver", restaurant.willDeliverToLocation(search.getLocation()));
         }
 
         return new ModelAndView("restaurant",model);
@@ -210,7 +222,6 @@ public class RestaurantController {
 
         PageRequest request;
 
-        
         if( StringUtils.hasText(sort)) {
             List<Map<String,String>> sortParams = (List<Map<String,String>>)jsonUtils.deserialize(sort);
             Map<String,String> sortProperties = sortParams.get(0);
@@ -223,11 +234,12 @@ public class RestaurantController {
         }
 
         List<Restaurant> restaurants = repository.getPage(request);
-
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants);
         model.put("count",repository.countActive());
-        return responseEntityUtils.buildResponse(model);
+        String[] excludes = new String[]{"restaurants.menu","restaurants.specialOffers","restaurants.discounts",
+                "restaurants.firstDiscount","restaurants.openingTimes"};
+        return responseEntityUtils.buildResponse(model,excludes);
     }
 
 
@@ -239,7 +251,10 @@ public class RestaurantController {
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants);
         model.put("count",restaurants.size());
-        return responseEntityUtils.buildResponse(model);
+        String[] excludes = new String[]{"restaurants.menu","restaurants.specialOffers","restaurants.discounts",
+                "restaurants.firstDiscount","restaurants.openingTimes","restaurants.deliveryOptions",
+                "restaurants.notificationOptions","restaurants.address"};
+        return responseEntityUtils.buildResponse(model,excludes);
     }
 
     

@@ -25,6 +25,12 @@ $(document).ready(function(){
         updateLaunchPos();
         updateOrderPanelPos();
     });
+
+    // Add onclick handler to change link
+    $('#changeLocation').click(function(){
+        $('#locationdisplay').hide();
+        $('#locationedit').show();
+    });
 });
 
 // Runs after the order panel is built

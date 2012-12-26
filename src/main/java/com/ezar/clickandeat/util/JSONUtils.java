@@ -34,7 +34,10 @@ public class JSONUtils {
                 .transform(new DateTimeTransformer(), DateTime.class)
                 .transform(new LocalDateTransformer(), LocalDate.class)
                 .transform(new LocalTimeTransformer(), LocalTime.class)
-                .transform(new NullIdStringTransformer(), String.class);
+                .transform(new NullIdStringTransformer(), String.class)
+                .exclude("restaurants.menu")
+                .exclude("restaurants.specialOffers")
+                .exclude("restaurants.discounts");
 
         this.htmlEscapingSerializer = new JSONSerializer()
                 .transform(new DateTimeTransformer(), DateTime.class)
@@ -46,6 +49,21 @@ public class JSONUtils {
     }
 
 
+    /**
+     * @param excludes
+     * @return
+     */
+
+    public JSONSerializer buildSerializer(String ... excludes ) {
+        return new JSONSerializer()
+                .transform(new DateTimeTransformer(), DateTime.class)
+                .transform(new LocalDateTransformer(), LocalDate.class)
+                .transform(new LocalTimeTransformer(), LocalTime.class)
+                .transform(new NullIdStringTransformer(), String.class)
+                .exclude(excludes);
+    }
+    
+    
     /**
      * @param obj
      * @return
@@ -64,6 +82,18 @@ public class JSONUtils {
     public String serializeAndEscape(Object obj) {
         return escapeQuotes(serializer.deepSerialize(obj));
     }
+
+
+    /**
+     * @param serializer
+     * @param obj
+     * @return
+     */
+
+    public String serializeAndEscape(JSONSerializer serializer, Object obj) {
+        return escapeQuotes(serializer.deepSerialize(obj));
+    }
+
 
     /**
      * @param obj

@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.maps;
 
 import com.ezar.clickandeat.model.GeoLocation;
+import com.ezar.clickandeat.util.LocationUtils;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -38,7 +39,7 @@ public class GeoLocationServiceTest {
         geoLocationService.setCacheLocations(false);
         GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
         GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
-        Double distance = geoLocationService.getDistance(location1.getLocation(), location2.getLocation());
+        Double distance = LocationUtils.getDistance(location1.getLocation(), location2.getLocation());
         LOGGER.info("Distance: " + distance);
     }
 

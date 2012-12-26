@@ -77,7 +77,8 @@ public class SystemCancelsHandler implements IWorkflowHandler {
                 if(order.getTestOrder()){
                     // If it is a test order only enter an Order update
                     order.addOrderUpdate("Test order. No real refund of credit card payment");
-                }else{
+                }
+                else {
                     String transactionType = order.getTransactionStatus().equals(Order.PAYMENT_PRE_AUTHORISED)? PaymentService.REVERSE: PaymentService.REFUND;
                     paymentService.processTransactionRequest(order,transactionType);
                     order.addOrderUpdate("Refunded customer credit card");

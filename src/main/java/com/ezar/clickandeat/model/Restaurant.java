@@ -2,6 +2,7 @@ package com.ezar.clickandeat.model;
 
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.DateUtil;
+import com.ezar.clickandeat.util.LocationUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -420,7 +421,44 @@ public class Restaurant extends PersistentObject {
         }
         return null;
     }
+
+
+    /**
+     * @param location
+     * @return
+     */
     
+    public boolean willDeliverToLocation(GeoLocation location) {
+        if( address == null || address.getLocation() == null ) {
+            return false;
+        }
+        if( location == null || location.getLocation() == null ) {
+            return false;
+        }
+        if( deliveryOptions.isCollectionOnly()) {
+            return false;
+        }
+        if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
+            double distance = LocationUtils.getDistance(address.getLocation(), location.getLocation());
+            double locationRadius = location.getRadius();
+            if( distance - locationRadius <= deliveryOptions.getDeliveryRadiusInKilometres()) {
+                return true;
+            }
+        }
+        String postCode = location.getLocationComponents().get("postal_code");
+        if( StringUtils.hasText(postCode)) {
+            String postCodeMatcher = postCode.toUpperCase().replace(" ","");
+            for( String deliverToPostCode: deliveryOptions.getAreasDeliveredTo()) {
+                String postCodeCandidate = deliverToPostCode.toUpperCase().replace(" ","");
+                if( postCodeMatcher.equals(postCodeCandidate)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public int getDeliveryTimeMinutes() {
         return deliveryOptions.getDeliveryTimeMinutes();
     }

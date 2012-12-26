@@ -1,13 +1,13 @@
 
 package com.ezar.clickandeat.repository;
 
-import com.ezar.clickandeat.maps.GeoLocationService;
-import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.User;
+import com.ezar.clickandeat.security.PasswordEncoder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
+
+import java.util.Date;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -23,9 +23,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private GeoLocationService locationService;
-
 
     @Override
     public User findByUsername(String username) {
@@ -35,40 +32,32 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
 
     @Override
     public User saveUser(User user) {
-
-        if( user.getAddress() != null ) {
-            GeoLocation location = locationService.getLocation(user.getAddress());
-            if( location != null ) {
-                user.getAddress().setLocation(location.getLocation());
-            }
-        }
-
-        if( user.getId() == null ) {
-            user.setSalt(user.makeSalt());
-            user.setPassword(passwordEncoder.encodePassword(user.getPassword(),user.getSalt()));
-            operations.save(user);
-        }
-        else {
-            operations.updateFirst(query(where("id").is(user.getId())),
-                    update("username",user.getUsername())
-                    .addToSet("address",user.getAddress())
-                    .addToSet("person",user.getPerson()),
-                    User.class);
-        }
+        user.setSalt(generateSalt());
+        user.setPassword(passwordEncoder.encodePassword(user.getPassword(),user.getSalt()));
+        operations.save(user);
         return user;
     }
 
 
     @Override
     public void updatePassword(String username, String password) {
-        
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Updating password for username: " + username);
-        }
-        
         User user = findByUsername(username);
         String encodedPassword = passwordEncoder.encodePassword(password,user.getSalt());
         operations.updateFirst(query(where("id").is(user.getId())),update("password",encodedPassword),User.class);
+    }
+
+
+    @Override
+    public boolean authenticate(String username, String password) throws SecurityException {
+        User user = findByUsername(username);
+        if( user == null ) {
+            throw new SecurityException("User not found");
+        }
+        return passwordEncoder.isPasswordValid(user.getPassword(), password,  user.getSalt());
+    }
+
+    private String generateSalt() {
+        return "" + Math.round((new Date().getTime() * Math.random()));
     }
 
 }

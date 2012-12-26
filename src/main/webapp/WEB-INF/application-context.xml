@@ -2,13 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:security="http://www.springframework.org/schema/security"
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation="
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-          http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.3.xsd
           http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -19,9 +17,6 @@
 
 	<!-- Read annotation based configuration classes -->
 	<context:component-scan base-package="com.ezar"/>
-
-	<!-- Enable annotation-based method security -->
-	<security:global-method-security secured-annotations="enabled" />
 
     <!-- Enable annotation-based task scheduling -->
     <task:scheduler id="scheduler" pool-size="1"/>
@@ -80,50 +75,6 @@
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
-
-	<!--  HTTP security config -->
-	<security:http disable-url-rewriting="true" security-context-repository-ref="simpleSecurityContextRepository" create-session="always">
-		<security:intercept-url pattern="/index.jsp" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    	<security:intercept-url pattern="/secure/login.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/secure/register.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/secure/doRegister.html*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-    	<security:intercept-url pattern="/secure/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="*.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/**" filters="none"/>
-
-    	<security:form-login login-page="/secure/login.html"
-    						 login-processing-url="/secure/j_security_check"
-    						 default-target-url="/home.html"
-    						 always-use-default-target="true"
-    						 authentication-failure-url="/secure/login.html?error=true"/>
-		<security:logout logout-url="/j_security_logout"
-                         success-handler-ref="securityLogoutSuccessHandler"/>
-  	</security:http>
-
-    <!-- Simple security context repository -->
-    <bean id="simpleSecurityContextRepository" class="com.ezar.clickandeat.web.security.SimpleSecurityContextRepository"/>
-
-    <!-- Security logout success handler -->
-    <bean id="securityLogoutSuccessHandler" class="com.ezar.clickandeat.web.security.SecurityLogoutSuccessHandler"/>
-
-    <!-- Password salt source -->
-    <bean id="saltSource" class="org.springframework.security.authentication.dao.ReflectionSaltSource">
-        <property name="userPropertyToUse" value="salt"/>
-    </bean>
-
-    <!-- Password encoder -->
-    <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
-        <constructor-arg value="256"/>
-    </bean>
-
-  	<!-- Authentication manager -->
-  	<security:authentication-manager>
-  		<security:authentication-provider user-service-ref="userService">
-              <security:password-encoder ref="passwordEncoder">
-                  <security:salt-source ref="saltSource"/>
-              </security:password-encoder>
-        </security:authentication-provider>
-	</security:authentication-manager>
 
 	<!-- Load the MONGO HQ url -->
 	<bean class="java.net.URI" id="dbUrl">

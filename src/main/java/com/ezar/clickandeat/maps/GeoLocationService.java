@@ -3,24 +3,20 @@ package com.ezar.clickandeat.maps;
 import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.repository.GeoLocationRepository;
+import com.ezar.clickandeat.util.LocationUtils;
 import flexjson.JSONDeserializer;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import sun.misc.BASE64Encoder;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Component(value = "locationService")
@@ -29,8 +25,6 @@ public class GeoLocationService  {
     private static final Logger LOGGER = Logger.getLogger(GeoLocationService.class);
 
     private static final String MAP_URL = "http://maps.googleapis.com/maps/api/geocode/json?address={0}&components=country:{1}&language={2}&sensor=false";
-
-    private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
     private static final long CONCURRENT_WAIT_INTERVAL = 250;
     
@@ -46,6 +40,8 @@ public class GeoLocationService  {
     private Double warningRadius;
 
     private int minComponentMatches;
+    
+    private boolean useProxy;
     
     private List<String> componentPreferences = new ArrayList<String>();
 
@@ -110,10 +106,8 @@ public class GeoLocationService  {
                 }
 
                 URL url = new URL(MessageFormat.format(MAP_URL, URLEncoder.encode(address, "UTF-8"),country,locale));
-                Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(proxyUrl, 1080));
                 LOGGER.debug("Constructed url: " + url);
-                URLConnection conn = url.openConnection(proxy);
-
+                URLConnection conn = useProxy? url.openConnection(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(proxyUrl, 1080))): url.openConnection();
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
                 Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
                 String status = (String)json.get("status");
@@ -210,7 +204,7 @@ public class GeoLocationService  {
                     southwestcorner[0] = (Double)southwest.get("lng");
                     southwestcorner[1] = (Double)southwest.get("lat");
 
-                    double radius = getDistance(northeastcorner, southwestcorner) / 2;
+                    double radius = LocationUtils.getDistance(northeastcorner, southwestcorner) / 2;
                     geoLocation.setRadius(radius);
                     geoLocation.setRadiusWarning(radius > warningRadius);
                 }
@@ -249,35 +243,6 @@ public class GeoLocationService  {
         return getLocation(sb.toString().trim());
     }
     
-    
-    /**
-     * Returns the distance in kilometres between two locations 
-     * @param location1
-     * @param location2
-     * @return
-     */
-
-    public double getDistance(double[] location1, double[] location2) {
-
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Determining distance between locations " +
-                    Arrays.toString(location1) + " and " + Arrays.toString(location2));
-        }
-
-        double dLon = Math.toRadians(location1[0] - location2[0]);
-        double dLat = Math.toRadians(location1[1]-location2[1]);
-
-        double lat1 = Math.toRadians(location1[1]);
-        double lat2 = Math.toRadians(location2[1]);
-
-        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.sin(dLon/2) * Math.sin(dLon/2) *
-                Math.cos(lat1) * Math.cos(lat2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return DIVISOR * c;
-
-    }
-
 
     /**
      * @param address
@@ -331,6 +296,13 @@ public class GeoLocationService  {
         Collections.addAll(this.commaBeforeComponents, commaBeforeComponents.split(","));
     }
 
+    @Required
+    @Value(value="${location.useProxy}")
+    public void setUseProxy(boolean useProxy) {
+        this.useProxy = useProxy;
+    }
+
+    
     public void setCacheLocations(boolean cacheLocations) {
         this.cacheLocations = cacheLocations;
     }

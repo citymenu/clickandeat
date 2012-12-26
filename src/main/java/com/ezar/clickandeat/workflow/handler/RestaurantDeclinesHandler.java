@@ -73,7 +73,8 @@ public class RestaurantDeclinesHandler implements IWorkflowHandler {
             if(order.getTestOrder()){
                 // If it is a test order only enter an Order update
                 order.addOrderUpdate("Test order. No real refund of customer credit card");
-            }else{
+            }
+            else {
                 paymentService.processTransactionRequest(order,PaymentService.REVERSE);
                 order.addOrderUpdate("Refunded customer credit card");
             }

@@ -78,7 +78,8 @@ public class RestaurantAcceptsWithDeliveryDetailHandler implements IWorkflowHand
             if(order.getTestOrder()){
                 // If it is a test order only enter an Order update
                 order.addOrderUpdate("Test order. No real capture of credit card payment");
-            }else{
+            }
+            else {
                 paymentService.processTransactionRequest(order, PaymentService.CAPTURE);
                 order.addOrderUpdate("Captured credit card payment");
             }
