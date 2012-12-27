@@ -7,10 +7,10 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
     layout:'fit',
     width:230,
     collapsible:true,
-    collapsed:false,
+    collapsed:true,
     resizable:true,
     stateful:false,
-    autoScroll:true,
+    scroll:'vertical',
 
     viewConfig: {
         loadMask: false
@@ -27,8 +27,7 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
     getSelectedRecord: function() {
     	if(this.getSelectionModel().hasSelection()) {
     		return this.getSelectionModel().getLastSelected();
-    	}
-    	else {
+    	} else {
     		return null;
     	}
     }
