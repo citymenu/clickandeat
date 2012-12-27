@@ -6,8 +6,8 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
     title:'Quick Launch',
     layout:'fit',
     width:230,
-    collapsible:true,
-    collapsed:true,
+    collapsible:false,
+    collapsed:false,
     resizable:true,
     stateful:false,
     scroll:'vertical',
@@ -20,7 +20,6 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
         this.columns = [
             {header:'Name', dataIndex:'name',flex:1, hideable:false, resizable:false}
         ];
-
         this.callParent(arguments);
     },
 
