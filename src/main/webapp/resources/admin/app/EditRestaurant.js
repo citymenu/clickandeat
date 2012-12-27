@@ -45,7 +45,6 @@ function onRestaurantLoaded() {
                     region:'west',
                     xtype:'restaurantquicklaunch',
                     frame:false,
-
                 }]
             });
         }

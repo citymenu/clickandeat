@@ -6,7 +6,6 @@ Ext.define('AD.view.restaurant.QuickLaunch' ,{
     title:'Quick Launch',
     layout:'fit',
     width:230,
-    frame:true,
     collapsible:true,
     collapsed:true,
     resizable:true,

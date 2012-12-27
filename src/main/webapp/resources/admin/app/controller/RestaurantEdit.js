@@ -102,7 +102,9 @@ Ext.define('AD.controller.RestaurantEdit', {
         this.control({
 
 		    'restaurantquicklaunch': {
-                itemdblclick:this.onGridDblClick
+                itemdblclick:this.onGridDblClick,
+                expand:this.onGridExpanded
+
             },
 
             'restaurantedit button[action=close]': {
@@ -281,6 +283,12 @@ Ext.define('AD.controller.RestaurantEdit', {
 	onGridDblClick: function(view,record,item,index,eventObj,options) {
         var restaurantId = record.get('restaurantId');
         location.href = ctx + '/admin/restaurants/edit.html?restaurantId=' + restaurantId;
+	},
+
+	onGridExpanded: function(panel) {
+	    panel.doLayout();
+        panel.mun(panel.scrollEl, 'scroll', panel.onElScroll, panel);
+        panel.mon(panel.scrollEl, 'scroll', panel.onElScroll, panel);
 	},
 
 	close: function(button) {
