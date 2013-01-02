@@ -26,8 +26,11 @@ Ext.define('AD.model.Order', {
         {name:'transactionStatus', type:'string'},
         {name:'orderNotificationStatus', type:'string',convert:convertOrderNotificationStatus},
         {name:'orderNotificationCallCount', type:'number'},
+        {name:'orderItems', type:'auto'},
         {name:'orderUpdates', type:'auto'},
-        {name:'orderAmendments', type:'auto'}
+        {name:'orderAmendments', type:'auto'},
+        {name:'customer', type:'auto'},
+        {name:'deliveryAddress', type:'auto'}
     ]
 });
 

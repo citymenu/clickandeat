@@ -50,6 +50,21 @@
     background:transparent;
 }
 
+.order-customer-left {
+    float:left;
+    width:50px;
+    background:transparent;
+}
+
+.order-customer-right {
+    float:left;
+    background:transparent;
+}
+
+.clear {
+    clear:both;
+}
+
 .even {
     background-color:#FAFAFA;
 }
