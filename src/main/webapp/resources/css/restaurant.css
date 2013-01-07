@@ -146,8 +146,18 @@ a.location-button {
 
 .discount-details {
     font: 400 12px/14px myriad-pro-n4,myriad-pro;
-    min-height:16px;
     color:#444444;
+}
+
+.discount-description {
+    font: 400 12px/14px myriad-pro-n4,myriad-pro;
+    color:#444444;
+}
+
+.discount-separator {
+    margin-top:4px;
+    padding-top:4px;
+    border-top:1px dashed #CCCCCC;
 }
 
 .restaurant-delivery-details {
