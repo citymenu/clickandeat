@@ -68,3 +68,7 @@
 .even {
     background-color:#FAFAFA;
 }
+
+.wrap .x-grid-cell-inner {
+    white-space: normal;
+}

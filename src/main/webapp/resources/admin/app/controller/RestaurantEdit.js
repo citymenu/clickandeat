@@ -173,7 +173,9 @@ Ext.define('AD.controller.RestaurantEdit', {
             '#menuitemsgrid button[action=create]': {
                 click:this.createMenuItem
             },
-
+            '#menuitemsgrid button[action=copyRestaurantMenu]': {
+                click:this.copyRestaurantMenu
+            },
             'restaurantmenuitemedit button[action=save]': {
                 click:this.updateMenuItem
             },
@@ -434,7 +436,73 @@ Ext.define('AD.controller.RestaurantEdit', {
         }
 
     },
+    copyRestaurantMenu: function() {
+        //First check that they have selected a source restaurant from where the menu will be copied
+        var restaurantsGrid = Ext.getCmp('restaurantquicklaunch');
+        var restaurantSourceRecord;
+        if(restaurantsGrid.getSelectionModel().hasSelection()) {
+            restaurantSourceRecord = restaurantsGrid.getSelectionModel().getLastSelected();
+        }else {
+            //in case this fires with no selection
+            Ext.Msg.show({
+                 title:'No restaurant selected',
+                 msg: 'You must select the restaurant whose menu you want to copy!',
+                 buttons: Ext.Msg.OK,
+                 icon: Ext.Msg.WARNING
+            });
+            //alert("You must select the restaurant whose menu you want to copy!");
+            return;
+       	};
 
+        //Warn the user that any changes he\she has made will not be saved
+        Ext.Msg.confirm('Copy restaurant menu', 'All the changes that you\'ve made that haven\'t been saved will be lost, do you want to go ahead?', function(button) {
+            if (button === 'yes') {
+                //alert("Source restaurant:"+restaurantSourceRecord.get('restaurantId'));
+                //alert("Target restaurant:"+restaurantObj.restaurantId);
+                Ext.Ajax.request({
+                    url: ctx + '/admin/restaurants/copyMenu.ajax',
+                    method:'POST',
+                    params: {
+                        sourceRestaurantId: restaurantSourceRecord.get('restaurantId'),
+                        targetRestaurantId: restaurantObj.restaurantId
+
+                    },
+
+                    success: function(response) {
+                        var obj = Ext.decode(response.responseText);
+                        if( obj.success ) {
+                            showSuccessMessage(Ext.get('menuitemsgrid'),'Updated','Menu from restaurant '+restaurantSourceRecord.get('name')+'copied successfully. Please wait for the window to reload');
+                            window.location.reload();
+                            /* Haven't manage to get the code below working
+                            var storeMenuCategories = Ext.getCmp('menucategoriesgrid').getStore();
+                            var storeMenuItems = Ext.getCmp('menuitemsgrid').getStore();
+                            // Reload the menu categories and menu items stores
+                            storeMenuCategories.loadPage(storeMenuCategories.currentPage);
+                            storeMenuItems.load();
+                            */
+                        } else {
+                            showErrorMessage(Ext.get('menuitemsgrid'),'Error',obj.message);
+                        }
+                    },
+
+                    failure: function(response) {
+                        var obj = Ext.decode(response.responseText);
+                        showErrorMessage(Ext.get('menuitemsgrid'),'Error',obj.message);
+                    },
+                    scope:this
+                });
+
+
+
+            } else {
+                // We stop the processing
+                console.log("Menu copy aborted");
+                return;
+            }
+        });
+
+
+    },
 
     sendForOwnerApproval: function(button) {
         // Change the list on Site field so that the restaurant is not displayed
