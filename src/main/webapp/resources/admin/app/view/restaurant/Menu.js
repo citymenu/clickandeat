@@ -74,7 +74,12 @@ Ext.define('AD.view.restaurant.Menu' ,{
                     xtype:'button',
                     text:'Add',
                     action:'create'
-                }]
+                },{
+                    xtype:'button',
+                    text:'Copy menu from restaurant',
+                    action:'copyRestaurantMenu'
+                }
+                ]
             }],
 
             viewConfig: {

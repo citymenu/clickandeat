@@ -1,10 +1,6 @@
 package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.config.MessageFactory;
-import com.ezar.clickandeat.converter.DateTimeTransformer;
-import com.ezar.clickandeat.converter.LocalDateTransformer;
-import com.ezar.clickandeat.converter.LocalTimeTransformer;
-import com.ezar.clickandeat.converter.NullIdStringTransformer;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.notification.IEmailService;
@@ -16,16 +12,13 @@ import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
 import com.opensymphony.module.sitemesh.RequestConstants;
-import flexjson.JSONSerializer;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.MutableDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -376,6 +369,47 @@ public class RestaurantController {
                 model.put("lat",geoLocation.getLocation()[0]);
                 model.put("lng",geoLocation.getLocation()[1]);
             }
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/copyMenu.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> updateAttribute(@RequestParam(value = "sourceRestaurantId") String sourceRestaurantId,
+                                                  @RequestParam(value = "targetRestaurantId") String targetRestaurantId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Restaurant sourceRestaurant = repository.findByRestaurantId(sourceRestaurantId);
+            Restaurant targetRestaurant = repository.findByRestaurantId(targetRestaurantId);
+            //Abort if we cannot find the restaurant whose menu we want to copy
+            if(sourceRestaurant == null){
+                model.put("success",false);
+                model.put("message",MessageFactory.getMessage("restaurant.admin.copy-menu.source-restaurant-missing",true));
+                //Abort if we cannot find the restaurant that will receive the menu
+            }else if(targetRestaurant == null){
+                model.put("success",false);
+                model.put("message",MessageFactory.getMessage("restaurant.admin.copy-menu.target-restaurant-missing",true));
+            }else{
+                targetRestaurant.setMenu(sourceRestaurant.getMenu());
+                targetRestaurant.addRestaurantUpdate("Copied menu from restaurant:["+sourceRestaurant.getName()+"].");
+                repository.saveRestaurant(targetRestaurant);
+                if( LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Menu from restaurant ["+sourceRestaurant.getName()+"] copied to restaurant ["+targetRestaurant.getName()+"]");
+                    // Add an update to the restaurant
+
+                }
+
+                model.put("success",true);
+            }
+
+
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
