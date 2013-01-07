@@ -78,8 +78,20 @@
                                     <c:if test="${restaurant.hasDiscounts == true}">
                                         <div class="restaurant-discount-details">
                                             <div class="scissors"></div>
-                                            <c:forEach var="discount" items="${restaurant.discounts}">
-                                                <div class="discount-details"><util:escape value="${discount.title}"/></div>
+                                            <c:forEach var="discount" items="${restaurant.discounts}" varStatus="status">
+                                                    <c:choose>
+                                                    <c:when test="${status.count > 1}">
+                                                    <div class="discount-details discount-separator">
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                    <div class="discount-details">
+                                                    </c:otherwise>
+                                                    </c:choose>
+                                                    <util:escape value="${discount.title}"/>
+                                                    <c:if test="${discount.description != ''}">
+                                                        <div class="discount-description"><util:escape value="${discount.description}" escapeNewLines="tue"/></div>
+                                                    </c:if>
+                                                </div>
                                             </c:forEach>
                                         </div>
                                     </c:if>
