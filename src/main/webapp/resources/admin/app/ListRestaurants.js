@@ -12,7 +12,7 @@ Ext.application({
                 region: 'north',
                 contentEl: 'north',
                 collapsible: false,
-                height: 133,
+                height: 103,
                 frame: false,
                 border:false
             },{

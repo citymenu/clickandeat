@@ -117,15 +117,22 @@ Ext.define('AD.controller.RestaurantEdit', {
                 }
             },
 
+            'restaurantedit button[action=upload]': {
+                click: this.uploadImage
+            },
+
             'restaurantedit button[action=sendForOwnerApproval]': {
                 click: this.sendForOwnerApproval
             },
+
             'restaurantedit button[action=openToTestPhoneCall]': {
                 click: this.openToTestPhoneCall
             },
+
             'restaurantedit button[action=showLocation]': {
                 click: this.showLocation
             },
+
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -500,8 +507,6 @@ Ext.define('AD.controller.RestaurantEdit', {
                 return;
             }
         });
-
-
     },
 
     sendForOwnerApproval: function(button) {
@@ -513,6 +518,29 @@ Ext.define('AD.controller.RestaurantEdit', {
 
         // Now save
         this.saveRestaurant(button , this.sendForOwnerApprovalCallBack)
+    },
+
+    uploadImage:function() {
+        var form = this.getMainDetailsForm().getForm();
+        var file = form.findField('file').getValue();
+        if( !file || file == '' ) {
+            this.getRestaurantTabPanel().setActiveTab(0);
+            form.findField('file').markInvalid();
+            this.showInvalidFormWarning();
+            return;
+        }
+        this.getMainDetailsForm().getForm().submit({
+            url: ctx + '/admin/upload.ajax',
+            params:{
+                restaurantId: restaurantObj.restaurantId
+            },
+            success: function(form,action) {
+                showSuccessMessage(Ext.get('restauranteditpanel'),'Uploaded','Restaurant image has been uploaded');
+            },
+            failure: function(form,action) {
+                showErrorMessage(Ext.get('restauranteditpanel'),'Error','Error occurred uploading restaurant image');
+            }
+        });
     },
 
     sendForOwnerApprovalCallBack: function() {

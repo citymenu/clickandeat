@@ -65,7 +65,7 @@ public class Restaurant extends PersistentObject {
     
     private List<SpecialOffer> specialOffers;
     
-    private String imageName;
+    private boolean hasUploadedImage;
 
     // Admin
     private Long created;
@@ -661,11 +661,15 @@ public class Restaurant extends PersistentObject {
     }
 
     public String getImageName() {
-        return StringUtils.hasText(imageName)? imageName: "default-logo.jpg";
+        return hasUploadedImage? restaurantId: "default-logo.jpg";
     }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
+    public boolean isHasUploadedImage() {
+        return hasUploadedImage;
+    }
+
+    public void setHasUploadedImage(boolean hasUploadedImage) {
+        this.hasUploadedImage = hasUploadedImage;
     }
 
     public Double getDistanceToSearchLocation() {

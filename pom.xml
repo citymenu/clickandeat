@@ -178,6 +178,18 @@
             <version>1.4</version>
         </dependency>
 
+        <!-- Commons file upload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+        </dependency>
+
         <!-- Jetty -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
