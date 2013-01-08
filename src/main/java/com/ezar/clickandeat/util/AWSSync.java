@@ -29,6 +29,7 @@ public class AWSSync {
         argsList.add("UP");
         argsList.add(awsbucket);
         argsList.add(sourceResource.getFile().getAbsolutePath());
+        argsList.add("--nodelete");
 
         Synchronize.main(argsList.toArray(new String[argsList.size()]));
         
