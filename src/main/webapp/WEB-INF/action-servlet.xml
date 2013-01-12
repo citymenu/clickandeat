@@ -2,35 +2,46 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xsi:schemaLocation=
-          "http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+        "http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-	<!-- Placeholder for annotated configuration classes -->
-	<context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
+    <!-- Placeholder for annotated configuration classes -->
+    <context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
 
-	<!-- Read annotation based configuration classes -->
-	<context:component-scan base-package="com.ezar"/>
+    <!-- Read annotation based configuration classes -->
+    <context:component-scan base-package="com.ezar"/>
+
+    <!-- Annotation driven @Controller mappings -->
+    <mvc:annotation-driven/>
+
+    <!-- Exclude sencha touch -->
+    <mvc:resources mapping="/resources/LC/**" location="/resources/LC/"/>
 
     <!-- Resource bundle view resolver -->
-    <bean id="resourceViewResolver"	class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-    	<property name="basename" value="views"/>
-    	<property name="order"><value>0</value></property>
-	</bean>
+    <bean id="resourceViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="basename" value="views"/>
+        <property name="order">
+            <value>0</value>
+        </property>
+    </bean>
 
-	<!-- View resolver for jsp files -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-    	<property name="prefix" value="/WEB-INF/jsp/"/>
-    	<property name="suffix" value=".jsp"/>
-	</bean>
+
+    <!-- View resolver for jsp files -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
 
     <!-- Controller to extract the file portion of a url -->
     <bean id="urlFilenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
 
     <!-- Allows users to switch locale -->
     <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-        <property name="paramName" value="lang" />
+        <property name="paramName" value="lang"/>
     </bean>
 
     <!-- Detect locale from request cookie -->
@@ -41,7 +52,7 @@
     <!-- Locale update annotation mapper -->
     <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
         <property name="interceptors">
-            <ref bean="localeChangeInterceptor" />
+            <ref bean="localeChangeInterceptor"/>
         </property>
     </bean>
 

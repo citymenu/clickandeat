@@ -1,6 +1,7 @@
 <decorators defaultdir="/WEB-INF/decorators">
     <excludes>
         <pattern>*.js</pattern>
+        <pattern>/resources/LC/**</pattern>
     </excludes>
     <decorator name="admin" page="admin.jsp">
         <pattern>/admin/*</pattern>

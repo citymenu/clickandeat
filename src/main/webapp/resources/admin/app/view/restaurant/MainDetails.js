@@ -35,7 +35,6 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             name:'file',
             allowBlank:true,
             msgTarget:'side',
-            anchor:'50%',
             buttonText:'Select Image..'
         },{
             fieldLabel:'Cuisines',

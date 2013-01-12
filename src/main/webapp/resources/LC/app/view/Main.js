@@ -6,45 +6,91 @@ Ext.define('LC.view.Main', {
         'Ext.Video'
     ],
     config: {
+        fullscreen: true,
         tabBarPosition: 'bottom',
+        cls:'home',
 
-        items: [
-            {
-                title: 'Welcome',
-                iconCls: 'home',
+        items: [{
+            title: 'Home',
+            iconCls: 'home',
+            html: [
+                '<img src="http://staging.sencha.com/img/sencha.png" />',
+                '<h1>Welcome to Sencha Touch</h1>',
+                "<p>You're creating the Getting Started app. This demonstrates how ",
+                "to use tabs, lists and forms to create a simple app</p>",
+                '<h2>Sencha Touch (2.0.0)</h2>'
+            ].join("")
+        },{
+            xtype: 'nestedlist',
+            title: 'Blog',
+            iconCls: 'star',
+            displayField: 'title',
 
-                styleHtmlContent: true,
-                scrollable: true,
 
-                items: {
-                    docked: 'top',
-                    xtype: 'titlebar',
-                    title: 'Welcome to Sencha Touch 2'
+
+            store: {
+                type: 'tree',
+                fields: [
+                    'title', 'link', 'author', 'contentSnippet', 'content',
+                    {name: 'leaf', defaultValue: true}
+                ],
+                root: {
+                    leaf: false
                 },
-
-                html: [
-                    "You've just generated a new Sencha Touch 2 project. What you're looking at right now is the ",
-                    "contents of <a target='_blank' href=\"app/view/Main.js\">app/view/Main.js</a> - edit that file ",
-                    "and refresh to change what's rendered here."
-                ].join("")
-            },
-            {
-                title: 'Get Started',
-                iconCls: 'action',
-
-                items: [
-                    {
-                        docked: 'top',
-                        xtype: 'titlebar',
-                        title: 'Getting Started'
-                    },
-                    {
-                        xtype: 'video',
-                        url: 'http://av.vimeo.com/64284/137/87347327.mp4?token=1330978144_f9b698fea38cd408d52a2393240c896c',
-                        posterUrl: 'http://b.vimeocdn.com/ts/261/062/261062119_640.jpg'
+                proxy: {
+                    type: 'jsonp',
+                    url: 'https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&q=http://feeds.feedburner.com/SenchaBlog',
+                    reader: {
+                        type: 'json',
+                        rootProperty: 'responseData.feed.entries'
                     }
-                ]
+                }
+            },
+
+            listConfig: {
+              variableHeights: true
+            },
+
+            detailCard: {
+                xtype: 'panel',
+                scrollable: true,
+                styleHtmlContent: true
+            },
+
+            listeners: {
+                itemtap: function(nestedList, list, index, element, post) {
+                    this.getDetailCard().setHtml(post.get('content'));
+                }
             }
-        ]
+        },{
+            title: 'Contact',
+            iconCls: 'user',
+            xtype: 'formpanel',
+            url: 'contact.php',
+            layout: 'vbox',
+
+            items: [{
+                xtype: 'fieldset',
+                title: 'Contact Us',
+                instructions: '(email address is optional)',
+                items: [{
+                    xtype: 'textfield',
+                    label: 'Name'
+                },{
+                    xtype: 'emailfield',
+                    label: 'Email'
+                },{
+                    xtype: 'textareafield',
+                    label: 'Message'
+                }]
+            },{
+                xtype: 'button',
+                text: 'Send',
+                ui: 'confirm',
+                handler: function() {
+                    this.up('formpanel').submit();
+                }
+            }]
+        }]
     }
 });
