@@ -19,6 +19,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.mail.internet.MimeMessage;
 import java.text.MessageFormat;
@@ -50,7 +51,7 @@ public class EmailServiceImpl implements IEmailService {
 
     private String from;
 
-    private String bcc;
+    private String[] bcc;
 
     private String adminEmailAddress;
 
@@ -457,7 +458,7 @@ public class EmailServiceImpl implements IEmailService {
     @Required
     @Value(value="${email.bcc}")
     public void setBcc(String bcc) {
-        this.bcc = bcc;
+        this.bcc = StringUtils.commaDelimitedListToStringArray(bcc);
     }
     @Required
     @Value(value="${email.adminaddress}")
