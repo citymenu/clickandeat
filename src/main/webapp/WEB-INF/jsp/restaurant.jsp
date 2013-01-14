@@ -45,7 +45,7 @@
                                     <table width="460">
                                         <tr valign="bottom">
                                             <td nowrap style="vertical-align:top">
-                                                <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>" class="restaurant-image"/>
                                             </td>
                                             <td width="100%">
                                                 <div class="restaurant-title">

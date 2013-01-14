@@ -59,6 +59,11 @@ a.location-button {
     *display: inline;
 }
 
+.restaurant-image {
+    max-width:150px;
+    max-height:150px;
+}
+
 .restaurant-title {
     vertical-align:bottom;
     padding: 0 20px 0 10px;

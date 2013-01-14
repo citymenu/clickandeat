@@ -22,7 +22,7 @@ Ext.define('LC.view.Main', {
             ].join("")
         },{
             xtype: 'nestedlist',
-            title: 'Blog',
+            title: 'Your Order',
             iconCls: 'star',
             displayField: 'title',
 
@@ -63,7 +63,7 @@ Ext.define('LC.view.Main', {
                 }
             }
         },{
-            title: 'Contact',
+            title: 'Checkout',
             iconCls: 'user',
             xtype: 'formpanel',
             url: 'contact.php',

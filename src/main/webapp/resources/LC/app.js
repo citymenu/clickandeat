@@ -1,9 +1,7 @@
-//<debug>
 Ext.Loader.setPath({
     'Ext': 'touch/src',
     'LC': 'app'
 });
-//</debug>
 
 Ext.application({
     name: 'LC',
@@ -38,6 +36,7 @@ Ext.application({
 
         // Initialize the main view
         Ext.Viewport.add(Ext.create('LC.view.Main'));
+
     },
 
     onUpdated: function() {
