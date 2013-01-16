@@ -529,6 +529,7 @@ public class RestaurantController {
         return new ModelAndView("workflow/approveContent",model);
     }
 
+
     @ResponseBody
     @RequestMapping(value="/approval/restaurant/contentRejected.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> contentRejectedSendEmail(@RequestParam(value = "restaurantId") String restaurantId,
@@ -565,6 +566,26 @@ public class RestaurantController {
         }
         return responseEntityUtils.buildResponse(model);
 
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value="/admin/restaurants/clearImage.ajax", method= RequestMethod.POST)
+    public ResponseEntity<byte[]> clearUploadedImage(@RequestParam(value = "restaurantId", required = true) String restaurantId) throws Exception {
+
+        Map<String,Object> model = new HashMap<String, Object>();
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            restaurant.setHasUploadedImage(false);
+            repository.saveRestaurant(restaurant);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
     }
 
 

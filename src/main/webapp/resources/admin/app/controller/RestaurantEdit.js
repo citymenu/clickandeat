@@ -121,6 +121,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click: this.uploadImage
             },
 
+            'restaurantedit button[action=clear]': {
+                click: this.clearImage
+            },
+
             'restaurantedit button[action=sendForOwnerApproval]': {
                 click: this.sendForOwnerApproval
             },
@@ -541,6 +545,24 @@ Ext.define('AD.controller.RestaurantEdit', {
                 showErrorMessage(Ext.get('restauranteditpanel'),'Error','Error occurred uploading restaurant image');
             }
         });
+    },
+
+    clearImage:function() {
+        Ext.Ajax.request({
+            url: ctx + '/admin/restaurants/clearImage.ajax',
+            method:'POST',
+            params: {
+                restaurantId: restaurantObj.restaurantId
+            },
+            success: function(response) {
+                var obj = Ext.decode(response.responseText);
+                if( obj.success ) {
+                    showSuccessMessage(Ext.get('restauranteditpanel'),'Cleared','Cleared restaurant image successfully');
+                } else {
+                    showErrorMessage(Ext.get('restauranteditpanel'),'Error',obj.message);
+                }
+            }
+        })
     },
 
     sendForOwnerApprovalCallBack: function() {

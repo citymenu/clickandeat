@@ -22,6 +22,11 @@ Ext.define('AD.view.restaurant.Edit' ,{
             icon: resources + '/images/icons-shadowless/image--arrow.png',
             text:'Upload image',
             action:'upload'
+        },{
+            xtype:'button',
+            icon: resources + '/images/icons-shadowless/image--minus.png',
+            text:'Clear uploaded image',
+            action:'clear'
         },'-',{
             xtype:'button',
             icon: resources + '/images/icons-shadowless/mail--arrow.png',

@@ -9,6 +9,7 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import com.ezar.clickandeat.web.controller.helper.RestaurantSearchComparator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +40,7 @@ public class RestaurantSearchController {
     @Autowired
     private CuisineProvider cuisineProvider;
 
+    
     @RequestMapping(value="/**/loc/{address}/csn/{cuisine}", method = RequestMethod.GET)
     public ModelAndView searchByLocationAndCuisine(HttpServletRequest request, @PathVariable("address") String address, @PathVariable("cuisine") String cuisine ) {
 
@@ -162,54 +164,5 @@ public class RestaurantSearchController {
         // Put the system locale on the response
         return new ModelAndView("findRestaurant",model);
     }
-    
-
-    /**
-     * Custom ordering for restaurant search results 
-     */
-    
-    private static final class RestaurantSearchComparator implements Comparator<Restaurant> {
-
-        @Override
-        public int compare(Restaurant restaurant1, Restaurant restaurant2) {
-            
-            //First deal with those restaurants that support phone orders only
-            if( !restaurant1.getPhoneOrdersOnly() && restaurant2.getPhoneOrdersOnly()) {
-                return -1;
-            }
-            else if( restaurant1.getPhoneOrdersOnly() && !restaurant2.getPhoneOrdersOnly()) {
-                return 1;
-            }
-
-            if( restaurant1.getOpen() && !restaurant2.getOpen()) {
-                return -1;                
-            }
-            else if( !restaurant1.getOpen() && restaurant2.getOpen()) {
-                return 1;
-            }
-            else if( restaurant1.getSearchRanking() == restaurant2.getSearchRanking()) {
-                double distanceDiff = restaurant1.getDistanceToSearchLocation() - restaurant2.getDistanceToSearchLocation();
-                if( distanceDiff == 0 ) {
-                    return restaurant1.getName().compareTo(restaurant2.getName());
-                }
-                else if( distanceDiff < 0 ) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
-            else {
-                int rankingDifference = restaurant1.getSearchRanking() - restaurant2.getSearchRanking();
-                if( rankingDifference < 0 ) {
-                    return 1;
-                }
-                else {
-                    return -1;
-                }
-            }
-        }
-    }
-
 
 }

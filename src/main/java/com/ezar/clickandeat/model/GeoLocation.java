@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 @Document(collection="geoLocations")
@@ -22,7 +23,7 @@ public class GeoLocation extends PersistentObject implements Serializable {
 
     private double[] location;
 
-    private Map<String,String> locationComponents;
+    private Map<String,String> locationComponents = new HashMap<String, String>();
     
     private double radius;
 
