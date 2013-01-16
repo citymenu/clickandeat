@@ -5,6 +5,8 @@ Ext.define('AD.view.order.List' ,{
     layout:'fit',
     autoScroll:true,
     loadMask:true,
+    stateful:true,
+    stateId:'ordergridpanel',
 
     plugins: [{
         ptype: 'rowexpander',

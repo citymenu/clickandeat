@@ -5,6 +5,8 @@ Ext.define('AD.view.registration.List' ,{
     layout:'fit',
     autoScroll:true,
     loadMask:true,
+    stateful:true,
+    stateId:'registrationgridpanel',
 
     plugins: [{
         ptype: 'rowexpander',

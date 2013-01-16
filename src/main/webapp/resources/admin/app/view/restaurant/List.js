@@ -5,6 +5,8 @@ Ext.define('AD.view.restaurant.List' ,{
     id:'restaurantlist',
     layout:'fit',
     loadMask:true,
+    stateful:true,
+    stateId:'restaurantgridpanel',
 
     dockedItems:[{
     	xtype:'toolbar',
