@@ -167,6 +167,7 @@ public class EmailResponseController {
             Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
             if( !restaurant.getListOnSite()) {
                 restaurant.setListOnSite(true);
+                restaurant.setTestMode(true);
                 restaurant.setLastOrderReponseTime(new DateTime()); // Mark the last time we got a response from the restaurant
                 restaurantRepository.saveRestaurant(restaurant);
                 model.put("message",MessageFactory.getMessage("workflow.restaurant-relisted-confirmation",true));
