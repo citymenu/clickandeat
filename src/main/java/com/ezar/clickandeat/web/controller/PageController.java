@@ -38,6 +38,11 @@ public class PageController {
     }
 
 
+    @RequestMapping(value="/help.html", method = RequestMethod.GET )
+    public String help() {
+        return MessageFactory.getLocaleString() + "/help";
+    }
+
     @RequestMapping(value="/dataConfidentiality.html", method = RequestMethod.GET )
     public String dataConfidentiality() {
         return MessageFactory.getLocaleString() + "/dataConfidentiality";
