@@ -753,6 +753,9 @@ public class Restaurant extends PersistentObject {
     }
 
     public boolean getHasMenuItemIcon() {
+        if( menu == null ) {
+            return false;
+        }
         for( MenuCategory category: menu.getMenuCategories()) {
             if( StringUtils.hasText(category.getIconClass())) {
                 return true;
@@ -790,6 +793,9 @@ public class Restaurant extends PersistentObject {
      */
     
     public boolean getHasIconClass(String iconClass) {
+        if( menu == null ) {
+            return false;
+        }
         for( MenuCategory category: menu.getMenuCategories()) {
             if( category.getIconClass() != null && category.getIconClass().startsWith(iconClass)) {
                 return true;
