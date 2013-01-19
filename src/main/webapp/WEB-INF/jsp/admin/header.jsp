@@ -43,6 +43,16 @@
                         </c:otherwise>
                     </c:choose>
 
+                    <li class="arrow">|</li>
+
+                    <c:choose>
+                        <c:when test="${path == 'admin/reporting.jsp'}">
+                            <li class="active unselectable">Reporting</li>
+                        </c:when>
+                        <c:otherwise>
+                            <li class="unselectable"><a href="${ctx}/admin/reporting.html">Reporting</a></li>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </div>
         </div>

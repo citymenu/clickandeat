@@ -69,4 +69,9 @@ public class PageController {
         return "admin/registrations";
     }
 
+    @RequestMapping(value="/admin/reporting.html", method = RequestMethod.GET)
+    public String reporting() {
+        return "admin/reporting";
+    }
+
 }
