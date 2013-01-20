@@ -111,6 +111,10 @@ public class GeoLocationService  {
                 BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
                 Map<String,Object> json = (Map<String,Object>)new JSONDeserializer().deserialize(in);
                 String status = (String)json.get("status");
+                if( "ZERO_RESULTS".equals("status")) {
+                    LOGGER.info("Received no results for search");
+                    return null;
+                }
                 if( !"OK".equals(status)) {
                     LOGGER.error("Received status: " + status);
                     return null;

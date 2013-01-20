@@ -1,6 +1,6 @@
 Ext.define('AD.controller.Reporting', {
     extend: 'Ext.app.Controller',
-    stores:['Orders'],
+    stores:['AcceptedOrders'],
     models: ['Order'],
     views:['reporting.TabPanel','reporting.OrderSummary'],
 
@@ -18,7 +18,7 @@ Ext.define('AD.controller.Reporting', {
 	},
 
 	onGridRendered: function(grid) {
-		grid.getStore().loadPage(1);
+		grid.getStore().load();
 	}
 
 });

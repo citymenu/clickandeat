@@ -53,6 +53,14 @@
     	});
     </script>
 
+    <!-- CSS Override -->
+    <style type="text/css">
+        .x-grid-row-summary .x-grid-cell-inner {
+            font-size: 11px;
+            font-weight: bold;
+        }
+    </style>
+
     <decorator:head/>
     <title><decorator:title/></title>
 </head>

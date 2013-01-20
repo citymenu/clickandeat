@@ -23,6 +23,8 @@ public interface OrderRepositoryCustom {
     List<Order> export();
     
     List<Order> pageByOrderId(Pageable pageable, String orderId, List<Filter> filters);
-    
+
+    List<Order> findAllAcceptedOrders();
+
     long count(String orderId, List<Filter> filters);
 }

@@ -25,6 +25,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
+import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_BASKET;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
@@ -73,6 +74,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         Query query = StringUtils.hasText(orderId)? new Query(where("orderId").regex(orderId,"i")): new Query();
         FilterUtils.applyFilters(query,filters);
         QueryUtils.applyPagination(query,pageable);
+        return operations.find(query,Order.class);
+    }
+
+
+    @Override
+    public List<Order> findAllAcceptedOrders() {
+        Query query = new Query(where("orderStatus").is(ORDER_STATUS_BASKET));
         return operations.find(query,Order.class);
     }
 

@@ -90,8 +90,7 @@ function arrayToString(value, record) {
 function convertOrderStatus(value,record) {
     if( !value || value == '' ) {
         return value;
-    }
-    else {
+    } else {
         return value.replace('ORDER_STATUS_','').replace('_',' ');
     }
 }
@@ -105,6 +104,18 @@ function convertOrderNotificationStatus(value,record) {
         return value.replace(/_/g,' ');
     }
 }
+
+// Converts a date to a month only date
+function convertDateToMonth(value, record) {
+    return value? Ext.Date.format(new Date(value),'m/Y'): '';
+}
+
+// plug European currency renderer into formatter
+Ext.util.Format.Euro = function(v) {
+	v = (Math.round((v-0)*100))/100;
+	v = (v == Math.floor(v)) ? v + ".00" : ((v*10 == Math.floor(v*10)) ? v + "0" : v);
+	return (v + ' &euro;').replace(/\./, ',');
+};
 
 //Messaging
 Ext.message = function(){

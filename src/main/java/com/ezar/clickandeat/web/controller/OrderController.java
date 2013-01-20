@@ -135,6 +135,20 @@ public class OrderController {
     }
 
 
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/admin/orders/acceptedOrders.ajax", method = RequestMethod.GET )
+    public ResponseEntity<byte[]> listAcceptedOrders() throws Exception {
+        List<Order> orders = orderRepository.findAllAcceptedOrders();
+        Map<String,Object> model = new HashMap<String,Object>();
+        model.put("success",true);
+        model.put("orders",orders);
+        model.put("count",orders.size());
+        String[] excludes = new String[]{"orders.orderDiscounts"};
+        return responseEntityUtils.buildResponse(model,excludes);
+    }
+
+
     @ResponseBody
     @RequestMapping(value="/admin/orders/export.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> export() throws Exception {
