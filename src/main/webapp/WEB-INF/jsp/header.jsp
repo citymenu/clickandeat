@@ -10,7 +10,7 @@
             <a href="${ctx}/home.html"><div class="header-company unselectable">llamar<span class="header-company-small">y</span>comer</div></a>
             <div class="help-links">
                 <div class="help-link-wrapper unselectable">
-                    <div class="help-link-content"><message:message key="label.help"/></div>
+                    <div class="help-link-content"><a class="direct" href="${ctx}/help.html"><message:message key="label.help"/></a></div>
                 </div>
                 <div class="help-link-wrapper unselectable">
                     <div class="help-link-content" onclick="Zenbox.show()"><message:message key="label.feedback"/></div>
