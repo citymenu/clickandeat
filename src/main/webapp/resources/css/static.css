@@ -31,3 +31,9 @@ li {
     letter-spacing: -0.01em;
     margin-bottom:10px;
 }
+
+li.static {
+    font:14px/16px myriad-pro-n4,myriad-pro;
+    color:#444444;
+    margin-bottom:10px;
+}
