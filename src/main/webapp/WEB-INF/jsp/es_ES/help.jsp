@@ -111,16 +111,16 @@
                 </p>
                 <p class="static">
                  <ol>
-                    <li>
+                    <li class="static">
                         Si el restaurante no ha aceptado o rechazado el pedido tras 5 minutos, tendrás la opción de
                         cancelarlo. En este caso el reintegro del dinero a tu cuenta es instantáneo ya que nosotros,
                         a diferencia de nuestra competencia, sólo te cobramos el pedido cuando lo acepta el restaurante.
                     </li>
-                    <li>
+                    <li class="static">
                         Si el restaurante no ha aceptado o rechazado el pedido tras 20 minutos, éste se cancelara de
                         manera automática y el reembolso del dinero a tu cuenta también será instantáneo.
                     </li>
-                    <li>
+                    <li class="static">
                         Si el pedido ha sido aceptado por el restaurante deberás ponerte en contacto con el restaurante
                         o con nosotros para su cancelación. Tu dinero se te reintegrará a tu cuenta en un plazo máximo
                         de una semana.
