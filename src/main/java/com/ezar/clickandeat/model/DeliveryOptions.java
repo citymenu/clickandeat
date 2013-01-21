@@ -25,11 +25,14 @@ public class DeliveryOptions {
 
     private Double deliveryRadiusInKilometres;
     private List<String> areasDeliveredTo;
+    
+    private List<AreaDeliveryCharge> areaDeliveryCharges;
 
     public DeliveryOptions() {
         this.deliveryTimeMinutes = DEFAULT_DELIVERY_TIME;
         this.collectionTimeMinutes = DEFAULT_COLLECTION_TIME;
         this.areasDeliveredTo = new ArrayList<String>();
+        this.areaDeliveryCharges = new ArrayList<AreaDeliveryCharge>();
     }
 
     public String getDeliveryOptionsSummary() {

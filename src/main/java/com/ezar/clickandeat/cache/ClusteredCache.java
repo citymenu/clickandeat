@@ -125,18 +125,38 @@ public class ClusteredCache implements InitializingBean {
 
     private final class CacheUpdateSubscriber implements Runnable, MessageListener {
 
-        private final RedisConnection connection;
+        private RedisConnection connection;
 
-        private final byte[] channel;
+        private byte[] channel;
 
+        private final int retryCount = 5; // Retry on startup
+        
         /**
          * @param template
          * @param channel
          */
 
         private CacheUpdateSubscriber(RedisTemplate template, String channel) {
-            this.connection = template.getConnectionFactory().getConnection();
-            this.channel = channel.getBytes();
+            int retryAttempt = 0;
+            while( this.channel == null ) {
+                try {
+                    this.connection = template.getConnectionFactory().getConnection();
+                    this.channel = channel.getBytes();
+                    break;
+                }
+                catch( Exception ex ) {
+                    if( ++retryAttempt > retryCount ) {
+                        throw new RuntimeException("Failed to get Jedis connection after " + retryAttempt + " attempts");
+                    }
+                    try {
+                        LOGGER.info("Failed to get Jedis connection, waiting 1000ms before retrying");
+                        Thread.sleep(1000); // Wait 500ms before retry
+                    }
+                    catch( InterruptedException iex ) {
+                        // Do nothing on purpose
+                    }
+                }
+            }
         }
 
         @Override
