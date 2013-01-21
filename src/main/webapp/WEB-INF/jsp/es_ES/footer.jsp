@@ -38,7 +38,7 @@
                     <div class="company-details">
                         <h2 class="footer">Información</h2>
                         <div class="footer-list">
-                            <p><a class="direct">Ayuda y preguntas frecuentes</a></p>
+                            <p><a class="direct" href="${ctx}/help.html">Ayuda y preguntas frecuentes</a></p>
                             <p><a class="direct" href="${ctx}/legal.html">Términos y Condiciones</a></p>
                             <p><a class="direct" href="${resources}/docs/promotions/es_ES/bases-legales-sorteo-jamon.pdf">Bases Legales: Sorteo de un jamón</a></p>
                             <p><a class="direct">Dueños de restaurantes</a></p>
