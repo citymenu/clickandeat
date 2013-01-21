@@ -70,6 +70,7 @@ public class Order extends PersistentObject {
     private Double voucherDiscount;
     private Double totalCost;
     private Double restaurantCost; // Cost to restaurant (without any vouchers applied)
+    private Double commission; // Commission to be retained by LlamaryComer
 
     // Order payment details
     private String transactionId;
@@ -203,6 +204,9 @@ public class Order extends PersistentObject {
         
         // Set the restaurant cost
         this.restaurantCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        
+        // Set the commission on this order
+        this.commission = restaurant.getCommissionPercent() * this.restaurantCost / 100d;
         
         // Apply any vouchers to the overall cost
         this.voucherDiscount = 0d;
@@ -785,6 +789,14 @@ public class Order extends PersistentObject {
 
     public void setVoucherDiscount(Double voucherDiscount) {
         this.voucherDiscount = voucherDiscount;
+    }
+
+    public Double getCommission() {
+        return commission;
+    }
+
+    public void setCommission(Double commission) {
+        this.commission = commission;
     }
 
     public List<OrderUpdate> getOrderUpdates() {

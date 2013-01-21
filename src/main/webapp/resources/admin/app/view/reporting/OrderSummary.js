@@ -49,6 +49,10 @@ Ext.define('AD.view.reporting.OrderSummary' ,{
                 header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.Euro,flex:.1,align:'right',
                 summaryType:'sum',
                 summaryRenderer: Ext.util.Format.Euro
+            },{
+                 header:'Commission', dataIndex:'commission',renderer: Ext.util.Format.Euro,flex:.1,align:'right',
+                 summaryType:'sum',
+                 summaryRenderer: Ext.util.Format.Euro
             }
         ];
 

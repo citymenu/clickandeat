@@ -12,6 +12,7 @@ Ext.define('AD.model.Order', {
         {name:'restaurantName', type:'string',convert: unescapeQuotes},
         {name:'voucherId', type:'string'},
         {name:'restaurantCost', type:'number'},
+        {name:'commission', type:'number'},
         {name:'totalCost', type:'number'},
         {name:'deliveryCost', type:'number'},
         {name:'totalDiscount', type:'number'},

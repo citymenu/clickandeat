@@ -67,6 +67,11 @@ Ext.define('AD.view.restaurant.MainDetails' ,{
             labelAlign:'top',
             xtype:'numberfield',
             name:'searchRanking'
+        },{
+            fieldLabel:'Commission percentage to be charged on orders',
+            labelAlign:'top',
+            xtype:'numberfield',
+            name:'commissionPercent'
         }]
     },{
         xtype:'fieldset',

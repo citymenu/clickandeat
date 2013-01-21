@@ -81,7 +81,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public List<Order> findAllAcceptedOrders() {
-        Query query = new Query(where("orderStatus").is(ORDER_STATUS_RESTAURANT_ACCEPTED));
+        Query query = new Query(where("orderStatus").is(ORDER_STATUS_RESTAURANT_ACCEPTED).and("transactionId").ne("DUMMY"));
         return operations.find(query,Order.class);
     }
 

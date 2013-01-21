@@ -120,11 +120,12 @@ Ext.define('AD.view.order.List' ,{
             {header:'Restaurant Actioned', dataIndex:'restaurantActionedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Confirmed Time', dataIndex:'restaurantConfirmedTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'),flex:.1, filter:{type:'date'}},
             {header:'Voucher Id', dataIndex:'voucherId',flex:.1, filter:{type:'string'}},
-            {header:'Delivery Cost', dataIndex:'deliveryCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
-            {header:'Discount', dataIndex:'totalDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
-            {header:'Voucher Discount', dataIndex:'voucherDiscount',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
-            {header:'Total Cost', dataIndex:'totalCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
-            {header:'Restaurant Cost', dataIndex:'restaurantCost',renderer: Ext.util.Format.numberRenderer('0.00'),flex:.1, filter:{type:'numeric'}},
+            {header:'Delivery Cost', dataIndex:'deliveryCost',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
+            {header:'Discount', dataIndex:'totalDiscount',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
+            {header:'Voucher Discount', dataIndex:'voucherDiscount',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
+            {header:'Total Cost', dataIndex:'totalCost',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
+            {header:'Restaurant Cost', dataIndex:'restaurantCost',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
+            {header:'Commission', dataIndex:'commission',align:'right',renderer: Ext.util.Format.Euro,flex:.1, filter:{type:'numeric'}},
             {header:'Transaction Id', dataIndex:'transactionId',flex:.1, filter:{type:'string'}},
             {header:'Transaction Status', dataIndex:'transactionStatus',flex:.1,filter:{type:'list',options:['CAPTURED','ERROR','PREAUTHORISED','REFUNDED']}}
         ];

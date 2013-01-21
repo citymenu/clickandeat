@@ -143,6 +143,13 @@ select.deliveryselect {
     font-weight:400;
 }
 
+.order-discount-separator {
+    margin-top:4px;
+    padding-top:4px;
+    border-top:1px dashed #CCCCCC;
+}
+
+
 .additional-information {
     border: 1px solid #CCCCCC;
     font: 12px/14px prenton-n4,prenton;

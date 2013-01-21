@@ -252,8 +252,11 @@ public class TwilioController implements InitializingBean {
         String callDurationParameter = request.getParameter("CallDuration");
         Integer callDuration = StringUtils.hasText(callDurationParameter)? Integer.valueOf(callDurationParameter): 0;
 
-        // Mark call answered or unanswered
-        if( !callStatus.equals("completed") || callDuration == 0 ) {
+        // If line busy do not count as a missed call attempt
+        if( callStatus.equals("busy")) {
+            orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_LINE_BUSY);
+        }
+        else if( !callStatus.equals("completed") || callDuration == 0 ) {
             orderWorkflowEngine.processAction(order, OrderWorkflowEngine.ACTION_CALL_NOT_ANSWERED);
         }
         else {

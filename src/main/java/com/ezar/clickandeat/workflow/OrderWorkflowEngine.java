@@ -50,6 +50,7 @@ public class OrderWorkflowEngine implements ApplicationContextAware, Initializin
     public static final String ACTION_SEND_SMS = "ACTION_SEND_SMS";
     public static final String ACTION_CALL_ANSWERED = "ACTION_CALL_ANSWERED";
     public static final String ACTION_CALL_NOT_ANSWERED = "ACTION_CALL_NOT_ANSWERED";
+    public static final String ACTION_CALL_LINE_BUSY = "ACTION_CALL_LINE_BUSY";
     public static final String ACTION_CALL_ERROR = "ACTION_CALL_ERROR";
     public static final String ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER = "ACTION_SEND_CANCEL_OFFER_TO_CUSTOMER";
 

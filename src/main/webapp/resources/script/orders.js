@@ -289,8 +289,12 @@ function doBuildOrder(order,config) {
         // Show details of discounts if available and if we are either on a menu page or there are items
         if( advancedDisplay && config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
             var discountItems = '';
+            var discountIndex = 0;
             order.restaurantDiscounts.forEach(function(discount){
-                discountItems += ('<div class=\'order-discount-item\'>{0}</div>').format(unescape(discount.title));
+                var cls = discountIndex == 0? 'order-discount-item': 'order-discount-item order-discount-separator';
+                var description = discount.description && discount.description != ''? '<br>' + unescape(discount.description): '';
+                discountItems += ('<div class=\'{0}\'>{1}{2}</div>').format(cls, unescape(discount.title), description);
+                discountIndex++;
             });
             var discountItemHeader = ('<h2>{0}:</h2>').format(getLabel('order.discounts-available'));
             var discountContainer = ('<div class=\'order-discount-wrapper\'>{0}{1}</div>').format(discountItemHeader,discountItems);

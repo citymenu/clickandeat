@@ -23,6 +23,8 @@ public class Restaurant extends PersistentObject {
 
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
+    private static final Double DEFAULT_COMMISSION_PERCENT = 10d;
+    
     @Indexed(unique=true)
     private String restaurantId;
 
@@ -74,6 +76,7 @@ public class Restaurant extends PersistentObject {
     private List<RestaurantUpdate> restaurantUpdates;
     private Boolean testMode;
     private int searchRanking; // Indicates where it should appear in the search results
+    private Double commissionPercent = DEFAULT_COMMISSION_PERCENT;
 
     // The last time the restaurant responded in any way to an order
     private DateTime lastOrderReponseTime;
@@ -825,5 +828,13 @@ public class Restaurant extends PersistentObject {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Double getCommissionPercent() {
+        return commissionPercent == null? DEFAULT_COMMISSION_PERCENT: commissionPercent;
+    }
+
+    public void setCommissionPercent(Double commissionPercent) {
+        this.commissionPercent = commissionPercent;
     }
 }
