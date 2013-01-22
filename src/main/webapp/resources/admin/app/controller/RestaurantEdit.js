@@ -721,6 +721,35 @@ Ext.define('AD.controller.RestaurantEdit', {
         });
         restaurantObj.openingTimes.bankHolidayOpeningTimes = bankHolidayOpeningTimes;
 
+        // Validate the delivery charges and areas if set
+        var deliveryChargeAreas = deliveryDetailValues['deliveryChargeAreas'];
+        var deliveryChargeAmounts = deliveryDetailValues['deliveryChargeAmounts'];
+        var deliveryChargeAreaArray = delimitedStringToArray(deliveryChargeAreas,'\n');
+        var deliveryChargeAmountArray = delimitedStringToArray(deliveryChargeAmounts,'\n');
+        if( deliveryChargeAreaArray.length != deliveryChargeAmountArray.length ) {
+            this.getRestaurantTabPanel().setActiveTab(1);
+            Ext.MessageBox.show({
+                title:'Input Values Not Valid',
+                msg:'Please ensure that delivery charge areas and amounts have the same number of lines',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+            return;
+        }
+
+        // Build an array of delivery charge objects to send back to the server
+        var areaDeliveryCharges = [];
+        for( var i = 0; i < deliveryChargeAreaArray.length; i++ ) {
+            var areas = deliveryChargeAreaArray[i];
+            var charge = deliveryChargeAmountArray[i];
+            var areaDeliveryCharge = new Object({
+                deliveryCharge: charge,
+                areas: delimitedStringToArray(areas,',')
+            });
+            areaDeliveryCharges.push(areaDeliveryCharge);
+        }
+
         // Build delivery options details
         restaurantObj.deliveryOptions = new Object({
             deliveryOptionsSummary: deliveryDetailValues['deliveryOptionsSummary'],
@@ -732,7 +761,8 @@ Ext.define('AD.controller.RestaurantEdit', {
             minimumOrderForFreeDelivery: deliveryDetailValues['minimumOrderForFreeDelivery'],
             allowDeliveryBelowMinimumForFreeDelivery: deliveryDetailValues['allowDeliveryBelowMinimumForFreeDelivery'] == 'on',
             deliveryRadiusInKilometres: deliveryDetailValues['deliveryRadiusInKilometres'],
-            areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n')
+            areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n'),
+            areaDeliveryCharges: areaDeliveryCharges
         });
 
         // Build restaurant menu
@@ -950,6 +980,17 @@ Ext.define('AD.controller.RestaurantEdit', {
         form.findField('earlyClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.earlyClosingTime);
         form.findField('lateOpeningTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateOpeningTime);
         form.findField('lateClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateClosingTime);
+
+        // Populate the delivery areas and charges
+        var areaDeliveryCharges = restaurantObj.deliveryOptions.areaDeliveryCharges;
+        var deliveryAmountsArray = [];
+        var deliveryAreasArray = [];
+        areaDeliveryCharges.forEach(function(areaDeliveryCharge){
+            deliveryAmountsArray.push(areaDeliveryCharge.deliveryCharge);
+            deliveryAreasArray.push(areaDeliveryCharge.areas.join(','));
+        });
+        form.findField('deliveryChargeAreas').setValue(deliveryAreasArray.join('\n'));
+        form.findField('deliveryChargeAmounts').setValue(deliveryAmountsArray.join('\n'));
 
         // Populate form values from delivery options record
         formPanel.loadRecord(deliveryOptions);

@@ -122,4 +122,12 @@ public class DeliveryOptions {
     public void setCollectionOnly(boolean collectionOnly) {
         this.collectionOnly = collectionOnly;
     }
+
+    public List<AreaDeliveryCharge> getAreaDeliveryCharges() {
+        return areaDeliveryCharges;
+    }
+
+    public void setAreaDeliveryCharges(List<AreaDeliveryCharge> areaDeliveryCharges) {
+        this.areaDeliveryCharges = areaDeliveryCharges;
+    }
 }

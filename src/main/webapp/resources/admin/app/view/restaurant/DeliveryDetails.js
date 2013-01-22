@@ -324,10 +324,6 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             xtype:'numberfield',
             allowBlank:false
         },{
-            fieldLabel:'Delivery charge',
-            name:'deliveryCharge',
-            xtype:'numberfield'
-        },{
             fieldLabel:'Minimum order value for delivery',
             name:'minimumOrderForDelivery',
             xtype:'numberfield'
@@ -352,6 +348,30 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             fieldLabel:'Areas delivered to (enter one per line)',
             xtype:'textareafield',
             height:90
+        }]
+    },{
+        xtype:'fieldset',
+        title:'Delivery Charges',
+        defaults:{
+            allowBlank:true,
+            anchor:'100%',
+            labelAlign:'top'
+        },
+        defaultType: 'textfield',
+        items:[{
+            fieldLabel:'Standard delivery charge',
+            name:'deliveryCharge',
+            xtype:'numberfield'
+        },{
+            name:'deliveryChargeAreas',
+            fieldLabel:'Enter comma-separated lists of locations with the same delivery charge (one list per line)',
+            xtype:'textareafield',
+            height:90
+        },{
+             name:'deliveryChargeAmounts',
+             fieldLabel:'Enter delivery charges for the location lists in the field above (one charge per line)',
+             xtype:'textareafield',
+             height:90
         }]
     }]
 
