@@ -39,7 +39,6 @@ public class DistributedLock {
 
         // Sleep for a random short period to allow one instance to win each time
         long randomWait = (long)(Math.random() * 200d);
-        LOGGER.debug("Sleeping for " + randomWait + "ms");
         Thread.sleep(randomWait);
 
         long expires = System.currentTimeMillis() + expireMsecs;
@@ -52,7 +51,6 @@ public class DistributedLock {
 
         String currentValueStr = operations.get();
         long currentTimeMillis = System.currentTimeMillis();
-        LOGGER.debug("Current lock expiry: " + currentValueStr + " / Current time: " + currentTimeMillis);
         if (currentValueStr != null && Long.parseLong(currentValueStr) < currentTimeMillis) {
 
             // lock is expired
@@ -61,9 +59,6 @@ public class DistributedLock {
                 LOGGER.debug("Lock aquired");
                 locked = true;
                 return true;
-            }
-            else {
-                LOGGER.debug("Lock not acquired, old expiry: " + oldValueStr);
             }
         }
 
