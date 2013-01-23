@@ -27,12 +27,14 @@ public class DeliveryOptions {
     private List<String> areasDeliveredTo;
     
     private List<AreaDeliveryCharge> areaDeliveryCharges;
+    private List<AreaDeliveryCharge> areaMinimumOrderCharges;
 
     public DeliveryOptions() {
         this.deliveryTimeMinutes = DEFAULT_DELIVERY_TIME;
         this.collectionTimeMinutes = DEFAULT_COLLECTION_TIME;
         this.areasDeliveredTo = new ArrayList<String>();
         this.areaDeliveryCharges = new ArrayList<AreaDeliveryCharge>();
+        this.areaMinimumOrderCharges = new ArrayList<AreaDeliveryCharge>();
     }
 
     public String getDeliveryOptionsSummary() {
@@ -129,5 +131,13 @@ public class DeliveryOptions {
 
     public void setAreaDeliveryCharges(List<AreaDeliveryCharge> areaDeliveryCharges) {
         this.areaDeliveryCharges = areaDeliveryCharges;
+    }
+
+    public List<AreaDeliveryCharge> getAreaMinimumOrderCharges() {
+        return areaMinimumOrderCharges;
+    }
+
+    public void setAreaMinimumOrderCharges(List<AreaDeliveryCharge> areaMinimumOrderCharges) {
+        this.areaMinimumOrderCharges = areaMinimumOrderCharges;
     }
 }

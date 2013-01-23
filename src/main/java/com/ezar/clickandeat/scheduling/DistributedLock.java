@@ -37,6 +37,11 @@ public class DistributedLock {
     public synchronized boolean acquire() throws InterruptedException {
         LOGGER.debug("Attempting to acquire lock");
 
+        // Sleep for a random short period to allow one instance to win each time
+        long randomWait = (long)(Math.random() * 1000d);
+        LOGGER.debug("Sleeping for " + randomWait + "ms");
+        Thread.sleep(randomWait);
+
         long expires = System.currentTimeMillis() + expireMsecs;
         String expiresStr = String.valueOf(expires);
         if (operations.setIfAbsent(expiresStr)) {
@@ -46,7 +51,9 @@ public class DistributedLock {
         }
 
         String currentValueStr = operations.get();
-        if (currentValueStr != null && Long.parseLong(currentValueStr) < System.currentTimeMillis()) {
+        long currentTimeMillis = System.currentTimeMillis();
+        LOGGER.debug("Current lock expiry: " + currentValueStr + " / Current time: " + currentTimeMillis);
+        if (currentValueStr != null && Long.parseLong(currentValueStr) < currentTimeMillis) {
 
             // lock is expired
             String oldValueStr = operations.getAndSet(expiresStr);
@@ -54,6 +61,9 @@ public class DistributedLock {
                 LOGGER.debug("Lock aquired");
                 locked = true;
                 return true;
+            }
+            else {
+                LOGGER.debug("Lock not acquired, old expiry: " + oldValueStr);
             }
         }
 

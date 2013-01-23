@@ -738,6 +738,23 @@ Ext.define('AD.controller.RestaurantEdit', {
             return;
         }
 
+        // Validate the minimum order values and areas if set
+        var minimumDeliveryAreas = deliveryDetailValues['minimumDeliveryAreas'];
+        var minimumDeliveryAmounts = deliveryDetailValues['minimumDeliveryAmounts'];
+        var minimumDeliveryAreaArray = delimitedStringToArray(minimumDeliveryAreas,'\n');
+        var minimumDeliveryAmountArray = delimitedStringToArray(minimumDeliveryAmounts,'\n');
+        if( minimumDeliveryAreaArray.length != minimumDeliveryAmountArray.length ) {
+            this.getRestaurantTabPanel().setActiveTab(1);
+            Ext.MessageBox.show({
+                title:'Input Values Not Valid',
+                msg:'Please ensure that minimum delivery value areas and charges have the same number of lines',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+            return;
+        }
+
         // Build an array of delivery charge objects to send back to the server
         var areaDeliveryCharges = [];
         for( var i = 0; i < deliveryChargeAreaArray.length; i++ ) {
@@ -748,6 +765,18 @@ Ext.define('AD.controller.RestaurantEdit', {
                 areas: delimitedStringToArray(areas,',')
             });
             areaDeliveryCharges.push(areaDeliveryCharge);
+        }
+
+        // Build an array of delivery charge objects to send back to the server
+        var areaMinimumOrderCharges = [];
+        for( var i = 0; i < minimumDeliveryAreaArray.length; i++ ) {
+            var areas = minimumDeliveryAreaArray[i];
+            var charge = minimumDeliveryAmountArray[i];
+            var areaMinimumDeliveryCharge = new Object({
+                deliveryCharge: charge,
+                areas: delimitedStringToArray(areas,',')
+            });
+            areaMinimumOrderCharges.push(areaMinimumDeliveryCharge);
         }
 
         // Build delivery options details
@@ -762,7 +791,8 @@ Ext.define('AD.controller.RestaurantEdit', {
             allowDeliveryBelowMinimumForFreeDelivery: deliveryDetailValues['allowDeliveryBelowMinimumForFreeDelivery'] == 'on',
             deliveryRadiusInKilometres: deliveryDetailValues['deliveryRadiusInKilometres'],
             areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n'),
-            areaDeliveryCharges: areaDeliveryCharges
+            areaDeliveryCharges: areaDeliveryCharges,
+            areaMinimumOrderCharges: areaMinimumOrderCharges
         });
 
         // Build restaurant menu
@@ -991,6 +1021,17 @@ Ext.define('AD.controller.RestaurantEdit', {
         });
         form.findField('deliveryChargeAreas').setValue(deliveryAreasArray.join('\n'));
         form.findField('deliveryChargeAmounts').setValue(deliveryAmountsArray.join('\n'));
+
+        // Populate the minimum order value areas and amounts
+        var areaMinimumOrderCharges = restaurantObj.deliveryOptions.areaMinimumOrderCharges;
+        var minimumOrderChargesArray = [];
+        var minimumOrderAreasArray = [];
+        areaMinimumOrderCharges.forEach(function(areaMinimumOrderCharge){
+            minimumOrderChargesArray.push(areaMinimumOrderCharge.deliveryCharge);
+            minimumOrderAreasArray.push(areaMinimumOrderCharge.areas.join(','));
+        });
+        form.findField('minimumDeliveryAreas').setValue(minimumOrderAreasArray.join('\n'));
+        form.findField('minimumDeliveryAmounts').setValue(minimumOrderChargesArray.join('\n'));
 
         // Populate form values from delivery options record
         formPanel.loadRecord(deliveryOptions);

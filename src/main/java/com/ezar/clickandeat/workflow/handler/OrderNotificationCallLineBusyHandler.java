@@ -9,7 +9,7 @@ import java.util.Map;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ACTION_CALL_LINE_BUSY;
 
 @Component
-public class OrderNotificationCallLineBusyandler implements IWorkflowHandler {
+public class OrderNotificationCallLineBusyHandler implements IWorkflowHandler {
     
     @Override
     public String getWorkflowAction() {

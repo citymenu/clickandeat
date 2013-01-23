@@ -20,7 +20,8 @@ Ext.define('AD.model.DeliveryOptions', {
             type:'auto',
             convert: arrayToString
         },
-        {name:'areaDeliveryCharges', type:'auto'}
+        {name:'areaDeliveryCharges', type:'auto'},
+        {name:'areaMinimumOrderCharges', type:'auto'}
     ]
 });
 
