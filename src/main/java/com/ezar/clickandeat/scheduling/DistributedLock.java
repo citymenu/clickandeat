@@ -12,7 +12,7 @@ public class DistributedLock {
     
     private String key;
 
-    private final int expireMsecs = 60 * 1000;
+    private final int expireMsecs = 50 * 1000;
 
     private boolean locked = false;
 
