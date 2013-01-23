@@ -203,6 +203,17 @@ public class RestaurantController {
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
         model.put("telephone",restaurant.getContactTelephone());
         request.setAttribute(RequestConstants.DECORATOR, "blank");
+        
+        // Update the order to indicate that the phone number was viewed
+        HttpSession session = request.getSession(true);
+        String orderId = (String)session.getAttribute("orderid");
+        if( orderId != null ) {
+            Order order = orderRepository.findByOrderId(orderId);
+            order.setPhoneNumberViewed(true);
+            orderRepository.saveOrder(order);
+            LOGGER.info("Marked phone number viewed in order id: " + orderId);
+        }
+
         return new ModelAndView(MessageFactory.getLocaleString() + "/contactTelephone",model);
     }
 

@@ -92,6 +92,9 @@ public class Order extends PersistentObject {
     private List<OrderUpdate> orderUpdates;
     private Boolean testOrder;
 
+    // Indicates if the restaurant phone number was viewed
+    private boolean phoneNumberViewed;
+
     // Indicates the order is deleted
     private boolean deleted;
 
@@ -857,6 +860,14 @@ public class Order extends PersistentObject {
             this.voucherId = voucher.getVoucherId();
             this.voucher = voucher;
         }
+    }
+
+    public boolean getPhoneNumberViewed() {
+        return phoneNumberViewed;
+    }
+
+    public void setPhoneNumberViewed(boolean phoneNumberViewed) {
+        this.phoneNumberViewed = phoneNumberViewed;
     }
 
     public boolean isDeleted() {

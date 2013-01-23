@@ -31,6 +31,7 @@ Ext.define('AD.model.Order', {
         {name:'orderUpdates', type:'auto'},
         {name:'orderAmendments', type:'auto'},
         {name:'customer', type:'auto'},
+        {name:'phoneNumberViewed', type:'boolean'},
         {name:'deliveryAddress', type:'auto'},
         {name:'orderCreatedMonth',mapping:'orderCreatedTime',convert:convertDateToMonth}
     ]
