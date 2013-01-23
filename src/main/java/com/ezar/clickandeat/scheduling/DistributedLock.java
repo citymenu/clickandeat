@@ -12,7 +12,7 @@ public class DistributedLock {
     
     private String key;
 
-    private final int expireMsecs = 60 * 1000;
+    private final int expireMsecs = 50 * 1000;
 
     private boolean locked = false;
 
@@ -38,7 +38,7 @@ public class DistributedLock {
         LOGGER.debug("Attempting to acquire lock");
 
         // Sleep for a random short period to allow one instance to win each time
-        long randomWait = (long)(Math.random() * 1000d);
+        long randomWait = (long)(Math.random() * 200d);
         LOGGER.debug("Sleeping for " + randomWait + "ms");
         Thread.sleep(randomWait);
 
