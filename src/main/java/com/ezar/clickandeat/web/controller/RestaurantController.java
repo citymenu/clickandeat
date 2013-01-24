@@ -106,7 +106,14 @@ public class RestaurantController {
         // Get the current location out of the session and check if the restaurant will deliver
         Search search = (Search)session.getAttribute("search");
         if( search != null && search.getLocation() != null ) {
-            model.put("restaurantWillDeliver", restaurant.willDeliverToLocation(search.getLocation()));
+            boolean restaurantWillDeliver = restaurant.willDeliverToLocation(search.getLocation());
+            if( restaurantWillDeliver ) {
+                LOGGER.info("Restaurant will deliver to address");
+            }
+            else {
+                LOGGER.info("Restaurant will not deliver to address");
+            }
+            model.put("restaurantWillDeliver", restaurantWillDeliver);
         }
 
         return new ModelAndView("restaurant",model);

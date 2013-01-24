@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.CommissionUtils;
 import com.ezar.clickandeat.util.DateTimeUtil;
 import com.ezar.clickandeat.util.NumberUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
@@ -209,7 +210,7 @@ public class Order extends PersistentObject {
         this.restaurantCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
         
         // Set the commission on this order
-        this.commission = restaurant.getCommissionPercent() * this.restaurantCost / 100d;
+        this.commission = CommissionUtils.calculateCommission(this);
         
         // Apply any vouchers to the overall cost
         this.voucherDiscount = 0d;
