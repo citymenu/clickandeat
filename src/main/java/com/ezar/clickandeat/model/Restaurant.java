@@ -24,6 +24,11 @@ public class Restaurant extends PersistentObject {
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
     private static final Double DEFAULT_COMMISSION_PERCENT = 10d;
+
+    public static final String CONTENT_STATUS_APPROVED = "approved";
+    public static final String CONTENT_STATUS_REJECTED = "rejected";
+    public static final String CONTENT_STATUS_SENT_FOR_APPROVAL = "sent to be approved";
+    public static final String CONTENT_STATUS_NO_ACTION = "";
     
     @Indexed(unique=true)
     private String restaurantId;
@@ -90,6 +95,9 @@ public class Restaurant extends PersistentObject {
     // Determines if the restaurant owner has approved or not the restaurant content
     private boolean contentApproved;
 
+    // String format for the status of the data of the restaurant
+    private String contentStatus;
+
     // Specify the reasons why the content has been rejected
     private String rejectionReasons;
 
@@ -113,6 +121,7 @@ public class Restaurant extends PersistentObject {
         this.testMode = false;
         this.phoneOrdersOnly = false;
         this.contentApproved = false;
+        this.contentStatus = CONTENT_STATUS_NO_ACTION;
         this.recommended = false;
         this.restaurantUpdates = new ArrayList<RestaurantUpdate>();
     }
@@ -713,6 +722,14 @@ public class Restaurant extends PersistentObject {
 
     public void setContentApproved(boolean contentApproved) {
         this.contentApproved = contentApproved;
+    }
+
+    public String getContentStatus() {
+        return contentStatus;
+    }
+
+    public void setContentStatus(String contentStatus) {
+        this.contentStatus = contentStatus;
     }
 
     public String getRejectionReasons() {

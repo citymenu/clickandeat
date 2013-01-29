@@ -39,11 +39,6 @@ function renderSMSNotification(value, metaData, record) {
     return booleanToString(notificationOptions.receiveSMSNotification);
 }
 
-function renderNotificationCall(value, metaData, record) {
-    var associatedData = record.getAssociatedData();
-    var notificationOptions = associatedData.notificationOptions[0];
-    return booleanToString(notificationOptions.receiveNotificationCall);
-}
 
 function renderOrderId(value, metaData, record) {
     var order = record.get('order');
