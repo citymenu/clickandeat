@@ -540,6 +540,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             },
             success: function(form,action) {
                 showSuccessMessage(Ext.get('restauranteditpanel'),'Uploaded','Restaurant image has been uploaded');
+                restaurantObj.hasUploadedImage = true;
             },
             failure: function(form,action) {
                 showErrorMessage(Ext.get('restauranteditpanel'),'Error','Error occurred uploading restaurant image');
