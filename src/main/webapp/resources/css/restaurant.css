@@ -282,6 +282,12 @@ div.even {
     background-color:#FAFAFA;
 }
 
+tr.even {
+    background-color:#FCFCFC;
+}
+
+tr.odd {
+}
 
 h3.menu-item-title {
     font: 700 14px/16px prenton-n7,prenton;

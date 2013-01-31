@@ -205,10 +205,12 @@ function showAllDeliveryCharges() {
                 }
                 table += '</tr></thead><tbody>';
 
+                var rowIndex = 0;
                 $.each( deliveryCharges, function( key, arr ) {
                     var areaDeliveryCharge = arr[0];
                     var areaMinimumOrderValue = arr[1];
-                    var row = ('<tr><td>{0}</td>').format(key);
+                    var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
+                    var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
                     if( hasDeliveryCharge ) {
                         row += ('<td class=\'right\'>{0} {1}</td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
                     }

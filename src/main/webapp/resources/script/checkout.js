@@ -132,6 +132,10 @@ function onAfterBuildOrder(order) {
     $('#buildorder').click(function(){
         updateOrder();
     });
+    if( order.canCheckout == true ) {
+        $('#validation-error').hide();
+        $('#validation-message').remove();
+    }
 }
 
 // Updates display based on delivery type
