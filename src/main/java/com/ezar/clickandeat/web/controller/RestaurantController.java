@@ -493,6 +493,9 @@ public class RestaurantController {
                 emailService.sendForOwnerApproval(restaurant);
                 // Change the contentApproved field
                 restaurant.setContentApproved(false);
+                // Change the contentStatus field
+                restaurant.setContentStatus(Restaurant.CONTENT_STATUS_SENT_FOR_APPROVAL);
+                LOGGER.info("Content Status: "+restaurant.getContentStatus());
                 // Update the LastContentApprovalStatusUpdated field
                 restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
                 // Add an update to the restaurant
@@ -543,6 +546,8 @@ public class RestaurantController {
 
             // Approve the content
             restaurant.setContentApproved(true);
+            restaurant.setContentStatus(Restaurant.CONTENT_STATUS_APPROVED);
+            LOGGER.info("Content Status: "+restaurant.getContentStatus());
             // Remove any reasons why the content may have been rejected
             restaurant.setRejectionReasons("");
             // Update the LastContentApprovalStatusUpdated field
@@ -598,6 +603,8 @@ public class RestaurantController {
             }
             restaurant.setRejectionReasons(rejectionReasons);
             restaurant.setContentApproved(false);
+            restaurant.setContentStatus(Restaurant.CONTENT_STATUS_REJECTED);
+            LOGGER.info("Content Status: "+restaurant.getContentStatus());
             // Update the LastContentApprovalStatusUpdated field
             restaurant.setLastContentApprovalStatusUpdated(new DateTime().getMillis());
             // Add a restaurant update entry
