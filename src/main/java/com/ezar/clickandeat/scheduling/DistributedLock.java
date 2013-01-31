@@ -37,10 +37,6 @@ public class DistributedLock {
     public synchronized boolean acquire() throws InterruptedException {
         LOGGER.debug("Attempting to acquire lock");
 
-        // Sleep for a random short period to allow one instance to win each time
-        long randomWait = (long)(Math.random() * 200d);
-        Thread.sleep(randomWait);
-
         long expires = System.currentTimeMillis() + expireMsecs;
         String expiresStr = String.valueOf(expires);
         if (operations.setIfAbsent(expiresStr)) {

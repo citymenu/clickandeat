@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.maps;
 
+import com.ezar.clickandeat.model.Address;
 import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.util.LocationUtils;
 import org.apache.log4j.Logger;
@@ -25,19 +26,22 @@ public class GeoLocationServiceTest {
     @Test
     public void testLocateValidAddress() throws Exception {
         geoLocationService.setLocale("es_ES");
-        geoLocationService.setCacheLocations(true);
-        String address = "Barcelona";
+        geoLocationService.setCacheLocations(false);
+        String address = "Milanesat 8 Barcelona 08017";
         GeoLocation location = geoLocationService.getLocation(address);
         LOGGER.info("Resolved location: " + location );
+        Address addr = geoLocationService.buildAddress(location);
+        LOGGER.info("Built address: " + addr.getDisplaySummary());
     }
     
     
     @Test
-    @Ignore
     public void testGetDistance() throws Exception {
         geoLocationService.setLocale("en_UK");
         geoLocationService.setCacheLocations(false);
-        GeoLocation location1 = geoLocationService.getLocation("Woodford Green, London");
+        GeoLocation location1 = geoLocationService.getLocation("80 Peel Road South Woodford London");
+        Address address = geoLocationService.buildAddress(location1);
+        LOGGER.info("Address: " + address.getDisplaySummary());
         GeoLocation location2 = geoLocationService.getLocation("E18 2LG");
         Double distance = LocationUtils.getDistance(location1.getLocation(), location2.getLocation());
         LOGGER.info("Distance: " + distance);

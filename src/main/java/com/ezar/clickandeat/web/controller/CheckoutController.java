@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,9 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -39,6 +36,9 @@ public class CheckoutController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private GeoLocationService geoLocationService;
+    
     @Autowired
     private RequestHelper requestHelper;
 
@@ -94,9 +94,6 @@ public class CheckoutController {
         // Put the system locale on the response
         model.put("validatorLocale", MessageFactory.getLocaleString().split("_")[0]);
         
-        // If there is no delivery address, populate it now
-        autoPopulateDeliveryAddress(order,session);
-
         // If the restaurant takes telephone orders only, send to call summary page
         if( restaurant.getPhoneOrdersOnly()) {
             return new ModelAndView(MessageFactory.getLocaleString() + "/callNowSummary",model);
@@ -110,7 +107,8 @@ public class CheckoutController {
     @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value="/updateOrder.ajax", method = RequestMethod.POST )
-    public ResponseEntity<byte[]> updateOrder(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
+    public ResponseEntity<byte[]> updateOrder(HttpServletRequest request, @RequestParam(value = "body") String body, @RequestParam(value="updateLocation") Boolean updateLocation ) throws Exception {
+
 
         Map<String,Object> model = new HashMap<String, Object>();
 
@@ -129,18 +127,48 @@ public class CheckoutController {
 
             // Update order delivery details
             order.setCustomer(person);
-            order.setDeliveryAddress(deliveryAddress);
+
+            // Update delivery address if a valid address is entered
+            if( updateLocation ) {
+                GeoLocation geoLocation = geoLocationService.getLocation(deliveryAddress);
+                if( geoLocation != null ) {
+                    deliveryAddress.setLocation(geoLocation.getLocation());
+                    deliveryAddress.setRadius(geoLocation.getRadius());
+                    deliveryAddress.setRadiusWarning(geoLocation.getRadiusWarning());
+                    order.setDeliveryAddress(deliveryAddress);
+                }
+            }
+            
             order.setAdditionalInstructions(additionalInstructions);
             order.setTermsAndConditionsAccepted(termsAndConditionsAccepted);
-            orderRepository.save(order);
+            order = orderRepository.save(order);
 
             // Update can checkout status of order
             HttpSession session = request.getSession(true);
             session.setAttribute("cancheckout", order.getCanCheckout());
+            session.setAttribute("cansubmitpayment", order.getCanSubmitPayment());
             
-            // Mark order updated successfully
-            model.put("success",true);
-            model.put("restaurantId",order.getRestaurantId());
+            // Mark order updated successfully if we are updating the location
+            if( updateLocation ) {
+                model.put("success",true);
+                model.put("restaurantId",order.getRestaurantId());
+            }
+            else {
+                model.put("deliveryType", order.getDeliveryType());
+                model.put("deliveryAddress",order.getDeliveryAddress());
+                if( order.getCanSubmitPayment()) {
+                    model.put("success",true);
+                }
+                else {
+                    model.put("success",false);
+                    if( !order.getRestaurantWillDeliver()) {
+                        model.put("reason","checkout-restaurant-wont-deliver");
+                    }
+                    else if( order.getExtraSpendNeededForDelivery() > 0 ) {
+                        model.put("reason","extra-spend-needed-for-delivery");
+                    }
+                }
+            }
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
@@ -170,37 +198,50 @@ public class CheckoutController {
             
             // Extract person and address from request
             Person person = buildPerson(params);
-            Address deliveryAddress = buildDeliveryAddress(params);
             String additionalInstructions = (String)params.get("additionalInstructions");
             Boolean termsAndConditionsAccepted = (Boolean)params.get("termsAndConditionsAccepted");
 
             // Get the order out of the session
             Order order = requestHelper.getOrderFromSession(request);
 
-            // Update order delivery details
+            // Update order details
             order.setCustomer(person);
-            order.setDeliveryAddress(deliveryAddress);
             order.setAdditionalInstructions(additionalInstructions);
             order.setTermsAndConditionsAccepted(termsAndConditionsAccepted);
             order.updateRestaurantIsOpen();
 
+            // Update order delivery address details
+            Address deliveryAddress = buildDeliveryAddress(params);
+            GeoLocation deliveryLocation = locationService.getLocation(deliveryAddress);
+            if( deliveryLocation == null ) {
+                success = false;
+                reason = "checkout-location-not-found";
+            }
+            else {
+                deliveryAddress.setLocation(deliveryLocation.getLocation());
+                deliveryAddress.setRadius(deliveryLocation.getRadius());
+                deliveryAddress.setRadiusWarning(deliveryLocation.getRadiusWarning());
+                order.setDeliveryAddress(deliveryAddress);
+            }
+            
             // If the restaurant is not open, return an error
             if( !order.getRestaurantIsOpen()) {
                 success = false;
                 reason = "checkout-restaurant-closed";
             }
-            else {
-                // If the order is for delivery, check that the delivery address can be determined
-                if( Order.DELIVERY.equals(order.getDeliveryType())) {
-                    GeoLocation deliveryLocation = locationService.getLocation(order.getDeliveryAddress());
-                    if( deliveryLocation != null ) {
-                        order.getDeliveryAddress().setLocation(deliveryLocation.getLocation());
-                    }
-                }
-            }
 
             // Update the order object
-            orderRepository.saveOrder(order);
+            order = orderRepository.saveOrder(order);
+
+            // If the restaurant does not deliver to this location, return an error
+            if( !order.getRestaurantWillDeliver()) {
+                success = false;
+                reason = "checkout-restaurant-wont-deliver";
+            }
+            else if( order.getExtraSpendNeededForDelivery() > 0 ) {
+                success = false;
+                reason = "extra-spend-needed-for-delivery";
+            }
 
             // Indicate if the data is all valid
             model.put("success",success);
@@ -217,57 +258,6 @@ public class CheckoutController {
     }
 
 
-    /**
-     * @param order
-     * @param session
-     */
-    
-    private void autoPopulateDeliveryAddress(Order order,HttpSession session) {
-        
-        if( !Order.DELIVERY.equals(order.getDeliveryType())) {
-            return;
-        }
-        
-        Search search = (Search)session.getAttribute("search");
-        if( search == null || search.getLocation() == null ) {
-            return;
-        }
-        
-        Address deliveryAddress = order.getDeliveryAddress();
-        if( StringUtils.hasText(deliveryAddress.getAddress1()) || StringUtils.hasText(deliveryAddress.getTown()) 
-                || StringUtils.hasText(deliveryAddress.getRegion()) || StringUtils.hasText(deliveryAddress.getPostCode())) {
-            return;
-        }
-
-        // Build the delivery address from the components of the geolocatio
-        Map<String,String> addressComponents = search.getLocation().getLocationComponents();
-        deliveryAddress.setAddress1(extractAddressLine(autofillAddress1,addressComponents));
-        deliveryAddress.setTown(extractAddressLine(autofillTown,addressComponents));
-        deliveryAddress.setRegion(extractAddressLine(autofillRegion,addressComponents));
-        deliveryAddress.setPostCode(extractAddressLine(autofillPostCode,addressComponents));
-        orderRepository.saveOrder(order);
-    }
-
-
-    /**
-     * @param config
-     * @param components
-     * @return
-     */
-    
-    private String extractAddressLine(String config, Map<String,String> components) {
-        List<String> elements = new ArrayList<String>();
-        for( String configElement: StringUtils.commaDelimitedListToStringArray(config)) {
-            String component = components.get(configElement);
-            if( component != null ) {
-                elements.add(component);
-            }
-        }
-        return elements.size() == 0? null: StringUtils.collectionToDelimitedString(elements,", ");
-    }
-    
-    
-    
     /**
      * @param params
      * @return
@@ -301,7 +291,16 @@ public class CheckoutController {
         String region = (String)deliveryAddressParams.get("region");
         String postCode = (String)deliveryAddressParams.get("postCode");
 
-        return new Address(address1,town,region,postCode);
+        Address address = new Address(address1,town,region, postCode);
+
+        GeoLocation location = geoLocationService.getLocation(address);
+        if( location != null ) {
+            address.setLocation(location.getLocation());
+            address.setRadius(location.getRadius());
+            address.setRadiusWarning(location.getRadiusWarning());
+        }
+        
+        return address;
     }
 
 

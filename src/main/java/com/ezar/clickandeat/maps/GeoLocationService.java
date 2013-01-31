@@ -51,6 +51,20 @@ public class GeoLocationService  {
 
     private final AtomicLong lastRequestTime = new AtomicLong(System.currentTimeMillis());
 
+    
+    /**
+     * Mappings to build an address from a GeoLocation
+     */
+
+    private String autofillAddress1;
+
+    private String autofillTown;
+
+    private String autofillRegion;
+
+    private String autofillPostCode;
+
+    private boolean useCommaAddressDelimiter;
 
     /**
      * Gets a matching address location for a query
@@ -154,17 +168,22 @@ public class GeoLocationService  {
                 coordinates[1] = (Double)geolocation.get("lat");
 
                 // Build the display address
-                StringBuilder sb = new StringBuilder();
+                Set<String> displaySet = new HashSet<String>();
+                StringBuffer sb = new StringBuffer();
                 String delim = "";
                 int componentCount = 0;
                 for( String componentPreference: componentPreferences ) {
                     String component = locationAddressComponents.get(componentPreference);
                     if( component != null ) {
+                        if( displaySet.contains(component)) {
+                            continue; // Do not repeat information
+                        }
                         if( commaBeforeComponents.contains(componentPreference)) {
                             sb.append(",");
                         }
                         sb.append(delim).append(component);
                         delim = " ";
+                        displaySet.add(component);
                         componentCount++;
                         if( componentCount >= minComponentMatches ) {
                             break;
@@ -244,9 +263,57 @@ public class GeoLocationService  {
         if( StringUtils.hasText(address.getPostCode())) {
             sb.append(address.getPostCode());
         }
-        return getLocation(sb.toString().trim());
+        return getLocation(sb.toString());
     }
-    
+
+
+    /**
+     * @param geoLocation
+     * @return
+     */
+
+    public Address buildAddress(GeoLocation geoLocation ) {
+        Address address = new Address();
+        Map<String,String> addressComponents = geoLocation.getLocationComponents();
+
+        address.setAddress1(extractAddressLine(autofillAddress1,addressComponents));
+        address.setPostCode(extractAddressLine(autofillPostCode,addressComponents));
+
+        String town = extractAddressLine(autofillTown,addressComponents);
+        String region = extractAddressLine(autofillRegion,addressComponents);
+
+        if( town != null && region != null && town.equals(region)) {
+            address.setRegion(region);
+        }
+        else {
+            address.setTown(town);
+            address.setRegion(region);
+        }
+
+        address.setLocation(geoLocation.getLocation());
+        address.setRadius(geoLocation.getRadius());
+        address.setRadiusWarning(geoLocation.getRadiusWarning());
+        return address;
+    }
+
+
+    /**
+     * @param config
+     * @param components
+     * @return
+     */
+
+    private String extractAddressLine(String config, Map<String,String> components) {
+        List<String> elements = new ArrayList<String>();
+        for( String configElement: StringUtils.commaDelimitedListToStringArray(config)) {
+            String component = components.get(configElement);
+            if( component != null ) {
+                elements.add(component);
+            }
+        }
+        return elements.size() == 0? null: StringUtils.collectionToDelimitedString(elements,useCommaAddressDelimiter? ", ": " ");
+    }
+
 
     /**
      * @param address
@@ -305,10 +372,39 @@ public class GeoLocationService  {
     public void setUseProxy(boolean useProxy) {
         this.useProxy = useProxy;
     }
-
     
     public void setCacheLocations(boolean cacheLocations) {
         this.cacheLocations = cacheLocations;
+    }
+
+    @Required
+    @Value(value="${autofill.address1}")
+    public void setAutofillAddress1(String autofillAddress1) {
+        this.autofillAddress1 = autofillAddress1;
+    }
+
+    @Required
+    @Value(value="${autofill.town}")
+    public void setAutofillTown(String autofillTown) {
+        this.autofillTown = autofillTown;
+    }
+
+    @Required
+    @Value(value="${autofill.region}")
+    public void setAutofillRegion(String autofillRegion) {
+        this.autofillRegion = autofillRegion;
+    }
+
+    @Required
+    @Value(value="${autofill.postCode}")
+    public void setAutofillPostCode(String autofillPostCode) {
+        this.autofillPostCode = autofillPostCode;
+    }
+
+    @Required
+    @Value(value="${autofill.useCommaAddressDelimiter}")
+    public void setUseCommaAddressDelimiter(boolean useCommaAddressDelimiter) {
+        this.useCommaAddressDelimiter = useCommaAddressDelimiter;
     }
 }
 

@@ -262,8 +262,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Executed map reduce query in: " + results.getTiming().getTotalTime() + "ms");
         }
-        
-        
+
         // Build results
         DateTime now = new DateTime();
         for (ValueObject valueObject : results) {

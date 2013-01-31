@@ -125,6 +125,7 @@ function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
         showBuildOrderLink: true,
+        allowChangeLocation: true,
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: true,
@@ -153,4 +154,10 @@ function register() {
             }
         );
     }
+}
+
+// Runs after location is updated
+function onAfterLocationUpdate() {
+    $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
+    location.reload();
 }

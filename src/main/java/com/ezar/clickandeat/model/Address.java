@@ -22,7 +22,10 @@ public class Address extends PersistentObject {
 
     @GeoSpatialIndexed
     private double[] location;
+    
+    private double radius;
 
+    private boolean radiusWarning;
 
     public Address() {
     }
@@ -49,7 +52,7 @@ public class Address extends PersistentObject {
     public String getDisplaySummary() {
         return StringUtils.collectionToDelimitedString(getAddressItems(), "\n");
     }
-    
+
     private List<String> getAddressItems() {
         List<String> items = new ArrayList<String>();
         if( StringUtils.hasText(address1)) {
@@ -67,6 +70,15 @@ public class Address extends PersistentObject {
         return items;
     }
 
+    public boolean isValid() {
+        if( !StringUtils.hasText(postCode)) {
+            return false;
+        }
+        if( !StringUtils.hasText(address1)) {
+            return false;
+        }
+        return true;
+    }
     
     public String getPostCode() {
         return postCode;
@@ -106,5 +118,21 @@ public class Address extends PersistentObject {
 
     public void setLocation(double[] location) {
         this.location = location;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public boolean isRadiusWarning() {
+        return radiusWarning;
+    }
+
+    public void setRadiusWarning(boolean radiusWarning) {
+        this.radiusWarning = radiusWarning;
     }
 }

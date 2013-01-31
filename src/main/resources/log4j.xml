@@ -17,8 +17,24 @@
         <level value="INFO"/>
     </logger>
 
+    <logger name="com.ovea.jetty.session">
+        <level value="INFO"/>
+    </logger>
+
     <logger name="com.ezar.clickandeat.web.security.SimpleSecurityContextRepository">
         <level value="INFO"/>
+    </logger>
+
+    <logger name="org.springframework.data.redis">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="org.apache.commons.pool">
+        <level value="DEBUG"/>
+    </logger>
+
+    <logger name="redis.clients">
+        <level value="DEBUG"/>
     </logger>
 
     <logger name="org.eclipse.jetty.server.session">

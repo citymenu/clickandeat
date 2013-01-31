@@ -115,3 +115,7 @@ a.location-link {
     text-decoration:underline;
     cursor:pointer;
 }
+
+.euro {
+    font: 12px/14px prenton-n4,prenton;
+}

@@ -105,6 +105,7 @@ function getOrderPanelConfig() {
     var config = {
         showDeliveryOptions: true,
         showBuildOrderLink: true,
+        allowChangeLocation: true,
         allowRemoveItems: true,
         allowUpdateFreeItem: true,
         enableCheckoutButton: false,
@@ -143,6 +144,12 @@ function updateDeliveryDisplay(deliveryType) {
         $('#collection-details').show();
         initializeMap();
     }
+}
+
+// Removes validation errors after updating delivery
+function onAfterUpdateDelivery() {
+    $('#validation-error').hide();
+    $('#validation-message').remove();
 }
 
 // Show restaurant map
@@ -203,7 +210,7 @@ function applyVoucher() {
 // Update order
 function updateOrder() {
     $.fancybox.showLoading();
-    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()) },
+    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()), updateLocation: true },
         function( data ) {
             if( data.success ) {
                 location.href = ctx + '/app/restaurant/' + data.restaurantId;
@@ -243,6 +250,7 @@ function payment() {
                             .format(getLabel('checkout.' + data.reason)));
                         $('#validation-error').show();
                         $.scrollTo(0);
+                        getOrder();
                     }
                 }
             }
@@ -252,7 +260,38 @@ function payment() {
         $('#validation-error').show();
         $.scrollTo(0);
     }
+}
 
+// Runs after location is updated
+function onAfterLocationUpdate() {
+    $('#validation-error').hide();
+    $('#validation-message').remove();
+    $.fancybox.showLoading();
+    $.post( ctx + '/updateOrder.ajax', { body: JSON.stringify(buildUpdate()), updateLocation: false },
+        function( data ) {
+            $.fancybox.hideLoading();
+
+            // Update delivery address if this is a delivery order
+            var deliveryAddress = data.deliveryAddress;
+            $('#address1').val(deliveryAddress.address1);
+            $('#town').val(deliveryAddress.town);
+            $('#region').val(deliveryAddress.region);
+            $('#postCode').val(deliveryAddress.postCode);
+            validateForm();
+
+            // Show error if there is a reason why we cannot proceed
+            if( !data.success && data.reason != null ) {
+                var reason = data.reason;
+                $('#validation-message-wrapper').append(('<span id=\'validation-message\'>{0}</div>')
+                    .format(getLabel('checkout.' + data.reason)));
+                $('#validation-error').show();
+                $.scrollTo(0);
+            }
+
+            // Update the order panel
+            getOrder();
+        }
+    );
 }
 
 // Builds a warning dialog

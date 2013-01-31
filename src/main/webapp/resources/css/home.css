@@ -113,21 +113,6 @@ input.watermark {
     color:#999999;
 }
 
-.pac-container:after {
-    content: none;
-}
-
-div.pac-item {
-    font:14px/16px "myriad-pro-n4", "myriad-pro";
-    padding: 2px 5px 2px 5px;
-    color:#444444;
-}
-
-div.pac-selected, div.pac-item:hover {
-    background-color:#CCCCCC;
-    color:#444444;
-}
-
 a.home {
     color:#FFFFFF;
     text-decoration:underline;

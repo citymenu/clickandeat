@@ -1,9 +1,5 @@
 package com.ezar.clickandeat.web.controller;
 
-import com.ezar.clickandeat.converter.DateTimeTransformer;
-import com.ezar.clickandeat.converter.LocalDateTransformer;
-import com.ezar.clickandeat.converter.LocalTimeTransformer;
-import com.ezar.clickandeat.converter.NullIdStringTransformer;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
@@ -16,18 +12,13 @@ import com.ezar.clickandeat.web.controller.helper.Filter;
 import com.ezar.clickandeat.web.controller.helper.FilterUtils;
 import com.ezar.clickandeat.web.controller.helper.FilterValueDecorator;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
-import flexjson.JSONSerializer;
 import net.sf.jxls.transformer.XLSTransformer;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.log4j.Logger;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.MutableDateTime;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.PageRequest;
@@ -274,13 +265,11 @@ public class OrderController {
                     order.setRestaurant(restaurantRepository.findByRestaurantId(restaurantId));
                 }
                 order.updateCosts();
+
                 // Update can checkout status of order
                 session.setAttribute("cancheckout", order.getCanCheckout());
+                session.setAttribute("cansubmitpayment", order.getCanSubmitPayment());
             }
-
-            // Mark if we have specified a location
-            Search search = (Search)session.getAttribute("search");
-            model.put("nolocation",search == null || search.getLocation() == null);
 
             model.put("success",true);
             model.put("order",order);
@@ -386,7 +375,6 @@ public class OrderController {
                     order.setRestaurant(restaurant);
                     order.getOrderItems().clear();
                     order.getOrderDiscounts().clear();
-                    order.updateCosts();
                 }
             }
 
@@ -556,7 +544,7 @@ public class OrderController {
     public ResponseEntity<byte[]> updateItemQuantity(HttpServletRequest request, @RequestParam(value = "body") String body ) throws Exception {
 
         if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Removing from order: " + body);
+            LOGGER.debug("Updating order items: " + body);
         }
 
         Map<String,Object> model = new HashMap<String, Object>();
@@ -587,7 +575,6 @@ public class OrderController {
                         if( !order.getRestaurantId().equals(restaurantId)) {
                             Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
                             order.setRestaurant(restaurant);
-                            order.updateCosts();
                             order = orderRepository.save(order);
                         }
                         session.removeAttribute("orderrestaurantid");
@@ -755,7 +742,6 @@ public class OrderController {
             order.setRestaurant(restaurant);
             order.getOrderItems().clear();
             order.getOrderDiscounts().clear();
-            order.updateCosts();
             order = orderRepository.saveOrder(order);
             model.put("success",true);
             model.put("order",order);
@@ -913,8 +899,6 @@ public class OrderController {
                 }
             }
 
-            // Update order costs and save
-            order.updateCosts();
             order = orderRepository.saveOrder(order);
 
             // Update order restaurant id session attribute if any items present
@@ -1037,7 +1021,6 @@ public class OrderController {
         Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
         order.setRestaurantId(restaurantId);
         order.setRestaurant(restaurant);
-        order.updateCosts();
         order = orderRepository.save(order);
         session.setAttribute("orderid",order.getOrderId());
         session.removeAttribute("completedorderid");

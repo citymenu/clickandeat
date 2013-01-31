@@ -92,7 +92,6 @@ public class RestaurantController {
                 if( session.getAttribute("orderrestaurantid") == null ) {
                     Order order = orderRepository.findByOrderId(orderId);
                     order.setRestaurant(restaurant);
-                    order.updateCosts();
                     orderRepository.save(order);
                 }
             }
@@ -101,19 +100,6 @@ public class RestaurantController {
         // Update the restaurant session id
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
             session.setAttribute("restaurantid", restaurantId);
-        }
-
-        // Get the current location out of the session and check if the restaurant will deliver
-        Search search = (Search)session.getAttribute("search");
-        if( search != null && search.getLocation() != null ) {
-            boolean restaurantWillDeliver = restaurant.willDeliverToLocation(search.getLocation());
-            if( restaurantWillDeliver ) {
-                LOGGER.info("Restaurant will deliver to address");
-            }
-            else {
-                LOGGER.info("Restaurant will not deliver to address");
-            }
-            model.put("restaurantWillDeliver", restaurantWillDeliver);
         }
 
         return new ModelAndView("restaurant",model);
@@ -201,6 +187,56 @@ public class RestaurantController {
             model.put("message",ex.getMessage());
         }
         return responseEntityUtils.buildResponse(model);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @ResponseBody
+    @RequestMapping(value="/restaurant/getDeliveryCharges.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> getDeliveryCharges(@RequestParam(value = "restaurantId") String restaurantId ) throws Exception {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
+            model.put("deliveryCharge",deliveryOptions.getDeliveryCharge());
+            model.put("minimumOrderForDelivery",deliveryOptions.getMinimumOrderForDelivery());
+            model.put("minimumOrderForFreeDelivery", deliveryOptions.getMinimumOrderForFreeDelivery());
+            model.put("allowFreeDelivery", deliveryOptions.isAllowFreeDelivery());
+            SortedMap<String,Double[]> areaCharges = new TreeMap<String, Double[]>();
+            
+            for( AreaDeliveryCharge deliveryCharge: deliveryOptions.getAreaDeliveryCharges()) {
+                for( String area: deliveryCharge.getAreas()) {
+                    Double[] charges = areaCharges.get(area);
+                    if( charges == null ) {
+                        charges = new Double[2];
+                        areaCharges.put(area,charges);
+                    }
+                    charges[0] = deliveryCharge.getDeliveryCharge();
+                }
+            }
+
+            for( AreaDeliveryCharge deliveryCharge: deliveryOptions.getAreaMinimumOrderCharges()) {
+                for( String area: deliveryCharge.getAreas()) {
+                    Double[] charges = areaCharges.get(area);
+                    if( charges == null ) {
+                        charges = new Double[2];
+                        areaCharges.put(area,charges);
+                    }
+                    charges[1] = deliveryCharge.getDeliveryCharge();
+                }
+            }
+
+            model.put("areaDeliveryCharges",areaCharges);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+
     }
 
 
@@ -628,12 +664,19 @@ public class RestaurantController {
      */
 
     private Order buildAndRegister(HttpSession session, Restaurant restaurant) {
+        
         Order order = orderRepository.create();
         if( restaurant.getCollectionOnly()) {
             order.setDeliveryType(Order.COLLECTION); // Default to collection for collection-only restaurants
         }
         order.setRestaurant(restaurant);
-        order.updateCosts();
+
+        // If a search term is in the session, update delivery location
+        Search search = (Search)session.getAttribute("search");
+        if( search != null && search.getLocation() != null ) {
+            order.setDeliveryAddress(geoLocationService.buildAddress(search.getLocation()));
+        }
+
         order = orderRepository.save(order);
         session.setAttribute("orderid",order.getOrderId());
         session.removeAttribute("completedorderid");

@@ -1,5 +1,8 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
+import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +38,46 @@ public class DeliveryOptions {
         this.areasDeliveredTo = new ArrayList<String>();
         this.areaDeliveryCharges = new ArrayList<AreaDeliveryCharge>();
         this.areaMinimumOrderCharges = new ArrayList<AreaDeliveryCharge>();
+    }
+
+
+    /**
+     * @param deliveryAddress
+     * @return
+     */
+
+    public Double getDeliveryCharge( Address deliveryAddress ) {
+        if( StringUtils.hasText(deliveryAddress.getPostCode())) {
+            String postCode = deliveryAddress.getPostCode().toUpperCase();
+            for( AreaDeliveryCharge areaDeliveryCharge: areaDeliveryCharges ) {
+                for( String area: areaDeliveryCharge.getAreas()) {
+                    if(postCode.contains(area.toUpperCase())) {
+                        return areaDeliveryCharge.getDeliveryCharge();
+                    }
+                }
+            }
+        }
+        return deliveryCharge;
+    }
+
+
+    /**
+     * @param deliveryAddress
+     * @return
+     */
+
+    public Double getMinimumOrderForDelivery( Address deliveryAddress ) {
+        if( StringUtils.hasText(deliveryAddress.getPostCode())) {
+            String postCode = deliveryAddress.getPostCode().toUpperCase();
+            for( AreaDeliveryCharge areaDeliveryCharge: areaMinimumOrderCharges ) {
+                for( String area: areaDeliveryCharge.getAreas()) {
+                    if(postCode.contains(area.toUpperCase())) {
+                        return areaDeliveryCharge.getDeliveryCharge();
+                    }
+                }
+            }
+        }
+        return minimumOrderForDelivery;
     }
 
     public String getDeliveryOptionsSummary() {
@@ -97,6 +140,10 @@ public class DeliveryOptions {
         return deliveryCharge;
     }
 
+    public String getFormattedDeliveryCharge() {
+        return NumberUtil.format(deliveryCharge);
+    }
+    
     public void setDeliveryCharge(Double deliveryCharge) {
         this.deliveryCharge = deliveryCharge;
     }
@@ -125,6 +172,14 @@ public class DeliveryOptions {
         this.collectionOnly = collectionOnly;
     }
 
+    public String getFormattedMinimumOrderForDelivery() {
+        return NumberUtil.format(minimumOrderForDelivery);
+    }
+
+    public String getFormattedMinimumOrderForFreeDelivery() {
+        return NumberUtil.format(minimumOrderForFreeDelivery);
+    }
+
     public List<AreaDeliveryCharge> getAreaDeliveryCharges() {
         return areaDeliveryCharges;
     }
@@ -139,5 +194,9 @@ public class DeliveryOptions {
 
     public void setAreaMinimumOrderCharges(List<AreaDeliveryCharge> areaMinimumOrderCharges) {
         this.areaMinimumOrderCharges = areaMinimumOrderCharges;
+    }
+    
+    public boolean getHasAdditionalDeliveryCharges() {
+        return areaDeliveryCharges.size() > 0 || areaMinimumOrderCharges.size() > 0;
     }
 }

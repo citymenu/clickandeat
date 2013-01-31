@@ -2,7 +2,9 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.GeoLocation;
+import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Search;
+import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.util.JSONUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class LocationValidationController {
     private GeoLocationService geoLocationService;
     
     @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
     private JSONUtils jsonUtils;
 
     
@@ -51,7 +56,13 @@ public class LocationValidationController {
                 Search search = new Search();
                 search.setLocation(geoLocation);
                 search.setCuisine(cuisine);
-                request.getSession(true).setAttribute("search", search);
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute("search", search);
+                
+                // If there is an order in the session, update the delivery address
+                updateOrderDeliveryAddress(session,search);
+
                 model.put("success",true);
             }
         }
@@ -78,6 +89,8 @@ public class LocationValidationController {
             }
             if( StringUtils.hasText(address)) {
                 search.setLocation(geoLocationService.getLocation(address));
+                // If there is an order in the session, update the delivery address
+                updateOrderDeliveryAddress(session,search);
             }
             search.setCuisine(StringUtils.hasText(cuisine)? cuisine: null);
             request.getSession(true).setAttribute("search", search);
@@ -89,6 +102,24 @@ public class LocationValidationController {
         return buildResponse(model);
     }
 
+
+    /**
+     * @param session
+     * @param search
+     */
+    
+    private void updateOrderDeliveryAddress(HttpSession session, Search search) {
+        if( search == null || search.getLocation() == null ) {
+            return;
+        }
+        String orderId = (String)session.getAttribute("orderid");
+        if( orderId != null ) {
+            Order order = orderRepository.findByOrderId(orderId);
+            order.setDeliveryAddress(geoLocationService.buildAddress(search.getLocation()));
+            orderRepository.saveOrder(order);
+        }
+    }
+    
     
     /**
      * @param model

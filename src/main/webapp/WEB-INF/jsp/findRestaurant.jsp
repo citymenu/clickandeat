@@ -15,7 +15,6 @@
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/findrestaurant.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
-    <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
     <script type="text/javascript">var address="${address}";</script>
     <title><message:message key="page-title.search-results" escape="false"/></title>
@@ -207,11 +206,15 @@
                                                                                 </div>
                                                                             </c:when>
                                                                             <c:otherwise>
-                                                                                <c:if test="${restaurant.deliveryOptions.deliveryOptionsSummary != null}">
-                                                                                    <div class="delivery-details">
-                                                                                        <util:escape value="${restaurant.deliveryOptions.deliveryOptionsSummary}" escapeNewLines="true" escapeComments="true"/>
-                                                                                    </div>
-                                                                                </c:if>
+                                                                                <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
+                                                                                <div class="delivery-details">
+                                                                                    <c:if test="${deliveryOptions.deliveryCharge != null && deliveryOptions.deliveryCharge != 0}">
+                                                                                        <div><message:message key="restaurant.standard-delivery-charge" escape="false"/> ${deliveryOptions.formattedDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                                    </c:if>
+                                                                                    <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
+                                                                                        <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                                    </c:if>
+                                                                                </div>
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </div>

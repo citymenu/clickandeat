@@ -427,28 +427,26 @@ public class Restaurant extends PersistentObject {
 
 
     /**
-     * @param location
+     * @param order
      * @return
      */
     
-    public boolean willDeliverToLocation(GeoLocation location) {
-        if( address == null || address.getLocation() == null ) {
-            return false;
-        }
-        if( location == null || location.getLocation() == null ) {
+    public boolean willDeliverToLocation(Order order) {
+        Address deliveryAddress = order.getDeliveryAddress();
+        if( deliveryAddress == null || deliveryAddress.getLocation() == null ) {
             return false;
         }
         if( deliveryOptions.isCollectionOnly()) {
             return false;
         }
         if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
-            double distance = LocationUtils.getDistance(address.getLocation(), location.getLocation());
-            double locationRadius = location.getRadius();
+            double distance = LocationUtils.getDistance(address.getLocation(), deliveryAddress.getLocation());
+            double locationRadius = deliveryAddress.getRadius();
             if( distance - locationRadius <= deliveryOptions.getDeliveryRadiusInKilometres()) {
                 return true;
             }
         }
-        String postCode = location.getLocationComponents().get("postal_code");
+        String postCode = deliveryAddress.getPostCode();
         if( StringUtils.hasText(postCode)) {
             String postCodeMatcher = postCode.toUpperCase().replace(" ","");
             for( String deliverToPostCode: deliveryOptions.getAreasDeliveredTo()) {

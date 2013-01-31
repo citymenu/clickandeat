@@ -37,11 +37,15 @@
     <!-- Watermark -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery.data.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.watermark.min.js" charset="utf-8"></script>
+    <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
 
     <!-- Scripts -->
     <script type="text/javascript" src="${ctx}/app/script/messages.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/json2.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/tools.js" charset="utf-8"></script>
+
+    <!-- CSS Overrides -->
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/overrides.css"/>
 
     <!-- Apply fancybox -->
     <script type="text/javascript">

@@ -3,8 +3,10 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.GeoLocation;
+import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.model.Search;
+import com.ezar.clickandeat.repository.OrderRepository;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.Pair;
@@ -34,6 +36,9 @@ public class RestaurantSearchController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+    
     @Autowired
     private ResponseEntityUtils responseEntityUtils;
 
@@ -69,9 +74,20 @@ public class RestaurantSearchController {
             }
             if( geoLocation != null ) {
                 search.setLocation(geoLocation);
+                
+                // If there is an order associated with the session, update the delivery address
+                String orderId = (String)session.getAttribute("orderid");
+                if( orderId != null ) {
+                    Order order = orderRepository.findByOrderId(orderId);
+                    order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
+                    orderRepository.saveOrder(order);
+                }
+
+
             }
             search.setCuisine(cuisine);
-            request.getSession(true).setAttribute("search", search);
+            session.setAttribute("search", search);
+
             return search(search,address);
             
         }

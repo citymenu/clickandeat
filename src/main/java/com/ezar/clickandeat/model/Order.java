@@ -52,6 +52,7 @@ public class Order extends PersistentObject {
     private Address billingAddress;
     private String additionalInstructions;
     private boolean termsAndConditionsAccepted;
+    private boolean restaurantWillDeliver;
 
     // Order timing details
     private DateTime orderCreatedTime;
@@ -82,6 +83,7 @@ public class Order extends PersistentObject {
 
     // Order tracking details
     private boolean canCheckout;
+    private boolean canSubmitPayment;
     private boolean restaurantIsOpen;
     private String orderStatus;
     private String orderNotificationStatus;
@@ -171,17 +173,25 @@ public class Order extends PersistentObject {
         // Reset and update delivery costs
         this.deliveryCost = 0d;
         this.extraSpendNeededForDelivery = 0d;
+        this.restaurantWillDeliver = true;
 
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
             DeliveryOptions deliveryOptions = this.restaurant.getDeliveryOptions();
             
-            Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery();
+            Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery(this.deliveryAddress);
             Double minimumOrderForFreeDelivery = deliveryOptions.getMinimumOrderForFreeDelivery();
-            Double deliveryCharge = deliveryOptions.getDeliveryCharge();
+            Double deliveryCharge = deliveryOptions.getDeliveryCharge(this.deliveryAddress);
             boolean allowFreeDelivery = deliveryOptions.isAllowFreeDelivery();
             boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
 
-            if( !allowFreeDelivery ) {
+            // Update whether or not the restaurant will deliver to this order
+            this.restaurantWillDeliver = this.restaurant.willDeliverToLocation(this);
+
+            if( !restaurantWillDeliver ) {
+                this.deliveryCost = 0d;
+                this.extraSpendNeededForDelivery = 0d;
+            }
+            else if( !allowFreeDelivery ) {
                 if( deliveryCharge != null ) {
                     this.deliveryCost = deliveryCharge;
                 }
@@ -226,6 +236,9 @@ public class Order extends PersistentObject {
         
         // Update whether or not the order is ready for checkout
         updateCanCheckout();
+        
+        // Update whether or not the order is ready for payment
+        updateCanSubmitPayment();
     }
 
 
@@ -319,7 +332,27 @@ public class Order extends PersistentObject {
             canCheckout = false;
         }
     }
-    
+
+    public void updateCanSubmitPayment() {
+        
+        canSubmitPayment = true;
+
+        if(DELIVERY.equals(deliveryType)) {
+            if( this.deliveryAddress == null || !this.deliveryAddress.isValid()) {
+                canSubmitPayment = false;
+            }
+            if( !restaurantWillDeliver ) {
+                canSubmitPayment = false;
+            }
+        }
+
+        // If cannot checkout, cannot submit payment either
+        if( !canCheckout ) {
+            canSubmitPayment = false;
+        }
+
+    }
+
 
     /**
      * @param orderItemId
@@ -537,6 +570,14 @@ public class Order extends PersistentObject {
 
     public void setCanCheckout(boolean canCheckout) {
         this.canCheckout = canCheckout;
+    }
+
+    public boolean getCanSubmitPayment() {
+        return canSubmitPayment;
+    }
+
+    public void setCanSubmitPayment(boolean canSubmitPayment) {
+        this.canSubmitPayment = canSubmitPayment;
     }
 
     public String getAuthorisationCode() {
@@ -863,6 +904,14 @@ public class Order extends PersistentObject {
         }
     }
 
+    public boolean getRestaurantWillDeliver() {
+        return restaurantWillDeliver;
+    }
+
+    public void setRestaurantWillDeliver(boolean restaurantWillDeliver) {
+        this.restaurantWillDeliver = restaurantWillDeliver;
+    }
+    
     public boolean getPhoneNumberViewed() {
         return phoneNumberViewed;
     }

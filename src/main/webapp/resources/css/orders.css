@@ -2,14 +2,18 @@
 
 #order-wrapper {
     margin-right:10px;
-    width: 250px;
-    background-color:#FCFCFC;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    border: 1px solid #AAAAAA;
+    padding:10px;
+    width:228px;
+    background-color: #FCFCFC;
     -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+       -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
     filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=3);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
 }
-
 
 .orderheader {
     text-align:left;
@@ -19,6 +23,35 @@
     border-bottom: 1px dashed #AAAAAA;
     margin-bottom: 10px;
     padding-bottom: 10px;
+}
+
+.order-location-wrapper {
+    border: 1px solid #CCCCCC;
+    background-color:#FFFFFF;
+    margin: 10px 0 10px 0;
+    padding: 5px 10px 5px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+.order-location-header {
+    margin-bottom: 2px;
+}
+
+.order-location-title {
+    font: 700 12px prenton-n7,prenton;
+    color: #444444;
+    float:left;
+}
+
+.order-location-link {
+    float:right;
+}
+
+.order-location-summary {
+    clear:both;
+    font: 400 12px prenton-n4,prenton;
 }
 
 .order-delivery-wrapper {
@@ -554,4 +587,47 @@ a.callnow-button, a.callnow-button:active, a.callnow-button:hover {
     border: 1px solid #B6B6B6;
     padding: 3px 5px 3px 5px;
     color:#444444;
+}
+
+#locedit {
+    font:14px/16px myriad-pro-n4,myriad-pro;
+    color:#666666;
+    height: 22px;
+    padding: 4px 6px;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    background-clip: padding-box;
+    width: 290px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+}
+
+a.location-search {
+    display:inline-block;
+    font: 16px MaiandraOTGD-DemiBold;
+    color:#c5171e;
+    background: url(../images/button-grey.png) 0 -2px no-repeat;
+    width: 68px;
+    height: 31px;
+    padding-top:4px;
+    margin-left:10px;
+    position:relative;
+    text-align:center;
+    cursor:pointer;
+}
+
+.location-edit-warning {
+    font:400 12px/14px myriad-pro-n4,myriad-pro;
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    margin: 12px 0 12px 0;
+    color:#444444;
+    padding: 6px 10px 6px 10px;
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
+    clear:both;
 }

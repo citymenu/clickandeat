@@ -37,7 +37,7 @@ $(document).ready(function(){
 function onAfterBuildOrder(order,config) {
     ensureHeight();
     $('#order-wrapper').removeClass('fixed');
-    $('#order-wrapper').css('top',20);
+    $('#order-wrapper').css('top',0);
     ordertop = $('#order-wrapper').offset().top - parseFloat($('#order-wrapper').css('marginTop').replace(/auto/, 0));
     updateOrderPanelPos();
 }
@@ -91,17 +91,17 @@ function updateOrderPanelPos() {
 
     var contenttop = $('.menu-center').offset().top;
     var contentheight = $('.menu-center').outerHeight();
-    var contentbottom = contenttop + contentheight;
+    var contentbottom = contenttop + contentheight - 20;
 
     if( orderbottom >= contentbottom ) {
-        var newtop = contentbottom - orderheight - ordertop + 40;
-        $('#order-wrapper').css('top',(newtop < 0? 20: newtop));
+        var newtop = contentbottom - orderheight - ordertop + 20;
+        $('#order-wrapper').css('top',(newtop < 0? 0: newtop));
         $('#order-wrapper').removeClass('fixed');
     } else if (y >= ordertop - 20 ) {
         $('#order-wrapper').css('top',20);
         $('#order-wrapper').addClass('fixed');
     } else {
-        $('#order-wrapper').css('top',20);
+        $('#order-wrapper').css('top',0);
         $('#order-wrapper').removeClass('fixed');
     }
 }
@@ -134,6 +134,95 @@ function showAllOpeningTimes() {
                 }
                 table += '</div>';
                 var content = ('<div class=\'dialog-content\'>{0}</div>').format(table);
+                var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
+
+                $.fancybox.open({
+                    type: 'html',
+                    content: container,
+                    modal:false,
+                    autoSize:false,
+                    width: 375,
+                    autoHeight:true,
+                    openEffect:'none',
+                    closeEffect:'none'
+                });
+            }
+        }
+    );
+}
+
+// Show all delivery charges for the restaurant
+function showAllDeliveryCharges() {
+    $.fancybox.showLoading();
+    $.post( ctx+'/restaurant/getDeliveryCharges.ajax', { restaurantId: restaurantId },
+        function( data ) {
+            $.fancybox.hideLoading();
+            if( data.success ) {
+
+                // Get free delivery values
+                var standardDeliveryCharge = data.deliveryCharge? data.deliveryCharge: 0;
+                var minimumOrderForDelivery = data.minimumOrderForDelivery? data.minimumOrderForDelivery: 0;
+                var minimumOrderForFreeDelivery = data.minimumOrderForFreeDelivery && data.allowFreeDelivery == true? data.minimumOrderForFreeDelivery: 0;
+
+                // Build map of delivery charges and minimum order values
+                var deliveryCharges = {};
+                var hasDeliveryCharge = false;
+                var hasMinimumOrder = false;
+
+                $.each( data.areaDeliveryCharges, function( key, arr ) {
+                    deliveryCharges[key] = arr;
+                    if( arr[0] != null ) {
+                        hasDeliveryCharge = true;
+                    }
+                    if( arr[1] != null ) {
+                        hasMinimumOrder = true;
+                    }
+                });
+
+                // Build the standard content
+                var standardContent = '';
+                if( standardDeliveryCharge != 0 ) {
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.standard-delivery-charge'),standardDeliveryCharge.toFixed(2),ccy);
+                }
+                if( minimumOrderForDelivery != 0 ) {
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.minimum-order-for-delivery'),minimumOrderForDelivery.toFixed(2),ccy);
+                }
+                if( minimumOrderForFreeDelivery != 0 ) {
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.minimum-order-for-free-delivery'),minimumOrderForFreeDelivery.toFixed(2),ccy);
+                }
+                if( standardContent != '' ) {
+                    standardContent = '<div class=\'standard-delivery-details\'><table>' + standardContent + '</table></div>';
+                }
+
+                // Build the location delivery options
+                var table = '<table class=\'delivery-details-table\'><thead><tr>';
+                table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-location'));
+                if( hasDeliveryCharge ) {
+                    table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-charge'));
+                }
+                if( hasMinimumOrder ) {
+                    table += ('<th>{0}</th>').format(getLabel('restaurant.minimum-order-value'));
+                }
+                table += '</tr></thead><tbody>';
+
+                $.each( deliveryCharges, function( key, arr ) {
+                    var areaDeliveryCharge = arr[0];
+                    var areaMinimumOrderValue = arr[1];
+                    var row = ('<tr><td>{0}</td>').format(key);
+                    if( hasDeliveryCharge ) {
+                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                    }
+                    if( hasMinimumOrder ) {
+                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                    }
+                    row += '</tr>';
+                    table += row;
+                });
+
+                table += '</tbody></table>';
+
+                var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.delivery-charges'));
+                var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(standardContent,table);
                 var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
 
                 $.fancybox.open({

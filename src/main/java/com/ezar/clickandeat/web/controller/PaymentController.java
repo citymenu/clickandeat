@@ -55,7 +55,10 @@ public class PaymentController {
             return "redirect:/home.html";
         }
         Order order = requestHelper.getOrderFromSession(request);
-        if( !order.getRestaurant().getTestMode()) {
+        if( !order.getCanSubmitPayment()) {
+            return "redirect:/checkout.html";
+        }
+        else if( !order.getRestaurant().getTestMode()) {
             return "payment";
         }
         else {

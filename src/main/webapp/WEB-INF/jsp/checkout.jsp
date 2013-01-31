@@ -5,7 +5,7 @@
 <!doctype html>
 
 <head>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
@@ -89,45 +89,6 @@
                                 </div>
                             </div>
 
-                            <!-- Vouchers -->
-                            <div class="checkout-item-wrapper">
-                                <h2><message:message key="checkout.apply-voucher"/></h2>
-                                <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
-                                <div class="contact-form-field">
-                                    <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
-                                    <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
-                                </div>
-                            </div>
-
-                            <!-- Terms and conditions -->
-                            <div class="checkout-item-wrapper">
-                                <h2><message:message key="checkout.terms-and-conditions"/></h2>
-                                <div class="checkout-description"><message:message key="checkout.terms-and-conditions-help"/></div>
-                                <div class="contact-form-field">
-                                    <c:choose>
-                                        <c:when test="${order.termsAndConditionsAccepted == true}">
-                                            <input type="checkbox" id="termsAndConditions" checked="checked" style="margin-right:10px;"/>
-                                        </c:when>
-                                        <c:otherwise>
-                                            <input type="checkbox" id="termsAndConditions" style="margin-right:10px;"/>
-                                        </c:otherwise>
-                                    </c:choose>
-                                    <span class="terms-and-conditions"><message:message key="checkout.accept-terms-and-conditions" escape="false"/></span>
-                                </div>
-
-                            </div>
-
-                            <!-- Additional instructions -->
-                            <div class="checkout-item-wrapper">
-                                <h2><message:message key="checkout.additional-instructions"/></h2>
-                                <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
-                                <div class="contact-form-entry">
-                                    <div class="contact-form-field">
-                                        <textarea id="additionalInstructions">${order.additionalInstructions}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Delivery details -->
                             <div id="delivery-details" class="checkout-item-wrapper hidden">
                                 <h2><message:message key="checkout.delivery-details"/></h2>
@@ -171,13 +132,51 @@
                                 </div>
                             </div>
 
+                            <!-- Vouchers -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.apply-voucher"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.vouchers-help"/></div>
+                                <div class="contact-form-field">
+                                    <input type="text" id="voucherid" style="width:130px; margin-right:10px;"/>
+                                    <a class="checkout-nav-button checkout-nav-button-large" onclick="applyVoucher()"><message:message key="button.apply"/></a>
+                                </div>
+                            </div>
+
+                            <!-- Terms and conditions -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.terms-and-conditions"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.terms-and-conditions-help"/></div>
+                                <div class="contact-form-field">
+                                    <c:choose>
+                                        <c:when test="${order.termsAndConditionsAccepted == true}">
+                                            <input type="checkbox" id="termsAndConditions" checked="checked" style="margin-right:10px;"/>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input type="checkbox" id="termsAndConditions" style="margin-right:10px;"/>
+                                        </c:otherwise>
+                                    </c:choose>
+                                    <span class="terms-and-conditions"><message:message key="checkout.accept-terms-and-conditions" escape="false"/></span>
+                                </div>
+
+                            </div>
+
+                            <!-- Additional instructions -->
+                            <div class="checkout-item-wrapper">
+                                <h2><message:message key="checkout.additional-instructions"/></h2>
+                                <div class="checkout-description"><message:message key="checkout.additional-instructions-help" format="${order.restaurant.name}"/></div>
+                                <div class="contact-form-entry">
+                                    <div class="contact-form-field">
+                                        <textarea id="additionalInstructions">${order.additionalInstructions}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Collection details -->
                             <div id="collection-details" class="checkout-item-wrapper hidden">
                                 <h2><message:message key="checkout.collection-details"/></h2>
                                 <div class="checkout-description"><message:message key="checkout.collection-help" format="${order.restaurant.name}"/></div>
                                 <div id="restaurant-location"></div>
                             </div>
-
 
                         </div>
                     </div>
