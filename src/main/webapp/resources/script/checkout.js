@@ -132,7 +132,7 @@ function onAfterBuildOrder(order) {
     $('#buildorder').click(function(){
         updateOrder();
     });
-    if( order.canCheckout == true ) {
+    if( order.canSubmitPayment == true) {
         $('#validation-error').hide();
         $('#validation-message').remove();
     }

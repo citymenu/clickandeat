@@ -180,7 +180,7 @@ public class Order extends PersistentObject {
             
             Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery(this.deliveryAddress);
             Double minimumOrderForFreeDelivery = deliveryOptions.getMinimumOrderForFreeDelivery();
-            Double deliveryCharge = deliveryOptions.getDeliveryCharge(this.deliveryAddress);
+            Double deliveryCharge = deliveryOptions.getDeliveryCharge(this.deliveryAddress, this.orderItemCost);
             boolean allowFreeDelivery = deliveryOptions.isAllowFreeDelivery();
             boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
 
@@ -338,10 +338,7 @@ public class Order extends PersistentObject {
         canSubmitPayment = true;
 
         if(DELIVERY.equals(deliveryType)) {
-            if( this.deliveryAddress == null || !this.deliveryAddress.isValid()) {
-                canSubmitPayment = false;
-            }
-            if( !restaurantWillDeliver ) {
+            if( this.deliveryAddress == null || !this.deliveryAddress.isValid() || !restaurantWillDeliver ) {
                 canSubmitPayment = false;
             }
         }

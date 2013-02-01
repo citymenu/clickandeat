@@ -182,16 +182,26 @@ function showAllDeliveryCharges() {
                 // Build the standard content
                 var standardContent = '';
                 if( standardDeliveryCharge != 0 ) {
-                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.standard-delivery-charge'),standardDeliveryCharge.toFixed(2),ccy);
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>')
+                        .format(getLabel('restaurant.standard-delivery-charge'),standardDeliveryCharge.toFixed(2),ccy);
                 }
+
+                data.variableDeliveryCharges.forEach(function(variableDeliveryCharge){
+                    standardContent += ('<tr><td>{0} {1} <span class="euro">{2}</span></td><td class=\'right\'>{3} <span class="euro">{4}</span></td></tr>')
+                        .format(getLabel('restaurant.delivery-charge-for-orders-over'),variableDeliveryCharge.minimumOrderValue.toFixed(2),ccy,variableDeliveryCharge.deliveryCharge.toFixed(2),ccy);
+                });
+
                 if( minimumOrderForDelivery != 0 ) {
-                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.minimum-order-for-delivery'),minimumOrderForDelivery.toFixed(2),ccy);
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>')
+                        .format(getLabel('restaurant.minimum-order-for-delivery'),minimumOrderForDelivery.toFixed(2),ccy);
                 }
                 if( minimumOrderForFreeDelivery != 0 ) {
-                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>').format(getLabel('restaurant.minimum-order-for-free-delivery'),minimumOrderForFreeDelivery.toFixed(2),ccy);
+                    standardContent += ('<tr><td>{0}</td><td class=\'right\'>{1} <span class="euro">{2}</span></td></tr>')
+                        .format(getLabel('restaurant.minimum-order-for-free-delivery'),minimumOrderForFreeDelivery.toFixed(2),ccy);
                 }
+
                 if( standardContent != '' ) {
-                    standardContent = '<div class=\'standard-delivery-details\'><table>' + standardContent + '</table></div>';
+                    standardContent = '<div class=\'standard-delivery-details\'><table class=\'standard-delivery\'>' + standardContent + '</table></div>';
                 }
 
                 // Build the location delivery options

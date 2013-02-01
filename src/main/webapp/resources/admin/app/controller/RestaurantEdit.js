@@ -722,6 +722,23 @@ Ext.define('AD.controller.RestaurantEdit', {
         });
         restaurantObj.openingTimes.bankHolidayOpeningTimes = bankHolidayOpeningTimes;
 
+        // Validate the delivery charges by order amount if set
+        var variableChargeOrderValues = deliveryDetailValues['variableChargeOrderValues'];
+        var variableChargeAmounts = deliveryDetailValues['variableChargeAmounts'];
+        var variableChargeOrderValueArray = delimitedStringToArray(variableChargeOrderValues,'\n');
+        var variableChargeAmountArray = delimitedStringToArray(variableChargeAmounts,'\n');
+        if( variableChargeOrderValueArray.length != variableChargeAmountArray.length ) {
+            this.getRestaurantTabPanel().setActiveTab(1);
+            Ext.MessageBox.show({
+                title:'Input Values Not Valid',
+                msg:'Please ensure that minimum order values and delivery charges have the same number of lines',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+            return;
+        }
+
         // Validate the delivery charges and areas if set
         var deliveryChargeAreas = deliveryDetailValues['deliveryChargeAreas'];
         var deliveryChargeAmounts = deliveryDetailValues['deliveryChargeAmounts'];
@@ -732,6 +749,19 @@ Ext.define('AD.controller.RestaurantEdit', {
             Ext.MessageBox.show({
                 title:'Input Values Not Valid',
                 msg:'Please ensure that delivery charge areas and amounts have the same number of lines',
+                buttons:Ext.MessageBox.OK,
+                icon:Ext.MessageBox.WARNING,
+                closable:false
+            });
+            return;
+        }
+
+        // If both delivery charge areas and order amounts are set, raise error
+        if( variableChargeOrderValueArray.length > 0 && deliveryChargeAreaArray.length > 0 ) {
+            this.getRestaurantTabPanel().setActiveTab(1);
+            Ext.MessageBox.show({
+                title:'Input Values Not Valid',
+                msg:'You can only specify delivery charges by minimum order value or by location, not both',
                 buttons:Ext.MessageBox.OK,
                 icon:Ext.MessageBox.WARNING,
                 closable:false
@@ -754,6 +784,30 @@ Ext.define('AD.controller.RestaurantEdit', {
                 closable:false
             });
             return;
+        }
+
+        // Build an array of variable delivery charge objects to send back to the server
+        var variableDeliveryCharges = [];
+        for( var i = 0; i < variableChargeOrderValueArray.length; i++ ) {
+            var minimumOrderValue = variableChargeOrderValueArray[i];
+            var deliveryCharge = variableChargeAmountArray[i];
+            var variableDeliveryCharge = new Object({
+                minimumOrderValue: minimumOrderValue,
+                deliveryCharge: deliveryCharge
+            });
+            variableDeliveryCharges.push(variableDeliveryCharge);
+        }
+
+        // Build an array of delivery charge objects to send back to the server
+        var areaDeliveryCharges = [];
+        for( var i = 0; i < deliveryChargeAreaArray.length; i++ ) {
+            var areas = deliveryChargeAreaArray[i];
+            var charge = deliveryChargeAmountArray[i];
+            var areaDeliveryCharge = new Object({
+                deliveryCharge: charge,
+                areas: delimitedStringToArray(areas,',')
+            });
+            areaDeliveryCharges.push(areaDeliveryCharge);
         }
 
         // Build an array of delivery charge objects to send back to the server
@@ -792,6 +846,7 @@ Ext.define('AD.controller.RestaurantEdit', {
             allowDeliveryBelowMinimumForFreeDelivery: deliveryDetailValues['allowDeliveryBelowMinimumForFreeDelivery'] == 'on',
             deliveryRadiusInKilometres: deliveryDetailValues['deliveryRadiusInKilometres'],
             areasDeliveredTo: delimitedStringToArray(deliveryDetailValues['areasDeliveredTo'],'\n'),
+            variableDeliveryCharges: variableDeliveryCharges,
             areaDeliveryCharges: areaDeliveryCharges,
             areaMinimumOrderCharges: areaMinimumOrderCharges
         });
@@ -1011,6 +1066,17 @@ Ext.define('AD.controller.RestaurantEdit', {
         form.findField('earlyClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.earlyClosingTime);
         form.findField('lateOpeningTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateOpeningTime);
         form.findField('lateClosingTime_bankHoliday').setValue(bankHolidayOpeningTimes.lateClosingTime);
+
+        // Populate the minimum order values and charges
+        var variableDeliveryCharges = restaurantObj.deliveryOptions.variableDeliveryCharges;
+        var orderValuesArray = [];
+        var deliveryChargesArray = [];
+        variableDeliveryCharges.forEach(function(variableDeliveryCharge){
+            orderValuesArray.push(variableDeliveryCharge.minimumOrderValue);
+            deliveryChargesArray.push(variableDeliveryCharge.deliveryCharge);
+        });
+        form.findField('variableChargeOrderValues').setValue(orderValuesArray.join('\n'));
+        form.findField('variableChargeAmounts').setValue(deliveryChargesArray.join('\n'));
 
         // Populate the delivery areas and charges
         var areaDeliveryCharges = restaurantObj.deliveryOptions.areaDeliveryCharges;

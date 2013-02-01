@@ -5,6 +5,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class DeliveryOptions {
 
@@ -28,7 +30,8 @@ public class DeliveryOptions {
 
     private Double deliveryRadiusInKilometres;
     private List<String> areasDeliveredTo;
-    
+
+    private SortedSet<VariableDeliveryCharge> variableDeliveryCharges;
     private List<AreaDeliveryCharge> areaDeliveryCharges;
     private List<AreaDeliveryCharge> areaMinimumOrderCharges;
 
@@ -38,16 +41,27 @@ public class DeliveryOptions {
         this.areasDeliveredTo = new ArrayList<String>();
         this.areaDeliveryCharges = new ArrayList<AreaDeliveryCharge>();
         this.areaMinimumOrderCharges = new ArrayList<AreaDeliveryCharge>();
+        this.variableDeliveryCharges = new TreeSet<VariableDeliveryCharge>();
     }
 
 
     /**
      * @param deliveryAddress
+     * @param orderItemCost
      * @return
      */
 
-    public Double getDeliveryCharge( Address deliveryAddress ) {
-        if( StringUtils.hasText(deliveryAddress.getPostCode())) {
+    public Double getDeliveryCharge( Address deliveryAddress, double orderItemCost ) {
+
+        // Variable delivery charges take precedence
+        if( variableDeliveryCharges.size() > 0 ) {
+            for( VariableDeliveryCharge variableDeliveryCharge: variableDeliveryCharges ) {
+                if( orderItemCost >= variableDeliveryCharge.getMinimumOrderValue()) {
+                    return variableDeliveryCharge.getDeliveryCharge();
+                }
+            }
+        }
+        else if( StringUtils.hasText(deliveryAddress.getPostCode())) {
             String postCode = deliveryAddress.getPostCode().toUpperCase();
             for( AreaDeliveryCharge areaDeliveryCharge: areaDeliveryCharges ) {
                 for( String area: areaDeliveryCharge.getAreas()) {
@@ -80,6 +94,28 @@ public class DeliveryOptions {
         return minimumOrderForDelivery;
     }
 
+    public String getMinimumDeliveryCharge() {
+        return NumberUtil.format(getMinimumAndMaximumDeliveryCharge()[0]);
+    }
+
+    public String getMaximumDeliveryCharge() {
+        return NumberUtil.format(getMinimumAndMaximumDeliveryCharge()[1]);
+    }
+
+    private Double[] getMinimumAndMaximumDeliveryCharge() {
+        double minCharge = deliveryCharge;
+        double maxCharge = deliveryCharge;
+        for( VariableDeliveryCharge variableDeliveryCharge: variableDeliveryCharges ) {
+            minCharge = Math.min(variableDeliveryCharge.getDeliveryCharge(), minCharge);
+            maxCharge = Math.max(variableDeliveryCharge.getDeliveryCharge(), maxCharge);
+        }
+        for( AreaDeliveryCharge areaDeliveryCharge: areaDeliveryCharges ) {
+            minCharge = Math.min(areaDeliveryCharge.getDeliveryCharge(), minCharge);
+            maxCharge = Math.max(areaDeliveryCharge.getDeliveryCharge(), maxCharge);
+        }
+        return new Double[]{minCharge, maxCharge};
+    }
+    
     public String getDeliveryOptionsSummary() {
         return deliveryOptionsSummary;
     }
@@ -197,6 +233,18 @@ public class DeliveryOptions {
     }
     
     public boolean getHasAdditionalDeliveryCharges() {
-        return areaDeliveryCharges.size() > 0 || areaMinimumOrderCharges.size() > 0;
+        return variableDeliveryCharges.size() > 0 || areaDeliveryCharges.size() > 0 || areaMinimumOrderCharges.size() > 0;
+    }
+
+    public SortedSet<VariableDeliveryCharge> getVariableDeliveryCharges() {
+        return variableDeliveryCharges;
+    }
+
+    public void setVariableDeliveryCharges(SortedSet<VariableDeliveryCharge> variableDeliveryCharges) {
+        this.variableDeliveryCharges = variableDeliveryCharges;
+    }
+
+    public boolean getHasVariableDeliveryCharges() {
+        return variableDeliveryCharges.size() > 0;
     }
 }

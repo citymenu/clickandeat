@@ -208,8 +208,15 @@
                                                                             <c:otherwise>
                                                                                 <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
                                                                                 <div class="delivery-details">
-                                                                                    <c:if test="${deliveryOptions.deliveryCharge != null && deliveryOptions.deliveryCharge != 0}">
-                                                                                        <div><message:message key="restaurant.standard-delivery-charge" escape="false"/> ${deliveryOptions.formattedDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00'}">
+                                                                                        <div><message:message key="restaurant.delivery-charge" escape="false"/> ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                                    </c:if>
+                                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge != deliveryOptions.maximumDeliveryCharge}">
+                                                                                        <div>
+                                                                                            <message:message key="restaurant.delivery-charge" escape="false"/>
+                                                                                            ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span> -
+                                                                                            ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                                        </div>
                                                                                     </c:if>
                                                                                     <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
                                                                                         <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>

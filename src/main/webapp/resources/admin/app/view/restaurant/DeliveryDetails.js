@@ -324,6 +324,10 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             xtype:'numberfield',
             allowBlank:false
         },{
+            fieldLabel:'Standard delivery charge',
+            name:'deliveryCharge',
+            xtype:'numberfield'
+        },{
             fieldLabel:'Allow free delivery',
             name:'allowFreeDelivery',
             xtype:'checkbox'
@@ -347,30 +351,6 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
         }]
     },{
         xtype:'fieldset',
-        title:'Delivery Charges',
-        defaults:{
-            allowBlank:true,
-            anchor:'100%',
-            labelAlign:'top'
-        },
-        defaultType: 'textfield',
-        items:[{
-            fieldLabel:'Standard delivery charge',
-            name:'deliveryCharge',
-            xtype:'numberfield'
-        },{
-            name:'deliveryChargeAreas',
-            fieldLabel:'Enter comma-separated lists of locations with the same delivery charge (one list per line)',
-            xtype:'textareafield',
-            height:90
-        },{
-             name:'deliveryChargeAmounts',
-             fieldLabel:'Enter delivery charges for the location lists in the field above (one charge per line)',
-             xtype:'textareafield',
-             height:90
-        }]
-    },{
-        xtype:'fieldset',
         title:'Minimum order values for delivery',
         defaults:{
             allowBlank:true,
@@ -388,11 +368,50 @@ Ext.define('AD.view.restaurant.DeliveryDetails' ,{
             xtype:'textareafield',
             height:90
         },{
-             name:'minimumDeliveryAmounts',
-             fieldLabel:'Enter minimum order values for the location lists in the field above (one value per line)',
+           name:'minimumDeliveryAmounts',
+           fieldLabel:'Enter minimum order values for the location lists in the field above (one value per line)',
+           xtype:'textareafield',
+           height:90
+        }]
+    },{
+        xtype:'fieldset',
+        title:'Delivery Charges by Order Amount',
+        defaults:{
+            allowBlank:true,
+            anchor:'100%',
+            labelAlign:'top'
+        },
+        defaultType: 'textfield',
+        items:[{
+            name:'variableChargeOrderValues',
+            fieldLabel:'Enter minimum order values (one per line)',
+            xtype:'textareafield',
+            height:90
+        },{
+             name:'variableChargeAmounts',
+             fieldLabel:'Enter delivery charges for the minium order values in the field above (one charge per line)',
+             xtype:'textareafield',
+             height:90
+        }]
+    },{
+        xtype:'fieldset',
+        title:'Delivery Charges by Location',
+        defaults:{
+            allowBlank:true,
+            anchor:'100%',
+            labelAlign:'top'
+        },
+        defaultType: 'textfield',
+        items:[{
+            name:'deliveryChargeAreas',
+            fieldLabel:'Enter comma-separated lists of locations with the same delivery charge (one list per line)',
+            xtype:'textareafield',
+            height:90
+        },{
+             name:'deliveryChargeAmounts',
+             fieldLabel:'Enter delivery charges for the location lists in the field above (one charge per line)',
              xtype:'textareafield',
              height:90
         }]
     }]
-
 });

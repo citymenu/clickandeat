@@ -204,6 +204,7 @@ public class RestaurantController {
             model.put("minimumOrderForDelivery",deliveryOptions.getMinimumOrderForDelivery());
             model.put("minimumOrderForFreeDelivery", deliveryOptions.getMinimumOrderForFreeDelivery());
             model.put("allowFreeDelivery", deliveryOptions.isAllowFreeDelivery());
+            model.put("variableDeliveryCharges", deliveryOptions.getVariableDeliveryCharges());
             SortedMap<String,Double[]> areaCharges = new TreeMap<String, Double[]>();
             
             for( AreaDeliveryCharge deliveryCharge: deliveryOptions.getAreaDeliveryCharges()) {

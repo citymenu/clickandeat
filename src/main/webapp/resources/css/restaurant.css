@@ -468,3 +468,7 @@ table.delivery-details-table td.right {
     color:#444444;
     padding-right:30px;
 }
+
+table.standard-delivery td {
+    padding:2px 0 2px 0;
+}
