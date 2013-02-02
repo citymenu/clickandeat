@@ -67,14 +67,6 @@
                                                         <util:escape value="${restaurant.address.summary}"/>
                                                         <a class="restaurant-text" onclick="showContactTelephone()"><message:message key="restaurant.show-telephone-number"/></a>
                                                     </div>
-                                                    <div class="restaurant-delivery-details">
-                                                        <c:if test="${!restaurant.collectionOnly && restaurant.deliveryTimeMinutes != 0}">
-                                                        <message:message key="order.delivery-time"/> ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/><br>
-                                                        </c:if>
-                                                        <c:if test="${restaurant.collectionTimeMinutes != 0}">
-                                                        <message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
-                                                        </c:if>
-                                                    </div>
                                                     <c:choose>
                                                         <c:when test="${search != null && search.coordinates != null}">
                                                             <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.get-directions"/></a> <message:message key="restaurant.from-your-location"/></div>
@@ -83,6 +75,14 @@
                                                             <div class="restaurant-details"><a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.show-location"/></a></div>
                                                         </c:otherwise>
                                                     </c:choose>
+                                                    <div class="restaurant-delivery-details">
+                                                        <c:if test="${!restaurant.collectionOnly && restaurant.deliveryTimeMinutes != 0}">
+                                                        <message:message key="order.delivery-time"/> ${restaurant.deliveryTimeMinutes} <message:message key="time.minutes"/><br>
+                                                        </c:if>
+                                                        <c:if test="${restaurant.collectionTimeMinutes != 0}">
+                                                        <message:message key="order.collection-time"/> ${restaurant.collectionTimeMinutes} <message:message key="time.minutes"/>
+                                                        </c:if>
+                                                    </div>
                                                 </div>
                                             </td>
                                             <td width="300">

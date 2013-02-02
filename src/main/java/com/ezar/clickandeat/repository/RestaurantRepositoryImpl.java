@@ -93,7 +93,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
-            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true));
+            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
+                    .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
             List<Restaurant> restaurants = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
                 if( restaurants.size() % 2 == 1 ) {
@@ -244,7 +245,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         Query query = geoLocation != null? new Query(where("address.location").nearSphere(
                 new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR)):
                 new Query();
-        query.addCriteria(where("listOnSite").is(true).and("deleted").ne(true));
+        query.addCriteria(where("listOnSite").is(true).and("deleted").ne(true)
+                .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
 
         // Add scope variables to the map/reduce query
         Map<String,Object> scopeVariables = new HashMap<String,Object>();

@@ -278,6 +278,13 @@ a.location-button {
     padding: 8px 0 8px 0;
 }
 
+.google-pin {
+    background:transparent url(../images/icons/map.png) 0 0 no-repeat;
+    padding-left:20px;
+    min-height:16px;
+    vertical-align:middle;
+}
+
 div.even {
     background-color:#FAFAFA;
 }
