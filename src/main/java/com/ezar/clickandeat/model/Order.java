@@ -175,6 +175,11 @@ public class Order extends PersistentObject {
         this.extraSpendNeededForDelivery = 0d;
         this.restaurantWillDeliver = true;
 
+        // Update whether or not the restaurant will deliver to this order
+        if( DELIVERY.equals(this.getDeliveryType())) {
+            this.restaurantWillDeliver = this.restaurant.willDeliverToLocation(this);
+        }
+
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
             DeliveryOptions deliveryOptions = this.restaurant.getDeliveryOptions();
             
@@ -183,9 +188,6 @@ public class Order extends PersistentObject {
             Double deliveryCharge = deliveryOptions.getDeliveryCharge(this.deliveryAddress, this.orderItemCost);
             boolean allowFreeDelivery = deliveryOptions.isAllowFreeDelivery();
             boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
-
-            // Update whether or not the restaurant will deliver to this order
-            this.restaurantWillDeliver = this.restaurant.willDeliverToLocation(this);
 
             if( !restaurantWillDeliver ) {
                 this.deliveryCost = 0d;
