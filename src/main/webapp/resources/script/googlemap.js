@@ -76,20 +76,6 @@ function showDirections(restaurantLat,restaurantLng,userLat,userLng,restaurantNa
     directionsDisplay.setMap(map);
     map.fitBounds(bounds);
 
-    // Add restaurant marker
-    var restaurantMarker = new google.maps.Marker({
-        position: restaurantLatlng,
-        icon: resources + '/images/markers/blue_MarkerB.png',
-        map: map
-    });
-
-    // Add user marker
-    var userMarker = new google.maps.Marker({
-        position: userLatlng,
-        icon: resources + '/images/markers/red_MarkerA.png',
-        map: map
-    });
-
     // Routing request
     var request = {
         origin:userLatlng,
