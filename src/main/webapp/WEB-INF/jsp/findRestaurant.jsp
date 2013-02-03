@@ -208,7 +208,6 @@
                                                                             <c:otherwise>
                                                                                 <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
                                                                                 <div class="delivery-details">
-                                                                                    <div>MIN: ${deliveryOptions.minimumDeliveryCharge}</div>
                                                                                     <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
                                                                                         <div><message:message key="restaurant.free-delivery" escape="false"/></div>
                                                                                     </c:if>
