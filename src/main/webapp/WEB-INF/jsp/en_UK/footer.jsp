@@ -4,9 +4,9 @@
 
 <div id="footer">
     <div class="footer-wrapper">
-        <table width="1020">
+        <table width="1000" class="footer-table">
             <tr valign="top">
-                <td width="500">
+                <td width="480">
                     <div class="company-details">
                         <h2 class="footer">Simply the easiest way to order takeaway food online</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur <span class="bolder">take away</span> adipisicing <span class="bolder">collection</span>

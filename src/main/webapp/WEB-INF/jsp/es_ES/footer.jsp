@@ -4,9 +4,9 @@
 
 <div id="footer">
     <div class="footer-wrapper">
-        <table width="1020">
+        <table width="1000" class="footer-table">
             <tr valign="top">
-                <td width="500">
+                <td width="480">
                     <div class="company-details">
                         <h2 class="footer">La manera más sencilla de pedir comida a domicilio.</h2>
                         <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span>te trae la mejor variedad de comida a domicilio
