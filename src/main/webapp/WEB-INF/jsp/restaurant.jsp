@@ -45,8 +45,8 @@
                                 <div class="restaurant-details-wrapper">
                                     <table width="720">
                                         <tr valign="top">
-                                            <td width="420">
-                                                <table width="420">
+                                            <td width="410">
+                                                <table width="410">
                                                     <tr valign="bottom">
                                                         <td nowrap style="vertical-align:top">
                                                             <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>" class="restaurant-image"/>
@@ -85,7 +85,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td width="300">
+                                            <td width="310">
                                                 <c:if test="${restaurant.hasDiscounts == true}">
                                                     <div class="restaurant-discount-details">
                                                         <div class="scissors"></div>
