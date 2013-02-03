@@ -4,9 +4,9 @@
 
 <div id="footer">
     <div class="footer-wrapper">
-        <table width="1000" class="footer-table">
+        <table width="1020" class="footer-table">
             <tr valign="top">
-                <td width="480">
+                <td width="500" style="padding-left:10px">
                     <div class="company-details">
                         <h2 class="footer">Simply the easiest way to order takeaway food online</h2>
                         <p>Lorem ipsum dolor sit amet, consectetur <span class="bolder">take away</span> adipisicing <span class="bolder">collection</span>
@@ -45,7 +45,7 @@
                         </div>
                     </div>
                 </td>
-                <td width="180">
+                <td width="180" style="padding-right:10px;">
                     <c:forEach var="entry" items="${cuisineLocations}">
                         <div class="cuisineLocation">
                             <a class="direct" href="${ctx}/app/find-takeaway-food-in-${entry.key.second}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
