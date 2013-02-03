@@ -82,8 +82,6 @@ public class RestaurantSearchController {
                     order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
                     orderRepository.saveOrder(order);
                 }
-
-
             }
             search.setCuisine(cuisine);
             session.setAttribute("search", search);
