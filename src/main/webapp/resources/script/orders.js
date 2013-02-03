@@ -317,7 +317,7 @@ function doBuildOrder(order,config) {
         // If the restaurant does not deliver to this location, show a warning
         if( order.deliveryType == 'DELIVERY' && order.deliveryAddress.displaySummary && !order.restaurantWillDeliver ) {
             var warningMessage = getLabel('order.restaurant-wont-deliver-warning');
-            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
+            var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(unescapeQuotes(order.restaurantName)));
             $('#deliverycheck').append(warning);
         } else if( advancedDisplay && !order.restaurantIsOpen && config.showDeliveryOptions ) {
             var warningMessage = (order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
@@ -828,7 +828,8 @@ function locationSearch() {
 
 // Runs after location is updated (can be overridden)
 function onAfterLocationUpdate() {
-    getOrder(); // Reload order panel
+    $.fancybox.showLoading();
+    location.reload();
 }
 
 // Add item to order, check if need to display additional item dialog
