@@ -63,6 +63,7 @@ blockquote p {
 .triangle-isosceles.left {
 	margin-left:50px;
 	background:#fdde70;
+	position:relative;
 }
 
 /* Variant : for right positioned triangle
@@ -78,16 +79,14 @@ blockquote p {
 
 /* creates triangle */
 .triangle-isosceles:after {
-	content:"";
-	position:absolute;
-	bottom:-15px; /* value = - border-top-width - border-bottom-width */
+    position:absolute;
+    content:"";
+	background-image:url(../images/triangle-left.png);
+	top:6px; /* value = - border-top-width - border-bottom-width */
 	left:50px; /* controls horizontal position */
-	border-width:15px 15px 0; /* vary these values to change the angle of the vertex */
-	border-style:solid;
-	border-color:#f3961c transparent;
-    /* reduce the damage in FF3.0 */
     display:block;
-    width:0;
+    width:50px;
+    height:20px;
 }
 
 /* Variant : top
