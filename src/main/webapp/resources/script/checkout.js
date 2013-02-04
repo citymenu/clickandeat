@@ -179,7 +179,7 @@ function initializeMap() {
     // Add restaurant marker
     var restaurantMarker = new google.maps.Marker({
         position: restaurantLatlng,
-        icon: resources + '/images/markers/green_MarkerB.png',
+        icon: resources + '/images/markers/darkgreen_MarkerB.png',
         map: map
     });
 
