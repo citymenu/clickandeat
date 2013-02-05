@@ -50,7 +50,7 @@ public class Address extends PersistentObject {
     }
 
     public String getDisplaySummary() {
-        return StringUtils.collectionToDelimitedString(getAddressItems(), "\n");
+        return StringUtils.collectionToDelimitedString(getDisplayItems(), "\n");
     }
 
     private List<String> getAddressItems() {
@@ -63,6 +63,20 @@ public class Address extends PersistentObject {
         }
         if(StringUtils.hasText(region)) {
             items.add(region);
+        }
+        if(StringUtils.hasText(postCode)) {
+            items.add(postCode);
+        }
+        return items;
+    }
+
+    private List<String> getDisplayItems() {
+        List<String> items = new ArrayList<String>();
+        if( StringUtils.hasText(address1)) {
+            items.add(address1);
+        }
+        if(StringUtils.hasText(town)) {
+            items.add(town);
         }
         if(StringUtils.hasText(postCode)) {
             items.add(postCode);
