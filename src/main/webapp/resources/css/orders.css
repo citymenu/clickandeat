@@ -462,10 +462,10 @@ a.order-button:active, a.order-button:hover {
     font:500 12px/14px prenton-n5,prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
-    margin-top: 6px;
     padding: 6px 10px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .restaurant-warning-wrapper {
