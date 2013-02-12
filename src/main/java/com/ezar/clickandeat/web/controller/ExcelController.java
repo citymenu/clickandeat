@@ -6,6 +6,12 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.xssf.usermodel.*;
+import org.jets3t.service.S3Service;
+import org.jets3t.service.impl.rest.httpclient.RestS3Service;
+import org.jets3t.service.model.S3Bucket;
+import org.jets3t.service.model.S3Object;
+import org.jets3t.service.security.AWSCredentials;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -24,34 +30,36 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @Controller
-public class ExcelController {
+public class ExcelController implements InitializingBean {
 
     private static final String TEMPLATE_LOCATION = "/src/main/webapp/resources/excel/MenuTemplate.xlsx";
 
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    @ResponseBody
-    @RequestMapping(value="/admin/menu/downloadTemplate.html", method = RequestMethod.GET )
-    public ResponseEntity<byte[]> downloadTemplate(HttpServletRequest request) throws Exception {
-        Resource resource = new ClassPathResource(TEMPLATE_LOCATION);
-        InputStream is = resource.getInputStream();
-        byte[] buff = new byte[1024];
-        int bytesRead = 0;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while((bytesRead = is.read(buff)) != -1) {
-            baos.write(buff, 0, bytesRead);
-        }
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-        headers.set("Content-Disposition","attachment;Filename=MenuTemplate.xlsx");
-        headers.setCacheControl("no-cache");
-        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
+    private String bucketName;
+
+    private String templatePath = "resources/excel/MenuTemplate.xlsx";
+
+    private S3Service s3Service;
+
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Properties props = new Properties();
+        props.load(new ClassPathResource("/aws.s3.synchronize.properties").getInputStream());
+        String accessKey = props.getProperty("accesskey");
+        String secretKey = props.getProperty("secretkey");
+        bucketName = props.getProperty("bucketname");
+        AWSCredentials credentials = new AWSCredentials(accessKey, secretKey);
+        s3Service = new RestS3Service(credentials);
     }
 
-
+    
+    
     @ResponseBody
     @RequestMapping(value="/admin/menu/downloadMenu.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> downloadTemplate(@RequestParam(value="id") String restaurantId, HttpServletRequest request) throws Exception {
@@ -59,8 +67,8 @@ public class ExcelController {
         Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
         Menu menu = restaurant.getMenu();
 
-        Resource resource = new ClassPathResource(TEMPLATE_LOCATION);
-        XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
+        S3Object object = s3Service.getObject(bucketName, templatePath);
+        XSSFWorkbook workbook = new XSSFWorkbook(object.getDataInputStream());
         XSSFSheet categorySheet = workbook.getSheet("Categories");
         XSSFSheet itemSheet = workbook.getSheet("Items");
         
