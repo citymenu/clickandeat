@@ -22,6 +22,10 @@ Ext.define('AD.view.restaurant.List' ,{
     		text:'Create New',
     		icon:'../resources/images/icons-shadowless/document--plus.png',
     		action:'create'
+    	},'-',{
+    	    text:'Download Menu Template',
+            icon:'../resources/images/icons-shadowless/report-excel.png',
+            action:'template'
     	}]
     },{
         xtype:'pagingtoolbar',

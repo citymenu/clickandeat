@@ -29,6 +29,10 @@ Ext.define('AD.controller.RestaurantList', {
 
             'restaurantlist button[action=delete]': {
             	click:this.deleteSelected
+            },
+
+            'restaurantlist button[action=template]': {
+            	click:this.downloadTemplate
             }
 		});
 	},
@@ -176,6 +180,11 @@ Ext.define('AD.controller.RestaurantList', {
 
 	getSelectedRecord: function() {
 	    return this.getRestaurantList().getSelectionModel().getLastSelected();
-	}
+	},
+
+    downloadTemplate:function() {
+        window.location = ctx + "/admin/menu/downloadTemplate.html";
+    }
+
 
 });

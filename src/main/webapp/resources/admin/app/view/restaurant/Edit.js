@@ -42,6 +42,22 @@ Ext.define('AD.view.restaurant.Edit' ,{
             icon: resources + '/images/icons-shadowless/map.png',
             text:'Show location',
             action:'showLocation'
+        },'-',{
+            xtype:'button',
+            icon: resources + '/images/icons-shadowless/report-excel.png',
+    	    text:'Menu Export',
+    	    menu:{
+                xtype:'menu',
+                items: [{
+                    text:'Upload Menu',
+                    action:'uploadMenu',
+                    icon: resources + '/images/icons-shadowless/upload.png'
+                },{
+                    text:'Download Menu',
+                    action:'downloadMenu',
+                    icon: resources + '/images/icons-shadowless/download.png'
+                }]
+    	    }
         }]
     }],
 

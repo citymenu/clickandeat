@@ -137,6 +137,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click: this.showLocation
             },
 
+            'restaurantedit menuitem[action=downloadMenu]': {
+                click: this.downloadMenu
+            },
+
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -616,6 +620,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 scope:this
             });
         }
+    },
+
+    downloadMenu:function(button) {
+        window.location = ctx + "/admin/menu/downloadMenu.html?id=" + restaurantObj.restaurantId;
     },
 
     saveRestaurant: function(button , callback) {
