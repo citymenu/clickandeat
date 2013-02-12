@@ -2,7 +2,6 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -30,7 +28,7 @@ import java.util.Map;
 @Controller
 public class ExcelController {
 
-    private static final String TEMPLATE_LOCATION = "/template/MenuTemplate.xlsx";
+    private static final String TEMPLATE_LOCATION = "/src/main/webapp/resources/excel/MenuTemplate.xlsx";
 
     @Autowired
     private RestaurantRepository restaurantRepository;
