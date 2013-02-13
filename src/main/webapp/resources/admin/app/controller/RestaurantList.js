@@ -183,7 +183,7 @@ Ext.define('AD.controller.RestaurantList', {
 	},
 
     downloadTemplate:function() {
-        window.location = resources + "/excel/MenuTemplate.xlsx";
+        window.location = '/admin/menu/downloadTemplate.html';
     }
 
 
