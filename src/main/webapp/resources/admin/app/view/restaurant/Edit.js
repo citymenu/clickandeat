@@ -8,6 +8,9 @@ Ext.define('AD.view.restaurant.Edit' ,{
         xtype:'toolbar',
         dock:'top',
         autoScroll:true,
+        layout: {
+            overflowHandler: 'Menu'
+        },
         items:[{
             xtype:'button',
             icon: resources + '/images/icons-shadowless/disk-black.png',
