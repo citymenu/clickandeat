@@ -7,6 +7,7 @@ Ext.define('AD.view.restaurant.Edit' ,{
     dockedItems:[{
         xtype:'toolbar',
         dock:'top',
+        autoScroll:true,
         items:[{
             xtype:'button',
             icon: resources + '/images/icons-shadowless/disk-black.png',
