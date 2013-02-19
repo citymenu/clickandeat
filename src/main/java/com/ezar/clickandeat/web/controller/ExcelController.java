@@ -32,7 +32,7 @@ public class ExcelController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    private String templatePath = "/excel/MenuTemplate.xlsx";
+    private String templatePath = "/template/MenuTemplate.xlsx";
 
 
     @ResponseBody
