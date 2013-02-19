@@ -2,10 +2,16 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.util.AreaReference;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.*;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -34,6 +40,8 @@ public class ExcelController {
 
     private String templatePath = "/template/MenuTemplate.xlsx";
 
+    private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
+    private final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 
     @ResponseBody
     @RequestMapping(value="/admin/menu/downloadTemplate.html", method = RequestMethod.GET )
@@ -59,21 +67,74 @@ public class ExcelController {
     public ResponseEntity<byte[]> downloadMenu(@RequestParam(value="id") String restaurantId, HttpServletRequest request) throws Exception {
 
         Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
-        Menu menu = restaurant.getMenu();
 
         Resource resource = new ClassPathResource(templatePath);
         XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
-        XSSFSheet categorySheet = workbook.getSheet("Categories");
-        XSSFSheet itemSheet = workbook.getSheet("Items");
-        
+
         // Build cell styles
         Map<String,CellStyle> styles = generateCellStyles(workbook);
 
+        // Export opening times
+        XSSFSheet openingTimesSheet = workbook.getSheet("Opening Times");
+        OpeningTimes restaurantOpeningTimes = restaurant.getOpeningTimes();
+        AreaReference openingTimesAreaReference = new AreaReference(workbook.getName("OpeningTimes").getRefersToFormula());
+        CellReference openingTimesCellReference = openingTimesAreaReference.getFirstCell();
+        int openingTimesRow = openingTimesCellReference.getRow();
+        int openingTimesColumn = (int)openingTimesCellReference.getCol();
+        for( OpeningTime openingTime: restaurantOpeningTimes.getOpeningTimes() ) {
+            int dayOfWeek = openingTime.getDayOfWeek();
+            XSSFRow row = openingTimesSheet.getRow(openingTimesRow + (dayOfWeek - 1));
+            if( openingTime.getEarlyOpeningTime() != null ) {
+                createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyOpeningTime()));
+            }
+            if( openingTime.getEarlyClosingTime() != null ) {
+                createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyClosingTime()));
+            }
+            if( openingTime.getLateOpeningTime() != null ) {
+                createCell(row, openingTimesColumn + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateOpeningTime()));
+            }
+            if( openingTime.getLateOpeningTime() != null ) {
+                createCell(row, openingTimesColumn + 3, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateClosingTime()));
+            }
+        }
+
+        // Output bank holiday opening times
+        OpeningTime bankHolidayOpeningTime = restaurantOpeningTimes.getBankHolidayOpeningTimes();
+        if( bankHolidayOpeningTime != null ) {
+            XSSFRow row = openingTimesSheet.getRow(openingTimesRow + 7);
+            if( bankHolidayOpeningTime.getEarlyOpeningTime() != null ) {
+                createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getEarlyOpeningTime()));
+            }
+            if( bankHolidayOpeningTime.getEarlyClosingTime() != null ) {
+                createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getEarlyClosingTime()));
+            }
+            if( bankHolidayOpeningTime.getLateOpeningTime() != null ) {
+                createCell(row, openingTimesColumn + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getLateOpeningTime()));
+            }
+            if( bankHolidayOpeningTime.getLateOpeningTime() != null ) {
+                createCell(row, openingTimesColumn + 3, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getLateClosingTime()));
+            }
+        }
+
+        // Output closed dates
+        CellReference closedDatesCellReference = new CellReference(workbook.getName("ClosedDates").getRefersToFormula());
+        int closedDatesRow = closedDatesCellReference.getRow();
+        int closedDateIndex = 1;
+        for(LocalDate closedDate: restaurant.getOpeningTimes().getClosedDates()) {
+            XSSFRow row = openingTimesSheet.createRow(closedDatesRow + closedDateIndex++ );
+            createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("date")).setCellValue(dateFormatter.print(closedDate));
+        }
+
+        // Export the menu
+        Menu menu = restaurant.getMenu();
+        XSSFSheet categorySheet = workbook.getSheet("Menu Categories");
+        XSSFSheet itemSheet = workbook.getSheet("Menu Items");
+        
         int categoryIndex = 1;
         int itemIndex = 1;
         for(MenuCategory category: menu.getMenuCategories()) {
             
-            // Output menu category onto first sheet
+            // Output menu category onto category sheet
             XSSFRow categoryRow = categorySheet.createRow(categoryIndex++);
             createCell(categoryRow, 0, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getName());
             createCell(categoryRow, 1, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getSummary());
@@ -147,6 +208,62 @@ public class ExcelController {
             }
         }
         
+        // Export discounts
+        XSSFSheet discountSheet = workbook.getSheet("Discounts");
+        int discountIndex = 1;
+        for( Discount discount: restaurant.getDiscounts()) {
+            int rowCount = Math.max(discount.getFreeItems().size(),1);
+            for( int rowIndex = 0; rowIndex < rowCount; rowIndex++ ) {
+                XSSFRow row = discountSheet.createRow(discountIndex);
+                if( rowIndex == 0 ) {
+                    if(discount.getTitle() != null ) {
+                        createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(discount.getTitle());
+                    }
+                    if(discount.getDescription() != null ) {
+                        createCell(row, 1, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(discount.getDescription());
+                    }
+                    if(discount.getDiscountType() != null) {
+                        createCell(row, 2, Cell.CELL_TYPE_STRING, styles.get("plain")).setCellValue(discount.getDiscountType());
+                    }
+                    createCell(row, 3, Cell.CELL_TYPE_STRING, styles.get("center")).setCellValue(discount.isDelivery()?"Y":"N");
+                    createCell(row, 4, Cell.CELL_TYPE_STRING, styles.get("center")).setCellValue(discount.isCollection()?"Y":"N");
+                    createCell(row, 5, Cell.CELL_TYPE_STRING, styles.get("center")).setCellValue(discount.isCanCombineWithOtherDiscounts()?"Y":"N");
+                    if(discount.getDiscountAmount() != null) {
+                        createCell(row, 6, Cell.CELL_TYPE_NUMERIC, styles.get("number")).setCellValue(discount.getDiscountAmount());
+                    }
+                    if(discount.getMinimumOrderValue() != null) {
+                        createCell(row, 7, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(discount.getMinimumOrderValue());
+                    }
+
+                    // Add applicable times for discounts
+                    int applicableTimeCol = 9;
+                    for(ApplicableTime applicableTime: discount.getDiscountApplicableTimes()) {
+                        int dayOfWeekOffset = (applicableTime.getDayOfWeek() -1 ) * 3;
+                        createCell(row, applicableTimeCol + dayOfWeekOffset, Cell.CELL_TYPE_STRING, styles.get("center")).setCellValue(applicableTime.getApplicable()?"Y":"N");
+                        if( applicableTime.getApplicableFrom() != null ) {
+                            createCell(row, applicableTimeCol + dayOfWeekOffset + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(applicableTime.getApplicableFrom()));
+                        }
+                        if( applicableTime.getApplicableTo() != null ) {
+                            createCell(row, applicableTimeCol + dayOfWeekOffset + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(applicableTime.getApplicableTo()));
+                        }
+                    }
+                }
+
+                // List out free items
+                if( discount.getFreeItems().size() > rowIndex ) {
+                    createCell(row, 8, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(discount.getFreeItems().get(rowIndex));
+                }
+
+                discountIndex++;
+            }
+
+            // Add a discount item separator row
+            XSSFRow separatorRow = discountSheet.createRow(discountIndex++);
+            for( int i = 0; i < 30; i++ ) {
+                createCell(separatorRow, i, Cell.CELL_TYPE_BLANK, styles.get("separator"));
+            }
+        }
+
         // Return workbook to brower
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
@@ -158,7 +275,7 @@ public class ExcelController {
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
     }
 
-
+    
     /**
      * @param menuItem
      * @return
@@ -196,7 +313,13 @@ public class ExcelController {
         text.setFont(font);
         text.setWrapText(true);
         styles.put("text",text);
-        
+
+        CellStyle center = workbook.createCellStyle();
+        center.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        center.setAlignment(CellStyle.ALIGN_CENTER);
+        center.setFont(font);
+        styles.put("center",center);
+
         CellStyle number = workbook.createCellStyle();
         number.setFont(font);
         number.setVerticalAlignment(CellStyle.VERTICAL_TOP);
@@ -213,6 +336,20 @@ public class ExcelController {
         separator.setFont(font);
         separator.setBorderBottom(CellStyle.BORDER_DASHED);
         styles.put("separator",separator);
+
+        CellStyle date = workbook.createCellStyle();
+        date.setFont(font);
+        date.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        date.setAlignment(CellStyle.ALIGN_CENTER);
+        date.setDataFormat(createHelper.createDataFormat().getFormat("dd/mm/yyyy"));
+        styles.put("date",date);
+
+        CellStyle time = workbook.createCellStyle();
+        time.setFont(font);
+        time.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        time.setAlignment(CellStyle.ALIGN_CENTER);
+        time.setDataFormat(createHelper.createDataFormat().getFormat("hh:mm"));
+        styles.put("time",time);
 
         return styles;
     }
