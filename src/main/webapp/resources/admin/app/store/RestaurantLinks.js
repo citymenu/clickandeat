@@ -17,9 +17,9 @@ Ext.define('AD.store.RestaurantLinks', {
             totalProperty:'count'
         }
     },
-    sortInfo:{
-    	field:'name',
+    sorters:[{
+    	property:'name',
     	direction:'ASC'
-    }
+    }]
 
 });
