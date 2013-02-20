@@ -44,7 +44,7 @@ public class MobileRestaurantSearchController {
             geoLocation.setLocation(new double[]{longitude,latitude});
             Search search = new Search();
             search.setLocation(geoLocation);
-            Pair<List<Restaurant>,Map<String,Integer>> pair = restaurantRepository.search(search);
+            Pair<List<Restaurant>,SortedMap<String,Integer>> pair = restaurantRepository.search(search);
             SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
             results.addAll(pair.first);
             

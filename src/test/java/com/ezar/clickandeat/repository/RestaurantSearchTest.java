@@ -4,9 +4,11 @@ import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.util.Pair;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,6 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
@@ -86,7 +89,7 @@ public class RestaurantSearchTest {
         Search search = new Search();
         search.setLocation(locationService.getLocation("London"));
         search.setCuisine("Mexican");
-        Pair<List<Restaurant>,Map<String,Integer>> pair = repository.search(search);
+        Pair<List<Restaurant>,SortedMap<String,Integer>> pair = repository.search(search);
         List<Restaurant> restaurants = pair.first;
         Map<String,Integer> cuisineCount = pair.second;
         Assert.assertTrue(restaurants.size() > 0);

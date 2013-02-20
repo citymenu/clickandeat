@@ -230,7 +230,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
 
     @Override
-    public Pair<List<Restaurant>,Map<String,Integer>> search(Search search) {
+    public Pair<List<Restaurant>,SortedMap<String,Integer>> search(Search search) {
 
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving matching search: " + search);
@@ -238,7 +238,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Return values
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
-        Map<String,Integer> cuisineCount = new HashMap<String, Integer>();
+        SortedMap<String,Integer> cuisineCount = new TreeMap<String, Integer>();
 
         // Build the query including location if set
         GeoLocation geoLocation = search.getLocation();
@@ -282,7 +282,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         }
 
         // Return the results
-        return new Pair<List<Restaurant>, Map<String, Integer>>(restaurants, cuisineCount);
+        return new Pair<List<Restaurant>, SortedMap<String, Integer>>(restaurants, cuisineCount);
 
     }
 

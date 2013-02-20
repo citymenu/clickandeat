@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 public interface RestaurantRepositoryCustom {
 
@@ -28,7 +29,7 @@ public interface RestaurantRepositoryCustom {
 
     long countActive();
 
-    Pair<List<Restaurant>,Map<String,Integer>> search(Search search);
+    Pair<List<Restaurant>,SortedMap<String,Integer>> search(Search search);
 
     Map<String,List<String>> getCuisinesByLocation();
     
