@@ -49,15 +49,15 @@ Ext.define('AD.view.restaurant.Edit' ,{
         },'-',{
             xtype:'button',
             icon: resources + '/images/icons-shadowless/report-excel.png',
-    	    text:'Menu Export',
+    	    text:'Details Export',
     	    menu:{
                 xtype:'menu',
                 items: [{
-                    text:'Upload Menu',
+                    text:'Upload Details',
                     action:'uploadMenu',
                     icon: resources + '/images/icons-shadowless/upload.png'
                 },{
-                    text:'Download Menu',
+                    text:'Download Details',
                     action:'downloadMenu',
                     icon: resources + '/images/icons-shadowless/download.png'
                 }]

@@ -56,7 +56,7 @@ public class ExcelController {
         }
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-        headers.set("Content-Disposition","attachment;Filename=MenuTemplate.xlsx");
+        headers.set("Content-Disposition","attachment;Filename=RestaurantDataTemplate.xlsx");
         headers.setCacheControl("no-cache");
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
     }
@@ -136,7 +136,7 @@ public class ExcelController {
             
             // Output menu category onto category sheet
             XSSFRow categoryRow = categorySheet.createRow(categoryIndex++);
-            createCell(categoryRow, 0, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getName());
+            createCell(categoryRow, 0, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(category.getName());
             createCell(categoryRow, 1, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getSummary());
             createCell(categoryRow, 2, Cell.CELL_TYPE_STRING, styles.get("plain")).setCellValue(category.getType());
             createCell(categoryRow, 3, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getIconClass());
@@ -152,7 +152,7 @@ public class ExcelController {
                         if( menuItem.getNumber() != 0 ) {
                             createCell(itemRow, 0, Cell.CELL_TYPE_NUMERIC, styles.get("number")).setCellValue(menuItem.getNumber());
                         }
-                        createCell(itemRow, 1, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(category.getName());
+                        createCell(itemRow, 1, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(category.getName());
                         createCell(itemRow, 2, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(menuItem.getTitle());
                         createCell(itemRow, 3, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(menuItem.getSubtitle());
                         createCell(itemRow, 4, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(menuItem.getDescription());
@@ -199,12 +199,10 @@ public class ExcelController {
                     itemIndex ++;
                 }
 
-                // Add a menu item separator row
-                XSSFRow separatorRow = itemSheet.createRow(itemIndex++);
-                for( int i = 0; i < 16; i++ ) {
-                    createCell(separatorRow, i, Cell.CELL_TYPE_BLANK, styles.get("separator"));
+                // Add a 2-line separator
+                for( int i = 0; i < 2; i++ ) {
+                    itemSheet.createRow(itemIndex++);
                 }
-                
             }
         }
         
@@ -217,7 +215,7 @@ public class ExcelController {
                 XSSFRow row = discountSheet.createRow(discountIndex);
                 if( rowIndex == 0 ) {
                     if(discount.getTitle() != null ) {
-                        createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(discount.getTitle());
+                        createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(discount.getTitle());
                     }
                     if(discount.getDescription() != null ) {
                         createCell(row, 1, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(discount.getDescription());
@@ -257,17 +255,80 @@ public class ExcelController {
                 discountIndex++;
             }
 
-            // Add a discount item separator row
-            XSSFRow separatorRow = discountSheet.createRow(discountIndex++);
-            for( int i = 0; i < 30; i++ ) {
-                createCell(separatorRow, i, Cell.CELL_TYPE_BLANK, styles.get("separator"));
+            // Add a 2-line separator
+            for( int i = 0; i < 2; i++ ) {
+                discountSheet.createRow(discountIndex++);
             }
         }
+
+
+        // Export special offers
+        XSSFSheet specialOfferSheet = workbook.getSheet("Special Offers");
+        XSSFSheet specialOfferItemSheet = workbook.getSheet("Special Offer Items");
+
+        int specialOfferIndex = 1;
+        int specialOfferItemIndex = 1;
+
+        for(SpecialOffer specialOffer: restaurant.getSpecialOffers()) {
+
+            // Output special offer onto special offer sheet
+            XSSFRow specialOfferRow = specialOfferSheet.createRow(specialOfferIndex++);
+            if( specialOffer.getNumber() != 0 ) {
+                createCell(specialOfferRow, 0, Cell.CELL_TYPE_NUMERIC, styles.get("number")).setCellValue(specialOffer.getNumber());
+            }
+            createCell(specialOfferRow, 1, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(specialOffer.getTitle());
+            createCell(specialOfferRow, 2, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(specialOffer.getDescription());
+            if( specialOffer.getCost() != null ) {
+                createCell(specialOfferRow, 3, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(specialOffer.getCost());
+            }
+
+            // Add applicable times for special offer
+            int applicableTimeCol = 4;
+            for(ApplicableTime applicableTime: specialOffer.getOfferApplicableTimes()) {
+                int dayOfWeekOffset = (applicableTime.getDayOfWeek() -1 ) * 3;
+                createCell(specialOfferRow, applicableTimeCol + dayOfWeekOffset, Cell.CELL_TYPE_STRING, styles.get("center")).setCellValue(applicableTime.getApplicable()?"Y":"N");
+                if( applicableTime.getApplicableFrom() != null ) {
+                    createCell(specialOfferRow, applicableTimeCol + dayOfWeekOffset + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(applicableTime.getApplicableFrom()));
+                }
+                if( applicableTime.getApplicableTo() != null ) {
+                    createCell(specialOfferRow, applicableTimeCol + dayOfWeekOffset + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(applicableTime.getApplicableTo()));
+                }
+            }
+
+            // Output special offer items onto second sheet
+            for(SpecialOfferItem specialOfferItem: specialOffer.getSpecialOfferItems()) {
+                int rowCount = Math.max(1,specialOfferItem.getSpecialOfferItemChoices().size()); // Number of rows needed for this item
+                for( int rowIndex = 0; rowIndex < rowCount; rowIndex ++ ) {
+                    XSSFRow specialOfferItemRow = specialOfferItemSheet.createRow(specialOfferItemIndex);
+
+                    // Output main detail row for special offer item
+                    if(rowIndex == 0 ) {
+                        createCell(specialOfferItemRow, 0, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(specialOffer.getTitle());
+                        createCell(specialOfferItemRow, 1, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(specialOfferItem.getTitle());
+                        createCell(specialOfferItemRow, 2, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(specialOfferItem.getDescription());
+                    }
+
+                    // Output rest of details
+                    if( specialOfferItem.getSpecialOfferItemChoices().size() > rowIndex ) {
+                        String specialOfferItemChoice = specialOfferItem.getSpecialOfferItemChoices().get(rowIndex);
+                        createCell(specialOfferItemRow, 3, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(specialOfferItemChoice);
+                    }
+
+                    specialOfferItemIndex++;
+                }
+
+                // Add a 2-line separator
+                for( int i = 0; i < 2; i++ ) {
+                    specialOfferItemSheet.createRow(specialOfferItemIndex++);
+                }
+            }
+        }
+
 
         // Return workbook to brower
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-        headers.set("Content-Disposition","attachment;Filename=" + restaurantId + ".xlsx");
+        headers.set("Content-Disposition","attachment;Filename=" + restaurantId + "_" + restaurant.getName() + ".xlsx");
         headers.setCacheControl("no-cache");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -302,7 +363,11 @@ public class ExcelController {
         
         XSSFFont font = workbook.createFont();
         font.setFontHeightInPoints((short)10);
-        
+
+        XSSFFont bold = workbook.createFont();
+        bold.setFontHeightInPoints((short)10);
+        bold.setBold(true);
+
         CellStyle plain = workbook.createCellStyle();
         plain.setFont(font);
         plain.setVerticalAlignment(CellStyle.VERTICAL_TOP);
@@ -313,6 +378,12 @@ public class ExcelController {
         text.setFont(font);
         text.setWrapText(true);
         styles.put("text",text);
+
+        CellStyle boldText = workbook.createCellStyle();
+        boldText.setVerticalAlignment(CellStyle.VERTICAL_TOP);
+        boldText.setFont(bold);
+        boldText.setWrapText(true);
+        styles.put("boldtext",boldText);
 
         CellStyle center = workbook.createCellStyle();
         center.setVerticalAlignment(CellStyle.VERTICAL_TOP);
