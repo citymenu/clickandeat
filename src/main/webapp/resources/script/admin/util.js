@@ -102,7 +102,7 @@ function convertOrderNotificationStatus(value,record) {
 
 // Converts a date to a month only date
 function convertDateToMonth(value, record) {
-    return value? Ext.Date.format(new Date(value),'m/Y'): '';
+    return value? Ext.Date.format(new Date(value),'Y/m'): '';
 }
 
 // plug European currency renderer into formatter
