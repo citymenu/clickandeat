@@ -19,7 +19,7 @@ Ext.define('AD.store.AcceptedOrders', {
     },
     groupField:'orderCreatedMonth',
     sorters:[{
-    	field:'orderCreatedDate',
+    	field:'orderCreatedMonth',
     	direction:'DESC'
     }]
 
