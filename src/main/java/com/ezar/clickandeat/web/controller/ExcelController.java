@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +74,91 @@ public class ExcelController {
 
         // Build cell styles
         Map<String,CellStyle> styles = generateCellStyles(workbook);
+
+        // Write out main details of restaurant
+        XSSFSheet mainDetailsSheet = workbook.getSheet("Main Details");        
+        writeToNamedCell(workbook, "Restaurant.Id", restaurant.getRestaurantId());
+        writeToNamedCell(workbook, "Restaurant.Name",restaurant.getName());
+        writeToNamedCell(workbook, "Restaurant.Description",restaurant.getDescription());
+
+        // Write out address
+        writeToNamedCell(workbook, "Restaurant.Address.Address1",restaurant.getAddress().getAddress1());
+        writeToNamedCell(workbook, "Restaurant.Address.Town",restaurant.getAddress().getTown());
+        writeToNamedCell(workbook, "Restaurant.Address.Region",restaurant.getAddress().getRegion());
+        writeToNamedCell(workbook, "Restaurant.Address.Postcode",restaurant.getAddress().getPostCode());
+
+        // Write out restaurant contact details
+        writeToNamedCell(workbook, "Restaurant.Contact.Telephone",restaurant.getContactTelephone());
+        writeToNamedCell(workbook, "Restaurant.Contact.Mobile",restaurant.getContactMobile());
+        writeToNamedCell(workbook, "Restaurant.Contact.Email",restaurant.getContactEmail());
+        writeToNamedCell(workbook, "Restaurant.Contact.Website",restaurant.getWebsite());
+
+        // Write out restaurant main contact details
+        writeToNamedCell(workbook, "Restaurant.MainContact.FirstName",restaurant.getMainContact().getFirstName());
+        writeToNamedCell(workbook, "Restaurant.MainContact.LastName",restaurant.getMainContact().getLastName());
+        writeToNamedCell(workbook, "Restaurant.MainContact.Telephone",restaurant.getMainContact().getTelephone());
+        writeToNamedCell(workbook, "Restaurant.MainContact.Email",restaurant.getMainContact().getEmail());
+
+        // Write out notification details
+        writeToNamedCell(workbook, "Restaurant.Notification.ReceiveCall",restaurant.getNotificationOptions().isReceiveNotificationCall()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Notification.ReceiveSMS",restaurant.getNotificationOptions().isReceiveSMSNotification()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Notification.Telephone",restaurant.getNotificationOptions().getNotificationPhoneNumber());
+        writeToNamedCell(workbook, "Restaurant.Notification.SMS",restaurant.getNotificationOptions().getNotificationSMSNumber());
+        writeToNamedCell(workbook, "Restaurant.Notification.Email",restaurant.getNotificationOptions().getNotificationEmailAddress());
+        writeToNamedCell(workbook, "Restaurant.Notification.PrinterEmail",restaurant.getNotificationOptions().getPrinterEmailAddress());
+
+        // Write out delivery options
+        XSSFSheet deliveryDetailsSheet = workbook.getSheet("Delivery Details");
+        writeToNamedCell(workbook, "Restaurant.Delivery.CollectionOnly",restaurant.getDeliveryOptions().isCollectionOnly()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Delivery.DeliveryTime",restaurant.getDeliveryOptions().getDeliveryTimeMinutes());
+        writeToNamedCell(workbook, "Restaurant.Delivery.CollectionTime",restaurant.getDeliveryOptions().getCollectionTimeMinutes());
+        writeToNamedCell(workbook, "Restaurant.Delivery.Charge",restaurant.getDeliveryOptions().getDeliveryCharge());
+        writeToNamedCell(workbook, "Restaurant.Delivery.AllowFreeDelivery",restaurant.getDeliveryOptions().isAllowFreeDelivery()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Delivery.MinimumOrderForDelivery",restaurant.getDeliveryOptions().getMinimumOrderForDelivery());
+        writeToNamedCell(workbook, "Restaurant.Delivery.AllowOrdersBelowMinimumForFreeDelivery",restaurant.getDeliveryOptions().isAllowDeliveryBelowMinimumForFreeDelivery()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Delivery.DeliveryRadius",restaurant.getDeliveryOptions().getDeliveryRadiusInKilometres());
+        writeToNamedCell(workbook, "Restaurant.Delivery.AreasDeliveredTo", StringUtils.collectionToCommaDelimitedString(restaurant.getDeliveryOptions().getAreasDeliveredTo()));
+
+        // Write out areas with same delivery charge
+        XSSFCell sameDeliveryChargeAnchor = getFirstCell(workbook, "Restaurant.Delivery.SameDeliveryCharge");
+        int sameDeliveryChargeRow = sameDeliveryChargeAnchor.getRowIndex();
+        int sameDeliveryChargeCol = sameDeliveryChargeAnchor.getColumnIndex();
+        for( int i = 0; i < restaurant.getDeliveryOptions().getAreaDeliveryCharges().size(); i++ ) {
+            AreaDeliveryCharge charge = restaurant.getDeliveryOptions().getAreaDeliveryCharges().get(i);
+            XSSFRow row = getRow(deliveryDetailsSheet, sameDeliveryChargeRow + i );
+            createCell(row, sameDeliveryChargeCol, Cell.CELL_TYPE_NUMERIC, styles.get("text")).setCellValue(StringUtils.collectionToCommaDelimitedString(charge.getAreas()));
+            if( charge.getDeliveryCharge() != null ) {
+                createCell(row, sameDeliveryChargeCol + 1, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getDeliveryCharge());
+            }
+        }
+
+        // Write out areas with same minimum order for delivery
+        XSSFCell minDeliveryChargeAnchor = getFirstCell(workbook, "Restaurant.Delivery.SameMinimumOrder");
+        int minDeliveryChargeRow = minDeliveryChargeAnchor.getRowIndex();
+        int minDeliveryChargeCol = minDeliveryChargeAnchor.getColumnIndex();
+        for( int i = 0; i < restaurant.getDeliveryOptions().getAreaMinimumOrderCharges().size(); i++ ) {
+            AreaDeliveryCharge charge = restaurant.getDeliveryOptions().getAreaMinimumOrderCharges().get(i);
+            XSSFRow row = getRow(deliveryDetailsSheet, minDeliveryChargeRow + i );
+            createCell(row, minDeliveryChargeCol, Cell.CELL_TYPE_NUMERIC, styles.get("text")).setCellValue(StringUtils.collectionToCommaDelimitedString(charge.getAreas()));
+            if( charge.getDeliveryCharge() != null ) {
+                createCell(row, minDeliveryChargeCol + 1, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getDeliveryCharge());
+            }
+        }
+
+        // Write out delivery charges by minimum order amount
+        XSSFCell deliveryChargesByOrderAmountAnchor = getFirstCell(workbook, "Restaurant.Delivery.DeliveryChargesByOrderAmount");
+        int deliveryChargesByOrderAmountRow = deliveryChargesByOrderAmountAnchor.getRowIndex();
+        int deliveryChargesByOrderAmountCol = deliveryChargesByOrderAmountAnchor.getColumnIndex();
+        int variableDeliveryChargeIndex = 0;
+        for( VariableDeliveryCharge charge: restaurant.getDeliveryOptions().getVariableDeliveryCharges() ) {
+            XSSFRow row = getRow(deliveryDetailsSheet, deliveryChargesByOrderAmountRow + variableDeliveryChargeIndex );
+            if( charge.getMinimumOrderValue() != null ) {
+                createCell(row, deliveryChargesByOrderAmountCol, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getMinimumOrderValue());
+            }
+            if( charge.getDeliveryCharge() != null ) {
+                createCell(row, deliveryChargesByOrderAmountCol + 1, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getDeliveryCharge());
+            }
+        }
 
         // Export opening times
         XSSFSheet openingTimesSheet = workbook.getSheet("Opening Times");
@@ -261,7 +347,6 @@ public class ExcelController {
             }
         }
 
-
         // Export special offers
         XSSFSheet specialOfferSheet = workbook.getSheet("Special Offers");
         XSSFSheet specialOfferItemSheet = workbook.getSheet("Special Offer Items");
@@ -336,6 +421,16 @@ public class ExcelController {
         return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
     }
 
+
+    /**
+     * @param sheet
+     * @param rowIndex
+     * @return
+     */
+    
+    private XSSFRow getRow(XSSFSheet sheet, int rowIndex ) {
+        return sheet.getRow(rowIndex) == null? sheet.createRow(rowIndex): sheet.getRow(rowIndex);
+    }
     
     /**
      * @param menuItem
@@ -349,7 +444,74 @@ public class ExcelController {
         rowCount = Math.max(rowCount, menuItem.getMenuItemTypeCosts().size());
         return rowCount;
     }
+
+
+    /**
+     * @param workbook
+     * @param areaName
+     * @return
+     */
+
+    private XSSFCell getFirstCell(XSSFWorkbook workbook, String areaName) {
+        AreaReference areaReference = new AreaReference(workbook.getName(areaName).getRefersToFormula());
+        CellReference anchorCellReference = areaReference.getFirstCell();
+        XSSFSheet sheet = workbook.getSheet(anchorCellReference.getSheetName());
+        XSSFRow row = sheet.getRow(anchorCellReference.getRow());
+        return row.getCell(anchorCellReference.getCol());
+    }
     
+
+    /**
+     * @param workbook
+     * @param rangeName
+     * @param value
+     */
+
+    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, String value) {
+        if( value != null ) {
+            getNamedCell(workbook, rangeName).setCellValue(value);
+        }
+    }
+
+
+    /**
+     * @param workbook
+     * @param rangeName
+     * @param value
+     */
+
+    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, Double value) {
+        if( value != null ) {
+            getNamedCell(workbook, rangeName).setCellValue(value);
+        }
+    }
+
+
+    /**
+     * @param workbook
+     * @param rangeName
+     * @param value
+     */
+
+    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, Integer value) {
+        if( value != null ) {
+            getNamedCell(workbook, rangeName).setCellValue(value);
+        }
+    }
+
+    /**
+     * @param workbook
+     * @param rangeName
+     * @return
+     */
+
+    private Cell getNamedCell(XSSFWorkbook workbook, String rangeName) {
+        CellReference cellReference = new CellReference(workbook.getName(rangeName).getRefersToFormula());
+        XSSFSheet sheet = workbook.getSheet(cellReference.getSheetName());
+        XSSFRow row = sheet.getRow(cellReference.getRow());
+        return row.getCell(cellReference.getCol());
+    }
+
     
     /**
      * @param workbook
@@ -434,7 +596,7 @@ public class ExcelController {
      */
 
     private XSSFCell createCell(XSSFRow row, int column, int cellType, CellStyle cellStyle ) {
-        XSSFCell cell = row.createCell(column);
+        XSSFCell cell = row.getCell(column) == null? row.createCell(column): row.getCell(column);
         cell.setCellType(cellType);
         cell.setCellStyle(cellStyle);
         return cell;
