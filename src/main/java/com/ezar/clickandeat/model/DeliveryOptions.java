@@ -103,8 +103,8 @@ public class DeliveryOptions {
     }
 
     private Double[] getMinimumAndMaximumDeliveryCharge() {
-        double minCharge = deliveryCharge;
-        double maxCharge = deliveryCharge;
+        Double minCharge = deliveryCharge;
+        Double maxCharge = deliveryCharge;
         for( VariableDeliveryCharge variableDeliveryCharge: variableDeliveryCharges ) {
             minCharge = Math.min(variableDeliveryCharge.getDeliveryCharge(), minCharge);
             maxCharge = Math.max(variableDeliveryCharge.getDeliveryCharge(), maxCharge);
