@@ -76,10 +76,16 @@ public class ExcelController {
         Map<String,CellStyle> styles = generateCellStyles(workbook);
 
         // Write out main details of restaurant
-        XSSFSheet mainDetailsSheet = workbook.getSheet("Main Details");        
         writeToNamedCell(workbook, "Restaurant.Id", restaurant.getRestaurantId());
         writeToNamedCell(workbook, "Restaurant.Name",restaurant.getName());
         writeToNamedCell(workbook, "Restaurant.Description",restaurant.getDescription());
+
+        // Write out admin details of restaurant
+        writeToNamedCell(workbook, "Restaurant.IncludeOnSite", restaurant.getListOnSite()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.PhoneOrdersOnly", restaurant.getPhoneOrdersOnly()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.Recommended", restaurant.getRecommended()?"Y":"N");
+        writeToNamedCell(workbook, "Restaurant.SearchRanking", restaurant.getSearchRanking());
+        writeToNamedCell(workbook, "Restaurant.Commission", restaurant.getCommissionPercent());
 
         // Write out address
         writeToNamedCell(workbook, "Restaurant.Address.Address1",restaurant.getAddress().getAddress1());
