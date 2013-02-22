@@ -39,6 +39,8 @@ public class OpenOrderProcessingTask implements InitializingBean {
     private ExceptionHandler exceptionHandler;
     
     private int secondsBeforeRetryCall;
+
+    private int secondsBeforeRetryAnsweredCall;
     
     private int minutesBeforeSendCancellationEmail;
 
@@ -67,15 +69,16 @@ public class OpenOrderProcessingTask implements InitializingBean {
                 for(Order order: orders ) {
     
                     DateTime orderPlacedTime = order.getOrderPlacedTime();
-                    LOGGER.info("Order id: " + order.getOrderId() + " was placed at: " + orderPlacedTime);
+                    String orderId = order.getOrderId();
+                    LOGGER.info("Order id: " + orderId + " was placed at: " + orderPlacedTime);
     
                     Restaurant restaurant = order.getRestaurant();
                     DateTime now = new DateTime();
                     LOGGER.info("Current time is: " + now);
 
                     String notificationStatus = order.getOrderNotificationStatus();
-                    String orderStatus = order.getOrderStatus();
-                    
+                    LOGGER.info("Order id: " + orderId + " notification status is: " + notificationStatus);
+
                     // Get the time the restaurant opened
                     DateTime restaurantOpenedTime = restaurant.getEarlyOpeningTime(now);
     
@@ -91,7 +94,7 @@ public class OpenOrderProcessingTask implements InitializingBean {
                     LOGGER.info("Auo cancel cutoff time is: " + autoCancelCutoff);
                     if(orderPlacedTime.isBefore(autoCancelCutoff) && restaurantOpenedTime.isBefore(autoCancelCutoff)) {
                         try {
-                            LOGGER.info("Order id: " + order.getOrderId() + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
+                            LOGGER.info("Order id: " + orderId + " has been awaiting confirmation for more than " + minutesBeforeAutoCancelOrder + " minutes, auto-cancelling");
                             orderWorkflowEngine.processAction(order, ACTION_AUTO_CANCEL);
                         }
                         catch( WorkflowException e ) {
@@ -118,18 +121,21 @@ public class OpenOrderProcessingTask implements InitializingBean {
                         }
                     }
     
-                    // Attempt to call restaurant again
-                    if(!NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus) && !NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus)
-                            && !NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
-                        DateTime lastCallTime = order.getLastCallPlacedTime();
-                        DateTime lastCallCutoff = new DateTime().minusSeconds(secondsBeforeRetryCall);
-                        if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
-                            try {
-                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
-                            }
-                            catch( Exception ex ) {
-                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
-                            }
+                    if( NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus) || NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus)) {
+                        LOGGER.info("Not attempting another call for order id:" + orderId + " as notification status is; " + notificationStatus);
+                        continue;
+                    }
+                    
+                    // If call was answered but order not accepted/rejected, retry after 5 minutes otherwise after 1 minute
+                    DateTime lastCallCutoff = new DateTime().minusMinutes(NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)? 
+                            secondsBeforeRetryAnsweredCall: secondsBeforeRetryCall);
+                    DateTime lastCallTime = order.getLastCallPlacedTime();
+                    if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
+                        try {
+                            orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                        }
+                        catch( Exception ex ) {
+                            LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
                         }
                     }
                 }
@@ -148,6 +154,12 @@ public class OpenOrderProcessingTask implements InitializingBean {
     @Value(value="${twilio.secondsBeforeRetryCall}")
     public void setSecondsBeforeRetryCall(int secondsBeforeRetryCall) {
         this.secondsBeforeRetryCall = secondsBeforeRetryCall;
+    }
+
+    @Required
+    @Value(value="${twilio.secondsBeforeRetryAnsweredCall}")
+    public void setSecondsBeforeRetryAnsweredCall(int secondsBeforeRetryAnsweredCall) {
+        this.secondsBeforeRetryAnsweredCall = secondsBeforeRetryAnsweredCall;
     }
 
     @Required
