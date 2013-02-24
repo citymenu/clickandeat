@@ -2,6 +2,7 @@ package com.ezar.clickandeat.web.controller;
 
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
+import com.ezar.clickandeat.util.CuisineProvider;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -39,6 +40,9 @@ public class ExcelController {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private CuisineProvider cuisineProvider;
+    
     private String templatePath = "/template/MenuTemplate.xlsx";
 
     private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
@@ -48,13 +52,16 @@ public class ExcelController {
     @RequestMapping(value="/admin/menu/downloadTemplate.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> downloadTemplate(HttpServletRequest request) throws Exception {
         Resource resource = new ClassPathResource(templatePath);
-        InputStream is = resource.getInputStream();
-        byte[] buff = new byte[1024];
-        int bytesRead = 0;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        while((bytesRead = is.read(buff)) != -1) {
-            baos.write(buff, 0, bytesRead);
+        XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
+        Map<String,CellStyle> styles = generateCellStyles(workbook);
+        XSSFSheet cuisineSheet = workbook.getSheet("Cuisines");
+        int cuisineIndex = 1;
+        for( String cuisine: cuisineProvider.getCuisineList()) {
+            XSSFRow row = getRow(cuisineSheet, cuisineIndex++);
+            createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(cuisine);
         }
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
         headers.set("Content-Disposition","attachment;Filename=RestaurantDataTemplate.xlsx");
@@ -144,7 +151,7 @@ public class ExcelController {
         int minDeliveryChargeCol = minDeliveryChargeAnchor.getColumnIndex();
         for( int i = 0; i < restaurant.getDeliveryOptions().getAreaMinimumOrderCharges().size(); i++ ) {
             AreaDeliveryCharge charge = restaurant.getDeliveryOptions().getAreaMinimumOrderCharges().get(i);
-            XSSFRow row = getRow(deliveryDetailsSheet, minDeliveryChargeRow + i );
+            XSSFRow row = getRow(deliveryDetailsSheet, minDeliveryChargeRow + i);
             createCell(row, minDeliveryChargeCol, Cell.CELL_TYPE_NUMERIC, styles.get("text")).setCellValue(StringUtils.collectionToCommaDelimitedString(charge.getAreas()));
             if( charge.getDeliveryCharge() != null ) {
                 createCell(row, minDeliveryChargeCol + 1, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getDeliveryCharge());
@@ -157,7 +164,7 @@ public class ExcelController {
         int deliveryChargesByOrderAmountCol = deliveryChargesByOrderAmountAnchor.getColumnIndex();
         int variableDeliveryChargeIndex = 0;
         for( VariableDeliveryCharge charge: restaurant.getDeliveryOptions().getVariableDeliveryCharges() ) {
-            XSSFRow row = getRow(deliveryDetailsSheet, deliveryChargesByOrderAmountRow + variableDeliveryChargeIndex );
+            XSSFRow row = getRow(deliveryDetailsSheet, deliveryChargesByOrderAmountRow + variableDeliveryChargeIndex);
             if( charge.getMinimumOrderValue() != null ) {
                 createCell(row, deliveryChargesByOrderAmountCol, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(charge.getMinimumOrderValue());
             }
@@ -217,6 +224,15 @@ public class ExcelController {
             createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("date")).setCellValue(dateFormatter.print(closedDate));
         }
 
+        // Export cuisines
+        XSSFSheet cuisinesSheet = workbook.getSheet("Cuisines");
+        int cuisineIndex = 1;
+        for( String cuisine: cuisineProvider.getCuisineList()) {
+            XSSFRow row = getRow(cuisinesSheet, cuisineIndex++);
+            createCell(row, 0, Cell.CELL_TYPE_STRING, styles.get("boldtext")).setCellValue(cuisine);
+            createCell(row, 1, Cell.CELL_TYPE_STRING, styles.get("plain")).setCellValue(restaurant.getCuisines().contains(cuisine)?"Y":"N");
+        }
+        
         // Export the menu
         Menu menu = restaurant.getMenu();
         XSSFSheet categorySheet = workbook.getSheet("Menu Categories");
