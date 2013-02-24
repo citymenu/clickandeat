@@ -137,7 +137,7 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click: this.showLocation
             },
 
-            'restaurantedit menuitem[action=downloadMenu]': {
+            'restaurantedit button[action=downloadMenu]': {
                 click: this.downloadMenu
             },
 

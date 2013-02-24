@@ -3,7 +3,6 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
@@ -29,10 +28,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.ezar.clickandeat.web.controller.helper.ExcelUtils.writeToNamedCell;
 
 @Controller
 public class ExcelController {
@@ -480,58 +479,6 @@ public class ExcelController {
         XSSFSheet sheet = workbook.getSheet(anchorCellReference.getSheetName());
         XSSFRow row = sheet.getRow(anchorCellReference.getRow());
         return row.getCell(anchorCellReference.getCol());
-    }
-    
-
-    /**
-     * @param workbook
-     * @param rangeName
-     * @param value
-     */
-
-    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, String value) {
-        if( value != null ) {
-            getNamedCell(workbook, rangeName).setCellValue(value);
-        }
-    }
-
-
-    /**
-     * @param workbook
-     * @param rangeName
-     * @param value
-     */
-
-    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, Double value) {
-        if( value != null ) {
-            getNamedCell(workbook, rangeName).setCellValue(value);
-        }
-    }
-
-
-    /**
-     * @param workbook
-     * @param rangeName
-     * @param value
-     */
-
-    private void writeToNamedCell(XSSFWorkbook workbook, String rangeName, Integer value) {
-        if( value != null ) {
-            getNamedCell(workbook, rangeName).setCellValue(value);
-        }
-    }
-
-    /**
-     * @param workbook
-     * @param rangeName
-     * @return
-     */
-
-    private Cell getNamedCell(XSSFWorkbook workbook, String rangeName) {
-        CellReference cellReference = new CellReference(workbook.getName(rangeName).getRefersToFormula());
-        XSSFSheet sheet = workbook.getSheet(cellReference.getSheetName());
-        XSSFRow row = sheet.getRow(cellReference.getRow());
-        return row.getCell(cellReference.getCol());
     }
 
     

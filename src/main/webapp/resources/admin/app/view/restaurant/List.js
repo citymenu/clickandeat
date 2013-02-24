@@ -23,9 +23,21 @@ Ext.define('AD.view.restaurant.List' ,{
     		icon:'../resources/images/icons-shadowless/document--plus.png',
     		action:'create'
     	},'-',{
-    	    text:'Download Data Template',
-            icon:'../resources/images/icons-shadowless/report-excel.png',
-            action:'template'
+            xtype:'button',
+            icon: resources + '/images/icons-shadowless/report-excel.png',
+    	    text:'Import/Export',
+    	    menu:{
+                xtype:'menu',
+                items: [{
+                    text:'Upload Restaurant Sheet',
+                    action:'uploadTemplate',
+                    icon: resources + '/images/icons-shadowless/upload.png'
+                },{
+                    text:'Download Template',
+                    action:'downloadTemplate',
+                    icon: resources + '/images/icons-shadowless/download.png'
+                }]
+    	    }
     	}]
     },{
         xtype:'pagingtoolbar',

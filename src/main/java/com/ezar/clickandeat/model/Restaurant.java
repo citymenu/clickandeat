@@ -108,6 +108,7 @@ public class Restaurant extends PersistentObject {
 
     public Restaurant() {
         this.uuid = UUID.randomUUID().toString();
+        this.address = new Address();
         this.openingTimes = new OpeningTimes();
         this.deliveryOptions = new DeliveryOptions();
         this.mainContact = new Person();

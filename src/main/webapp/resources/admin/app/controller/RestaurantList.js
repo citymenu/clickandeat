@@ -31,9 +31,14 @@ Ext.define('AD.controller.RestaurantList', {
             	click:this.deleteSelected
             },
 
-            'restaurantlist button[action=template]': {
+            'restaurantlist menuitem[action=downloadTemplate]': {
             	click:this.downloadTemplate
+            },
+
+            'restaurantlist menuitem[action=uploadTemplate]': {
+                click:this.uploadTemplate
             }
+
 		});
 	},
 
@@ -184,6 +189,59 @@ Ext.define('AD.controller.RestaurantList', {
 
     downloadTemplate:function() {
         window.location = '/admin/menu/downloadTemplate.html';
+    },
+
+    uploadTemplate:function() {
+        Ext.create('Ext.window.Window', {
+            title: 'Upload Restaurant Sheet',
+            id:'uploadsheet',
+            height: 130,
+            width: 450,
+            autoScroll:true,
+            layout:'fit',
+            closeAction:'destroy',
+            items: [{
+                xtype:'form',
+                id:'uploadForm',
+                bodyPadding: 15,
+                layout:'anchor',
+                frame:false,
+                border:false,
+                items:[{
+                    xtype:'filefield',
+                    anchor:'100%',
+                    allowBlank:true,
+                    fieldLabel:'Spreadsheet',
+                    name:'file',
+                    buttonText:'Select File'
+                }]
+            }],
+            buttons: [{
+                text:'Upload',
+                handler:function() {
+                    var formPanel = Ext.getCmp('uploadForm');
+                    var fileField = formPanel.getForm().findField('file');
+                    if( fileField.getValue() != '' ) {
+                        var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                        myMask.show();
+                        formPanel.getForm().submit({
+                            url: ctx + '/admin/menu/upload.ajax',
+                            success: function(form,action) {
+                                myMask.hide();
+                                showSuccessMessage(Ext.get('restaurantlist'),'Uploaded','Restaurant data uploaded successfully');
+                                Ext.getCmp('uploadsheet').close();
+                                var store = Ext.getCmp('restaurantlist').getStore();
+                                store.loadPage(store.currentPage);
+                            },
+                            failure: function(form,action) {
+                                myMask.hide();
+                                showErrorMessage(Ext.get('restaurantlist'),'Error','Error occurred uploading restaurant details');
+                            }
+                        });
+                    }
+                }
+            }]
+        }).show();
     }
 
 
