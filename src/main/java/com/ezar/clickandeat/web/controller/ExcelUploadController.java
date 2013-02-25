@@ -389,7 +389,7 @@ public class ExcelUploadController {
                     currentDiscount.getFreeItems().add(freeItemChoiceName);
                 }
 
-                // Add effective dates for discount
+                // Add applicable times for discount
                 int applicableTimeAnchor = 9;
                 List<ApplicableTime> applicableTimes = new ArrayList<ApplicableTime>();
                 for(int i = 0; i < 7; i++ ) {
@@ -398,7 +398,7 @@ public class ExcelUploadController {
                     applicableTime.setDayOfWeek(i + 1);
                     applicableTime.setApplicable("Y".equals(getCellStringValue(discountSheet,discountIndex, applicableTimeAnchor + (3 * i))));
                     applicableTime.setApplicableFrom(getLocalTime(getCell(row,applicableTimeAnchor + (3 * i) + 1)));
-                    applicableTime.setApplicableTo(getLocalTime(getCell(row,applicableTimeAnchor + (3 * i) + 2)));
+                    applicableTime.setApplicableTo(getLocalTime(getCell(row, applicableTimeAnchor + (3 * i) + 2)));
                     applicableTimes.add(applicableTime);
                 }
                 currentDiscount.setDiscountApplicableTimes(applicableTimes);
@@ -419,8 +419,88 @@ public class ExcelUploadController {
             restaurant.getDiscounts().add(currentDiscount);
         }
 
+        // Special offers
+        XSSFSheet specialOffersSheet = workbook.getSheet("Special Offers");
+        int specialOfferIndex = 1;
+        emptyRowCount = 0;
+        String specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,1);
+        while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
+            if(StringUtils.hasText(specialOfferName)) {
+                SpecialOffer specialOffer = new SpecialOffer();
+                specialOffer.setTitle(specialOfferName);
+                specialOffer.setNumber((int)getCellDoubleValue(specialOffersSheet,specialOfferIndex,0));
+                specialOffer.setDescription(getCellStringValue(specialOffersSheet,specialOfferIndex,2));
+                double cost = getCellDoubleValue(specialOffersSheet,specialOfferIndex,3);
+                specialOffer.setCost(cost == 0d?null: cost);
 
-        
+                // Add applicable times for special offer
+                int applicableTimeAnchor = 4;
+                List<ApplicableTime> applicableTimes = new ArrayList<ApplicableTime>();
+                for(int i = 0; i < 7; i++ ) {
+                    XSSFRow row = getRow(specialOffersSheet,specialOfferIndex);
+                    ApplicableTime applicableTime = new ApplicableTime();
+                    applicableTime.setDayOfWeek(i + 1);
+                    applicableTime.setApplicable("Y".equals(getCellStringValue(specialOffersSheet,specialOfferIndex, applicableTimeAnchor + (3 * i))));
+                    applicableTime.setApplicableFrom(getLocalTime(getCell(row,applicableTimeAnchor + (3 * i) + 1)));
+                    applicableTime.setApplicableTo(getLocalTime(getCell(row, applicableTimeAnchor + (3 * i) + 2)));
+                    applicableTimes.add(applicableTime);
+                }
+                specialOffer.setOfferApplicableTimes(applicableTimes);
+                emptyRowCount = 0;
+            }
+            else {
+                emptyRowCount++;
+            }
+            specialOfferIndex++;
+            specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,0);
+        }
+
+        // Special offer items
+        XSSFSheet specialOfferItemsSheet = workbook.getSheet("Special Offer Items");
+        int specialOfferItemIndex = 0;
+        emptyRowCount = 0;
+        SpecialOfferItem currentSpecialOfferItem = null;
+        String currentSpecialOfferName = null;
+        while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
+            specialOfferItemIndex++;
+            emptyRowCount++; // Will reset as soon as we find a string value anywhere in the row
+            String specialOfferItemName = getCellStringValue(specialOfferItemsSheet, specialOfferIndex, 1);
+            if(StringUtils.hasText(specialOfferItemName)) {
+                emptyRowCount = 0; // Reset counter;
+                if(currentSpecialOfferItem != null) {
+                    SpecialOffer specialOffer = restaurant.getSpecialOfferByTitle(currentSpecialOfferName);
+                    if(specialOffer != null) {
+                        specialOffer.getSpecialOfferItems().add(currentSpecialOfferItem);
+                    }
+                }
+                currentSpecialOfferItem = new SpecialOfferItem(); // Create new special offer item
+                currentSpecialOfferName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,0);
+                currentSpecialOfferItem.setTitle(specialOfferName);
+                currentSpecialOfferItem.setDescription(getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,2));
+                String choiceName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,3);
+                if(StringUtils.hasText(choiceName)) {
+                    currentSpecialOfferItem.getSpecialOfferItemChoices().add(choiceName);
+                }
+            }
+            else {
+                // Just add any additional choices
+                if(currentSpecialOfferItem != null) {
+                    String choiceName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,3);
+                    if(StringUtils.hasText(choiceName)) {
+                        emptyRowCount = 0; // Reset counter
+                        currentSpecialOfferItem.getSpecialOfferItemChoices().add(choiceName);
+                    }
+                }
+            }
+        }
+        // Add last special offer item
+        if(currentSpecialOfferItem != null ) {
+            SpecialOffer specialOffer = restaurant.getSpecialOfferByTitle(currentSpecialOfferName);
+            if(specialOffer != null) {
+                specialOffer.getSpecialOfferItems().add(currentSpecialOfferItem);
+            }
+        }
+
         return restaurant;
     }
 

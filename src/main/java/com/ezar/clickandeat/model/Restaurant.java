@@ -437,6 +437,20 @@ public class Restaurant extends PersistentObject {
 
 
     /**
+     * @param specialOfferTitle
+     * @return
+     */
+
+    public SpecialOffer getSpecialOfferByTitle(String specialOfferTitle) {
+        for( SpecialOffer specialOffer: specialOffers ) {
+            if( specialOffer.getTitle().equals(specialOfferTitle)) {
+                return specialOffer;
+            }
+        }
+        return null;
+    }
+
+    /**
      * @param order
      * @return
      */
