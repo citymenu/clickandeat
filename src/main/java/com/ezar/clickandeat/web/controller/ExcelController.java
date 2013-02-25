@@ -31,7 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ezar.clickandeat.web.controller.helper.ExcelUtils.writeToNamedCell;
+import static com.ezar.clickandeat.web.controller.helper.ExcelUtils.*;
 
 @Controller
 public class ExcelController {
@@ -444,16 +444,6 @@ public class ExcelController {
 
 
     /**
-     * @param sheet
-     * @param rowIndex
-     * @return
-     */
-    
-    private XSSFRow getRow(XSSFSheet sheet, int rowIndex ) {
-        return sheet.getRow(rowIndex) == null? sheet.createRow(rowIndex): sheet.getRow(rowIndex);
-    }
-    
-    /**
      * @param menuItem
      * @return
      */
@@ -467,21 +457,6 @@ public class ExcelController {
     }
 
 
-    /**
-     * @param workbook
-     * @param areaName
-     * @return
-     */
-
-    private XSSFCell getFirstCell(XSSFWorkbook workbook, String areaName) {
-        AreaReference areaReference = new AreaReference(workbook.getName(areaName).getRefersToFormula());
-        CellReference anchorCellReference = areaReference.getFirstCell();
-        XSSFSheet sheet = workbook.getSheet(anchorCellReference.getSheetName());
-        XSSFRow row = sheet.getRow(anchorCellReference.getRow());
-        return row.getCell(anchorCellReference.getCol());
-    }
-
-    
     /**
      * @param workbook
      * @return
@@ -556,20 +531,4 @@ public class ExcelController {
         return styles;
     }
 
-
-    /**
-     * @param row
-     * @param column
-     * @param cellType
-     * @return
-     */
-
-    private XSSFCell createCell(XSSFRow row, int column, int cellType, CellStyle cellStyle ) {
-        XSSFCell cell = row.getCell(column) == null? row.createCell(column): row.getCell(column);
-        cell.setCellType(cellType);
-        cell.setCellStyle(cellStyle);
-        return cell;
-    }
-    
-    
 }

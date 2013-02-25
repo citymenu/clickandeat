@@ -32,4 +32,13 @@ public class Menu extends PersistentObject {
         this.menuCategories = menuCategories;
     }
 
+    public MenuCategory getMenuCategory(String categoryName) {
+        for( MenuCategory category: menuCategories ) {
+            if(category.getName().equals(categoryName)) {
+                return category;
+            }
+        }
+        return null;
+    }
+
 }
