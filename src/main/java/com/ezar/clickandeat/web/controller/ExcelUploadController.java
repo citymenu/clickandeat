@@ -4,6 +4,10 @@ import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
+import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.validator.*;
+import com.ezar.clickandeat.validator.excel.ExcelObjectValidator;
+import com.ezar.clickandeat.validator.excel.ExcelObjectValidatorImpl;
 import org.apache.log4j.Logger;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -41,31 +45,66 @@ public class ExcelUploadController {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
+    private SequenceGenerator sequenceGenerator;
+
+    @Autowired
     private CuisineProvider cuisineProvider;
 
     @Autowired
     private JSONUtils jsonUtils;
-    
-    private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
-    private final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 
+    @Autowired
+    private ObjectValidator<Restaurant> restaurantValidator;
+
+    private ExcelObjectValidator<MenuCategory> menuCategoryValidator = new ExcelObjectValidatorImpl<MenuCategory>(new MenuCategoryValidator());
+    private ExcelObjectValidator<MenuItem> menuItemValidator = new ExcelObjectValidatorImpl<MenuItem>(new MenuItemValidator());
+    
+    
+    private DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
+
+    
     @ResponseBody
     @RequestMapping(value="/admin/menu/upload.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> uploadRestaurant(@RequestParam("file") CommonsMultipartFile file) throws Exception {
 
-        LOGGER.info("Uploading workboox");
         Map<String,Object> model = new HashMap<String,Object>();
         
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
 
             // Build restaurant from workbook
-            Restaurant restaurant = buildRestaurantFromWorkbook(workbook);
+            ValidationErrors excelErrors = new ValidationErrors();
+            Restaurant restaurant = buildRestaurantFromWorkbook(workbook,excelErrors);
+            
+            // Now validate the restaurant
+            ValidationErrors errors = restaurantValidator.validate(restaurant);
+            errors.getErrors().addAll(excelErrors.getErrors());
 
-            // All OK
-            model.put("success",true);
+            // If there are no errors, then we save the restaurant object
+            if(!errors.hasErrors()) {
+                if(StringUtils.hasText(restaurant.getRestaurantId())) {
+                    copyExistingRestaurantDetails(restaurant);
+                    restaurantRepository.saveRestaurant(restaurant);
+                }
+                else {
+                    // Just save the new restaurant
+                    restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
+                    restaurantRepository.saveRestaurant(restaurant);
+                }
+            }
+            
+            // Any errors, return them now
+            if( errors.hasErrors()) {
+                model.put("success",false);
+                model.put("errors",errors.getErrors());
+            }
+            else {
+                // All OK
+                model.put("success",true);
+            }
         }
         catch( Exception ex ) {
+            LOGGER.error("",ex);
             model.put("success",false);
             model.put("message",ex.getMessage());
         }
@@ -79,11 +118,30 @@ public class ExcelUploadController {
 
 
     /**
+     * Get existing restaurant and copy over identifier and status values
+     * @param restaurant
+     */
+
+    private void copyExistingRestaurantDetails(Restaurant restaurant) {
+        Restaurant existingRestaurant = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId());
+        restaurant.setId(existingRestaurant.getId());
+        restaurant.setContentApproved(existingRestaurant.isContentApproved());
+        restaurant.setCreated(existingRestaurant.getCreated());
+        restaurant.setHasUploadedImage(existingRestaurant.isHasUploadedImage());
+        restaurant.setContentStatus(existingRestaurant.getContentStatus());
+        restaurant.setLastContentApprovalStatusUpdated(existingRestaurant.getLastContentApprovalStatusUpdated());
+        restaurant.setLastOrderReponseTime(existingRestaurant.getLastOrderReponseTime());
+        restaurant.setRejectionReasons(existingRestaurant.getRejectionReasons());
+        restaurant.setRestaurantUpdates(existingRestaurant.getRestaurantUpdates());
+    }
+
+
+    /**
      * @param workbook
      * @return
      */
     
-    private Restaurant buildRestaurantFromWorkbook(XSSFWorkbook workbook) {
+    private Restaurant buildRestaurantFromWorkbook(XSSFWorkbook workbook,ValidationErrors errors) {
         Restaurant restaurant = new Restaurant();
 
         // Core data
@@ -125,7 +183,7 @@ public class ExcelUploadController {
         restaurant.setCommissionPercent(getNamedCellDoubleValue(workbook, "Restaurant.Commission"));
 
         // Opening times
-        XSSFCell openingTimesAnchor = getFirstCell(workbook, "OpeningTimes");
+        XSSFCell openingTimesAnchor = getFirstCell(workbook, "Restaurant.OpeningTimes");
         int openingTimesAnchorRow = openingTimesAnchor.getRowIndex();
         int openingTimesAnchorCol = openingTimesAnchor.getColumnIndex();
         XSSFSheet openingTimesSheet = openingTimesAnchor.getSheet();
@@ -135,18 +193,20 @@ public class ExcelUploadController {
             OpeningTime openingTime = new OpeningTime();
             openingTime.setDayOfWeek(i + 1);
             XSSFRow row = getRow(openingTimesSheet, openingTimesAnchorRow + i);
-            openingTime.setEarlyOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol)));
-            openingTime.setEarlyClosingTime(getLocalTime(row.getCell(openingTimesAnchorCol + 1)));
-            openingTime.setLateOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol + 2)));
-            openingTime.setLateClosingTime(getLocalTime(row.getCell(openingTimesAnchorCol + 3)));
+            openingTime.setOpen("Y".equals(getCell(row, openingTimesAnchorCol).getStringCellValue()));
+            openingTime.setEarlyOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol + 1)));
+            openingTime.setEarlyClosingTime(getLocalTime(row.getCell(openingTimesAnchorCol + 2)));
+            openingTime.setLateOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol + 3)));
+            openingTime.setLateClosingTime(getLocalTime(row.getCell(openingTimesAnchorCol + 4)));
             openingTimeList.add(openingTime);
         }
         openingTimes.setOpeningTimes(openingTimeList);
         XSSFRow bankHolidayRow = getRow(openingTimesSheet, openingTimesAnchorRow + 7);
-        openingTimes.getBankHolidayOpeningTimes().setEarlyOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol)));
-        openingTimes.getBankHolidayOpeningTimes().setEarlyClosingTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 1)));
-        openingTimes.getBankHolidayOpeningTimes().setLateOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 2)));
-        openingTimes.getBankHolidayOpeningTimes().setLateClosingTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 3)));
+        openingTimes.getBankHolidayOpeningTimes().setOpen("Y".equals(getCell(bankHolidayRow, openingTimesAnchorCol).getStringCellValue()));
+        openingTimes.getBankHolidayOpeningTimes().setEarlyOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 1)));
+        openingTimes.getBankHolidayOpeningTimes().setEarlyClosingTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 2)));
+        openingTimes.getBankHolidayOpeningTimes().setLateOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 3)));
+        openingTimes.getBankHolidayOpeningTimes().setLateClosingTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 4)));
 
         // Closed dates
         XSSFCell closingTimesCell = getNamedCell(workbook, "ClosedDates");
@@ -253,6 +313,7 @@ public class ExcelUploadController {
                 menuCategory.setType(getCellStringValue(menuCategoriesSheet, menuCategoryIndex, 2));
                 menuCategory.setIconClass(getCellStringValue(menuCategoriesSheet, menuCategoryIndex, 3));
                 restaurant.getMenu().getMenuCategories().add(menuCategory);
+                menuCategoryValidator.validate(menuCategory,errors,menuCategoriesSheet.getSheetName(), menuCategoryIndex, 0);
                 emptyRowCount = 0;
             }
             else {
@@ -279,6 +340,7 @@ public class ExcelUploadController {
                     if(menuCategory != null) {
                         menuCategory.getMenuItems().add(currentMenuItem);
                     }
+                    menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
                 }
                 currentMenuItem = new MenuItem(); // Create new menu item
                 currentMenuCategoryName = getCellStringValue(menuItemsSheet,menuItemIndex,1);
@@ -357,6 +419,7 @@ public class ExcelUploadController {
             if(menuCategory != null) {
                 menuCategory.getMenuItems().add(currentMenuItem);
             }
+            menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
         }
 
         // Discounts

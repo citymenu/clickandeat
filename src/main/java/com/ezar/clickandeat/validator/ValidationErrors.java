@@ -16,7 +16,11 @@ public class ValidationErrors {
     public String getErrorSummary() {
         return StringUtils.collectionToDelimitedString(errors, ", ");
     }
-    
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
     public boolean hasErrors() {
         return errors.size() > 0;
     }

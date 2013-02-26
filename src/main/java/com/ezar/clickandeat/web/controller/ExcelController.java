@@ -175,24 +175,25 @@ public class ExcelController {
         // Export opening times
         XSSFSheet openingTimesSheet = workbook.getSheet("Opening Times");
         OpeningTimes restaurantOpeningTimes = restaurant.getOpeningTimes();
-        AreaReference openingTimesAreaReference = new AreaReference(workbook.getName("OpeningTimes").getRefersToFormula());
+        AreaReference openingTimesAreaReference = new AreaReference(workbook.getName("Restaurant.OpeningTimes").getRefersToFormula());
         CellReference openingTimesCellReference = openingTimesAreaReference.getFirstCell();
         int openingTimesRow = openingTimesCellReference.getRow();
         int openingTimesColumn = (int)openingTimesCellReference.getCol();
         for( OpeningTime openingTime: restaurantOpeningTimes.getOpeningTimes() ) {
             int dayOfWeek = openingTime.getDayOfWeek();
             XSSFRow row = openingTimesSheet.getRow(openingTimesRow + (dayOfWeek - 1));
+            createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("plain")).setCellValue(openingTime.isOpen()?"Y":"N");
             if( openingTime.getEarlyOpeningTime() != null ) {
-                createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyOpeningTime()));
+                createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyOpeningTime()));
             }
             if( openingTime.getEarlyClosingTime() != null ) {
-                createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyClosingTime()));
+                createCell(row, openingTimesColumn + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getEarlyClosingTime()));
             }
             if( openingTime.getLateOpeningTime() != null ) {
-                createCell(row, openingTimesColumn + 2, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateOpeningTime()));
+                createCell(row, openingTimesColumn + 3, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateOpeningTime()));
             }
             if( openingTime.getLateOpeningTime() != null ) {
-                createCell(row, openingTimesColumn + 3, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateClosingTime()));
+                createCell(row, openingTimesColumn + 4, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(openingTime.getLateClosingTime()));
             }
         }
 
@@ -200,8 +201,9 @@ public class ExcelController {
         OpeningTime bankHolidayOpeningTime = restaurantOpeningTimes.getBankHolidayOpeningTimes();
         if( bankHolidayOpeningTime != null ) {
             XSSFRow row = openingTimesSheet.getRow(openingTimesRow + 7);
+            createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("plain")).setCellValue(bankHolidayOpeningTime.isOpen()?"Y":"N");
             if( bankHolidayOpeningTime.getEarlyOpeningTime() != null ) {
-                createCell(row, openingTimesColumn, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getEarlyOpeningTime()));
+                createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getEarlyOpeningTime()));
             }
             if( bankHolidayOpeningTime.getEarlyClosingTime() != null ) {
                 createCell(row, openingTimesColumn + 1, Cell.CELL_TYPE_STRING, styles.get("time")).setCellValue(timeFormatter.print(bankHolidayOpeningTime.getEarlyClosingTime()));
