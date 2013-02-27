@@ -95,12 +95,14 @@ public class ExcelUploadController {
             
             // Any errors, return them now
             if( errors.hasErrors()) {
-                model.put("success",false);
+                model.put("success",true);
+                model.put("valid",false);
                 model.put("errors",errors.getErrors());
             }
             else {
                 // All OK
                 model.put("success",true);
+                model.put("valid",true);
             }
         }
         catch( Exception ex ) {
@@ -336,11 +338,11 @@ public class ExcelUploadController {
             if(StringUtils.hasText(menuItemName)) {
                 emptyRowCount = 0; // Reset counter;
                 if(currentMenuItem != null) {
+                    menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
                     MenuCategory menuCategory = restaurant.getMenu().getMenuCategory(currentMenuCategoryName);
                     if(menuCategory != null) {
                         menuCategory.getMenuItems().add(currentMenuItem);
                     }
-                    menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
                 }
                 currentMenuItem = new MenuItem(); // Create new menu item
                 currentMenuCategoryName = getCellStringValue(menuItemsSheet,menuItemIndex,1);
@@ -415,11 +417,11 @@ public class ExcelUploadController {
         }
         // Add last menu item
         if(currentMenuItem != null ) {
+            menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
             MenuCategory menuCategory = restaurant.getMenu().getMenuCategory(currentMenuCategoryName);
             if(menuCategory != null) {
                 menuCategory.getMenuItems().add(currentMenuItem);
             }
-            menuItemValidator.validate(currentMenuItem, errors, menuItemsSheet.getSheetName(), menuItemIndex, 2);
         }
 
         // Discounts

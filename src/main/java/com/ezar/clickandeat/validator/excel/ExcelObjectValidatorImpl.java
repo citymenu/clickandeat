@@ -24,7 +24,7 @@ public class ExcelObjectValidatorImpl<T> implements ExcelObjectValidator<T> {
     public void validate(T in, ValidationErrors errors, String sheetName, int rowIndex, int colIndex ) {
         String className = in.getClass().getSimpleName();
         ValidationErrors internalErrors = internalValidator.validate(in);
-        for( String error: errors.getErrors()) {
+        for( String error: internalErrors.getErrors()) {
             errors.addError("[" + sheetName + " - " + columnNames.get(colIndex) + rowIndex + "] " + className + " -> " + error);
         }
     }

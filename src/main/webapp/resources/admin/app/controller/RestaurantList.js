@@ -228,10 +228,24 @@ Ext.define('AD.controller.RestaurantList', {
                             url: ctx + '/admin/menu/upload.ajax',
                             success: function(form,action) {
                                 myMask.hide();
-                                showSuccessMessage(Ext.get('restaurantlist'),'Uploaded','Restaurant data uploaded successfully');
-                                Ext.getCmp('uploadsheet').close();
-                                var store = Ext.getCmp('restaurantlist').getStore();
-                                store.loadPage(store.currentPage);
+                                var obj = Ext.decode(action.response.responseText);
+                                if( obj.valid == true ) {
+                                    Ext.getCmp('uploadsheet').close();
+                                    showSuccessMessage(Ext.get('restaurantlist'),'Uploaded','Restaurant data uploaded successfully');
+                                    var store = Ext.getCmp('restaurantlist').getStore();
+                                    store.loadPage(store.currentPage);
+                                } else {
+                                    var errorText = '';
+                                    obj.errors.forEach(function(error){
+                                        errorText += '<p>' + error + '</p>';
+                                    });
+                                    Ext.Msg.show({
+                                         title:'Errors validating spreadsheet',
+                                         msg: errorText,
+                                         buttons: Ext.Msg.OK,
+                                         icon: Ext.Msg.WARNING
+                                    });
+                                }
                             },
                             failure: function(form,action) {
                                 myMask.hide();
