@@ -18,7 +18,7 @@ $(document).ready(function(){
         speed: 1200,
         vertical: true,
         circular:true,
-        visible:2
+        visible:3
     })
     .hover(function() {
         paused = true;
