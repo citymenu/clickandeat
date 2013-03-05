@@ -102,7 +102,7 @@
                     <div id="page">
                         <div id="header-container">
                             <div id="header-inner">
-                                <div class="header-company-text unselectable"><a href="${ctx}/home.html" class="blank">llamar<span class="header-company-small">y</span>comer</a></div>
+                                <div class="header-company-text unselectable"><a href="${ctx}/home.html" class="header-blank">llamar<span class="header-company-small">y</span>comer</a></div>
                             </div>
                         </div>
                     </div>
