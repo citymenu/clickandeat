@@ -456,7 +456,7 @@ a.order-button:active, a.order-button:hover {
 }
 
 .itemcountwarning {
-    font:500 12px/14px prenton-n5,prenton;
+    font:400 12px/14px prenton-n4,prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
     padding: 6px 10px;
