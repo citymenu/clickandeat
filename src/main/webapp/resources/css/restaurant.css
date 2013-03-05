@@ -38,9 +38,8 @@ a.location-button {
 }
 
 .restaurant-details-wrapper {
-    padding: 0px 0px 15px 0px;
+    padding: 0;
     margin-right:30px;
-    border-bottom: 1px dashed #AAAAAA;
 }
 
 .restaurant-details-wrapper h2 {
@@ -170,7 +169,7 @@ a.location-button {
 }
 
 .menu-center {
-    padding: 10px 0 0 0;
+    padding: 0;
     width: 449px;
     margin: 20px 30px 0 30px;
     position:relative;
