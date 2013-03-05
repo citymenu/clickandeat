@@ -337,3 +337,8 @@ a.location-link {
 .euro {
     font: 12px/14px prenton-n4,prenton;
 }
+
+a.blank, a.blank:visited, a.blank:hover, a.blank:active {
+    text-decoration:none;
+    color:#FFFFFF;
+}
