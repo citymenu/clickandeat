@@ -28,7 +28,7 @@
                 <div class="wsite-header">
                     <div class="hero-border"></div>
                     <div class="hero-banner-upper">La manera más sencilla de pedir comida a domicilio</div>
-                    <div class="hero-banner-main">Búsqueda de restaurantes<br>en tu zona</div>
+                    <div class="hero-banner-main">Busca restaurantes<br>en tu zona</div>
                     <div class="searchbar-container">
                         <div class="searchbar">
                             <table width="406">
