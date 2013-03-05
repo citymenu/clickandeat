@@ -18,8 +18,9 @@ $(document).ready(function(){
     // Add click handler for location change link
     $('#changeLocation').click(function(){
         var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder=\'\'/>').format(getLabel('search.watermark'));
-        var searchButton = ('<a class=\'search\'>{0}</a>').format(getLabel('button.search'));
-        var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationField,searchButton);
+        var searchButton = ('<div class=\'search-small\'><div class=\'search-button-text-small\'>{0}</div></div>').format(getLabel('button.search'));
+        var locationTable = ("<table width=\'390\'><tr valign=\'middle\'><td width=\'290\'>{0}</td><td width=\'100\'>{1}</td></tr></table").format(locationField,searchButton);
+        var locationEdit = ('<div class=\'search-location-edit\'>{0}</div>').format(locationTable);
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
@@ -34,7 +35,7 @@ $(document).ready(function(){
             }
         });
 
-        $('.search').click(function(){
+        $('.search-small').click(function(){
             search();
         });
 
@@ -68,6 +69,12 @@ $(document).ready(function(){
         );
     });
 
+    // Add url links to all restaurant buttons
+    $('div[type="link"]').click(function(){
+        var url = $(this).attr('url');
+        window.location = ctx + '/' + url;
+    });
+
 });
 
 
@@ -75,7 +82,6 @@ $(document).ready(function(){
 function search() {
     var location = $('#loc').val();
     if( location != '' ) {
-        $('#search-warning').hide();
         $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
@@ -83,10 +89,7 @@ function search() {
                 if( data.success ) {
                     var address = unescapeQuotes(data.address);
                     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';                }
-                else {
-                    $('.location-warning').remove();
-                    $('.location-warning-wrapper').append(('<div class=\'location-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
+                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
                 }
             }
         );

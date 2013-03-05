@@ -1,5 +1,95 @@
 @charset "utf-8";
 
+.hero-border {
+    width:20%;
+    text-align:center;
+    margin:0px auto 15px auto;
+    height:50px;
+    border-bottom:1px solid #EEEEEE;
+}
+
+.hero-banner-upper {
+    font:14px/14px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-align:center;
+    padding:10px 0 10px 0;
+    text-transform:uppercase;
+}
+
+.hero-banner-main {
+    font:40px/42px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-align:center;
+    padding:15px 0 30px 0;
+    text-transform:uppercase;
+}
+
+.hero-banner-lower {
+    font:14px/14px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-align:center;
+    padding:12px 0 0 0;
+}
+
+.searchbar {
+    margin: 0 auto 0 auto;
+    text-align:center;
+    width:410px;
+    height:52px;
+    padding:8px;
+    background-color:#F4F4F4;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+
+input.location {
+    font:14px/16px "myriad-pro-n4", "myriad-pro";
+    color:#666666;
+    height: 40px;
+    padding: 4px 6px;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    background-clip: padding-box;
+    width: 290px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+input.location:focus {
+    border: 1px solid #CCCCCC;
+}
+
+.search-button {
+    background:url(../images/search-button-back.png) 0 0 repeat-x transparent;
+    margin-left:8px;
+    width:96px;
+    height:50px;
+    text-align:center;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    cursor:pointer;
+}
+
+.search-button-text {
+    font:12px/12px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-align:center;
+    text-transform:uppercase;
+    padding-top:19px;
+}
+
 .main-content {
     background: none repeat scroll 0 0 #FFFFFF;
     margin: 0px auto 0px auto;
@@ -19,8 +109,8 @@
 
 #searchbar-wrapper {
     position:absolute;
-    right: 210px;
-    top: 25px;
+    right: 160px;
+    top: 40px;
     width: 550px;
 }
 
@@ -41,11 +131,6 @@
 }
 
 .location-input {
-    width: 350px;
-    height: 32px;
-    position:absolute;
-    top:0;
-    left:0;
 }
 
 .location-button {
@@ -65,35 +150,6 @@ a.search {
     color:#c5171e;
 }
 
-.location-direct {
-    font:500 12px/14px "prenton-n5", "prenton";
-    color:#FFFFFF;
-    text-shadow: 0 2px #333333;
-    padding-top: 7px;
-    width:264px;
-    text-align:left;
-}
-
-input.location {
-    font:14px/16px "myriad-pro-n4", "myriad-pro";
-    color:#666666;
-    height: 22px;
-    padding: 4px 6px;
-    margin-bottom: 9px;
-    border-radius: 4px 4px 4px 4px;
-    background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-    background-clip: padding-box;
-    width: 360px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    -webkit-border-radius: 3px;
-       -moz-border-radius: 3px;
-            border-radius: 3px;
-}
-
-input.location:focus {
-    border: 1px solid #CCCCCC;
-}
 
 #search-warning {
     display:none;
@@ -227,22 +283,22 @@ a.home {
 }
 
 .divider {
-    border-top:1px dashed #CCCCCC;
+    border-top:1px solid #EEEEEE;
     padding-top:10px;
 }
 
 .restaurant-panel-left {
     display:inline-block;
     height:100px;
-    width:458px;
+    width:448px;
     padding-bottom:10px;
 }
 
 .restaurant-panel-right {
     display:inline-block;
     height:100px;
-    width:458px;
-    padding-left:40px;
+    width:448px;
+    padding-left:39px;
     padding-bottom:10px;
 }
 
@@ -323,10 +379,7 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 .step {
     width: 210px;
     height: 175px;
-    border: 2px solid #CCCCCC;
-    -webkit-border-radius: 20px;
-       -moz-border-radius: 20px;
-            border-radius: 20px;
+    border: 1px solid #BBBBBB;
     position:relative;
     text-align:center;
 }

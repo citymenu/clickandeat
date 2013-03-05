@@ -2,8 +2,8 @@
 
 .checkout-left {
     padding: 0;
-    margin: 0 30px 0 10px;
-    width: 720px;
+    margin: 0 30px 0 0;
+    width: 639px;
     position:relative;
 }
 
@@ -15,7 +15,6 @@
 }
 
 .checkout-wrapper {
-    padding: 0 10px;
 }
 
 .checkout-item-wrapper {
@@ -26,8 +25,8 @@
 .checkout-wrapper h2 {
     color: #BB0000;
     font-family: MaiandraOTGD-DemiBold;
-    font-size:18px;
-    line-height:22px
+    font-size:16px;
+    line-height:18px
     text-shadow: 0 1px #EEEEEE;
 }
 

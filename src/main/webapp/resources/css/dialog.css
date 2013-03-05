@@ -14,13 +14,13 @@
 .dialog-header h2 {
     color: #BB0000;
     font-family: MaiandraOTGD-DemiBold;
-    font-size:18px;
-    line-height:22px;
+    font-size:16px;
+    line-height:20px;
     text-shadow: 0 1px #EEEEEE;
 }
 
 .dialog-subheader {
-    font: 14px/16px myriad-pro-n4,myriad-pro;
+    font: 13px/15px myriad-pro-n4,myriad-pro;
     color: #444444;
     padding: 0 5px 8px 5px;
 }

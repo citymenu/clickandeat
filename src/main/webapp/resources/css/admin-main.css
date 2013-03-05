@@ -1,0 +1,121 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+}
+
+html {
+    margin:0;
+    padding:0;
+}
+
+body {
+    background: none repeat scroll 0 0 #FCFbF5;
+    font-family: pt-sans-n4,pt-sans;
+    font-size: 12px;
+    line-height: 16px;
+    color: #333333;
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+}
+
+iframe.payment {
+     background: none repeat scroll 0 0 #FFFFFF;
+}
+
+table {
+    border:0;
+    padding:0;
+    margin:0;
+    border-collapse:collapse;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333333;
+    font-family: myriad-pro-n4,myriad-pro;
+    font-weight: normal;
+}
+
+h3, h4, h5, h6 {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 0 0 10px;
+    font-weight: normal;
+}
+
+.third {
+    margin-right: 40px;
+    width: 313px;
+}
+
+.last {
+    margin-right: 0;
+    padding-right: 0;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+div.outer-box {
+    border: 1px solid #675c58;
+    padding: 3px;
+}
+
+div.middle-box {
+    border: 2px solid #675C58;
+    padding: 1px;
+}
+
+div.center-box {
+    border: 1px solid #786d69;
+    padding: 10px;
+}
+
+div.boxcontent { padding: 8px;}
+
+.warning-wrapper {
+    border: 1px solid #b64242;
+    background-color: #fffece;
+    width: 300px;
+    padding: 10px 15px 10px 15px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.warning-content {
+    font-family: MaiandraOTGD-DemiBold;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.01em;
+}
+
+.location-match {
+    font-family: pt-sans-n4,pt-sans;
+    font-size: 16px;
+    line-height:18px;
+    padding-bottom:6px;
+}
+
+a.location-link {
+    color:#0000CC;
+    text-decoration:underline;
+    cursor:pointer;
+}
+
+.euro {
+    font: 12px/14px prenton-n4,prenton;
+}

@@ -22,8 +22,6 @@
 
 <body>
 
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
-
 <script type="text/javascript">
     var orderid = '${order.orderId}';
     var coordinates=[${order.restaurant.coordinates}];
@@ -32,17 +30,17 @@
 <div id="content">
 
     <div class="content-wrapper">
-        <table width="1020">
+        <table width="939">
             <tr valign="top">
                 <!-- Order summary -->
-                <td width="760">
+                <td width="679">
                     <div class="order-summary-wrapper">
                         <h2>Gracias por usar <message:message key="title.companyname" escape="false"/></h2>
                         <div class="order-detail-wrapper">
-                            <table width="720">
+                            <table width="649">
                                 <tr valign="top">
                                     <!-- Order detalis -->
-                                    <td width="430">
+                                    <td width="379">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
                                                 <div class="order-information">N&#250;mero de pedido: ${order.orderId}</div>
@@ -83,7 +81,7 @@
                                         </div>
                                     </td>
                                     <!-- Explanation -->
-                                    <td width="290">
+                                    <td width="270">
                                         <div class="call-now-image"></div>
                                     </td>
                                 </tr>
@@ -102,8 +100,6 @@
         </table>
     </div>
 </div>
-
-<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

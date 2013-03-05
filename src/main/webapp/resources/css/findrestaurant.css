@@ -1,12 +1,12 @@
 @charset "utf-8";
 
 .search-results-entry-wrapper {
-    border-top: 1px dashed #AAAAAA;
+    border-top: 1px dashed #BBBBBB;
 }
 
 .search-results-wrapper {
     margin: 0 30px 0 0;
-    width: 730px;
+    width: 649px;
 }
 
 .search-results-header-wrapper {
@@ -14,20 +14,17 @@
     background-color:#F6F6F6;
     padding: 10px;
     margin: 0 0 30px 0;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=3);
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=2);
 }
 
 .search-results-header-wrapper h2 {
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
+    font-size: 16px;
     color:#AA0000;
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 .location-warning {
@@ -37,9 +34,6 @@
     margin: 12px 0 12px 0;
     color:#444444;
     padding: 6px 10px 6px 10px;
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
 }
 
 .search-location-wrapper {
@@ -62,7 +56,7 @@
 }
 
 .search-location, .search-location-empty {
-    font:700 16px/18px prenton-n7,prenton;
+    font:700 14px/14px prenton-n7,prenton;
     color:#444444;
     margin-bottom: 6px;
 }
@@ -109,12 +103,12 @@ a.search {
     background-color:#FFFFFF;
     padding: 10px;
     margin: 0 0 30px 0;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .no-results-content-wrapper {
@@ -128,21 +122,32 @@ a.search {
 }
 
 .no-results-content {
-    width: 435px;
+    width: 370px;
     padding-right:20px;
 }
 
+.phone-orders-header {
+    font:400 12px/14px myriad-pro-n4,myriad-pro;
+    background-color: #fdde70;
+    margin: 18px 0 24px 0;
+    color:#444444;
+    padding: 8px 10px 8px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
 .registration-content {
-    width: 435px;
+    width: 370px;
     min-height: 250px;
     padding-right:20px;
 }
 
 .registration-content h2 {
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
+    font-size: 18px;
     color:#AA0000;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 
@@ -168,7 +173,7 @@ a.search {
 
 .invalid-email {
     display:inline-block;
-    font:400 14px/14px myriad-pro-n4,myriad-pro;
+    font:400 12px/12px myriad-pro-n4,myriad-pro;
     color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
@@ -198,19 +203,19 @@ a.register-button:active, a.register-button:hover {
 
 .no-results-content h2 {
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
+    font-size: 18px;
     color:#AA0000;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .no-results-text {
-    font:16px/18px myriad-pro-n4,myriad-pro;
+    font:14px/15px myriad-pro-n4,myriad-pro;
     color:#444444;
     margin-bottom:10px;
 }
 
 .search-location-results {
-    font:14px/16px prenton-n4,prenton;
+    font:12px/14px prenton-n4,prenton;
     color:#444444;
 }
 
@@ -255,14 +260,14 @@ a.register-button:active, a.register-button:hover {
 }
 
 .search-result-wrapper {
-    border-bottom: 1px dashed #AAAAAA;
-    padding: 20px 10px 20px 10px;
+    border-bottom: 1px dashed #BBBBBB;
+    padding: 16px 0 16px 0;
     clear:both;
 }
 
 .search-result-wrapper h2 {
     color: #AA0000;
-    font: 18px/20px MaiandraOTGD-DemiBold;
+    font: 16px/18px MaiandraOTGD-DemiBold;
     margin-bottom:2px;
 }
 

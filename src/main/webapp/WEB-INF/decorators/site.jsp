@@ -1,7 +1,17 @@
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
 <%@ taglib uri="/WEB-INF/tld/message.tld" prefix="message" %>
+<%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
+
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="locale" value="${pageContext.response.locale}"/>
+<c:set var="user" value="${pageContext.request.remoteUser}"/>
+
+<locale:locale/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="<locale:language/>">
 
@@ -78,7 +88,119 @@
   }
 </script>
 
-<decorator:body/>
+
+<body>
+    <div id="wrapper">
+        <div id="wrap">
+            <div id="wrap-in">
+                <div id="header-wrap">
+                    <div id="page">
+                        <div id="page-nav">
+                            <a href="${ctx}/help.html"><message:message key="label.help"/></a> |
+                            <a onclick="Zenbox.show()"><message:message key="label.feedback"/></a>
+                        </div>
+                    </div>
+                    <div id="page">
+                        <div id="header-container">
+                            <div id="header-inner">
+                                <div class="header-company-text unselectable">llamar<span class="header-company-small">y</span>comer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main-wrap">
+
+                    <div id="nav-wrap">
+                        <div id="page">
+                            <div id="topnav">
+                                <div class="navigation-links">
+                                    <ul>
+                                        <c:choose>
+                                            <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
+                                                <li class="active unselectable"><message:message key="workflow.1-enter-your-location"/></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="unselectable"><a href="${ctx}/home.html"><message:message key="workflow.1-enter-your-location"/></a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <li class="arrow">&gt&gt</li>
+
+                                        <c:choose>
+                                            <c:when test="${path == 'findRestaurant.jsp'}">
+                                                <li class="active unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
+                                            </c:when>
+                                            <c:when test="${search != null}">
+                                                <li class="unselectable"><a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <li class="arrow">&gt&gt</li>
+
+                                        <c:choose>
+                                            <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
+                                                <li class="active unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                                            </c:when>
+                                            <c:when test="${path == 'restaurant.jsp'}">
+                                                <li class="active unselectable"><message:message key="workflow.3-build-your-order"/></li>
+                                            </c:when>
+                                            <c:when test="${orderrestaurantid != null && search != null}">
+                                                <li class="unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                                            </c:when>
+                                            <c:when test="${restaurantid != null && search != null}">
+                                                <li class="unselectable"><a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="unselectable"><message:message key="workflow.3-build-your-order"/></li>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                        <li class="arrow">&gt&gt</li>
+
+                                        <c:choose>
+                                            <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
+                                                <li class="active unselectable"><message:message key="workflow.4-checkout"/></li>
+                                            </c:when>
+                                            <c:when test="${cancheckout != null && cancheckout == true}">
+                                                <li class="unselectable"><a href="${ctx}/checkout.html"><message:message key="workflow.4-checkout"/></a></li>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="unselectable"><message:message key="workflow.4-checkout"/></li>
+                                            </c:otherwise>
+                                        </c:choose>
+
+                                    </ul>
+                                </div>
+                                <div style="clear:both"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="page">
+                        <div id="main-bot">
+                            <div id="main-inner">
+                                <div id="main">
+                                    <decorator:body/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-wrap">
+        <div id="page">
+            <jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
+        </div>
+    </div>
+</body>
+
+</body>
+
 
 <!-- Google Tracking -->
 <script type="text/javascript">

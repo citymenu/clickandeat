@@ -18,6 +18,8 @@
             </div>
         </div>
         <div class="navigation-wrapper">
+
+
             <div class="navigation-links">
                 <ul>
                     <c:choose>
@@ -79,6 +81,9 @@
 
                 </ul>
             </div>
+
+
+
         </div>
     </div>
 </div>

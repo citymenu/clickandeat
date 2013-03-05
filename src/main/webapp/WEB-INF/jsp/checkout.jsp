@@ -26,13 +26,11 @@
 
 <body>
 
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
-
 <div id="content">
     <div class="content-wrapper">
-        <table width="1020">
+        <table width="939">
             <tr valign="top">
-                <td width="760">
+                <td width="679">
                     <div class="checkout-left">
                         <div class="checkout-wrapper">
 
@@ -190,8 +188,6 @@
         </table>
     </div>
 </div>
-
-<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

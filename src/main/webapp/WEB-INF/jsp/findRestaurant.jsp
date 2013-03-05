@@ -22,17 +22,14 @@
 
 <body>
 
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
-
 <div id="content">
     <div class="content-wrapper">
-        <table width="1020">
+        <table width="939">
             <tr valign="top">
                 <!-- Search results -->
-                <td width="760">
+                <td width="679">
                     <div class="search-results-wrapper">
                         <div class="search-results-header-wrapper">
-                            <h2><message:message key="search.search-results"/></h2>
                             <div class="search-location-wrapper">
                                 <div class="search-location-edit">
                                     <c:choose>
@@ -72,9 +69,9 @@
                             </div>
                             <c:if test="${count > 0}">
                             <div class="search-filters">
-                                <table width="690">
+                                <table width="609">
                                     <tr valign="middle">
-                                        <td width="370">
+                                        <td width="289">
                                             <div class="search-cuisine-filter">
                                                 <message:message key="search.filter-by-cuisine"/>:
                                                 <select class="search-select" id="cuisine-select">
@@ -116,19 +113,15 @@
                                 <c:if test="${restaurant.phoneOrdersOnly == true}">
                                     <c:if test="${phoneOrdersOnlyflag=='0'}">
                                         <c:set var="phoneOrdersOnlyflag" value="1"/>
-                                        <div class="phone-orders-only-wrapper">
-                                            <div class="phone-orders-only">
-                                                <p class="triangle-isosceles left"><message:message key="search.phone-orders-only-text"/></p>
-                                            </div>
-                                        </div>
+                                        <div class="phone-orders-header"><message:message key="search.phone-orders-only-text"/></div>
                                     </c:if>
                                 </c:if>
                                 <div class="search-result-wrapper" isOpen="${restaurant.open}" cuisines="${restaurant.cuisineSummary}" isPhoneOnly="${restaurant.phoneOrdersOnly}">
                                     <div class="search-result">
-                                        <table width="710">
+                                        <table width="649">
                                             <tr valign="top">
-                                                <td width="330">
-                                                    <table width="330">
+                                                <td width="329">
+                                                    <table width="329">
                                                         <tr valign="bottom">
                                                             <td width="85">
                                                                 <a href="${ctx}/${restaurant.url}" class="blank">
@@ -138,7 +131,7 @@
                                                                     <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                                                 </a>
                                                             </td>
-                                                            <td width="245">
+                                                            <td width="244">
                                                                 <div class="search-result-center">
                                                                     <h2><a href="${ctx}/${restaurant.url}" class="blank"><util:escape value="${restaurant.name}"/></a></h2>
                                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
@@ -146,7 +139,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr valign="top">
-                                                            <td width="330" colspan="2">
+                                                            <td width="329" colspan="2">
                                                                 <div class="address-details">
                                                                     <util:escape value="${restaurant.address.summary}"/><br>
                                                                     <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
@@ -155,10 +148,10 @@
                                                         </tr>
                                                     </table>
                                                 </td>
-                                                <td width="380">
-                                                    <table width="380">
+                                                <td width="320">
+                                                    <table width="320">
                                                         <tr valign="top">
-                                                            <td width="230">
+                                                            <td width="190">
                                                                 <c:if test="${restaurant.hasDiscounts == true}">
                                                                     <div class="restaurant-discount-details">
                                                                         <div class="scissors"></div>
@@ -168,26 +161,34 @@
                                                                     </div>
                                                                 </c:if>
                                                             </td>
-                                                            <td width="150" align="right">
+                                                            <td width="130" align="right">
                                                                 <div class="menu-link">
                                                                     <c:choose>
                                                                         <c:when test="${restaurant.open == true}">
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-open"><message:message key="search.call-now"/></a>
+                                                                                    <div class="button-green" url="${restaurant.url}" type="link">
+                                                                                        <div class="button-text"><message:message key="search.call-now"/></div>
+                                                                                    </div>
                                                                                 </c:when>
                                                                                 <c:otherwise>
-                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-open"><message:message key="search.order-now"/></a>
+                                                                                    <div class="button-green" url="${restaurant.url}" type="link">
+                                                                                        <div class="button-text"><message:message key="search.order-now"/></div>
+                                                                                    </div>
                                                                                 </c:otherwise>
                                                                             </c:choose>
                                                                         </c:when>
                                                                         <c:otherwise>
                                                                             <c:choose>
                                                                                 <c:when test="${restaurant.phoneOrdersOnly == true}">
-                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-closed"><message:message key="search.view-menu"/></a>
+                                                                                    <div class="button-orange" url="${restaurant.url}" type="link">
+                                                                                        <div class="button-text"><message:message key="search.view-menu"/></div>
+                                                                                    </div>
                                                                                 </c:when>
                                                                                 <c:otherwise>
-                                                                                    <a href="${ctx}/${restaurant.url}" class="search-result-button-closed"><message:message key="search.pre-order"/></a>
+                                                                                    <div class="button-orange" url="${restaurant.url}" type="link">
+                                                                                        <div class="button-text"><message:message key="search.pre-order"/></div>
+                                                                                    </div>
                                                                                 </c:otherwise>
                                                                             </c:choose>
                                                                         </c:otherwise>
@@ -196,7 +197,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr valign="top">
-                                                            <td width="380" colspan="2">
+                                                            <td width="320" colspan="2">
                                                                 <div class="restaurant-opening-details">
                                                                     <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                                                         <c:choose>
@@ -254,8 +255,6 @@
         </table>
     </div>
 </div>
-
-<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

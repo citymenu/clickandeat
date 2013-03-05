@@ -1,5 +1,6 @@
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
+<%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
 <!doctype html>
 
@@ -20,8 +21,6 @@
 
 <body>
 
-<%@ include file="/WEB-INF/jsp/header.jsp" %>
-
 <script type="text/javascript">
     var orderid = '${order.orderId}';
     var coordinates=[${order.restaurant.coordinates}];
@@ -30,17 +29,17 @@
 <div id="content">
 
     <div class="content-wrapper">
-        <table width="1020">
+        <table width="939">
             <tr valign="top">
                 <!-- Order summary -->
-                <td width="760">
+                <td width="679">
                     <div class="order-summary-wrapper">
                         <h2>Thank you for using <message:message key="title.companyname" escape="false"/></h2>
                         <div class="order-detail-wrapper">
-                            <table width="720">
+                            <table width="649">
                                 <tr valign="top">
                                     <!-- Order detalis -->
-                                    <td width="430">
+                                    <td width="379">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
                                                 <div class="order-information">Your order number is ${order.orderId}</div>
@@ -51,7 +50,7 @@
                                                 <div id="notregistered">
                                                     <div class="order-overview">
                                                         <h2>What happens next?</h2>
-                                                        <p><util:escape value="${order.restaurant.name}"/> does not take online payments yet but you can contact them on the number shown above right now.</p>
+                                                        <p>${order.restaurant.name} does not take online payments yet but you can contact them on the number shown above right now.</p>
                                                         <p><message:message key="title.companyname" escape="false"/> is currently offering a discount voucher if you complete your telephone order.</p>
                                                         <p>Enter your email address in the field below and click on <message:message key="button.call-now.send.voucher"/> button. Once your order is confirmed with <util:escape value="${order.restaurant.name}"/> you will soon receive a discount voucher.</p>
                                                         <p>Do not forget that to receive your discount voucher you will have to mention the order id above to <util:escape value="${order.restaurant.name}"/> when you phone them.</p>
@@ -74,7 +73,7 @@
                                         </div>
                                     </td>
                                     <!-- Explanation -->
-                                    <td width="290">
+                                    <td width="270">
                                         <div class="call-now-image"></div>
                                     </td>
                                 </tr>
@@ -93,8 +92,6 @@
         </table>
     </div>
 </div>
-
-<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>
