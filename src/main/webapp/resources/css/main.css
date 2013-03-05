@@ -146,7 +146,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     position: relative;
     width: 100%;
     height: 380px;
-    background: url(../images/hero.jpg) 0 0 no-repeat #FFFFFF;
+    background: url(../images/banner-tall.jpg) 0 0 no-repeat #FFFFFF;
 }
 
 #content {
