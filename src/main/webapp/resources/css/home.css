@@ -9,11 +9,10 @@
 }
 
 .hero-banner-upper {
-    font:14px/14px MaiandraOTGD-DemiBold;
-    color:#FFFFFF;
-    text-shadow: 0 2px #333333;
+    font:22px/22px MaiandraOTGD-DemiBold;
+    color:#AA0000;
     text-align:center;
-    padding:10px 0 10px 0;
+    padding:30px 0 15px 0;
     text-transform:uppercase;
 }
 
@@ -28,8 +27,7 @@
 
 .hero-banner-lower {
     font:14px/14px MaiandraOTGD-DemiBold;
-    color:#FFFFFF;
-    text-shadow: 0 2px #333333;
+    color:#AA0000;
     text-align:center;
     padding:12px 0 0 0;
 }
