@@ -25,9 +25,7 @@
         <div id="banner-outer">
             <div id="banner-inner">
                 <div class="wsite-header">
-                    <div class="hero-border"></div>
-                    <div class="hero-banner-upper">The easiest way to order takeaway food online</div>
-                    <div class="hero-banner-main">Search for restaurants<br>in your area</div>
+                    <div class="hero-banner-upper">Find restaurants in your area</div>
                     <div class="searchbar-container">
                         <div class="searchbar">
                             <table width="406">
