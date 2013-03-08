@@ -100,20 +100,23 @@ a.call-now-nav-button:active, a.call-now-nav-button:hover {
 
 .invalid-email {
     display:inline-block;
-    font:400 13px/15px myriad-pro-n4,myriad-pro;
+    font:400 14px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
     margin-top:5px;
     padding: 5px 10px 5px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
     zoom: 1;
     *display: inline;
 }
 
 
 .call-now-image {
-    width: 260px;
-    height: 256px;
+    width: 290px;
+    height: 285px;
     background-image: url(../images/order-confirmation.jpg);
 }
 

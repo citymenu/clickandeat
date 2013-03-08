@@ -22,42 +22,65 @@
 </head>
 
 <body>
-    <div id="banner">
-        <div id="banner-outer">
-            <div id="banner-inner">
-                <div class="wsite-header">
-                    <div class="hero-border"></div>
-                    <div class="hero-banner-upper">La manera más sencilla de pedir comida a domicilio</div>
-                    <div class="hero-banner-main">Busca restaurantes<br>en tu zona</div>
-                    <div class="searchbar-container">
-                        <div class="searchbar">
-                            <table width="406">
-                                <tr valign="middle">
-                                    <td width="302">
-                                        <div class="location-input">
-                                            <input class="location" type="text" id="loc" value="${address}" placeholder=""/>
-                                        </div>
-                                    </td>
-                                    <td width="104">
-                                        <div class="search-button">
-                                            <div class="search-button-text">Buscar</div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
+
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
+<div id="content">
+    <div class="main-content">
+        <div class="butler-main">
+            <div id="searchbar-wrapper">
+                <div class="triangle-right left">
+                    <div class="searchbar-content">
+                        <div class="searchbar-location unselectable">Restaurantes en tu zona</div>
+                        <div class="search-location-form">
+                            <div class="location-input"><input class="location" type="text" id="loc" value="${address}" placeholder=""/></div>
+                            <div class="location-button"><div class="search-container unselectable"><a class="search">Buscar</a></div></div>
                         </div>
-                    </div>
-                    <div class="hero-banner-lower">
-                        O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a>
+                        <div class="location-direct unselectable">O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a></div>
+                        <!--<div class="location-direct unselectable">O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a></div>-->
+                        <div id="search-warning"><message:message key="search.location-not-found"/></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="content">
-        <div id="wsite-content" class="wsite-elements wsite-not-footer">
-            <div class="home-content-header">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
-            <div id="carousel" style="margin-top:30px;">
+
+        <div class="box-large-middle">
+            <div class="caption">La manera más cómoda de pedir comida a domicilio</div>
+            <div class="help">
+                <table width="976">
+                    <tr>
+                        <td width="244" align="center">
+                            <div class="step step-1">
+                                <div class="step-number">1.</div>
+                                <div class="step-detail">Dinos dónde estás</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-2">
+                                <div class="step-number">2.</div>
+                                <div class="step-detail">Elige tu comida preferida</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-3">
+                                <div class="step-number">3.</div>
+                                <div class="step-detail">Realiza tu pedido</div>
+                            </div>
+                        </td>
+                        <td width="244" align="center">
+                            <div class="step step-4">
+                                <div class="step-number">4.</div>
+                                <div class="step-detail">Tu comida está de camino</div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box-large-bottom">
+            <div class="caption">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
+            <div id="carousel">
                 <div class="carousel-items">
                     <ul>
                         <c:forEach var="restaurant" items="${recommendations}" varStatus="status">
@@ -76,21 +99,21 @@
 
                         <div class="divider"></div>
 
-                        <table width="448">
+                        <table width="458">
                             <tr valign="top">
                                 <td width="78" align="left">
                                     <a class="blank" href="${restaurant.url}">
                                         <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                     </a>
                                 </td>
-                                <td width="228">
+                                <td width="220">
                                     <a class="blank" href="${restaurant.url}">
                                         <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                     </a>
                                     <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
                                     <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                 </td>
-                                <td width="142" align="right">
+                                <td width="150" align="right">
                                     <c:if test="${restaurant.hasDiscounts == true}">
                                         <div class="restaurant-discount-details">
                                             <div class="scissors"></div>
@@ -109,35 +132,12 @@
                     </ul>
                 </div>
             </div>
-            <div class="home-content-header">La manera más cómoda de pedir comida a domicilio</div>
-            <table width="932" style="margin:20px auto 10px auto;">
-                <tr>
-                    <td width="233" align="center">
-                        <div class="step step-1">
-                            <div class="step-number">1.</div>
-                            <div class="step-detail">Dinos dónde estás</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-2">
-                            <div class="step-number">2.</div>
-                            <div class="step-detail">Elige tu comida preferida</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-3">
-                            <div class="step-number">3.</div>
-                            <div class="step-detail">Realiza tu pedido</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-4">
-                            <div class="step-number">4.</div>
-                            <div class="step-detail">Tu comida está de camino</div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
         </div>
+
     </div>
+</div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
+
 </body>
+</html>

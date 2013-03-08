@@ -222,10 +222,10 @@ function showAllDeliveryCharges() {
                     var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
                     var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
                     if( hasDeliveryCharge ) {
-                        row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
                     }
                     if( hasMinimumOrder ) {
-                        row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
                     }
                     row += '</tr>';
                     table += row;

@@ -96,29 +96,26 @@
 }
 
 .navigation-links {
-    padding: 6px 25px 6px 0;
-    overflow:hidden;
+    padding-top: 5px;
+    padding-left: 25px;
+    clear:both;
 }
 
-.navigation-wrapper ul, .navigation-links ul {
-    text-align:right;
+.navigation-wrapper ul {
     list-style:none outside none;
 }
 
-.navigation-wrapper li, .navigation-links li {
-    color: #FFFFFF;
-    #font-family: "prenton-n5", "prenton";
-    font:12px MaiandraOTGD-DemiBold;
-    text-shadow: 0 2px #333333;
-    font-size: 12px;
+.navigation-wrapper li {
+    color: #999999;
+    font-family: "prenton-n5", "prenton";
+    font-size: 13px;
     font-weight:500;
     display:inline;
     float:left;
     padding-right:15px;
-    text-transform:uppercase;
 }
 
-.navigation-links li.active {
+.navigation-wrapper li.active {
     color:#FFFFFF;
 }
 
@@ -127,7 +124,7 @@
 }
 
 .navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {
-    color: #FFFFFF;
+    color: #999999;
     text-decoration:none;
     cursor:pointer;
 }

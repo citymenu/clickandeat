@@ -32,12 +32,15 @@
 
 <body>
 
+
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
 <div id="content">
     <div class="content-wrapper">
-        <table width="939">
+        <table width="1020">
             <tr valign="top">
                 <!-- Payment form -->
-                <td width="679">
+                <td width="760">
                     <div class="payment-wrapper">
                         <div class="payment-title-wrapper">
                             <div class="payment-title"><h2><message:message key="payment.payment-details"/></h2></div>
@@ -58,6 +61,8 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

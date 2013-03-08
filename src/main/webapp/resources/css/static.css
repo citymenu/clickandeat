@@ -21,11 +21,11 @@ p.static {
     min-height:350px;
 }
 
-.static-content ol {
+ol {
     padding: 0 20px 0 20px;
 }
 
-.static-content li {
+li {
     color: #515151;
     font:16px MaiandraOTGD-DemiBold;
     letter-spacing: -0.01em;

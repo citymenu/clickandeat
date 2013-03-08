@@ -23,7 +23,7 @@
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/overrides.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/messagebox.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/MyFontsWebfontsKit.css" charset="utf-8"/>
-	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/admin-main.css" charset="utf-8"/>
+	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/main.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/dialog.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/header-admin.css" charset="utf-8"/>
 	<link rel="stylesheet" type="text/css" media="all" href="${resources}/css/admin.css" charset="utf-8"/>

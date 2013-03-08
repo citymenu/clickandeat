@@ -11,11 +11,13 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
 <div id="content">
     <div class="content-wrapper">
-        <table width="939">
+        <table width="1020">
             <tr valign="top">
-                <td width="579">
+                <td width="660">
                     <div class="order-confirmation-wrapper">
                         <h2><message:message key="workflow.order-update-status" format="${order.orderId}"/></h2>
                         <div class="order-confirmation-header-wrapper">
@@ -30,5 +32,7 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>

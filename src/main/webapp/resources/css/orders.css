@@ -1,24 +1,24 @@
 @charset "utf-8";
 
 #order-wrapper {
+    margin-right:10px;
     border: 1px solid #AAAAAA;
     padding:10px;
-    width:236px;
-    background-color: #F6F6F6;
-    color:#444444;
-    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    filter: progid:DXImageTransform.Microsoft.Shadow(color='#AAAAAA', Direction=145, Strength=2);
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
+    width:228px;
+    background-color: #FCFCFC;
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+       -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=3);
+    -webkit-border-radius: 10px;
+       -moz-border-radius: 10px;
+            border-radius: 10px;
 }
 
 .orderheader {
     text-align:left;
     font-family: MaiandraOTGD-DemiBold;
-    font-size: 18px;
+    font-size: 20px;
     color:#AA0000;
     border-bottom: 1px dashed #AAAAAA;
     margin-bottom: 10px;
@@ -150,7 +150,7 @@ h3.order-table {
 }
 
 select.deliveryselect {
-    font:12px myriad-pro-n4,myriad-pro;
+    font:13px myriad-pro-n4,myriad-pro;
 }
 
 .order-discount-wrapper {
@@ -230,10 +230,10 @@ option.freeitemselect {
     text-align:center;
     font-family: MaiandraOTGD-DemiBold;
     color:#444444;
-    font-size: 16px;
+    font-size: 18px;
     letter-spacing: -0.01em;
     margin: 20px 0 10px 0;
-    padding: 10px 0 10px 0;
+    padding: 10px 0 15px 0;
     border-bottom: 1px dashed #AAAAAA;
     border-top: 1px dashed #AAAAAA;
 }
@@ -264,6 +264,9 @@ option.freeitemselect {
     background-color: #fffece;
     margin-top: 6px;
     padding: 5px 10px 5px 10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .restaurant-warning {
@@ -339,12 +342,12 @@ a.order-button:active, a.order-button:hover {
 }
 
 .additional-item-description {
-    font:13px/15px prenton-n4,prenton;
-    padding: 2px 0 1px 0;
+    font:14px/16px prenton-n4,prenton;
+    padding: 2px 0 2px 0;
 }
 
 .additional-item-cost-wrapper {
-    font:700 14px/16px prenton-n7,prenton;
+    font:700 16px/18px prenton-n7,prenton;
     background-color:#FCFCFC;
     clear:both;
     overflow:hidden;
@@ -366,7 +369,7 @@ a.order-button:active, a.order-button:hover {
 #quantity {
     width:20px;
     border:1px solid #AAAAAA;
-    font: 700 14px myriad-pro-n7,myriad-pro;
+    font: 700 16px myriad-pro-n7,myriad-pro;
     color: #444444;
     padding: 0 5px 0 5px;
     margin-left: 5px;
@@ -394,7 +397,7 @@ a.order-button:active, a.order-button:hover {
 }
 
 .additional-item-title {
-    font: 700 13px/15px prenton-n7,prenton;
+    font: 700 14px/16px prenton-n7,prenton;
     padding: 4px 0 4px 0px;
 }
 
@@ -403,7 +406,7 @@ a.order-button:active, a.order-button:hover {
 }
 
 .additional-item-cost {
-    font: 700 13px/15px prenton-n7,prenton;
+    font: 700 14px/16px prenton-n7,prenton;
     padding: 4px 0 4px 0;
 }
 
@@ -456,7 +459,7 @@ a.order-button:active, a.order-button:hover {
 }
 
 .itemcountwarning {
-    font:400 12px/14px prenton-n4,prenton;
+    font:500 12px/14px prenton-n5,prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
     padding: 6px 10px;
@@ -495,12 +498,6 @@ a.order-button:active, a.order-button:hover {
     border-radius: 5px;
 }
 
-.checkout-container {
-    padding:5px 0 5px 0;
-    margin:0 auto 0 auto;
-    width:110px;
-}
-
 .warning-container p {
     padding-bottom:6px;
 }
@@ -517,12 +514,12 @@ a.order-button:active, a.order-button:hover {
 
 .specialofferitemtitle {
     color: #AA0000;
-    font:14px/16px MaiandraOTGD-DemiBold;
+    font:16px/18px MaiandraOTGD-DemiBold;
     color:#AA0000;
 }
 
 .specialofferitemdescription {
-    font:600 13px/15px prenton-n6,prenton;
+    font:600 14px/16px prenton-n6,prenton;
     color:#444444;
     padding-top:3px;
 }
@@ -532,7 +529,7 @@ a.order-button:active, a.order-button:hover {
 }
 
 .specialofferitemchoice select {
-    font: 13px myriad-pro-n4,myriad-pro;
+    font: 14px myriad-pro-n4,myriad-pro;
 }
 
 #checkout {

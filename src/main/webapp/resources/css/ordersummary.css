@@ -1,11 +1,11 @@
 @charset "utf-8";
 
 .order-summary-wrapper {
-    margin-right: 30px;
+    margin: 0 30px 0 10px;
 }
 
 .order-summary-wrapper h2 {
-     font: 20px/22px MaiandraOTGD-DemiBold;
+     font: 28px/32px MaiandraOTGD-DemiBold;
      margin-bottom:20px;
      padding-bottom: 10px;
      border-bottom: 1px dashed #AAAAAA;
@@ -17,7 +17,7 @@
 }
 
 .order-information {
-    font: 18px/20px MaiandraOTGD-DemiBold;
+    font: 22px/24px MaiandraOTGD-DemiBold;
     color: #444444;
     margin-bottom: 20px;
 }
@@ -25,7 +25,6 @@
 .order-restaurant {
     font: 14px/16px myriad-pro-n4,myriad-pro;
     margin-bottom: 20px;
-    color:#444444;
 }
 
 .restaurant-contact {
@@ -61,8 +60,8 @@
 }
 
 .order-image {
-    width: 260px;
-    height: 256px;
+    width: 290px;
+    height: 285px;
     background-image: url(../images/order-confirmation.jpg);
 }
 
@@ -83,7 +82,7 @@
 }
 
 #restaurant-location {
-    width: 619px;
+    width: 700px;
     height: 320px;
     margin-top: 10px;
 }

@@ -55,7 +55,9 @@
 
 .navigation-wrapper li {
     color: #999999;
-    font:13px/13px MaiandraOTGD-DemiBold;
+    font-family: prenton;
+    font-size: 13px;
+    font-weight:500;
     display:inline;
     float:left;
     padding-right:15px;

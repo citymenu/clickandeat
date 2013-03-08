@@ -31,20 +31,22 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
 <!-- Menu item index -->
 <div id="content">
     <div class="content-wrapper">
-        <table width="939">
+        <table width="1020">
             <tr valign="top">
-                <td width="679">
-                    <table width="679">
+                <td width="760">
+                    <table width="760">
                         <tr valign="top">
-                            <td width="679" colspan="2">
+                            <td width="760" colspan="2">
                                 <div class="restaurant-details-wrapper">
-                                    <table width="649">
+                                    <table width="720">
                                         <tr valign="top">
-                                            <td width="339">
-                                                <table width="339">
+                                            <td width="410">
+                                                <table width="410">
                                                     <tr valign="bottom">
                                                         <td nowrap style="vertical-align:top">
                                                             <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>" class="restaurant-image"/>
@@ -156,7 +158,7 @@
                         </tr>
                         <tr valign="top">
                             <!-- Menu category launchpad -->
-                            <td width="170">
+                            <td width="180">
                                 <div class="menu-left">
                                     <div id="menu-launch-wrapper">
                                         <h2><message:message key="restaurant.menu"/>:</h2>
@@ -178,7 +180,7 @@
                             </td>
 
                             <!-- Menu -->
-                            <td width="509">
+                            <td width="580">
                                 <div class="menu-center">
 
                                     <c:if test="${restaurant.hasMenuItemIcon == true}">
@@ -206,11 +208,11 @@
                                             <c:when test="${menuCategory.type == 'STANDARD'}">
                                                 <c:forEach var="menuItem" items="${menuCategory.menuItems}" varStatus="index">
                                                 <div class="menu-item-wrapper">
-                                                    <table width="449">
+                                                    <table width="520">
                                                         <c:choose>
                                                             <c:when test="${menuItem.type == 'STANDARD'}">
                                                             <tr valign="top">
-                                                                <td width="349">
+                                                                <td width="420">
                                                                     <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                                 </td>
                                                                 <td width="100" align="right">
@@ -222,7 +224,7 @@
                                                             </tr>
                                                             <c:if test="${menuItem.description != null }">
                                                             <tr valign="top">
-                                                                <td width="349">
+                                                                <td width="420">
                                                                     <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                                 </td>
                                                                 <td width="100"></td>
@@ -237,14 +239,14 @@
                                                                         <c:set var="style" value="spacer"/>
                                                                     </c:if>
                                                                     <c:if test="${status.count == 1}">
-                                                                    <td width="199" rowspan="${menuItem.menuItemSubTypeCount}">
+                                                                    <td width="230" rowspan="${menuItem.menuItemSubTypeCount}">
                                                                         <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
                                                                         <c:if test="${menuItem.description != null }">
                                                                             <div class="menu-item-description"><util:escape value="${menuItem.description}" escapeNewLines="true"/></div>
                                                                         </c:if>
                                                                     </td>
                                                                     </c:if>
-                                                                    <td width="150" class="${style}">
+                                                                    <td width="190" class="${style}">
                                                                         <h3 class="menu-item-title"><util:escape value="${menuItemSubType.type}" escapeNewLines="true"/></h3>
                                                                     </td>
                                                                     <td width="100" align="right">
@@ -262,9 +264,9 @@
                                                 </c:forEach>
                                             </c:when>
                                             <c:otherwise>
-                                            <c:set var="colwidth" value="${269 / menuCategory.itemTypeCount}"/>
+                                            <c:set var="colwidth" value="${340 / menuCategory.itemTypeCount}"/>
                                             <div class="menu-item-title-wrapper">
-                                                <table width="449">
+                                                <table width="520">
                                                     <tr valign="top">
                                                         <td width="180"></td>
                                                         <c:forEach var="itemType" items="${menuCategory.itemTypes}">
@@ -275,7 +277,7 @@
                                             </div>
                                             <c:forEach var="menuItem" items="${menuCategory.menuItems}">
                                             <div class="menu-item-wrapper">
-                                                <table width="449">
+                                                <table width="520">
                                                     <tr valign="top">
                                                         <td width="180">
                                                             <h3 class="menu-item-title"><span class="${menuItem.iconClass}"><util:escape value="${menuItem.title}"/></span> <span class="menu-item-subtitle"><util:escape value="${menuItem.subtitle}"/></span></h3>
@@ -314,12 +316,12 @@
                                         <div class="menu-category-summary"></div>
                                         <c:forEach var="specialOffer" items="${restaurant.specialOffers}">
                                         <div class="menu-item-wrapper">
-                                            <table width="449">
+                                            <table width="520">
                                                 <tr valign="top">
-                                                    <td width="349">
+                                                    <td width="400">
                                                         <h3 class="menu-item-title"><util:escape value="${specialOffer.title}"/></h3>
                                                     </td>
-                                                    <td width="100" align="right">
+                                                    <td width="120" align="right">
                                                         <span class="menu-item-cost">${specialOffer.formattedCost} <message:message key="config.currency" escape="false"/></span>
                                                         <span class="menu-item-action">
                                                             <a onclick="checkCanAddSpecialOfferToOrder('${restaurant.restaurantId}','${specialOffer.specialOfferId}',${specialOffer.specialOfferItemsArray},${specialOffer.cost})" class="menuitem-button add-button unselectable">&nbsp;</a>
@@ -328,10 +330,10 @@
                                                 </tr>
                                                 <c:if test="${specialOffer.description != null }">
                                                 <tr valign="top">
-                                                    <td width="349">
+                                                    <td width="400">
                                                         <div class="menu-item-description"><util:escape value="${specialOffer.description}" escapeNewLines="true"/></div>
                                                     </td>
-                                                    <td width="100"></td>
+                                                    <td width="120"></td>
                                                 </tr>
                                                 </c:if>
                                             </table>
@@ -356,6 +358,8 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

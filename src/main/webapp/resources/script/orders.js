@@ -108,7 +108,8 @@ function doBuildOrder(order,config) {
     $('.order-free-item-wrapper').remove();
     $('.order-discount-wrapper').remove();
     $('.additional-information').remove();
-    $('.checkout-container').remove();
+    $('#checkout').remove();
+    $('#callnow').remove();
     $('.delivery-warning-wrapper').remove();
 
     if( order ) {
@@ -213,10 +214,10 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'36\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'128\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'36\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'120\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
                     .format(orderItem.orderItemId,orderItem.quantity,buildDisplay(orderItem),ccy,orderItem.formattedCost);
             } else {
-                var row = '<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>{1} {2}</td></tr>'
+                var row = '<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0}</td><td width=\'50\' align=\'right\'>{1} {2}</td></tr>'
                     .format(buildStaticDisplay(orderItem),ccy,orderItem.formattedCost);
             }
             $('#order-item-contents').prepend(row);
@@ -236,7 +237,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -245,7 +246,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -254,28 +255,28 @@ function doBuildOrder(order,config) {
 
         // If there are any items in the order, show the total order amount
         if( order.orderItemCost && order.orderItemCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{2}</span> {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
+            var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{2}</span> {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
             $('#order-item-contents').append(row);
         };
 
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>-{2} {1}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0}</td><td width=\'50\' align=\'right\'>-{2} {1}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
                 $('#order-item-contents').append(row);
             }
         });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'214\'><tr valign=\'top\'><td width=\'164\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{1} {0}</td></tr>').format(ccy,order.formattedDeliveryCost);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'206\'><tr valign=\'top\'><td width=\'156\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{1} {0}</td></tr>').format(ccy,order.formattedDeliveryCost);
             $('#order-item-contents').append(row);
         }
 
         // Add voucher if applicable
         if( order.voucher != null ) {
             var voucher = order.voucher;
-            var row = '<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{3} {2}</td></tr>'
+            var row = '<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{3} {2}</td></tr>'
                 .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
             $('#order-item-contents').append(row);
         }
@@ -331,18 +332,18 @@ function doBuildOrder(order,config) {
                 if( config.enableCheckoutButton ) {
                     // For phone orders only restaurant we use a different button
                     if( order.phoneOrdersOnly ) {
-                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="callnowbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.call-now')));
+                        $('#checkoutcontainer').append(('<div id=\'callnow\'><a id=\'callnowbutton\' class=\'callnow-button unselectable\'>{0}</a></div>').format(getLabel('button.call-now')));
                         $('#callnowbutton').click(function(){
                             checkout();
                         });
                     }else{
-                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.checkout')));
+                        $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
                         $('#checkoutbutton').click(function(){
                             checkout();
                         });
                     }
                 } else if (config.enablePaymentButton) {
-                    $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.payment')));
+                    $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.payment')));
                     $('#checkoutbutton').click(function(){
                         payment();
                     });
@@ -761,13 +762,12 @@ function restaurantCheck(restaurantId, callback ) {
 // Update current location
 function locationEdit() {
 
-    var locationField = ('<input class=\'input-location\' id=\'locedit\' placeholder=\'\'/>').format(getLabel('search.watermark'));
-    var searchButton = ('<div class=\'search-small\'><div class=\'search-button-text-small\'>{0}</div></div>').format(getLabel('button.search'));
-    var locationTable = ("<table width=\'390\'><tr valign=\'middle\'><td width=\'290\'>{0}</td><td width=\'100\'>{1}</td></tr></table").format(locationField,searchButton);
-    var locationEdit = ('<div class=\'search-location-edit\'>{0}</div>').format(locationTable);
+    var locationEditField = ('<input class=\'input-location\' id=\'locedit\' placeholder=\'\'/>').format(getLabel('search.watermark'));
+    var searchButton = ('<a class=\'location-search\'>{0}</a>').format(getLabel('button.search'));
+    var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationEditField,searchButton);
 
     var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('location.enter-your-location'));
-    var content = ('<div class=\'dialog-content\'>{0}</div>').format(locationTable);
+    var content = ('<div class=\'dialog-content\'>{0}<div id=\'locationeditwarning\'></div></div>').format(locationEdit);
     var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
 
     $.fancybox.open({
@@ -776,7 +776,7 @@ function locationEdit() {
         modal:false,
         autoSize:false,
         autoWidth:true,
-        height:145,
+        height:165,
         openEffect:'none',
         closeEffect:'none'
     });
@@ -792,7 +792,7 @@ function locationEdit() {
         }
     });
 
-    $('.search-small').click(function(){
+    $('.location-search').click(function(){
         locationSearch();
     });
 
@@ -809,6 +809,7 @@ function locationEdit() {
 function locationSearch() {
     var location = $('#locedit').val();
     if( location != '' ) {
+        $('.location-edit-warning').remove();
         $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
@@ -816,6 +817,9 @@ function locationSearch() {
                 if( data.success ) {
                     $.fancybox.close(true);
                     onAfterLocationUpdate();
+                }
+                else {
+                    $('#locationeditwarning').append(('<div class=\'location-edit-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
                 }
             }
         );

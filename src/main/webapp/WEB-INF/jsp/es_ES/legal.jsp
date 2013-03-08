@@ -10,6 +10,8 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
 <div id="content">
     <div class="content-wrapper">
         <div class="static-content">
@@ -52,6 +54,8 @@
         </div>
     </div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

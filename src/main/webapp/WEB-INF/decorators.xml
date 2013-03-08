@@ -9,6 +9,9 @@
     <decorator name="blank" page="blank.jsp">
         <pattern>/cardProcessing*</pattern>
     </decorator>
+    <decorator name="static" page="static.jsp">
+        <pattern>/legal*</pattern>
+    </decorator>
     <decorator name="default" page="site.jsp">
 		<pattern>/*</pattern>
   	</decorator>

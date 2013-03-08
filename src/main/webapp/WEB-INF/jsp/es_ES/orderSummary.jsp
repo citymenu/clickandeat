@@ -17,6 +17,8 @@
 
 <body>
 
+<%@ include file="/WEB-INF/jsp/header.jsp" %>
+
 <script type="text/javascript">
     var completedorderid = '${completedorderid}';
     var coordinates=[${order.restaurant.coordinates}];
@@ -25,17 +27,17 @@
 <div id="content">
 
     <div class="content-wrapper">
-        <table width="939">
+        <table width="1020">
             <tr valign="top">
                 <!-- Order summary -->
-                <td width="649">
+                <td width="760">
                     <div class="order-summary-wrapper">
                         <h2>Gracias por tu pedido <util:escape value="${order.customer.firstName}"/></h2>
                         <div class="order-detail-wrapper">
-                            <table width="649">
+                            <table width="720">
                                 <tr valign="top">
                                     <!-- Order detalis -->
-                                    <td width="379">
+                                    <td width="430">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
                                                 <div class="order-information">N&#250;mero de pedido: ${order.orderId}</div>
@@ -65,12 +67,12 @@
                                         </div>
                                     </td>
                                     <!-- Explanation -->
-                                    <td width="270">
+                                    <td width="290">
                                         <div class="order-image"></div>
                                     </td>
                                 </tr>
                                 <tr valign="top">
-                                    <td width="649" colspan="2">
+                                    <td width="720" colspan="2">
                                         <div class="order-delivery">
                                             <c:choose>
                                                 <c:when test="${order.deliveryType == 'DELIVERY'}">
@@ -105,6 +107,8 @@
         </table>
     </div>
 </div>
+
+<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
 
 </body>
 </html>

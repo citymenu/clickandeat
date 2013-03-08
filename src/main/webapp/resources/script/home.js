@@ -26,9 +26,10 @@ $(document).ready(function(){
         paused = false;
     });
 
-    $('.search-button').click(function(){
-        search();
-    });
+    // If error in model, show location warning
+    if( notfound == 'true' ) {
+        $('#search-warning').show();
+    }
 
     $('#loc').watermark(watermark);
 
@@ -46,6 +47,7 @@ $(document).ready(function(){
 function search() {
     var location = $('#loc').val();
     if( location != '' ) {
+        $('#search-warning').hide();
         $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
@@ -54,6 +56,9 @@ function search() {
                     var address = unescapeQuotes(data.address);
                     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
                     window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
+                }
+                else {
+                    $('#search-warning').show();
                 }
             }
         );
