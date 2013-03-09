@@ -17,7 +17,6 @@ Ext.application({
     name: 'AD',
     appFolder: ctx + '/resources/admin/app',
     controllers:['OrderList'],
-    
     launch: function() {
         Ext.create('Ext.container.Viewport',{
             layout:'border',
