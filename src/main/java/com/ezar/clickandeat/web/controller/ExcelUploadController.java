@@ -678,11 +678,11 @@ public class ExcelUploadController {
                 restaurant.getNotificationOptions().setNotificationEmailAddress(getCellStringValue(sheet, currentRowIndex, 18));
 
                 // Administration
-                restaurant.setListOnSite("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 19)));
-                restaurant.setPhoneOrdersOnly("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 20)));
-                restaurant.setRecommended("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 21)));
-                restaurant.setSearchRanking((int) getCellDoubleValue(sheet, currentRowIndex, 22));
-                restaurant.setCommissionPercent(getCellDoubleValue(sheet, currentRowIndex, 23));
+                restaurant.setListOnSite(false);
+                restaurant.setPhoneOrdersOnly(false);
+                restaurant.setRecommended(false);
+                restaurant.setSearchRanking(0);
+                restaurant.setCommissionPercent(getCellDoubleValue(sheet, currentRowIndex, 19));
 
                 restaurants.add(restaurant);
             }
