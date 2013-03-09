@@ -38,7 +38,23 @@ Ext.define('AD.view.restaurant.List' ,{
                     icon: resources + '/images/icons-shadowless/download.png'
                 }]
     	    }
-    	}]
+    	},'-',{
+            xtype:'button',
+            icon: resources + '/images/icons-shadowless/report-excel.png',
+            text:'Bulk Import/Export',
+            menu:{
+                 xtype:'menu',
+                 items: [{
+                     text:'Upload Bulk Restaurant Sheet',
+                     action:'uploadBulkTemplate',
+                     icon: resources + '/images/icons-shadowless/upload.png'
+                 },{
+                     text:'Download Bulk Template',
+                     action:'downloadBulkTemplate',
+                     icon: resources + '/images/icons-shadowless/download.png'
+                 }]
+            }
+        }]
     },{
         xtype:'pagingtoolbar',
         store:'Restaurants',

@@ -5,7 +5,10 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.SequenceGenerator;
-import com.ezar.clickandeat.validator.*;
+import com.ezar.clickandeat.validator.MenuCategoryValidator;
+import com.ezar.clickandeat.validator.MenuItemValidator;
+import com.ezar.clickandeat.validator.ObjectValidator;
+import com.ezar.clickandeat.validator.ValidationErrors;
 import com.ezar.clickandeat.validator.excel.ExcelObjectValidator;
 import com.ezar.clickandeat.validator.excel.ExcelObjectValidatorImpl;
 import org.apache.log4j.Logger;
@@ -119,6 +122,61 @@ public class ExcelUploadController {
     }
 
 
+    @ResponseBody
+    @RequestMapping(value="/admin/menu/bulkUpload.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> uploadBulkRestaurant(@RequestParam("file") CommonsMultipartFile file) throws Exception {
+
+        Map<String,Object> model = new HashMap<String,Object>();
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+            // Build restaurant from workbook
+            ValidationErrors excelErrors = new ValidationErrors();
+            List<Restaurant> restaurants = buildRestaurantsFromWorkbook(workbook, excelErrors);
+
+            // Now validate the restaurant
+            ValidationErrors errors = new ValidationErrors();
+            for( Restaurant restaurant: restaurants ) {
+                ValidationErrors restaurantErrors = restaurantValidator.validate(restaurant);
+                errors.getErrors().addAll(restaurantErrors.getErrors());
+            }
+            errors.getErrors().addAll(excelErrors.getErrors());
+
+            // If there are no errors, then we save the restaurant objects
+            if(!errors.hasErrors()) {
+                for( Restaurant restaurant: restaurants) {
+                    restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
+                    restaurantRepository.saveRestaurant(restaurant);
+                }
+            }
+
+            // Any errors, return them now
+            if( errors.hasErrors()) {
+                model.put("success",true);
+                model.put("valid",false);
+                model.put("errors",errors.getErrors());
+            }
+            else {
+                // All OK
+                model.put("success",true);
+                model.put("valid",true);
+            }
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+
+        String json = jsonUtils.serializeAndEscape(model);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_HTML);
+        headers.setCacheControl("no-cache");
+        return new ResponseEntity<byte[]>(json.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
+
     /**
      * Get existing restaurant and copy over identifier and status values
      * @param restaurant
@@ -170,17 +228,17 @@ public class ExcelUploadController {
         restaurant.getMainContact().setEmail(getNamedCellStringValue(workbook, "Restaurant.MainContact.Email"));
 
         // Notification details
-        restaurant.getNotificationOptions().setReceiveNotificationCall("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Notification.ReceiveCall")));
-        restaurant.getNotificationOptions().setReceiveSMSNotification("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Notification.ReceiveSMS")));
+        restaurant.getNotificationOptions().setReceiveNotificationCall("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Notification.ReceiveCall")));
+        restaurant.getNotificationOptions().setReceiveSMSNotification("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Notification.ReceiveSMS")));
         restaurant.getNotificationOptions().setNotificationPhoneNumber(getNamedCellStringValue(workbook, "Restaurant.Notification.Telephone"));
         restaurant.getNotificationOptions().setNotificationSMSNumber(getNamedCellStringValue(workbook, "Restaurant.Notification.SMS"));
         restaurant.getNotificationOptions().setNotificationEmailAddress(getNamedCellStringValue(workbook, "Restaurant.Notification.Email"));
         restaurant.getNotificationOptions().setPrinterEmailAddress(getNamedCellStringValue(workbook, "Restaurant.Notification.PrinterEmail"));
 
         // Administration
-        restaurant.setListOnSite("Y".equals(getNamedCellStringValue(workbook, "Restaurant.IncludeOnSite")));
-        restaurant.setPhoneOrdersOnly("Y".equals(getNamedCellStringValue(workbook, "Restaurant.PhoneOrdersOnly")));
-        restaurant.setRecommended("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Recommended")));
+        restaurant.setListOnSite("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.IncludeOnSite")));
+        restaurant.setPhoneOrdersOnly("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.PhoneOrdersOnly")));
+        restaurant.setRecommended("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Recommended")));
         restaurant.setSearchRanking((int) getNamedCellDoubleValue(workbook, "Restaurant.SearchRanking"));
         restaurant.setCommissionPercent(getNamedCellDoubleValue(workbook, "Restaurant.Commission"));
 
@@ -195,7 +253,7 @@ public class ExcelUploadController {
             OpeningTime openingTime = new OpeningTime();
             openingTime.setDayOfWeek(i + 1);
             XSSFRow row = getRow(openingTimesSheet, openingTimesAnchorRow + i);
-            openingTime.setOpen("Y".equals(getCell(row, openingTimesAnchorCol).getStringCellValue()));
+            openingTime.setOpen("Y".equalsIgnoreCase(getCell(row, openingTimesAnchorCol).getStringCellValue()));
             openingTime.setEarlyOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol + 1)));
             openingTime.setEarlyClosingTime(getLocalTime(row.getCell(openingTimesAnchorCol + 2)));
             openingTime.setLateOpeningTime(getLocalTime(row.getCell(openingTimesAnchorCol + 3)));
@@ -204,7 +262,7 @@ public class ExcelUploadController {
         }
         openingTimes.setOpeningTimes(openingTimeList);
         XSSFRow bankHolidayRow = getRow(openingTimesSheet, openingTimesAnchorRow + 7);
-        openingTimes.getBankHolidayOpeningTimes().setOpen("Y".equals(getCell(bankHolidayRow, openingTimesAnchorCol).getStringCellValue()));
+        openingTimes.getBankHolidayOpeningTimes().setOpen("Y".equalsIgnoreCase(getCell(bankHolidayRow, openingTimesAnchorCol).getStringCellValue()));
         openingTimes.getBankHolidayOpeningTimes().setEarlyOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 1)));
         openingTimes.getBankHolidayOpeningTimes().setEarlyClosingTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 2)));
         openingTimes.getBankHolidayOpeningTimes().setLateOpeningTime(getLocalTime(bankHolidayRow.getCell(openingTimesAnchorCol + 3)));
@@ -224,14 +282,14 @@ public class ExcelUploadController {
 
         // Delivery details
         XSSFSheet deliveryDetailsSheet = workbook.getSheet("Delivery Details");
-        restaurant.getDeliveryOptions().setCollectionOnly("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Delivery.CollectionOnly")));
+        restaurant.getDeliveryOptions().setCollectionOnly("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Delivery.CollectionOnly")));
         restaurant.getDeliveryOptions().setDeliveryTimeMinutes((int) getNamedCellDoubleValue(workbook, "Restaurant.Delivery.DeliveryTime"));
         restaurant.getDeliveryOptions().setCollectionTimeMinutes((int) getNamedCellDoubleValue(workbook, "Restaurant.Delivery.CollectionTime"));
         restaurant.getDeliveryOptions().setDeliveryCharge(getNamedCellDoubleValue(workbook, "Restaurant.Delivery.Charge"));
-        restaurant.getDeliveryOptions().setAllowFreeDelivery("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Delivery.AllowFreeDelivery")));
+        restaurant.getDeliveryOptions().setAllowFreeDelivery("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Delivery.AllowFreeDelivery")));
         restaurant.getDeliveryOptions().setMinimumOrderForDelivery(getNamedCellDoubleValue(workbook, "Restaurant.Delivery.MinimumOrderForDelivery"));
         restaurant.getDeliveryOptions().setMinimumOrderForFreeDelivery(getNamedCellDoubleValue(workbook, "Restaurant.Delivery.MinimumOrderForFreeDelivery"));
-        restaurant.getDeliveryOptions().setAllowDeliveryBelowMinimumForFreeDelivery("Y".equals(getNamedCellStringValue(workbook, "Restaurant.Delivery.AllowOrdersBelowMinimumForFreeDelivery")));
+        restaurant.getDeliveryOptions().setAllowDeliveryBelowMinimumForFreeDelivery("Y".equalsIgnoreCase(getNamedCellStringValue(workbook, "Restaurant.Delivery.AllowOrdersBelowMinimumForFreeDelivery")));
         restaurant.getDeliveryOptions().setDeliveryRadiusInKilometres(getNamedCellDoubleValue(workbook, "Restaurant.Delivery.DeliveryRadius"));
         String areasDeliveredTo = getNamedCellStringValue(workbook, "Restaurant.Delivery.AreasDeliveredTo");
         if( StringUtils.hasText(areasDeliveredTo)) {
@@ -294,7 +352,7 @@ public class ExcelUploadController {
         int cuisineIndex = 1;
         String cuisine = getCellStringValue(cuisinesSheet, cuisineIndex, 0);
         while( StringUtils.hasText(cuisine)) {
-            boolean cuisineSelected = "Y".equals(getCellStringValue(cuisinesSheet, cuisineIndex, 1));
+            boolean cuisineSelected = "Y".equalsIgnoreCase(getCellStringValue(cuisinesSheet, cuisineIndex, 1));
             if( cuisineSelected ) {
                 restaurant.getCuisines().add(cuisine);
             }
@@ -442,9 +500,9 @@ public class ExcelUploadController {
                 currentDiscount.setTitle(discountName);
                 currentDiscount.setDescription(getCellStringValue(discountSheet,discountIndex,1));
                 currentDiscount.setDiscountType(getCellStringValue(discountSheet,discountIndex,2));
-                currentDiscount.setDelivery("Y".equals(getCellStringValue(discountSheet,discountIndex,3)));
-                currentDiscount.setCollection("Y".equals(getCellStringValue(discountSheet,discountIndex,4)));
-                currentDiscount.setCanCombineWithOtherDiscounts("Y".equals(getCellStringValue(discountSheet,discountIndex,5)));
+                currentDiscount.setDelivery("Y".equalsIgnoreCase(getCellStringValue(discountSheet,discountIndex,3)));
+                currentDiscount.setCollection("Y".equalsIgnoreCase(getCellStringValue(discountSheet,discountIndex,4)));
+                currentDiscount.setCanCombineWithOtherDiscounts("Y".equalsIgnoreCase(getCellStringValue(discountSheet,discountIndex,5)));
                 double discount = getCellDoubleValue(discountSheet,discountIndex,6);
                 currentDiscount.setDiscountAmount(discount == 0d? null: discount);
                 double minimumOrderAmount = getCellDoubleValue(discountSheet,discountIndex,7);
@@ -461,7 +519,7 @@ public class ExcelUploadController {
                     XSSFRow row = getRow(discountSheet,discountIndex);
                     ApplicableTime applicableTime = new ApplicableTime();
                     applicableTime.setDayOfWeek(i + 1);
-                    applicableTime.setApplicable("Y".equals(getCellStringValue(discountSheet,discountIndex, applicableTimeAnchor + (3 * i))));
+                    applicableTime.setApplicable("Y".equalsIgnoreCase(getCellStringValue(discountSheet,discountIndex, applicableTimeAnchor + (3 * i))));
                     applicableTime.setApplicableFrom(getLocalTime(getCell(row,applicableTimeAnchor + (3 * i) + 1)));
                     applicableTime.setApplicableTo(getLocalTime(getCell(row, applicableTimeAnchor + (3 * i) + 2)));
                     applicableTimes.add(applicableTime);
@@ -505,7 +563,7 @@ public class ExcelUploadController {
                     XSSFRow row = getRow(specialOffersSheet,specialOfferIndex);
                     ApplicableTime applicableTime = new ApplicableTime();
                     applicableTime.setDayOfWeek(i + 1);
-                    applicableTime.setApplicable("Y".equals(getCellStringValue(specialOffersSheet,specialOfferIndex, applicableTimeAnchor + (3 * i))));
+                    applicableTime.setApplicable("Y".equalsIgnoreCase(getCellStringValue(specialOffersSheet,specialOfferIndex, applicableTimeAnchor + (3 * i))));
                     applicableTime.setApplicableFrom(getLocalTime(getCell(row,applicableTimeAnchor + (3 * i) + 1)));
                     applicableTime.setApplicableTo(getLocalTime(getCell(row, applicableTimeAnchor + (3 * i) + 2)));
                     applicableTimes.add(applicableTime);
@@ -568,6 +626,72 @@ public class ExcelUploadController {
 
         return restaurant;
     }
+
+
+    /**
+     * @param workbook
+     * @return
+     */
+
+    private List<Restaurant> buildRestaurantsFromWorkbook(XSSFWorkbook workbook,ValidationErrors errors) {
+
+        List<Restaurant> restaurants = new ArrayList<Restaurant>();
+        
+        XSSFSheet sheet = workbook.getSheet("Main Details");
+        int currentRowIndex = 2; // Start of data
+        int emptyRowCount = 0;
+        while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
+            emptyRowCount++; // Increment counter
+            String restaurantName = getCellStringValue(sheet, currentRowIndex, 0);
+            if( StringUtils.hasText(restaurantName)) {
+                emptyRowCount = 0; // Reset counter
+
+                Restaurant restaurant = new Restaurant();
+
+                // Core data
+                restaurant.setName(restaurantName);
+                restaurant.setDescription(getCellStringValue(sheet, currentRowIndex, 1));
+
+                // Address
+                restaurant.getAddress().setAddress1(getCellStringValue(sheet, currentRowIndex, 2));
+                restaurant.getAddress().setTown(getCellStringValue(sheet, currentRowIndex, 3));
+                restaurant.getAddress().setRegion(getCellStringValue(sheet, currentRowIndex, 4));
+                restaurant.getAddress().setPostCode(getCellStringValue(sheet, currentRowIndex, 5));
+
+                // Contact details
+                restaurant.setContactTelephone(getCellStringValue(sheet, currentRowIndex, 6));
+                restaurant.setContactMobile(getCellStringValue(sheet, currentRowIndex, 7));
+                restaurant.setContactEmail(getCellStringValue(sheet, currentRowIndex, 8));
+                restaurant.setWebsite(getCellStringValue(sheet, currentRowIndex, 9));
+
+                // Main contact
+                restaurant.getMainContact().setFirstName(getCellStringValue(sheet, currentRowIndex, 10));
+                restaurant.getMainContact().setLastName(getCellStringValue(sheet, currentRowIndex, 11));
+                restaurant.getMainContact().setTelephone(getCellStringValue(sheet, currentRowIndex, 12));
+                restaurant.getMainContact().setEmail(getCellStringValue(sheet, currentRowIndex, 13));
+
+                // Notification details
+                restaurant.getNotificationOptions().setReceiveNotificationCall("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 14)));
+                restaurant.getNotificationOptions().setReceiveSMSNotification("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 15)));
+                restaurant.getNotificationOptions().setNotificationPhoneNumber(getCellStringValue(sheet, currentRowIndex, 16));
+                restaurant.getNotificationOptions().setNotificationSMSNumber(getCellStringValue(sheet, currentRowIndex, 17));
+                restaurant.getNotificationOptions().setNotificationEmailAddress(getCellStringValue(sheet, currentRowIndex, 18));
+
+                // Administration
+                restaurant.setListOnSite("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 19)));
+                restaurant.setPhoneOrdersOnly("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 20)));
+                restaurant.setRecommended("Y".equalsIgnoreCase(getCellStringValue(sheet, currentRowIndex, 21)));
+                restaurant.setSearchRanking((int) getCellDoubleValue(sheet, currentRowIndex, 22));
+                restaurant.setCommissionPercent(getCellDoubleValue(sheet, currentRowIndex, 23));
+
+                restaurants.add(restaurant);
+            }
+            currentRowIndex++;
+        }
+
+        return restaurants;
+    }
+
 
 
     /**

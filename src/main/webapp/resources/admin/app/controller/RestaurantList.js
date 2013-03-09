@@ -37,6 +37,14 @@ Ext.define('AD.controller.RestaurantList', {
 
             'restaurantlist menuitem[action=uploadTemplate]': {
                 click:this.uploadTemplate
+            },
+
+            'restaurantlist menuitem[action=downloadBulkTemplate]': {
+            	click:this.downloadBulkTemplate
+            },
+
+            'restaurantlist menuitem[action=uploadBulkTemplate]': {
+                click:this.uploadBulkTemplate
             }
 
 		});
@@ -191,6 +199,10 @@ Ext.define('AD.controller.RestaurantList', {
         window.location = '/admin/menu/downloadTemplate.html';
     },
 
+    downloadBulkTemplate:function() {
+        window.location = '/admin/menu/downloadBulkTemplate.html';
+    },
+
     uploadTemplate:function() {
         Ext.create('Ext.window.Window', {
             title: 'Upload Restaurant Sheet',
@@ -256,7 +268,73 @@ Ext.define('AD.controller.RestaurantList', {
                 }
             }]
         }).show();
-    }
+    },
 
+    uploadBulkTemplate:function() {
+        Ext.create('Ext.window.Window', {
+            title: 'Upload Bulk Restaurant Sheet',
+            id:'uploadsheet',
+            height: 130,
+            width: 450,
+            autoScroll:true,
+            layout:'fit',
+            closeAction:'destroy',
+            items: [{
+                xtype:'form',
+                id:'uploadForm',
+                bodyPadding: 15,
+                layout:'anchor',
+                frame:false,
+                border:false,
+                items:[{
+                    xtype:'filefield',
+                    anchor:'100%',
+                    allowBlank:true,
+                    fieldLabel:'Spreadsheet',
+                    name:'file',
+                    buttonText:'Select File'
+                }]
+            }],
+            buttons: [{
+                text:'Upload',
+                handler:function() {
+                    var formPanel = Ext.getCmp('uploadForm');
+                    var fileField = formPanel.getForm().findField('file');
+                    if( fileField.getValue() != '' ) {
+                        var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                        myMask.show();
+                        formPanel.getForm().submit({
+                            url: ctx + '/admin/menu/bulkUpload.ajax',
+                            success: function(form,action) {
+                                myMask.hide();
+                                var obj = Ext.decode(action.response.responseText);
+                                if( obj.valid == true ) {
+                                    Ext.getCmp('uploadsheet').close();
+                                    showSuccessMessage(Ext.get('restaurantlist'),'Uploaded','Restaurant data uploaded successfully');
+                                    var store = Ext.getCmp('restaurantlist').getStore();
+                                    store.loadPage(store.currentPage);
+                                } else {
+                                    var errorText = '';
+                                    obj.errors.forEach(function(error){
+                                        errorText += '<p>' + error + '</p>';
+                                    });
+                                    Ext.Msg.show({
+                                         title:'Errors validating spreadsheet',
+                                         msg: errorText,
+                                         buttons: Ext.Msg.OK,
+                                         icon: Ext.Msg.WARNING
+                                    });
+                                }
+                            },
+                            failure: function(form,action) {
+                                myMask.hide();
+                                showErrorMessage(Ext.get('restaurantlist'),'Error','Error occurred uploading bulk restaurant details');
+                            }
+                        });
+                    }
+                }
+            }]
+        }).show();
+    }
 
 });

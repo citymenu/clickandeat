@@ -42,15 +42,13 @@ public class ExcelController {
     @Autowired
     private CuisineProvider cuisineProvider;
     
-    private String templatePath = "/template/MenuTemplate.xlsx";
-
     private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
     private final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd/MM/yyyy");
 
     @ResponseBody
     @RequestMapping(value="/admin/menu/downloadTemplate.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> downloadTemplate(HttpServletRequest request) throws Exception {
-        Resource resource = new ClassPathResource(templatePath);
+        Resource resource = new ClassPathResource("/template/MenuTemplate.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
         Map<String,CellStyle> styles = generateCellStyles(workbook);
         XSSFSheet cuisineSheet = workbook.getSheet("Cuisines");
@@ -70,12 +68,27 @@ public class ExcelController {
 
 
     @ResponseBody
+    @RequestMapping(value="/admin/menu/downloadBulkTemplate.html", method = RequestMethod.GET )
+    public ResponseEntity<byte[]> downloadBulkTemplate(HttpServletRequest request) throws Exception {
+        Resource resource = new ClassPathResource("/template/RestaurantBulkTemplate.xlsx");
+        XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        workbook.write(baos);
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(new MediaType("application","vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+        headers.set("Content-Disposition","attachment;Filename=RestaurantBulkTemplate.xlsx");
+        headers.setCacheControl("no-cache");
+        return new ResponseEntity<byte[]>(baos.toByteArray(), headers, HttpStatus.OK);
+    }
+
+
+    @ResponseBody
     @RequestMapping(value="/admin/menu/downloadMenu.html", method = RequestMethod.GET )
     public ResponseEntity<byte[]> downloadMenu(@RequestParam(value="id") String restaurantId, HttpServletRequest request) throws Exception {
 
         Restaurant restaurant = restaurantRepository.findByRestaurantId(restaurantId);
 
-        Resource resource = new ClassPathResource(templatePath);
+        Resource resource = new ClassPathResource("/template/MenuTemplate.xlsx");
         XSSFWorkbook workbook = new XSSFWorkbook(resource.getInputStream());
 
         // Build cell styles
