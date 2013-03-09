@@ -117,19 +117,19 @@ div.credit-card {
 }
 
 .visa {
-    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -360px transparent;
+    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -360px transparent;
 }
 
 .mastercard {
-    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -200px transparent;
+    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -200px transparent;
 }
 
 .maestro {
-    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -160px transparent;
+    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -160px transparent;
 }
 
 .amex {
-    background: url(../images/checkout-sprites.png) no-repeat scroll -42px 0px transparent;
+    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px 0px transparent;
 }
 
 .copyright {
