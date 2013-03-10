@@ -137,9 +137,13 @@ public class ExcelUploadController {
 
             // Now validate the restaurant
             ValidationErrors errors = new ValidationErrors();
+            int rowIndex = 2;
             for( Restaurant restaurant: restaurants ) {
                 ValidationErrors restaurantErrors = restaurantValidator.validate(restaurant);
-                errors.getErrors().addAll(restaurantErrors.getErrors());
+                for( String error: restaurantErrors.getErrors()) {
+                    errors.getErrors().add("Row " + rowIndex + " -> " + error);
+                }
+                rowIndex++;
             }
             errors.getErrors().addAll(excelErrors.getErrors());
 
