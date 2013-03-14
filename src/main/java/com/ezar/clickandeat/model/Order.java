@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.CommissionUtils;
 import com.ezar.clickandeat.util.DateTimeUtil;
 import com.ezar.clickandeat.util.NumberUtil;
@@ -31,6 +32,8 @@ public class Order extends PersistentObject {
 
     private String userId;
 
+    private String locale;
+    
     // Restaurant details
     private String restaurantId;
     private String restaurantName;
@@ -874,6 +877,14 @@ public class Order extends PersistentObject {
             }
         }
         return null;
+    }
+
+    public String getLocale() {
+        return locale == null? MessageFactory.getLocaleString(): locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
     }
 
     public Boolean getTestOrder() {

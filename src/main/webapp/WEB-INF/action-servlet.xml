@@ -39,20 +39,15 @@
     <!-- Controller to extract the file portion of a url -->
     <bean id="urlFilenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController"/>
 
-    <!-- Allows users to switch locale -->
-    <bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
-        <property name="paramName" value="lang"/>
-    </bean>
-
     <!-- Detect locale from request cookie -->
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="en"/>
+        <property name="defaultLocale" value="${locale}"/>
     </bean>
 
     <!-- Locale update annotation mapper -->
     <bean id="handlerMapping" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
         <property name="interceptors">
-            <ref bean="localeChangeInterceptor"/>
+            <ref bean="orderLocaleInterceptor"/>
         </property>
     </bean>
 
