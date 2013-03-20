@@ -120,13 +120,49 @@ public class OpenOrderProcessingTask implements InitializingBean {
                             exceptionHandler.handleException(ex);
                         }
                     }
-    
+
+                    // Don't repeat calls if the restaurant failed to respond
                     if( NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus) || NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus)) {
                         LOGGER.info("Not attempting another call for order id:" + orderId + " as notification status is; " + notificationStatus);
                         continue;
                     }
-                    
+
+                    // Retry unanswered calls
+                    if( !NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
+                        DateTime lastCallCutoff = new DateTime().minusSeconds(secondsBeforeRetryCall);
+                        LOGGER.info("Restaurant has not answered call, time when it is good to retry: " + lastCallCutoff);
+                        DateTime lastCallTime = order.getLastCallPlacedTime();
+                        LOGGER.info("Last call placed at: " + lastCallTime);
+                        if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
+                            try {
+                                LOGGER.info("Attempting to call restaurant");
+                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                            }
+                            catch( Exception ex ) {
+                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
+                            }
+                        }
+                    }
+
                     // If call was answered but order not accepted/rejected, retry after 5 minutes otherwise after 1 minute
+                    if( NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)) {
+                        DateTime lastCallCutoff = new DateTime().minusSeconds(secondsBeforeRetryAnsweredCall);
+                        LOGGER.info("Restaurant answered call but order is not accepted/rejected, time when it is good to retry:" + lastCallCutoff);
+                        DateTime lastCallTime = order.getLastCallPlacedTime();
+                        LOGGER.info("Last call placed at: " + lastCallTime);
+                        if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
+                            try {
+                                LOGGER.info("Attempting to call restaurant");
+                                orderWorkflowEngine.processAction(order,ACTION_CALL_RESTAURANT);
+                            }
+                            catch( Exception ex ) {
+                                LOGGER.error("Error occurred placing order call to restaurant for order id: " + order.getOrderId());
+                            }
+                        }
+
+
+                    }
+                    
                     DateTime lastCallCutoff = new DateTime().minusMinutes(NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)? 
                             secondsBeforeRetryAnsweredCall: secondsBeforeRetryCall);
                     DateTime lastCallTime = order.getLastCallPlacedTime();
