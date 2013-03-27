@@ -77,8 +77,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public List<Restaurant> getPage(Pageable pageable) {
-        Query query = new Query(where("deleted").ne(true));
-        QueryUtils.applyPagination(query, pageable);
+        Query query = new Query(where("deleted").ne(true)).with(pageable);
         return operations.find(query,Restaurant.class);
     }
 
