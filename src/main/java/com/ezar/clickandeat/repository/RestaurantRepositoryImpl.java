@@ -63,7 +63,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        operations.ensureIndex(new GeospatialIndex("address.location"), Restaurant.class);
+        operations.indexOps(Restaurant.class).ensureIndex(new GeospatialIndex("address.location"));
     }
      
 
