@@ -4,86 +4,84 @@
 
 <c:set var="path" value="${fn:substringAfter(pageContext.request.servletPath,'/WEB-INF/jsp/')}"/>
 
+<c:choose>
+    <c:when test="${path == 'findRestaurant.jsp'}">
+        <c:set var="navstyle" value="workflow2"/>
+    </c:when>
+    <c:when test="${path == 'restaurant.jsp'}">
+        <c:set var="navstyle" value="workflow3"/>
+    </c:when>
+    <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
+        <c:set var="navstyle" value="workflow3"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="navstyle" value="workflow1"/>
+    </c:otherwise>
+</c:choose>
+
 <div id="header">
-    <div class="header-wrapper">
-        <div class="header-banner">
-            <a href="${ctx}/home.html"><div class="header-company unselectable">llamar<span class="header-company-small">y</span>comer</div></a>
-            <div class="help-links">
-                <div class="help-link-wrapper unselectable">
-                    <div class="help-link-content" onclick="window.location.href='${ctx}/help.html'"><message:message key="label.help"/></div>
-                </div>
-                <div class="help-link-wrapper unselectable">
-                    <div class="help-link-content" onclick="Zenbox.show()"><message:message key="label.feedback"/></div>
-                </div>
-            </div>
+    <div id="topnav" class="${navstyle}">
+        <div class="navigation-links">
+            <table width="1020" class="unselectable">
+                <tr valign="top">
+                    <td width="260" align="center">
+                        <c:choose>
+                            <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
+                                <message:message key="workflow.1-enter-your-location"/>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${ctx}/home.html"><message:message key="workflow.1-enter-your-location"/></a>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td width="260" align="center">
+                        <c:choose>
+                            <c:when test="${path == 'findRestaurant.jsp'}">
+                                <message:message key="workflow.2-select-a-restaurant"/>
+                            </c:when>
+                            <c:when test="${search != null}">
+                                <a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a>
+                            </c:when>
+                            <c:otherwise>
+                                <message:message key="workflow.2-select-a-restaurant"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td width="260" align="center">
+                        <c:choose>
+                            <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
+                                <a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a>
+                            </c:when>
+                            <c:when test="${path == 'restaurant.jsp'}">
+                                <message:message key="workflow.3-build-your-order"/>
+                            </c:when>
+                            <c:when test="${orderrestaurantid != null && search != null}">
+                                <a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                            </c:when>
+                            <c:when test="${restaurantid != null && search != null}">
+                                <a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a>
+                            </c:when>
+                            <c:otherwise>
+                                <message:message key="workflow.3-build-your-order"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                    <td width="260" align="center">
+                        <c:choose>
+                            <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
+                                <message:message key="workflow.4-checkout"/>
+                            </c:when>
+                            <c:when test="${cancheckout != null && cancheckout == true}">
+                                <a href="${ctx}/checkout.html"><message:message key="workflow.4-checkout"/></a>
+                            </c:when>
+                            <c:otherwise>
+                                <message:message key="workflow.4-checkout"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <div class="navigation-wrapper">
-
-
-            <div class="navigation-links">
-                <ul>
-                    <c:choose>
-                        <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
-                            <li class="active unselectable"><message:message key="workflow.1-enter-your-location"/></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="unselectable"><a href="${ctx}/home.html"><message:message key="workflow.1-enter-your-location"/></a></li>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <li class="arrow">&gt&gt</li>
-
-                    <c:choose>
-                        <c:when test="${path == 'findRestaurant.jsp'}">
-                            <li class="active unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
-                        </c:when>
-                        <c:when test="${search != null}">
-                            <li class="unselectable"><a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <li class="arrow">&gt&gt</li>
-
-                    <c:choose>
-                        <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
-                            <li class="active unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                        </c:when>
-                        <c:when test="${path == 'restaurant.jsp'}">
-                            <li class="active unselectable"><message:message key="workflow.3-build-your-order"/></li>
-                        </c:when>
-                        <c:when test="${orderrestaurantid != null && search != null}">
-                            <li class="unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                        </c:when>
-                        <c:when test="${restaurantid != null && search != null}">
-                            <li class="unselectable"><a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="unselectable"><message:message key="workflow.3-build-your-order"/></li>
-                        </c:otherwise>
-                    </c:choose>
-
-                    <li class="arrow">&gt&gt</li>
-
-                    <c:choose>
-                        <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
-                            <li class="active unselectable"><message:message key="workflow.4-checkout"/></li>
-                        </c:when>
-                        <c:when test="${cancheckout != null && cancheckout == true}">
-                            <li class="unselectable"><a href="${ctx}/checkout.html"><message:message key="workflow.4-checkout"/></a></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li class="unselectable"><message:message key="workflow.4-checkout"/></li>
-                        </c:otherwise>
-                    </c:choose>
-
-                </ul>
-            </div>
-
-
-
-        </div>
+        <div style="clear:both"></div>
     </div>
 </div>

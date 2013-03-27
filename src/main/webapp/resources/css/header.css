@@ -1,11 +1,9 @@
 @charset "utf-8";
 
 #header {
-    background: none repeat scroll 0 0 #FFFFFF;
 }
 
 .header-wrapper {
-    background-color:#FFFFFF;
     clear: both;
     margin: 0 auto;
     position: relative;
@@ -82,7 +80,7 @@
 
 .navigation-wrapper {
     background-color: none;
-    background: url(../images/nav-background.png) 0 0 repeat-x;
+    background: url(../images/nav-background.png) 0 0 no-repeat transparent;
     -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
     box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
@@ -96,34 +94,13 @@
 }
 
 .navigation-links {
-    padding: 6px 25px 6px 0;
+    padding: 11px 0 6px 0;
     overflow:hidden;
-}
-
-.navigation-wrapper ul, .navigation-links ul {
-    text-align:right;
-    list-style:none outside none;
-}
-
-.navigation-wrapper li, .navigation-links li {
     color: #FFFFFF;
-    #font-family: "prenton-n5", "prenton";
     font:12px MaiandraOTGD-DemiBold;
     text-shadow: 0 2px #333333;
-    font-size: 12px;
     font-weight:500;
-    display:inline;
-    float:left;
-    padding-right:15px;
     text-transform:uppercase;
-}
-
-.navigation-links li.active {
-    color:#FFFFFF;
-}
-
-.arrow {
-    font-weight: 700;
 }
 
 .navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {

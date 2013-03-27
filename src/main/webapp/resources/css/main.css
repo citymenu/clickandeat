@@ -40,6 +40,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 
 #wrap-in {
     background: url(../images/wrap-inner-bg-red.png) repeat-x scroll center bottom transparent;
+    position:relative
 }
 
 #header-wrap, #main-wrap, #footer-wrap {
@@ -51,9 +52,19 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     padding: 0 0 150px 0;
 }
 
+#main-wrap {
+    #background: url(../images/main-wrap-back.png) 5px 0 repeat-y transparent;
+    width:1020px;
+    margin:0 auto 0 auto;
+	-webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
+	   -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
+	        box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
+
+}
+
 #page-nav {
     text-align:right;
-    padding: 10px 25px 0 0;
+    padding: 10px 0 0 0;
     font: 700 12px/12px prenton-n7,prenton;
     text-shadow: 0 2px #333333;
     color:#FFFFFF;
@@ -70,13 +81,12 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 }
 
 #header-inner {
-    padding: 0px 25px;
+    padding: 0 0 20px 0;
 }
 
 #page {
     margin: 0 auto;
-    position: relative;
-    width: 1035px;
+    width: 1020px;
     z-index: 2;
 }
 
@@ -86,55 +96,67 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 }
 
 #header {
-    height: 90px;
-    width: 100%;
-}
-
-#header {
     margin: 0;
-    padding: 0 50px;
+    padding: 0;
 }
 
 #main-wrap {
     margin-top: -140px;
-    position: relative;
 }
 
 #nav-wrap {
 }
 
 #topnav {
-    background:url(../images/nav-back-small.png) 0 0 repeat-x transparent;
-    #background-color: #222222;
-    border-bottom: 2px solid #555555;
-    border-top: 2px solid #555555;
     clear: both;
-    margin: 0 20px;
-    padding: 0 10px;
+    margin: 0;
+    padding: 0;
+    height:41px;
+}
+
+.workflow1 {
+    background:url(../images/topnav/topnav2.png) 0 0 no-repeat transparent;
+}
+
+.workflow2 {
+    background:url(../images/topnav/topnav3.png) 0 0 no-repeat transparent;
+}
+
+.workflow3 {
+    background:url(../images/topnav/topnav4.png) 0 0 no-repeat transparent;
+}
+
+.workflow4 {
+    background:url(../images/topnav/topnav5.png) 0 0 no-repeat transparent;
 }
 
 #main-bot {
     background: url(../images/main-bot.png) no-repeat scroll left bottom transparent;
-    padding-bottom: 25px;
 }
 
 #main-inner {
     background: url(../images/main-inner-wide.png) repeat-y scroll 0 0 transparent;
-    padding: 0 30px 0;
 }
 
 #main {
+    position:relative;
 }
 
 #banner {
-    overflow: hidden;
-    position: relative;
+    overflow:hidden;
+    background-color:#FFFFFF;
+}
+
+#banner-wrap {
+    background: none repeat scroll 0 0 #FFFFFF;
+    padding:5px;
 }
 
 #banner-outer {
     background: none repeat scroll 0 0 #E9E1D3;
     border: 1px solid #D4CBB9;
     padding: 9px;
+    margin-bottom:110px;
 }
 
 #banner-inner {
@@ -143,16 +165,15 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 
 .wsite-header {
     margin: 0px auto 0px auto;
-    position: relative;
     width: 100%;
-    height: 380px;
+    height:250px;
     background-color:#FFFFFF;
-    #background: url(../images/banner-tall.jpg) 0 0 no-repeat #FFFFFF;
+    background: url(../images/food/banner-back.jpg) 0 0 no-repeat #FFFFFF;
 }
 
 #content {
-    min-height: 400px;
-    padding: 18px 18px 28px;
+    min-height: 300px;
+    padding: 10px 10px 40px 10px;
 }
 
 #footer-wrap {
@@ -172,7 +193,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 }
 
 #footer {
-    padding: 10px 10px 30px 10px;
+    padding: 35px 10px 30px 10px;
     text-align: right;
 }
 
@@ -212,13 +233,14 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     font: 32px/32px MaiandraOTGD-DemiBold;
     text-shadow: 0 2px #333333;
     text-transform: uppercase;
-    padding:0 0 10px 0;
+    padding:0;
     cursor:pointer;
 }
 
 .home-content-header {
     text-align:center;
     padding-top:40px;
+    margin-top:10px;
     font: 16px/16px MaiandraOTGD-DemiBold;
     color:#666666;
     background: url(../images/banner-bot.png) no-repeat scroll center top transparent;

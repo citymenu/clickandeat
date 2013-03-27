@@ -12,18 +12,13 @@ $(document).ready(function(){
     };
     autocomplete = new google.maps.places.Autocomplete(input, options);
 
-    // Add carousel
-    $("#carousel").jCarouselLite({
+    // Add banner carousel
+    $("#bannercarousel").jCarouselLite({
         auto: 5000,
         speed: 1200,
-        vertical: true,
+        vertical: false,
         circular:true,
-        visible:3
-    })
-    .hover(function() {
-        paused = true;
-    }, function() {
-        paused = false;
+        visible:2
     });
 
     $('.search-button').click(function(){
@@ -39,6 +34,17 @@ $(document).ready(function(){
             search();
         }
     });
+
+    // Add restaurant links
+    $('.restaurant-link').click(function(){
+        location.href = $(this).attr('url');
+    });
+
+    // Fade through the three speech options
+    $('#speech1').delay(7000).fadeOut(500);
+    $('#speech2').delay(7500).fadeIn(500).delay(7000).fadeOut(500);
+    $('#speech3').delay(15500).fadeIn(500);
+
 
 });
 
@@ -59,5 +65,4 @@ function search() {
         );
     }
 }
-
 

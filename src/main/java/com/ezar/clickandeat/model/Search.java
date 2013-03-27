@@ -66,6 +66,15 @@ public class Search implements Serializable {
         }
     }
     
+    public String getAddressSummary() {
+        if( location == null || location.getAddress() == null ) {
+            return null;
+        }
+        else {
+            return location.getDisplayAddress();
+        }
+    }
+    
     public GeoLocation getLocation() {
         return location;
     }

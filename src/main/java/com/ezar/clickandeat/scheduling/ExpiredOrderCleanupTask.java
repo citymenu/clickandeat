@@ -11,12 +11,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_BASKET;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Component
 public class ExpiredOrderCleanupTask implements InitializingBean {
@@ -36,9 +35,9 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
     }
-    
 
-    @Scheduled(cron="0 11 23 * * ?")
+
+    @Scheduled(cron="0 0 0/4 * * ?")
     public void execute() {
 
         try {
@@ -50,22 +49,14 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 LOGGER.info("Found " + orders.size() + " orders with status 'BASKET'");
     
                 // Get all expired orders
-                Set<String> orderIds = new HashSet<String>();
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
                     if( orderCreatedTime.isBefore(cutoff) && order.getOrderItems().size() == 0) {
-                        orderIds.add(order.getOrderId());
-                        if( LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("Order id: " + order.getOrderId() + " has expired, will remove from database");
-                        }
+                        LOGGER.info("Order id: " + order.getOrderId() + " has expired, deleting from database");
+                        operations.remove(query(where("orderId").is(order.getOrderId())), Order.class);
                     }
                 }
                 
-                // Delete expired orders
-                if( orderIds.size() > 0 ) {
-                    LOGGER.info("Deleting " + orderIds.size() + " expired orders");
-                    operations.remove(new Query(where("orderId").in(orderIds)), Order.class);
-                }
             }
         }
         catch (Exception ex) {

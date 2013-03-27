@@ -3,6 +3,7 @@ package com.ezar.clickandeat.model;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.DateUtil;
 import com.ezar.clickandeat.util.LocationUtils;
+import com.ezar.clickandeat.util.NumberUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
@@ -699,6 +700,10 @@ public class Restaurant extends PersistentObject {
 
     public Double getDistanceToSearchLocation() {
         return distanceToSearchLocation;
+    }
+    
+    public String getFormattedDistanceToSearchLocation() {
+        return NumberUtil.format(distanceToSearchLocation);
     }
 
     public void setDistanceToSearchLocation(Double distanceToSearchLocation) {

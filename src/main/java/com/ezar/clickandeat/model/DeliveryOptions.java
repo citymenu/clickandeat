@@ -113,6 +113,11 @@ public class DeliveryOptions {
             minCharge = Math.min(areaDeliveryCharge.getDeliveryCharge(), minCharge);
             maxCharge = Math.max(areaDeliveryCharge.getDeliveryCharge(), maxCharge);
         }
+        if( allowFreeDelivery ) {
+            if( minimumOrderForFreeDelivery != null ) {
+                minCharge = 0d;
+            }
+        }
         return new Double[]{minCharge, maxCharge};
     }
     

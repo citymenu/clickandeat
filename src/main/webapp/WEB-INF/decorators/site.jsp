@@ -87,7 +87,6 @@
   }
 </script>
 
-
 <body>
     <div id="wrapper">
         <div id="wrap">
@@ -108,76 +107,6 @@
                     </div>
                 </div>
                 <div id="main-wrap">
-
-                    <div id="nav-wrap">
-                        <div id="page">
-                            <div id="topnav">
-                                <div class="navigation-links">
-                                    <ul>
-                                        <c:choose>
-                                            <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
-                                                <li class="active unselectable"><message:message key="workflow.1-enter-your-location"/></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="unselectable"><a href="${ctx}/home.html"><message:message key="workflow.1-enter-your-location"/></a></li>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <li class="arrow">&gt&gt</li>
-
-                                        <c:choose>
-                                            <c:when test="${path == 'findRestaurant.jsp'}">
-                                                <li class="active unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
-                                            </c:when>
-                                            <c:when test="${search != null}">
-                                                <li class="unselectable"><a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="unselectable"><message:message key="workflow.2-select-a-restaurant"/></li>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <li class="arrow">&gt&gt</li>
-
-                                        <c:choose>
-                                            <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
-                                                <li class="active unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                                            </c:when>
-                                            <c:when test="${path == 'restaurant.jsp'}">
-                                                <li class="active unselectable"><message:message key="workflow.3-build-your-order"/></li>
-                                            </c:when>
-                                            <c:when test="${orderrestaurantid != null && search != null}">
-                                                <li class="unselectable"><a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                                            </c:when>
-                                            <c:when test="${restaurantid != null && search != null}">
-                                                <li class="unselectable"><a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="unselectable"><message:message key="workflow.3-build-your-order"/></li>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                        <li class="arrow">&gt&gt</li>
-
-                                        <c:choose>
-                                            <c:when test="${path == 'checkout.jsp' || path == 'payment.jsp' || path == 'en_UK/callNowSummary.jsp' || path == 'es_ES/callNowSummary.jsp'}">
-                                                <li class="active unselectable"><message:message key="workflow.4-checkout"/></li>
-                                            </c:when>
-                                            <c:when test="${cancheckout != null && cancheckout == true}">
-                                                <li class="unselectable"><a href="${ctx}/checkout.html"><message:message key="workflow.4-checkout"/></a></li>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <li class="unselectable"><message:message key="workflow.4-checkout"/></li>
-                                            </c:otherwise>
-                                        </c:choose>
-
-                                    </ul>
-                                </div>
-                                <div style="clear:both"></div>
-                            </div>
-                        </div>
-                    </div>
-
                     <div id="page">
                         <div id="main-bot">
                             <div id="main-inner">
@@ -198,9 +127,6 @@
     </div>
 </body>
 
-</body>
-
-
 <!-- Google Tracking -->
 <script type="text/javascript">
 var _gaq = _gaq || [];
@@ -215,8 +141,5 @@ _gaq.push(['_trackPageview']);
     s.parentNode.insertBefore(ga, s);
 })();
 </script>
-
-
-</body>
 
 </html>

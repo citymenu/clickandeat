@@ -37,9 +37,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_RECOMMENDATIONS = 18;
+    private static final int MAX_RECOMMENDATIONS = 6;
     
-    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60; // Refresh recommendations list every hour
+    private static final int REFRESH_TIMEOUT = 1000 * 60 * 15; // Refresh recommendations list every 15 minutes
     
     
     @Autowired
@@ -115,7 +115,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 }
                 List<Restaurant> randomList = new ArrayList<Restaurant>();
                 Random random = new Random();
-                for( int i = 0; i < MAX_RECOMMENDATIONS; i++ ) {
+                while (randomList.size() < MAX_RECOMMENDATIONS ) {
                     int nextIndex = random.nextInt(candidates.size());
                     Restaurant candidate = candidates.get(nextIndex);
                     if( !randomList.contains(candidate)) {
