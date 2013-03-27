@@ -127,7 +127,7 @@ public class OpenOrderProcessingTask implements InitializingBean {
                     }
                     
                     // If call was answered but order not accepted/rejected, retry after 5 minutes otherwise after 1 minute
-                    DateTime lastCallCutoff = new DateTime().minusMinutes(NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)? 
+                    DateTime lastCallCutoff = new DateTime().minusSeconds(NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)?
                             secondsBeforeRetryAnsweredCall: secondsBeforeRetryCall);
                     DateTime lastCallTime = order.getLastCallPlacedTime();
                     if(lastCallTime == null || lastCallTime.isBefore(lastCallCutoff)) {
