@@ -97,11 +97,13 @@ function doBuildOrder(order,config) {
     }
 
     // Reset all previous order details
+    $('.orderheadertext').remove();
     $('.ordertitle').remove();
     $('.restaurant-warning').remove();
     $('.order-location-wrapper').remove();
     $('.delivery-wrapper').remove();
     $('.order-item-wrapper').remove();
+    $('.order-total-wrapper').remove();
     $('.discountrow').remove();
     $('.deliverychargerow').remove();
     $('.order-totalcost').remove();
@@ -111,55 +113,11 @@ function doBuildOrder(order,config) {
     $('.checkout-container').remove();
     $('.delivery-warning-wrapper').remove();
 
-    if( order ) {
-
-        // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
-        if( config.showBuildOrderLink && order.orderItems.length > 0 ) {
-            var warningMessage = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
-            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-            var warningContent = ('<div>{0} {1}</div>')
-                .format(buildOrderLink, warningMessage);
-
-            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
-            $('#restaurant-warning-wrapper').append(warning);
-
-            // Add link to continue building existing order
-            $('#buildorder').click(function(){
-                location.href = ctx + '/app/restaurant/' + order.restaurantId;
-            });
-        } else if ( orderIsForAnotherRestaurant ) {
-            var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
-            var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(restaurantName));
-
-            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-            var clearOrderLink = ('<a id=\'clearorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-
-            var warningContent = ('<div>{0} {1}</div><div class=\'restaurant-warning-text\'>{2} {3}</div>')
-                .format(buildOrderLink, warningMessage1, clearOrderLink, warningMessage2);
-
-            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
-            $('#restaurant-warning-wrapper').append(warning);
-
-            // Add link to continue building existing order
-            $('#buildorder').click(function(){
-                location.href = ctx + '/app/restaurant/' + order.restaurantId;
-            });
-
-            $('#clearorder').click(function(){
-                $.fancybox.showLoading(getLabel('ajax.clearing-order'));
-                $.post( ctx+'/order/clearOrder.ajax', {orderId: currentOrder.orderId, restaurantId: restaurantId},
-                    function( data ) {
-                        $.fancybox.hideLoading();
-                        if( data.success ) {
-                            buildOrder(data.order);
-                        } else {
-                            alert('success:' + data.success);
-                        }
-                    }
-                );
-            });
-
-        }
+    // Display order header
+    if(orderIsForAnotherRestaurant) {
+        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order-with') + ' ' + order.restaurantName + ':'));
+    } else {
+        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order')+':'));
     }
 
     // Show current location details
@@ -195,11 +153,12 @@ function doBuildOrder(order,config) {
             deliveryTime = deliveryTimeOfDay;
         }
 
-        var link = (config.showDeliveryOptions? '<div class=\'delivery-edit\'><a id=\'deliveryedit\' class=\'delivery-button unselectable\'>' + getLabel('button.change') + '</a></div>' : '');
-        var deliveryContainer = ('<div class=\'delivery-wrapper\'><div class=\'delivery-title\'>{0}: <span class=\'delivery-header\'>{1} - {2}</span></div>{3}</div>')
-            .format(orderType,deliveryDay,deliveryTime,link);
+        var deliveryDetails = orderType + ': ' + deliveryDay + ' - ' + deliveryTime;
+        var deliveryLink = config.showDeliveryOptions? ('<a id=\'deliveryedit\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.change')): '';
+        var deliveryContainer = ('<div class=\'order-location-wrapper\' id=\'deliverydetails\'><div class=\'order-location-header\'><span class=\'order-location-title\'>{0}</span><span class=\'order-location-link\'>{1}</span><div class=\'order-location-summary\'>{2}</div></div>')
+            .format(getLabel('order.delivery-details'), deliveryLink, deliveryDetails );
         $('.order-delivery-wrapper').append(deliveryContainer);
-        if( config.showDeliveryOptions ) {
+        if( config.allowChangeLocation ) {
             $('#deliveryedit').click(function(){
                 deliveryEdit();
             });
@@ -254,7 +213,7 @@ function doBuildOrder(order,config) {
 
         // If there are any items in the order, show the total order amount
         if( order.orderItemCost && order.orderItemCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{2}</span> {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
+            var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>{2} {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
             $('#order-item-contents').append(row);
         };
 
@@ -280,8 +239,9 @@ function doBuildOrder(order,config) {
             $('#order-item-contents').append(row);
         }
 
-        // Build total item cost
-        $('#ordertotal').append('<span class=\'order-totalcost\'>{1} {0}</span>'.format(ccy,order.formattedTotalCost));
+        // Build total order item
+        var row = ('<div class=\'order-total-wrapper\'><span class=\'order-total-left\'>{0}</span><span class=\'order-total-right\'>{1} {2}</span></div>').format(getLabel('order.total'),ccy,order.formattedTotalCost);
+        $('#order-item-contents').append(row);
 
         // Show details of discounts if available and if we are either on a menu page or there are items
         if( advancedDisplay && config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
@@ -331,18 +291,18 @@ function doBuildOrder(order,config) {
                 if( config.enableCheckoutButton ) {
                     // For phone orders only restaurant we use a different button
                     if( order.phoneOrdersOnly ) {
-                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="callnowbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.call-now')));
+                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="callnowbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.call-now')));
                         $('#callnowbutton').click(function(){
                             checkout();
                         });
                     }else{
-                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.checkout')));
+                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.checkout')));
                         $('#checkoutbutton').click(function(){
                             checkout();
                         });
                     }
                 } else if (config.enablePaymentButton) {
-                    $('#checkoutcontainer').append(('<div class="checkout-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div>').format(getLabel('button.payment')));
+                    $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.payment')));
                     $('#checkoutbutton').click(function(){
                         payment();
                     });
@@ -513,7 +473,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     $('.delivery-wrapper').remove();
 
     // Add the new options in the same area
-    $('.order-delivery-wrapper').append(('<div class=\'delivery-wrapper\'><div class=\'delivery-form\'>{0}{1}</div>{2}</div>').format(deliveryContainer,deliverySelectContainer,buttonContainer));
+    $('#deliverydetails').append(('<div class=\'delivery-wrapper\'><div class=\'delivery-form\'>{0}{1}</div>{2}</div>').format(deliveryContainer,deliverySelectContainer,buttonContainer));
 
     // Add onchange events to the delivery radio buttons if they are present
     if( hasDeliveryTime && hasCollectionTime ) {

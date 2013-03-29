@@ -12,11 +12,9 @@
 }
 
 .dialog-header h2 {
-    color: #BB0000;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size:16px;
-    line-height:20px;
-    text-shadow: 0 1px #EEEEEE;
+    color: #CC0000;
+    font:16px/18px MaiandraOTGD-DemiBold;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .dialog-subheader {

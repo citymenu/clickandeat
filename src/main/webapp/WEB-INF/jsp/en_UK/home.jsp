@@ -30,9 +30,9 @@
                 <div class="wsite-header">
                     <div id="butler"></div>
                     <div id="speechbubble">
-                        <div id="speech1" class="active">Simply the easiest way to get local takeaway food delivered to your home....</div>
-                        <div id="speech2" class="inactive">We have a wide range of restaurants to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
-                        <div id="speech3" class="inactive">Tell us your location in the box below and start ordering local takeaway right now....</div>
+                        <div id="speech1" class="active">Hi, I&apos;m here to show you the easiest way to get local takeaway food delivered to your home....</div>
+                        <div id="speech2" class="inactive">I have a wide range of restaurant menus to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
+                        <div id="speech3" class="inactive">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
                     </div>
                     <div id="bannercarouselwrapper">
                         <div id="bannercarousel">
@@ -40,36 +40,57 @@
                                 <ul>
                                     <li>
                                         <div class="rounded-img-wrapper">
-                                            <div class="rounded-img" style="background:url(${resources}/images/food/image1.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Americana</div>
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/pizza.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Pizza</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
-                                            <div class="rounded-img" style="background:url(${resources}/images/food/image2.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Asiática</div>
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/chinese.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Chinese</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
-                                            <div class="rounded-img" style="background:url(${resources}/images/food/image3.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Internacional</div>
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/sushi.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Sushi</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
-                                            <div class="rounded-img" style="background:url(${resources}/images/food/image4.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Mediterránea</div>
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/mexican.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Mexican</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
-                                            <div class="rounded-img" style="background:url(${resources}/images/food/image5.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Ensaladas</div>
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/mediterranean.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Mediterranean</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/american.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">American</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/salad.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Salads</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/vegetarian.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Vegetarian</div>
                                             </div>
                                         </div>
                                     </li>
@@ -89,22 +110,22 @@
                                         </td>
                                         <td width="104">
                                             <div class="search-button">
-                                                <div class="search-button-text">Buscar</div>
+                                                <div class="search-button-text">Search</div>
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
                             </div>
                             <div class="searchbartext">
-                                O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a>
+                                Or go directly to: <a class="location" href="${ctx}/app/find-takeaway-food-in-London/loc/London"/>London</a>
                             </div>
                         </div>
                         <div id="searchbarright">
                             <div class="searchbarinfo">
                                 <div>
-                                    500 RESTAURANTES CON ENTREGA<br>
-                                    SIGUE TU PEDIDO A TIEMPO REAL<br>
-                                    ENTREGA EN MENOS DE 45MIN
+                                    OVER 500 RESTAURANTES LISTED<br>
+                                    SUPER EASY ORDERING PROCESS<br>
+                                    HOME DELIVERY WITHIN 45 MINUTES
                                 </div>
                             </div>
                         </div>
@@ -116,7 +137,7 @@
     <div id="content">
         <div id="wsite-content" class="wsite-elements wsite-not-footer">
 
-            <div class="home-content-header">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
+            <div class="home-content-header">Why not order from one of my recommended restaurants?</div>
             <div id="carousel" style="margin-top:30px;">
                 <div class="carousel-items">
                     <ul>

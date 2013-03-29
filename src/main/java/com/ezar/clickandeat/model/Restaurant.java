@@ -622,6 +622,24 @@ public class Restaurant extends PersistentObject {
         }
     }
 
+    public String getLongitude() {
+        if( this.address == null || this.address.getLocation() == null ) {
+            return "";
+        }
+        else {
+            return this.address.getLocation()[1] + "";
+        }
+    }
+
+    public String getLatitude() {
+        if( this.address == null || this.address.getLocation() == null ) {
+            return "";
+        }
+        else {
+            return this.address.getLocation()[0] + "";
+        }
+    }
+
     public Menu getMenu() {
         return menu;
     }

@@ -92,6 +92,7 @@
                             </c:otherwise>
                         </c:choose>
 
+
                         <c:set var="phoneOrdersOnlyflag" value="0"/>
 
                         <c:forEach var="restaurant" items="${results}">
@@ -110,7 +111,7 @@
                                         <tr valign="middle">
                                             <td width="105">
                                                 <div class="restaurant-image">
-                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="85" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" alt="<util:escape value="${restaurant.name}"/>"/>
                                                 </div>
                                             </td>
                                             <td width="200">
@@ -130,15 +131,11 @@
                                                     <div class="address-details">
                                                         <util:escape value="${restaurant.address.summary}"/>
                                                         <div class="location-details">
-                                                            <c:choose>
-                                                                <c:when test="${search != null && search.coordinates != null}">
-                                                                    <span class="distance">(${restaurant.formattedDistanceToSearchLocation}km)</span> <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.get-directions"/></a>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <a class="restaurant-location" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="search.show-location"/></a>
-                                                                </c:otherwise>
-                                                            </c:choose>
+                                                            <c:if test="${search != null && search.coordinates != null}">
+                                                                (<message:message key="search.distance"/>: ${restaurant.formattedDistanceToSearchLocation}km)
+                                                            </c:if>
                                                         </div>
+                                                        <div class="restaurant-telephone"><message:message key="restaurant.contact"/>: ${restaurant.contactTelephone}</div>
                                                     </div>
                                                 </div>
                                             </td>

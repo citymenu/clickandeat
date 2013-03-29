@@ -129,9 +129,9 @@
     position:absolute;
     top:10px;
     right:13px;
-    width:155px;
+    width:150px;
     height:16px;
-    padding: 9px 0 3px 25px;
+    padding: 9px 0 3px 30px;
 }
 
 .searchbar {
@@ -410,8 +410,9 @@ a.home {
 
 .restaurant-name {
     padding:5px 0 2px 0;
-    font: 16px MaiandraOTGD-DemiBold;
-    color:#AA0000;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .restaurant-summary {

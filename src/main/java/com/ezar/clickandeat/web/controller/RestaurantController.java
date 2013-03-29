@@ -35,7 +35,8 @@ import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Controller
-public class RestaurantController {
+public class 
+        RestaurantController {
 
     private static final Logger LOGGER = Logger.getLogger(RestaurantController.class);
 

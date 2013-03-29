@@ -3,6 +3,7 @@
 #order-wrapper {
     border: 1px solid #AAAAAA;
     padding:10px;
+    margin-top:20px;
     width:236px;
     background-color: #F6F6F6;
     color:#444444;
@@ -57,12 +58,12 @@
 .order-delivery-wrapper {
     text-align:left;
     margin: 6px 0 10px 0;
-    padding: 0px 5px 0px 5px;
+    padding: 0;
 }
 
 .delivery-wrapper {
     text-align:left;
-    padding: 0;
+    padding: 10px 0 0 0;
 }
 
 .delivery-title {
@@ -104,6 +105,23 @@ h3.order-table {
 .order-item-wrapper {
     margin-top: 2px;
 }
+
+.order-total-wrapper {
+    font: 700 12px prenton-n7,prenton;
+    padding:5px 0 3px 0;
+    color:#444444;
+    overflow: hidden;
+    clear:both;
+}
+
+.order-total-left {
+    float:left;
+}
+
+.order-total-right {
+    float:right;
+}
+
 
 .order-item-wrapper td {
     font: 12px/14px pt-sans-n4,pt-sans;
@@ -200,10 +218,6 @@ select.deliveryselect {
     margin-bottom: 2px;
 }
 
-span.semi-bold {
-    font: 600 12px/14px myriad-pro-n6,myriad-pro;
-}
-
 select.freeitemselect {
     font:12px myriad-pro-n4,myriad-pro;
     margin-top:2px;
@@ -232,9 +246,8 @@ option.freeitemselect {
     color:#444444;
     font-size: 16px;
     letter-spacing: -0.01em;
-    margin: 20px 0 10px 0;
-    padding: 10px 0 10px 0;
-    border-bottom: 1px dashed #AAAAAA;
+    margin: 10px 0 0 0;
+    padding: 10px 0 0 0;
     border-top: 1px dashed #AAAAAA;
 }
 
@@ -262,7 +275,7 @@ option.freeitemselect {
     font:12px/14px prenton-n4,prenton;
     border: 1px solid #b64242;
     background-color: #fffece;
-    margin-top: 6px;
+    margin: 10px 0 10px 0;
     padding: 5px 10px 5px 10px;
 }
 
@@ -283,9 +296,7 @@ option.freeitemselect {
 
 .delivery-options-wrapper {
     text-align:left;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 13px;
-    font-weight:normal;
+    font:700 12px/12px prenton-n7, prenton;
     margin: 0 0 6px 0;
 }
 
@@ -460,9 +471,6 @@ a.order-button:active, a.order-button:hover {
     border: 1px solid #b64242;
     background-color: #fffece;
     padding: 6px 10px;
-    -webkit-border-radius: 5px;
-       -moz-border-radius: 5px;
-            border-radius: 5px;
 }
 
 .restaurant-warning-wrapper {
@@ -496,9 +504,15 @@ a.order-button:active, a.order-button:hover {
 }
 
 .checkout-container {
-    padding:5px 0 5px 0;
-    margin:0 auto 0 auto;
+    padding:10px 0 10px 0;
+    margin:10px 0 10px 0;
+    border-top: 1px dashed #AAAAAA;
+    border-bottom: 1px dashed #AAAAAA;
+}
+
+.checkout-button-container {
     width:110px;
+    margin:0 auto 0 auto;
 }
 
 .warning-container p {
@@ -533,6 +547,9 @@ a.order-button:active, a.order-button:hover {
 
 .specialofferitemchoice select {
     font: 13px myriad-pro-n4,myriad-pro;
+}
+
+#checkoutcontainer {
 }
 
 #checkout {

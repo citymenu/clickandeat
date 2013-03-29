@@ -49,9 +49,9 @@ function onBuildDeliveryEdit() {
 
 // Update the height of the menu right panel to ensure it can fit the order panel
 function ensureHeight() {
-    orderheight = $('#order-wrapper').outerHeight();
+    orderheight = $('#order-wrapper').outerHeight() + 20;
     $('.menu-right').css('min-height',orderheight);
-    launchheight = $('#menu-launch-wrapper').outerHeight();
+    launchheight = $('#menu-launch-wrapper').outerHeight() + 20;
     $('.menu-left').css('min-height',launchheight);
 }
 
@@ -87,18 +87,18 @@ function updateOrderPanelPos() {
     var y = $(this).scrollTop();
     var orderpaddingtop = parseInt($('.menu-right').css('padding-top').replace('px',''));
     var orderheight = $('#order-wrapper').outerHeight() + orderpaddingtop;
-    var orderbottom = orderheight + y;
+    var orderbottom = orderheight + y + 20;
 
     var contenttop = $('.menu-center').offset().top;
     var contentheight = $('.menu-center').outerHeight();
-    var contentbottom = contenttop + contentheight - 20;
+    var contentbottom = contenttop + contentheight;
 
     if( orderbottom >= contentbottom ) {
-        var newtop = contentbottom - orderheight - ordertop + 20;
+        var newtop = contentbottom - orderheight - ordertop - 20;
         $('#order-wrapper').css('top',(newtop < 0? 0: newtop));
         $('#order-wrapper').removeClass('fixed');
-    } else if (y >= ordertop - 20 ) {
-        $('#order-wrapper').css('top',20);
+    } else if (y >= ordertop ) {
+        $('#order-wrapper').css('top',0);
         $('#order-wrapper').addClass('fixed');
     } else {
         $('#order-wrapper').css('top',0);

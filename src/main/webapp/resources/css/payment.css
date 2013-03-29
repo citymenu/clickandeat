@@ -1,22 +1,25 @@
 @charset "utf-8";
 
+#order-wrapper {
+    margin-top:0;
+}
+
 .payment-wrapper {
     margin-right:30px;
+    padding:10px 0 0 25px;
 }
 
 .payment-title-wrapper {
+    border-bottom:2px solid #CC0000;
     margin-bottom: 20px;
-    width:629px;
+    padding-bottom:10px;
 }
 
 .payment-title h2 {
     text-align:left;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 16px;
-    color:#AA0000;
-    border-bottom: 1px dashed #AAAAAA;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .payment-error {
@@ -33,7 +36,7 @@
 
 #paymentbody {
     background-color:#FFFFFF;
-    width:629px;
+    width:685px;
     height: 600px;
     overflow: hidden;
 }

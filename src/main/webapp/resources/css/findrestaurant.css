@@ -13,6 +13,10 @@
     padding: 10px;
 }
 
+#filterclosed {
+    padding-left:7px;
+}
+
 .filter-wrapper {
     background-color: #FFFFFF;
     border: 1px solid #CCCCCC;
@@ -65,6 +69,26 @@
     color:#AA0000;
 }
 
+input[type="radio"] {
+    width:13px;
+    height:13px;
+    padding: 0 5px 0 0;
+    margin:0;
+    font:600 12px/12px prenton-n6,prenton;
+    color:#666666;
+    vertical-align: bottom;
+    position: relative;
+    top: 0px;
+    *overflow: hidden;
+    margin-right:3px;
+}
+
+label {
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
+}
+
 #locedit {
     font:14px/16px myriad-pro-n4,myriad-pro;
     color:#666666;
@@ -82,14 +106,17 @@
 }
 
 .search-results-header {
-    margin-bottom:20px;
-    padding-bottom:10px;
-    border-bottom:2px solid #CC0000;
+    padding:10px 0 0 0;
+    border-bottom: 1px solid #DDDDDD;
 }
 
 .search-location-results {
-    font: 700 16px/16px prenton-n7,prenton;
-    color:#666666;
+    font: 16px/18px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin-bottom:20px;
+    padding-bottom:10px;
+    border-bottom:2px solid #CC0000;
 }
 
 .distance {
@@ -105,10 +132,11 @@
     padding:10px 0 10px 0;
     position:relative;
     cursor:pointer;
+    min-height:85px;
 }
 
 .result-hover {
-    background-color:#F6F6F6;
+    background-color: #FAFAFA;
 }
 
 .table-entry {
@@ -133,8 +161,8 @@
 }
 
 .phone-orders-wrapper {
-    padding:10px 0 10px 0;
-    margin:10px 0 10px 0;
+    padding:5px 0 10px 0;
+    margin:10px 0 0 0;
 }
 
 .phone-orders-header {
@@ -149,11 +177,11 @@
 }
 
 h2.restaurant-name {
-    color: #AA0000;
+    color: #CC0000;
     font: 16px/18px MaiandraOTGD-DemiBold;
+    text-shadow: 1px 1px 2px #EEEEEE;
     margin-bottom:2px;
 }
-
 
 .no-results-wrapper {
     border: 1px solid #AAAAAA;
@@ -179,29 +207,28 @@ h2.restaurant-name {
 }
 
 .no-results-content {
-    width: 370px;
+    width: 450px;
     padding-right:20px;
 }
 
 .registration-content {
-    width: 370px;
+    width: 450px;
     min-height: 250px;
     padding-right:20px;
 }
 
 .registration-content h2 {
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 18px;
-    color:#AA0000;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
     margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
-
 
 .email-entry {
     margin:20px 0 20px 0;
 }
 
-.email-entry input {
+input[type="text"] {
     font: 14px/16px myriad-pro-n4,myriad-pro;
     width:460px;
     background-clip: padding-box;
@@ -211,10 +238,6 @@ h2.restaurant-name {
     -webkit-border-radius: 3px;
        -moz-border-radius: 3px;
             border-radius: 3px;
-}
-
-.email-entry input:focus {
-    border: 1px solid #AA0000;
 }
 
 .invalid-email {
@@ -248,36 +271,16 @@ a.register-button:active, a.register-button:hover {
 
 
 .no-results-content h2 {
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 18px;
-    color:#AA0000;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
     margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .no-results-text {
     font:14px/15px myriad-pro-n4,myriad-pro;
     color:#444444;
     margin-bottom:10px;
-}
-
-input {
-    width:13px;
-    height:13px;
-    padding: 0 5px 0 0;
-    margin:0;
-    font:600 12px/12px prenton-n6,prenton;
-    color:#666666;
-    vertical-align: bottom;
-    position: relative;
-    top: 0px;
-    *overflow: hidden;
-    margin-right:3px;
-}
-
-label {
-    display: block;
-    padding-left: 15px;
-    text-indent: -15px;
 }
 
 .search-select {
@@ -362,6 +365,12 @@ label {
     padding: 0 0 0 26px;
 }
 
+.restaurant-telephone {
+    font:700 12px/12px myriad-pro-n7,myriad-pro;
+    color:#444444;
+    margin-top: 10px;
+}
+
 .restaurant-delivery-details {
     font:12px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
@@ -369,6 +378,7 @@ label {
 
 .restaurant-discount-details {
     display:inline-block;
+    background-color:#FFFFFF;
     border: 1px dashed #cf6e6e;
     padding: 4px 12px 2px 4px;
     margin: 4px 0 0 0;

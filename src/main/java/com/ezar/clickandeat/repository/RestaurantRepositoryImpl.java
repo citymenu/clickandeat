@@ -297,7 +297,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             return new HashMap<String, List<String>>();
         }
         
-        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true));
+        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true).and("testMode").ne(true));
 
         // Add scope variables to the map/reduce query
         MapReduceOptions options = MapReduceOptions.options();
