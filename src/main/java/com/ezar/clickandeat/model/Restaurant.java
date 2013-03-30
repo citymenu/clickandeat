@@ -5,6 +5,7 @@ import com.ezar.clickandeat.util.DateUtil;
 import com.ezar.clickandeat.util.LocationUtils;
 import com.ezar.clickandeat.util.NumberUtil;
 import org.joda.time.DateTime;
+import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -320,7 +321,12 @@ public class Restaurant extends PersistentObject {
                     if( times[0] == null && times[1] == null ) {
                         times[0] = now.toLocalDate().toDateTime(earlyOpen);
                         if( earlyClose.isBefore(earlyOpen)) {
-                            times[1] = now.toLocalDate().plusDays(1).toDateTime(earlyClose);
+                            try {
+                                times[1] = now.toLocalDate().plusDays(1).toDateTime(earlyClose);
+                            }
+                            catch( IllegalFieldValueException ex ) {
+                                times[1] = now.toLocalDate().plusDays(1).toDateTime(earlyClose.minusHours(1));
+                            }
                         }
                         else {
                             times[1] = now.toLocalDate().toDateTime(earlyClose);
@@ -344,7 +350,12 @@ public class Restaurant extends PersistentObject {
                     if( times[2] == null && times[3] == null ) {
                         times[2] = now.toLocalDate().toDateTime(lateOpen);
                         if( lateClose.isBefore(lateOpen)) {
-                            times[3] = now.toLocalDate().plusDays(1).toDateTime(lateClose);
+                            try {
+                                times[3] = now.toLocalDate().plusDays(1).toDateTime(lateClose);
+                            }
+                            catch( IllegalFieldValueException ex ) {
+                                times[3] = now.toLocalDate().plusDays(1).toDateTime(lateClose.minusHours(1));
+                            }
                         }
                         else {
                             times[3] = now.toLocalDate().toDateTime(lateClose);
