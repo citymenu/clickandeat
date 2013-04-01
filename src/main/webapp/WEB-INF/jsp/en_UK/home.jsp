@@ -82,6 +82,13 @@
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/asian.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Asian</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/salad.jpg) no-repeat center center;">
                                                 <div class="rounded-img-ribbon">Salads</div>
                                             </div>

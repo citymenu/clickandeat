@@ -98,7 +98,12 @@ public class ExcelUtils {
     public static String getCellStringValue(XSSFSheet sheet, int rowIndex, int colIndex ) {
         XSSFRow row = getRow(sheet, rowIndex);
         XSSFCell cell = getCell(row, colIndex);
-        return cell.getStringCellValue();
+        try {
+            return cell.getStringCellValue();
+        }
+        catch( IllegalStateException ex ) {
+            return cell.getRawValue();
+        }
     }
 
 

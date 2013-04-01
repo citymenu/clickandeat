@@ -2,6 +2,8 @@
 <%@ page contentType="text/html; charset=utf-8" %>
 <%@ include file="/WEB-INF/jsp/taglibs.jsp" %>
 
+<c:set var="path" value="${fn:substringAfter(pageContext.request.servletPath,'/WEB-INF/jsp/')}"/>
+
 <!doctype html>
 
 <head>
@@ -9,6 +11,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="${resources}/jquery/script/jquery.ui-1.9.2-min.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.carousel.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
@@ -22,33 +25,120 @@
 </head>
 
 <body>
+    <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div id="banner">
+        <div id="banner-wrap">
         <div id="banner-outer">
             <div id="banner-inner">
                 <div class="wsite-header">
-                    <div class="hero-border"></div>
-                    <div class="hero-banner-upper">La manera más sencilla de pedir comida a domicilio</div>
-                    <div class="hero-banner-main">Busca restaurantes<br>en tu zona</div>
-                    <div class="searchbar-container">
-                        <div class="searchbar">
-                            <table width="406">
-                                <tr valign="middle">
-                                    <td width="302">
-                                        <div class="location-input">
-                                            <input class="location" type="text" id="loc" value="${address}" placeholder=""/>
+                    <div id="butler"></div>
+                    <div id="speechbubble">
+                        <div id="speech1" class="active">Hi, I&apos;m here to show you the easiest way to get local takeaway food delivered to your home....</div>
+                        <div id="speech2" class="inactive">I have a wide range of restaurant menus to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
+                        <div id="speech3" class="inactive">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
+                    </div>
+                    <div id="bannercarouselwrapper">
+                        <div id="bannercarousel">
+                            <div class="carousel-items">
+                                <ul>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/pizza.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Pizza</div>
+                                            </div>
                                         </div>
-                                    </td>
-                                    <td width="104">
-                                        <div class="search-button">
-                                            <div class="search-button-text">Buscar</div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/chinese.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">China</div>
+                                            </div>
                                         </div>
-                                    </td>
-                                </tr>
-                            </table>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/sushi.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Sushi</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/mexican.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Mexicana</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/mediterranean.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Mediterránea</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/american.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Americana</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/asian.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Asiática</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/salad.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Ensaladas</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="rounded-img-wrapper">
+                                            <div class="rounded-img" style="background:url(${resources}/images/food/vegetarian.jpg) no-repeat center center;">
+                                                <div class="rounded-img-ribbon">Vegetariana</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <div class="hero-banner-lower">
-                        O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a>
+                    <div id="searchbar">
+                        <div id="searchbarleft">
+                            <div class="searchbar">
+                                <table width="406">
+                                    <tr valign="middle">
+                                        <td width="302">
+                                            <div class="location-input">
+                                                <input class="location" type="text" id="loc" value="${address}" placeholder=""/>
+                                            </div>
+                                        </td>
+                                        <td width="104">
+                                            <div class="search-button">
+                                                <div class="search-button-text">Buscar</div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="searchbartext">
+                                O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a>
+                            </div>
+                        </div>
+                        <div id="searchbarright">
+                            <div class="searchbarinfo">
+                                <div>
+                                    OVER 500 RESTAURANTES LISTED<br>
+                                    SUPER EASY ORDERING PROCESS<br>
+                                    HOME DELIVERY WITHIN 45 MINUTES
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,6 +146,7 @@
     </div>
     <div id="content">
         <div id="wsite-content" class="wsite-elements wsite-not-footer">
+
             <div class="home-content-header">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
             <div id="carousel" style="margin-top:30px;">
                 <div class="carousel-items">
@@ -76,14 +167,14 @@
 
                         <div class="divider"></div>
 
-                        <table width="448">
+                        <table width="430">
                             <tr valign="top">
                                 <td width="78" align="left">
                                     <a class="blank" href="${restaurant.url}">
                                         <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                     </a>
                                 </td>
-                                <td width="228">
+                                <td width="210">
                                     <a class="blank" href="${restaurant.url}">
                                         <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                     </a>
@@ -109,35 +200,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="home-content-header">La manera más cómoda de pedir comida a domicilio</div>
-            <table width="932" style="margin:20px auto 10px auto;">
-                <tr>
-                    <td width="233" align="center">
-                        <div class="step step-1">
-                            <div class="step-number">1.</div>
-                            <div class="step-detail">Dinos dónde estás</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-2">
-                            <div class="step-number">2.</div>
-                            <div class="step-detail">Elige tu comida preferida</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-3">
-                            <div class="step-number">3.</div>
-                            <div class="step-detail">Realiza tu pedido</div>
-                        </div>
-                    </td>
-                    <td width="233" align="center">
-                        <div class="step step-4">
-                            <div class="step-number">4.</div>
-                            <div class="step-detail">Tu comida está de camino</div>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+
         </div>
     </div>
 </body>

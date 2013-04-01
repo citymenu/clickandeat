@@ -5,8 +5,8 @@
 <!doctype html>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/ordersummary.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/ordersummary.css" charset="utf-8"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
@@ -17,25 +17,27 @@
 
 <body>
 
-<script type="text/javascript">
-    var completedorderid = '${completedorderid}';
-    var coordinates=[${order.restaurant.coordinates}];
-</script>
+    <script type="text/javascript">
+        var completedorderid = '${completedorderid}';
+        var coordinates=[${order.restaurant.coordinates}];
+    </script>
+
+    <jsp:include page="/WEB-INF/jsp/header.jsp" />
 
 <div id="content">
 
     <div class="content-wrapper">
-        <table width="939">
+        <table width="1000">
             <tr valign="top">
                 <!-- Order summary -->
-                <td width="649">
+                <td width="740">
                     <div class="order-summary-wrapper">
                         <h2>Gracias por tu pedido <util:escape value="${order.customer.firstName}"/></h2>
                         <div class="order-detail-wrapper">
-                            <table width="649">
+                            <table width="700">
                                 <tr valign="top">
                                     <!-- Order detalis -->
-                                    <td width="379">
+                                    <td width="430">
                                         <div class="order-overview-wrapper">
                                             <div class="order-detail">
                                                 <div class="order-information">N&#250;mero de pedido: ${order.orderId}</div>
@@ -70,7 +72,7 @@
                                     </td>
                                 </tr>
                                 <tr valign="top">
-                                    <td width="649" colspan="2">
+                                    <td width="700" colspan="2">
                                         <div class="order-delivery">
                                             <c:choose>
                                                 <c:when test="${order.deliveryType == 'DELIVERY'}">

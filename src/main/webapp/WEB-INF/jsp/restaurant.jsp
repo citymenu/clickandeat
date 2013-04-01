@@ -40,7 +40,7 @@
                         <div class="restaurant-details-wrapper">
                             <table width="966">
                                 <tr valign="top">
-                                    <td width="356">
+                                    <td width="341">
                                         <table width="100%">
                                             <tr valign="bottom">
                                                 <td nowrap style="vertical-align:top">
@@ -69,7 +69,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td width="370">
+                                    <td width="385">
                                         <div class="restaurant-header-center">
 
                                             <div class="restaurant-summary-wrapper">

@@ -5,6 +5,9 @@
 <c:set var="path" value="${fn:substringAfter(pageContext.request.servletPath,'/WEB-INF/jsp/')}"/>
 
 <c:choose>
+    <c:when test="${path == 'en_UK/home.jsp' || path == 'es_ES/home.jsp'}">
+        <c:set var="navstyle" value="workflow1"/>
+    </c:when>
     <c:when test="${path == 'findRestaurant.jsp'}">
         <c:set var="navstyle" value="workflow2"/>
     </c:when>
@@ -15,7 +18,7 @@
         <c:set var="navstyle" value="workflow4"/>
     </c:when>
     <c:otherwise>
-        <c:set var="navstyle" value="workflow1"/>
+        <c:set var="navstyle" value="workflow5"/>
     </c:otherwise>
 </c:choose>
 

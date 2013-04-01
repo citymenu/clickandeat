@@ -1,15 +1,21 @@
 @charset "utf-8";
 
+#order-wrapper {
+    margin-top:0;
+}
+
 .order-summary-wrapper {
-    margin-right: 30px;
+    padding:10px 0 0 10px;
+    margin: 0 30px 30px 0;
 }
 
 .order-summary-wrapper h2 {
-     font: 20px/22px MaiandraOTGD-DemiBold;
-     margin-bottom:20px;
-     padding-bottom: 10px;
-     border-bottom: 1px dashed #AAAAAA;
-     color:#AA0000;
+    font: 20px/20px MaiandraOTGD-DemiBold;
+    margin-bottom:20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #DDDDDD;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .order-overview-wrapper {
@@ -40,11 +46,12 @@
 }
 
 .order-overview h2 {
-     font: 18px/20px MaiandraOTGD-DemiBold;
-     padding-bottom: 6px;
-     color:#AA0000;
-     margin:0;
-     border:0;
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    padding-bottom: 6px;
+    color:#CC0000;
+    margin:0;
+    border:0;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .order-overview p {
@@ -67,11 +74,12 @@
 }
 
 .order-delivery h2 {
-     font: 18px/20px MaiandraOTGD-DemiBold;
-     padding-bottom: 6px;
-     color:#AA0000;
-     margin:0;
-     border:0;
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    padding-bottom: 6px;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin:0;
+    border:0;
 }
 
 .delivery-address {
