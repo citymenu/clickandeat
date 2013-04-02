@@ -38,7 +38,7 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
     }
     
 
-    @Scheduled(cron="0 11 23 * * ?")
+    @Scheduled(cron="0 0 0/1 * * ?")
     public void execute() {
 
         try {
@@ -50,21 +50,13 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 LOGGER.info("Found " + orders.size() + " orders with status 'BASKET'");
     
                 // Get all expired orders
-                Set<String> orderIds = new HashSet<String>();
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
+                    String orderId = order.getOrderId();
                     if( orderCreatedTime.isBefore(cutoff) && order.getOrderItems().size() == 0) {
-                        orderIds.add(order.getOrderId());
-                        if( LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("Order id: " + order.getOrderId() + " has expired, will remove from database");
-                        }
+                        LOGGER.info("Order id: " + orderId + " is more than 2 days old and has no items, will remove from database");
+                        operations.remove(new Query(where("orderId").is(orderId)), Order.class);
                     }
-                }
-                
-                // Delete expired orders
-                if( orderIds.size() > 0 ) {
-                    LOGGER.info("Deleting " + orderIds.size() + " expired orders");
-                    operations.remove(new Query(where("orderId").in(orderIds)), Order.class);
                 }
             }
         }
