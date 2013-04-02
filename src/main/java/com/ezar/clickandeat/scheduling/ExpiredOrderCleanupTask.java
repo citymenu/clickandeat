@@ -11,11 +11,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_BASKET;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
-import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Component
 public class ExpiredOrderCleanupTask implements InitializingBean {
@@ -30,14 +31,14 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
 
     private DistributedLock lock;
 
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
     }
 
 
-    @Scheduled(cron="0 0 0/4 * * ?")
+    @Scheduled(cron="0 0 0/6 * * ?")
     public void execute() {
 
         try {
@@ -47,16 +48,16 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 DateTime cutoff = new DateTime().minusDays(2);
                 List<Order> orders = operations.find(new Query(where("orderStatus").is(ORDER_STATUS_BASKET)), Order.class);
                 LOGGER.info("Found " + orders.size() + " orders with status 'BASKET'");
-    
+
                 // Get all expired orders
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
-                    if( orderCreatedTime.isBefore(cutoff) && order.getOrderItems().size() == 0) {
-                        LOGGER.info("Order id: " + order.getOrderId() + " has expired, deleting from database");
-                        operations.remove(query(where("orderId").is(order.getOrderId())), Order.class);
+                    String orderId = order.getOrderId();
+                    if( orderCreatedTime.isBefore(cutoff)) {
+                        LOGGER.info("Order id: " + orderId + " is more than 2 days old and has order status 'BASKET', will remove from database");
+                        operations.remove(new Query(where("orderId").is(orderId)), Order.class);
                     }
                 }
-                
             }
         }
         catch (Exception ex) {
@@ -66,6 +67,4 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
             lock.release();
         }
     }
-
-
 }
