@@ -53,8 +53,8 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
                     String orderId = order.getOrderId();
-                    if( orderCreatedTime.isBefore(cutoff) && order.getOrderItems().size() == 0) {
-                        LOGGER.info("Order id: " + orderId + " is more than 2 days old and has no items, will remove from database");
+                    if( orderCreatedTime.isBefore(cutoff)) {
+                        LOGGER.info("Order id: " + orderId + " is more than 2 days old and has order status 'BASKET', will remove from database");
                         operations.remove(new Query(where("orderId").is(orderId)), Order.class);
                     }
                 }
