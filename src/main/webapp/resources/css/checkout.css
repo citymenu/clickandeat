@@ -162,6 +162,15 @@ a.checkout-nav-button:active, a.checkout-nav-button:hover {
     *display: inline;
 }
 
+#validation-message-wrapper {
+    display:inline-block;
+    padding:8px 10px 8px 10px;
+}
+
+#validation-message {
+    font:400 12px/14px myriad-pro-n4,myriad-pro;
+}
+
 .validation-message {
     background:url(../images/invalid.png) 0 0 no-repeat;
     padding:0 0 0 65px;

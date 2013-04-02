@@ -100,7 +100,7 @@
                                 <c:if test="${phoneOrdersOnlyflag=='0'}">
                                     <c:set var="phoneOrdersOnlyflag" value="1"/>
                                     <div class="phone-orders-wrapper">
-                                        <div class="phone-orders-header"><message:message key="search.phone-orders-only-text"/></div>
+                                        <div class="phone-orders-header triangle-isosceles left"><message:message key="search.phone-orders-only-text"/></div>
                                     </div>
                                 </c:if>
                             </c:if>

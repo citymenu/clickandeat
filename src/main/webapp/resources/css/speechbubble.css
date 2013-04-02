@@ -45,6 +45,7 @@ blockquote p {
 	-webkit-border-radius:10px;
 	-moz-border-radius:10px;
 	border-radius:10px;
+	min-height:25px;
 }
 
 /* Variant : for top positioned triangle
@@ -61,7 +62,7 @@ blockquote p {
 ------------------------------------------ */
 
 .triangle-isosceles.left {
-	margin-left:50px;
+	margin-left:30px;
 	background:#fdde70;
 	position:relative;
 }
@@ -83,9 +84,9 @@ blockquote p {
     content:"";
 	background-image:url(../images/triangle-left.png);
 	top:6px; /* value = - border-top-width - border-bottom-width */
-	left:50px; /* controls horizontal position */
+	left:30px; /* controls horizontal position */
     display:block;
-    width:50px;
+    width:30px;
     height:20px;
 }
 
@@ -105,10 +106,10 @@ blockquote p {
 ------------------------------------------ */
 
 .triangle-isosceles.left:after {
-	top:16px; /* controls vertical position */
-	left:-50px; /* value = - border-left-width - border-right-width */
+	top:12px; /* controls vertical position */
+	left:-30px; /* value = - border-left-width - border-right-width */
 	bottom:auto;
-	border-width:10px 50px 10px 0;
+	border-width:10px 30px 10px 0;
 	border-color:transparent #fdde70;
 }
 
