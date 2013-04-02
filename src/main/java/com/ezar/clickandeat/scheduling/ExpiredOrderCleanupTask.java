@@ -38,7 +38,7 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
     }
     
 
-    @Scheduled(cron="0 0 0/1 * * ?")
+    @Scheduled(cron="0 0 0/6 * * ?")
     public void execute() {
 
         try {
