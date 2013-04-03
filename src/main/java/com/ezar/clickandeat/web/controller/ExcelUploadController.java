@@ -86,7 +86,14 @@ public class ExcelUploadController {
             // If there are no errors, then we save the restaurant object
             if(!errors.hasErrors()) {
                 if(StringUtils.hasText(restaurant.getRestaurantId())) {
-                    copyExistingRestaurantDetails(restaurant);
+                    Restaurant existingRestaurant = restaurantRepository.findByRestaurantId(restaurant.getRestaurantId());
+                    if( existingRestaurant != null ) {
+                        copyExistingRestaurantDetails(restaurant);
+                    }
+                    else {
+                        LOGGER.warn("Given restaurant id does not exist, creating new restaurant id");
+                        restaurant.setRestaurantId(sequenceGenerator.getNextSequence());
+                    }
                     restaurantRepository.saveRestaurant(restaurant);
                 }
                 else {
@@ -407,6 +414,7 @@ public class ExcelUploadController {
                     }
                 }
                 currentMenuItem = new MenuItem(); // Create new menu item
+                currentMenuItem.setType(MenuItem.TYPE_STANDARD);
                 currentMenuCategoryName = getCellStringValue(menuItemsSheet,menuItemIndex,1);
                 currentMenuItem.setTitle(menuItemName);
                 currentMenuItem.setNumber((int)getCellDoubleValue(menuItemsSheet,menuItemIndex,0));
@@ -425,6 +433,7 @@ public class ExcelUploadController {
                     subType.setType(subTypeName);
                     subType.setCost(getCellDoubleValue(menuItemsSheet,menuItemIndex,10));
                     currentMenuItem.getMenuItemSubTypes().add(subType);
+                    currentMenuItem.setType(MenuItem.TYPE_SUBTYPE);
                 }
                 String additionalItemChoiceName = getCellStringValue(menuItemsSheet,menuItemIndex,11);
                 if(StringUtils.hasText(additionalItemChoiceName)) {

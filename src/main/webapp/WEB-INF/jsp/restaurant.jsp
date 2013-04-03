@@ -165,9 +165,11 @@
                                         <div class="menu-launch-description"><message:message key="restaurant.menu-launch-description"/></div>
                                         <div class="menu-launch-content-wrapper">
                                             <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
+                                            <c:if test="${menuCategory.hasMenuItems}">
                                             <div class="menu-launch-entry">
                                                 <a onclick="jump('${menuCategory.categoryId}')"><util:escape value="${menuCategory.name}"/></a>
                                             </div>
+                                            </c:if>
                                             </c:forEach>
                                             <c:if test="${restaurant.specialOfferCount > 0}">
                                             <div class="menu-launch-entry">
@@ -201,6 +203,7 @@
                                     </c:if>
 
                                     <c:forEach var="menuCategory" items="${restaurant.menu.menuCategories}">
+                                    <c:if test="${menuCategory.hasMenuItems}">
                                     <div class="menu-category-wrapper" id="${menuCategory.categoryId}">
                                         <h2><span class="${menuCategory.iconClass}"><util:escape value="${menuCategory.name}"/></span></h2>
                                         <div class="menu-category-summary"><util:escape value="${menuCategory.summary}" escapeNewLines="true"/></div>
@@ -309,6 +312,7 @@
                                             </c:otherwise>
                                         </c:choose>
                                     </div>
+                                    </c:if>
                                     </c:forEach>
                                     <c:if test="${restaurant.specialOfferCount > 0}">
                                     <div class="menu-category-wrapper" id="special_offers">

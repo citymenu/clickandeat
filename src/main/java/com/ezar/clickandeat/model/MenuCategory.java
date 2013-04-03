@@ -89,4 +89,8 @@ public class MenuCategory {
     public void setItemTypes(List<String> itemTypes) {
         this.itemTypes = itemTypes;
     }
+    
+    public boolean getHasMenuItems() {
+        return menuItems.size() > 0;
+    }
 }
