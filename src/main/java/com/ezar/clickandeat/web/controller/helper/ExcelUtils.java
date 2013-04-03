@@ -63,7 +63,7 @@ public class ExcelUtils {
         return row.getCell(cellReference.getCol());
     }
 
-    
+
     /**
      * @param workbook
      * @param cellName
@@ -117,7 +117,13 @@ public class ExcelUtils {
     public static double getCellDoubleValue(XSSFSheet sheet, int rowIndex, int colIndex ) {
         XSSFRow row = getRow(sheet, rowIndex);
         XSSFCell cell = getCell(row, colIndex);
-        return cell.getNumericCellValue();
+        if( cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+            return cell.getNumericCellValue();
+        }
+        else {
+            String cellValue = cell.getStringCellValue();
+            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue): 0d;
+        }
     }
 
 
