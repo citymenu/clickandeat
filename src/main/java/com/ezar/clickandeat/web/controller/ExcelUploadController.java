@@ -704,6 +704,9 @@ public class ExcelUploadController {
      */
 
     private LocalTime getLocalTime(XSSFCell cell) {
+        if( cell == null ) {
+            return null;
+        }
         String value = cell.getStringCellValue();
         if( !StringUtils.hasText(value)) {
             return null;
@@ -723,6 +726,9 @@ public class ExcelUploadController {
      */
     @SuppressWarnings("deprecation")
     private LocalDate getLocalDate(XSSFCell cell) {
+        if( cell == null ) {
+            return null;
+        }
         Date value = cell.getDateCellValue();
         if( value == null ) { 
             return null;
