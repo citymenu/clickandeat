@@ -257,7 +257,9 @@ table {
     border:0;
     padding:0;
     margin:0;
-    border-collapse:collapse;
+    border-collapse: separate;
+    border-spacing: 0px;
+    *border-collapse: expression('separate', cellSpacing = '0px');
 }
 
 
