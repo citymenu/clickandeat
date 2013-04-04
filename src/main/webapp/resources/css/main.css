@@ -18,6 +18,7 @@ html {
 }
 
 body {
+    min-width:1060px;
     background: none repeat scroll 0 0 #880000;
     color: #827762;
     font-family: Arial,Helvetica,sans-serif;
@@ -53,13 +54,11 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 }
 
 #main-wrap {
-    #background: url(../images/main-wrap-back.png) 5px 0 repeat-y transparent;
     width:1020px;
     margin:0 auto 0 auto;
 	-webkit-box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
 	   -moz-box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
 	        box-shadow: 0 0 4px 4px rgba(0, 0, 0, .3);
-
 }
 
 #page-nav {

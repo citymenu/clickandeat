@@ -209,5 +209,5 @@ function locationSearch() {
 // Runs after location is updated
 function onAfterLocationUpdate() {
     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-    location.reload();
+    location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
 }
