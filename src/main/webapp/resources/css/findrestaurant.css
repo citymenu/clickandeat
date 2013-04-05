@@ -132,7 +132,7 @@ label {
     padding:10px 0 10px 0;
     position:relative;
     cursor:pointer;
-    min-height:85px;
+    min-height:75px;
 }
 
 .result-hover {
@@ -146,8 +146,8 @@ label {
 .phone-orders-description {
     display:inline-block;
     position:absolute;
-    top:2px;
-    left:40px;
+    top:3px;
+    left:5px;
     padding:1px 8px 1px 8px;
     color:#FFFFFF;
     font:500 12px/13px prenton-n5,prenton;
