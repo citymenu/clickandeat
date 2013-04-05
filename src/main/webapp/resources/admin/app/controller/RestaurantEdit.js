@@ -1769,12 +1769,19 @@ Ext.define('AD.controller.RestaurantEdit', {
         specialOfferEditForm.loadRecord(selectedSpecialOffer);
 
         // Populate individual applicability dates
-        selectedSpecialOffer.get('offerApplicableTimes').forEach(function(offerApplicableTime){
-            var day = offerApplicableTime.get('dayOfWeek');
-            specialOfferEditForm.getForm().findField('applicable_' + day).setValue(offerApplicableTime.get('applicable'));
-            specialOfferEditForm.getForm().findField('applicableFrom_' + day).setValue(offerApplicableTime.get('applicableFrom'));
-            specialOfferEditForm.getForm().findField('applicableTo_' + day).setValue(offerApplicableTime.get('applicableTo'));
-        });
+        var offerApplicableTimes = selectedSpecialOffer.get('offerApplicableTimes');
+        if(offerApplicableTimes.length == 0) {
+            for(var i = 1; i < 8; i++ ) {
+                specialOfferEditForm.getForm().findField('applicable_' + i).setValue(true);
+            }
+        } else {
+            offerApplicableTimes.forEach(function(offerApplicableTime){
+                var day = offerApplicableTime.get('dayOfWeek');
+                specialOfferEditForm.getForm().findField('applicable_' + day).setValue(offerApplicableTime.get('applicable'));
+                specialOfferEditForm.getForm().findField('applicableFrom_' + day).setValue(offerApplicableTime.get('applicableFrom'));
+                specialOfferEditForm.getForm().findField('applicableTo_' + day).setValue(offerApplicableTime.get('applicableTo'));
+            });
+        }
     },
 
     // Fires when a record is selected in the speical offer items grid
