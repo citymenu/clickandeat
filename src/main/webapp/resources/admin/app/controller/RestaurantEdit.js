@@ -1588,12 +1588,19 @@ Ext.define('AD.controller.RestaurantEdit', {
         discountEditForm.loadRecord(selectedDiscount);
 
         // Populate individual applicability dates
-        selectedDiscount.get('discountApplicableTimes').forEach(function(discountApplicableTime){
-            var day = discountApplicableTime.get('dayOfWeek');
-            discountEditForm.getForm().findField('applicable_' + day).setValue(discountApplicableTime.get('applicable'));
-            discountEditForm.getForm().findField('applicableFrom_' + day).setValue(discountApplicableTime.get('applicableFrom'));
-            discountEditForm.getForm().findField('applicableTo_' + day).setValue(discountApplicableTime.get('applicableTo'));
-        });
+        var applicableTimes = selectedDiscount.get('discountApplicableTimes');
+        if(applicableTimes.length == 0) {
+            for(var i = 1; i < 8; i++ ) {
+                discountEditForm.getForm().findField('applicable_' + i).setValue(true);
+            }
+        } else {
+            applicableTimes.forEach(function(discountApplicableTime){
+                var day = discountApplicableTime.get('dayOfWeek');
+                discountEditForm.getForm().findField('applicable_' + day).setValue(discountApplicableTime.get('applicable'));
+                discountEditForm.getForm().findField('applicableFrom_' + day).setValue(discountApplicableTime.get('applicableFrom'));
+                discountEditForm.getForm().findField('applicableTo_' + day).setValue(discountApplicableTime.get('applicableTo'));
+            });
+        }
     },
 
     // Fires when the save button is clicked on the discount edit form
