@@ -72,7 +72,12 @@ public class ExcelUtils {
 
     public static String getNamedCellStringValue(XSSFWorkbook workbook, String cellName) {
         XSSFCell cell = getNamedCell(workbook, cellName);
-        return cell.getStringCellValue();
+        if( cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+            return cell.getNumericCellValue() + "";
+        }
+        else {
+            return cell.getStringCellValue();
+        }
     }
 
 
@@ -84,7 +89,13 @@ public class ExcelUtils {
 
     public static double getNamedCellDoubleValue(XSSFWorkbook workbook, String cellName) {
         XSSFCell cell = getNamedCell(workbook, cellName);
-        return cell.getNumericCellValue();
+        if( cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+            return cell.getNumericCellValue();
+        }
+        else {
+            String cellValue = cell.getStringCellValue();
+            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue): 0d;
+        }
     }
 
 
@@ -98,11 +109,11 @@ public class ExcelUtils {
     public static String getCellStringValue(XSSFSheet sheet, int rowIndex, int colIndex ) {
         XSSFRow row = getRow(sheet, rowIndex);
         XSSFCell cell = getCell(row, colIndex);
-        try {   
-            return cell.getStringCellValue();
+        if( cell.getCellType() == XSSFCell.CELL_TYPE_NUMERIC) {
+            return cell.getNumericCellValue() + "";
         }
-        catch( IllegalStateException ex ) {
-            return cell.getRawValue();
+        else {
+            return cell.getStringCellValue();
         }
     }
 
