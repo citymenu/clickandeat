@@ -111,7 +111,7 @@
                                         <tr valign="middle">
                                             <td width="105">
                                                 <div class="restaurant-image">
-                                                    <img src="http://clickandeat.s3-external-3.amazonaws.com/resources/images/restaurant/00005641" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
                                                 </div>
                                             </td>
                                             <td width="200">
