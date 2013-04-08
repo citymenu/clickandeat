@@ -592,7 +592,7 @@ public class ExcelUploadController {
                 emptyRowCount++;
             }
             specialOfferIndex++;
-            specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,0);
+            specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,1);
         }
         if( currentSpecialOffer != null ) {
             restaurant.getSpecialOffers().add(currentSpecialOffer);
@@ -607,7 +607,7 @@ public class ExcelUploadController {
         while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
             specialOfferItemIndex++;
             emptyRowCount++; // Will reset as soon as we find a string value anywhere in the row
-            String specialOfferItemName = getCellStringValue(specialOfferItemsSheet, specialOfferIndex, 1);
+            String specialOfferItemName = getCellStringValue(specialOfferItemsSheet, specialOfferItemIndex, 1);
             if(StringUtils.hasText(specialOfferItemName)) {
                 emptyRowCount = 0; // Reset counter;
                 if(currentSpecialOfferItem != null) {
@@ -618,7 +618,7 @@ public class ExcelUploadController {
                 }
                 currentSpecialOfferItem = new SpecialOfferItem(); // Create new special offer item
                 currentSpecialOfferName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,0);
-                currentSpecialOfferItem.setTitle(specialOfferName);
+                currentSpecialOfferItem.setTitle(specialOfferItemName);
                 currentSpecialOfferItem.setDescription(getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,2));
                 String choiceName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,3);
                 if(StringUtils.hasText(choiceName)) {
