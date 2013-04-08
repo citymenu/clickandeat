@@ -94,7 +94,7 @@ public class ExcelUtils {
         }
         else {
             String cellValue = cell.getStringCellValue();
-            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue): 0d;
+            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue.replace(",",".")): 0d;
         }
     }
 
@@ -133,7 +133,7 @@ public class ExcelUtils {
         }
         else {
             String cellValue = cell.getStringCellValue();
-            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue): 0d;
+            return StringUtils.hasText(cellValue)? Double.valueOf(cellValue.replace(",",".")): 0d;
         }
     }
 
@@ -188,23 +188,5 @@ public class ExcelUtils {
         cell.setCellStyle(cellStyle);
         return cell;
     }
-
-
-    /**
-     * @param row
-     * @return
-     */
-
-    public static boolean isEmptyRow(XSSFRow row) {
-        for( int i = 0; i < 100; i++ ) {
-            XSSFCell cell = getCell(row,i);
-            if(StringUtils.hasText(cell.getRawValue())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-
 
 }

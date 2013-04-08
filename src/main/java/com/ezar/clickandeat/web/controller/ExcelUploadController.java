@@ -559,15 +559,19 @@ public class ExcelUploadController {
         XSSFSheet specialOffersSheet = workbook.getSheet("Special Offers");
         int specialOfferIndex = 1;
         emptyRowCount = 0;
+        SpecialOffer currentSpecialOffer = null;
         String specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,1);
         while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
             if(StringUtils.hasText(specialOfferName)) {
-                SpecialOffer specialOffer = new SpecialOffer();
-                specialOffer.setTitle(specialOfferName);
-                specialOffer.setNumber((int)getCellDoubleValue(specialOffersSheet,specialOfferIndex,0));
-                specialOffer.setDescription(getCellStringValue(specialOffersSheet,specialOfferIndex,2));
+                if( currentSpecialOffer != null ) {
+                    restaurant.getSpecialOffers().add(currentSpecialOffer);
+                }
+                currentSpecialOffer = new SpecialOffer();
+                currentSpecialOffer.setTitle(specialOfferName);
+                currentSpecialOffer.setNumber((int)getCellDoubleValue(specialOffersSheet,specialOfferIndex,0));
+                currentSpecialOffer.setDescription(getCellStringValue(specialOffersSheet,specialOfferIndex,2));
                 double cost = getCellDoubleValue(specialOffersSheet,specialOfferIndex,3);
-                specialOffer.setCost(cost == 0d?null: cost);
+                currentSpecialOffer.setCost(cost == 0d?null: cost);
 
                 // Add applicable times for special offer
                 int applicableTimeAnchor = 4;
@@ -581,7 +585,7 @@ public class ExcelUploadController {
                     applicableTime.setApplicableTo(getLocalTime(getCell(row, applicableTimeAnchor + (3 * i) + 2)));
                     applicableTimes.add(applicableTime);
                 }
-                specialOffer.setOfferApplicableTimes(applicableTimes);
+                currentSpecialOffer.setOfferApplicableTimes(applicableTimes);
                 emptyRowCount = 0;
             }
             else {
@@ -589,6 +593,9 @@ public class ExcelUploadController {
             }
             specialOfferIndex++;
             specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,0);
+        }
+        if( currentSpecialOffer != null ) {
+            restaurant.getSpecialOffers().add(currentSpecialOffer);
         }
 
         // Special offer items
