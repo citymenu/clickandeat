@@ -395,6 +395,14 @@ a.home {
     cursor:pointer;
 }
 
+.restaurant-panel-left, .restaurant-panel-right {
+    cursor:pointer;
+}
+
+.restaurant-panel-hover {
+    background-color: #FAFAFA;
+}
+
 .restaurant-panel-left {
     display:inline-block;
     height:85px;

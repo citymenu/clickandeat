@@ -155,10 +155,10 @@
 
                         <c:choose>
                             <c:when test="${status.count %2 == 1}">
-                            <div class="restaurant-panel-left">
+                            <div class="restaurant-panel-left" url="${restaurant.url}" type="recommendation">
                             </c:when>
                             <c:otherwise>
-                            <div class="restaurant-panel-right">
+                            <div class="restaurant-panel-right" url="${restaurant.url}" type="recommendation">
                             </c:otherwise>
                         </c:choose>
 
@@ -167,14 +167,10 @@
                         <table width="430">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <a class="blank" href="${restaurant.url}">
-                                        <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
-                                    </a>
+                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                 </td>
                                 <td width="210">
-                                    <a class="blank" href="${restaurant.url}">
-                                        <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
-                                    </a>
+                                    <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                     <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
                                     <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                 </td>

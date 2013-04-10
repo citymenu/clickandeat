@@ -45,6 +45,21 @@ $(document).ready(function(){
     $('#speech2').delay(7500).fadeIn(500).delay(7000).fadeOut(500);
     $('#speech3').delay(15500).fadeIn(500);
 
+    // Recommendations hover
+    $('div[type="recommendation"]').hover(
+        function() {
+            $(this).addClass('restaurant-panel-hover');
+        },
+        function() {
+            $(this).removeClass('restaurant-panel-hover');
+        }
+    );
+
+    // Add url links to all restaurant buttons
+    $('div[type="recommendation"]').click(function(){
+        var url = $(this).attr('url');
+        window.location = ctx + '/' + url;
+    });
 
 });
 
