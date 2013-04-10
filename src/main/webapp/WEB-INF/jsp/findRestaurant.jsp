@@ -116,6 +116,9 @@
                                             </td>
                                             <td width="200">
                                                 <div class="table-entry">
+                                                    <c:if test="${restaurant.phoneOrdersOnly == true}">
+                                                    <div class="phone-orders-description"><message:message key="search.phone-orders-only"/></div>
+                                                    </c:if>
                                                     <h2 class="restaurant-name"><util:escape value="${restaurant.name}"/></h2>
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                     <c:if test="${restaurant.hasDiscounts == true}">

@@ -289,7 +289,7 @@ public class ExcelController {
                     if( menuItem.getAdditionalItemChoices().size() > rowIndex ) {
                         MenuItemAdditionalItemChoice choice = menuItem.getAdditionalItemChoices().get(rowIndex);
                         createCell(itemRow, 11, Cell.CELL_TYPE_STRING, styles.get("text")).setCellValue(choice.getName());
-                        if( choice.getCost() != null ) {
+                        if( choice.getCost() != null && choice.getCost() != 0d ) {
                             createCell(itemRow, 12, Cell.CELL_TYPE_NUMERIC, styles.get("currency")).setCellValue(choice.getCost());
                         }
                     }

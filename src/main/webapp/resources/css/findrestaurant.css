@@ -145,10 +145,8 @@ label {
 
 .phone-orders-description {
     display:inline-block;
-    position:absolute;
-    top:3px;
-    left:5px;
-    padding:1px 8px 1px 8px;
+    padding:1px 5px 1px 5px;
+    margin-bottom:4px;
     color:#FFFFFF;
     font:500 12px/13px prenton-n5,prenton;
     background: rgb(170 ,0, 0);
@@ -164,8 +162,7 @@ label {
     padding:5px 0 10px 65px;
     margin:20px 0 0 0;
     background:url(../images/telf.png) 10px 0 no-repeat;
-    min-height:65px;
-
+    min-height:60px;
 }
 
 .phone-orders-header {
@@ -369,9 +366,9 @@ a.register-button:active, a.register-button:hover {
 }
 
 .restaurant-telephone {
-    font:700 12px/12px myriad-pro-n7,myriad-pro;
+    font: 12px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .restaurant-delivery-details {

@@ -194,7 +194,7 @@ public class MenuItem {
             sb.append("'");
             sb.append(StringEscapeUtils.escapeHtml(additionalItemChoice.getName().replace("'", "###")));
             sb.append("%%%");
-            sb.append(additionalItemChoice.getCost() == null? "null": additionalItemChoice.getFormattedCost());
+            sb.append(additionalItemChoice.getCost() == null || additionalItemChoice.getCost() == 0d? "null": additionalItemChoice.getFormattedCost());
             sb.append("'");
             delim = ",";
         }
