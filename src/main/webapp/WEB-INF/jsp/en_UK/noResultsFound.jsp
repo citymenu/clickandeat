@@ -6,7 +6,7 @@
     <div class="no-results-content-wrapper">
         <div class="no-results-content">
             <h2><message:message key="search.no-restaurants-found"/></h2>
-            <div class="no-results-text">I&pos;m very sorry but I do not currently have any restaurants on this site which serve your location. Rest assured that I am constanly
+            <div class="no-results-text">I'm very sorry but I do not currently have any restaurants on this site which serve your location. Rest assured that I am constanly
              expanding the areas that this site covers wo please check back with me in a couple of months.</div>
             <div class="no-results-text">If you want to join my mailing list, please let me know your your email address and as soon as I have restaurants
             in your area I will send you a discount voucher entitling you to <b>10% off</b> your first online order.</div>

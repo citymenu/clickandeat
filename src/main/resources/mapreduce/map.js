@@ -21,7 +21,8 @@ function map() {
         if( this.deliveryOptions.collectionOnly ) {
             include = true;
         } else {
-            if( distance  < this.deliveryOptions.deliveryRadiusInKilometres + radius ) {
+            var deliveryRadius = this.deliveryOptions.deliveryRadiusInKilometres || 0;
+            if( distance  < deliveryRadius + radius ) {
                 include = true;
             }
         }
