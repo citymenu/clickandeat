@@ -116,9 +116,6 @@
                                             </td>
                                             <td width="200">
                                                 <div class="table-entry">
-                                                    <c:if test="${restaurant.phoneOrdersOnly == true}">
-                                                    <div class="phone-orders-description"><message:message key="search.phone-orders-only"/></div>
-                                                    </c:if>
                                                     <h2 class="restaurant-name"><util:escape value="${restaurant.name}"/></h2>
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                     <c:if test="${restaurant.hasDiscounts == true}">
@@ -138,7 +135,6 @@
                                                                 (<message:message key="search.distance"/>: ${restaurant.formattedDistanceToSearchLocation}km)
                                                             </c:if>
                                                         </div>
-                                                        <div class="restaurant-telephone"><message:message key="restaurant.contact"/>: ${restaurant.contactTelephone}</div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -154,7 +150,7 @@
                                                             <c:otherwise>
                                                                 <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
                                                                 <div class="delivery-details">
-                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
+                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumOrderForFreeDelivery == 0 && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
                                                                         <div><message:message key="restaurant.free-delivery" escape="false"/></div>
                                                                     </c:if>
                                                                     <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00' && deliveryOptions.minimumDeliveryCharge != '0,00'}">
@@ -165,6 +161,9 @@
                                                                             ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span> -
                                                                             ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
                                                                         </div>
+                                                                    </c:if>
+                                                                    <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
+                                                                        <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
                                                                     </c:if>
                                                                 </div>
                                                             </c:otherwise>

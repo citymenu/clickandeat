@@ -53,7 +53,6 @@
                                                         <div class="restaurant-description"><util:escape value="${restaurant.description}" escapeNewLines="true"/></div>
                                                         </c:if>
                                                         <div class="cuisine-summary">${restaurant.cuisineSummary}</div>
-                                                        <div class="restaurant-telephone"><message:message key="restaurant.contact"/>: ${restaurant.contactTelephone}</div>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -87,7 +86,7 @@
                                                                 <c:otherwise>
                                                                     <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
                                                                     <div class="delivery-details">
-                                                                        <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
+                                                                        <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumOrderForFreeDelivery == 0 && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
                                                                             <div><message:message key="restaurant.free-delivery" escape="false"/></div>
                                                                         </c:if>
                                                                         <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00' && deliveryOptions.minimumDeliveryCharge != '0,00'}">

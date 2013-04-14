@@ -72,9 +72,9 @@ a.location-button {
     *display: inline;
 }
 
-.restaurant-image {
-    max-width:150px;
-    max-height:150px;
+img.restaurant-image {
+    max-width:90px;
+    max-height:90px;
 }
 
 .restaurant-title {

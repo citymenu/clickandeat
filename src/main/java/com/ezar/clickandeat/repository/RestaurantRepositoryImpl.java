@@ -57,7 +57,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private double maxDistance;
 
     private long lastRefreshed = 0l;    
-    
+
+    private boolean usecache = true;
+
     private List<Restaurant> recommendations;
     
 
@@ -77,8 +79,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public List<Restaurant> getPage(Pageable pageable) {
-        Query query = new Query(where("deleted").ne(true));
-        QueryUtils.applyPagination(query, pageable);
+        Query query = new Query(where("deleted").ne(true)).with(pageable);
         return operations.find(query,Restaurant.class);
     }
 
@@ -149,15 +150,22 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( restaurantId == null ) {
             throw new IllegalArgumentException("restaurantId must not be null");
         }
-        Restaurant restaurant;
-        restaurant = clusteredCache.get(Restaurant.class, restaurantId);
+        Restaurant restaurant = null;
+        if(usecache) {
+            restaurant = clusteredCache.get(Restaurant.class, restaurantId);
+        }
         if( restaurant == null ) {
             restaurant = operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
-            if( restaurant != null ) {
+            if( restaurant != null && usecache ) {
                 clusteredCache.store(Restaurant.class,restaurantId,restaurant);
             }
         }
         return restaurant;
+    }
+
+    @Override
+    public Restaurant findByName(String name) {
+        return operations.findOne(query(where("name").is(name)),Restaurant.class);
     }
 
     @Override
@@ -199,7 +207,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
 
-        clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        if(usecache) {
+            clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        }
         
         // Update created and last update times
         long now = new DateTime().getMillis();
@@ -225,7 +235,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @SuppressWarnings("unchecked")
     public void deleteRestaurant(Restaurant restaurant) {
         operations.remove(query(where("restaurantId").is(restaurant.getRestaurantId())), Restaurant.class);
-        clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        if(usecache) {
+            clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        }
     }
 
 
@@ -335,4 +347,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         operations.updateFirst(query(where("restaurantId").is(restaurantId)),update,Restaurant.class);
     }
 
+    public void setUsecache(boolean usecache) {
+        this.usecache = usecache;
+    }
 }

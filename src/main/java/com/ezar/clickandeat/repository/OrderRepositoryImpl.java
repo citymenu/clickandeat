@@ -59,11 +59,17 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         Query query = query(where("orderId").is(orderId));
         Order order = operations.findOne(query,Order.class);
         if( order != null ) {
-            if( order.getRestaurantId() != null ) {
-                order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+            try {
+                if( order.getRestaurantId() != null ) {
+                    order.setRestaurant(restaurantRepository.findByRestaurantId(order.getRestaurantId()));
+                }
+                if( order.getVoucherId() != null ) {
+                    order.setVoucher(voucherRepository.findByVoucherId(order.getVoucherId()));
+                }
             }
-            if( order.getVoucherId() != null ) {
-                order.setVoucher(voucherRepository.findByVoucherId(order.getVoucherId()));
+            catch(Exception ex ) {
+                LOGGER.info("Could not find order restaurant id: " + order.getRestaurantId() + ", not returning order");
+                return null;
             }
         }
         LOGGER.debug("Retrieving order id " + orderId + " took " + ( System.currentTimeMillis() - now) + " ms");

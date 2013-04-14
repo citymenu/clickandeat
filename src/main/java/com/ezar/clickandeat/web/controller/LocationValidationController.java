@@ -115,8 +115,13 @@ public class LocationValidationController {
         String orderId = (String)session.getAttribute("orderid");
         if( orderId != null ) {
             Order order = orderRepository.findByOrderId(orderId);
-            order.setDeliveryAddress(geoLocationService.buildAddress(search.getLocation()));
-            orderRepository.saveOrder(order);
+            if( order != null ) {
+                order.setDeliveryAddress(geoLocationService.buildAddress(search.getLocation()));
+                orderRepository.saveOrder(order);
+            }
+            else {
+                session.removeAttribute("orderid");
+            }
         }
     }
     

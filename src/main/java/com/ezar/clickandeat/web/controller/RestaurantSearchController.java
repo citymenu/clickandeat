@@ -79,8 +79,10 @@ public class RestaurantSearchController {
                 String orderId = (String)session.getAttribute("orderid");
                 if( orderId != null ) {
                     Order order = orderRepository.findByOrderId(orderId);
-                    order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
-                    orderRepository.saveOrder(order);
+                    if( order != null ) {
+                        order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
+                        orderRepository.saveOrder(order);
+                    }
                 }
             }
             search.setCuisine(cuisine);
