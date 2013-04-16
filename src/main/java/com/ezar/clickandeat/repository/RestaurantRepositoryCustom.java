@@ -17,6 +17,8 @@ public interface RestaurantRepositoryCustom {
 
     Restaurant findByName(String name);
 
+    Restaurant findByExternalId(String externalId);
+
     Restaurant saveRestaurant(Restaurant restaurant);
 
     void addRestaurantUpdate(String restaurantId, String restaurantUpdate);

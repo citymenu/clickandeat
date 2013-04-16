@@ -94,6 +94,9 @@ public class Restaurant extends PersistentObject {
     @Transient
     private boolean open;
 
+    // External id (i.e. url to Just eat)
+    private String externalId;
+    
     // Determines if the restaurant owner has approved or not the restaurant content
     private boolean contentApproved;
 
@@ -900,5 +903,17 @@ public class Restaurant extends PersistentObject {
 
     public void setCommissionPercent(Double commissionPercent) {
         this.commissionPercent = commissionPercent;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+    
+    public String getOrigin() {
+        return externalId == null? "Local": "JustEat";
     }
 }

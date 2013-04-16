@@ -169,6 +169,11 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
+    public Restaurant findByExternalId(String externalId) {
+        return operations.findOne(query(where("externalId").is(externalId)),Restaurant.class);
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public Restaurant saveRestaurant(Restaurant restaurant) {
 

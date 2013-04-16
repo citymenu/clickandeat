@@ -3,13 +3,12 @@ package com.ezar.clickandeat.scheduling;
 
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
 import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
 import com.ezar.clickandeat.util.Pair;
 import org.apache.log4j.Logger;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
-import org.jets3t.service.model.S3Bucket;
-import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -20,10 +19,19 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.*;
+import javax.mail.internet.MimeMessage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -37,7 +45,16 @@ public class RestaurantScraper implements InitializingBean {
 
     @Autowired
     private RestaurantRepositoryImpl restaurantRepository;
-    
+
+    @Autowired
+    private GeoLocationRepositoryImpl geoLocationRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
     private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
     
     private final SortedSet<String> postcodes = new TreeSet<String>();
@@ -49,16 +66,22 @@ public class RestaurantScraper implements InitializingBean {
     private String bucketName;
 
     private S3Service s3Service;
+
+    private String sendTo;
     
+    private String from;
+
+    private DistributedLock lock;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-    
-        geoLocationService.setCacheLocations(false);
-        geoLocationService.setLocale("es_ES");
 
-        restaurantRepository.setUsecache(false);
+        this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
         
+        geoLocationService.setLocale("es_ES");
+        restaurantRepository.setUsecache(false);
+        geoLocationRepository.setUsecache(false);
+
         Properties props = new Properties();
         props.load(new ClassPathResource("/aws.s3.synchronize.properties").getInputStream());
         String accessKey = props.getProperty("accesskey");
@@ -80,107 +103,184 @@ public class RestaurantScraper implements InitializingBean {
     }
 
 
+    @Scheduled(cron="0 0 10 * * WED")
     public void scrapeData() throws Exception {
-
-        List<Pair<Restaurant,String>> restaurants = new ArrayList<Pair<Restaurant,String>>();
-        List<String> errorUrls = new ArrayList<String>();
-        Map<String,Pair<Set<String>,List<String>>> detailsByPostcode = new HashMap<String, Pair<Set<String>, List<String>>>();
-        for( String postcode: postcodes ) {
-            for(Pair<String,String> restaurantDetails :getRestaurantDetails(postcode)) {
-                String url = restaurantDetails.first;
-                List<String> cuisines = new ArrayList<String>();
-                List<String> cuisineList = Arrays.asList(StringUtils.delimitedListToStringArray(restaurantDetails.second, ", "));
-                for(String cuisine: cuisineList) {
-                    cuisines.add(cuisine.trim());
-                }
-                Pair<Set<String>,List<String>> details = detailsByPostcode.get(url);
-                if( details == null ) {
-                    Set<String> postcodes = new HashSet<String>();
-                    details = new Pair<Set<String>, List<String>>(postcodes,cuisines);
-                    detailsByPostcode.put(url,details);
-                }
-                details.first.add(postcode);
-            }
-        }
-        LOGGER.info("Extracted " + detailsByPostcode.size() + " restaurants");
-
-        for(Map.Entry<String,Pair<Set<String>,List<String>>> entry: detailsByPostcode.entrySet()) {
-            String url = entry.getKey();
-            Set<String> postcodes = entry.getValue().first;
-            List<String> cuisines = entry.getValue().second;
-            try {
-                Pair<Restaurant,String> restaurant = buildRestaurant(url, postcodes, cuisines);
-                restaurants.add(restaurant);
-            }
-            catch( Exception ex ) {
-                LOGGER.error("Error occurred loading from url: " + url,ex);
-                errorUrls.add(url);
-            }
-        }
-        
-        // Log out all urls which had an error
-        if(errorUrls.size() > 0 ) {
-            LOGGER.info("Could not parse the following urls:");
-            for(String url: errorUrls ) {
-                LOGGER.info(url);
-            }
-        }
-        
-        // Now save new restaurant details
-        for(Pair<Restaurant,String> pair: restaurants) {
-            Restaurant restaurant = pair.first;
-            String imageUrl = pair.second;
-            if(restaurantRepository.findByName(restaurant.getName()) != null ) {
-                restaurantRepository.deleteRestaurant(restaurantRepository.findByName(restaurant.getName()));
-            }
-            
-            if(restaurantRepository.findByName(restaurant.getName()) == null ) {
-
-                // Read image into memory
-                try {
-                    if(!imageUrl.startsWith("http:")) {
-                        imageUrl = "http:" + imageUrl;
+        try {
+            if(lock.acquire()) {
+                List<Pair<Restaurant,String>> restaurants = new ArrayList<Pair<Restaurant,String>>();
+                final List<String> errorUrls = new ArrayList<String>();
+                final List<Restaurant> newRestaurants = new ArrayList<Restaurant>();
+                
+                Map<String,Pair<Set<String>,List<String>>> detailsByPostcode = new HashMap<String, Pair<Set<String>, List<String>>>();
+                for( String postcode: postcodes ) {
+                    for(Pair<String,String> restaurantDetails :getRestaurantDetails(postcode)) {
+                        String url = restaurantDetails.first;
+                        List<String> cuisines = new ArrayList<String>();
+                        List<String> cuisineList = Arrays.asList(StringUtils.delimitedListToStringArray(restaurantDetails.second, ", "));
+                        for(String cuisine: cuisineList) {
+                            cuisines.add(cuisine.trim());
+                        }
+                        Pair<Set<String>,List<String>> details = detailsByPostcode.get(url);
+                        if( details == null ) {
+                            Set<String> postcodes = new HashSet<String>();
+                            details = new Pair<Set<String>, List<String>>(postcodes,cuisines);
+                            detailsByPostcode.put(url,details);
+                        }
+                        details.first.add(postcode);
                     }
-                    URL url = new URL(imageUrl);
-                    InputStream is = url.openStream();
-                    File file = new File("c:/workspace/clickandeat/src/main/webapp/resources/images/restaurant/" + restaurant.getRestaurantId());
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    FileOutputStream faos = new FileOutputStream(file);
-                    byte[] b = new byte[2048];
-                    int length;
-                    while ((length = is.read(b)) != -1) {
-                        baos.write(b, 0, length);
-                        faos.write(b, 0, length);
+                }
+                LOGGER.info("Extracted " + detailsByPostcode.size() + " restaurants");
+        
+                for(Map.Entry<String,Pair<Set<String>,List<String>>> entry: detailsByPostcode.entrySet()) {
+                    String url = entry.getKey();
+                    Set<String> postcodes = entry.getValue().first;
+                    List<String> cuisines = entry.getValue().second;
+                    try {
+                        Pair<Restaurant,String> restaurant = buildRestaurant(url, postcodes, cuisines);
+                        restaurants.add(restaurant);
                     }
-                    is.close();
-                    baos.close();
-                    faos.close();
+                    catch( Exception ex ) {
+                        LOGGER.error("Error occurred loading from url: " + url,ex);
+                        errorUrls.add(url);
+                    }
                 }
-                catch(Exception ex ) {
-                    LOGGER.error("",ex);
+                
+                // Now save new restaurant details
+                for(Pair<Restaurant,String> pair: restaurants) {
+                    Restaurant restaurant = pair.first;
+                    String imageUrl = pair.second;
+                    if(restaurantRepository.findByName(restaurant.getName()) != null ) {
+                        restaurantRepository.deleteRestaurant(restaurantRepository.findByName(restaurant.getName()));
+                    }
+                    
+                    if(restaurantRepository.findByExternalId(restaurant.getExternalId()) == null ) {
+
+                        boolean hasUploadedImage = true;
+
+                        // Read image into memory
+                        try {
+                            if(!imageUrl.startsWith("http:")) {
+                                imageUrl = "http:" + imageUrl;
+                            }
+                            URL url = new URL(imageUrl);
+                            InputStream is = url.openStream();
+                            File file = new File("c:/workspace/clickandeat/src/main/webapp/resources/images/restaurant/" + restaurant.getRestaurantId());
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            FileOutputStream faos = new FileOutputStream(file);
+                            byte[] b = new byte[2048];
+                            int length;
+                            while ((length = is.read(b)) != -1) {
+                                baos.write(b, 0, length);
+                                faos.write(b, 0, length);
+                            }
+                            is.close();
+                            baos.close();
+                            faos.close();
+                        }
+                        catch(Exception ex ) {
+                            LOGGER.error("",ex);
+                            hasUploadedImage = false;
+                        }
+        
+                        // Save new restaurant
+                        restaurant.setHasUploadedImage(hasUploadedImage);
+                        restaurant = restaurantRepository.saveRestaurant(restaurant);
+                        String restaurantId = restaurant.getRestaurantId();
+                        LOGGER.info("Saved [" + restaurant.getName() + "] with id: " + restaurantId);
+        
+                        String imageType = imageUrl.substring(imageUrl.lastIndexOf(".")+1);
+        
+                        // Now upload the restaurant image
+        //                S3Object object = new S3Object(basePath + "/" + restaurantId);
+        //                ByteArrayInputStream bis = new ByteArrayInputStream(baos.toByteArray());
+        //                object.setDataInputStream(bis);
+        //                object.setContentLength(baos.size());
+        //                object.setContentType("image/"+imageType);
+                        //S3Bucket bucket = s3Service.getBucket(bucketName);
+                        //s3Service.putObject(bucket, object);
+                        LOGGER.info("Uploaded image for restaurant id: " + restaurantId);
+                        newRestaurants.add(restaurant);
+                    }
                 }
-
-                // Save new restaurant
-                restaurant.setHasUploadedImage(true);
-                restaurant = restaurantRepository.saveRestaurant(restaurant);
-                String restaurantId = restaurant.getRestaurantId();
-                LOGGER.info("Saved [" + restaurant.getName() + "] with id: " + restaurantId);
-
-                String imageType = imageUrl.substring(imageUrl.lastIndexOf(".")+1);
-
-                // Now upload the restaurant image
-//                S3Object object = new S3Object(basePath + "/" + restaurantId);
-//                ByteArrayInputStream bis = new ByteArrayInputStream(baos.toByteArray());
-//                object.setDataInputStream(bis);
-//                object.setContentLength(baos.size());
-//                object.setContentType("image/"+imageType);
-                //S3Bucket bucket = s3Service.getBucket(bucketName);
-                //s3Service.putObject(bucket, object);
-                LOGGER.info("Uploaded image for restaurant id: " + restaurantId);
+        
+                // Send out an email report
+                MimeMessagePreparator mimeMessagePreparator = new MimeMessagePreparator() {
+                    @Override
+                    public void prepare(MimeMessage mimeMessage) throws Exception {
+                        MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                        //message.setTo("soporte@llamarycomer.com");
+                        message.setTo("mishimaltd@gmail.com");
+                        message.setFrom("noreply@llamarycomer.com");
+                        message.setSubject("Restaurant scraper report");
+                        StringBuilder sb = new StringBuilder();
+                        if(newRestaurants.size() > 0 ) {
+                            sb.append("Created the following new restaurants:\n\n");
+                            for(Restaurant restaurant: newRestaurants ) {
+                                sb.append(restaurant.getName()).append(" (").append(restaurant.getExternalId()).append(")");
+                                if( hasOffers(restaurant)) {
+                                    sb.append(" - Has Offers");
+                                }
+                                if( hasDiscounts(restaurant)) {
+                                    sb.append(" - Has Discounts");
+                                }
+                                sb.append("\n");
+                            }
+                        }
+                        else {
+                            sb.append("No new restaurants created\n");
+                        }
+                        if(errorUrls.size() > 0 ) {
+                            sb.append("\n\nCould not parse the following urls:\n\n");
+                            for(String errorUrl: errorUrls ) {
+                                sb.append(baseUrl).append(errorUrl).append("\n");
+                            }
+                        }
+                        message.setText(sb.toString());
+                    }
+                };
+                javaMailSender.send(mimeMessagePreparator);
             }
-
         }
+        catch (Exception ex ) {
+            LOGGER.error(ex);
+        }
+        finally {
+            lock.release();
+        }
+    }
 
+
+    /**
+     * @param restaurant
+     * @return
+     */
+
+    private boolean hasOffers(Restaurant restaurant ) {
+        for( MenuCategory category: restaurant.getMenu().getMenuCategories()) {
+            String name = category.getName();
+            if("Menú".equalsIgnoreCase(name) || "Offertas".equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * @param restaurant
+     * @return
+     */
+
+    private boolean hasDiscounts(Restaurant restaurant ) {
+        LOGGER.info("Checking for discounts for restaurant: " + restaurant.getName());
+        try {
+            Document doc = getDocument(restaurant.getExternalId());
+            String content = doc.text().toLowerCase();
+            return content.contains("descuento");
+        }
+        catch( Exception ex ) {
+            return false;
+        }
     }
 
 
@@ -223,6 +323,7 @@ public class RestaurantScraper implements InitializingBean {
         Restaurant restaurant = restaurantRepository.create();
         restaurant.setListOnSite(true);
         restaurant.setPhoneOrdersOnly(true);
+        restaurant.setExternalId(baseUrl + url );
 
         // Get the image url
         String imageUrl = doc.select("img[id=ctl00_ContentPlaceHolder1_RestInfo_DefaultRestaurantImage]").first().attr("src");
@@ -305,11 +406,11 @@ public class RestaurantScraper implements InitializingBean {
                 String orderText = deliveryText.replace("€", "").replace("Más de", "").replace("Menos de", "").replace(",", ".").replace("=","").trim();
                 Double orderValue = Double.valueOf(orderText);
                 String deliveryCostText = deliveryCosts.get(i+1).text().trim();
-                if("Gratis".equals(deliveryCostText)) {
+                if("Gratis".equalsIgnoreCase(deliveryCostText)) {
                     deliveryOptions.setMinimumOrderForFreeDelivery(orderValue);
                     deliveryOptions.setAllowFreeDelivery(true);
                 }
-                else if("No entrega".equals(deliveryCostText)) {
+                else if("No entrega".equalsIgnoreCase(deliveryCostText)) {
                     if( orderValue != 0d ) {
                         deliveryOptions.setMinimumOrderForDelivery(orderValue);
                     }
@@ -334,8 +435,9 @@ public class RestaurantScraper implements InitializingBean {
             }
         }
     
-        // Set delivery areas
+        // Set delivery areas and default delivery radius
         deliveryOptions.setAreasDeliveredTo(new ArrayList<String>(postcodes));
+        deliveryOptions.setDeliveryRadiusInKilometres(2d);
 
         // Clean up delivery options
         if( deliveryOptions.getMinimumOrderForDelivery() != null && deliveryOptions.getDeliveryCharge() == null ) {
@@ -457,8 +559,14 @@ public class RestaurantScraper implements InitializingBean {
         }
         return new Pair<Restaurant, String>(restaurant,imageUrl);
     }
-    
-    
+
+
+    /**
+     * @param url
+     * @return
+     * @throws Exception
+     */
+
     private Document getDocument(String url) throws Exception {
         int maxAttempts = 5;
         int currentAttempt = 0;
@@ -473,5 +581,6 @@ public class RestaurantScraper implements InitializingBean {
         }
         throw new Exception("Failed to get url: " + url);
     }
-    
+
+
 }

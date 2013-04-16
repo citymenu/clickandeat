@@ -17,6 +17,8 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
     @Autowired
     private ClusteredCache clusteredCache;
 
+    private boolean usecache = true;
+    
     
     @Override
     public GeoLocation findByAddress(String address) {
@@ -27,7 +29,7 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
         geoLocation = clusteredCache.get(GeoLocation.class, address);
         if( geoLocation == null ) {
             geoLocation = operations.findOne(query(where("address").is(address)),GeoLocation.class);
-            if( geoLocation != null ) {
+            if( geoLocation != null && usecache ) {
                 clusteredCache.store(GeoLocation.class,address,geoLocation);
             }
         }
@@ -37,10 +39,15 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
     
     @Override
     public GeoLocation saveGeoLocation(GeoLocation geoLocation) {
-        clusteredCache.remove(GeoLocation.class, geoLocation.getAddress());
+        if(usecache) {
+            clusteredCache.remove(GeoLocation.class, geoLocation.getAddress());
+        }
         operations.save(geoLocation);
         return geoLocation;
     }
-
     
+
+    public void setUsecache(boolean usecache) {
+        this.usecache = usecache;
+    }
 }
