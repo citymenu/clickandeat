@@ -19,7 +19,6 @@
     <meta name="robots" content="all" />
     <meta http-equiv="expires" content="0"/>
     <meta name="viewport" content="width=1050"/>
-    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
     <%@ include file="/WEB-INF/jsp/taglibs_js.jsp" %>
 	<link rel="shortcut icon" href="${resources}/images/favicon.png">
 

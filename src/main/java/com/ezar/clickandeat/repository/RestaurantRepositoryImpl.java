@@ -231,7 +231,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public List<Restaurant> quickLaunch() {
-        Query query = new Query(where("deleted").ne("true"));
+        Query query = new Query(where("deleted").ne(true));
         return operations.find(query, Restaurant.class);
     }
 

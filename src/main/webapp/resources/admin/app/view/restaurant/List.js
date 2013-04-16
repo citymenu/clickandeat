@@ -54,6 +54,7 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'List on site', dataIndex:'listOnSite', renderer:booleanToString, flex:.1},
             {header:'Content approved', dataIndex:'contentApproved', renderer:booleanToString, flex:.1},
             {header:'Content status', dataIndex:'contentStatus', flex:.1},
+            {header:'Origin', dataIndex:'origin', flex:.1},
             {header:'Content status date', dataIndex:'lastContentApprovalStatusUpdated', renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s'), flex:.1},
             {header:'Search ranking', dataIndex:'searchRanking', flex:.1},
             {header:'Phone orders only', dataIndex:'phoneOrdersOnly', renderer:booleanToString, type:'boolean',flex:.1},

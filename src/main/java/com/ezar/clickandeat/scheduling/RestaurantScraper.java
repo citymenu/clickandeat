@@ -321,7 +321,7 @@ public class RestaurantScraper implements InitializingBean {
         Document doc = getDocument(baseUrl + url );
 
         Restaurant restaurant = restaurantRepository.create();
-        restaurant.setListOnSite(true);
+        restaurant.setListOnSite(false);
         restaurant.setPhoneOrdersOnly(true);
         restaurant.setExternalId(baseUrl + url );
 

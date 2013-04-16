@@ -275,10 +275,10 @@ public class RestaurantController {
             Map<String,String> sortProperties = sortParams.get(0);
             String direction = sortProperties.get("direction");
             String property = sortProperties.get("property");
-            request = new PageRequest(page - 1, limit - start, ( "ASC".equals(direction)? ASC : DESC ), property );
+            request = new PageRequest(page - 1, limit, ( "ASC".equals(direction)? ASC : DESC ), property );
         }
         else {
-            request = new PageRequest(page - 1, limit - start );
+            request = new PageRequest(page - 1, limit );
         }
 
         List<Restaurant> restaurants = repository.getPage(request);

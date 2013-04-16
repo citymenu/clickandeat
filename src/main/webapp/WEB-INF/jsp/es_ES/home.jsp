@@ -7,6 +7,8 @@
 <!doctype html>
 
 <head>
+    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
@@ -170,7 +172,7 @@
                         <table width="430">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
+                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="60" height="60" alt="<util:escape value="${restaurant.name}"/>"/>
                                 </td>
                                 <td width="210">
                                     <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>

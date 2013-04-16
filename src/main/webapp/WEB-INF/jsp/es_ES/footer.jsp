@@ -76,7 +76,8 @@
         </table>
     </div>
 </div>
-<div class="display:none">
+
+<div style="display:none">
     <c:forEach var="entry" items="${cuisineLocationsFull}">
         <div>
             <a href="${ctx}/app/encontrar-comida-para-llevar-en-${entry.key.second}/loc/${entry.key.first}">${entry.key.second}</a>

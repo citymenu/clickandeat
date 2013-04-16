@@ -5,6 +5,8 @@
 <!doctype html>
 
 <head>
+    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>

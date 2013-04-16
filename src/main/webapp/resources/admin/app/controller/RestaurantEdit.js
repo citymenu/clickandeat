@@ -141,6 +141,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click: this.downloadMenu
             },
 
+            'restaurantedit button[action=openExternal]': {
+                click: this.openExternal
+            },
+
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -624,6 +628,13 @@ Ext.define('AD.controller.RestaurantEdit', {
 
     downloadMenu:function(button) {
         window.location = ctx + "/admin/menu/downloadMenu.html?id=" + restaurantObj.restaurantId;
+    },
+
+    openExternal:function(button) {
+        var externalId = restaurantObj.externalId;
+        if(externalId != null && externalId != '') {
+            window.open(externalId);
+        }
     },
 
     saveRestaurant: function(button , callback) {

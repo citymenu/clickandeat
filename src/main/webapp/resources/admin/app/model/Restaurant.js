@@ -8,6 +8,8 @@ Ext.define('AD.model.Restaurant', {
         {name:'restaurantId', type:'string'},
         {name:'name', type:'string',convert: unescapeQuotes},
         {name:'description',type: 'string',convert: unescapeQuotes},
+        {name:'origin',type: 'string'},
+        {name:'externalId',type: 'string'},
         {name:'contactEmail', type:'string'},
         {name:'contactTelephone', type:'string'},
         {name:'contactMobile', type:'string'},

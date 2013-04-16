@@ -7,6 +7,8 @@
 <!doctype html>
 
 <head>
+    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
 
