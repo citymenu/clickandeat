@@ -35,9 +35,9 @@
                 <div class="wsite-header">
                     <div id="butler"></div>
                     <div id="speechbubble">
-                        <div id="speech1" class="active">Hi, I&apos;m here to show you the easiest way to get local takeaway food delivered to your home....</div>
-                        <div id="speech2" class="inactive">I have a wide range of restaurant menus to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
-                        <div id="speech3" class="inactive">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
+                        <div id="speech1" class="active">Bienvenido, deja que te ensena la manera más sencilla de pedir comida a domicilio...</div>
+                        <div id="speech2" class="inactive">Disfruta de la gran variedad de cocinas que ponemos a tu alcance: italiana, mejicana, china, pizza, y mucho más.</div>
+                        <div id="speech3" class="inactive">Dime dónde hay que llevarla y te ayudaré a pedir tu comida ahora mismo...</div>
                     </div>
                     <div id="bannercarouselwrapper">
                         <div id="bannercarousel">
@@ -135,9 +135,9 @@
                         <div id="searchbarright">
                             <div class="searchbarinfo">
                                 <div>
-                                    OVER 500 RESTAURANTES LISTED<br>
-                                    SUPER EASY ORDERING PROCESS<br>
-                                    HOME DELIVERY WITHIN 45 MINUTES
+                                    más de 1000 restaurantes para elegir<br>
+                                    es muy fácil pedir online<br>
+                                    servicio a domicilio "en menos de" 45 minutos
                                 </div>
                             </div>
                         </div>

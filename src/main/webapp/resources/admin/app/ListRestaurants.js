@@ -1,4 +1,16 @@
 Ext.Loader.setConfig({enabled:true});
+Ext.Loader.setPath('Ext.ux', '../resources/ext/src/ux');
+
+var cp = Ext.create('Ext.state.CookieProvider', {
+    expires: new Date(new Date().getTime()+(1000*60*60*24)) //1 days
+});
+
+Ext.state.Manager.setProvider(cp);
+
+Ext.require([
+    'Ext.ux.form.SearchField',
+    'Ext.ux.grid.FiltersFeature'
+]);
 
 Ext.application({
     name: 'AD',

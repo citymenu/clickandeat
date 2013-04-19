@@ -140,8 +140,8 @@ label {
 }
 
 .table-entry {
-    margin-left:10px;
-    margin-right:10px;
+    margin-left:15px;
+    margin-right:15px;
 }
 
 .phone-orders-description {
@@ -364,6 +364,10 @@ a.register-button:active, a.register-button:hover {
     color:#444444;
     margin-top: 4px;
     padding: 0 0 0 26px;
+}
+
+.delivery-details div {
+    padding-bottom:2px;
 }
 
 .restaurant-telephone {

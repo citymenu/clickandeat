@@ -205,33 +205,36 @@ function showAllDeliveryCharges() {
                 }
 
                 // Build the location delivery options
-                var table = '<table class=\'delivery-details-table\'><thead><tr>';
-                table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-location'));
-                if( hasDeliveryCharge ) {
-                    table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-charge'));
-                }
-                if( hasMinimumOrder ) {
-                    table += ('<th>{0}</th>').format(getLabel('restaurant.minimum-order-value'));
-                }
-                table += '</tr></thead><tbody>';
-
-                var rowIndex = 0;
-                $.each( deliveryCharges, function( key, arr ) {
-                    var areaDeliveryCharge = arr[0];
-                    var areaMinimumOrderValue = arr[1];
-                    var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
-                    var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
+                var table = '';
+                if(hasDeliveryCharge || hasMinimumOrder) {
+                    table = '<table class=\'delivery-details-table\'><thead><tr>';
+                    table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-location'));
                     if( hasDeliveryCharge ) {
-                        row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                        table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-charge'));
                     }
                     if( hasMinimumOrder ) {
-                        row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                        table += ('<th>{0}</th>').format(getLabel('restaurant.minimum-order-value'));
                     }
-                    row += '</tr>';
-                    table += row;
-                });
+                    table += '</tr></thead><tbody>';
 
-                table += '</tbody></table>';
+                    var rowIndex = 0;
+                    $.each( deliveryCharges, function( key, arr ) {
+                        var areaDeliveryCharge = arr[0];
+                        var areaMinimumOrderValue = arr[1];
+                        var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
+                        var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
+                        if( hasDeliveryCharge ) {
+                            row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                        }
+                        if( hasMinimumOrder ) {
+                            row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                        }
+                        row += '</tr>';
+                        table += row;
+                    });
+
+                    table += '</tbody></table>';
+                }
 
                 var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.delivery-charges'));
                 var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(standardContent,table);

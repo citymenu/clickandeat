@@ -53,7 +53,7 @@ Ext.define('AD.view.restaurant.Edit' ,{
             action:'downloadMenu'
         },'-',{
             xtype:'button',
-            icon: resources + /images/icons-shadowless/navigation-000-button.png',
+            icon: resources + '/images/icons-shadowless/navigation-000-button.png',
             text:'Open External Site',
             action:'openExternal'
         }]

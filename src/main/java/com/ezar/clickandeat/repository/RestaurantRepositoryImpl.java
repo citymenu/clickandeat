@@ -3,8 +3,10 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.cache.ClusteredCache;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.repository.util.FilterUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.web.controller.helper.Filter;
 import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -12,8 +14,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
@@ -174,6 +178,23 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
+    public List<Restaurant> pageByRestaurantName(Pageable pageable, String restaurantName, List<Filter> filters) {
+        Query query = StringUtils.hasText(restaurantName)? new Query(where("name").regex(restaurantName,"i").and("deleted").ne(true)): new Query(where("deleted").ne(true));
+        FilterUtils.applyFilters(query, filters);
+        query.with(pageable);
+        return operations.find(query, Restaurant.class);
+    }
+
+
+    @Override
+    public long count(String restaurantName, List<Filter> filters) {
+        Query query = StringUtils.hasText(restaurantName)? new Query(where("name").regex(restaurantName).and("deleted").ne(true)): new Query(where("deleted").ne(true));
+        FilterUtils.applyFilters(query,filters);
+        return operations.count(query, Restaurant.class);
+    }
+
+
+    @Override
     @SuppressWarnings("unchecked")
     public Restaurant saveRestaurant(Restaurant restaurant) {
 
@@ -259,9 +280,15 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Build the query including location if set
         GeoLocation geoLocation = search.getLocation();
-        Query query = geoLocation != null? new Query(where("address.location").nearSphere(
-                new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR)):
-                new Query();
+        Query query;
+        if( geoLocation == null ) {
+            query = new Query();
+        }
+        else {
+            Double radius = Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR;
+            Circle circle = new Circle(geoLocation.getLocation()[0], geoLocation.getLocation()[1], radius);
+            query = new Query(where("address.location").withinSphere(circle));
+        }
         query.addCriteria(where("listOnSite").is(true).and("deleted").ne(true)
                 .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
 

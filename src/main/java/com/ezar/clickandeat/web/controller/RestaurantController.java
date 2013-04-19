@@ -11,6 +11,9 @@ import com.ezar.clickandeat.util.JSONUtils;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
 import com.ezar.clickandeat.validator.RestaurantValidator;
 import com.ezar.clickandeat.validator.ValidationErrors;
+import com.ezar.clickandeat.web.controller.helper.Filter;
+import com.ezar.clickandeat.web.controller.helper.FilterUtils;
+import com.ezar.clickandeat.web.controller.helper.FilterValueDecorator;
 import com.opensymphony.module.sitemesh.RequestConstants;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -64,6 +67,8 @@ public class RestaurantController {
 
     @Autowired
     private CuisineProvider cuisineProvider;
+
+    private final Map<String,FilterValueDecorator> filterDecoratorMap = new HashMap<String, FilterValueDecorator>();
 
     @RequestMapping(value="/**/restaurant/{restaurantId}", method = RequestMethod.GET)
     public ModelAndView get(@PathVariable("restaurantId") String restaurantId, HttpServletRequest request) {
@@ -266,7 +271,8 @@ public class RestaurantController {
     @ResponseBody
     @RequestMapping(value="/admin/restaurants/list.ajax", method = RequestMethod.GET )
     public ResponseEntity<byte[]> list(@RequestParam(value = "page") int page, @RequestParam(value = "start") int start,
-                                       @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort ) throws Exception {
+                                       @RequestParam(value = "limit") int limit, @RequestParam(value="sort", required = false) String sort,
+                                       @RequestParam(value = "query", required = false) String query, HttpServletRequest req) throws Exception {
 
         PageRequest request;
 
@@ -281,10 +287,11 @@ public class RestaurantController {
             request = new PageRequest(page - 1, limit );
         }
 
-        List<Restaurant> restaurants = repository.getPage(request);
+        List<Filter> filters = FilterUtils.extractFilters(req, filterDecoratorMap);
+        List<Restaurant> restaurants = repository.pageByRestaurantName(request,query,filters);
         Map<String,Object> model = new HashMap<String,Object>();
         model.put("restaurants",restaurants);
-        model.put("count",repository.countActive());
+        model.put("count",repository.count(query, filters));
         String[] excludes = new String[]{"restaurants.menu","restaurants.specialOffers","restaurants.discounts",
                 "restaurants.firstDiscount","restaurants.openingTimes"};
         return responseEntityUtils.buildResponse(model,excludes);

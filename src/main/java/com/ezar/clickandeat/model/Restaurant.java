@@ -36,7 +36,8 @@ public class Restaurant extends PersistentObject {
     private String restaurantId;
 
     private String uuid;
-    
+
+    @Indexed
     private String name;
 
     private String description;
@@ -96,6 +97,7 @@ public class Restaurant extends PersistentObject {
 
     // External id (i.e. url to Just eat)
     private String externalId;
+    private Integer justEatRating;
     
     // Determines if the restaurant owner has approved or not the restaurant content
     private boolean contentApproved;
@@ -916,8 +918,20 @@ public class Restaurant extends PersistentObject {
     public void setExternalId(String externalId) {
         this.externalId = externalId;
     }
-    
+
+    public Integer getJustEatRating() {
+        return justEatRating;
+    }
+
+    public void setJustEatRating(Integer justEatRating) {
+        this.justEatRating = justEatRating;
+    }
+
     public String getOrigin() {
         return externalId == null? "Local": "JustEat";
+    }
+
+    public String getTown() {
+        return address == null || address.getTown() == null? null: address.getTown();
     }
 }

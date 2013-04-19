@@ -111,12 +111,12 @@
                                 <div class="result" url="${restaurant.url}" type="link">
                                     <table width="780">
                                         <tr valign="middle">
-                                            <td width="105">
+                                            <td width="95">
                                                 <div class="restaurant-image">
                                                     <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
                                                 </div>
                                             </td>
-                                            <td width="200">
+                                            <td width="195">
                                                 <div class="table-entry">
                                                     <h2 class="restaurant-name"><util:escape value="${restaurant.name}"/></h2>
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
@@ -140,37 +140,45 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td width="165">
+                                            <td width="180">
                                                 <div class="restaurant-opening-details">
                                                     <div class="opening-details">${restaurant.todaysOpeningTimes}</div>
-                                                        <c:choose>
-                                                            <c:when test="${restaurant.collectionOnly}">
-                                                                <div class="delivery-details">
-                                                                    <message:message key="restaurant.collection-only"/>
-                                                                </div>
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
-                                                                <div class="delivery-details">
-                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumOrderForFreeDelivery == 0 && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
-                                                                        <div><message:message key="restaurant.free-delivery" escape="false"/></div>
-                                                                    </c:if>
-                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00' && deliveryOptions.minimumDeliveryCharge != '0,00'}">
-                                                                        <div>${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
-                                                                    </c:if>
-                                                                    <c:if test="${deliveryOptions.minimumDeliveryCharge != deliveryOptions.maximumDeliveryCharge}">
-                                                                        <div>
-                                                                            ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span> -
-                                                                            ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
-                                                                        </div>
-                                                                    </c:if>
-                                                                    <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
-                                                                        <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
-                                                                    </c:if>
-                                                                </div>
-                                                            </c:otherwise>
-                                                        </c:choose>
-                                                    </div>
+                                                    <c:choose>
+                                                        <c:when test="${restaurant.collectionOnly}">
+                                                            <div class="delivery-details">
+                                                                <message:message key="restaurant.collection-only"/>
+                                                            </div>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
+                                                            <div class="delivery-details">
+                                                                <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumOrderForFreeDelivery == 0 && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
+                                                                    <div><message:message key="restaurant.free-delivery" escape="false"/></div>
+                                                                </c:if>
+                                                                <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00' && deliveryOptions.minimumDeliveryCharge != '0,00'}">
+                                                                    <div>
+                                                                        <message:message key="restaurant.delivery-charge" escape="false"/>
+                                                                        ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="${deliveryOptions.minimumDeliveryCharge != deliveryOptions.maximumDeliveryCharge}">
+                                                                    <div>
+                                                                        <message:message key="restaurant.delivery-charge" escape="false"/>
+                                                                        ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span> -
+                                                                        ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="${deliveryOptions.minimumOrderForDelivery != null && deliveryOptions.minimumOrderForDelivery != null}">
+                                                                    <div>
+                                                                        <message:message key="restaurant.minimum-delivery-order" escape="false"/> ${deliveryOptions.formattedMinimumOrderForDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                    </div>
+                                                                </c:if>
+                                                                <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
+                                                                    <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                </c:if>
+                                                            </div>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </div>
                                             </td>
                                             <td width="140" align="right">

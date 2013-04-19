@@ -188,7 +188,7 @@ Ext.define('AD.controller.RestaurantList', {
     },
 
 	onGridRendered: function(grid) {
-		this.getRestaurantsStore().loadPage(1);
+		grid.getStore().loadPage(1);
 	},
 
 	onGridDblClick: function(view,record,item,index,eventObj,options) {

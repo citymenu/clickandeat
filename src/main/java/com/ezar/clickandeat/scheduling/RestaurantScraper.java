@@ -6,6 +6,7 @@ import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
 import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
 import com.ezar.clickandeat.util.Pair;
+import com.ezar.clickandeat.util.Triple;
 import org.apache.log4j.Logger;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
@@ -67,12 +68,19 @@ public class RestaurantScraper implements InitializingBean {
 
     private S3Service s3Service;
 
+    private String defaultCuisine = "Pizza";
+    
     private String sendTo;
     
     private String from;
 
     private DistributedLock lock;
 
+    private String notificationPhone = null;
+    private String notificationSMS = null;
+    private String notificationEmail = null;
+
+    
     @Override
     public void afterPropertiesSet() throws Exception {
 
@@ -93,37 +101,37 @@ public class RestaurantScraper implements InitializingBean {
         for(int i = 0; i < 1000; i++ ) {
             String suffix = "" + i;
             postcodes.add("0800".substring(0,5-suffix.length()) + suffix);
-        }
-
-        for(int i = 0; i < 1000; i++ ) {
-            String suffix = "" + i;
             postcodes.add("2800".substring(0,5-suffix.length()) + suffix);
+            postcodes.add("4800".substring(0,5-suffix.length()) + suffix);
+            postcodes.add("3500".substring(0,5-suffix.length()) + suffix);
+            postcodes.add("2900".substring(0,5-suffix.length()) + suffix);
+            postcodes.add("0300".substring(0,5-suffix.length()) + suffix);
         }
-
     }
 
 
     @Scheduled(cron="0 0 10 * * WED")
     public void scrapeData() throws Exception {
         try {
-            if(lock.acquire()) {
+            if(true || lock.acquire()) {
                 List<Pair<Restaurant,String>> restaurants = new ArrayList<Pair<Restaurant,String>>();
                 final List<String> errorUrls = new ArrayList<String>();
                 final List<Restaurant> newRestaurants = new ArrayList<Restaurant>();
                 
-                Map<String,Pair<Set<String>,List<String>>> detailsByPostcode = new HashMap<String, Pair<Set<String>, List<String>>>();
+                Map<String,Triple<Set<String>,List<String>,Integer>> detailsByPostcode = new HashMap<String, Triple<Set<String>, List<String>,Integer>>();
                 for( String postcode: postcodes ) {
-                    for(Pair<String,String> restaurantDetails :getRestaurantDetails(postcode)) {
+                    for(Triple<String,String,String> restaurantDetails :getRestaurantDetails(postcode)) {
                         String url = restaurantDetails.first;
                         List<String> cuisines = new ArrayList<String>();
                         List<String> cuisineList = Arrays.asList(StringUtils.delimitedListToStringArray(restaurantDetails.second, ", "));
                         for(String cuisine: cuisineList) {
                             cuisines.add(cuisine.trim());
                         }
-                        Pair<Set<String>,List<String>> details = detailsByPostcode.get(url);
+                        Triple<Set<String>,List<String>,Integer> details = detailsByPostcode.get(url);
                         if( details == null ) {
                             Set<String> postcodes = new HashSet<String>();
-                            details = new Pair<Set<String>, List<String>>(postcodes,cuisines);
+                            Integer rating = Integer.valueOf(restaurantDetails.third);
+                            details = new Triple<Set<String>, List<String>,Integer>(postcodes,cuisines,rating);
                             detailsByPostcode.put(url,details);
                         }
                         details.first.add(postcode);
@@ -131,12 +139,18 @@ public class RestaurantScraper implements InitializingBean {
                 }
                 LOGGER.info("Extracted " + detailsByPostcode.size() + " restaurants");
         
-                for(Map.Entry<String,Pair<Set<String>,List<String>>> entry: detailsByPostcode.entrySet()) {
-                    String url = entry.getKey();
+                for(Map.Entry<String,Triple<Set<String>,List<String>,Integer>> entry: detailsByPostcode.entrySet()) {
+                    String url = baseUrl + entry.getKey();
                     Set<String> postcodes = entry.getValue().first;
                     List<String> cuisines = entry.getValue().second;
+                    Integer rating = entry.getValue().third;
                     try {
-                        Pair<Restaurant,String> restaurant = buildRestaurant(url, postcodes, cuisines);
+                        Restaurant existingRestaurant = restaurantRepository.findByExternalId(url);
+                        if( existingRestaurant != null ) {
+                            continue; // Already exists
+                            //restaurantRepository.deleteRestaurant(existingRestaurant);
+                        }
+                        Pair<Restaurant,String> restaurant = buildRestaurant(url, postcodes, cuisines, rating);
                         restaurants.add(restaurant);
                     }
                     catch( Exception ex ) {
@@ -149,10 +163,6 @@ public class RestaurantScraper implements InitializingBean {
                 for(Pair<Restaurant,String> pair: restaurants) {
                     Restaurant restaurant = pair.first;
                     String imageUrl = pair.second;
-                    if(restaurantRepository.findByName(restaurant.getName()) != null ) {
-                        restaurantRepository.deleteRestaurant(restaurantRepository.findByName(restaurant.getName()));
-                    }
-                    
                     if(restaurantRepository.findByExternalId(restaurant.getExternalId()) == null ) {
 
                         boolean hasUploadedImage = true;
@@ -214,16 +224,15 @@ public class RestaurantScraper implements InitializingBean {
                         message.setSubject("Restaurant scraper report");
                         StringBuilder sb = new StringBuilder();
                         if(newRestaurants.size() > 0 ) {
-                            sb.append("Created the following new restaurants:\n\n");
+                            sb.append("Created the following new restaurants:\n");
                             for(Restaurant restaurant: newRestaurants ) {
-                                sb.append(restaurant.getName()).append(" (").append(restaurant.getExternalId()).append(")");
+                                sb.append("\n").append(restaurant.getName()).append(" (").append(restaurant.getExternalId()).append(")");
                                 if( hasOffers(restaurant)) {
                                     sb.append(" - Has Offers");
                                 }
                                 if( hasDiscounts(restaurant)) {
                                     sb.append(" - Has Discounts");
                                 }
-                                sb.append("\n");
                             }
                         }
                         else {
@@ -232,7 +241,7 @@ public class RestaurantScraper implements InitializingBean {
                         if(errorUrls.size() > 0 ) {
                             sb.append("\n\nCould not parse the following urls:\n\n");
                             for(String errorUrl: errorUrls ) {
-                                sb.append(baseUrl).append(errorUrl).append("\n");
+                                sb.append(errorUrl).append("\n");
                             }
                         }
                         message.setText(sb.toString());
@@ -242,7 +251,7 @@ public class RestaurantScraper implements InitializingBean {
             }
         }
         catch (Exception ex ) {
-            LOGGER.error(ex);
+            LOGGER.error("",ex);
         }
         finally {
             lock.release();
@@ -289,19 +298,29 @@ public class RestaurantScraper implements InitializingBean {
      * @return
      */
 
-    public List<Pair<String,String>> getRestaurantDetails(String postcode) throws Exception {
-        List<Pair<String,String>> details = new ArrayList<Pair<String,String>>();
-        Document doc = getDocument(baseUrl + "/area/" + postcode);
-        Elements links = doc.select("section[class=menuDetails] > a[href]");
-        Elements cuisines = doc.select("section[class=menuDetails] > p[class=restaurantCuisines]");
-        
-        for(int i = 0; i < links.size(); i++ ) {
-            Element link = links.get(i);
-            String cuisine = cuisines.get(i).text().replaceAll("Tipo","").replaceAll("Comida","").trim();
-            details.add(new Pair<String,String>(link.attr("href"),cuisine));
+    public List<Triple<String,String,String>> getRestaurantDetails(String postcode) throws Exception {
+        List<Triple<String,String,String>> details = new ArrayList<Triple<String,String,String>>();
+        String url = baseUrl + "/area/" + postcode;
+        LOGGER.info("Extracting restaurants for url: " + url);
+        Document doc = getDocument(url);
+        Elements sponsors = doc.select("div[class=sponsorWrap]");
+        for(Element sponsor: sponsors) {
+            Element link = sponsor.select("section[class=menuDetails] > a[href]").first();
+            Element cuisines = sponsor.select("section[class=menuDetails] > p[class=restaurantCuisines]").first();
+            Element ratings = sponsor.select("span[class^=rating]").first();
+            String cuisine = defaultCuisine;
+            if(cuisines != null ) {
+                cuisine = cuisines.text().replaceAll("Tipo","").replaceAll("Comida","").trim();                 
+            }
+            String rating = "0";
+            if( ratings != null ) {
+                String ratingText = ratings.text();
+                rating = ratingText.substring(ratingText.indexOf("-") + 1);
+            }
+            details.add(new Triple<String,String,String>(link.attr("href"),cuisine,rating));
         }
         
-        LOGGER.info("Extracted " + links.size() + " urls for postcode: " + postcode);
+        LOGGER.info("Extracted " + sponsors.size() + " urls for postcode: " + postcode);
         return details;
     }
 
@@ -310,20 +329,23 @@ public class RestaurantScraper implements InitializingBean {
      * @param url
      * @param postcodes
      * @param cuisines
+     * @param rating
      * @return
      * @throws Exception
      */
 
-    public Pair<Restaurant,String> buildRestaurant(String url, Set<String> postcodes, List<String> cuisines) throws Exception {
+    public Pair<Restaurant,String> buildRestaurant(String url, Set<String> postcodes, List<String> cuisines, Integer rating) throws Exception {
 
         LOGGER.info("Building restaurant from url: " + url);
         
-        Document doc = getDocument(baseUrl + url );
+        Document doc = getDocument( url );
 
         Restaurant restaurant = restaurantRepository.create();
-        restaurant.setListOnSite(false);
-        restaurant.setPhoneOrdersOnly(true);
-        restaurant.setExternalId(baseUrl + url );
+        restaurant.setListOnSite(true);
+        restaurant.setPhoneOrdersOnly(false);
+        restaurant.setExternalId( url );
+        restaurant.setJustEatRating(rating);
+        restaurant.setRecommended(rating >= 45);
 
         // Get the image url
         String imageUrl = doc.select("img[id=ctl00_ContentPlaceHolder1_RestInfo_DefaultRestaurantImage]").first().attr("src");
@@ -357,6 +379,14 @@ public class RestaurantScraper implements InitializingBean {
             LOGGER.info("Generated address: " + address.getSummary());
             restaurant.setAddress(address);
         }
+        
+        // Set notification options
+        NotificationOptions notificationOptions = restaurant.getNotificationOptions();
+        notificationOptions.setReceiveNotificationCall(true);
+        notificationOptions.setReceiveSMSNotification(true);
+        notificationOptions.setNotificationPhoneNumber(notificationPhone);
+        notificationOptions.setNotificationSMSNumber(notificationSMS);
+        notificationOptions.setNotificationEmailAddress(notificationEmail);
 
         // Get opening hours
         Element openingHoursLink = doc.select("a[onclick^=GB_showCenter").first();

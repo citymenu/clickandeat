@@ -26,6 +26,8 @@ Ext.define('AD.model.Restaurant', {
         {name:'created', type:'number',convert: buildDate},
         {name:'lastUpdated', type:'number',convert: buildDate},
         {name:'searchRanking', type:'int'},
+        {name:'justEatRating', type:'int'},
+        {name:'town', type:'town'},
         {name:'commissionPercent', type:'number'},
         {name:'restaurantUpdates', type:'auto'}
     ],
