@@ -40,7 +40,7 @@
                         <div class="restaurant-details-wrapper">
                             <table width="966">
                                 <tr valign="top">
-                                    <td width="341">
+                                    <td width="359">
                                         <table width="100%">
                                             <tr valign="bottom">
                                                 <td nowrap style="vertical-align:top">
@@ -103,7 +103,19 @@
                                                                             <div><message:message key="restaurant.minimum-order-for-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
                                                                         </c:if>
                                                                         <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
-                                                                            <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                            <c:choose>
+                                                                                <c:when test="${deliveryOptions.allowDeliveryBelowMinimumForFreeDelivery == false}">
+                                                                                    <div><message:message key="restaurant.free-delivery" escape="false"/></div>
+                                                                                    <div>
+                                                                                        <message:message key="restaurant.minimum-order-for-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                                    </div>
+                                                                                </c:when>
+                                                                                <c:otherwise>
+                                                                                    <div>
+                                                                                        <message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                                    </div>
+                                                                                </c:otherwise>
+                                                                            </c:choose>
                                                                         </c:if>
                                                                         <c:if test="${deliveryOptions.hasAdditionalDeliveryCharges}">
                                                                             <div><a class="restaurant-text" onclick="showAllDeliveryCharges()"><message:message key="restaurant.delivery-charges-show-all"/></a></div>
@@ -115,31 +127,35 @@
                                                     </div>
                                                 </div>
                                                 <c:if test="${restaurant.hasDiscounts == true}">
-                                                    <div class="restaurant-discount-details">
-                                                        <div class="scissors"></div>
-                                                        <c:forEach var="discount" items="${restaurant.discounts}" varStatus="status">
+                                                    <div class="restaurant-discount-wrapper">
+                                                        <div class="restaurant-discount-details">
+                                                            <div class="scissors"></div>
+                                                            <div class="restaurant-discount-details-inner">
+                                                            <c:forEach var="discount" items="${restaurant.discounts}" varStatus="status">
                                                                 <c:choose>
-                                                                <c:when test="${status.count > 1}">
-                                                                <div class="discount-details discount-separator">
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                <div class="discount-details">
-                                                                </c:otherwise>
+                                                                    <c:when test="${status.count > 1}">
+                                                                    <div class="discount-details discount-separator">
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                    <div class="discount-details">
+                                                                    </c:otherwise>
                                                                 </c:choose>
                                                                 <util:escape value="${discount.title}"/>
                                                                 <c:if test="${discount.description != ''}">
                                                                     <div class="discount-description"><util:escape value="${discount.description}" escapeNewLines="tue"/></div>
                                                                 </c:if>
+                                                                </div>
+                                                            </c:forEach>
                                                             </div>
-                                                        </c:forEach>
+                                                        </div>
                                                     </div>
                                                 </c:if>
                                             </div>
                                         </div>
                                     </td>
-                                    <td width="230">
+                                    <td width="212">
                                         <div class="restaurant-location-wrapper">
-                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=14&size=228x125&markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&maptype=roadmap&sensor=false"/ width="228" height="125">
+                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=14&size=210x115&markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&maptype=roadmap&sensor=false"/ width="210" height="115">
                                             <div class="restaurant-details">
                                                 <util:escape value="${restaurant.address.summary}"/><br/>
                                                 <c:choose>

@@ -147,8 +147,7 @@ public class RestaurantScraper implements InitializingBean {
                     try {
                         Restaurant existingRestaurant = restaurantRepository.findByExternalId(url);
                         if( existingRestaurant != null ) {
-                            continue; // Already exists
-                            //restaurantRepository.deleteRestaurant(existingRestaurant);
+                            restaurantRepository.deleteRestaurant(existingRestaurant);
                         }
                         Pair<Restaurant,String> restaurant = buildRestaurant(url, postcodes, cuisines, rating);
                         restaurants.add(restaurant);
@@ -163,7 +162,7 @@ public class RestaurantScraper implements InitializingBean {
                 for(Pair<Restaurant,String> pair: restaurants) {
                     Restaurant restaurant = pair.first;
                     String imageUrl = pair.second;
-                    if(restaurantRepository.findByExternalId(restaurant.getExternalId()) == null ) {
+                    if(restaurantRepository.findByName(restaurant.getName()) == null ) {
 
                         boolean hasUploadedImage = true;
 
@@ -227,12 +226,6 @@ public class RestaurantScraper implements InitializingBean {
                             sb.append("Created the following new restaurants:\n");
                             for(Restaurant restaurant: newRestaurants ) {
                                 sb.append("\n").append(restaurant.getName()).append(" (").append(restaurant.getExternalId()).append(")");
-                                if( hasOffers(restaurant)) {
-                                    sb.append(" - Has Offers");
-                                }
-                                if( hasDiscounts(restaurant)) {
-                                    sb.append(" - Has Discounts");
-                                }
                             }
                         }
                         else {
@@ -255,40 +248,6 @@ public class RestaurantScraper implements InitializingBean {
         }
         finally {
             lock.release();
-        }
-    }
-
-
-    /**
-     * @param restaurant
-     * @return
-     */
-
-    private boolean hasOffers(Restaurant restaurant ) {
-        for( MenuCategory category: restaurant.getMenu().getMenuCategories()) {
-            String name = category.getName();
-            if("Menú".equalsIgnoreCase(name) || "Offertas".equalsIgnoreCase(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * @param restaurant
-     * @return
-     */
-
-    private boolean hasDiscounts(Restaurant restaurant ) {
-        LOGGER.info("Checking for discounts for restaurant: " + restaurant.getName());
-        try {
-            Document doc = getDocument(restaurant.getExternalId());
-            String content = doc.text().toLowerCase();
-            return content.contains("descuento");
-        }
-        catch( Exception ex ) {
-            return false;
         }
     }
 
@@ -357,6 +316,28 @@ public class RestaurantScraper implements InitializingBean {
         // Get the cuisines
         restaurant.setCuisines(cuisines);
 
+        // Get any discount
+        Element discountElement = doc.select("p[class=discountSummary]").first();
+        if(discountElement != null) {
+            String[] discountElems = discountElement.text().split(" ");
+            String dicountAmount = discountElems[0];
+            String orderValue = discountElems[discountElems.length-1];
+            Discount discount = new Discount();
+            discount.setCollection(true);
+            discount.setDelivery(true);
+            discount.setDiscountType(Discount.DISCOUNT_PERCENTAGE);
+            discount.setTitle(discountElement.text());
+            discount.setDiscountAmount(Double.valueOf(dicountAmount.replace("%","")));
+            discount.setMinimumOrderValue(Double.valueOf(orderValue.replace("€","")));
+            for(int i = 1; i <=7; i++ ) {
+                ApplicableTime time = new ApplicableTime();
+                time.setDayOfWeek(i);
+                time.setApplicable(true);
+                discount.getDiscountApplicableTimes().add(time);
+            }
+            restaurant.getDiscounts().add(discount);
+        }
+        
         // Get the location
         String streetAddress = doc.select("span[id=ctl00_ContentPlaceHolder1_RestInfo_lblRestAddress]").first().text();
         String postCode = doc.select("span[id=ctl00_ContentPlaceHolder1_RestInfo_lblRestZip]").first().text();
@@ -467,7 +448,7 @@ public class RestaurantScraper implements InitializingBean {
     
         // Set delivery areas and default delivery radius
         deliveryOptions.setAreasDeliveredTo(new ArrayList<String>(postcodes));
-        deliveryOptions.setDeliveryRadiusInKilometres(2d);
+        deliveryOptions.setDeliveryRadiusInKilometres(1d);
 
         // Clean up delivery options
         if( deliveryOptions.getMinimumOrderForDelivery() != null && deliveryOptions.getDeliveryCharge() == null ) {
@@ -498,11 +479,24 @@ public class RestaurantScraper implements InitializingBean {
         for(int i = 0; i < categories.size(); i++ ) {
 
             Element category = categories.get(i);
+            String categoryName = category.text();
             Elements menuItems = itemLists.get(i).select("tr[class^=prdLi");
+
+            if(categoryName.equals("Offertas") || categoryName.equals("Menú") ||
+                    categoryName.equals("Ofertas Especiales") || categoryName.equals("Menús Especiales")) {
+                if(shouldTreatAsSpecialOffer(menuItems)) {
+                    for(Element menuItem: menuItems ) {
+                        SpecialOffer specialOffer = buildSpecialOffer(menuItem);
+                        if(specialOffer != null ) {
+                            restaurant.getSpecialOffers().add(specialOffer);
+                        }
+                    }
+                    continue;
+                }
+            }
 
             MenuCategory menuCategory = new MenuCategory();
             menuCategory.setType(MenuCategory.TYPE_STANDARD);
-            String categoryName = category.text();
             menuCategory.setName(categoryName);
             String summary = category.parent().text().replaceFirst(categoryName,"");
             if(summary.startsWith("\"") && summary.endsWith("\"")) {
@@ -588,6 +582,115 @@ public class RestaurantScraper implements InitializingBean {
             restaurant.getMenu().getMenuCategories().add(menuCategory);
         }
         return new Pair<Restaurant, String>(restaurant,imageUrl);
+    }
+
+
+    /**
+     * @param menuItems
+     * @return
+     */
+
+    private boolean shouldTreatAsSpecialOffer(Elements menuItems) {
+        boolean ret = false;
+        for(Element menuItem: menuItems ) {
+            Element image = menuItem.select("img[class=PlusMC]").first();
+            String linkOnclick = image.attr("onclick");
+            String productId = linkOnclick.split("'")[1];
+            String productUrl = "http://www.just-eat.es/pages/menuselectionpopupLegacy.aspx?pid=" + productId;
+            try {
+                Document options = getDocument(productUrl);
+                Elements selects = options.select("select");
+                if(selects.size() > 0) {
+                    ret = true;
+                    break;
+                }
+            }
+            catch( Exception ignore) {
+                // Do nothing on purpose;
+            }
+        }
+        return ret;
+    }
+
+
+    /**
+     * @param menuItem
+     * @return
+     */
+
+    private SpecialOffer buildSpecialOffer(Element menuItem) {
+        SpecialOffer specialOffer = new SpecialOffer();
+        Element titleElement = menuItem.select("td[class=prdDe] > h6").first();
+        if( titleElement == null ) {
+            return null;
+        }
+        String title = titleElement.text();
+        specialOffer.setTitle(title);
+        Element itemNumberElement = menuItem.select("td[class=prdNo] > h6").first();
+        if(itemNumberElement != null ) {
+            String itemNumberText = itemNumberElement.text().replace(".","");
+            try {
+                Integer itemNumber = Integer.valueOf(itemNumberText);
+                specialOffer.setNumber(itemNumber);
+            }
+            catch(NumberFormatException ignore) {
+                // Ignore on purpose;
+            }
+        }
+        try {
+            String description = menuItem.select("td[class=prdDe]").first().text().replaceFirst(title,"");
+            description = description.replaceAll("\n","").trim();
+            if(StringUtils.hasText(description)) {
+                specialOffer.setDescription(description);
+            }
+        }
+        catch( Exception ex ) {
+            LOGGER.warn("Could not parse description for title: " + title);
+        }
+        Element costElement = menuItem.select("td[class=prdPr]").first().select("div").get(1);
+        Double cost = Double.valueOf(costElement.text().replaceAll(",","."));
+        specialOffer.setCost(cost);
+
+        // Now get the special offer item choices
+        Element linkElement = menuItem.select("td[class=prdPlus]").first().select("img").first();
+        String linkOnclick = linkElement.attr("onclick");
+        String productId = linkOnclick.split("'")[1];
+        String productUrl = "http://www.just-eat.es/pages/menuselectionpopupLegacy.aspx?pid=" + productId;
+        try {
+            Document options = getDocument(productUrl);
+            Elements selects = options.select("select");
+            for( int i = 0; i < selects.size(); i++ ) {
+                Element select = selects.get(i);
+                SpecialOfferItem specialOfferItem = new SpecialOfferItem();
+                specialOfferItem.setTitle("Opción " + (i+1));
+                Elements choices = select.select("option");
+                for(int j = 1; j < choices.size(); j++) {
+                    Element choice = choices.get(j);
+                    String choiceText = choice.text();
+                    Double additionalCost = 0d;
+                    if(choiceText.contains("€")) {
+                        String costText = choiceText.substring(choiceText.indexOf("€")+1).replace(",",".").trim();
+                        additionalCost = Double.valueOf(costText);
+                        choiceText = choiceText.substring(0,choiceText.indexOf("€")).trim();
+                    }
+                    specialOfferItem.getSpecialOfferItemChoices().add(choiceText);
+                    specialOfferItem.getSpecialOfferItemChoiceCosts().add(additionalCost);
+                }
+                specialOffer.getSpecialOfferItems().add(specialOfferItem);
+            }
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            return null;
+        }
+
+        for(int i = 1; i <=7; i++ ) {
+            ApplicableTime time = new ApplicableTime();
+            time.setDayOfWeek(i);
+            time.setApplicable(true);
+            specialOffer.getOfferApplicableTimes().add(time);
+        }
+        return specialOffer;
     }
 
 

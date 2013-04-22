@@ -1036,7 +1036,9 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
 
         var itemArray = specialOfferItemStr.split('%%%');
         var itemChoiceArrayStr = itemArray[2];
+        var itemChoiceCostArrayStr = itemArray[3];
         var itemChoices = [];
+        var itemChoiceCosts = [];
 
         itemChoiceArrayStr.split('$$$').forEach(function(itemChoiceStr){
             var itemChoice = new Object({
@@ -1045,10 +1047,18 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
             itemChoices.push(itemChoice);
         });
 
+        itemChoiceCostArrayStr.split('$$$').forEach(function(itemChoiceCostStr){
+            var itemChoiceCost = new Object({
+                cost:Number(itemChoiceCostStr)
+            });
+            itemChoiceCosts.push(itemChoiceCost);
+        });
+
         var specialOfferItem = new Object({
             title: (itemArray[0] == 'null'? null: unescapeQuotes(itemArray[0])),
             description: (itemArray[1] == 'null'? null: unescapeQuotes(itemArray[1])),
-            itemChoices: itemChoices
+            itemChoices: itemChoices,
+            itemChoiceCosts: itemChoiceCosts
         });
         specialOfferItems.push(specialOfferItem);
     });
@@ -1064,6 +1074,13 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
 function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity, cost) {
 
     var currentQuantity = quantity;
+    var additionalCost = 0;
+
+    // If no choices for special offer just add straight away
+    if(specialOfferItems.length == 0) {
+        doAddSpecialOfferToOrder(restaurantId, specialOfferId, [], [], quantity);
+        return;
+    }
 
     // Build the container for showing the quantity and total cost
     var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
@@ -1079,9 +1096,15 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
             specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
         }
         var selectOptions = '';
-        specialOfferItem.itemChoices.forEach(function(itemChoice){
-            selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
-        });
+        for( var i = 0; i < specialOfferItem.itemChoices.length; i++ ) {
+            var itemChoice = specialOfferItem.itemChoices[i];
+            var itemChoiceCost = specialOfferItem.itemChoiceCosts[i];
+            if( i == 0 ) {
+                additionalCost += itemChoiceCost.cost; // Add default selected value
+            }
+            var additionalText = itemChoiceCost.cost == 0? '': ' (+' + itemChoiceCost.cost.toFixed(2).replace('.',',') + ' ' + ccy + ')';
+            selectOptions += ('<option cost=\'{0}\' value=\'{1}\'>{2}</option>').format(itemChoiceCost.cost, itemChoice.text, unescapeQuotes(itemChoice.text) + additionalText);
+        };
         var selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
 
         specialOfferItemContent += selectBox;
@@ -1113,9 +1136,8 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
         closeEffect:'none'
     });
 
-
     // Update the total cost
-    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
 
     // Only allow numeric input in quantity field
     $("#quantity").keydown(function(event) {
@@ -1130,11 +1152,26 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
         }
     });
 
+    // Update total cost on item selection
+    for( var i = 0; i < specialOfferItems.length; i++ ) {
+        $('#specialOfferItemSelect_'+i).change(function() {
+            var newAdditionalCost = 0;
+            for( var j = 0; j < specialOfferItems.length; j++ ) {
+                var itemCost = $('option:selected', '#specialOfferItemSelect_' + j).attr('cost');
+                newAdditionalCost += Number(itemCost);
+            }
+            additionalCost = newAdditionalCost;
+            currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
+            $('#itemtotalcost').remove();
+            $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
+        });
+    };
+
     // Update total cost on quantity update
     $("#quantity").keyup(function(event) {
         currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
         $('#itemtotalcost').remove();
-        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
     });
 
     // Handler for the cancel button
@@ -1146,27 +1183,32 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     $('#additembutton').click(function(){
         if( currentQuantity != '' && currentQuantity > 0 ) {
             var itemChoices = [];
+            var itemChoiceCosts = [];
             for( i = 0; i < specialOfferItems.length; i++) {
                 var selectedValue = $('#specialOfferItemSelect_' + i ).val();
+                var itemCost = $('option:selected', '#specialOfferItemSelect_' + i).attr('cost');
                 if( selectedValue == 'EMPTY' ) {
                     return;
                 } else {
                     itemChoices.push(selectedValue);
+                    itemChoiceCosts.push(itemCost);
+
                 }
             }
-            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, currentQuantity);
+            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, itemChoiceCosts, currentQuantity);
         }
         $.fancybox.close(true);
     });
 }
 
 // Add the special offer item to the order
-function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity ) {
+function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, itemChoiceCosts, quantity ) {
 
     var update = {
         restaurantId: restaurantId,
         specialOfferId: specialOfferId,
         itemChoices: unescapeArray(itemChoices),
+        itemChoiceCosts: unescapeArray(itemChoiceCosts),
         quantity: quantity || 1
     };
 

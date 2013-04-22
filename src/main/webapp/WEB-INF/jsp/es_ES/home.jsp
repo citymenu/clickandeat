@@ -152,15 +152,13 @@
             <div class="home-content-header">¿Por qué no pruebas uno de nuestros restaurantes recomendados?</div>
             <div id="carousel" style="margin-top:30px;">
                 <div class="carousel-items">
-                    <ul>
-                        <c:forEach var="restaurant" items="${recommendations}" varStatus="status">
-                        <c:if test="${status.count % 2 == 1}">
-                        <li>
-                        </c:if>
-
+                    <c:forEach var="restaurant" items="${recommendations}" varStatus="status">
                         <c:choose>
-                            <c:when test="${status.count %2 == 1}">
+                            <c:when test="${status.count %3 == 1}">
                             <div class="restaurant-panel-left" url="${restaurant.url}" type="recommendation">
+                            </c:when>
+                            <c:when test="${status.count %3 == 2}">
+                            <div class="restaurant-panel-center" url="${restaurant.url}" type="recommendation">
                             </c:when>
                             <c:otherwise>
                             <div class="restaurant-panel-right" url="${restaurant.url}" type="recommendation">
@@ -169,33 +167,37 @@
 
                         <div class="divider"></div>
 
-                        <table width="430">
+                        <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="60" height="60" alt="<util:escape value="${restaurant.name}"/>"/>
+                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                 </td>
-                                <td width="210">
+                                <td width="212">
+                                    <c:if test="${restaurant.hasDiscounts == true}">
+                                        <div class="restaurant-discount-details">
+                                            <div class="scissors"></div>
+                                            <div class="restaurant-discount-details-inner">
+                                                <div class="discount-details">
+                                                    <c:choose>
+                                                        <c:when test="${rerestaurant.firstDiscount.type == 'FREE_ITEM'}">
+                                                            <message:message key="restaurant.discount.free-item"/>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <message:message key="restaurant.discount.short" format="${restaurant.firstDiscount.amountSummary}"/>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                     <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
                                     <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
                                     <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                 </td>
-                                <td width="142" align="right">
-                                    <c:if test="${restaurant.hasDiscounts == true}">
-                                        <div class="restaurant-discount-details">
-                                            <div class="scissors"></div>
-                                            <div class="discount-details"><util:escape value="${restaurant.firstDiscount.title}"/></div>
-                                        </div>
-                                    </c:if>
-                                </td>
                             </tr>
                         </table>
                         </div>
-
-                        <c:if test="${status.count % 2 == 0}">
-                        </li>
-                        </c:if>
-                        </c:forEach>
-                    </ul>
+                    </c:forEach>
                 </div>
             </div>
 

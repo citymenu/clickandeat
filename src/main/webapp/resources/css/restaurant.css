@@ -93,7 +93,6 @@ img.restaurant-image {
 	   -moz-border-radius: 5px;
 	        border-radius: 5px;
 	border: 1px solid #AAAAAA;
-	margin-bottom:5px;
 }
 
 .cuisine-summary {
@@ -149,12 +148,25 @@ img.restaurant-image {
     color:#444444;
 }
 
+.restaurant-discount-wrapper {
+    text-align:right;
+}
+
 .restaurant-discount-details {
+    border: 1px dashed #AAAAAA;
     background-color:#FFFFFF;
-    border: 1px dashed #cf6e6e;
-    padding: 4px 12px 4px 8px;
+    padding: 3px;
     margin: 15px 0 0 0;
     position:relative;
+    display:inline-block;
+    text-align:left;
+    zoom: 1;
+    *display: inline;
+}
+
+.restaurant-discount-details-inner {
+    padding: 4px 12px 4px 8px;
+    background-color:#CC0000;
 }
 
 .restaurant-summary-wrapper {
@@ -172,12 +184,13 @@ img.restaurant-image {
 }
 
 .discount-details {
-    font: 400 12px/14px myriad-pro-n4,myriad-pro;
-    color:#444444;
+    font: 500 12px/14px prenton-n5,prenton;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #333333;
 }
 
 .discount-description {
-    font: 400 12px/14px myriad-pro-n4,myriad-pro;
+    font: 400 12px/14px prenton-n4,prenton;
     color:#444444;
 }
 

@@ -42,10 +42,10 @@
 
 #butler {
     position:absolute;
-    top:155px;
-    left:40px;
-    height:170px;
-    width:98px;
+    top:145px;
+    left:30px;
+    height:180px;
+    width:116px;
     z-index:1000;
     background:url(../images/food/butler.png) 0 0 no-repeat transparent;
 }
@@ -166,6 +166,16 @@ input.location {
 
 input.location:focus {
     border: 1px solid #CCCCCC;
+}
+
+img.rounded-img-small {
+    border:1px solid #BBBBBB;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+    -webkit-box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
+       -moz-box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
+            box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
 }
 
 .search-button {
@@ -371,6 +381,16 @@ a.home {
             border-radius: 10px;
 }
 
+img.rounded-img {
+    border:1px solid #CFCFCF;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+    -webkit-box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+       -moz-box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+            box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+}
+
 .recommendations {
     margin:15px 0 25px 10px;
 }
@@ -388,14 +408,18 @@ a.home {
 
 .divider {
     border-top:1px dashed #CCCCCC;
-    padding-top:10px;
+    padding-top:18px;
 }
 
 .restaurant-link {
     cursor:pointer;
 }
 
-.restaurant-panel-left, .restaurant-panel-right {
+.restaurant-panel-left, .restaurant-panel-right, .restaurant-panel-center {
+    display:inline-block;
+    position:relative;
+    height:100px;
+    width:280px;
     cursor:pointer;
 }
 
@@ -403,21 +427,12 @@ a.home {
     background-color: #FAFAFA;
 }
 
-.restaurant-panel-left {
-    display:inline-block;
-    height:85px;
-    width:430px;
-}
-
-.restaurant-panel-right {
-    display:inline-block;
-    height:85px;
-    width:430px;
-    padding-left:40px;
+.restaurant-panel-center {
+    margin:0 28px 0 28px;
 }
 
 .restaurant-name {
-    padding:5px 0 2px 0;
+    padding:13px 0 2px 0;
     font: 16px/16px MaiandraOTGD-DemiBold;
     color:#CC0000;
     text-shadow: 1px 1px 2px #EEEEEE;
@@ -436,18 +451,21 @@ a.home {
 }
 
 .restaurant-discount-details {
+    position:absolute;
+    top:6px;
+    right:15px;
     background-color:#FFFFFF;
     display:inline-block;
     border: 1px dashed #cf6e6e;
-    padding: 4px 12px 4px 8px;
-    margin: 0 5px 6px 0;
-    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-       -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-            box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-    position:relative;
+    padding: 2px;
     text-align:left;
     zoom: 1;
     *display: inline;
+}
+
+.restaurant-discount-details-inner {
+    padding: 1px 14px 1px 6px;
+    background-color:#CC0000;
 }
 
 .scissors {
@@ -462,9 +480,10 @@ a.home {
 
 .discount-details {
     display:inline-block;
-    font: 400 12px/14px "prenton-n4", "prenton";
+    font: 500 12px/14px prenton-n5,prenton;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #555555;
     min-height:16px;
-    color:#444444;
     text-align:left;
     zoom: 1;
     *display: inline;

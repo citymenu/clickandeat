@@ -110,7 +110,17 @@ public class SpecialOffer {
             sb.append("'");
             sb.append(StringEscapeUtils.escapeHtml(item.getNullSafeTitle().replace("'", "###"))).append("%%%");
             sb.append(StringEscapeUtils.escapeHtml(item.getNullSafeDescription()).replace("'", "###").replace("\n","<br>")).append("%%%");
-            sb.append(StringEscapeUtils.escapeHtml(StringUtils.collectionToDelimitedString(item.getSpecialOfferItemChoices(),"$$$")).replace("'","###"));
+            sb.append(StringEscapeUtils.escapeHtml(StringUtils.collectionToDelimitedString(item.getSpecialOfferItemChoices(),"$$$")).replace("'","###")).append("%%%");
+            List<String> itemCosts = new ArrayList<String>();
+            for(int i = 0; i < item.getSpecialOfferItemChoices().size(); i++ ) {
+                if(item.getSpecialOfferItemChoiceCosts().size() == 0 ) {
+                    itemCosts.add("0");
+                }
+                else {
+                    itemCosts.add(item.getSpecialOfferItemChoiceCosts().get(i).toString());
+                }
+            }
+            sb.append(StringUtils.collectionToDelimitedString(itemCosts,"$$$"));
             sb.append("'");
             delim = ",";
         }

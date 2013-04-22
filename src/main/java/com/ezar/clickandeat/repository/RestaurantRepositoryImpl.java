@@ -23,10 +23,8 @@ import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
-import org.springframework.data.mongodb.core.query.BasicUpdate;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.data.mongodb.core.query.Order;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
@@ -41,7 +39,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_RECOMMENDATIONS = 6;
+    private static final int MAX_RECOMMENDATIONS = 54;
     
     private static final int REFRESH_TIMEOUT = 1000 * 60 * 15; // Refresh recommendations list every 15 minutes
     
@@ -102,8 +100,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                     .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
             List<Restaurant> restaurants = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
-                if( restaurants.size() % 2 == 1 ) {
-                    recommendations = restaurants.subList(0,restaurants.size() -1 ); // Must be an even number
+                if( restaurants.size() % 3 != 0 ) {
+                    recommendations = restaurants.subList(0,restaurants.size() - restaurants.size() % 3 ); // Must be a multiple of 3
                 }
                 else {
                     recommendations = restaurants;
@@ -295,7 +293,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         // Add scope variables to the map/reduce query
         Map<String,Object> scopeVariables = new HashMap<String,Object>();
         scopeVariables.put("cuisine",search.getCuisine() == null? null: search.getCuisine());
-        scopeVariables.put("address", search.getLocation() == null? null: search.getLocation().getAddress());
+        scopeVariables.put("address", search.getLocation() == null? null: search.getLocation().getAddress().toUpperCase());
         scopeVariables.put("lat1",search.getLocation() == null? null: search.getLocation().getLocation()[0]);
         scopeVariables.put("lon1",search.getLocation() == null? null: search.getLocation().getLocation()[1]);
         scopeVariables.put("radius", search.getLocation() == null? null: search.getLocation().getRadius());

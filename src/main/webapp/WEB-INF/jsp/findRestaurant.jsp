@@ -112,23 +112,37 @@
                                     <table width="780">
                                         <tr valign="middle">
                                             <td width="95">
+                                                <c:if test="${restaurant.open == false}">
+                                                    <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
+                                                </c:if>
                                                 <div class="restaurant-image">
-                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
                                                 </div>
                                             </td>
-                                            <td width="195">
-                                                <div class="table-entry">
+                                            <td width="185">
+                                                <div class="table-left">
                                                     <h2 class="restaurant-name"><util:escape value="${restaurant.name}"/></h2>
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                     <c:if test="${restaurant.hasDiscounts == true}">
                                                         <div class="restaurant-discount-details">
                                                             <div class="scissors"></div>
-                                                            <div class="discount-details"><util:escape value="${restaurant.firstDiscount.title}"/></div>
+                                                            <div class="restaurant-discount-details-inner">
+                                                                <div class="discount-details">
+                                                                    <c:choose>
+                                                                        <c:when test="${rerestaurant.firstDiscount.type == 'FREE_ITEM'}">
+                                                                            <message:message key="restaurant.discount.free-item"/>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <message:message key="restaurant.discount.short" format="${restaurant.firstDiscount.amountSummary}"/>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </c:if>
                                                 </div>
                                             </td>
-                                            <td width="180">
+                                            <td width="190">
                                                 <div class="table-entry">
                                                     <div class="address-details">
                                                         <util:escape value="${restaurant.address.summary}"/>
@@ -140,7 +154,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td width="180">
+                                            <td width="190">
                                                 <div class="restaurant-opening-details">
                                                     <div class="opening-details">${restaurant.todaysOpeningTimes}</div>
                                                     <c:choose>
@@ -174,14 +188,26 @@
                                                                     </div>
                                                                 </c:if>
                                                                 <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
-                                                                    <div><message:message key="restaurant.minimum-order-for-free-delivery" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span></div>
+                                                                    <c:choose>
+                                                                        <c:when test="${deliveryOptions.allowDeliveryBelowMinimumForFreeDelivery == false}">
+                                                                            <div><message:message key="restaurant.free-delivery" escape="false"/></div>
+                                                                            <div>
+                                                                                <message:message key="restaurant.minimum-delivery-order" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                            </div>
+                                                                        </c:when>
+                                                                        <c:otherwise>
+                                                                            <div>
+                                                                                <message:message key="restaurant.minimum-order-for-free-delivery-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                                                            </div>
+                                                                        </c:otherwise>
+                                                                    </c:choose>
                                                                 </c:if>
                                                             </div>
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </div>
                                             </td>
-                                            <td width="140" align="right">
+                                            <td width="130" align="right">
                                                 <div class="menu-link">
                                                     <c:choose>
                                                         <c:when test="${restaurant.open == true}">

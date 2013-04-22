@@ -8,11 +8,14 @@ public class SpecialOfferItem {
     String title;
     
     String description;
-    
+
     List<String> specialOfferItemChoices;
+    
+    List<Double> specialOfferItemChoiceCosts;
 
     public SpecialOfferItem() {
         this.specialOfferItemChoices = new ArrayList<String>();
+        this.specialOfferItemChoiceCosts = new ArrayList<Double>();
     }
 
     public String getTitle() {
@@ -45,5 +48,13 @@ public class SpecialOfferItem {
 
     public void setSpecialOfferItemChoices(List<String> specialOfferItemChoices) {
         this.specialOfferItemChoices = specialOfferItemChoices;
+    }
+
+    public List<Double> getSpecialOfferItemChoiceCosts() {
+        return specialOfferItemChoiceCosts;
+    }
+
+    public void setSpecialOfferItemChoiceCosts(List<Double> specialOfferItemChoiceCosts) {
+        this.specialOfferItemChoiceCosts = specialOfferItemChoiceCosts;
     }
 }
