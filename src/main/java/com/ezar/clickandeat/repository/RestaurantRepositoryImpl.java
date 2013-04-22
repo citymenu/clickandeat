@@ -39,7 +39,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_RECOMMENDATIONS = 54;
+    private static final int MAX_RECOMMENDATIONS = 9;
     
     private static final int REFRESH_TIMEOUT = 1000 * 60 * 15; // Refresh recommendations list every 15 minutes
     
