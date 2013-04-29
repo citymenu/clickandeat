@@ -149,7 +149,7 @@ img.restaurant-image {
 }
 
 .restaurant-discount-wrapper {
-    text-align:right;
+    text-align:left;
 }
 
 .restaurant-discount-details {
@@ -417,6 +417,12 @@ a.menuitem-button, a.menuitem-button:active, a.menuitem-button:hover {
 
 
 a.menuitem-button:active, a.menuitem-button:hover {
+}
+
+.restaurant-location-link {
+    display:inline-block;
+    zoom:1;
+    *display: inline;
 }
 
 a.restaurant-text {

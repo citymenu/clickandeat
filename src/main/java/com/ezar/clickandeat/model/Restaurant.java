@@ -198,8 +198,8 @@ public class Restaurant extends PersistentObject {
         DateTime lateOpeningTime = times[2];
         return earlyOpeningTime == null? lateOpeningTime: earlyOpeningTime;
     }
-    
-    
+
+
     /**
      * @param now
      * @return

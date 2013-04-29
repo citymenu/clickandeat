@@ -7,6 +7,11 @@ import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
 import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.Triple;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
@@ -29,10 +34,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.mail.internet.MimeMessage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -63,6 +65,8 @@ public class RestaurantScraper implements InitializingBean {
     private String baseUrl = "http://just-eat.es";
 
     private String basePath = "resources/images/restaurant";
+
+    private List<String> offers = Arrays.asList("ofertas","offertas","menú");
     
     private String bucketName;
 
@@ -109,6 +113,26 @@ public class RestaurantScraper implements InitializingBean {
         }
     }
 
+    public void scrapeTelephoneNumbers() throws Exception {
+
+        HttpClient httpclient = new DefaultHttpClient();
+        try {
+            HttpGet httpget = new HttpGet("http://www.laneveraroja.com/comida-domicilio-madrid/madrid_fusion-numancia.html#categoria_seccion_16763");
+
+            System.out.println("executing request " + httpget.getURI());
+
+            // Create a response handler
+            ResponseHandler<String> responseHandler = new BasicResponseHandler();
+            String responseBody = httpclient.execute(httpget, responseHandler);
+            System.out.println("----------------------------------------");
+            System.out.println(responseBody);
+            System.out.println("----------------------------------------");
+
+        } finally {
+            httpclient.getConnectionManager().shutdown();
+        }
+    }
+    
 
     @Scheduled(cron="0 0 10 * * WED")
     public void scrapeData() throws Exception {
@@ -310,8 +334,12 @@ public class RestaurantScraper implements InitializingBean {
         String imageUrl = doc.select("img[id=ctl00_ContentPlaceHolder1_RestInfo_DefaultRestaurantImage]").first().attr("src");
         
         // Get the name
-        String name = doc.select("span[id=ctl00_ContentPlaceHolder1_RestInfo_lblRestName]").first().text();
-        restaurant.setName(name);
+        Elements breadcrumbs = doc.select("a[class=BreadCrumb]");
+        for( Element element: breadcrumbs ) {
+            if(element.attr("href").startsWith("/restaurants")) {
+                restaurant.setName(element.attr("title"));
+            }
+        }
 
         // Get the cuisines
         restaurant.setCuisines(cuisines);
@@ -482,8 +510,7 @@ public class RestaurantScraper implements InitializingBean {
             String categoryName = category.text();
             Elements menuItems = itemLists.get(i).select("tr[class^=prdLi");
 
-            if(categoryName.equals("Offertas") || categoryName.equals("Menú") ||
-                    categoryName.equals("Ofertas Especiales") || categoryName.equals("Menús Especiales")) {
+            if(isSpecialOffer(categoryName.toLowerCase())) {
                 if(shouldTreatAsSpecialOffer(menuItems)) {
                     for(Element menuItem: menuItems ) {
                         SpecialOffer specialOffer = buildSpecialOffer(menuItem);
@@ -585,6 +612,21 @@ public class RestaurantScraper implements InitializingBean {
     }
 
 
+    /**
+     * @param categoryName
+     * @return
+     */
+    
+    private boolean isSpecialOffer(String categoryName) {
+        for( String name: offers ) {
+            if( categoryName.contains(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    
     /**
      * @param menuItems
      * @return

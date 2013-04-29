@@ -173,9 +173,43 @@
                                     <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
                                 </td>
                                 <td width="212">
+                                    <c:if test="${restaurant.hasDiscounts == false}">
+                                        <div class="restaurant-padding"></div>
+                                    </c:if>
+                                    <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
+                                    <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
+                                    <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
+                                    <div class="delivery-details">
+                                        <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumOrderForFreeDelivery == 0 && (deliveryOptions.minimumDeliveryCharge == '0.00' || deliveryOptions.minimumDeliveryCharge == '0,00')}">
+                                            <span><message:message key="restaurant.free-delivery-short" escape="false"/></span>
+                                        </c:if>
+                                        <c:if test="${deliveryOptions.minimumDeliveryCharge == deliveryOptions.maximumDeliveryCharge && deliveryOptions.minimumDeliveryCharge != '0.00' && deliveryOptions.minimumDeliveryCharge != '0,00'}">
+                                            <span>
+                                                ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${deliveryOptions.minimumDeliveryCharge != deliveryOptions.maximumDeliveryCharge}">
+                                            <span>
+                                                ${deliveryOptions.minimumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span> -
+                                                ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${deliveryOptions.minimumOrderForDelivery != null && deliveryOptions.minimumOrderForDelivery != null}">
+                                            <span>
+                                                (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>)
+                                            </span>
+                                        </c:if>
+                                        <c:if test="${deliveryOptions.allowFreeDelivery == true && deliveryOptions.minimumOrderForFreeDelivery != null && deliveryOptions.minimumOrderForFreeDelivery != 0}">
+                                            <c:if test="${deliveryOptions.allowDeliveryBelowMinimumForFreeDelivery == false}">
+                                                <span>
+                                                    <message:message key="restaurant.free-delivery-short" escape="false"/>
+                                                    (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/>)
+                                                </span>
+                                            </c:if>
+                                        </c:if>
+                                    </div>
                                     <c:if test="${restaurant.hasDiscounts == true}">
                                         <div class="restaurant-discount-details">
-                                            <div class="scissors"></div>
                                             <div class="restaurant-discount-details-inner">
                                                 <div class="discount-details">
                                                     <c:choose>
@@ -190,9 +224,6 @@
                                             </div>
                                         </div>
                                     </c:if>
-                                    <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
-                                    <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
-                                    <div class="opening-details"><message:message key="search.open-today"/>: ${restaurant.todaysOpeningTimes}</div>
                                 </td>
                             </tr>
                         </table>

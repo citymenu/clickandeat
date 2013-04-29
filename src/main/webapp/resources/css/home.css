@@ -408,7 +408,7 @@ img.rounded-img {
 
 .divider {
     border-top:1px dashed #CCCCCC;
-    padding-top:18px;
+    padding-top:15px;
 }
 
 .restaurant-link {
@@ -418,9 +418,10 @@ img.rounded-img {
 .restaurant-panel-left, .restaurant-panel-right, .restaurant-panel-center {
     display:inline-block;
     position:relative;
-    height:100px;
+    min-height:100px;
     width:280px;
     cursor:pointer;
+    vertical-align:middle;
 }
 
 .restaurant-panel-hover {
@@ -432,7 +433,7 @@ img.rounded-img {
 }
 
 .restaurant-name {
-    padding:13px 0 2px 0;
+    padding:0px 0 2px 0;
     font: 16px/16px MaiandraOTGD-DemiBold;
     color:#CC0000;
     text-shadow: 1px 1px 2px #EEEEEE;
@@ -443,23 +444,27 @@ img.rounded-img {
     color:#444444;
 }
 
-.opening-details {
-    text-align:left;
-    font: 12px/14px "myriad-pro-n4", "myriad-pro";
+.restaurant-padding {
+    padding-top:8px;
+}
+
+.delivery-details {
+    font: 12px/14px myriad-pro-n4,myriad-pro;
+    background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
-    margin-top: 3px;
+    margin-top: 4px;
+    padding: 0 0 0 26px;
 }
 
 .restaurant-discount-details {
-    position:absolute;
-    top:6px;
-    right:15px;
     background-color:#FFFFFF;
     display:inline-block;
+    position:relative;
     border: 1px dashed #cf6e6e;
     padding: 2px;
     text-align:left;
     zoom: 1;
+    margin-top:3px;
     *display: inline;
 }
 

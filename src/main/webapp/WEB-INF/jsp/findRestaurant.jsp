@@ -125,7 +125,6 @@
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
                                                     <c:if test="${restaurant.hasDiscounts == true}">
                                                         <div class="restaurant-discount-details">
-                                                            <div class="scissors"></div>
                                                             <div class="restaurant-discount-details-inner">
                                                                 <div class="discount-details">
                                                                     <c:choose>

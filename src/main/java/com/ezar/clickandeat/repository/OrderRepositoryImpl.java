@@ -1,7 +1,5 @@
 package com.ezar.clickandeat.repository;
 
-import com.ezar.clickandeat.maps.GeoLocationService;
-import com.ezar.clickandeat.model.GeoLocation;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.OrderItem;
 import com.ezar.clickandeat.model.OrderUpdate;
@@ -12,20 +10,17 @@ import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicUpdate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_AWAITING_RESTAURANT;
-import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_BASKET;
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_RESTAURANT_ACCEPTED;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -102,8 +97,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     @Override
     public List<Order> export() {
-        Query query = new Query(where("deleted").ne(true));
-        query.sort().on("created", org.springframework.data.mongodb.core.query.Order.ASCENDING);
+        Query query = new Query(where("deleted").ne(true)).with(new Sort("created"));
         return operations.find(query, Order.class);
     }
 

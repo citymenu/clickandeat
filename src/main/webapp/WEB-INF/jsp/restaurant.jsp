@@ -155,17 +155,19 @@
                                     </td>
                                     <td width="212">
                                         <div class="restaurant-location-wrapper">
-                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=14&size=210x115&markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&maptype=roadmap&sensor=false"/ width="210" height="115">
+                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=210x115&markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&maptype=roadmap&sensor=false"/ width="210" height="115">
                                             <div class="restaurant-details">
-                                                <util:escape value="${restaurant.address.summary}"/><br/>
-                                                <c:choose>
-                                                    <c:when test="${search != null && search.coordinates != null}">
-                                                        <a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.get-directions"/></a>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.show-location"/></a>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <util:escape value="${restaurant.address.summary}"/>
+                                                <div class="restaurant-location-link">
+                                                    <c:choose>
+                                                        <c:when test="${search != null && search.coordinates != null}">
+                                                            <a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},${search.coordinates},'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.get-directions"/></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a class="restaurant-text" onclick="showDirections(${restaurant.coordinates},null,null,'<util:escape value="${restaurant.name}" escapeComments="true"/>')"><message:message key="restaurant.show-location"/></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
