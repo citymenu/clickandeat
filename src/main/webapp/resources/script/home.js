@@ -14,7 +14,7 @@ $(document).ready(function(){
 
     // Add banner carousel
     $("#bannercarousel").jCarouselLite({
-        auto: 5000,
+        auto: 2500,
         speed: 1200,
         vertical: false,
         circular:true,

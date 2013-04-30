@@ -171,7 +171,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     width: 100%;
     height:250px;
     background-color:#FFFFFF;
-    background: url(../images/food/banner-back-chef.jpg) 0 0 no-repeat #FFFFFF;
+    background: url(../images/food/banner-back-kitchen.jpg) 0 0 no-repeat #FFFFFF;
 }
 
 #content {
@@ -252,6 +252,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     margin-top:10px;
     font: 16px/16px MaiandraOTGD-DemiBold;
     color:#666666;
+    text-shadow: 1px 1px 2px #EEEEEE;
     background: url(../images/banner-bot.png) no-repeat scroll center top transparent;
 }
 

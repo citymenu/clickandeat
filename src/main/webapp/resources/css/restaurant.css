@@ -422,7 +422,7 @@ a.menuitem-button:active, a.menuitem-button:hover {
 .restaurant-location-link {
     display:inline-block;
     zoom:1;
-    *display: inline;
+
 }
 
 a.restaurant-text {
