@@ -15,6 +15,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
+import org.jets3t.service.model.S3Bucket;
+import org.jets3t.service.model.S3Object;
 import org.jets3t.service.security.AWSCredentials;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -113,28 +115,8 @@ public class RestaurantScraper implements InitializingBean {
         }
     }
 
-    public void scrapeTelephoneNumbers() throws Exception {
 
-        HttpClient httpclient = new DefaultHttpClient();
-        try {
-            HttpGet httpget = new HttpGet("http://www.laneveraroja.com/comida-domicilio-madrid/madrid_fusion-numancia.html#categoria_seccion_16763");
-
-            System.out.println("executing request " + httpget.getURI());
-
-            // Create a response handler
-            ResponseHandler<String> responseHandler = new BasicResponseHandler();
-            String responseBody = httpclient.execute(httpget, responseHandler);
-            System.out.println("----------------------------------------");
-            System.out.println(responseBody);
-            System.out.println("----------------------------------------");
-
-        } finally {
-            httpclient.getConnectionManager().shutdown();
-        }
-    }
-    
-
-    @Scheduled(cron="0 0 10 * * WED")
+    //@Scheduled(cron="0 0 10 * * WED")
     public void scrapeData() throws Exception {
         try {
             if(true || lock.acquire()) {
@@ -188,50 +170,46 @@ public class RestaurantScraper implements InitializingBean {
                     String imageUrl = pair.second;
                     if(restaurantRepository.findByName(restaurant.getName()) == null ) {
 
+                        String restaurantId = restaurant.getRestaurantId();
                         boolean hasUploadedImage = true;
 
-                        // Read image into memory
                         try {
                             if(!imageUrl.startsWith("http:")) {
                                 imageUrl = "http:" + imageUrl;
                             }
                             URL url = new URL(imageUrl);
                             InputStream is = url.openStream();
-                            File file = new File("c:/workspace/clickandeat/src/main/webapp/resources/images/restaurant/" + restaurant.getRestaurantId());
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            FileOutputStream faos = new FileOutputStream(file);
                             byte[] b = new byte[2048];
                             int length;
                             while ((length = is.read(b)) != -1) {
                                 baos.write(b, 0, length);
-                                faos.write(b, 0, length);
                             }
                             is.close();
                             baos.close();
-                            faos.close();
+
+                            String imageType = imageUrl.substring(imageUrl.lastIndexOf(".")+1);
+
+                            // Now upload the restaurant image
+                            S3Object object = new S3Object(basePath + "/" + restaurantId);
+                            ByteArrayInputStream bis = new ByteArrayInputStream(baos.toByteArray());
+                            object.setDataInputStream(bis);
+                            object.setContentLength(baos.size());
+                            object.setContentType("image/"+imageType);
+                            S3Bucket bucket = s3Service.getBucket(bucketName);
+                            s3Service.putObject(bucket, object);
+                            LOGGER.info("Uploaded image for restaurant id: " + restaurantId);
+
                         }
                         catch(Exception ex ) {
                             LOGGER.error("",ex);
                             hasUploadedImage = false;
                         }
-        
+
                         // Save new restaurant
                         restaurant.setHasUploadedImage(hasUploadedImage);
                         restaurant = restaurantRepository.saveRestaurant(restaurant);
-                        String restaurantId = restaurant.getRestaurantId();
                         LOGGER.info("Saved [" + restaurant.getName() + "] with id: " + restaurantId);
-        
-                        String imageType = imageUrl.substring(imageUrl.lastIndexOf(".")+1);
-        
-                        // Now upload the restaurant image
-        //                S3Object object = new S3Object(basePath + "/" + restaurantId);
-        //                ByteArrayInputStream bis = new ByteArrayInputStream(baos.toByteArray());
-        //                object.setDataInputStream(bis);
-        //                object.setContentLength(baos.size());
-        //                object.setContentType("image/"+imageType);
-                        //S3Bucket bucket = s3Service.getBucket(bucketName);
-                        //s3Service.putObject(bucket, object);
-                        LOGGER.info("Uploaded image for restaurant id: " + restaurantId);
                         newRestaurants.add(restaurant);
                     }
                 }
@@ -241,8 +219,7 @@ public class RestaurantScraper implements InitializingBean {
                     @Override
                     public void prepare(MimeMessage mimeMessage) throws Exception {
                         MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                        //message.setTo("soporte@llamarycomer.com");
-                        message.setTo("mishimaltd@gmail.com");
+                        message.setTo("soporte@llamarycomer.com");
                         message.setFrom("noreply@llamarycomer.com");
                         message.setSubject("Restaurant scraper report");
                         StringBuilder sb = new StringBuilder();
