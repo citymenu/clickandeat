@@ -29,7 +29,7 @@ body {
 
 .visa {
     display:inline-block;
-    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.jpg') no-repeat scroll -40px -360px transparent;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -40px -360px transparent;
     height:28px;
     width:45px;
     zoom: 1;
@@ -38,7 +38,7 @@ body {
 
 .mastercard {
     display:inline-block;
-    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.jpg') no-repeat scroll -40px -200px transparent;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -40px -200px transparent;
     height:28px;
     width:45px;
     padding-left:10px;
@@ -98,7 +98,7 @@ select {
 
 .info {
     display:inline-block;
-    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.jpg') no-repeat scroll -75px -520px transparent;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -75px -520px transparent;
     height: 12px;
     margin-left: 15px;
     padding: 0;
@@ -146,7 +146,7 @@ a.payment-button:active, a.payment-button:hover {
 }
 
 .security-help-image {
-    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.jpg') no-repeat scroll -110px -240px transparent;
+    background: url('https://clickandeat.s3-external-3.amazonaws.com/resources/images/checkout-sprites.png') no-repeat scroll -110px -240px transparent;
     margin:20px;
     padding:0;
     width:70px;

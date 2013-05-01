@@ -1,18 +1,12 @@
 @charset "utf-8";
 
-#footer {
-    clear: both;
-    border-top: 1px solid #B56C2B;
-    min-width:1020px;
-}
-
 .footer-wrapper {
+    text-align:left;
     clear: both;
-    color:#837954;
+    color:#E6E6E6;
     margin: 0 auto;
-    padding: 25px 0px 30px 0px;
+    padding: 0px 0px 30px 0px;
     position: relative;
-    width: 1020px;
 }
 
 .company-details {
@@ -28,14 +22,14 @@ h1.footer {
 
 .h1-small {
     font-size:18px;
-    color:#A39974;
+    color:#E6E6E6;
 }
 
 h2.footer {
     font-family: "prenton-n5", "prenton";
     font-weight:500;
     font-size:16px;
-    color:#837954;
+    color:#F3F3F3;
     padding:0;
     margin-bottom:6px;
 }
@@ -51,7 +45,7 @@ h2.spacer {
 
 h3.footer {
     font: 16px MaiandraOTGD-DemiBold;
-    color:#837954;
+    color:#E6E6E6;
     padding:0;
     margin-bottom:10px;
 }
@@ -77,14 +71,14 @@ a.direct, a.direct:visited, a.direct:hover, a.direct:active {
     font-weight:400;
     font-size:13px;
     line-height:15px;
-    color:#837954;
+    color:#E6E6E6;
     text-decoration:none;
     cursor:pointer;
 }
 
 h4.footer {
     font: 18px MaiandraOTGD-DemiBold;
-    color:#837954;
+    color:#E6E6E6;
 }
 
 .footer-contact ul {
@@ -96,7 +90,7 @@ h4.footer {
     font-weight:400;
     font-size:13px;
     line-height:15px;
-    color:#837954;
+    color:#E6E6E6;
 }
 
 .bolder {
@@ -117,19 +111,19 @@ div.credit-card {
 }
 
 .visa {
-    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -360px transparent;
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -360px transparent;
 }
 
 .mastercard {
-    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -200px transparent;
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -200px transparent;
 }
 
 .maestro {
-    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px -160px transparent;
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px -160px transparent;
 }
 
 .amex {
-    background: url(../images/checkout-sprites.jpg) no-repeat scroll -42px 0px transparent;
+    background: url(../images/checkout-sprites.png) no-repeat scroll -42px 0px transparent;
 }
 
 .copyright {
@@ -137,6 +131,7 @@ div.credit-card {
     font-weight:400;
     font-size:12px;
     line-height:14px;
+    color:#FFFFFF;
 }
 
 .icon-email {
