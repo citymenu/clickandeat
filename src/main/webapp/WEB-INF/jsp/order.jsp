@@ -7,11 +7,9 @@
 </script>
 
 <div id="order-wrapper">
-    <div class='orderheader'><message:message key="order.your-order"/>:</div>
-    <div id="restaurant-warning-wrapper"></div>
+    <div class='orderheader'></div>
     <div id="location-wrapper"></div>
     <div class="order-delivery-wrapper"></div>
-    <div id="deliverycheck"></div>
     <div class="order-items-wrapper">
         <div class="order-item-wrapper-header">
             <table width="206">
@@ -25,8 +23,8 @@
         </div>
         <div id="order-item-contents"></div>
     </div>
+    <div id="checkoutcontainer"></div>
+    <div id="deliverycheck"></div>
     <div id="additionalinstructions"></div>
     <div id="discounts"></div>
-    <div id="ordertotal"><message:message key="order.total"/>:</div>
-    <div id="checkoutcontainer"></div>
 </div>

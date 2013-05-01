@@ -97,70 +97,27 @@ function doBuildOrder(order,config) {
     }
 
     // Reset all previous order details
+    $('.orderheadertext').remove();
     $('.ordertitle').remove();
     $('.restaurant-warning').remove();
     $('.order-location-wrapper').remove();
     $('.delivery-wrapper').remove();
     $('.order-item-wrapper').remove();
+    $('.order-total-wrapper').remove();
     $('.discountrow').remove();
     $('.deliverychargerow').remove();
     $('.order-totalcost').remove();
     $('.order-free-item-wrapper').remove();
     $('.order-discount-wrapper').remove();
     $('.additional-information').remove();
-    $('#checkout').remove();
-    $('#callnow').remove();
+    $('.checkout-container').remove();
     $('.delivery-warning-wrapper').remove();
 
-    if( order ) {
-
-        // If there is an order and the order restauarant id does not match the current restaurant id, show a warning
-        if( config.showBuildOrderLink && order.orderItems.length > 0 ) {
-            var warningMessage = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
-            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-            var warningContent = ('<div>{0} {1}</div>')
-                .format(buildOrderLink, warningMessage);
-
-            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
-            $('#restaurant-warning-wrapper').append(warning);
-
-            // Add link to continue building existing order
-            $('#buildorder').click(function(){
-                location.href = ctx + '/app/restaurant/' + order.restaurantId;
-            });
-        } else if ( orderIsForAnotherRestaurant ) {
-            var warningMessage1 = getLabel('order.existing-restaurant-warning-1').format(unescapeQuotes(order.restaurantName));
-            var warningMessage2 = getLabel('order.existing-restaurant-warning-2').format(unescapeQuotes(restaurantName));
-
-            var buildOrderLink = ('<a id=\'buildorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-            var clearOrderLink = ('<a id=\'clearorder\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.click-here'));
-
-            var warningContent = ('<div>{0} {1}</div><div class=\'restaurant-warning-text\'>{2} {3}</div>')
-                .format(buildOrderLink, warningMessage1, clearOrderLink, warningMessage2);
-
-            var warning = ('<div class=\'restaurant-warning\'>{0}</div>').format(warningContent);
-            $('#restaurant-warning-wrapper').append(warning);
-
-            // Add link to continue building existing order
-            $('#buildorder').click(function(){
-                location.href = ctx + '/app/restaurant/' + order.restaurantId;
-            });
-
-            $('#clearorder').click(function(){
-                $.fancybox.showLoading(getLabel('ajax.clearing-order'));
-                $.post( ctx+'/order/clearOrder.ajax', {orderId: currentOrder.orderId, restaurantId: restaurantId},
-                    function( data ) {
-                        $.fancybox.hideLoading();
-                        if( data.success ) {
-                            buildOrder(data.order);
-                        } else {
-                            alert('success:' + data.success);
-                        }
-                    }
-                );
-            });
-
-        }
+    // Display order header
+    if(orderIsForAnotherRestaurant) {
+        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order-with') + ' ' + order.restaurantName + ':'));
+    } else {
+        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order')+':'));
     }
 
     // Show current location details
@@ -196,11 +153,12 @@ function doBuildOrder(order,config) {
             deliveryTime = deliveryTimeOfDay;
         }
 
-        var link = (config.showDeliveryOptions? '<div class=\'delivery-edit\'><a id=\'deliveryedit\' class=\'delivery-button unselectable\'>' + getLabel('button.change') + '</a></div>' : '');
-        var deliveryContainer = ('<div class=\'delivery-wrapper\'><div class=\'delivery-title\'>{0}: <span class=\'delivery-header\'>{1} - {2}</span></div>{3}</div>')
-            .format(orderType,deliveryDay,deliveryTime,link);
+        var deliveryDetails = orderType + ': ' + deliveryDay + ' - ' + deliveryTime;
+        var deliveryLink = config.showDeliveryOptions? ('<a id=\'deliveryedit\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.change')): '';
+        var deliveryContainer = ('<div class=\'order-location-wrapper\' id=\'deliverydetails\'><div class=\'order-location-header\'><span class=\'order-location-title\'>{0}</span><span class=\'order-location-link\'>{1}</span><div class=\'order-location-summary\'>{2}</div></div>')
+            .format(getLabel('order.delivery-details'), deliveryLink, deliveryDetails );
         $('.order-delivery-wrapper').append(deliveryContainer);
-        if( config.showDeliveryOptions ) {
+        if( config.allowChangeLocation ) {
             $('#deliveryedit').click(function(){
                 deliveryEdit();
             });
@@ -214,10 +172,10 @@ function doBuildOrder(order,config) {
         for (var i = order.orderItems.length - 1; i >= 0; i--) {
             var orderItem = order.orderItems[i];
             if(config.allowRemoveItems) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'36\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'120\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'36\'><div class=\'order-item-edit\'><a onclick=\"updateQuantity(\'{0}\',1)\"><span class=\'order-add-item\'></span></a>{1}<a onclick=\"updateQuantity(\'{0}\',-1)\"><span class=\'order-remove-item\'></span></a></div></td><td width=\'128\'>{2}</td><td width=\'50\' align=\'right\'>{4} {3}</td></tr></table></div>')
                     .format(orderItem.orderItemId,orderItem.quantity,buildDisplay(orderItem),ccy,orderItem.formattedCost);
             } else {
-                var row = '<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0}</td><td width=\'50\' align=\'right\'>{1} {2}</td></tr>'
+                var row = '<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>{1} {2}</td></tr>'
                     .format(buildStaticDisplay(orderItem),ccy,orderItem.formattedCost);
             }
             $('#order-item-contents').prepend(row);
@@ -237,7 +195,7 @@ function doBuildOrder(order,config) {
                         }
                     });
                     selectBox += '</select>';
-                    var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
+                    var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0}:</span><br/>{1}</td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.title,selectBox,ccy,'0.00');
                     $('#order-item-contents').append(row);
                     $('#' + orderDiscount.discountId).change(function(){
                         var discountId = $(this).attr('id');
@@ -246,7 +204,7 @@ function doBuildOrder(order,config) {
                     });
                 } else {
                     if( orderDiscount.selectedFreeItem && orderDiscount.selectedFreeItem != '') {
-                        var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
+                        var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'><span class=\'semi-bold\'>{0} ({1})</span></td><td width=\'50\' align=\'right\'>{3} {2}</td></tr></table></div>').format(orderDiscount.selectedFreeItem,getLabel('order.free'),ccy,'0.00');
                         $('#order-item-contents').append(row);
                     }
                 }
@@ -255,34 +213,35 @@ function doBuildOrder(order,config) {
 
         // If there are any items in the order, show the total order amount
         if( order.orderItemCost && order.orderItemCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'><span class=\'semi-bold\'>{0}</span></td><td width=\'50\' align=\'right\'><span class=\'semi-bold\'>{2}</span> {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
+            var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>{2} {1}</td></tr></table></div>').format(getLabel('order.order-item-cost'),ccy,order.formattedOrderItemCost);
             $('#order-item-contents').append(row);
         };
 
         // Add details of any cash discounts
         order.orderDiscounts.forEach(function(orderDiscount) {
             if( orderDiscount.discountType != 'DISCOUNT_FREE_ITEM' ) {
-                var row = ('<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0}</td><td width=\'50\' align=\'right\'>-{2} {1}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
+                var row = ('<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0}</td><td width=\'50\' align=\'right\'>-{2} {1}</td></tr></table></div>').format(orderDiscount.title,ccy,orderDiscount.formattedAmount);
                 $('#order-item-contents').append(row);
             }
         });
 
         // Add delivery charge if applicable
         if( order.deliveryCost && order.deliveryCost > 0 ) {
-            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'206\'><tr valign=\'top\'><td width=\'156\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{1} {0}</td></tr>').format(ccy,order.formattedDeliveryCost);
+            var row = ('<div class=\'order-item-wrapper\'><table class=\'order-cash-discount\' width=\'214\'><tr valign=\'top\'><td width=\'164\'>' + getLabel('order.delivery-charge') + '</td><td width=\'50\' align=\'right\'>{1} {0}</td></tr>').format(ccy,order.formattedDeliveryCost);
             $('#order-item-contents').append(row);
         }
 
         // Add voucher if applicable
         if( order.voucher != null ) {
             var voucher = order.voucher;
-            var row = '<div class=\'order-item-wrapper\'><table width=\'206\'><tr valign=\'top\'><td width=\'156\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{3} {2}</td></tr>'
+            var row = '<div class=\'order-item-wrapper\'><table width=\'214\'><tr valign=\'top\'><td width=\'164\'>{0} (-{1}%)</td><td width=\'50\' align=\'right\'>-{3} {2}</td></tr>'
                 .format(voucher.voucherId,voucher.discount.toFixed(0),ccy,order.voucherDiscount.toFixed(2));
             $('#order-item-contents').append(row);
         }
 
-        // Build total item cost
-        $('#ordertotal').append('<span class=\'order-totalcost\'>{1} {0}</span>'.format(ccy,order.formattedTotalCost));
+        // Build total order item
+        var row = ('<div class=\'order-total-wrapper\'><span class=\'order-total-left\'>{0}</span><span class=\'order-total-right\'>{1} {2}</span></div>').format(getLabel('order.total'),ccy,order.formattedTotalCost);
+        $('#order-item-contents').append(row);
 
         // Show details of discounts if available and if we are either on a menu page or there are items
         if( advancedDisplay && config.showDiscountInformation && order.restaurantDiscounts.length > 0 ) {
@@ -332,18 +291,18 @@ function doBuildOrder(order,config) {
                 if( config.enableCheckoutButton ) {
                     // For phone orders only restaurant we use a different button
                     if( order.phoneOrdersOnly ) {
-                        $('#checkoutcontainer').append(('<div id=\'callnow\'><a id=\'callnowbutton\' class=\'callnow-button unselectable\'>{0}</a></div>').format(getLabel('button.call-now')));
+                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="callnowbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.call-now')));
                         $('#callnowbutton').click(function(){
                             checkout();
                         });
                     }else{
-                        $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.checkout')));
+                        $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.checkout')));
                         $('#checkoutbutton').click(function(){
                             checkout();
                         });
                     }
                 } else if (config.enablePaymentButton) {
-                    $('#checkoutcontainer').append(('<div id=\'checkout\'><a id=\'checkoutbutton\' class=\'checkout-button unselectable\'>{0}</a></div>').format(getLabel('button.payment')));
+                    $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.payment')));
                     $('#checkoutbutton').click(function(){
                         payment();
                     });
@@ -514,7 +473,7 @@ function buildDeliveryEdit(daysArray, deliveryTimesArray, collectionTimesArray, 
     $('.delivery-wrapper').remove();
 
     // Add the new options in the same area
-    $('.order-delivery-wrapper').append(('<div class=\'delivery-wrapper\'><div class=\'delivery-form\'>{0}{1}</div>{2}</div>').format(deliveryContainer,deliverySelectContainer,buttonContainer));
+    $('#deliverydetails').append(('<div class=\'delivery-wrapper\'><div class=\'delivery-form\'>{0}{1}</div>{2}</div>').format(deliveryContainer,deliverySelectContainer,buttonContainer));
 
     // Add onchange events to the delivery radio buttons if they are present
     if( hasDeliveryTime && hasCollectionTime ) {
@@ -762,12 +721,13 @@ function restaurantCheck(restaurantId, callback ) {
 // Update current location
 function locationEdit() {
 
-    var locationEditField = ('<input class=\'input-location\' id=\'locedit\' placeholder=\'\'/>').format(getLabel('search.watermark'));
-    var searchButton = ('<a class=\'location-search\'>{0}</a>').format(getLabel('button.search'));
-    var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationEditField,searchButton);
+    var locationField = ('<input class=\'input-location\' id=\'locedit\' placeholder=\'\'/>').format(getLabel('search.watermark'));
+    var searchButton = ('<div class=\'search-small\'><div class=\'search-button-text-small\'>{0}</div></div>').format(getLabel('button.search'));
+    var locationTable = ("<table width=\'390\'><tr valign=\'middle\'><td width=\'290\'>{0}</td><td width=\'100\'>{1}</td></tr></table").format(locationField,searchButton);
+    var locationEdit = ('<div class=\'search-location-edit\'>{0}</div>').format(locationTable);
 
     var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('location.enter-your-location'));
-    var content = ('<div class=\'dialog-content\'>{0}<div id=\'locationeditwarning\'></div></div>').format(locationEdit);
+    var content = ('<div class=\'dialog-content\'>{0}</div>').format(locationTable);
     var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
 
     $.fancybox.open({
@@ -776,7 +736,7 @@ function locationEdit() {
         modal:false,
         autoSize:false,
         autoWidth:true,
-        height:165,
+        height:145,
         openEffect:'none',
         closeEffect:'none'
     });
@@ -792,7 +752,7 @@ function locationEdit() {
         }
     });
 
-    $('.location-search').click(function(){
+    $('.search-small').click(function(){
         locationSearch();
     });
 
@@ -809,7 +769,6 @@ function locationEdit() {
 function locationSearch() {
     var location = $('#locedit').val();
     if( location != '' ) {
-        $('.location-edit-warning').remove();
         $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
         $.post( ctx+'/validateLocation.ajax', { loc: location },
             function( data ) {
@@ -817,9 +776,6 @@ function locationSearch() {
                 if( data.success ) {
                     $.fancybox.close(true);
                     onAfterLocationUpdate();
-                }
-                else {
-                    $('#locationeditwarning').append(('<div class=\'location-edit-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
                 }
             }
         );
@@ -1080,7 +1036,9 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
 
         var itemArray = specialOfferItemStr.split('%%%');
         var itemChoiceArrayStr = itemArray[2];
+        var itemChoiceCostArrayStr = itemArray[3];
         var itemChoices = [];
+        var itemChoiceCosts = [];
 
         itemChoiceArrayStr.split('$$$').forEach(function(itemChoiceStr){
             var itemChoice = new Object({
@@ -1089,10 +1047,18 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
             itemChoices.push(itemChoice);
         });
 
+        itemChoiceCostArrayStr.split('$$$').forEach(function(itemChoiceCostStr){
+            var itemChoiceCost = new Object({
+                cost:Number(itemChoiceCostStr)
+            });
+            itemChoiceCosts.push(itemChoiceCost);
+        });
+
         var specialOfferItem = new Object({
             title: (itemArray[0] == 'null'? null: unescapeQuotes(itemArray[0])),
             description: (itemArray[1] == 'null'? null: unescapeQuotes(itemArray[1])),
-            itemChoices: itemChoices
+            itemChoices: itemChoices,
+            itemChoiceCosts: itemChoiceCosts
         });
         specialOfferItems.push(specialOfferItem);
     });
@@ -1108,6 +1074,13 @@ function addSpecialOfferToOrder(restaurantId, specialOfferId, specialOfferItemsA
 function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOfferItems, quantity, cost) {
 
     var currentQuantity = quantity;
+    var additionalCost = 0;
+
+    // If no choices for special offer just add straight away
+    if(specialOfferItems.length == 0) {
+        doAddSpecialOfferToOrder(restaurantId, specialOfferId, [], [], quantity);
+        return;
+    }
 
     // Build the container for showing the quantity and total cost
     var itemQuantityField = ('<div class=\'additional-item-quantity\'>{0}: <input id=\'quantity\' value=\'{1}\'/></div>').format(getLabel('order.quantity'),quantity);
@@ -1123,9 +1096,15 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
             specialOfferItemContent += ('<div class=\'specialofferitemdescription\'>{0}</div>').format(unescapeQuotes(specialOfferItem.description));
         }
         var selectOptions = '';
-        specialOfferItem.itemChoices.forEach(function(itemChoice){
-            selectOptions += ('<option value=\'{0}\'>{1}</option>').format(itemChoice.text, unescapeQuotes(itemChoice.text));
-        });
+        for( var i = 0; i < specialOfferItem.itemChoices.length; i++ ) {
+            var itemChoice = specialOfferItem.itemChoices[i];
+            var itemChoiceCost = specialOfferItem.itemChoiceCosts[i];
+            if( i == 0 ) {
+                additionalCost += itemChoiceCost.cost; // Add default selected value
+            }
+            var additionalText = itemChoiceCost.cost == 0? '': ' (+' + itemChoiceCost.cost.toFixed(2).replace('.',',') + ' ' + ccy + ')';
+            selectOptions += ('<option cost=\'{0}\' value=\'{1}\'>{2}</option>').format(itemChoiceCost.cost, itemChoice.text, unescapeQuotes(itemChoice.text) + additionalText);
+        };
         var selectBox = ('<div class=\'specialofferitemchoice\'><select id=\'specialOfferItemSelect_{0}\'>{1}</select></div>').format(specialOfferItemIndex, selectOptions);
 
         specialOfferItemContent += selectBox;
@@ -1157,9 +1136,8 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
         closeEffect:'none'
     });
 
-
     // Update the total cost
-    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+    $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
 
     // Only allow numeric input in quantity field
     $("#quantity").keydown(function(event) {
@@ -1174,11 +1152,26 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
         }
     });
 
+    // Update total cost on item selection
+    for( var i = 0; i < specialOfferItems.length; i++ ) {
+        $('#specialOfferItemSelect_'+i).change(function() {
+            var newAdditionalCost = 0;
+            for( var j = 0; j < specialOfferItems.length; j++ ) {
+                var itemCost = $('option:selected', '#specialOfferItemSelect_' + j).attr('cost');
+                newAdditionalCost += Number(itemCost);
+            }
+            additionalCost = newAdditionalCost;
+            currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
+            $('#itemtotalcost').remove();
+            $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
+        });
+    };
+
     // Update total cost on quantity update
     $("#quantity").keyup(function(event) {
         currentQuantity = ($('#quantity').val() == ''? 0: $('#quantity').val());
         $('#itemtotalcost').remove();
-        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format((cost * currentQuantity).toFixed(2)));
+        $('#itemcost').append(('<span id=\'itemtotalcost\'>{0}</span>').format(((cost + additionalCost) * currentQuantity).toFixed(2).replace('.',',')));
     });
 
     // Handler for the cancel button
@@ -1190,27 +1183,32 @@ function doAddSpecialOfferToOrderCheck(restaurantId, specialOfferId, specialOffe
     $('#additembutton').click(function(){
         if( currentQuantity != '' && currentQuantity > 0 ) {
             var itemChoices = [];
+            var itemChoiceCosts = [];
             for( i = 0; i < specialOfferItems.length; i++) {
                 var selectedValue = $('#specialOfferItemSelect_' + i ).val();
+                var itemCost = $('option:selected', '#specialOfferItemSelect_' + i).attr('cost');
                 if( selectedValue == 'EMPTY' ) {
                     return;
                 } else {
                     itemChoices.push(selectedValue);
+                    itemChoiceCosts.push(itemCost);
+
                 }
             }
-            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, currentQuantity);
+            doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, itemChoiceCosts, currentQuantity);
         }
         $.fancybox.close(true);
     });
 }
 
 // Add the special offer item to the order
-function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, quantity ) {
+function doAddSpecialOfferToOrder(restaurantId, specialOfferId, itemChoices, itemChoiceCosts, quantity ) {
 
     var update = {
         restaurantId: restaurantId,
         specialOfferId: specialOfferId,
         itemChoices: unescapeArray(itemChoices),
+        itemChoiceCosts: unescapeArray(itemChoiceCosts),
         quantity: quantity || 1
     };
 

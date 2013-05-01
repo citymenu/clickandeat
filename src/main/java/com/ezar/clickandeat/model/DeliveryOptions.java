@@ -103,8 +103,8 @@ public class DeliveryOptions {
     }
 
     private Double[] getMinimumAndMaximumDeliveryCharge() {
-        Double minCharge = deliveryCharge;
-        Double maxCharge = deliveryCharge;
+        Double minCharge = deliveryCharge == null? 0d: deliveryCharge;
+        Double maxCharge = deliveryCharge == null? 0d: deliveryCharge;
         for( VariableDeliveryCharge variableDeliveryCharge: variableDeliveryCharges ) {
             minCharge = Math.min(variableDeliveryCharge.getDeliveryCharge(), minCharge);
             maxCharge = Math.max(variableDeliveryCharge.getDeliveryCharge(), maxCharge);
@@ -112,6 +112,11 @@ public class DeliveryOptions {
         for( AreaDeliveryCharge areaDeliveryCharge: areaDeliveryCharges ) {
             minCharge = Math.min(areaDeliveryCharge.getDeliveryCharge(), minCharge);
             maxCharge = Math.max(areaDeliveryCharge.getDeliveryCharge(), maxCharge);
+        }
+        if( allowFreeDelivery ) {
+            if( minimumOrderForFreeDelivery != null && minimumOrderForFreeDelivery == 0d) {
+                minCharge = 0d;
+            }
         }
         return new Double[]{minCharge, maxCharge};
     }

@@ -17,7 +17,6 @@ import static org.junit.Assert.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
-
 public class OrderWorkflowEngineTest {
 
     private static final Logger LOGGER = Logger.getLogger(OrderWorkflowEngineTest.class);

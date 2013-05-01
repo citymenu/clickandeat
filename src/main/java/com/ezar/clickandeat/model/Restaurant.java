@@ -3,6 +3,7 @@ package com.ezar.clickandeat.model;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.DateUtil;
 import com.ezar.clickandeat.util.LocationUtils;
+import com.ezar.clickandeat.util.NumberUtil;
 import org.joda.time.DateTime;
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
@@ -35,7 +36,8 @@ public class Restaurant extends PersistentObject {
     private String restaurantId;
 
     private String uuid;
-    
+
+    @Indexed
     private String name;
 
     private String description;
@@ -93,6 +95,10 @@ public class Restaurant extends PersistentObject {
     @Transient
     private boolean open;
 
+    // External id (i.e. url to Just eat)
+    private String externalId;
+    private Integer justEatRating;
+    
     // Determines if the restaurant owner has approved or not the restaurant content
     private boolean contentApproved;
 
@@ -192,8 +198,8 @@ public class Restaurant extends PersistentObject {
         DateTime lateOpeningTime = times[2];
         return earlyOpeningTime == null? lateOpeningTime: earlyOpeningTime;
     }
-    
-    
+
+
     /**
      * @param now
      * @return
@@ -539,6 +545,10 @@ public class Restaurant extends PersistentObject {
         this.description = description;
     }
 
+    public String getMetaDescription() {
+        return MessageFactory.formatMessage("restaurant.metadescription", false, StringUtils.collectionToDelimitedString(cuisines, ","), name , address.getSummary());
+    }
+    
     public Boolean getListOnSite() {
         return listOnSite;
     }
@@ -632,6 +642,24 @@ public class Restaurant extends PersistentObject {
         }
     }
 
+    public String getLongitude() {
+        if( this.address == null || this.address.getLocation() == null ) {
+            return "";
+        }
+        else {
+            return this.address.getLocation()[1] + "";
+        }
+    }
+
+    public String getLatitude() {
+        if( this.address == null || this.address.getLocation() == null ) {
+            return "";
+        }
+        else {
+            return this.address.getLocation()[0] + "";
+        }
+    }
+
     public Menu getMenu() {
         return menu;
     }
@@ -710,6 +738,10 @@ public class Restaurant extends PersistentObject {
 
     public Double getDistanceToSearchLocation() {
         return distanceToSearchLocation;
+    }
+    
+    public String getFormattedDistanceToSearchLocation() {
+        return NumberUtil.format(distanceToSearchLocation);
     }
 
     public void setDistanceToSearchLocation(Double distanceToSearchLocation) {
@@ -877,5 +909,29 @@ public class Restaurant extends PersistentObject {
 
     public void setCommissionPercent(Double commissionPercent) {
         this.commissionPercent = commissionPercent;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public Integer getJustEatRating() {
+        return justEatRating;
+    }
+
+    public void setJustEatRating(Integer justEatRating) {
+        this.justEatRating = justEatRating;
+    }
+
+    public String getOrigin() {
+        return externalId == null? "Local": "JustEat";
+    }
+
+    public String getTown() {
+        return address == null || address.getTown() == null? null: address.getTown();
     }
 }

@@ -68,7 +68,7 @@
                 <property name="useCacheControlNoStore" value="true"/>
                 <property name="cacheMappings">
                     <props>
-                        <prop key="/**/messages.js*">3600</prop>
+                        <prop key="/**/messages.js">3600</prop>
                         <prop key="/**">0</prop>
                     </props>
                 </property>
@@ -81,11 +81,12 @@
     	<constructor-arg value="${MONGOHQ_URL}"/>
 	</bean>
 
-    <mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
-        <mongo:options connections-per-host="40"
-                       auto-connect-retry="true"
-                       socket-keep-alive="true"
-                       socket-timeout="60000"/>
+	<!-- Default bean name is 'mongo' -->
+  	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
+          <mongo:options connections-per-host="40"
+                         auto-connect-retry="true"
+                         socket-keep-alive="true"
+                         socket-timeout="60000"/>
     </mongo:mongo>
 
 	<!-- Mongo db factory -->

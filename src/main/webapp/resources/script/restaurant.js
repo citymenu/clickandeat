@@ -49,9 +49,9 @@ function onBuildDeliveryEdit() {
 
 // Update the height of the menu right panel to ensure it can fit the order panel
 function ensureHeight() {
-    orderheight = $('#order-wrapper').outerHeight();
+    orderheight = $('#order-wrapper').outerHeight() + 20;
     $('.menu-right').css('min-height',orderheight);
-    launchheight = $('#menu-launch-wrapper').outerHeight();
+    launchheight = $('#menu-launch-wrapper').outerHeight() + 20;
     $('.menu-left').css('min-height',launchheight);
 }
 
@@ -87,18 +87,18 @@ function updateOrderPanelPos() {
     var y = $(this).scrollTop();
     var orderpaddingtop = parseInt($('.menu-right').css('padding-top').replace('px',''));
     var orderheight = $('#order-wrapper').outerHeight() + orderpaddingtop;
-    var orderbottom = orderheight + y;
+    var orderbottom = orderheight + y + 20;
 
     var contenttop = $('.menu-center').offset().top;
     var contentheight = $('.menu-center').outerHeight();
-    var contentbottom = contenttop + contentheight - 20;
+    var contentbottom = contenttop + contentheight;
 
     if( orderbottom >= contentbottom ) {
-        var newtop = contentbottom - orderheight - ordertop + 20;
+        var newtop = contentbottom - orderheight - ordertop - 20;
         $('#order-wrapper').css('top',(newtop < 0? 0: newtop));
         $('#order-wrapper').removeClass('fixed');
-    } else if (y >= ordertop - 20 ) {
-        $('#order-wrapper').css('top',20);
+    } else if (y >= ordertop ) {
+        $('#order-wrapper').css('top',0);
         $('#order-wrapper').addClass('fixed');
     } else {
         $('#order-wrapper').css('top',0);
@@ -205,33 +205,36 @@ function showAllDeliveryCharges() {
                 }
 
                 // Build the location delivery options
-                var table = '<table class=\'delivery-details-table\'><thead><tr>';
-                table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-location'));
-                if( hasDeliveryCharge ) {
-                    table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-charge'));
-                }
-                if( hasMinimumOrder ) {
-                    table += ('<th>{0}</th>').format(getLabel('restaurant.minimum-order-value'));
-                }
-                table += '</tr></thead><tbody>';
-
-                var rowIndex = 0;
-                $.each( deliveryCharges, function( key, arr ) {
-                    var areaDeliveryCharge = arr[0];
-                    var areaMinimumOrderValue = arr[1];
-                    var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
-                    var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
+                var table = '';
+                if(hasDeliveryCharge || hasMinimumOrder) {
+                    table = '<table class=\'delivery-details-table\'><thead><tr>';
+                    table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-location'));
                     if( hasDeliveryCharge ) {
-                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                        table += ('<th>{0}</th>').format(getLabel('restaurant.delivery-charge'));
                     }
                     if( hasMinimumOrder ) {
-                        row += ('<td class=\'right\'>{0} {1}</td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                        table += ('<th>{0}</th>').format(getLabel('restaurant.minimum-order-value'));
                     }
-                    row += '</tr>';
-                    table += row;
-                });
+                    table += '</tr></thead><tbody>';
 
-                table += '</tbody></table>';
+                    var rowIndex = 0;
+                    $.each( deliveryCharges, function( key, arr ) {
+                        var areaDeliveryCharge = arr[0];
+                        var areaMinimumOrderValue = arr[1];
+                        var cls = ( rowIndex++ % 2 ) == 0? 'even': 'odd';
+                        var row = ('<tr class=\'{0}\'><td>{1}</td>').format(cls,key);
+                        if( hasDeliveryCharge ) {
+                            row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaDeliveryCharge? areaDeliveryCharge.toFixed(2): standardDeliveryCharge.toFixed(2), ccy );
+                        }
+                        if( hasMinimumOrder ) {
+                            row += ('<td class=\'right\'>{0} <span class=\'euro\'>{1}</span></td>').format(areaMinimumOrderValue? areaMinimumOrderValue.toFixed(2): minimumOrderForDelivery.toFixed(2), ccy );
+                        }
+                        row += '</tr>';
+                        table += row;
+                    });
+
+                    table += '</tbody></table>';
+                }
 
                 var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('restaurant.delivery-charges'));
                 var content = ('<div class=\'dialog-content\'>{0}{1}</div>').format(standardContent,table);

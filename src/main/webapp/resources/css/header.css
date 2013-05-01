@@ -1,11 +1,9 @@
 @charset "utf-8";
 
 #header {
-    background: none repeat scroll 0 0 #FFFFFF;
 }
 
 .header-wrapper {
-    background-color:#FFFFFF;
     clear: both;
     margin: 0 auto;
     position: relative;
@@ -82,7 +80,7 @@
 
 .navigation-wrapper {
     background-color: none;
-    background: url(../images/nav-background.png) 0 0 repeat-x;
+    background: url(../images/nav-background.png) 0 0 no-repeat transparent;
     -moz-box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
     -webkit-box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
     box-shadow: 0px 1px 1px rgba(0,0,0,0.5);
@@ -96,35 +94,17 @@
 }
 
 .navigation-links {
-    padding-top: 5px;
-    padding-left: 25px;
-    clear:both;
-}
-
-.navigation-wrapper ul {
-    list-style:none outside none;
-}
-
-.navigation-wrapper li {
-    color: #999999;
-    font-family: "prenton-n5", "prenton";
-    font-size: 13px;
+    padding: 11px 0 6px 0;
+    overflow:hidden;
+    color: #FFFFFF;
+    font:12px MaiandraOTGD-DemiBold;
+    text-shadow: 0 2px #333333;
     font-weight:500;
-    display:inline;
-    float:left;
-    padding-right:15px;
-}
-
-.navigation-wrapper li.active {
-    color:#FFFFFF;
-}
-
-.arrow {
-    font-weight: 700;
+    text-transform:uppercase;
 }
 
 .navigation-links a, .navigation-links a:visited, .navigation-links a:active, .navigation-links a:hover {
-    color: #999999;
+    color: #FFFFFF;
     text-decoration:none;
     cursor:pointer;
 }

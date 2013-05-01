@@ -31,12 +31,12 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
 
     private DistributedLock lock;
 
-    
+
     @Override
     public void afterPropertiesSet() throws Exception {
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
     }
-    
+
 
     @Scheduled(cron="0 0 0/6 * * ?")
     public void execute() {
@@ -48,7 +48,7 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
                 DateTime cutoff = new DateTime().minusDays(2);
                 List<Order> orders = operations.find(new Query(where("orderStatus").is(ORDER_STATUS_BASKET)), Order.class);
                 LOGGER.info("Found " + orders.size() + " orders with status 'BASKET'");
-    
+
                 // Get all expired orders
                 for(Order order: orders ) {
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
@@ -67,6 +67,4 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
             lock.release();
         }
     }
-
-
 }

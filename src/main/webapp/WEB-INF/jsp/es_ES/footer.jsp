@@ -77,3 +77,13 @@
     </div>
 </div>
 
+<div style="display:none">
+    <c:forEach var="entry" items="${cuisineLocationsFull}">
+        <div>
+            <a href="${ctx}/app/encontrar-comida-para-llevar-en-${entry.key.second}/loc/${entry.key.first}">${entry.key.second}</a>
+        </div>
+        <c:forEach var="list" items="${entry.value}">
+            <div><a href="${ctx}/app/encontrar-${list.second}-comida-para-llevar-en-${entry.key.second}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></div>
+        </c:forEach>
+    </c:forEach>
+</div>

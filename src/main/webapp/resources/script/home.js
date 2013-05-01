@@ -12,18 +12,13 @@ $(document).ready(function(){
     };
     autocomplete = new google.maps.places.Autocomplete(input, options);
 
-    // Add carousel
-    $("#carousel").jCarouselLite({
-        auto: 5000,
+    // Add banner carousel
+    $("#bannercarousel").jCarouselLite({
+        auto: 2500,
         speed: 1200,
-        vertical: true,
+        vertical: false,
         circular:true,
-        visible:3
-    })
-    .hover(function() {
-        paused = true;
-    }, function() {
-        paused = false;
+        visible:2
     });
 
     // If error in model, show location warning
@@ -39,6 +34,32 @@ $(document).ready(function(){
         if( event.keyCode == 13 ) {
             search();
         }
+    });
+
+    // Add restaurant links
+    $('.restaurant-link').click(function(){
+        location.href = $(this).attr('url');
+    });
+
+    // Fade through the three speech options
+    $('#speech1').delay(7000).fadeOut(500);
+    $('#speech2').delay(7500).fadeIn(500).delay(7000).fadeOut(500);
+    $('#speech3').delay(15500).fadeIn(500);
+
+    // Recommendations hover
+    $('div[type="recommendation"]').hover(
+        function() {
+            $(this).addClass('restaurant-panel-hover');
+        },
+        function() {
+            $(this).removeClass('restaurant-panel-hover');
+        }
+    );
+
+    // Add url links to all restaurant buttons
+    $('div[type="recommendation"]').click(function(){
+        var url = $(this).attr('url');
+        window.location = ctx + '/' + url;
     });
 
 });
@@ -64,5 +85,4 @@ function search() {
         );
     }
 }
-
 

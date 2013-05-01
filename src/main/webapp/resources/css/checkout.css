@@ -1,9 +1,13 @@
 @charset "utf-8";
 
+#order-wrapper {
+    margin-top:0;
+}
+
 .checkout-left {
-    padding: 0;
-    margin: 0 30px 0 10px;
-    width: 720px;
+    padding: 0 0 0 10px;
+    margin: 0 30px 0 0;
+    width: 700px;
     position:relative;
 }
 
@@ -15,20 +19,35 @@
 }
 
 .checkout-wrapper {
-    padding: 0 10px;
+}
+
+.checkout-header {
+    padding:10px 0 0 0;
+}
+
+.checkout-title {
+    font: 16px/18px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin-bottom:20px;
+    padding-bottom:10px;
+    border-bottom:2px solid #CC0000;
 }
 
 .checkout-item-wrapper {
-    margin-bottom: 30px;
-    width:630px;
+    padding:10px 0 0 15px;
+    margin-bottom: 25px;
+    width:662px;
+}
+
+.divider {
+    margin-bottom:25px;
 }
 
 .checkout-wrapper h2 {
-    color: #BB0000;
-    font-family: MaiandraOTGD-DemiBold;
-    font-size:18px;
-    line-height:22px
-    text-shadow: 0 1px #EEEEEE;
+    color: #CC0000;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .contact-form-entry {
@@ -46,9 +65,8 @@
 }
 
 .checkout-description {
-    font:12px/16px prenton-n5,prenton;
-    font-weight: 500;
-    color:#666666;
+    font:400 12px/16px prenton-n4,prenton;
+    color:#444444;
     padding: 5px 0 10px 0;
 }
 
@@ -138,15 +156,26 @@ a.checkout-nav-button:active, a.checkout-nav-button:hover {
 #validation-error {
     display:inline-block;
     font:400 14px/16px myriad-pro-n4,myriad-pro;
-    margin-bottom: 20px;
+    margin:10px 0 20px 0;
+    width:650px;
     zoom: 1;
     *display: inline;
 }
 
+#validation-message-wrapper {
+    display:inline-block;
+    padding:8px 10px 8px 10px;
+}
+
+#validation-message {
+    font:400 12px/14px myriad-pro-n4,myriad-pro;
+}
+
 .validation-message {
     background:url(../images/invalid.png) 0 0 no-repeat;
-    padding-left:65px;
+    padding:0 0 0 65px;
     min-height:65px;
+    width:
 }
 
 input.checkbox {

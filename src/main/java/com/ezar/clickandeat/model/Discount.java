@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.util.NumberUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 
@@ -235,5 +236,12 @@ public class Discount {
 
     public void setDiscountApplicableTimes(List<ApplicableTime> discountApplicableTimes) {
         this.discountApplicableTimes = discountApplicableTimes;
+    }
+    
+    public String getAmountSummary() {
+        if(DISCOUNT_FREE_ITEM.equals(discountType)) {
+            return "";
+        }
+        return NumberUtil.formatGeneral(discountAmount) + (discountType.equals(DISCOUNT_PERCENTAGE)?"%":" €");
     }
 }

@@ -141,6 +141,10 @@ Ext.define('AD.controller.RestaurantEdit', {
                 click: this.downloadMenu
             },
 
+            'restaurantedit button[action=openExternal]': {
+                click: this.openExternal
+            },
+
             'restaurantmaindetails': {
                 render:this.mainDetailsRendered
             },
@@ -626,6 +630,13 @@ Ext.define('AD.controller.RestaurantEdit', {
         window.location = ctx + "/admin/menu/downloadMenu.html?id=" + restaurantObj.restaurantId;
     },
 
+    openExternal:function(button) {
+        var externalId = restaurantObj.externalId;
+        if(externalId != null && externalId != '') {
+            window.open(externalId);
+        }
+    },
+
     saveRestaurant: function(button , callback) {
 
         // Check if the main details form is invalid`
@@ -986,7 +997,8 @@ Ext.define('AD.controller.RestaurantEdit', {
                 var specialOfferItem = new Object({
                     title: item.get('title'),
                     description: item.get('description'),
-                    specialOfferItemChoices: delimitedStringToArray(item.get('specialOfferItemChoices'),'\n')
+                    specialOfferItemChoices: delimitedStringToArray(item.get('specialOfferItemChoices'),'\n'),
+                    specialOfferItemChoiceCosts: delimitedStringToArray(item.get('specialOfferItemChoiceCosts'),'\n')
                 });
                 specialOfferItems.push(specialOfferItem);
             });
@@ -1732,7 +1744,7 @@ Ext.define('AD.controller.RestaurantEdit', {
         showSuccessMessage(Ext.get('restauranteditpanel'),'Reverted','Special offer details have been reverted');
     },
 
-    // Fires when a record is selected in the menu categories grid
+    // Fires when a record is selected in the special offers grid
     specialOffersGridSelected: function(rowmodel,record,item,index,evt,options) {
 
         // If the item is already selected, do nothing
@@ -1849,6 +1861,16 @@ Ext.define('AD.controller.RestaurantEdit', {
         if(!specialOfferItemEditForm.getForm().isValid()) {
             this.showInvalidFormWarning();
         } else {
+
+            var specialOfferItemChoiceNamesField = specialOfferItemEditForm.getForm().findField('specialOfferItemChoices');
+            var specialOfferItemChoiceCostsField = specialOfferItemEditForm.getForm().findField('specialOfferItemChoiceCosts');
+            var specialOfferItemChoiceNames = delimitedStringToArray(specialOfferItemChoiceNamesField.getValue(),'\n');
+            var specialOfferItemChoiceCosts = delimitedStringToArray(specialOfferItemChoiceCostsField.getValue(),'\n');
+            if( specialOfferItemChoiceCosts.length > 0 && specialOfferItemChoiceNames.length != specialOfferItemChoiceCosts.length) {
+                showErrorMessage(Ext.get('restauranteditpanel'),'Error','You must set the same number of choice costs as choices (enter 0 for no additional cost).');
+                return;
+            }
+
             var index = this.getSpecialOfferItemsStore().indexOf(specialOfferItemEditForm.getRecord());
             var record = this.getSpecialOfferItemsStore().getAt(index);
             record.set(specialOfferItemEditForm.getValues());

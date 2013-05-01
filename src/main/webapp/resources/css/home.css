@@ -1,5 +1,204 @@
 @charset "utf-8";
 
+.hero-border {
+    width:20%;
+    text-align:center;
+    margin:0px auto 15px auto;
+    height:50px;
+    border-bottom:1px solid #EEEEEE;
+}
+
+.hero-banner-upper {
+    font:28px/28px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-align:center;
+    padding:30px 0 20px 0;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    text-transform:uppercase;
+}
+
+#bannercarouselwrapper {
+    position:absolute;
+    top:91px;
+    right:40px;
+}
+
+#bannercarousel {
+}
+
+.searchbarheader {
+    font: 14px/14px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    padding:7px 0 10px 0;
+}
+
+.searchbartext {
+    font: 500 12px/14px "prenton-n5","prenton";
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    padding:8px 0 10px 0;
+}
+
+#butler {
+    position:absolute;
+    top:145px;
+    left:30px;
+    height:180px;
+    width:116px;
+    z-index:1000;
+    background:url(../images/food/butler.png) 0 0 no-repeat transparent;
+}
+
+#speechbubble {
+    background-color:#FFFFFF;
+    position:absolute;
+    top:105px;
+    width:235px;
+    left:125px;
+    height:148px;
+    background:url(../images/food/speechbubble.png) 0 0 no-repeat transparent;
+}
+
+#speech1, #speech2, #speech3 {
+    padding:15px 15px 15px 51px;
+    color:#DD0000;
+    font:16px/18px MaiandraOTGD-DemiBold;
+    text-shadow: 1px 1px 2px #EEEEEE;
+}
+
+.inactive {
+    display:none;
+}
+
+#searchbar {
+    position:absolute;
+    top:285px;
+    left:-15px;
+    height:142px;
+    width:1070px;
+    z-index:100;
+    padding:0;
+    clear:both;
+    background:url(../images/food/ribbon.png) 0 0 no-repeat transparent;
+}
+
+#searchbarleft {
+    margin:38px 0 0 130px;
+    float:left;
+    width:400px;
+}
+
+#searchbarright {
+    margin:24px 80px 0 0;
+    padding-top:10px;
+    float:right;
+    width:400px;
+}
+
+.searchbarinfo {
+    font:14px/22px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-transform:uppercase;
+}
+
+.rounded-img-wrapper {
+    position:relative;
+    padding: 2px 20px 2px 20px;
+}
+
+.rounded-img {
+	border: 5px solid #FFFFFF;
+	width:240px;
+	height:160px;
+	overflow: hidden;
+	-webkit-border-radius: 15px;
+	   -moz-border-radius: 15px;
+	        border-radius: 15px;
+    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+       -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+            box-shadow: 3px 3px 3px rgba(0,0,0,0.3);
+}
+
+.rounded-img-ribbon {
+    font: 14px/14px MaiandraOTGD-DemiBold;
+    background:url(../images/food/ribbon-small.png) 0 0 no-repeat transparent;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #333333;
+    position:absolute;
+    top:10px;
+    right:13px;
+    width:150px;
+    height:16px;
+    padding: 9px 0 3px 30px;
+}
+
+.searchbar {
+    text-align:center;
+    width:410px;
+    height:46px;
+    padding:6px;
+    background-color:#F4F4F4;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+       -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+
+input.location {
+    font:14px/16px "myriad-pro-n4", "myriad-pro";
+    color:#666666;
+    height: 36px;
+    padding: 4px 6px;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    background-clip: padding-box;
+    width: 290px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+input.location:focus {
+    border: 1px solid #CCCCCC;
+}
+
+img.rounded-img-small {
+    border:1px solid #BBBBBB;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+    -webkit-box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
+       -moz-box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
+            box-shadow: 0px 1px 0px rgba(80,80,80,0.25);
+}
+
+.search-button {
+    background:url(../images/search-button-back.png) 0 0 repeat-x transparent;
+    margin-left:8px;
+    width:96px;
+    height:46px;
+    text-align:center;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+    cursor:pointer;
+}
+
+.search-button-text {
+    font:12px/12px MaiandraOTGD-DemiBold;
+    color:#FFFFFF;
+    text-shadow: 0 2px #333333;
+    text-align:center;
+    text-transform:uppercase;
+    padding-top:17px;
+}
+
 .main-content {
     background: none repeat scroll 0 0 #FFFFFF;
     margin: 0px auto 0px auto;
@@ -19,8 +218,8 @@
 
 #searchbar-wrapper {
     position:absolute;
-    right: 210px;
-    top: 25px;
+    right: 160px;
+    top: 40px;
     width: 550px;
 }
 
@@ -41,11 +240,6 @@
 }
 
 .location-input {
-    width: 350px;
-    height: 32px;
-    position:absolute;
-    top:0;
-    left:0;
 }
 
 .location-button {
@@ -65,35 +259,6 @@ a.search {
     color:#c5171e;
 }
 
-.location-direct {
-    font:500 12px/14px "prenton-n5", "prenton";
-    color:#FFFFFF;
-    text-shadow: 0 2px #333333;
-    padding-top: 7px;
-    width:264px;
-    text-align:left;
-}
-
-input.location {
-    font:14px/16px "myriad-pro-n4", "myriad-pro";
-    color:#666666;
-    height: 22px;
-    padding: 4px 6px;
-    margin-bottom: 9px;
-    border-radius: 4px 4px 4px 4px;
-    background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-    background-clip: padding-box;
-    width: 360px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    -webkit-border-radius: 3px;
-       -moz-border-radius: 3px;
-            border-radius: 3px;
-}
-
-input.location:focus {
-    border: 1px solid #CCCCCC;
-}
 
 #search-warning {
     display:none;
@@ -216,40 +381,62 @@ a.home {
             border-radius: 10px;
 }
 
+img.rounded-img {
+    border:1px solid #CFCFCF;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+    -webkit-box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+       -moz-box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+            box-shadow: 1px 1px 2px rgba(80,80,80,0.2);
+}
+
 .recommendations {
     margin:15px 0 25px 10px;
 }
 
 #carousel {
-    margin:0;
+    width:904px;
+    margin:0 auto 0 auto;
     padding:0;
     text-align:left;
 }
 
+#carousel ul {
+    list-style:none;
+}
+
 .divider {
     border-top:1px dashed #CCCCCC;
-    padding-top:10px;
+    padding-top:15px;
 }
 
-.restaurant-panel-left {
-    display:inline-block;
-    height:100px;
-    width:458px;
-    padding-bottom:10px;
+.restaurant-link {
+    cursor:pointer;
 }
 
-.restaurant-panel-right {
+.restaurant-panel-left, .restaurant-panel-right, .restaurant-panel-center {
     display:inline-block;
-    height:100px;
-    width:458px;
-    padding-left:40px;
-    padding-bottom:10px;
+    position:relative;
+    min-height:100px;
+    width:280px;
+    cursor:pointer;
+    vertical-align:middle;
+}
+
+.restaurant-panel-hover {
+    background-color: #FAFAFA;
+}
+
+.restaurant-panel-center {
+    margin:0 28px 0 28px;
 }
 
 .restaurant-name {
-    padding:5px 0 2px 0;
-    font: 16px MaiandraOTGD-DemiBold;
-    color:#AA0000;
+    padding:0px 0 2px 0;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .restaurant-summary {
@@ -257,26 +444,33 @@ a.home {
     color:#444444;
 }
 
-.opening-details {
-    text-align:left;
-    font: 12px/14px "myriad-pro-n4", "myriad-pro";
+.restaurant-padding {
+    padding-top:8px;
+}
+
+.delivery-details {
+    font: 12px/14px myriad-pro-n4,myriad-pro;
+    background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
-    margin-top: 3px;
+    margin-top: 4px;
+    padding: 0 0 0 26px;
 }
 
 .restaurant-discount-details {
     background-color:#FFFFFF;
     display:inline-block;
-    border: 1px dashed #cf6e6e;
-    padding: 4px 12px 4px 8px;
-    margin: 0 0 6px 0;
-    -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-    box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
     position:relative;
+    border: 1px dashed #cf6e6e;
+    padding: 2px;
     text-align:left;
     zoom: 1;
+    margin-top:3px;
     *display: inline;
+}
+
+.restaurant-discount-details-inner {
+    padding: 1px 14px 1px 6px;
+    background-color:#CC0000;
 }
 
 .scissors {
@@ -291,9 +485,10 @@ a.home {
 
 .discount-details {
     display:inline-block;
-    font: 400 12px/14px "prenton-n4", "prenton";
+    font: 500 12px/14px prenton-n5,prenton;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #555555;
     min-height:16px;
-    color:#444444;
     text-align:left;
     zoom: 1;
     *display: inline;
@@ -323,12 +518,13 @@ a.location, a.location:visited, a.location:hover, a.location:active {
 .step {
     width: 210px;
     height: 175px;
-    border: 2px solid #CCCCCC;
-    -webkit-border-radius: 20px;
-       -moz-border-radius: 20px;
-            border-radius: 20px;
+    border: 1px solid #CCCCCC;
+    background-color:#FFFFFF;
     position:relative;
     text-align:center;
+	-webkit-border-radius:10px;
+  	   -moz-border-radius:10px;
+	        border-radius:10px;
 }
 
 .step-number {

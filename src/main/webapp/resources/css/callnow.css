@@ -1,5 +1,9 @@
 @charset "utf-8";
 
+#order-wrapper {
+    margin-top:0;
+}
+
 .order-detail {
     font: 400 16px/18px myriad-pro-n4,myriad-pro;
     color:#444444;

@@ -466,6 +466,7 @@ public class OrderController {
             String restaurantId = (String)params.get("restaurantId");
             String specialOfferId = (String)params.get("specialOfferId");
             List<String> itemChoices = (List<String>)params.get("itemChoices");
+            List<String> itemChoiceCosts = (List<String>)params.get("itemChoiceCosts");
             Integer quantity = Integer.valueOf(params.get("quantity").toString());
 
             // Get the restaurant object
@@ -507,7 +508,11 @@ public class OrderController {
                 orderItem.setMenuItemTitle(specialOffer.getTitle());
                 orderItem.setAdditionalItems(itemChoices);
                 orderItem.setQuantity(quantity);
-                orderItem.setCost(specialOffer.getCost());
+                double additionalCost = 0d;
+                for( String itemChoiceCost: itemChoiceCosts ) {
+                    additionalCost += Double.valueOf(itemChoiceCost);
+                }
+                orderItem.setCost(specialOffer.getCost() + additionalCost);
 
                 // Add new order item to order and update
                 order.addOrderItem(orderItem);

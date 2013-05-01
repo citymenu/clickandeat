@@ -23,6 +23,7 @@ public class CuisineTag extends RequestContextAwareTag {
         
         pageContext.setAttribute("cuisines", cuisineProvider.getCuisineList());
         pageContext.setAttribute("cuisineLocations", cuisineProvider.getCuisineLocations());
+        pageContext.setAttribute("cuisineLocationsFull", cuisineProvider.getCuisineLocationsFull());
         return SKIP_BODY;
     }
 

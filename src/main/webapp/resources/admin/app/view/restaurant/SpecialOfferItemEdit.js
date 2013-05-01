@@ -52,6 +52,12 @@ Ext.define('AD.view.restaurant.SpecialOfferItemEdit' ,{
         name:'specialOfferItemChoices',
         xtype:'textareafield',
         height:90
+    },{
+        fieldLabel:'Additional costs for above choices for this item (enter one per line (leave empty if no additional costs)',
+        labelAlign:'top',
+        name:'specialOfferItemChoiceCosts',
+        xtype:'textareafield',
+        height:90
     }]
 
 });

@@ -71,6 +71,7 @@ Ext.define('AD.controller.RestaurantList', {
 	    e.stopEvent();
 	    this.getRestaurantList().getSelectionModel().select(record);
 	    var restaurantId = record.get('restaurantId');
+	    var externalId = record.get('externalId');
 	    var ctrl = this;
 	    var menu = Ext.create('Ext.menu.Menu',{
 	        id:'restaurant-menu',
@@ -136,6 +137,18 @@ Ext.define('AD.controller.RestaurantList', {
             }
         });
 
+        // Add jump to external button
+        if(record.get('origin') == 'JustEat') {
+            menu.add('-');
+            menu.add({
+                text:'Open external site',
+                icon:'../resources/images/icons-shadowless/navigation-000-button.png',
+                handler:function() {
+                    window.open(externalId);
+                }
+            });
+        }
+
 	    menu.showAt(e.getXY());
 	},
 
@@ -183,7 +196,7 @@ Ext.define('AD.controller.RestaurantList', {
     },
 
 	onGridRendered: function(grid) {
-		this.getRestaurantsStore().loadPage(1);
+		grid.getStore().loadPage(1);
 	},
 
 	onGridDblClick: function(view,record,item,index,eventObj,options) {

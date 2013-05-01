@@ -62,7 +62,7 @@ public class RestaurantSearchController {
                     Map<String,Object> model = new HashMap<String, Object>();
                     model.put("address", address);
                     model.put("notfound",true);
-                    return new ModelAndView(MessageFactory.getLocaleString() + "/home",model);
+                    return new ModelAndView("redirect:/home.html");
                 }
             }
 
@@ -79,8 +79,10 @@ public class RestaurantSearchController {
                 String orderId = (String)session.getAttribute("orderid");
                 if( orderId != null ) {
                     Order order = orderRepository.findByOrderId(orderId);
-                    order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
-                    orderRepository.saveOrder(order);
+                    if( order != null ) {
+                        order.setDeliveryAddress(geoLocationService.buildAddress(geoLocation));
+                        orderRepository.saveOrder(order);
+                    }
                 }
             }
             search.setCuisine(cuisine);
@@ -91,7 +93,7 @@ public class RestaurantSearchController {
         }
         catch( Exception ex ) {
             LOGGER.error("",ex);
-            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+            return new ModelAndView("redirect:/home.html");
         }
 
     }
@@ -104,7 +106,7 @@ public class RestaurantSearchController {
                 return searchByLocationAndCuisine(request,locationPair.second,null);        
             }
         }
-        return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+        return new ModelAndView("redirect:/home.html");
     }
 
 
@@ -120,7 +122,7 @@ public class RestaurantSearchController {
                 }
             }
         }
-        return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+        return new ModelAndView("redirect:/home.html");
     }
 
 
@@ -128,7 +130,7 @@ public class RestaurantSearchController {
     public ModelAndView savedSearch(HttpServletRequest request ) {
         Search search = (Search)request.getSession(true).getAttribute("search");
         if( search == null ) {
-            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+            return new ModelAndView("redirect:/home.html");
         }
         String address = search.getLocation() == null? null: search.getLocation().getAddress();
         return search(search, address);
@@ -139,7 +141,7 @@ public class RestaurantSearchController {
     public ModelAndView savedSearchWithoutAddress(HttpServletRequest request ) {
         Search search = (Search)request.getSession(true).getAttribute("search");
         if( search == null ) {
-            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+            return new ModelAndView("redirect:/home.html");
         }
         return search(search, null);
     }
@@ -149,7 +151,7 @@ public class RestaurantSearchController {
     public ModelAndView savedSearchClearingCuisine(HttpServletRequest request ) {
         Search search = (Search)request.getSession(true).getAttribute("search");
         if( search == null ) {
-            return new ModelAndView(MessageFactory.getLocaleString() + "/home",null);
+            return new ModelAndView("redirect:/home.html");
         }
         search.setCuisine(null);
         String address = search.getLocation() == null? null: search.getLocation().getAddress();

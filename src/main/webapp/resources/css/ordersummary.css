@@ -1,15 +1,21 @@
 @charset "utf-8";
 
+#order-wrapper {
+    margin-top:0;
+}
+
 .order-summary-wrapper {
-    margin: 0 30px 0 10px;
+    padding:10px 0 0 10px;
+    margin: 0 30px 30px 0;
 }
 
 .order-summary-wrapper h2 {
-     font: 28px/32px MaiandraOTGD-DemiBold;
-     margin-bottom:20px;
-     padding-bottom: 10px;
-     border-bottom: 1px dashed #AAAAAA;
-     color:#AA0000;
+    font: 20px/20px MaiandraOTGD-DemiBold;
+    margin-bottom:20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #DDDDDD;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .order-overview-wrapper {
@@ -17,7 +23,7 @@
 }
 
 .order-information {
-    font: 22px/24px MaiandraOTGD-DemiBold;
+    font: 18px/20px MaiandraOTGD-DemiBold;
     color: #444444;
     margin-bottom: 20px;
 }
@@ -25,6 +31,7 @@
 .order-restaurant {
     font: 14px/16px myriad-pro-n4,myriad-pro;
     margin-bottom: 20px;
+    color:#444444;
 }
 
 .restaurant-contact {
@@ -39,11 +46,12 @@
 }
 
 .order-overview h2 {
-     font: 18px/20px MaiandraOTGD-DemiBold;
-     padding-bottom: 6px;
-     color:#AA0000;
-     margin:0;
-     border:0;
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    padding-bottom: 6px;
+    color:#CC0000;
+    margin:0;
+    border:0;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .order-overview p {
@@ -60,17 +68,18 @@
 }
 
 .order-image {
-    width: 290px;
-    height: 285px;
+    width: 260px;
+    height: 256px;
     background-image: url(../images/order-confirmation.jpg);
 }
 
 .order-delivery h2 {
-     font: 18px/20px MaiandraOTGD-DemiBold;
-     padding-bottom: 6px;
-     color:#AA0000;
-     margin:0;
-     border:0;
+    font: 18px/20px MaiandraOTGD-DemiBold;
+    padding-bottom: 6px;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin:0;
+    border:0;
 }
 
 .delivery-address {
@@ -82,7 +91,7 @@
 }
 
 #restaurant-location {
-    width: 700px;
+    width: 619px;
     height: 320px;
     margin-top: 10px;
 }

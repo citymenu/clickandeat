@@ -18,8 +18,9 @@ $(document).ready(function(){
     // Add click handler for location change link
     $('#changeLocation').click(function(){
         var locationField = ('<input class=\'input-location\' id=\'loc\' placeholder=\'\'/>').format(getLabel('search.watermark'));
-        var searchButton = ('<a class=\'search\'>{0}</a>').format(getLabel('button.search'));
-        var locationEdit = ('<div class=\'search-location-edit\'>{0} {1}</div>').format(locationField,searchButton);
+        var searchButton = ('<div class=\'search-small\'><div class=\'search-button-text-small\'>{0}</div></div>').format(getLabel('button.search'));
+        var locationTable = ("<table width=\'390\'><tr valign=\'middle\'><td width=\'290\'>{0}</td><td width=\'100\'>{1}</td></tr></table").format(locationField,searchButton);
+        var locationEdit = ('<div class=\'search-location-edit\'>{0}</div>').format(locationTable);
         $('.search-location').remove();
         $('.search-location-results').remove();
         $('.search-location-edit').append(locationEdit);
@@ -34,7 +35,7 @@ $(document).ready(function(){
             }
         });
 
-        $('.search').click(function(){
+        $('.search-small').click(function(){
             search();
         });
 
@@ -48,14 +49,21 @@ $(document).ready(function(){
     });
 
     //Add change handler for checkbox
+    $('#ignore-closed').removeAttr('checked');
     $('#ignore-closed').change(function(){
         ignoreClosed = ('checked' == $('#ignore-closed').attr('checked'));
         filterRestaurants();
+        if(ignoreClosed) {
+            $('#filterclosed').addClass('selectedcuisine');
+        } else {
+            $('#filterclosed').removeClass('selectedcuisine');
+        }
+
     });
 
-    // Change handler for select box
-    $('#cuisine-select').change(function(){
-        var cuisine = $('#cuisine-select').val();
+    // Change handler for radio
+    $('input[name="cuisine"]').change(function(){
+        var cuisine = $('input:radio[name=cuisine]:checked').val();
         $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
         $.post( ctx+'/updateLocation.ajax', { loc: address, c: cuisine },
             function( data ) {
@@ -68,37 +76,32 @@ $(document).ready(function(){
         );
     });
 
+    // Add hover to results
+    $('.result').hover(
+        function() {
+            $(this).addClass('result-hover');
+        },
+        function() {
+            $(this).removeClass('result-hover');
+        }
+    );
+
+    // Add url links to all restaurant buttons
+    $('div[type="link"]').click(function(){
+        var url = $(this).attr('url');
+        window.location = ctx + '/' + url;
+    });
+
 });
 
 
-// Executes search function
-function search() {
-    var location = $('#loc').val();
-    if( location != '' ) {
-        $('#search-warning').hide();
-        $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
-        $.post( ctx+'/validateLocation.ajax', { loc: location },
-            function( data ) {
-                $.fancybox.hideLoading();
-                if( data.success ) {
-                    var address = unescapeQuotes(data.address);
-                    $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-                    window.location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';                }
-                else {
-                    $('.location-warning').remove();
-                    $('.location-warning-wrapper').append(('<div class=\'location-warning\'>{0}</div>').format(getLabel('search.location-not-found')));
-                }
-            }
-        );
-    }
-}
 
 // Update visible restaurants
 function filterRestaurants() {
 
     var displayPhoneOnlyMessage = false;
 
-    $('.search-result-wrapper').each(function(index,element){
+    $('.result-wrapper').each(function(index,element){
         var open = $(this).attr('isOpen');
         var cuisineSummary = $(this).attr('cuisines');
         if( open == 'false' && ignoreClosed == true ) {
@@ -114,27 +117,10 @@ function filterRestaurants() {
     });
 
     if( displayPhoneOnlyMessage ) {
-        $('.phone-orders-only-wrapper').show();
+        $('.phone-orders-wrapper').show();
     } else {
-        $('.phone-orders-only-wrapper').hide();
+        $('.phone-orders-wrapper').hide();
     }
-}
-
-// Override order config
-function getOrderPanelConfig() {
-    var config = {
-        showDeliveryOptions: true,
-        showBuildOrderLink: true,
-        allowChangeLocation: true,
-        allowRemoveItems: true,
-        allowUpdateFreeItem: true,
-        enableCheckoutButton: true,
-        enablePaymentButton: false,
-        showDiscountInformation: true,
-        showAdditionalInformation: true,
-        displayAdditionalInformation:false
-    };
-    return config;
 }
 
 // Registers when no restaurants found
@@ -156,8 +142,72 @@ function register() {
     }
 }
 
+// Update current location
+function locationEdit() {
+
+    var locationField = ('<input class=\'input-location\' id=\'locedit\' placeholder=\'\'/>').format(getLabel('search.watermark'));
+    var searchButton = ('<div class=\'search-small\'><div class=\'search-button-text-small\'>{0}</div></div>').format(getLabel('button.search'));
+    var locationTable = ("<table width=\'390\'><tr valign=\'middle\'><td width=\'290\'>{0}</td><td width=\'100\'>{1}</td></tr></table").format(locationField,searchButton);
+    var locationEdit = ('<div class=\'search-location-edit\'>{0}</div>').format(locationTable);
+
+    var header = ('<div class=\'dialog-header\'><h2>{0}</h2></div>').format(getLabel('location.enter-your-location'));
+    var content = ('<div class=\'dialog-content\'>{0}</div>').format(locationTable);
+    var container = ('<div class=\'dialog-container\'>{0}{1}</div>').format(header,content);
+
+    $.fancybox.open({
+        type: 'html',
+        content: container,
+        modal:false,
+        autoSize:false,
+        autoWidth:true,
+        height:145,
+        openEffect:'none',
+        closeEffect:'none'
+    });
+
+    $('#locedit').attr('placeholder','');
+    $('#locedit').watermark(watermark);
+    $('#locedit').focus();
+
+    // Add event handlers
+    $('#locedit').keydown(function(event){
+        if( event.keyCode == 13 ) {
+            locationSearch();
+        }
+    });
+
+    $('.search-small').click(function(){
+        locationSearch();
+    });
+
+    // Enable Google autocomplete
+    var input = document.getElementById('locedit');
+    var options = {
+      types: ['geocode'],
+      componentRestrictions: {country: country}
+    };
+    autocomplete = new google.maps.places.Autocomplete(input, options);
+}
+
+// Update order location
+function locationSearch() {
+    var location = $('#locedit').val();
+    if( location != '' ) {
+        $.fancybox.showLoading(getLabel('ajax.checking-your-location'));
+        $.post( ctx+'/validateLocation.ajax', { loc: location },
+            function( data ) {
+                $.fancybox.hideLoading();
+                if( data.success ) {
+                    $.fancybox.close(true);
+                    onAfterLocationUpdate();
+                }
+            }
+        );
+    }
+}
+
 // Runs after location is updated
 function onAfterLocationUpdate() {
     $.fancybox.showLoading(getLabel('ajax.finding-restaurants'));
-    location.reload();
+    location.href = ctx + '/app/' + getLabel('url.find-takeaway') + '/session/loc';
 }

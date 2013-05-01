@@ -7,7 +7,8 @@ Ext.define('AD.model.SpecialOfferItem', {
     fields: [
         {name:'title', type:'string', convert: unescapeQuotes},
         {name:'description',type: 'string',convert: unescapeQuotes},
-        {name:'specialOfferItemChoices',type:'auto',convert: arrayToString}
+        {name:'specialOfferItemChoices',type:'auto',convert: arrayToString},
+        {name:'specialOfferItemChoiceCosts',type:'auto',convert: arrayToString}
     ],
     belongsTo: 'AD.model.SpecialOffer'
 });

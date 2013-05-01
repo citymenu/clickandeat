@@ -37,11 +37,11 @@ public class OpenOrderProcessingTask implements InitializingBean {
 
     @Autowired
     private ExceptionHandler exceptionHandler;
-    
+
     private int secondsBeforeRetryCall;
 
     private int secondsBeforeRetryAnsweredCall;
-    
+
     private int minutesBeforeSendCancellationEmail;
 
     private int minutesBeforeAutoCancelOrder;
@@ -53,25 +53,25 @@ public class OpenOrderProcessingTask implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
     }
-    
+
 
     @Scheduled(cron="0 0/1 * * * ?")
     public void execute() {
 
         try {
-            if(lock.acquire()) {            
+            if(lock.acquire()) {
 
                 LOGGER.info("Checking for any orders with status 'AWAITING_RESTAURANT'");
-    
+
                 List<Order> orders = orderRepository.findByOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
                 LOGGER.info("Found " + orders.size() + " orders with status 'AWAITING_RESTAURANT'");
-    
+
                 for(Order order: orders ) {
-    
+
                     DateTime orderPlacedTime = order.getOrderPlacedTime();
                     String orderId = order.getOrderId();
                     LOGGER.info("Order id: " + orderId + " was placed at: " + orderPlacedTime);
-    
+
                     Restaurant restaurant = order.getRestaurant();
                     DateTime now = new DateTime();
                     LOGGER.info("Current time is: " + now);
@@ -81,14 +81,14 @@ public class OpenOrderProcessingTask implements InitializingBean {
 
                     // Get the time the restaurant opened
                     DateTime restaurantOpenedTime = restaurant.getEarlyOpeningTime(now);
-    
+
                     // Don't do anything if the restaurant is not currently open
                     LOGGER.info("Restaurant " + restaurant.getName() + " opened time today is: " + restaurantOpenedTime);
                     if( restaurantOpenedTime == null || restaurantOpenedTime.isAfter(now)) {
                         LOGGER.info("Restaurant " + restaurant.getName() + " has not opened yet, not doing any processing");
                         continue;
                     }
-    
+
                     // Auto cancel orders which have been awaiting confirmation for too long and the restaurant has been open long enough to respond
                     DateTime autoCancelCutoff = new DateTime().minusMinutes(minutesBeforeAutoCancelOrder);
                     LOGGER.info("Auo cancel cutoff time is: " + autoCancelCutoff);
@@ -120,12 +120,12 @@ public class OpenOrderProcessingTask implements InitializingBean {
                             exceptionHandler.handleException(ex);
                         }
                     }
-    
+
                     if( NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus) || NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus)) {
                         LOGGER.info("Not attempting another call for order id:" + orderId + " as notification status is; " + notificationStatus);
                         continue;
                     }
-                    
+
                     // If call was answered but order not accepted/rejected, retry after 5 minutes otherwise after 1 minute
                     DateTime lastCallCutoff = new DateTime().minusSeconds(NOTIFICATION_STATUS_RESTAURANT_ANSWERED.equals(notificationStatus)?
                             secondsBeforeRetryAnsweredCall: secondsBeforeRetryCall);

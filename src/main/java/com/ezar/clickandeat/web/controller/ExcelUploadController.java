@@ -43,7 +43,7 @@ public class ExcelUploadController {
     private static final Logger LOGGER = Logger.getLogger(ExcelUploadController.class);
 
     private static final int MAX_ALLOWED_EMPTY_ROWS = 100;
-    
+
     @Autowired
     private RestaurantRepository restaurantRepository;
 
@@ -61,24 +61,24 @@ public class ExcelUploadController {
 
     private ExcelObjectValidator<MenuCategory> menuCategoryValidator = new ExcelObjectValidatorImpl<MenuCategory>(new MenuCategoryValidator());
     private ExcelObjectValidator<MenuItem> menuItemValidator = new ExcelObjectValidatorImpl<MenuItem>(new MenuItemValidator());
-    
-    
+
+
     private DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
 
-    
+
     @ResponseBody
     @RequestMapping(value="/admin/menu/upload.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> uploadRestaurant(@RequestParam("file") CommonsMultipartFile file) throws Exception {
 
         Map<String,Object> model = new HashMap<String,Object>();
-        
+
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
 
             // Build restaurant from workbook
             ValidationErrors excelErrors = new ValidationErrors();
             Restaurant restaurant = buildRestaurantFromWorkbook(workbook,excelErrors);
-            
+
             // Now validate the restaurant
             ValidationErrors errors = restaurantValidator.validate(restaurant);
             errors.getErrors().addAll(excelErrors.getErrors());
@@ -102,7 +102,7 @@ public class ExcelUploadController {
                     restaurantRepository.saveRestaurant(restaurant);
                 }
             }
-            
+
             // Any errors, return them now
             if( errors.hasErrors()) {
                 model.put("success",true);
@@ -211,7 +211,7 @@ public class ExcelUploadController {
      * @param workbook
      * @return
      */
-    
+
     private Restaurant buildRestaurantFromWorkbook(XSSFWorkbook workbook,ValidationErrors errors) {
         Restaurant restaurant = new Restaurant();
 
@@ -225,7 +225,7 @@ public class ExcelUploadController {
         restaurant.getAddress().setTown(getNamedCellStringValue(workbook, "Restaurant.Address.Town"));
         restaurant.getAddress().setRegion(getNamedCellStringValue(workbook, "Restaurant.Address.Region"));
         restaurant.getAddress().setPostCode(getNamedCellStringValue(workbook, "Restaurant.Address.Postcode"));
-        
+
         // Contact details
         restaurant.setContactTelephone(getNamedCellStringValue(workbook, "Restaurant.Contact.Telephone"));
         restaurant.setContactMobile(getNamedCellStringValue(workbook, "Restaurant.Contact.Mobile"));
@@ -592,7 +592,7 @@ public class ExcelUploadController {
                 emptyRowCount++;
             }
             specialOfferIndex++;
-            specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,1);
+            specialOfferName = getCellStringValue(specialOffersSheet,specialOfferIndex,0);
         }
         if( currentSpecialOffer != null ) {
             restaurant.getSpecialOffers().add(currentSpecialOffer);
@@ -607,7 +607,7 @@ public class ExcelUploadController {
         while(emptyRowCount < MAX_ALLOWED_EMPTY_ROWS ) {
             specialOfferItemIndex++;
             emptyRowCount++; // Will reset as soon as we find a string value anywhere in the row
-            String specialOfferItemName = getCellStringValue(specialOfferItemsSheet, specialOfferItemIndex, 1);
+            String specialOfferItemName = getCellStringValue(specialOfferItemsSheet, specialOfferIndex, 1);
             if(StringUtils.hasText(specialOfferItemName)) {
                 emptyRowCount = 0; // Reset counter;
                 if(currentSpecialOfferItem != null) {
@@ -618,7 +618,7 @@ public class ExcelUploadController {
                 }
                 currentSpecialOfferItem = new SpecialOfferItem(); // Create new special offer item
                 currentSpecialOfferName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,0);
-                currentSpecialOfferItem.setTitle(specialOfferItemName);
+                currentSpecialOfferItem.setTitle(specialOfferName);
                 currentSpecialOfferItem.setDescription(getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,2));
                 String choiceName = getCellStringValue(specialOfferItemsSheet,specialOfferItemIndex,3);
                 if(StringUtils.hasText(choiceName)) {
@@ -656,7 +656,7 @@ public class ExcelUploadController {
     private List<Restaurant> buildRestaurantsFromWorkbook(XSSFWorkbook workbook,ValidationErrors errors) {
 
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
-        
+
         XSSFSheet sheet = workbook.getSheet("Main Details");
         int currentRowIndex = 2; // Start of data
         int emptyRowCount = 0;
@@ -728,7 +728,7 @@ public class ExcelUploadController {
             return null;
         }
         try {
-            return timeFormatter.parseLocalTime(value);            
+            return timeFormatter.parseLocalTime(value);
         }
         catch( Exception ex ) {
             return null;
@@ -746,7 +746,7 @@ public class ExcelUploadController {
             return null;
         }
         Date value = cell.getDateCellValue();
-        if( value == null ) { 
+        if( value == null ) {
             return null;
         }
         return new LocalDate(value.getTime());

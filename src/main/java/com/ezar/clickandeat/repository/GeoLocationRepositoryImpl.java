@@ -4,6 +4,7 @@ import com.ezar.clickandeat.cache.ClusteredCache;
 import com.ezar.clickandeat.model.GeoLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.stereotype.Repository;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -16,6 +17,8 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
     @Autowired
     private ClusteredCache clusteredCache;
 
+    private boolean usecache = true;
+    
     
     @Override
     public GeoLocation findByAddress(String address) {
@@ -26,7 +29,7 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
         geoLocation = clusteredCache.get(GeoLocation.class, address);
         if( geoLocation == null ) {
             geoLocation = operations.findOne(query(where("address").is(address)),GeoLocation.class);
-            if( geoLocation != null ) {
+            if( geoLocation != null && usecache ) {
                 clusteredCache.store(GeoLocation.class,address,geoLocation);
             }
         }
@@ -36,10 +39,15 @@ public class GeoLocationRepositoryImpl implements GeoLocationRepositoryCustom {
     
     @Override
     public GeoLocation saveGeoLocation(GeoLocation geoLocation) {
-        clusteredCache.remove(GeoLocation.class, geoLocation.getAddress());
+        if(usecache) {
+            clusteredCache.remove(GeoLocation.class, geoLocation.getAddress());
+        }
         operations.save(geoLocation);
         return geoLocation;
     }
-
     
+
+    public void setUsecache(boolean usecache) {
+        this.usecache = usecache;
+    }
 }

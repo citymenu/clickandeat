@@ -146,6 +146,14 @@
             <version>2.0.2</version>
         </dependency>
 
+        <!-- Jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.7.2</version>
+        </dependency>
+
+
         <!-- Velocity -->
         <dependency>
             <groupId>org.apache.velocity</groupId>

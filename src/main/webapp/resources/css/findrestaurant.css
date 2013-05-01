@@ -1,77 +1,105 @@
 @charset "utf-8";
 
-.search-results-entry-wrapper {
-    border-top: 1px dashed #AAAAAA;
+#filter-wrapper {
+    margin-right:30px;
 }
 
-.search-results-wrapper {
-    margin: 0 30px 0 0;
-    width: 730px;
-}
-
-.search-results-header-wrapper {
+#filter {
+    background-color: #F6F6F6;
     border: 1px solid #AAAAAA;
-    background-color:#F6F6F6;
+    border-radius: 5px 5px 5px 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+    color: #444444;
     padding: 10px;
-    margin: 0 0 30px 0;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    filter: progid:DXImageTransform.Microsoft.Shadow(color='#999999', Direction=145, Strength=3);
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
 }
 
-.search-results-header-wrapper h2 {
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
+#filterclosed {
+    padding-left:7px;
+}
+
+.filter-wrapper {
+    background-color: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px 5px 5px 5px;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.location-title {
+    color: #444444;
+    float: left;
+    font: 700 12px prenton-n7,prenton;
+}
+
+.location-link {
+    float:right;
+}
+
+.location-summary {
+    clear: both;
+    font: 400 12px prenton-n4,prenton;
+}
+
+.filter-title {
+    color: #444444;
+    font: 700 12px prenton-n7,prenton;
+}
+
+.filter-cuisine-list {
+    margin:5px 0 5px 0;
+}
+
+.filter-cuisine {
+    padding:4px 0 4px 0;
+    font: 500 12px/12px prenton-n5,prenton;
+    color:#444444;
+}
+
+.filter-additional {
+    padding:4px 0 4px 0;
+    font: 400 12px/12px prenton-n4,prenton;
+    color:#444444;
+}
+
+.cuisine-title {
+    padding-left:3px;
+}
+
+.selectedcuisine {
     color:#AA0000;
-    margin-bottom: 15px;
 }
 
-.location-warning {
-    font:400 12px/14px myriad-pro-n4,myriad-pro;
-    border: 1px solid #b64242;
-    background-color: #fffece;
-    margin: 12px 0 12px 0;
-    color:#444444;
-    padding: 6px 10px 6px 10px;
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
+img.rounded-img {
+    border:1px solid #DDDDDD;
+	-webkit-border-radius: 10px;
+	   -moz-border-radius: 10px;
+	        border-radius: 10px;
+    -webkit-box-shadow: 0px 1px 0px rgba(80,80,80,0.3);
+       -moz-box-shadow: 0px 1px 0px rgba(80,80,80,0.3);
+            box-shadow: 0px 1px 0px rgba(80,80,80,0.3);
 }
 
-.search-location-wrapper {
-    background-color:#FFFFFF;
-    padding: 8px 10px 8px 10px;
-    border:1px solid #CCCCCC;
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
+input[type="radio"] {
+    width:13px;
+    height:13px;
+    padding: 0 5px 0 0;
+    margin:0;
+    font:600 12px/12px prenton-n6,prenton;
+    color:#666666;
+    vertical-align: bottom;
+    position: relative;
+    top: 0px;
+    *overflow: hidden;
+    margin-right:3px;
 }
 
-.search-filters {
-    margin-top: 10px;
-    padding:0 10px 0 10px;
+label {
+    display: block;
+    padding-left: 15px;
+    text-indent: -15px;
 }
 
-.search-cuisine-filter {
-    font: 12px/14px prenton-n4,prenton;
-    color:#000000;
-}
-
-.search-location, .search-location-empty {
-    font:700 16px/18px prenton-n7,prenton;
-    color:#444444;
-    margin-bottom: 6px;
-}
-
-.search-location-edit {
-
-}
-
-#loc {
+#locedit {
     font:14px/16px myriad-pro-n4,myriad-pro;
     color:#666666;
     height: 22px;
@@ -87,21 +115,98 @@
             border-radius: 3px;
 }
 
-.location-button {
+.search-results-header {
+    padding:10px 0 0 0;
+    border-bottom: 1px solid #DDDDDD;
 }
 
-a.search {
-    display:inline-block;
-    font: 16px MaiandraOTGD-DemiBold;
-    color:#c5171e;
-    background: url(../images/button-grey.png) 0 -2px no-repeat;
-    width: 68px;
-    height: 31px;
-    padding-top:4px;
-    margin-left:10px;
+.search-location-results {
+    font: 16px/18px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin-bottom:20px;
+    padding-bottom:10px;
+    border-bottom:2px solid #CC0000;
+}
+
+.distance {
+    font: 500 12px/12px prenton-n7,prenton;
+    color:#444444;
+}
+
+.result-wrapper {
+    border-bottom: 1px solid #DDDDDD;
+}
+
+.result {
+    padding:12px 0 12px 0;
     position:relative;
-    text-align:center;
     cursor:pointer;
+    min-height:75px;
+}
+
+.result-hover {
+    background-color: #FAFAFA;
+}
+
+.table-entry {
+    margin-left:15px;
+    margin-right:15px;
+}
+
+.table-left {
+    margin-left:5px;
+}
+
+.phone-orders-description {
+    position:absolute;
+    top:20px;
+    left:-10px;
+    display:inline-block;
+    padding:1px 6px 1px 6px;
+    margin-bottom:4px;
+    color:#FFFFFF;
+    font: 500 12px/14px prenton-n5,prenton;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #555555;
+    min-height:16px;
+    background-color:#CC0000;
+    -webkit-box-shadow: 0px 2px 2px rgba(80,80,80,0.2);
+       -moz-box-shadow: 0px 2px 2px rgba(80,80,80,0.2);
+            box-shadow: 0px 2px 2px rgba(80,80,80,0.2);
+    -webkit-border-radius: 3px;
+       -moz-border-radius: 3px;
+            border-radius: 3px;
+    -webkit-transform:rotate(-40deg); /* Safari and Chrome */
+        -ms-transform:rotate(-40deg); /* IE 9 */
+            transform:rotate(-40deg);
+    zoom: 1;
+    *display: inline;
+}
+
+.phone-orders-wrapper {
+    padding:5px 0 10px 65px;
+    margin:20px 0 0 0;
+    background:url(../images/telf.png) 10px 0 no-repeat;
+    min-height:60px;
+}
+
+.phone-orders-header {
+    font:400 12px/14px myriad-pro-n4,myriad-pro;
+    background-color: #fdde70;
+    color:#444444;
+    padding: 8px 10px 8px 10px;
+    margin-right:10px;
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
+}
+
+h2.restaurant-name {
+    color: #CC0000;
+    font: 16px/18px MaiandraOTGD-DemiBold;
+    text-shadow: 1px 1px 2px #EEEEEE;
+    margin-bottom:2px;
 }
 
 .no-results-wrapper {
@@ -109,12 +214,12 @@ a.search {
     background-color:#FFFFFF;
     padding: 10px;
     margin: 0 0 30px 0;
-    -moz-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.5);
-    -webkit-border-radius: 10px;
-       -moz-border-radius: 10px;
-            border-radius: 10px;
+    -moz-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    -webkit-border-radius: 5px;
+       -moz-border-radius: 5px;
+            border-radius: 5px;
 }
 
 .no-results-content-wrapper {
@@ -128,29 +233,28 @@ a.search {
 }
 
 .no-results-content {
-    width: 435px;
+    width: 450px;
     padding-right:20px;
 }
 
 .registration-content {
-    width: 435px;
+    width: 450px;
     min-height: 250px;
     padding-right:20px;
 }
 
 .registration-content h2 {
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
-    color:#AA0000;
-    margin-bottom: 15px;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
-
 
 .email-entry {
     margin:20px 0 20px 0;
 }
 
-.email-entry input {
+input[type="text"] {
     font: 14px/16px myriad-pro-n4,myriad-pro;
     width:460px;
     background-clip: padding-box;
@@ -162,13 +266,9 @@ a.search {
             border-radius: 3px;
 }
 
-.email-entry input:focus {
-    border: 1px solid #AA0000;
-}
-
 .invalid-email {
     display:inline-block;
-    font:400 14px/14px myriad-pro-n4,myriad-pro;
+    font:400 12px/12px myriad-pro-n4,myriad-pro;
     color:#444444;
     border: 1px solid #b64242;
     background-color: #fffece;
@@ -197,33 +297,16 @@ a.register-button:active, a.register-button:hover {
 
 
 .no-results-content h2 {
-    font-family: MaiandraOTGD-DemiBold;
-    font-size: 20px;
-    color:#AA0000;
-    margin-bottom: 15px;
+    font: 16px/16px MaiandraOTGD-DemiBold;
+    color:#CC0000;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px #EEEEEE;
 }
 
 .no-results-text {
-    font:16px/18px myriad-pro-n4,myriad-pro;
+    font:14px/15px myriad-pro-n4,myriad-pro;
     color:#444444;
     margin-bottom:10px;
-}
-
-.search-location-results {
-    font:14px/16px prenton-n4,prenton;
-    color:#444444;
-}
-
-.search-checkbox {
-    padding: 0;
-    margin:0;
-    font:600 14px/16px prenton-n6,prenton;
-    color:#666666;
-    vertical-align: bottom;
-    position: relative;
-    top: -1px;
-    *overflow: hidden;
-    margin-right:5px;
 }
 
 .search-select {
@@ -255,14 +338,14 @@ a.register-button:active, a.register-button:hover {
 }
 
 .search-result-wrapper {
-    border-bottom: 1px dashed #AAAAAA;
-    padding: 20px 10px 20px 10px;
+    border-bottom: 1px dashed #BBBBBB;
+    padding: 16px 0 16px 0;
     clear:both;
 }
 
 .search-result-wrapper h2 {
     color: #AA0000;
-    font: 18px/20px MaiandraOTGD-DemiBold;
+    font: 16px/18px MaiandraOTGD-DemiBold;
     margin-bottom:2px;
 }
 
@@ -273,29 +356,15 @@ a.register-button:active, a.register-button:hover {
 .address-details {
     font: 12px/14px prenton-n4,prenton;
     color:#444444;
-    margin: 6px 20px 0 0;
+}
+
+.location-details {
+    margin-top:2px;
 }
 
 .menu-link {
     display:block;
-    height: 35px;
-}
-
-.phone-orders-description {
-    display:inline-block;
-    position:absolute;
-    top:-5px;
-    left:40px;
-    padding:1px 8px 1px 8px;
-    color:#FFFFFF;
-    font:500 10px prenton-n5,prenton;
-    background: rgb(170 ,0, 0);
-    background: rgba(170, 0, 0, 0.75);
-    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-       -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-            box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-    zoom: 1;
-    *display: inline;
+    margin-right:10px;
 }
 
 .restaurant-opening-details {
@@ -322,19 +391,34 @@ a.register-button:active, a.register-button:hover {
     padding: 0 0 0 26px;
 }
 
+.delivery-details div {
+    padding-bottom:2px;
+}
+
+.restaurant-telephone {
+    font: 12px/14px myriad-pro-n4,myriad-pro;
+    color:#444444;
+    margin-top: 5px;
+}
+
 .restaurant-delivery-details {
     font:12px/14px myriad-pro-n4,myriad-pro;
     color:#444444;
 }
 
 .restaurant-discount-details {
-    border: 1px dashed #cf6e6e;
-    padding: 4px 12px 4px 8px;
-    margin: 0 0 6px 0;
-    -webkit-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-       -moz-box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
-            box-shadow: 2px 2px 2px rgba(80,80,80,0.2);
+    display:inline-block;
+    max-width:160px;
+    background-color:#FFFFFF;
+    border: 1px dashed #AAAAAA;
+    padding: 2px;
+    margin: 2px 0 0 0;
     position:relative;
+}
+
+.restaurant-discount-details-inner {
+    padding: 2px 14px 2px 6px;
+    background-color:#CC0000;
 }
 
 .scissors {
@@ -348,9 +432,10 @@ a.register-button:active, a.register-button:hover {
 }
 
 .discount-details {
-    font: 400 12px/14px prenton-n4,prenton;
+    font: 500 12px/14px prenton-n5,prenton;
+    color:#FFFFFF;
+    text-shadow: 1px 1px 2px #555555;
     min-height:16px;
-    color:#444444;
 }
 
 .cuisine-summary {

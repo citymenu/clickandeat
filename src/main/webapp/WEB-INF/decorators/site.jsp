@@ -1,7 +1,16 @@
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
 <%@ taglib uri="/WEB-INF/tld/message.tld" prefix="message" %>
+<%@ taglib uri="/WEB-INF/tld/locale.tld" prefix="locale" %>
+
+<c:set var="ctx" value="${pageContext.request.contextPath}"/>
+<c:set var="locale" value="${pageContext.response.locale}"/>
+<c:set var="user" value="${pageContext.request.remoteUser}"/>
+<locale:locale/>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="<locale:language/>">
 
@@ -9,7 +18,7 @@
     <meta charset="utf-8"/>
     <meta name="robots" content="all" />
     <meta http-equiv="expires" content="0"/>
-    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+    <meta name="viewport" content="width=1050"/>
     <%@ include file="/WEB-INF/jsp/taglibs_js.jsp" %>
 	<link rel="shortcut icon" href="${resources}/images/favicon.png">
 
@@ -78,7 +87,45 @@
   }
 </script>
 
-<decorator:body/>
+<body>
+    <div id="wrapper">
+        <div id="wrap">
+            <div id="wrap-in">
+                <div id="header-wrap">
+                    <div id="page">
+                        <div id="page-nav">
+                            <a href="${ctx}/help.html"><message:message key="label.help"/></a> |
+                            <a onclick="Zenbox.show()"><message:message key="label.feedback"/></a>
+                        </div>
+                    </div>
+                    <div id="page">
+                        <div id="header-container">
+                            <div id="header-inner">
+                                <div class="header-company-text unselectable"><a href="${ctx}/home.html" class="header-blank">llamar<span class="header-company-small">y</span>comer</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="main-wrap">
+                    <div id="page">
+                        <div id="main-bot">
+                            <div id="main-inner">
+                                <div id="main">
+                                    <decorator:body/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer-wrap">
+        <div id="page">
+            <jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
+        </div>
+    </div>
+</body>
 
 <!-- Google Tracking -->
 <script type="text/javascript">
@@ -94,8 +141,5 @@ _gaq.push(['_trackPageview']);
     s.parentNode.insertBefore(ga, s);
 })();
 </script>
-
-
-</body>
 
 </html>

@@ -23,11 +23,14 @@ public class CuisineProvider implements InitializingBean {
 
     private Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocations = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
 
+    private Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocationsFull = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
+
     
     @Override
     public void afterPropertiesSet() throws Exception {
         
         String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
+        List<String> cuisinesLocations = Arrays.asList(StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.footerLocations", false)));
         Collections.addAll(cuisineList, cuisines);
         
         Map<String,List<String>> cuisinesByLocation = restaurantRepository.getCuisinesByLocation();
@@ -43,7 +46,10 @@ public class CuisineProvider implements InitializingBean {
                 Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
                 cuisinesPairList.add(cuisinePair);
             }
-            cuisineLocations.put(locationPair, cuisinesPairList);
+            if( cuisinesLocations.contains(locationPair.second)) {
+                cuisineLocations.put(locationPair, cuisinesPairList);
+            }
+            cuisineLocationsFull.put(locationPair, cuisinesPairList);
         }
     }
 
@@ -54,5 +60,9 @@ public class CuisineProvider implements InitializingBean {
 
     public Map<Pair<String, String>, List<Pair<String, String>>> getCuisineLocations() {
         return cuisineLocations;
+    }
+
+    public Map<Pair<String, String>, List<Pair<String, String>>> getCuisineLocationsFull() {
+        return cuisineLocationsFull;
     }
 }

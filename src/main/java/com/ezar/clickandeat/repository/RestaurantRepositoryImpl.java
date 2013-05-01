@@ -3,8 +3,10 @@ package com.ezar.clickandeat.repository;
 import com.ezar.clickandeat.cache.ClusteredCache;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
+import com.ezar.clickandeat.repository.util.FilterUtils;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.SequenceGenerator;
+import com.ezar.clickandeat.web.controller.helper.Filter;
 import com.mongodb.BasicDBObject;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -12,17 +14,17 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.geo.Metrics;
 import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
-import org.springframework.data.mongodb.core.query.BasicUpdate;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.data.mongodb.core.query.Order;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
@@ -37,9 +39,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final double DIVISOR = Metrics.KILOMETERS.getMultiplier();
 
-    private static final int MAX_RECOMMENDATIONS = 18;
+    private static final int MAX_RECOMMENDATIONS = 9;
     
-    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60; // Refresh recommendations list every hour
+    private static final int REFRESH_TIMEOUT = 1000 * 60 * 15; // Refresh recommendations list every 15 minutes
     
     
     @Autowired
@@ -57,7 +59,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private double maxDistance;
 
     private long lastRefreshed = 0l;    
-    
+
+    private boolean usecache = true;
+
     private List<Restaurant> recommendations;
     
 
@@ -96,8 +100,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                     .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
             List<Restaurant> restaurants = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
-                if( restaurants.size() % 2 == 1 ) {
-                    recommendations = restaurants.subList(0,restaurants.size() -1 ); // Must be an even number
+                if( restaurants.size() % 3 != 0 ) {
+                    recommendations = restaurants.subList(0,restaurants.size() - restaurants.size() % 3 ); // Must be a multiple of 3
                 }
                 else {
                     recommendations = restaurants;
@@ -114,7 +118,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 }
                 List<Restaurant> randomList = new ArrayList<Restaurant>();
                 Random random = new Random();
-                for( int i = 0; i < MAX_RECOMMENDATIONS; i++ ) {
+                while (randomList.size() < MAX_RECOMMENDATIONS ) {
                     int nextIndex = random.nextInt(candidates.size());
                     Restaurant candidate = candidates.get(nextIndex);
                     if( !randomList.contains(candidate)) {
@@ -148,16 +152,45 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         if( restaurantId == null ) {
             throw new IllegalArgumentException("restaurantId must not be null");
         }
-        Restaurant restaurant;
-        restaurant = clusteredCache.get(Restaurant.class, restaurantId);
+        Restaurant restaurant = null;
+        if(usecache) {
+            restaurant = clusteredCache.get(Restaurant.class, restaurantId);
+        }
         if( restaurant == null ) {
             restaurant = operations.findOne(query(where("restaurantId").is(restaurantId)),Restaurant.class);
-            if( restaurant != null ) {
+            if( restaurant != null && usecache ) {
                 clusteredCache.store(Restaurant.class,restaurantId,restaurant);
             }
         }
         return restaurant;
     }
+
+    @Override
+    public Restaurant findByName(String name) {
+        return operations.findOne(query(where("name").is(name)),Restaurant.class);
+    }
+
+    @Override
+    public Restaurant findByExternalId(String externalId) {
+        return operations.findOne(query(where("externalId").is(externalId)),Restaurant.class);
+    }
+
+    @Override
+    public List<Restaurant> pageByRestaurantName(Pageable pageable, String restaurantName, List<Filter> filters) {
+        Query query = StringUtils.hasText(restaurantName)? new Query(where("name").regex(restaurantName,"i").and("deleted").ne(true)): new Query(where("deleted").ne(true));
+        FilterUtils.applyFilters(query, filters);
+        query.with(pageable);
+        return operations.find(query, Restaurant.class);
+    }
+
+
+    @Override
+    public long count(String restaurantName, List<Filter> filters) {
+        Query query = StringUtils.hasText(restaurantName)? new Query(where("name").regex(restaurantName).and("deleted").ne(true)): new Query(where("deleted").ne(true));
+        FilterUtils.applyFilters(query,filters);
+        return operations.count(query, Restaurant.class);
+    }
+
 
     @Override
     @SuppressWarnings("unchecked")
@@ -198,7 +231,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
 
-        clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        if(usecache) {
+            clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        }
         
         // Update created and last update times
         long now = new DateTime().getMillis();
@@ -215,7 +250,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     @Override
     public List<Restaurant> quickLaunch() {
-        Query query = new Query(where("deleted").ne("true"));
+        Query query = new Query(where("deleted").ne(true));
         return operations.find(query, Restaurant.class);
     }
 
@@ -224,7 +259,9 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @SuppressWarnings("unchecked")
     public void deleteRestaurant(Restaurant restaurant) {
         operations.remove(query(where("restaurantId").is(restaurant.getRestaurantId())), Restaurant.class);
-        clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        if(usecache) {
+            clusteredCache.remove(Restaurant.class, restaurant.getRestaurantId());
+        }
     }
 
 
@@ -241,16 +278,22 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Build the query including location if set
         GeoLocation geoLocation = search.getLocation();
-        Query query = geoLocation != null? new Query(where("address.location").nearSphere(
-                new Point(geoLocation.getLocation()[0], geoLocation.getLocation()[1])).maxDistance(Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR)):
-                new Query();
+        Query query;
+        if( geoLocation == null ) {
+            query = new Query();
+        }
+        else {
+            Double radius = Math.max(maxDistance,geoLocation.getRadius()) / DIVISOR;
+            Circle circle = new Circle(geoLocation.getLocation()[0], geoLocation.getLocation()[1], radius);
+            query = new Query(where("address.location").withinSphere(circle));
+        }
         query.addCriteria(where("listOnSite").is(true).and("deleted").ne(true)
                 .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
 
         // Add scope variables to the map/reduce query
         Map<String,Object> scopeVariables = new HashMap<String,Object>();
         scopeVariables.put("cuisine",search.getCuisine() == null? null: search.getCuisine());
-        scopeVariables.put("address", search.getLocation() == null? null: search.getLocation().getAddress());
+        scopeVariables.put("address", search.getLocation() == null? null: search.getLocation().getAddress().toUpperCase());
         scopeVariables.put("lat1",search.getLocation() == null? null: search.getLocation().getLocation()[0]);
         scopeVariables.put("lon1",search.getLocation() == null? null: search.getLocation().getLocation()[1]);
         scopeVariables.put("radius", search.getLocation() == null? null: search.getLocation().getRadius());
@@ -296,7 +339,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             return new HashMap<String, List<String>>();
         }
         
-        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true));
+        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true).and("testMode").ne(true));
 
         // Add scope variables to the map/reduce query
         MapReduceOptions options = MapReduceOptions.options();
@@ -334,4 +377,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         operations.updateFirst(query(where("restaurantId").is(restaurantId)),update,Restaurant.class);
     }
 
+    public void setUsecache(boolean usecache) {
+        this.usecache = usecache;
+    }
 }

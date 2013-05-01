@@ -14,7 +14,7 @@
                 <ul>
                     <c:choose>
                         <c:when test="${path == 'admin/restaurants.jsp' || path == 'admin/editRestaurant.jsp'}">
-                            <li class="active unselectable">Restaurants</li>
+                            <li class="active unselectable"><a href="${ctx}/admin/restaurants.html">Restaurants</a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><a href="${ctx}/admin/restaurants.html">Restaurants</a></li>
@@ -25,7 +25,7 @@
 
                     <c:choose>
                         <c:when test="${path == 'admin/orders.jsp'}">
-                            <li class="active unselectable">Orders</li>
+                            <li class="active unselectable"><a href="${ctx}/admin/orders.html">Orders</a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><a href="${ctx}/admin/orders.html">Orders</a></li>
@@ -36,7 +36,7 @@
 
                     <c:choose>
                         <c:when test="${path == 'admin/registrations.jsp'}">
-                            <li class="active unselectable">Registrations</li>
+                            <li class="active unselectable"><a href="${ctx}/admin/registrations.html">Registrations</a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><a href="${ctx}/admin/registrations.html">Registrations</a></li>
@@ -47,7 +47,7 @@
 
                     <c:choose>
                         <c:when test="${path == 'admin/reporting.jsp'}">
-                            <li class="active unselectable">Reporting</li>
+                            <li class="active unselectable"><a href="${ctx}/admin/reporting.html">Reporting</a></li>
                         </c:when>
                         <c:otherwise>
                             <li class="unselectable"><a href="${ctx}/admin/reporting.html">Reporting</a></li>

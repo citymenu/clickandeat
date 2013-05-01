@@ -29,10 +29,10 @@ public class RestaurantSearchComparator implements Comparator<Restaurant> {
                 return restaurant1.getName().compareTo(restaurant2.getName());
             }
             else if( distanceDiff < 0 ) {
-                return 1;
+                return -1;
             }
             else {
-                return -1;
+                return 1;
             }
         }
         else {

@@ -11,8 +11,9 @@ function map() {
         distanceToLocation = distance;
 
         // First check delivery by postcode
-        for( x in this.deliveryOptions.areasDeliveredTo ) {
-            if( address.toUpperCase().indexOf(x.toUpperCase()) != -1 ) {
+        for( var i = 0; i < this.deliveryOptions.areasDeliveredTo.length; i++ ) {
+            var area = this.deliveryOptions.areasDeliveredTo[i].toUpperCase();
+            if( address.indexOf(area) != -1 ) {
                 include = true;
             }
         }
@@ -21,7 +22,8 @@ function map() {
         if( this.deliveryOptions.collectionOnly ) {
             include = true;
         } else {
-            if( distance  < this.deliveryOptions.deliveryRadiusInKilometres + radius ) {
+            var deliveryRadius = this.deliveryOptions.deliveryRadiusInKilometres || 0;
+            if( distanceToLocation  < deliveryRadius + radius ) {
                 include = true;
             }
         }
