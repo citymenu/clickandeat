@@ -18,11 +18,8 @@ public class MongoKeepAliveTask {
     @Autowired
     private MongoOperations operations;
 
-    @Scheduled(cron="0 0/15 0 * * ?")
+    @Scheduled(cron="0 0/15 * * * ?")
     public void execute() throws Exception {
-        LOGGER.info("Executing mongo keep alive query");
-        Query query = new Query(where("deleted").ne(true));
-        long count = operations.count(query,Restaurant.class);
-        LOGGER.info("Found " + count + " active restaurants");
+        operations.count(new Query(where("deleted").ne(true)),Restaurant.class);
     }
 }

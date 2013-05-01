@@ -61,10 +61,10 @@ public class OpenOrderProcessingTask implements InitializingBean {
         try {
             if(lock.acquire()) {
 
-                LOGGER.info("Checking for any orders with status 'AWAITING_RESTAURANT'");
-
                 List<Order> orders = orderRepository.findByOrderStatus(ORDER_STATUS_AWAITING_RESTAURANT);
-                LOGGER.info("Found " + orders.size() + " orders with status 'AWAITING_RESTAURANT'");
+                if(orders.size() > 0 ) {
+                    LOGGER.info("Found " + orders.size() + " orders with status 'AWAITING_RESTAURANT'");
+                }
 
                 for(Order order: orders ) {
 

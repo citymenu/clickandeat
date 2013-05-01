@@ -301,11 +301,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         options.scopeVariables(scopeVariables);
         options.outputTypeInline(); // Important!
         options.finalizeFunction("classpath:/mapreduce/finalize.js");
-
         MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/map.js", "classpath:/mapreduce/reduce.js", options, ValueObject.class);
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Executed map reduce query in: " + results.getTiming().getTotalTime() + "ms");
-        }
 
         // Build results
         DateTime now = new DateTime();
@@ -344,11 +340,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         // Add scope variables to the map/reduce query
         MapReduceOptions options = MapReduceOptions.options();
         options.outputTypeInline(); // Important!
-
         MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/footermap.js", "classpath:/mapreduce/footerreduce.js", options, ValueObject.class);
-        if( LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Executed map reduce query in: " + results.getTiming().getTotalTime() + "ms");
-        }
 
         // Build results
         Map<String,List<String>> cuisinesByLocation = new HashMap<String, List<String>>();

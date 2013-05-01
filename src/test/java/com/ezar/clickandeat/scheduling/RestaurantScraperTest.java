@@ -24,9 +24,5 @@ public class RestaurantScraperTest {
         restaurantScraper.scrapeData();
     }
 
-    @Test
-    public void testScrapePhoneNumbers() throws Exception {
-        restaurantScraper.scrapeTelephoneNumbers();
-    }
-    
+
 }

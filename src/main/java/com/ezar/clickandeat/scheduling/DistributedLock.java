@@ -35,6 +35,7 @@ public class DistributedLock {
      */
     
     public synchronized boolean acquire() throws InterruptedException {
+
         LOGGER.debug("Attempting to acquire lock");
 
         long expires = System.currentTimeMillis() + expireMsecs;
@@ -71,7 +72,7 @@ public class DistributedLock {
         if (locked) {
             operations.getOperations().delete(key);
             locked = false;
-            LOGGER.info("Released lock");
+            LOGGER.debug("Released lock");
         }
     }
 
