@@ -30,6 +30,10 @@ $(document).ready(function(){
 
     $('#loc').focus();
 
+    $('.search-button').click(function(){
+        search();
+    });
+
     $('#loc').keydown(function(event){
         if( event.keyCode == 13 ) {
             search();
