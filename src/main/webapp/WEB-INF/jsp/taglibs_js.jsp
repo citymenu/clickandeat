@@ -24,6 +24,7 @@
         <c:set var="resources" value="http://clickandeat.s3-external-3.amazonaws.com/resources"/>
     </c:otherwise>
 </c:choose>
+<c:set var="resources" value="${ctx}/resources"/>
 
 <script type="text/javascript">
 var ctx = "${ctx}";
