@@ -184,7 +184,5 @@
     </div>
 </div>
 
-<jsp:include page="/WEB-INF/jsp/${systemLocale}/footer.jsp" />
-
 </body>
 </html>

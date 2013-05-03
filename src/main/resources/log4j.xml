@@ -29,10 +29,6 @@
         <level value="INFO"/>
     </logger>
 
-    <logger name="com.ezar.clickandeat.scheduling.DistributedLock">
-        <level value="INFO"/>
-    </logger>
-
     <logger name="org.springframework.data.redis">
         <level value="INFO"/>
     </logger>
