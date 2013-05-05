@@ -814,7 +814,7 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     // Work out how to split rows across tables
     var itemCount = additionalItemArray.length;
     var defaultBreak = 6;
-    var rowBreak = Math.max(itemCount / 2, defaultBreak );
+    var rowBreak = Math.ceil(Math.max(itemCount / 2, defaultBreak ));
     var tableWidth = (itemCount <= defaultBreak)? 300:200;
 
     // Build the total cost item and quantity
