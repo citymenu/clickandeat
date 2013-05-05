@@ -181,7 +181,7 @@
                                                                         ${deliveryOptions.maximumDeliveryCharge} <span class="euro"><message:message key="config.currency" escape="false"/></span>
                                                                     </div>
                                                                 </c:if>
-                                                                <c:if test="${deliveryOptions.minimumOrderForDelivery != null && deliveryOptions.minimumOrderForDelivery != null}">
+                                                                <c:if test="${deliveryOptions.minimumOrderForDelivery != null && deliveryOptions.minimumOrderForDelivery != 0 && deliveryOptions.minimumOrderForDelivery != deliveryOptions.minimumOrderForFreeDelivery}">
                                                                     <div>
                                                                         <message:message key="restaurant.minimum-delivery-order" escape="false"/> ${deliveryOptions.formattedMinimumOrderForDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>
                                                                     </div>
