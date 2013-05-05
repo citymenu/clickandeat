@@ -115,7 +115,7 @@ function doBuildOrder(order,config) {
 
     // Display order header
     if(orderIsForAnotherRestaurant) {
-        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order-with') + ' ' + order.restaurantName + ':'));
+        $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order-with') + ' ' + unescapeQuotes(order.restaurantName) + ':'));
     } else {
         $('.orderheader').append(('<div class=\'orderheadertext\'>{0}</div>').format(getLabel('order.your-order')+':'));
     }
