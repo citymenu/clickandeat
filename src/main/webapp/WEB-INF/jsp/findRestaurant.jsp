@@ -128,7 +128,7 @@
                                                             <div class="restaurant-discount-details-inner">
                                                                 <div class="discount-details">
                                                                     <c:choose>
-                                                                        <c:when test="${rerestaurant.firstDiscount.type == 'FREE_ITEM'}">
+                                                                        <c:when test="${rerestaurant.firstDiscount.type == 'DISCOUNT_FREE_ITEM'}">
                                                                             <message:message key="restaurant.discount.free-item"/>
                                                                         </c:when>
                                                                         <c:otherwise>
