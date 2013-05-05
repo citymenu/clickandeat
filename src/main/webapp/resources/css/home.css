@@ -452,7 +452,7 @@ img.rounded-img {
     font: 12px/14px myriad-pro-n4,myriad-pro;
     background: url(../images/moped.png) 0 1px no-repeat;
     color:#444444;
-    margin-top: 4px;
+    margin: 4px 0 3px 0;
     padding: 0 0 0 26px;
 }
 
@@ -464,7 +464,6 @@ img.rounded-img {
     padding: 2px;
     text-align:left;
     zoom: 1;
-    margin-top:3px;
     *display: inline;
 }
 
