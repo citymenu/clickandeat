@@ -32,9 +32,9 @@
                 <div class="wsite-header">
                     <div id="butler"></div>
                     <div id="speechbubble">
-                        <div id="speech1" class="active">Hi, I&apos;m here to show you the easiest way to get local takeaway food delivered to your home....</div>
-                        <div id="speech2" class="inactive">I have a wide range of restaurant menus to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
-                        <div id="speech3" class="inactive">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
+                        <div id="speech1" class="active unselectable">Hi, I&apos;m here to show you the easiest way to get local takeaway food delivered to your home....</div>
+                        <div id="speech2" class="inactive unselectable">I have a wide range of restaurant menus to suit all tastes. Italian, Mexican, Chinese, Pizza and many more....</div>
+                        <div id="speech3" class="inactive unselectable">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
                     </div>
                     <div id="bannercarouselwrapper">
                         <div id="bannercarousel">
@@ -43,63 +43,63 @@
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/pizza.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Pizza</div>
+                                                <div class="rounded-img-ribbon unselectable">Pizza</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/chinese.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Chinese</div>
+                                                <div class="rounded-img-ribbon unselectable">Chinese</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/sushi.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Sushi</div>
+                                                <div class="rounded-img-ribbon unselectable">Sushi</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/mexican.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Mexican</div>
+                                                <div class="rounded-img-ribbon unselectable">Mexican</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/mediterranean.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Mediterranean</div>
+                                                <div class="rounded-img-ribbon unselectable">Mediterranean</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/american.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">American</div>
+                                                <div class="rounded-img-ribbon unselectable">American</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/asian.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Asian</div>
+                                                <div class="rounded-img-ribbon unselectable">Asian</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/salad.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Salads</div>
+                                                <div class="rounded-img-ribbon unselectable">Salads</div>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="rounded-img-wrapper">
                                             <div class="rounded-img" style="background:url(${resources}/images/food/vegetarian.jpg) no-repeat center center;">
-                                                <div class="rounded-img-ribbon">Vegetarian</div>
+                                                <div class="rounded-img-ribbon unselectable">Vegetarian</div>
                                             </div>
                                         </div>
                                     </li>
