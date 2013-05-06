@@ -13,7 +13,7 @@
             <div class="email-entry">
                 <input type="text" id="email" style="width:200px; margin-right:10px;"/>
                 <a class="register-button" id="#register" onclick="register()"><message:message key="button.register"/></a>
-                <div class="invalid-email">Please can you ensure that you enter a valid email address</div>
+                <div class="invalid-email" style="display:none">Please can you ensure that you enter a valid email address</div>
             </div>
         </div>
     </div>

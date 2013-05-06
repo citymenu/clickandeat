@@ -15,7 +15,7 @@
             <div class="email-entry">
                 <input type="text" id="email" style="width:200px; margin-right:10px;"/>
                 <a class="register-button" id="#register" onclick="register()"><message:message key="button.register"/></a>
-                <div class="invalid-email">Por favor introduce un correo electr&#243;nico v&#225;lido</div>
+                <div class="invalid-email" style="display:none">Por favor introduce un correo electr&#243;nico v&#225;lido</div>
             </div>
         </div>
     </div>
