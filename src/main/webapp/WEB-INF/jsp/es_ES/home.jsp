@@ -40,7 +40,7 @@
                         <div id="speech3" class="inactive unselectable">Dime dónde hay que llevarla y te ayudaré a pedir tu comida ahora mismo...</div>
                     </div>
                     <div id="bannercarouselwrapper">
-                        <div id="bannercarousel">
+                        <div id="bannercarousel" style="visibility:hidden">
                             <div class="carousel-items">
                                 <ul>
                                     <li>

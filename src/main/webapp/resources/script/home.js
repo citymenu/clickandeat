@@ -21,6 +21,9 @@ $(document).ready(function(){
         visible:2
     });
 
+    // Display carousel
+    $("#bannercarousel").show();
+
     // If error in model, show location warning
     if( notfound == 'true' ) {
         $('#search-warning').show();

@@ -37,7 +37,7 @@
                         <div id="speech3" class="inactive unselectable">Tell me your location in the box below and I&apos;ll help you order local takeaway food right now....</div>
                     </div>
                     <div id="bannercarouselwrapper">
-                        <div id="bannercarousel">
+                        <div id="bannercarousel" style="visibility:hidden">
                             <div class="carousel-items">
                                 <ul>
                                     <li>
