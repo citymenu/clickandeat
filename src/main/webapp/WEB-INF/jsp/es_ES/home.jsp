@@ -129,7 +129,7 @@
                                 </table>
                             </div>
                             <div class="searchbartext">
-                                O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/Barcelona"/>Barcelona</a>
+                                O entra directamente en: <a class="location" href="${ctx}/app/Madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/Barcelona/loc/Barcelona"/>Barcelona</a>
                             </div>
                         </div>
                         <div id="searchbarright">

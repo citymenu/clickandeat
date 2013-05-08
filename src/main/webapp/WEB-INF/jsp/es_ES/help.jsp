@@ -5,6 +5,8 @@
 <!doctype html>
 
 <head>
+    <title>Ayuda y preguntas frecuentes</title>
+    <meta name="description">Términos y Condiciones</meta>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/static.css" charset="utf-8"/>
 </head>
 
