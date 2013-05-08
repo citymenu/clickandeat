@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -51,9 +52,11 @@ public class Search implements Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder("Search: {");
-        sb.append("location:").append(location);
-        sb.append("}");
+        StringBuilder sb = new StringBuilder(MessageFactory.getMessage("page.takeaway",false));
+        sb.append(" ").append(getAddressSummary());
+        if(cuisine != null) {
+            sb.append(" - ").append(cuisine);
+        }
         return sb.toString();
     }
     

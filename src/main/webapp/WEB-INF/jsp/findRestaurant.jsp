@@ -5,7 +5,7 @@
 <!doctype html>
 
 <head>
-    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+    <meta name="description" content="${search} | <message:message key="page.description" escape="false"/>"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 
@@ -17,7 +17,7 @@
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>
     <script type="text/javascript">var address="${address}";</script>
-    <title><message:message key="page-title.search-results" escape="false"/></title>
+    <title>${search}</title>
 </head>
 
 <body>
