@@ -23,15 +23,18 @@
             <title>${restaurant.name} - ${restaurant.cuisineSummary} | LlamaryComer</title>
         </c:when>
         <c:otherwise>
-            <title>${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary} | LlamaryComer</title>
+            <title><message:message key="page.takeaway"/> | ${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary}</title>
         </c:otherwise>
     </c:choose>
 
 </head>
 
 <body>
-
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
+    <div style="display:none">
+        <h1><message:message key="page.takeaway"/> ${restaurant.name}</h1>
+        <p>${restaurant.cuisineSummary}</p>
+    </div>
     <div id="content">
         <div class="content-wrapper">
             <table width="1000">
