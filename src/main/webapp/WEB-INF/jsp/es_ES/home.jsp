@@ -28,6 +28,14 @@
 
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
+    <div style="display:none">
+        <h1>Comida a domicilio en Madrid, Barcelona</h1>
+        <p>Llamarycomer cuenta con más de 1.000 restaurantes listos para entregar alimentos a usted en su casa</p>
+        <h1>Comida para llevar entregado a su hogar</h1>
+        <p>Conseguir comida para llevar entregado a su hogar a los 45 minutos</p>
+        <h1>Elija entre una amplia variedad de menús, Pizza, chino, italiano y muchos más</h1>
+        <p>Super fácil proceso de pedido, escoja entre una amplia variedad de menús, italiano, chino, pizza y más</p>
+    </div>
     <div id="banner">
         <div id="banner-wrap">
         <div id="banner-outer">
