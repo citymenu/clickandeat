@@ -131,11 +131,9 @@
                         </div>
                         <div id="searchbarright">
                             <div class="searchbarinfo">
-                                <div>
-                                    OVER 500 RESTAURANTES LISTED<br>
-                                    SUPER EASY ORDERING PROCESS<br>
-                                    HOME DELIVERY WITHIN 45 MINUTES
-                                </div>
+                                <h2>OVER 1000 RESTAURANTES LISTED</h2>
+                                <h2>SUPER EASY ORDERING PROCESS</h2>
+                                <h2>HOME DELIVERY WITHIN 45 MINUTES</h2>
                             </div>
                         </div>
                     </div>
@@ -167,7 +165,7 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
+                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
                                 </td>
                                 <td width="212">
                                     <c:if test="${restaurant.hasDiscounts == false}">

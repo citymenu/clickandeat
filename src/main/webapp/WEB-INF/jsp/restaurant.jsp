@@ -32,7 +32,7 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
-        <h1><message:message key="page.takeaway"/> ${restaurant.name}</h1>
+        <h1><strong><message:message key="page.takeaway"/> ${restaurant.name}</strong></h1>
         <p>${restaurant.cuisineSummary}</p>
     </div>
     <div id="content">

@@ -22,6 +22,9 @@
 
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
+    <div style="display:none">
+        <h1><strong>${search}</strong></h1>
+    </div>
     <div id="content">
         <div class="content-wrapper">
             <table width="1000">
@@ -94,7 +97,6 @@
                             </c:otherwise>
                         </c:choose>
 
-
                         <c:set var="phoneOrdersOnlyflag" value="0"/>
 
                         <c:forEach var="restaurant" items="${results}">
@@ -116,7 +118,7 @@
                                                     <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
                                                 </c:if>
                                                 <div class="restaurant-image">
-                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>"/>
+                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
                                                 </div>
                                             </td>
                                             <td width="185">

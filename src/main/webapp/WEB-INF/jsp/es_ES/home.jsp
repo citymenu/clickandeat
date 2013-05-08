@@ -9,7 +9,6 @@
 <head>
     <title>Comida a domicilio | Restaurantes on line en Llamarycomer.com</title>
     <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición" />
-    <meta name="keywords" content="comida a domicilio - comida en casa - restaurantes on line - comida para llevar - llamar y comer" />
     <meta http-equiv="Content-Language" content="es"/>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
@@ -26,12 +25,8 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
-        <h1>Comida a domicilio en Madrid, Barcelona</h1>
+        <h1><strong>Comida a domicilio en Madrid, Barcelona</strong></h1>
         <p>Llamarycomer cuenta con más de 1.000 restaurantes listos para entregar alimentos a usted en su casa</p>
-        <h1>Comida para llevar entregado a su hogar</h1>
-        <p>Conseguir comida para llevar entregado a su hogar a los 45 minutos</p>
-        <h1>Elija entre una amplia variedad de menús, Pizza, chino, italiano y muchos más</h1>
-        <p>Super fácil proceso de pedido, escoja entre una amplia variedad de menús, italiano, chino, pizza y más</p>
     </div>
     <div id="banner">
         <div id="banner-wrap">
@@ -139,11 +134,9 @@
                         </div>
                         <div id="searchbarright">
                             <div class="searchbarinfo">
-                                <div>
-                                    más de 1000 restaurantes para elegir<br>
-                                    es muy fácil pedir online<br>
-                                    servicio a domicilio "en menos de" 45 minutos
-                                </div>
+                                <h2>más de 1000 restaurantes para elegir<h2>
+                                <h2>es muy fácil pedir online<h2>
+                                <h2>servicio a domicilio "en menos de" 45 minutos</h2>
                             </div>
                         </div>
                     </div>
@@ -175,7 +168,7 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>"/>
+                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
                                 </td>
                                 <td width="212">
                                     <c:if test="${restaurant.hasDiscounts == false}">
