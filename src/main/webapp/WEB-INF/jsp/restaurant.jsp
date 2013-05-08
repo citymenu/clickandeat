@@ -20,10 +20,10 @@
 
     <c:choose>
         <c:when test="${restaurant.address.town == ''}">
-            <title>${restaurant.name} - ${restaurant.cuisineSummary} | LlamaryComer</title>
+            <title>${restaurant.name} - ${restaurant.cuisineSummary} | <message:message key="page.takeaway"/></title>
         </c:when>
         <c:otherwise>
-            <title><message:message key="page.takeaway"/> | ${restaurant.name} - (${restaurant.address.town}) - ${restaurant.cuisineSummary}</title>
+            <title>${restaurant.name} - ${restaurant.address.town} | <message:message key="page.takeaway"/></title>
         </c:otherwise>
     </c:choose>
 
@@ -32,7 +32,14 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
-        <h1><strong><message:message key="page.takeaway"/> ${restaurant.name}</strong></h1>
+        <c:choose>
+            <c:when test="${restaurant.address.town == ''}">
+                <h1><strong>${restaurant.name} - ${restaurant.cuisineSummary} | <message:message key="page.takeaway"/></strong></h1>
+            </c:when>
+            <c:otherwise>
+                <h1><strong><message:message key="page.takeaway"/> | ${restaurant.name} - ${restaurant.address.town} | <message:message key="page.takeaway"/></strong></h1>
+            </c:otherwise>
+        </c:choose>
         <p>${restaurant.cuisineSummary}</p>
     </div>
     <div id="content">
