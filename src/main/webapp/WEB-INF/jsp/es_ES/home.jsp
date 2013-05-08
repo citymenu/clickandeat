@@ -7,7 +7,10 @@
 <!doctype html>
 
 <head>
-    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+    <title>Comida a domicilio | Restaurantes on line en Llamarycomer.com</title>
+    <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición" />
+    <meta name="keywords" content="comida a domicilio - comida en casa - restaurantes on line - comida para llevar - llamar y comer" />
+    <meta http-equiv="Content-Language" content="es"/>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
@@ -18,12 +21,6 @@
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript">var notfound = '${notfound}';</script>
-
-    <title>Comida a domicilio | Restaurantes on line en Llamarycomer.com</title>
-    <meta name="keywords" content="comida a domicilio - comida en casa - restaurantes on line - comida para llevar - llamar y comer" />
-    <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición" />
-    <meta http-equiv="Content-Language" content="es"/>
-
 </head>
 
 <body>

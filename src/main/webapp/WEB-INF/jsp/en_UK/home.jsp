@@ -7,7 +7,8 @@
 <!doctype html>
 
 <head>
-    <meta name="description" content="<message:message key="page.description" escape="false"/>"/>
+    <title>LlamaryComer | Order Takeaway Food Online - London</title>
+    <meta name="description" content="Llamar y Comer is the easiest way to order delivery and takeout. A variety of restaurants at your disposal"/>
 
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
@@ -18,9 +19,8 @@
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
     <script type="text/javascript">var watermark="<message:message key="search.watermark"/>";</script>
     <script type="text/javascript">var notfound = '${notfound}';</script>
-
-    <title>LlamaryComer | Order Takeaway Food Online - London</title>
     <script type="text/javascript">var path="${path}";</script>
+
 </head>
 
 <body>
