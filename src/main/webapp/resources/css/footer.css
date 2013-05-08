@@ -14,10 +14,12 @@
 }
 
 .footer-h1 {
-    font: 24px MaiandraOTGD-DemiBold;
-    color:#837954;
+    font-family: "prenton-n5", "prenton";
+    font-weight:500;
+    font-size:16px;
+    color:#F3F3F3;
     padding:0;
-    margin-bottom:3px;
+    margin-bottom:6px;
 }
 
 .h1-small {
