@@ -88,7 +88,7 @@ $(document).ready(function(){
 
     // Add url links to all restaurant buttons
     $('div[type="link"]').click(function(){
-        window.location.href = $(this).attr('url');
+        location.href = $(this).attr('url');
     });
 
 });

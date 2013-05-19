@@ -43,11 +43,6 @@ $(document).ready(function(){
         }
     });
 
-    // Add restaurant links
-    $('.restaurant-link').click(function(){
-        window.location.href = $(this).attr('url');
-    });
-
     // Fade through the three speech options
     $('#speech1').delay(7000).fadeOut(500);
     $('#speech2').delay(7500).fadeIn(500).delay(7000).fadeOut(500);
@@ -65,8 +60,7 @@ $(document).ready(function(){
 
     // Add url links to all restaurant buttons
     $('div[type="recommendation"]').click(function(){
-        var url = $(this).attr('url');
-        window.location = ctx + '/' + url;
+        location.href = $(this).attr('url');
     });
 
 });
