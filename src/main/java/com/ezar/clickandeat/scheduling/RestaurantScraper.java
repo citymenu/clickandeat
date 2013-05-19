@@ -117,9 +117,9 @@ public class RestaurantScraper implements InitializingBean {
 
 
     //@Scheduled(cron="0 0 10 * * WED")
-    public void scrapeData() throws Exception {
+    public void scrapeData() {
         try {
-            if(true || lock.acquire()) {
+            if(lock.acquire()) {
                 List<Pair<Restaurant,String>> restaurants = new ArrayList<Pair<Restaurant,String>>();
                 final List<String> errorUrls = new ArrayList<String>();
                 final List<Restaurant> newRestaurants = new ArrayList<Restaurant>();
