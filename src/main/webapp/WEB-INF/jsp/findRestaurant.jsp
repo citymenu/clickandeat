@@ -124,7 +124,7 @@
                                                     <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
                                                 </c:if>
                                                 <div class="restaurant-image">
-                                                    <a href="${restaurant.url}">
+                                                    <a href="${restaurant.url}" class="inherit">
                                                         <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
                                                     </a>
                                                 </div>
