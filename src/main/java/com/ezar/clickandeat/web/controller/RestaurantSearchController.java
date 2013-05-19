@@ -101,8 +101,8 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
     public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
-        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocations().keySet()) {
-            if(locationPair.first.equals(address)) {
+        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocationsFull().keySet()) {
+            if(locationPair.first.equalsIgnoreCase(address)) {
                 return searchByLocationAndCuisine(request,locationPair.second,null);        
             }
         }
@@ -112,11 +112,11 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/csn/{cuisine}/{address}", method = RequestMethod.GET)
     public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine, @PathVariable("address") String address ) {
-        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocations().entrySet()) {
+        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocationsFull().entrySet()) {
             Pair<String,String> locationPair = entry.getKey();
-            if( locationPair.first.equals(address)) {
+            if( locationPair.first.equalsIgnoreCase(address)) {
                 for( Pair<String,String> cuisinePair: entry.getValue()) {
-                    if( cuisinePair.first.equals(cuisine)) {
+                    if( cuisinePair.first.equalsIgnoreCase(cuisine)) {
                         return searchByLocationAndCuisine(request,locationPair.second,cuisinePair.second);
                     }
                 }

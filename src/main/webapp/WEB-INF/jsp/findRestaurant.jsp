@@ -92,7 +92,13 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="search-results-header">
-                                    <div class="search-location-results"><message:message key="search.restaurants-serving-your-location" format="${count}"/></div>
+                                    <c:choose>
+                                        <c:when test="${search.cuisine == null}">
+                                            <h1 class="search-location-results"><message:message key="search.restaurants-serving-your-location"/> ${search.addressSummary}.</h1>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <h1 class="search-location-results">${search.cuisine} <message:message key="search.restaurants-serving-your-location-lower"/> ${search.addressSummary}.</h1>                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </c:otherwise>
                         </c:choose>
@@ -118,13 +124,16 @@
                                                     <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
                                                 </c:if>
                                                 <div class="restaurant-image">
-                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                                    <a href="${restaurant.url}">
+                                                        <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                                    </a>
                                                 </div>
                                             </td>
                                             <td width="185">
                                                 <div class="table-left">
-                                                    <h2 class="restaurant-name"><util:escape value="${restaurant.name}"/></h2>
+                                                    <h2 class="restaurant-name"><a href="${restaurant.url}" class="inherit"><util:escape value="${restaurant.name}"/></a></h2>
                                                     <div class="cuisine-summary"><util:escape value="${restaurant.cuisineSummary}"/></div>
+                                                    <div style="display:none">${restaurant.description}</div>
                                                     <c:if test="${restaurant.hasDiscounts == true}">
                                                         <div class="restaurant-discount-details">
                                                             <div class="restaurant-discount-details-inner">

@@ -52,12 +52,12 @@ public class Search implements Serializable {
     }
 
     public String toString() {
-        StringBuilder sb = new StringBuilder(MessageFactory.getMessage("page.takeaway",false));
-        sb.append(" ").append(getAddressSummary());
         if(cuisine != null) {
-            sb.append(" - ").append(cuisine);
+            return MessageFactory.formatMessage("page.search.cuisine.location", false, cuisine, getAddressSummary());
         }
-        return sb.toString();
+        else {
+            return MessageFactory.formatMessage("page.search.takeaway.location", false, getAddressSummary());
+        }
     }
     
     public String getCoordinates() {

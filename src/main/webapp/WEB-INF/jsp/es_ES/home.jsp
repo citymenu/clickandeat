@@ -129,7 +129,7 @@
                                 </table>
                             </div>
                             <div class="searchbartext">
-                                O entra directamente en: <a class="location" href="${ctx}/app/Madrid/loc/Madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/Barcelona/loc/Barcelona"/>Barcelona</a>
+                                O entra directamente en: <a class="location" href="${ctx}/app/comida-domicilio-madrid/loc/madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-domicilio-barcelona/loc/barcelona"/>Barcelona</a>
                             </div>
                         </div>
                         <div id="searchbarright">
@@ -168,13 +168,15 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                    <a href="${restaurant.url}">
+                                        <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                    </a>
                                 </td>
                                 <td width="212">
                                     <c:if test="${restaurant.hasDiscounts == false}">
                                         <div class="restaurant-padding"></div>
                                     </c:if>
-                                    <div class="restaurant-name"><util:escape value="${restaurant.name}"/></div>
+                                    <div class="restaurant-name"><a href="${restaurant.url}" class="inherit"><util:escape value="${restaurant.name}"/></a></div>
                                     <div class="restaurant-summary"><util:escape value="${restaurant.address.town}"/> - <util:escape value="${restaurant.cuisineSummary}"/></div>
                                     <c:set var="deliveryOptions" value="${restaurant.deliveryOptions}"/>
                                     <div class="delivery-details">

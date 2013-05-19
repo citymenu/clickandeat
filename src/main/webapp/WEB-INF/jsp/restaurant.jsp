@@ -18,14 +18,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css" charset="utf-8"/>
 
-    <c:choose>
-        <c:when test="${restaurant.address.town == ''}">
-            <title>${restaurant.name} - ${restaurant.cuisineSummary} | <message:message key="page.takeaway"/></title>
-        </c:when>
-        <c:otherwise>
-            <title>${restaurant.name} - ${restaurant.address.town} | <message:message key="page.takeaway"/></title>
-        </c:otherwise>
-    </c:choose>
+    <title>${restaurant.name} | Llamarycomer.com</title>
 
 </head>
 

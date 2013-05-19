@@ -65,9 +65,9 @@
                 <td width="180" style="padding-right:10px">
                     <c:forEach var="entry" items="${cuisineLocations}">
                         <div class="cuisineLocation">
-                            <a class="direct" href="${ctx}/app/${entry.key.second}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
+                            <a class="direct" href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
                             <c:forEach var="list" items="${entry.value}">
-                                <p class="locationlink"><a class="direct" href="${ctx}/app/${entry.key.second}-${list.second}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></p>
+                                <p class="locationlink"><a class="direct" href="${ctx}/app/comida-${list.first}-domicilio-${entry.key.first}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></p>
                             </c:forEach>
                         </div>
                     </c:forEach>
@@ -80,10 +80,10 @@
 <div style="display:none">
     <c:forEach var="entry" items="${cuisineLocationsFull}">
         <div>
-            <a href="${ctx}/app/${entry.key.second}/loc/${entry.key.first}">${entry.key.second}</a>
+            <a href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}">${entry.key.second}</a>
         </div>
         <c:forEach var="list" items="${entry.value}">
-            <div><a href="${ctx}/app/${entry.key.second}-${list.second}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></div>
+            <div><a href="${ctx}/app/comida-${list.first}-domicilio-${entry.key.first}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></div>
         </c:forEach>
     </c:forEach>
 </div>
