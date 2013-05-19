@@ -45,7 +45,7 @@ $(document).ready(function(){
 
     // Add restaurant links
     $('.restaurant-link').click(function(){
-        location.href = $(this).attr('url');
+        window.location.href = $(this).attr('url');
     });
 
     // Fade through the three speech options
