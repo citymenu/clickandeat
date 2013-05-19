@@ -240,7 +240,7 @@ function doBuildOrder(order,config) {
         }
 
         // Build total order item
-        var row = ('<div class=\'order-total-wrapper\'><span class=\'order-total-left\'>{0}</span><span class=\'order-total-right\'>{1} {2}</span></div>').format(getLabel('order.total'),ccy,order.formattedTotalCost);
+        var row = ('<div class=\'order-total-wrapper\'><span class=\'order-total-left\'>{0}</span><span class=\'order-total-right\'>{1} {2}</span></div>').format(getLabel('order.total'),order.formattedTotalCost,ccy);
         $('#order-item-contents').append(row);
 
         // Show details of discounts if available and if we are either on a menu page or there are items
@@ -310,7 +310,7 @@ function doBuildOrder(order,config) {
             }
         }
     } else {
-        $('#ordertotal').append('<span class=\'order-totalcost\'>' + ccy + ' 0.00</span>');
+        $('#ordertotal').append('<span class=\'order-totalcost\'>0.00 ' + ccy + '</span>');
     }
 }
 
