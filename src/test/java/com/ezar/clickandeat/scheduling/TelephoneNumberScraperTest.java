@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.scheduling;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class TelephoneNumberScraperTest {
     private TelephoneNumberScraper telephoneNumberScraper;
 
     @Test
+    @Ignore
     public void testScrapeData() throws Exception {
         telephoneNumberScraper.scrapeData();
     }

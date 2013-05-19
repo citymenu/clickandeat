@@ -2,6 +2,7 @@ package com.ezar.clickandeat.scheduling;
 
 import com.ezar.clickandeat.model.Restaurant;
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class RestaurantScraperTest {
     private RestaurantScraper restaurantScraper;
 
     @Test
+    @Ignore
     public void testScrapeData() throws Exception {
         restaurantScraper.scrapeData();
     }
