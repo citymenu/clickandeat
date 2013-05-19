@@ -168,7 +168,7 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <a href="${restaurant.url}">
+                                    <a href="${restaurant.url}" class="inherit">
                                         <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
                                     </a>
                                 </td>
