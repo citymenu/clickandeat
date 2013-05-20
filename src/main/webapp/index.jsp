@@ -1,5 +1,7 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
-<%@ taglib uri="http://java.sun.com/jstl/fmt_rt" prefix="fmt" %>
+<%@ page import="javax.servlet.http.*" %>
 
-<c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<c:redirect url="${ctx}/home.html"/>
+<%
+String ctx = ((HttpServletRequest)pageContext.getRequest()).getContextPath();
+response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+response.setHeader("Location", ctx + "/home.html");
+%>
