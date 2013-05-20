@@ -78,6 +78,15 @@ public class Search implements Serializable {
         }
     }
     
+    public String getDescription() {
+        if(cuisine != null) {
+            return MessageFactory.formatMessage("page.search.cuisine.description", false, cuisine, getAddressSummary());
+        }
+        else {
+            return MessageFactory.formatMessage("page.search.takeaway.description", false, getAddressSummary());
+        }
+    }
+    
     public GeoLocation getLocation() {
         return location;
     }

@@ -5,7 +5,7 @@
 <!doctype html>
 
 <head>
-    <meta name="description" content="${search} | <message:message key="page.description" escape="false"/>"/>
+    <meta name="description" content="${search.description}"/>
 
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
 

@@ -25,15 +25,15 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
+        <h1><strong>${restaurant.metaDescription}</strong></h1>
         <c:choose>
-            <c:when test="${restaurant.address.town == ''}">
-                <h1><strong>${restaurant.name} - ${restaurant.cuisineSummary} | <message:message key="page.takeaway"/></strong></h1>
+            <c:when test="${restaurant.description == ''}">
+                <p>${restaurant.cuisineSummary}</p>
             </c:when>
             <c:otherwise>
-                <h1><strong><message:message key="page.takeaway"/> | ${restaurant.name} - ${restaurant.address.town} | <message:message key="page.takeaway"/></strong></h1>
+                <p>${restaurant.description} - ${restaurant.cuisineSummary}</p>
             </c:otherwise>
         </c:choose>
-        <p>${restaurant.cuisineSummary}</p>
     </div>
     <div id="content">
         <div class="content-wrapper">

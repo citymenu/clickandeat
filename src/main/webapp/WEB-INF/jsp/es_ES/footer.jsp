@@ -80,10 +80,10 @@
 <div style="display:none">
     <c:forEach var="entry" items="${cuisineLocationsFull}">
         <div>
-            <a href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}">${entry.key.second}</a>
+            <a href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}">Comida domicilio en ${entry.key.second}</a>
         </div>
         <c:forEach var="list" items="${entry.value}">
-            <div><a href="${ctx}/app/comida-${list.first}-domicilio-${entry.key.first}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></div>
+            <div><a href="${ctx}/app/comida-${list.first}-domicilio-${entry.key.first}/csn/${list.first}/${entry.key.first}">Comida ${list.second} domicilio en ${entry.key.first}</a></div>
         </c:forEach>
     </c:forEach>
 </div>

@@ -553,7 +553,7 @@ public class Restaurant extends PersistentObject {
     }
 
     public String getMetaDescription() {
-        return MessageFactory.formatMessage("restaurant.metadescription", false, StringUtils.collectionToDelimitedString(cuisines, ","), name , address.getSummary());
+        return MessageFactory.formatMessage("restaurant.metadescription", false, StringUtils.collectionToDelimitedString(cuisines, ","), name , address.getTown());
     }
     
     public Boolean getListOnSite() {
