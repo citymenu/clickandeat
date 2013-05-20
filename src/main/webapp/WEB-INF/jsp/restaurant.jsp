@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
     <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css" charset="utf-8"/>
 
-    <title>${restaurant.name} | Llamarycomer.com</title>
+    <title>${restaurant.pageTitle}</title>
 
 </head>
 

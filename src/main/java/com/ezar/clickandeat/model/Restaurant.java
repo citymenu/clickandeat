@@ -134,6 +134,18 @@ public class Restaurant extends PersistentObject {
         this.restaurantUpdates = new ArrayList<RestaurantUpdate>();
     }
 
+    public String getPageTitle() {
+        StringBuilder sb = new StringBuilder();
+        if( name != null ) {
+            sb.append(name);
+        }
+        if( address != null && address.getTown() != null ) { 
+            sb.append(" | ").append(MessageFactory.formatMessage("page.takeaway",false,address.getTown()));
+        }
+        sb.append(" | Llamarycomer.com");
+        return sb.toString();
+    }
+    
 
     /**
      * Builds a url link to open this restaurant
