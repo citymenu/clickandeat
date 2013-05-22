@@ -105,6 +105,7 @@ public class RestaurantController {
         // Update the restaurant session id
         if( restaurantSessionId == null || !(restaurantSessionId.equals(restaurantId))) {
             session.setAttribute("restaurantid", restaurantId);
+            session.setAttribute("restauranturl", restaurant.getUrl());
         }
 
         return new ModelAndView("restaurant",model);

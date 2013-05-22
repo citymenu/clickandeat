@@ -388,8 +388,10 @@ public class OrderController {
             // Update order restaurant id session attribute if any items present
             if( order.getOrderItems().size() > 0 ) {
                 session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                session.setAttribute("orderrestauranturl", order.getRestaurant().getUrl());
             } else {
                 session.removeAttribute("orderrestaurantid");
+                session.removeAttribute("orderrestauranturl");
             }
 
             // Return success
@@ -524,8 +526,10 @@ public class OrderController {
                 // Update order restaurant id session attribute if any items present
                 if( order.getOrderItems().size() > 0 ) {
                     session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                    session.setAttribute("orderrestauranturl", order.getRestaurant().getUrl());
                 } else {
                     session.removeAttribute("orderrestaurantId");
+                    session.removeAttribute("orderrestauranturl");
                 }
 
                 // Return success
@@ -574,6 +578,7 @@ public class OrderController {
                     // Update order restaurant id session attribute if any items present
                     if( order.getOrderItems().size() > 0 ) {
                         session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                        session.setAttribute("orderrestauranturl", order.getRestaurant().getUrl());
                     } else {
                         // If the restaurant session id does not match the order restaurant id, update the order
                         String restaurantId = (String)session.getAttribute("restaurantid");
@@ -583,6 +588,7 @@ public class OrderController {
                             order = orderRepository.save(order);
                         }
                         session.removeAttribute("orderrestaurantid");
+                        session.removeAttribute("orderrestauranturl");
                     }
                 }
             }
@@ -910,8 +916,10 @@ public class OrderController {
             HttpSession session = request.getSession(true);
             if( order.getOrderItems().size() > 0 ) {
                 session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                session.setAttribute("orderrestauranturl", order.getRestaurant().getUrl());
             } else {
                 session.removeAttribute("orderrestaurantId");
+                session.removeAttribute("orderrestauranturl");
             }
             
             // Update can checkout status of order
@@ -963,8 +971,10 @@ public class OrderController {
                     // Update order restaurant id session attribute if any items present
                     if( order.getOrderItems().size() > 0 ) {
                         session.setAttribute("orderrestaurantid", order.getRestaurantId());
+                        session.setAttribute("orderrestauranturl", order.getRestaurant().getUrl());
                     } else {
                         session.removeAttribute("orderrestaurantid");
+                        session.removeAttribute("orderrestauranturl");
                     }
 
                     // Update can checkout status of order

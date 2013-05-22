@@ -87,7 +87,9 @@ public class PaymentController {
             session.setAttribute("completedorderid",order.getOrderId());
             session.removeAttribute("orderid");
             session.removeAttribute("orderrestaurantid");
+            session.removeAttribute("orderrestauranturl");
             session.removeAttribute("restaurantid");
+            session.removeAttribute("restauranturl");
             session.removeAttribute("cancheckout");
 
             // Send redirect to order confirmation page
@@ -157,7 +159,9 @@ public class PaymentController {
         session.setAttribute("completedorderid",order.getOrderId());
         session.removeAttribute("orderid");
         session.removeAttribute("orderrestaurantid");
+        session.removeAttribute("orderrestauranturl");
         session.removeAttribute("restaurantid");
+        session.removeAttribute("restauranturl");
         session.removeAttribute("cancheckout");
 
         // Send redirect to order confirmation page
@@ -250,7 +254,9 @@ public class PaymentController {
         session.setAttribute("completedorderid",order.getOrderId());
         session.removeAttribute("orderid");
         session.removeAttribute("orderrestaurantid");
+        session.removeAttribute("orderrestauranturl");
         session.removeAttribute("restaurantid");
+        session.removeAttribute("restauranturl");
         session.removeAttribute("cancheckout");
 
         // Flag the order as a test order

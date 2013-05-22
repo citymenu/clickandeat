@@ -134,6 +134,12 @@ public class Restaurant extends PersistentObject {
         this.restaurantUpdates = new ArrayList<RestaurantUpdate>();
     }
 
+
+    /**
+     * Truncates page title if over 70 characters
+     * @return
+     */
+
     public String getPageTitle() {
         StringBuilder sb = new StringBuilder();
         if( name != null ) {
@@ -143,7 +149,13 @@ public class Restaurant extends PersistentObject {
             sb.append(" | ").append(MessageFactory.formatMessage("page.takeaway",false,address.getTown()));
         }
         sb.append(" | Llamarycomer.com");
-        return sb.toString();
+        String title = sb.toString();
+        if( title.length() > 70 ) {
+            return name + " | Llamarycomer.com";
+        }
+        else {
+            return title;
+        }
     }
     
 

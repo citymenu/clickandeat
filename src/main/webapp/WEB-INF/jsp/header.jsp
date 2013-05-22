@@ -43,16 +43,16 @@
                     <td width="260" align="center">
                         <c:choose>
                             <c:when test="${path == 'restaurant.jsp' && orderrestaurantid != null && restaurantid != null && orderrestaurantid != restaurantid && search != null}">
-                                <a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a>
+                                <a href="${ctx}${orderrestauranturl}"><message:message key="workflow.3-build-your-order"/></a>
                             </c:when>
                             <c:when test="${path == 'restaurant.jsp'}">
-                                <a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a>
+                                <a href="${ctx}${restauranturl}"><message:message key="workflow.3-build-your-order"/></a>
                             </c:when>
                             <c:when test="${orderrestaurantid != null && search != null}">
-                                <a href="${ctx}/app/restaurant/${orderrestaurantid}"><message:message key="workflow.3-build-your-order"/></a></li>
+                                <a href="${ctx}${orderrestauranturl}"><message:message key="workflow.3-build-your-order"/></a></li>
                             </c:when>
                             <c:when test="${restaurantid != null && search != null}">
-                                <a href="${ctx}/app/restaurant/${restaurantid}"><message:message key="workflow.3-build-your-order"/></a>
+                                <a href="${ctx}${restauranturl}"><message:message key="workflow.3-build-your-order"/></a>
                             </c:when>
                             <c:otherwise>
                                 <message:message key="workflow.3-build-your-order"/>

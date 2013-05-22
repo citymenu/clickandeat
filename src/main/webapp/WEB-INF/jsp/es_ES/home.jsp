@@ -234,4 +234,13 @@
 
         </div>
     </div>
+
+    <div style="display:none">
+        <c:forEach var="entry" items="${cuisineLocationsFull}">
+            <div>
+                <a href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}">Comida domicilio en ${entry.key.second}</a>
+            </div>
+        </c:forEach>
+    </div>
+
 </body>
