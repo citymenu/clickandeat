@@ -32,6 +32,9 @@
                     </td>
                     <td width="260" align="center">
                         <c:choose>
+                            <c:when test="${searchurl != null}">
+                                <a href="${searchurl}"><message:message key="workflow.2-select-a-restaurant"/></a>
+                            </c:when>
                             <c:when test="${path == 'findRestaurant.jsp' || search != null}">
                                 <a href="${ctx}/app/<message:message key="url.find-takeaway"/>/session/loc"><message:message key="workflow.2-select-a-restaurant"/></a>
                             </c:when>

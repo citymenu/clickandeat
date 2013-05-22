@@ -87,7 +87,7 @@ public class RestaurantSearchController {
             }
             search.setCuisine(cuisine);
             session.setAttribute("search", search);
-
+            session.setAttribute("searchurl", request.getRequestURL().toString());
             return search(search,address);
             
         }
@@ -155,6 +155,10 @@ public class RestaurantSearchController {
         }
         search.setCuisine(null);
         String address = search.getLocation() == null? null: search.getLocation().getAddress();
+        
+        HttpSession session = request.getSession(true);
+        session.removeAttribute("searchurl");
+        
         return search(search, address);
     }
 

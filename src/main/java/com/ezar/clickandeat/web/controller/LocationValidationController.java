@@ -93,7 +93,8 @@ public class LocationValidationController {
                 updateOrderDeliveryAddress(session,search);
             }
             search.setCuisine(StringUtils.hasText(cuisine)? cuisine: null);
-            request.getSession(true).setAttribute("search", search);
+            session.setAttribute("search", search);
+            session.removeAttribute("searchurl");
             model.put("success",true);
         }
         catch( Exception ex ) {
