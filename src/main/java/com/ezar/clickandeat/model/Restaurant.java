@@ -167,7 +167,7 @@ public class Restaurant extends PersistentObject {
         StringBuilder sb = new StringBuilder("/app/");
         sb.append(MessageFactory.getMessage("url.find-takeaway",false));
         if( address != null && address.getTown() != null )
-            sb.append("-").append(address.getTown());
+            sb.append("-").append(address.getTown().trim());
         if( name != null )
             sb.append("/").append(name.replace(" ","-"));
         if( restaurantId != null )
