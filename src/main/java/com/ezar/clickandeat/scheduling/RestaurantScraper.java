@@ -6,12 +6,8 @@ import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
 import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
 import com.ezar.clickandeat.util.Pair;
+import com.ezar.clickandeat.util.ScrapedNumberProvider;
 import com.ezar.clickandeat.util.Triple;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.log4j.Logger;
 import org.jets3t.service.S3Service;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
@@ -31,12 +27,13 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.mail.internet.MimeMessage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
@@ -60,6 +57,9 @@ public class RestaurantScraper implements InitializingBean {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Autowired
+    private ScrapedNumberProvider scrapedNumberProvider;
+    
     private final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
     
     private final SortedSet<String> postcodes = new TreeSet<String>();
@@ -74,18 +74,46 @@ public class RestaurantScraper implements InitializingBean {
 
     private S3Service s3Service;
 
-    private String defaultCuisine = "Pizza";
-    
+    private String defaultCuisine = "Pizzas";
+
     private String sendTo;
     
     private String from;
 
     private DistributedLock lock;
-
-    private String notificationPhone = null;
-    private String notificationSMS = null;
-    private String notificationEmail = null;
-
+    
+    private Map<String,List<String>> cuisineMappings = new HashMap<String,List<String>>();
+    
+    public RestaurantScraper() {
+        cuisineMappings.put("Americana",Arrays.asList("Americana","Hamburguesas"));
+        cuisineMappings.put("Argentina",Arrays.asList("Argentina"));
+        cuisineMappings.put("Brasileña",Arrays.asList("Brasileña"));
+        cuisineMappings.put("Caribeña",Arrays.asList("Caribeña"));
+        cuisineMappings.put("China",Arrays.asList("China","Asiática"));
+        cuisineMappings.put("Coreana",Arrays.asList("Coreana","Asiática"));
+        cuisineMappings.put("Ecuatoriana",Arrays.asList("Ecuatoriana"));
+        cuisineMappings.put("Española",Arrays.asList("Española","Tradicional"));
+        cuisineMappings.put("Coreana",Arrays.asList("Coreana","Asiática"));
+        cuisineMappings.put("Francesa",Arrays.asList("Internacional","Tradicional"));
+        cuisineMappings.put("Griega",Arrays.asList("Griega","Mediterránea"));
+        cuisineMappings.put("Halal",Arrays.asList("Árabe"));
+        cuisineMappings.put("India",Arrays.asList("India","Asiática"));
+        cuisineMappings.put("Inglesa",Arrays.asList("Internacional"));
+        cuisineMappings.put("Italiana",Arrays.asList("Italiana","Mediterránea","Pizzas"));
+        cuisineMappings.put("Japonesa",Arrays.asList("Japonesa","Asiática","Sushi"));
+        cuisineMappings.put("Kurda",Arrays.asList("Kurda","Kebab"));
+        cuisineMappings.put("Libanesa",Arrays.asList("Libanesa","Árabe"));
+        cuisineMappings.put("Medio Oriental",Arrays.asList("Árabe"));
+        cuisineMappings.put("Mexicana",Arrays.asList("Mexicana"));
+        cuisineMappings.put("Nepalí",Arrays.asList("Nepalí","Asiática"));
+        cuisineMappings.put("Oriental",Arrays.asList("Asiática"));
+        cuisineMappings.put("Paquistaní",Arrays.asList("Paquistaní","Kebab"));
+        cuisineMappings.put("Peruana",Arrays.asList("Peruana"));
+        cuisineMappings.put("Siria",Arrays.asList("Siria","Árabe"));
+        cuisineMappings.put("Tailandesa",Arrays.asList("Tailandesa","Asiática"));
+        cuisineMappings.put("Turca",Arrays.asList("Turca","Kebab"));
+        cuisineMappings.put("Vietnamita",Arrays.asList("Vietnamita","Vietnamita"));
+    }
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -125,13 +153,17 @@ public class RestaurantScraper implements InitializingBean {
                 final List<Restaurant> newRestaurants = new ArrayList<Restaurant>();
                 
                 Map<String,Triple<Set<String>,List<String>,Integer>> detailsByPostcode = new HashMap<String, Triple<Set<String>, List<String>,Integer>>();
-                for( String postcode: postcodes ) {
+                for( String postcode: Arrays.asList("08009") ) {
                     for(Triple<String,String,String> restaurantDetails :getRestaurantDetails(postcode)) {
                         String url = restaurantDetails.first;
                         List<String> cuisines = new ArrayList<String>();
                         List<String> cuisineList = Arrays.asList(StringUtils.delimitedListToStringArray(restaurantDetails.second, ", "));
                         for(String cuisine: cuisineList) {
-                            cuisines.add(cuisine.trim());
+                            List<String> mappedCuisines = cuisineMappings.get(cuisine.trim());
+                            if(mappedCuisines == null) {
+                                mappedCuisines = Arrays.asList(cuisine.trim());
+                            }
+                            cuisines.addAll(mappedCuisines);
                         }
                         Triple<Set<String>,List<String>,Integer> details = detailsByPostcode.get(url);
                         if( details == null ) {
@@ -219,7 +251,7 @@ public class RestaurantScraper implements InitializingBean {
                     @Override
                     public void prepare(MimeMessage mimeMessage) throws Exception {
                         MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                        message.setTo("soporte@llamarycomer.com");
+                        message.setTo("mishimaltd@gmail.com");
                         message.setFrom("noreply@llamarycomer.com");
                         message.setSubject("Restaurant scraper report");
                         StringBuilder sb = new StringBuilder();
@@ -303,7 +335,8 @@ public class RestaurantScraper implements InitializingBean {
         Restaurant restaurant = restaurantRepository.create();
         restaurant.setListOnSite(true);
         restaurant.setPhoneOrdersOnly(false);
-        restaurant.setExternalId( url );
+        restaurant.setTestMode(false);
+        restaurant.setExternalId(url);
         restaurant.setJustEatRating(rating);
         restaurant.setRecommended(rating >= 45);
 
@@ -319,7 +352,8 @@ public class RestaurantScraper implements InitializingBean {
         }
 
         // Get the cuisines
-        restaurant.setCuisines(cuisines);
+        Set<String> distinctCuisines = new HashSet<String>(cuisines);
+        restaurant.setCuisines(new ArrayList<String>(distinctCuisines));
 
         // Get any discount
         Element discountElement = doc.select("p[class=discountSummary]").first();
@@ -370,9 +404,9 @@ public class RestaurantScraper implements InitializingBean {
         NotificationOptions notificationOptions = restaurant.getNotificationOptions();
         notificationOptions.setReceiveNotificationCall(true);
         notificationOptions.setReceiveSMSNotification(true);
-        notificationOptions.setNotificationPhoneNumber(notificationPhone);
-        notificationOptions.setNotificationSMSNumber(notificationSMS);
-        notificationOptions.setNotificationEmailAddress(notificationEmail);
+        notificationOptions.setNotificationEmailAddress(scrapedNumberProvider.getNotificationEmail());
+        notificationOptions.setNotificationPhoneNumber(scrapedNumberProvider.getNotificationPhoneNumber());
+        notificationOptions.setNotificationSMSNumber(scrapedNumberProvider.getNotificationSMSNumber());
 
         // Get opening hours
         Element openingHoursLink = doc.select("a[onclick^=GB_showCenter").first();

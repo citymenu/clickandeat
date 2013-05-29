@@ -339,6 +339,26 @@ public class RestaurantController {
 
 
     @ResponseBody
+    @RequestMapping(value="/admin/restaurants/setLocalOrigin.ajax", method = RequestMethod.POST )
+    public ResponseEntity<byte[]> setLocalOrigin(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
+        Map<String,Object> model = new HashMap<String, Object>();
+
+        try {
+            Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+            restaurant.setExternalId(null);
+            repository.saveRestaurant(restaurant);
+            model.put("success",true);
+        }
+        catch( Exception ex ) {
+            LOGGER.error("",ex);
+            model.put("success",false);
+            model.put("message",ex.getMessage());
+        }
+        return responseEntityUtils.buildResponse(model);
+    }
+
+
+    @ResponseBody
     @RequestMapping(value="/admin/restaurants/load.ajax", method = RequestMethod.POST )
     public ResponseEntity<byte[]> load(@RequestParam(value = "restaurantId") String restaurantId) throws Exception {
 

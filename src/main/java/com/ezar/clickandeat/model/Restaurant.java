@@ -953,4 +953,8 @@ public class Restaurant extends PersistentObject {
     public String getTown() {
         return address == null || address.getTown() == null? null: address.getTown();
     }
+
+    public String getPostcode() {
+        return address == null || address.getPostCode() == null? null: address.getPostCode();
+    }
 }

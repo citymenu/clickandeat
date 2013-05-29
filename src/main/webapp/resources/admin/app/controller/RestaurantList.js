@@ -147,6 +147,13 @@ Ext.define('AD.controller.RestaurantList', {
                     window.open(externalId);
                 }
             });
+            menu.add({
+                text:'Set as Llamarycomer',
+                icon:'../resources/images/icons-shadowless/home.png',
+                handler:function() {
+                    ctrl.setLocalOrigin(restaurantId);
+                }
+            });
         }
 
 	    menu.showAt(e.getXY());
@@ -189,6 +196,43 @@ Ext.define('AD.controller.RestaurantList', {
             fn:function(result) {
                 if(result == 'yes') {
                     this.updateAttribute(restaurantId,'deleted',true);
+                }
+            },
+            scope:this
+        });
+    },
+
+    setLocalOrigin: function(restaurantId) {
+        Ext.MessageBox.show({
+            title:'Set as Llamarycomer',
+            msg:'Are you sure you want to unlink from JustEat?',
+            buttons:Ext.MessageBox.YESNO,
+            icon:Ext.MessageBox.QUESTION,
+            closable:false,
+            fn:function(result) {
+                if(result == 'yes') {
+                    Ext.Ajax.request({
+                        url: ctx + '/admin/restaurants/setLocalOrigin.ajax',
+                        method:'POST',
+                        params: {
+                            restaurantId: restaurantId
+                        },
+                        success: function(response) {
+                            var obj = Ext.decode(response.responseText);
+                            if( obj.success ) {
+                                showSuccessMessage(Ext.get('restaurantlist'),'Updated','Restaurant updated successfully');
+                                var store = Ext.getCmp('restaurantlist').getStore();
+                                store.loadPage(store.currentPage);
+                            } else {
+                                showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+                            }
+                        },
+                        failure: function(response) {
+                            var obj = Ext.decode(response.responseText);
+                            showErrorMessage(Ext.get('restaurantlist'),'Error',obj.message);
+                        },
+                        scope:this
+                    });
                 }
             },
             scope:this

@@ -24,6 +24,7 @@ Ext.define('AD.view.restaurant.List' ,{
             {header:'ID', dataIndex:'restaurantId',flex:.1,filter:{type:'string'}},
             {header:'Name', dataIndex:'name',flex:.1,filter:{type:'string'}},
             {header:'Town', dataIndex:'town',flex:.1,filterable:false},
+            {header:'Postcode', dataIndex:'postcode',flex:.1,filterable:false},
             {header:'Recommended', dataIndex:'recommended', renderer:booleanToString, type:'boolean',flex:.1,filter:{type:'boolean'}},
             {header:'List on site', dataIndex:'listOnSite', renderer:booleanToString, flex:.1,filter:{type:'boolean'}},
             {header:'Content approved', dataIndex:'contentApproved', renderer:booleanToString, flex:.1,filter:{type:'boolean'}},

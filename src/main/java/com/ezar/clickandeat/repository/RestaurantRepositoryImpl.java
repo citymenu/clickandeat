@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.repository;
 
 import com.ezar.clickandeat.cache.ClusteredCache;
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.util.FilterUtils;
@@ -28,6 +29,7 @@ import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.repository.query.QueryUtils;
 import org.springframework.util.StringUtils;
 
+import java.text.Collator;
 import java.util.*;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -274,7 +276,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
         // Return values
         List<Restaurant> restaurants = new ArrayList<Restaurant>();
-        SortedMap<String,Integer> cuisineCount = new TreeMap<String, Integer>();
+        SortedMap<String,Integer> cuisineCount = new TreeMap<String, Integer>(new CuisineComparator());
 
         // Build the query including location if set
         GeoLocation geoLocation = search.getLocation();
@@ -316,6 +318,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             else {
                 int count = ((Double)values.get("count")).intValue();
                 cuisineCount.put(valueObject.getId(), count);
+
             }
         }
 
@@ -372,4 +375,24 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public void setUsecache(boolean usecache) {
         this.usecache = usecache;
     }
+
+
+    /**
+     * Locale-specific comparator
+     */
+
+    private static final class CuisineComparator implements Comparator<String> {
+
+        private final Collator collator = Collator.getInstance(MessageFactory.getLocale());
+                
+        public CuisineComparator() {
+            collator.setStrength(Collator.SECONDARY);            
+        }
+        
+        @Override
+        public int compare(String o1, String o2) {
+            return collator.compare(o1,o2);
+        }
+    }
+    
 }
