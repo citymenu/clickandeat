@@ -15,18 +15,16 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.geo.Metrics;
-import org.springframework.data.mongodb.core.geo.Point;
 import org.springframework.data.mongodb.core.index.GeospatialIndex;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceOptions;
 import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
-import org.springframework.data.mongodb.core.query.*;
-import org.springframework.data.mongodb.core.query.Order;
-import org.springframework.data.mongodb.repository.query.QueryUtils;
+import org.springframework.data.mongodb.core.query.BasicUpdate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.util.StringUtils;
 
 import java.text.Collator;
@@ -43,7 +41,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private static final int MAX_RECOMMENDATIONS = 9;
     
-    private static final int REFRESH_TIMEOUT = 1000 * 60 * 15; // Refresh recommendations list every 15 minutes
+    private static final int REFRESH_TIMEOUT = 1000 * 60 * 60; // Refresh recommendations list every hour
     
     
     @Autowired
@@ -60,17 +58,22 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
 
     private double maxDistance;
 
-    private long lastRefreshed = 0l;    
-
     private boolean usecache = true;
 
     private List<Restaurant> recommendations;
     
+    private final Timer timer = new Timer(true);
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
         operations.indexOps(Restaurant.class).ensureIndex(new GeospatialIndex("address.location"));
-        getRecommended();
+        updateRecommendations();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                updateRecommendations();
+            }
+        },REFRESH_TIMEOUT,REFRESH_TIMEOUT);
     }
      
 
@@ -96,59 +99,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
-    public synchronized List<Restaurant> getRecommended() {
-        long now = System.currentTimeMillis();
-        if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
-            LOGGER.info("Loading recommended restaurants");
-            Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
-                    .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
-            query.fields().exclude("menu").exclude("openingTimes");
-            List<Restaurant> restaurants = operations.find(query,Restaurant.class);
-            if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
-                if( restaurants.size() % 3 != 0 ) {
-                    recommendations = restaurants.subList(0,restaurants.size() - restaurants.size() % 3 ); // Must be a multiple of 3
-                }
-                else {
-                    recommendations = restaurants;
-                }
-            }
-            else {
-                List<Restaurant> candidates = new ArrayList<Restaurant>();
-                // Add more instances of a restaurant depending on search ranking (0 - 100)
-                for( Restaurant restaurant: restaurants ) {
-                    int rankCount = restaurant.getSearchRanking() / 9 + 1; // 1 to 10
-                    for( int j = 0; j <= rankCount; j++ ) {
-                        candidates.add(restaurant);
-                    }
-                }
-                List<Restaurant> randomList = new ArrayList<Restaurant>();
-                Random random = new Random();
-                while (randomList.size() < MAX_RECOMMENDATIONS ) {
-                    int nextIndex = random.nextInt(candidates.size());
-                    Restaurant candidate = candidates.get(nextIndex);
-                    if( !randomList.contains(candidate)) {
-                        randomList.add(candidate);
-                    }
-                }
-                Collections.sort(randomList, new Comparator<Restaurant>() {
-                    public int compare(Restaurant r1, Restaurant r2) {
-                        int rankingDifference = r1.getSearchRanking() - r2.getSearchRanking();
-                        if( rankingDifference == 0 ) {
-                            return r1.getCreated().compareTo(r2.getCreated());
-                        }
-                        else if( rankingDifference < 0 ) {
-                            return 1;
-                        }
-                        else {
-                            return -1;
-                        }
-                    }
-                });
-                recommendations = randomList;
-            }
-            lastRefreshed = now;
-            LOGGER.info("Finished loading recommended restaurants");
-        }
+    public List<Restaurant> getRecommended() {
         return recommendations;
     }
 
@@ -381,6 +332,62 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
 
+    /**
+     * Loads recommended restaurants
+     */
+    
+    private void updateRecommendations() {
+        LOGGER.info("Loading recommended restaurants");
+        Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
+                .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
+        query.fields().exclude("menu").exclude("openingTimes");
+        List<Restaurant> restaurants = operations.find(query,Restaurant.class);
+        if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
+            if( restaurants.size() % 3 != 0 ) {
+                recommendations = restaurants.subList(0,restaurants.size() - restaurants.size() % 3 ); // Must be a multiple of 3
+            }
+            else {
+                recommendations = restaurants;
+            }
+        }
+        else {
+            List<Restaurant> candidates = new ArrayList<Restaurant>();
+            // Add more instances of a restaurant depending on search ranking (0 - 100)
+            for( Restaurant restaurant: restaurants ) {
+                int rankCount = restaurant.getSearchRanking() / 9 + 1; // 1 to 10
+                for( int j = 0; j <= rankCount; j++ ) {
+                    candidates.add(restaurant);
+                }
+            }
+            List<Restaurant> randomList = new ArrayList<Restaurant>();
+            Random random = new Random();
+            while (randomList.size() < MAX_RECOMMENDATIONS ) {
+                int nextIndex = random.nextInt(candidates.size());
+                Restaurant candidate = candidates.get(nextIndex);
+                if( !randomList.contains(candidate)) {
+                    randomList.add(candidate);
+                }
+            }
+            Collections.sort(randomList, new Comparator<Restaurant>() {
+                public int compare(Restaurant r1, Restaurant r2) {
+                    int rankingDifference = r1.getSearchRanking() - r2.getSearchRanking();
+                    if( rankingDifference == 0 ) {
+                        return r1.getCreated().compareTo(r2.getCreated());
+                    }
+                    else if( rankingDifference < 0 ) {
+                        return 1;
+                    }
+                    else {
+                        return -1;
+                    }
+                }
+            });
+            recommendations = randomList;
+        }
+        LOGGER.info("Finished loading recommended restaurants");
+    }
+
+    
     /**
      * Locale-specific comparator
      */

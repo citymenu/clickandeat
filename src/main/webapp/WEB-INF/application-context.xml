@@ -86,7 +86,8 @@
           <mongo:options connections-per-host="40"
                          auto-connect-retry="true"
                          socket-keep-alive="true"
-                         socket-timeout="60000"/>
+                         max-wait-time="20000"
+                         connect-timeout="20000"/>
     </mongo:mongo>
 
 	<!-- Mongo db factory -->
