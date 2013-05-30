@@ -153,7 +153,7 @@ public class RestaurantScraper implements InitializingBean {
                 final List<Restaurant> newRestaurants = new ArrayList<Restaurant>();
                 
                 Map<String,Triple<Set<String>,List<String>,Integer>> detailsByPostcode = new HashMap<String, Triple<Set<String>, List<String>,Integer>>();
-                for( String postcode: Arrays.asList("08009") ) {
+                for( String postcode: postcodes ) {
                     for(Triple<String,String,String> restaurantDetails :getRestaurantDetails(postcode)) {
                         String url = restaurantDetails.first;
                         List<String> cuisines = new ArrayList<String>();
@@ -251,7 +251,7 @@ public class RestaurantScraper implements InitializingBean {
                     @Override
                     public void prepare(MimeMessage mimeMessage) throws Exception {
                         MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-                        message.setTo("mishimaltd@gmail.com");
+                        message.setTo("soporte@llamarycomer.com");
                         message.setFrom("noreply@llamarycomer.com");
                         message.setSubject("Restaurant scraper report");
                         StringBuilder sb = new StringBuilder();
