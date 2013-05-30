@@ -18,7 +18,7 @@
         </div>
     </div>
 </div>
-<div class="no-results-wrapper" id="registered">
+<div class="no-results-wrapper" id="registered" style="display:none">
     <div class="registration-content-wrapper">
         <div class="registration-content">
             <h2><message:message key="registration.thank-you-for-registering"/></h2>
