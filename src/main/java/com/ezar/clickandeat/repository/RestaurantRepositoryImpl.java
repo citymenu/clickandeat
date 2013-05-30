@@ -95,7 +95,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
-    public synchronized List<Restaurant> getRecommended() {
+    public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
             LOGGER.info("Loading recommended restaurants");
