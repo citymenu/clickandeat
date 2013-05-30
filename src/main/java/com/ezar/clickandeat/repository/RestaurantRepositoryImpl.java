@@ -95,12 +95,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     }
 
     @Override
-    public List<Restaurant> getRecommended() {
+    public synchronized List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
             LOGGER.info("Loading recommended restaurants");
             Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
-                    .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
+                    .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true))).limit(MAX_RECOMMENDATIONS);
             List<Restaurant> restaurants = operations.find(query,Restaurant.class);
             if( restaurants.size() <= MAX_RECOMMENDATIONS ) {
                 if( restaurants.size() % 3 != 0 ) {
