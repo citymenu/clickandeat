@@ -3,6 +3,7 @@ package com.ezar.clickandeat.util;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
@@ -16,6 +17,8 @@ import java.util.*;
 @Component
 public class CuisineProvider implements InitializingBean {
 
+    private static final Logger LOGGER = Logger.getLogger(CuisineProvider.class);
+    
     @Autowired
     private RestaurantRepository restaurantRepository;
     
@@ -51,6 +54,7 @@ public class CuisineProvider implements InitializingBean {
             }
             cuisineLocationsFull.put(locationPair, cuisinesPairList);
         }
+        LOGGER.info("Loaded all cuisines into memory");
     }
 
     

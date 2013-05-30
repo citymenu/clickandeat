@@ -98,6 +98,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     public List<Restaurant> getRecommended() {
         long now = System.currentTimeMillis();
         if( recommendations == null || now > lastRefreshed + REFRESH_TIMEOUT ) {
+            LOGGER.info("Loading recommended restaurants");
             Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
                     .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
             List<Restaurant> restaurants = operations.find(query,Restaurant.class);
@@ -144,6 +145,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
                 recommendations = randomList;
             }
             lastRefreshed = now;
+            LOGGER.info("Finished loading recommended restaurants");
         }
         return recommendations;
     }
