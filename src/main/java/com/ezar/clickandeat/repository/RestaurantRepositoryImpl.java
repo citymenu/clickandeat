@@ -225,6 +225,8 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     @Override
     public Pair<List<Restaurant>,SortedMap<String,Integer>> search(Search search) {
 
+        long start = System.currentTimeMillis();
+
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Looking up restaurants serving matching search: " + search);
         }
@@ -277,6 +279,11 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
             }
         }
 
+        long duration = System.currentTimeMillis() - start;
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Search took: " + duration + "ms");
+        }
+        
         // Return the results
         return new Pair<List<Restaurant>, SortedMap<String, Integer>>(restaurants, cuisineCount);
 
