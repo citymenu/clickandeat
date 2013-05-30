@@ -151,7 +151,13 @@ public class Restaurant extends PersistentObject {
         sb.append(" | Llamarycomer.com");
         String title = sb.toString();
         if( title.length() > 70 ) {
-            return name + " | Llamarycomer.com";
+            title = name + " | " + MessageFactory.formatMessage("page.order-online",false) + " | Llamarycomer.com";
+            if( title.length() > 70 ) {
+                return name + " | Llamarycomer.com";
+            }
+            else {
+                return title;
+            }
         }
         else {
             return title;
