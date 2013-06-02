@@ -12,13 +12,13 @@
 <c:set var="user" value="${pageContext.request.remoteUser}"/>
 <locale:locale/>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="<locale:language/>">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><html lang="<locale:language/>">
 
 <head>
-    <meta charset="utf-8"/>
-    <meta name="robots" content="all" />
-    <meta http-equiv="expires" content="0"/>
-    <meta name="viewport" content="width=1050"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="robots" content="all">
+    <meta http-equiv="expires" content="0">
+    <meta name="viewport" content="width=1050">
     <%@ include file="/WEB-INF/jsp/taglibs_js.jsp" %>
 	<link rel="shortcut icon" href="${resources}/images/favicon.png">
 
@@ -27,12 +27,12 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css"/>
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css"/>
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/header.css"/>
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/content.css"/>
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/footer.css"/>
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/dialog.css"/>
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css">
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css">
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/header.css">
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/content.css">
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/footer.css">
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/dialog.css">
 
     <!-- JQuery -->
     <script type="text/javascript" src="${resources}/jquery/script/jquery-1.8.2.min.js" charset="utf-8"></script>
@@ -40,7 +40,7 @@
     <script type="text/javascript" src="${resources}/jquery/script/jquery.scrollto.js" charset="utf-8"></script>
 
     <!-- Fancybox -->
-    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" charset="utf-8"/>
+    <link rel="stylesheet" href="${resources}/fancybox/source/jquery.fancybox.css" type="text/css" media="screen" charset="utf-8">
     <script type="text/javascript" src="${resources}/fancybox/source/jquery.fancybox.js" charset="utf-8"></script>
 
     <!-- Watermark -->
@@ -54,7 +54,7 @@
     <script type="text/javascript" src="${resources}/script/tools.js" charset="utf-8"></script>
 
     <!-- CSS Overrides -->
-    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/overrides.css"/>
+    <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/overrides.css">
 
     <!-- Apply fancybox -->
     <script type="text/javascript">
@@ -67,25 +67,23 @@
 
     <title><decorator:title/></title>
 
+    <!-- Zendesk -->
+    <script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.5/zenbox.js" charset="utf-8"></script>
+    <style type="text/css" media="screen, projection">
+      @import url(//assets.zendesk.com/external/zenbox/v2.5/zenbox.css);
+      @import url(${resources}/css/zenbox_override.css);
+    </style>
+    <script type="text/javascript">
+      if (typeof(Zenbox) !== "undefined") {
+        Zenbox.init({
+          dropboxID:   "20117406",
+          url:         "https://llamarycomer.zendesk.com",
+          hide_tab: true
+        });
+      }
+    </script>
+
 </head>
-
-<body>
-
-<!-- Zendesk -->
-<script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.5/zenbox.js" charset="utf-8"></script>
-<style type="text/css" media="screen, projection">
-  @import url(//assets.zendesk.com/external/zenbox/v2.5/zenbox.css);
-  @import url(${resources}/css/zenbox_override.css);
-</style>
-<script type="text/javascript">
-  if (typeof(Zenbox) !== "undefined") {
-    Zenbox.init({
-      dropboxID:   "20117406",
-      url:         "https://llamarycomer.zendesk.com",
-      hide_tab: true
-    });
-  }
-</script>
 
 <body>
     <div id="wrapper">

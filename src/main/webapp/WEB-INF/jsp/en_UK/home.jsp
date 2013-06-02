@@ -10,10 +10,10 @@
     <title>LlamaryComer | Order Takeaway Food Online - London</title>
     <meta name="description" content="Llamar y Comer is the easiest way to order delivery and takeout. A variety of restaurants at your disposal"/>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8">
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&amp;libraries=places&amp;language=<locale:language/>&amp;sensor=false"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.ui-1.9.2-min.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.carousel.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
@@ -29,7 +29,7 @@
     <!-- SEO entry point -->
     <div style="display:none">
         <c:forEach var="location" items="${locationprimary}">
-            <a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Takeaway in ${location.second}</a></p>
+            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Takeaway in ${location.second}</a></div>
         </c:forEach>
     </div>
 
@@ -173,7 +173,7 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>">
                                 </td>
                                 <td width="212">
                                     <c:if test="${restaurant.hasDiscounts == false}">
@@ -206,7 +206,7 @@
                                             <c:if test="${deliveryOptions.allowDeliveryBelowMinimumForFreeDelivery == false}">
                                                 <span>
                                                     <message:message key="restaurant.free-delivery-short" escape="false"/>
-                                                    (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/>)
+                                                    (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/><span>)
                                                 </span>
                                             </c:if>
                                         </c:if>

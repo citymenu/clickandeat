@@ -5,7 +5,7 @@
 <!doctype html>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/workflow.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/workflow.css" charset="utf-8">
     <title>LlamaryComer | <message:message key="workflow.order-confirmation"/></title>
 </head>
 

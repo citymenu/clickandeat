@@ -7,7 +7,7 @@
 <head>
     <meta name="description" content="${restaurant.metaDescription}">
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&amp;libraries=places&amp;language=<locale:language/>&amp;sensor=false"></script>
 
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/restaurant.js" charset="utf-8"></script>
@@ -15,8 +15,8 @@
     <script type="text/javascript">var restaurantId='${restaurant.restaurantId}';</script>
     <script type="text/javascript">var restaurantName='<util:escape value="${restaurant.name}" escapeComments="true"/>';</script>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/restaurant.css" charset="utf-8">
 
     <title>${restaurant.pageTitle}</title>
 
@@ -47,7 +47,7 @@
                                         <table width="100%">
                                             <tr valign="bottom">
                                                 <td nowrap style="vertical-align:top">
-                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>" class="restaurant-image"/>
+                                                    <img src="${resources}/images/restaurant/${restaurant.imageName}" alt="<util:escape value="${restaurant.name}"/>" class="restaurant-image">
                                                 </td>
                                                 <td width="100%">
                                                     <div class="restaurant-title">
@@ -158,7 +158,7 @@
                                     </td>
                                     <td width="212">
                                         <div class="restaurant-location-wrapper">
-                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&zoom=15&size=210x115&markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&maptype=roadmap&sensor=false"/ width="210" height="115">
+                                            <img class="google-map" src="http://maps.googleapis.com/maps/api/staticmap?center=${restaurant.coordinates}&amp;zoom=15&amp;size=210x115&amp;markers=color:green%7Clabel:B%7C${restaurant.longitude},${restaurant.latitude}&amp;maptype=roadmap&amp;sensor=false" width="210" height="115">
                                             <div class="restaurant-details">
                                                 <util:escape value="${restaurant.address.summary}"/>
                                                 <div class="restaurant-location-link">

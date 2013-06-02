@@ -5,11 +5,11 @@
 <!doctype html>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/callnow.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/ordersummary.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/callnow.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/ordersummary.css" charset="utf-8">
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&amp;language=<locale:language/>&amp;sensor=false"></script>
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/validation.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/validation/validators_${systemLocale}.js" charset="utf-8"></script>

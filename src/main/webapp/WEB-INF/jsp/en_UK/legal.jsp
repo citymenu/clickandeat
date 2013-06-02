@@ -5,7 +5,7 @@
 <!doctype html>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/static.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/static.css" charset="utf-8">
 </head>
 
 <body>

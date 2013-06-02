@@ -5,8 +5,8 @@
 <!doctype html>
 
 <head>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/orders.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/payment.css" charset="utf-8">
 
     <script type="text/javascript" src="${resources}/script/orders.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/payment.js" charset="utf-8"></script>

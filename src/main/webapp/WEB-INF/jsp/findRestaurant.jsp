@@ -5,13 +5,13 @@
 <!doctype html>
 
 <head>
-    <meta name="description" content="${search.description}"/>
+    <meta name="description" content="${search.description}">
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&amp;libraries=places&amp;language=<locale:language/>&amp;sensor=false"></script>
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/content.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/findrestaurant.css" charset="utf-8">
 
     <script type="text/javascript" src="${resources}/script/findrestaurant.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/googlemap.js" charset="utf-8"></script>
@@ -70,10 +70,10 @@
                                         <div class="filter-cuisine">
                                             <c:choose>
                                                 <c:when test="${cuisine == ''}">
-                                                    <label><input type="radio" name="cuisine" value="" class="search-checkbox" checked/><span class="cuisine-title selectedcuisine"><message:message key="search.all"/></span></label>
+                                                    <label><input type="radio" name="cuisine" value="" class="search-checkbox" checked><span class="cuisine-title selectedcuisine"><message:message key="search.all"/></span></label>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <label><input type="radio" name="cuisine" value="" class="search-checkbox"/><span class="cuisine-title"><message:message key="search.all"/></span></label>
+                                                    <label><input type="radio" name="cuisine" value="" class="search-checkbox"><span class="cuisine-title"><message:message key="search.all"/></span></label>
                                                 </c:otherwise>
                                             </c:choose>
                                         </div>
@@ -81,10 +81,10 @@
                                             <div class="filter-cuisine">
                                                 <c:choose>
                                                     <c:when test="${entry.key == cuisine}">
-                                                        <label><input type="radio" name="cuisine" value="${entry.key}" class="search-checkbox" checked/><span class="cuisine-title selectedcuisine">${entry.key} (${entry.value})</span></label>
+                                                        <label><input type="radio" name="cuisine" value="${entry.key}" class="search-checkbox" checked><span class="cuisine-title selectedcuisine">${entry.key} (${entry.value})</span></label>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <label><input type="radio" name="cuisine" value="${entry.key}" class="search-checkbox"/><span class="cuisine-title">${entry.key} (${entry.value})</span></label>
+                                                        <label><input type="radio" name="cuisine" value="${entry.key}" class="search-checkbox"><span class="cuisine-title">${entry.key} (${entry.value})</span></label>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </div>
@@ -139,7 +139,7 @@
                                                     <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
                                                 </c:if>
                                                 <div class="restaurant-image">
-                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>">
                                                 </div>
                                             </td>
                                             <td width="185">

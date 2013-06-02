@@ -8,13 +8,13 @@
 
 <head>
     <title>Comida a domicilio | Restaurantes on line en Llamarycomer.com</title>
-    <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición" />
-    <meta http-equiv="Content-Language" content="es"/>
+    <meta name="description" content="Llamar y Comer es la manera más fácil de pedir comida a domicilio y para llevar. Una gran variedad de restaurantes a tu disposición">
+    <meta http-equiv="Content-Language" content="es">
 
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8"/>
-    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/speechbubble.css" charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="all" href="${resources}/css/home.css" charset="utf-8">
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&libraries=places&language=<locale:language/>&sensor=false"></script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBV3hoZjKpsmV0HYAICzvct4rIwSIG2I-8&amp;libraries=places&amp;language=<locale:language/>&amp;sensor=false"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.ui-1.9.2-min.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/jquery/script/jquery.carousel.js" charset="utf-8"></script>
     <script type="text/javascript" src="${resources}/script/home.js" charset="utf-8"></script>
@@ -32,7 +32,7 @@
     <!-- SEO entry point -->
     <div style="display:none">
         <c:forEach var="location" items="${locationprimary}">
-            <a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Comida domicilio en ${location.second}</a></p>
+            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Comida domicilio en ${location.second}</a></div>
         </c:forEach>
     </div>
 
@@ -125,7 +125,7 @@
                                     <tr valign="middle">
                                         <td width="302">
                                             <div class="location-input">
-                                                <input class="location" type="text" id="loc" value="${address}" placeholder=""/>
+                                                <input class="location" type="text" id="loc" value="${address}" placeholder="">
                                             </div>
                                         </td>
                                         <td width="104">
@@ -137,13 +137,13 @@
                                 </table>
                             </div>
                             <div class="searchbartext">
-                                O entra directamente en: <a class="location" href="${ctx}/app/comida-domicilio-madrid/loc/madrid"/>Madrid</a> / <a class="location" href="${ctx}/app/comida-domicilio-barcelona/loc/barcelona"/>Barcelona</a>
+                                O entra directamente en: <a class="location" href="${ctx}/app/comida-domicilio-madrid/loc/madrid">Madrid</a> / <a class="location" href="${ctx}/app/comida-domicilio-barcelona/loc/barcelona">Barcelona</a>
                             </div>
                         </div>
                         <div id="searchbarright">
                             <div class="searchbarinfo">
-                                <h2>más de 1000 restaurantes para elegir<h2>
-                                <h2>es muy fácil pedir online<h2>
+                                <h2>más de 1000 restaurantes para elegir</h2>
+                                <h2>es muy fácil pedir online</h2>
                                 <h2>servicio a domicilio "en menos de" 45 minutos</h2>
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                             <tr valign="top">
                                 <td width="78" align="left">
                                     <a href="${restaurant.url}" class="inherit">
-                                        <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>"/>
+                                        <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>">
                                     </a>
                                 </td>
                                 <td width="212">
@@ -211,7 +211,7 @@
                                             <c:if test="${deliveryOptions.allowDeliveryBelowMinimumForFreeDelivery == false}">
                                                 <span>
                                                     <message:message key="restaurant.free-delivery-short" escape="false"/>
-                                                    (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/>)
+                                                    (<message:message key="restaurant.minimum-delivery-order-short" escape="false"/> ${deliveryOptions.formattedMinimumOrderForFreeDelivery} <span class="euro"><message:message key="config.currency" escape="false"/></span>)
                                                 </span>
                                             </c:if>
                                         </c:if>
