@@ -109,10 +109,10 @@
                                 <div class="search-results-header">
                                     <c:choose>
                                         <c:when test="${search.cuisine == null}">
-                                            <h1 class="search-location-results"><message:message key="search.restaurants-serving-your-location"/> ${search.addressSummary}.</h1>
+                                            <h2 class="search-location-results"><message:message key="search.restaurants-serving-your-location"/> ${search.addressSummary}.</h1>
                                         </c:when>
                                         <c:otherwise>
-                                            <h1 class="search-location-results">${search.cuisine} <message:message key="search.restaurants-serving-your-location-lower"/> ${search.addressSummary}.</h1>                                        </c:otherwise>
+                                            <h2 class="search-location-results">${search.cuisine} <message:message key="search.restaurants-serving-your-location-lower"/> ${search.addressSummary}.</h1>                                        </c:otherwise>
                                     </c:choose>
                                 </div>
                             </c:otherwise>
