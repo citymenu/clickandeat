@@ -23,7 +23,7 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
-        <h1><strong>${search}</strong></h1>
+        <h1><strong><bold>${search.description}</bold></strong></h1>
     </div>
 
     <!-- SEO secondary entry point -->
