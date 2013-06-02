@@ -67,6 +67,10 @@
 
     <title><decorator:title/></title>
 
+</head>
+
+<body>
+
     <!-- Zendesk -->
     <script type="text/javascript" src="//assets.zendesk.com/external/zenbox/v2.5/zenbox.js" charset="utf-8"></script>
     <style type="text/css" media="screen, projection">
@@ -83,9 +87,6 @@
       }
     </script>
 
-</head>
-
-<body>
     <div id="wrapper">
         <div id="wrap">
             <div id="wrap-in">
