@@ -25,6 +25,14 @@
 
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
+
+    <!-- SEO entry point -->
+    <div style="display:none">
+        <c:forEach var="location" items="${locationprimary}">
+            <a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Takeaway in ${location.second}</a></p>
+        </c:forEach>
+    </div>
+
     <div id="banner">
         <div id="banner-wrap">
         <div id="banner-outer">
@@ -226,7 +234,6 @@
                     </c:forEach>
                 </div>
             </div>
-
         </div>
     </div>
 </body>

@@ -11,6 +11,7 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ResponseEntityUtils;
+import com.ezar.clickandeat.util.StringUtil;
 import com.ezar.clickandeat.web.controller.helper.RestaurantSearchComparator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,9 +60,6 @@ public class RestaurantSearchController {
                 geoLocation = geoLocationService.getLocation(address);
                 if( geoLocation == null ) {
                     LOGGER.warn("Could not resolve location for address: " + address);
-                    Map<String,Object> model = new HashMap<String, Object>();
-                    model.put("address", address);
-                    model.put("notfound",true);
                     return new ModelAndView("redirect:/home.html");
                 }
             }
@@ -101,7 +99,7 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
     public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
-        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocationsFull().keySet()) {
+        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocations().keySet()) {
             if(locationPair.first.equalsIgnoreCase(address)) {
                 return searchByLocationAndCuisine(request,locationPair.second,null);        
             }
@@ -112,7 +110,7 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/csn/{cuisine}/{address}", method = RequestMethod.GET)
     public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine, @PathVariable("address") String address ) {
-        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocationsFull().entrySet()) {
+        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocations().entrySet()) {
             Pair<String,String> locationPair = entry.getKey();
             if( locationPair.first.equalsIgnoreCase(address)) {
                 for( Pair<String,String> cuisinePair: entry.getValue()) {
@@ -174,12 +172,27 @@ public class RestaurantSearchController {
         SortedSet<Restaurant> results = new TreeSet<Restaurant>(new RestaurantSearchComparator());
         results.addAll(pair.first);
 
+        // Build direct links to all cuisines at this location
+        List<Pair<String,String>> cuisineLinks = new ArrayList<Pair<String, String>>();
+        for(String cuisine: pair.second.keySet()) {
+            String escapedCuisine = StringUtil.normalise(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+            cuisineLinks.add(new Pair<String, String>(escapedCuisine,cuisine));
+        }
+        String escapedAddress = StringUtil.normalise(address).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+        Pair<String,String> locationLinks = new Pair<String, String>(escapedAddress, address);
+
         Map<String,Object> model = new HashMap<String, Object>();
         model.put("address",address == null? "": address);
         model.put("cuisine",search.getCuisine() == null? "": search.getCuisine());
         model.put("results",results);
         model.put("count",results.size());
         model.put("cuisineCount",pair.second);
+
+        model.put("cuisineLinks",cuisineLinks);
+        model.put("locationLinks",locationLinks);
+
+        // Add any secondary key links
+        model.put("secondarylinks",cuisineProvider.getMappedLocations(locationLinks));
 
         // Put the system locale on the response
         return new ModelAndView("findRestaurant",model);

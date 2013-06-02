@@ -2,14 +2,10 @@ package com.ezar.clickandeat.util;
 
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.repository.RestaurantRepository;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -19,45 +15,102 @@ public class CuisineProvider implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(CuisineProvider.class);
     
+    private static final int LOCATION_LINK_SIZE = 25;
+
+    
     @Autowired
     private RestaurantRepository restaurantRepository;
-    
+
     private SortedSet<String> cuisineList = new TreeSet<String>();
 
+    private List<Pair<String,String>> locations = new ArrayList<Pair<String, String>>();
+    
     private Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocations = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
 
-    private Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocationsFull = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
-
+    private SortedSet<Pair<String,String>> locationPrimary = new TreeSet<Pair<String,String>>(new LocationNameComparator());
+    
+    private Map<Pair<String,String>,List<Pair<String,String>>> locationSecondary = new HashMap<Pair<String,String>, List<Pair<String,String>>>();
+    
     
     @Override
     public void afterPropertiesSet() throws Exception {
-        
-        String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
-        List<String> cuisinesLocations = Arrays.asList(StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.footerLocations", false)));
-        Collections.addAll(cuisineList, cuisines);
-        
-        Map<String,List<String>> cuisinesByLocation = restaurantRepository.getCuisinesByLocation();
 
+        String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
+        Collections.addAll(cuisineList, cuisines);
+
+        Map<String,List<String>> cuisinesByLocation = restaurantRepository.getCuisinesByLocation();
+        SortedSet<Pair<String,String>> locationNames = new TreeSet<Pair<String,String>>(new LocationNameComparator());
+
+        // Extract top locations for footer list
+        Map<String,Integer> locationCount = restaurantRepository.getRestaurantLocationCount();
+        SortedSet<Pair<String,Integer>> locationsByCount = new TreeSet<Pair<String, Integer>>(new LocationCountComparator());
+        for( Map.Entry<String,Integer> entry: locationCount.entrySet()) {
+            locationsByCount.add(new Pair<String, Integer>(entry.getKey(), entry.getValue()));
+        }
+        int locationIndex = 0;
+        for(Pair<String,Integer> count: locationsByCount) {
+            if(locationIndex >= LOCATION_LINK_SIZE) {
+                break;
+            }
+            String location = count.first;
+            String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+            locations.add(new Pair<String, String>(escapedLocation,location));
+            locationIndex++;
+        }
+
+        // Extract all cuisines for major links
         for( Map.Entry<String,List<String>> entry: cuisinesByLocation.entrySet()) {
             String location = entry.getKey();
-            String escapedLocation = StringEscapeUtils.escapeJavaScript(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
             List<String> cuisineList = entry.getValue();
+            String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+            locationNames.add(new Pair<String, String>(escapedLocation,location));
             Pair<String,String> locationPair = new Pair<String, String>(escapedLocation,location);
             List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
             for( String cuisine: cuisineList ) {
-                String escapedCuisine = StringEscapeUtils.escapeJavaScript(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+                String escapedCuisine = StringUtil.normalise(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
                 Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
                 cuisinesPairList.add(cuisinePair);
             }
-            if( cuisinesLocations.contains(locationPair.second)) {
-                cuisineLocations.put(locationPair, cuisinesPairList);
-            }
-            cuisineLocationsFull.put(locationPair, cuisinesPairList);
+            cuisineLocations.put(locationPair,cuisinesPairList);
         }
+        
+        // Push all cuisines into the secondary links table
+        List<Pair<String,String>> locationNamesList = new ArrayList<Pair<String, String>>();
+        locationNamesList.addAll(locationNames);
+        int index = 0;
+        while(index < locationNamesList.size()) {
+            List<Pair<String,String>> sublist = locationNamesList.subList(index,Math.min(index + LOCATION_LINK_SIZE, locationNames.size() -1 ));
+            locationSecondary.put(sublist.get(0),sublist);
+            index += LOCATION_LINK_SIZE;
+        }
+        
+        // Now consolidate into the primary links table
+        locationPrimary.clear();
+        locationPrimary.addAll(locationSecondary.keySet());
+
         LOGGER.info("Loaded all cuisines into memory");
     }
 
+
+    /**
+     * @param locationPair
+     * @return
+     */
+
+    public List<Pair<String,String>> getMappedLocations(Pair<String,String> locationPair) {
+        List<Pair<String,String>> locations = locationSecondary.get(locationPair);
+        return locations == null? new ArrayList<Pair<String, String>>(): locations;
+    }
+
     
+    public SortedSet<Pair<String, String>> getLocationPrimary() {
+        return locationPrimary;
+    }
+
+    public List<Pair<String, String>> getLocations() {
+        return locations;
+    }
+
     public SortedSet<String> getCuisineList() {
         return cuisineList;
     }
@@ -65,8 +118,19 @@ public class CuisineProvider implements InitializingBean {
     public Map<Pair<String, String>, List<Pair<String, String>>> getCuisineLocations() {
         return cuisineLocations;
     }
-
-    public Map<Pair<String, String>, List<Pair<String, String>>> getCuisineLocationsFull() {
-        return cuisineLocationsFull;
+    
+    
+    private static final class LocationCountComparator implements Comparator<Pair<String,Integer>> {
+        public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
+            return o2.second - o1.second;
+        }
     }
+
+
+    private static final class LocationNameComparator implements Comparator<Pair<String,String>> {
+        public int compare(Pair<String, String> o1, Pair<String, String> o2) {
+            return o1.first.compareTo(o2.first);
+        }
+    }
+
 }

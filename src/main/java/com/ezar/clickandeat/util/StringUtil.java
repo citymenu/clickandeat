@@ -2,6 +2,8 @@ package com.ezar.clickandeat.util;
 
 import org.springframework.util.StringUtils;
 
+import java.text.Normalizer;
+
 public class StringUtil {
 
 
@@ -45,6 +47,12 @@ public class StringUtil {
         in = in.replace("\n","<br>");
         in = in.replace(" ","_");
         return in;
+    }
+    
+    public static String normalise(String in) {
+        String normalised = Normalizer.normalize(in, Normalizer.Form.NFD);
+        normalised = normalised.replaceAll("[^\\p{ASCII}]", "");
+        return normalised;
     }
     
 }

@@ -25,6 +25,21 @@
     <div style="display:none">
         <h1><strong>${search}</strong></h1>
     </div>
+
+    <!-- SEO secondary entry point -->
+    <div style="display:none">
+        <c:forEach var="location" items="${secondarylinks}">
+            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Comida domicilio en ${location.second}</a></div>
+        </c:forEach>
+    </div>
+
+    <!-- Cuisines -->
+    <div style="display:none">
+        <c:forEach var="cuisine" items="${cuisineLinks}">
+            <div><a href="${ctx}/app/comida-${cuisine.first}-domicilio-${locationLinks.first}/csn/${cuisine.first}/${locationLinks.first}">Comida ${cuisine.second} domicilio en ${locationLinks.second}</a></div>
+        </c:forEach>
+    </div>
+
     <div id="content">
         <div class="content-wrapper">
             <table width="1000">

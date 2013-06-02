@@ -294,29 +294,54 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
      * @return
      */
     @SuppressWarnings("unchecked")
-    public Map<String,List<String>> getCuisinesByLocation() {
-        
-        if( countActive() == 0 ) {
-            return new HashMap<String, List<String>>();
-        }
+    public Map<String,Integer> getRestaurantLocationCount() {
         
         Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true).and("testMode").ne(true));
 
         // Add scope variables to the map/reduce query
         MapReduceOptions options = MapReduceOptions.options();
         options.outputTypeInline(); // Important!
-        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/footermap.js", "classpath:/mapreduce/footerreduce.js", options, ValueObject.class);
+        MapReduceResults<SimpleValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/locationmap.js", "classpath:/mapreduce/locationreduce.js", options, SimpleValueObject.class);
 
         // Build results
-        Map<String,List<String>> cuisinesByLocation = new HashMap<String, List<String>>();
-        for (ValueObject valueObject : results) {
+        Map<String,Integer> locationCount = new HashMap<String, Integer>();
+        for (SimpleValueObject valueObject : results) {
             String location = valueObject.getId();
-            List<String> cuisines = (List<String>)valueObject.getValue().get("cuisines");
-            cuisinesByLocation.put(location, cuisines);
+            int count = (int)valueObject.getValue();
+            locationCount.put(location, count);
         }
-        return cuisinesByLocation;
+        return locationCount;
     }
-    
+
+
+    /**
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String,List<String>> getCuisinesByLocation() {
+
+        if( countActive() == 0 ) {
+            return new HashMap<String, List<String>>();
+        }
+
+        Query query = new Query(where("listOnSite").is(true).and("deleted").ne(true).and("testMode").ne(true));
+
+        // Add scope variables to the map/reduce query
+        MapReduceOptions options = MapReduceOptions.options();
+        options.outputTypeInline(); // Important!
+        MapReduceResults<ValueObject> results = operations.mapReduce(query, "restaurants", "classpath:/mapreduce/cuisinelocationmap.js", "classpath:/mapreduce/cuisinereduce.js", options, ValueObject.class);
+
+        // Build results
+        Map<String,List<String>> cuisinesByPostcode = new HashMap<String, List<String>>();
+        for (ValueObject valueObject : results) {
+            String postcode = valueObject.getId();
+            List<String> cuisines = (List<String>)valueObject.getValue().get("cuisines");
+            cuisinesByPostcode.put(postcode, cuisines);
+        }
+        return cuisinesByPostcode;
+
+    }
+
 
     @Required
     @Value(value="${location.maxDistance}")

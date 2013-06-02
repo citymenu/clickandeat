@@ -21,9 +21,7 @@ public class CuisineTag extends RequestContextAwareTag {
             factory.autowireBean(this);
         }
         
-        pageContext.setAttribute("cuisines", cuisineProvider.getCuisineList());
-        pageContext.setAttribute("cuisineLocations", cuisineProvider.getCuisineLocations());
-        pageContext.setAttribute("cuisineLocationsFull", cuisineProvider.getCuisineLocationsFull());
+        pageContext.setAttribute("locations", cuisineProvider.getLocations());
         return SKIP_BODY;
     }
 

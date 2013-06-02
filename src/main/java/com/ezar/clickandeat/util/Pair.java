@@ -33,4 +33,5 @@ public class Pair<X,Y> {
     public int hashCode() {
         return first.hashCode() * second.hashCode();
     }
+
 }

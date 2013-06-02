@@ -28,6 +28,14 @@
         <h1><strong>Comida a domicilio en Madrid, Barcelona</strong></h1>
         <p>Llamarycomer cuenta con más de 1.000 restaurantes listos para entregar alimentos a usted en su casa</p>
     </div>
+
+    <!-- SEO entry point -->
+    <div style="display:none">
+        <c:forEach var="location" items="${locationprimary}">
+            <a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Comida domicilio en ${location.second}</a></p>
+        </c:forEach>
+    </div>
+
     <div id="banner">
         <div id="banner-wrap">
         <div id="banner-outer">
@@ -231,16 +239,7 @@
                     </c:forEach>
                 </div>
             </div>
-
         </div>
-    </div>
-
-    <div style="display:none">
-        <c:forEach var="entry" items="${cuisineLocationsFull}">
-            <div>
-                <a href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}">Comida domicilio en ${entry.key.second}</a>
-            </div>
-        </c:forEach>
     </div>
 
 </body>

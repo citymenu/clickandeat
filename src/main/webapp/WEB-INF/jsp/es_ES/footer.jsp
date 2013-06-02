@@ -6,7 +6,7 @@
     <div class="footer-wrapper">
         <table width="1000" class="footer-table">
             <tr valign="top">
-                <td width="500" style="padding-left:10px">
+                <td width="470" style="padding-left:10px">
                     <div class="company-details">
                         <div class="footer-h1">La manera más sencilla de pedir comida a domicilio.</div>
                         <p>¡Ya estamos aquí! <span class="bolder">LlamarYComer </span>te trae la mejor variedad de comida a domicilio
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </td>
-                <td width="240">
+                <td width="200">
                     <div class="company-details">
                         <h2 class="footer">Información</h2>
                         <div class="footer-list">
@@ -62,14 +62,10 @@
                         </div>
                     </div>
                 </td>
-                <td width="180" style="padding-right:10px">
-                    <c:forEach var="entry" items="${cuisineLocations}">
-                        <div class="cuisineLocation">
-                            <a class="direct" href="${ctx}/app/comida-domicilio-${entry.key.first}/loc/${entry.key.first}"><h2 class="footer">${entry.key.second}</h2></a>
-                            <c:forEach var="list" items="${entry.value}">
-                                <p class="locationlink"><a class="direct" href="${ctx}/app/comida-${list.first}-domicilio-${entry.key.first}/csn/${list.first}/${entry.key.first}">${list.second} a domicilio</a></p>
-                            </c:forEach>
-                        </div>
+                <td width="250" style="padding-right:10px">
+                    <h2 class="footer">Locations</h2>
+                    <c:forEach var="location" items="${locations}">
+                        <p class="locationlink"><a class="direct" href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">${location.second} comida domicilio</a></p>
                     </c:forEach>
                 </td>
             </tr>
