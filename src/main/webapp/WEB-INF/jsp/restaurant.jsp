@@ -25,7 +25,7 @@
 <body>
     <jsp:include page="/WEB-INF/jsp/header.jsp" />
     <div style="display:none">
-        <h1><strong><bold>${restaurant.headerDescription}</bold></strong></h1>
+        <h1><strong><bold>${restaurant.metaDescription}</bold></strong></h1>
         <c:choose>
             <c:when test="${restaurant.description == ''}">
                 <p>${restaurant.cuisineSummary}</p>
