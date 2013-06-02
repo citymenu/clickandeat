@@ -574,6 +574,10 @@ public class Restaurant extends PersistentObject {
         return MessageFactory.formatMessage("restaurant.metadescription", false, StringUtils.collectionToDelimitedString(cuisines, ", "), name , address.getTown() == null? address.getPostCode(): address.getTown());
     }
     
+    public String getImageAlt() {
+        return MessageFactory.formatMessage("restaurant.image-alt", false, name , address.getTown() == null? address.getPostCode(): address.getTown());
+    }
+    
     public Boolean getListOnSite() {
         return listOnSite;
     }

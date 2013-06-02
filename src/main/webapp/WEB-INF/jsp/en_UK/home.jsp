@@ -173,7 +173,7 @@
                         <table width="280">
                             <tr valign="top">
                                 <td width="78" align="left">
-                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>">
+                                    <img class="rounded-img-small" src="${resources}/images/restaurant/${restaurant.imageName}" width="65" height="65" alt="${restaurant.imageAlt}">
                                 </td>
                                 <td width="212">
                                     <c:if test="${restaurant.hasDiscounts == false}">

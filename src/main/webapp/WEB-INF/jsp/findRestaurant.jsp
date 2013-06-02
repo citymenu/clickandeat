@@ -139,7 +139,7 @@
                                                     <div class="phone-orders-description"><message:message key="restaurant.closed"/></div>
                                                 </c:if>
                                                 <div class="restaurant-image">
-                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="<util:escape value="${restaurant.name}"/>-<message:message key="page.takeaway"/>">
+                                                    <img class="rounded-img" src="${resources}/images/restaurant/${restaurant.imageName}" width="85" height="75" alt="${restaurant.imageAlt}">
                                                 </div>
                                             </td>
                                             <td width="185">
