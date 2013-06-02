@@ -59,10 +59,10 @@ public class LocationValidationController {
 
                 HttpSession session = request.getSession(true);
                 session.setAttribute("search", search);
-                
+                session.removeAttribute("searchurl");
+
                 // If there is an order in the session, update the delivery address
                 updateOrderDeliveryAddress(session,search);
-
                 model.put("success",true);
             }
         }
