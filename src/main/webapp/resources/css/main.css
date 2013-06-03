@@ -80,7 +80,7 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
 }
 
 #header-inner {
-    padding: 0 0 20px 0;
+    padding: 0 0 10px 0;
 }
 
 #page {
@@ -244,6 +244,14 @@ ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, body, html, p, blockquote, fields
     text-transform: uppercase;
     padding:0;
     cursor:pointer;
+}
+
+.header-subtitle {
+    background: none repeat scroll 0 0 transparent;
+    color: #FFFFFF;
+    font: 12px/12px MaiandraOTGD-DemiBold;
+    text-shadow: 0 2px #333333;
+    padding-top:8px;
 }
 
 .home-content-header {

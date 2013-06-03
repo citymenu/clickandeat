@@ -101,6 +101,7 @@
                         <div id="header-container">
                             <div id="header-inner">
                                 <div class="header-company-text unselectable"><a href="${ctx}/home.html" class="header-blank">llamar<span class="header-company-small">y</span>comer</a></div>
+                                <div class="header-subtitle unselectable"><message:message key="page.header-subtitle"/></div>
                             </div>
                         </div>
                     </div>
