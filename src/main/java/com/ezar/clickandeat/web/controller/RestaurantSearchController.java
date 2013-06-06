@@ -120,7 +120,11 @@ public class RestaurantSearchController {
                 }
             }
         }
-        return new ModelAndView("redirect:/home.html");
+        
+        // Did not get a search, just try a standard search instead
+        String unescapedCuisine = cuisineProvider.getMappedCuisine(cuisine);
+        return searchByLocationAndCuisine(request, address, unescapedCuisine );
+
     }
 
 

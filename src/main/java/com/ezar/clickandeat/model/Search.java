@@ -53,10 +53,10 @@ public class Search implements Serializable {
 
     public String toString() {
         if(cuisine != null) {
-            return MessageFactory.formatMessage("page.search.cuisine.location", false, cuisine, getAddressSummary());
+            return MessageFactory.formatMessage("page.search.cuisine.location", false, cuisine, getShortAddressSummary());
         }
         else {
-            return MessageFactory.formatMessage("page.search.takeaway.location", false, getAddressSummary());
+            return MessageFactory.formatMessage("page.search.takeaway.location", false, getShortAddressSummary());
         }
     }
     
@@ -67,6 +67,28 @@ public class Search implements Serializable {
         else {
             return location.getLocation()[1] + "," + location.getLocation()[0];
         }
+    }
+    
+    public String getShortAddressSummary() {
+        if( location == null || location.getAddress() == null ) {
+            return null;
+        }
+        else {
+            String address = location.getAddress();
+            String postcode = location.getLocationComponents().get("postal_code");
+            String displayAddress = location.getDisplayAddress();
+            if( postcode != null ) {
+                if( address.equals(postcode)) {
+                    return postcode;
+                }
+                if( displayAddress.endsWith(postcode)) {
+                    return displayAddress.replace(postcode, "").trim();
+                }
+            }
+            return location.getDisplayAddress();
+            
+        }
+        
     }
     
     public String getAddressSummary() {

@@ -31,6 +31,7 @@ public class CuisineProvider implements InitializingBean {
     
     private Map<Pair<String,String>,List<Pair<String,String>>> locationSecondary = new HashMap<Pair<String,String>, List<Pair<String,String>>>();
     
+    private Map<String,String> cuisineMap = new HashMap<String,String>();
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -68,6 +69,7 @@ public class CuisineProvider implements InitializingBean {
             List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
             for( String cuisine: cuisineList ) {
                 String escapedCuisine = StringUtil.normalise(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+                cuisineMap.put(escapedCuisine, cuisine);
                 Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
                 cuisinesPairList.add(cuisinePair);
             }
@@ -118,6 +120,11 @@ public class CuisineProvider implements InitializingBean {
     public Map<Pair<String, String>, List<Pair<String, String>>> getCuisineLocations() {
         return cuisineLocations;
     }
+
+    public String getMappedCuisine(String escapedCuisine) {
+        return cuisineMap.containsKey(escapedCuisine)? cuisineMap.get(escapedCuisine): escapedCuisine;
+    }
+    
     
     
     private static final class LocationCountComparator implements Comparator<Pair<String,Integer>> {
