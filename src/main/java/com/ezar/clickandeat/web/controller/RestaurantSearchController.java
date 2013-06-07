@@ -99,32 +99,16 @@ public class RestaurantSearchController {
 
     @RequestMapping(value="/**/loc/{address}", method = RequestMethod.GET)
     public ModelAndView searchByLocation(HttpServletRequest request, @PathVariable("address") String address ) {
-        for( Pair<String,String> locationPair: cuisineProvider.getCuisineLocations().keySet()) {
-            if(locationPair.first.equalsIgnoreCase(address)) {
-                return searchByLocationAndCuisine(request,locationPair.second,null);        
-            }
-        }
-        return new ModelAndView("redirect:/home.html");
+        String unescapedLocation = cuisineProvider.getMappedLocation(address);
+        return searchByLocationAndCuisine(request,unescapedLocation,null);
     }
 
 
     @RequestMapping(value="/**/csn/{cuisine}/{address}", method = RequestMethod.GET)
     public ModelAndView searchByCuisine(HttpServletRequest request, @PathVariable("cuisine") String cuisine, @PathVariable("address") String address ) {
-        for( Map.Entry<Pair<String,String>,List<Pair<String,String>>> entry: cuisineProvider.getCuisineLocations().entrySet()) {
-            Pair<String,String> locationPair = entry.getKey();
-            if( locationPair.first.equalsIgnoreCase(address)) {
-                for( Pair<String,String> cuisinePair: entry.getValue()) {
-                    if( cuisinePair.first.equalsIgnoreCase(cuisine)) {
-                        return searchByLocationAndCuisine(request,locationPair.second,cuisinePair.second);
-                    }
-                }
-            }
-        }
-        
-        // Did not get a search, just try a standard search instead
+        String unescapedLocation = cuisineProvider.getMappedLocation(address);
         String unescapedCuisine = cuisineProvider.getMappedCuisine(cuisine);
-        return searchByLocationAndCuisine(request, address, unescapedCuisine );
-
+        return searchByLocationAndCuisine(request, unescapedLocation, unescapedCuisine );
     }
 
 

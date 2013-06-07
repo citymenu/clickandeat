@@ -32,6 +32,9 @@ public class CuisineProvider implements InitializingBean {
     private Map<Pair<String,String>,List<Pair<String,String>>> locationSecondary = new HashMap<Pair<String,String>, List<Pair<String,String>>>();
     
     private Map<String,String> cuisineMap = new HashMap<String,String>();
+
+    private Map<String,String> locationMap = new HashMap<String,String>();
+    
     
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -64,6 +67,7 @@ public class CuisineProvider implements InitializingBean {
             String location = entry.getKey();
             List<String> cuisineList = entry.getValue();
             String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+            locationMap.put(escapedLocation, location );
             locationNames.add(new Pair<String, String>(escapedLocation,location));
             Pair<String,String> locationPair = new Pair<String, String>(escapedLocation,location);
             List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
@@ -121,12 +125,15 @@ public class CuisineProvider implements InitializingBean {
         return cuisineLocations;
     }
 
+    public String getMappedLocation(String escapedLocation) {
+        return locationMap.containsKey(escapedLocation)? locationMap.get(escapedLocation): escapedLocation;
+    }
+
     public String getMappedCuisine(String escapedCuisine) {
         return cuisineMap.containsKey(escapedCuisine)? cuisineMap.get(escapedCuisine): escapedCuisine;
     }
-    
-    
-    
+
+
     private static final class LocationCountComparator implements Comparator<Pair<String,Integer>> {
         public int compare(Pair<String, Integer> o1, Pair<String, Integer> o2) {
             return o2.second - o1.second;

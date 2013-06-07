@@ -31,8 +31,8 @@
 
     <!-- SEO entry point -->
     <div style="display:none">
-        <c:forEach var="location" items="${locationprimary}">
-            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">Comida domicilio en ${location.second}</a></div>
+        <c:forEach var="location" items="${locationprimary}" varStatus="status">
+            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">seo${status.count}</a></div>
         </c:forEach>
     </div>
 
