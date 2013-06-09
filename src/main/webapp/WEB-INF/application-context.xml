@@ -85,9 +85,9 @@
   	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
           <mongo:options connections-per-host="20"
                          auto-connect-retry="true"
-                         socket-keep-alive="true"
-                         max-wait-time="20000"
-                         connect-timeout="20000"/>
+                         socket-timeout="60000"
+                         max-wait-time="10000"
+                         connect-timeout="10000"/>
     </mongo:mongo>
 
 	<!-- Mongo db factory -->

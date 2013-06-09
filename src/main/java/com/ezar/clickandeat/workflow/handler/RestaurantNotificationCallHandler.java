@@ -45,17 +45,12 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
-//        try {
-//            if(!lockFactory.acquire(order.getOrderId())) {
-//                LOGGER.warn("Call already in progress for order id: " + order.getOrderId() + ", not calling.");
-//                order.addOrderUpdate("Not placing another call at this time as call already in progress");
-//                return order;
-//            }
-//        }
-//        catch( Exception ex ) {
-//            LOGGER.warn("Exception acquiring lock",ex);
-//        }
-        
+        if(!lockFactory.acquire(order.getOrderId())) {
+            LOGGER.warn("Call already in progress for order id: " + order.getOrderId() + ", not calling.");
+            order.addOrderUpdate("Not placing another call at this time as call already in progress");
+            return order;
+        }
+
         Restaurant restaurant = order.getRestaurant();
         
         if( !restaurant.getNotificationOptions().isReceiveNotificationCall()) {

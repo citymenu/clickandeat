@@ -26,27 +26,18 @@ public class DistributedLockFactory {
      * @return
      */
     
-    public boolean acquire(String id) throws InterruptedException {
-        DistributedLock lock = locks.get(id);
-        if( lock == null ) {
-            lock = new DistributedLock(redisTemplate, id, DEFAULT_EXPIRES_MS);
-            locks.put(id,lock);
+    public boolean acquire(String id) {
+        try {
+            DistributedLock lock = locks.get(id);
+            if( lock == null ) {
+                lock = new DistributedLock(redisTemplate, id, DEFAULT_EXPIRES_MS);
+                locks.put(id,lock);
+            }
+            return lock.acquire();
         }
-        return lock.acquire();
-    }
-
-
-    /**
-     * @param id
-     */
-
-    public void release(String id) throws InterruptedException {
-        DistributedLock lock = locks.get(id);
-        if( lock == null ) {
-            LOGGER.warn("No lock found with id: " + id);
-        }
-        else {
-            lock.release();
+        catch( Exception ex ) {
+            LOGGER.warn("Exception occurred acquiring lock for id: " + id + ", allowing to be safe");
+            return true;
         }
     }
 
@@ -55,8 +46,20 @@ public class DistributedLockFactory {
      * @param id
      */
 
-    public void remove(String id) {
-        locks.remove(id);
+    public void release(String id) {
+        try {
+            DistributedLock lock = locks.get(id);
+            if( lock == null ) {
+                LOGGER.warn("No lock found with id: " + id);
+            }
+            else {
+                lock.release();
+            }
+        }
+        catch( Exception ex ) {
+            LOGGER.warn("Exception occurred releasing lock for id: " + id + ", removing to be safe");
+            locks.remove(id);
+        }
     }
-    
+
 }

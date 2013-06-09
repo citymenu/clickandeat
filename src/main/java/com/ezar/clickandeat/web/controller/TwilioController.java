@@ -487,13 +487,7 @@ public class TwilioController implements InitializingBean {
      */
 
     private void releaseCallLock( String orderId ) {
-        try {
-            lockFactory.release(orderId);
-        }
-        catch( Exception ex) {
-            LOGGER.error("Error occurred releasing call lock for order id: " + orderId,ex);
-            lockFactory.remove(orderId);
-        }
+        lockFactory.release(orderId);
     }
 
 

@@ -67,10 +67,10 @@ public class NotificationService {
      */
     
     public void placeOrderNotificationCallToRestaurant(Order order) throws Exception {
-//        if(!lockFactory.acquire(order.getOrderId())) {
-//            LOGGER.warn("Could not acquire lock for order: " + order.getOrderId() + ", call in progress?");
-//            return;
-//        }
+        if(!lockFactory.acquire(order.getOrderId())) {
+            LOGGER.warn("Could not acquire lock for order: " + order.getOrderId() + ", call in progress?");
+            return;
+        }
         LOGGER.info("Placing order notification call to restauarant for orderId [" + order.getOrderId() + "]");
         twilioService.makeOrderNotificationCall(order);
     }
