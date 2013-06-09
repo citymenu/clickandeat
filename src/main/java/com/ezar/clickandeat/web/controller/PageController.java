@@ -5,9 +5,14 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -77,6 +82,16 @@ public class PageController {
     @RequestMapping(value="/admin/reporting.html", method = RequestMethod.GET)
     public String reporting() {
         return "admin/reporting";
+    }
+
+    @RequestMapping(value="/google1794732305a7d580.html", method = RequestMethod.GET )
+    @ResponseBody
+    public ResponseEntity<byte[]> validateGoogle() throws Exception {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setCacheControl("no-cache");
+        String validation = "google-site-verification: google1794732305a7d580.html";
+        return new ResponseEntity<byte[]>(validation.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 
 }
