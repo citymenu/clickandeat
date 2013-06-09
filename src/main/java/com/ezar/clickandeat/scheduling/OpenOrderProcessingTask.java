@@ -5,6 +5,7 @@ import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.repository.OrderRepository;
+import com.ezar.clickandeat.util.DistributedLock;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;

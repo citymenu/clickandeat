@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.notification;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.templating.VelocityTemplatingService;
 import com.ezar.clickandeat.util.PhoneNumberUtils;
@@ -82,6 +83,8 @@ public class TwilioServiceImpl implements ITwilioService {
         // Build the xml
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("order",order);
+        String lookupKey = order.getDeliveryType().equals(Order.DELIVERY)?"restaurant.delivery":"restaurant.collection"; 
+        templateModel.put("delivery", MessageFactory.getMessage(lookupKey,false).toLowerCase(MessageFactory.getLocale()));
         String body = velocityTemplatingService.mergeContentIntoTemplate(templateModel, templateLocation);
         if( LOGGER.isDebugEnabled()) {
             LOGGER.debug("Generated body [" + body + "]");

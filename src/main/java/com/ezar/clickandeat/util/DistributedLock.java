@@ -1,4 +1,4 @@
-package com.ezar.clickandeat.scheduling;
+package com.ezar.clickandeat.util;
 
 import org.apache.log4j.Logger;
 import org.springframework.data.redis.core.BoundValueOperations;
@@ -8,13 +8,27 @@ public class DistributedLock {
 
     private static final Logger LOGGER = Logger.getLogger(DistributedLock.class);
     
+    private static final int DEFAULT_EXPIRE_MS = 1000 * 50;
+    
     private BoundValueOperations<String,String> operations;
     
     private String key;
 
-    private final int expireMsecs = 50 * 1000;
+    private int expireMsecs = DEFAULT_EXPIRE_MS;
 
     private boolean locked = false;
+
+
+    /**
+     * @param template
+     * @param key
+     */
+
+    public DistributedLock( StringRedisTemplate template, String key, int expireMsecs ) {
+        this.operations = template.boundValueOps(key);
+        this.key = key;
+        this.expireMsecs = expireMsecs;
+    }
 
     
     /**

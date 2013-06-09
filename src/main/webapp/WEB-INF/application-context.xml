@@ -83,7 +83,7 @@
 
 	<!-- Default bean name is 'mongo' -->
   	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
-          <mongo:options connections-per-host="200"
+          <mongo:options connections-per-host="20"
                          auto-connect-retry="true"
                          socket-keep-alive="true"
                          max-wait-time="20000"

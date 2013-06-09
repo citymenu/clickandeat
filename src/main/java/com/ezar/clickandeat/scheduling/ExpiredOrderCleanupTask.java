@@ -1,6 +1,7 @@
 package com.ezar.clickandeat.scheduling;
 
 import com.ezar.clickandeat.model.Order;
+import com.ezar.clickandeat.util.DistributedLock;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.InitializingBean;
@@ -11,9 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static com.ezar.clickandeat.workflow.OrderWorkflowEngine.ORDER_STATUS_BASKET;
 import static org.springframework.data.mongodb.core.query.Criteria.where;

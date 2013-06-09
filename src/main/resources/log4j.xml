@@ -21,7 +21,7 @@
         <level value="INFO"/>
     </logger>
 
-    <logger name="com.ezar.clickandeat.scheduling.DistributedLock">
+    <logger name="com.ezar.clickandeat.util.DistributedLock">
         <level value="INFO"/>
     </logger>
 
