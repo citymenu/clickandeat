@@ -83,11 +83,12 @@
 
 	<!-- Default bean name is 'mongo' -->
   	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
-          <mongo:options connections-per-host="20"
+          <mongo:options connections-per-host="40"
                          auto-connect-retry="true"
                          socket-timeout="60000"
-                         max-wait-time="10000"
-                         connect-timeout="10000"/>
+                         socket-keep-alive="true"
+                         max-wait-time="20000"
+                         connect-timeout="5000"/>
     </mongo:mongo>
 
 	<!-- Mongo db factory -->
@@ -98,7 +99,7 @@
     	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="mongoConverter" ref="mappingConverter"/>
     	<property name="writeResultChecking" value="EXCEPTION"/>
-		<property name="writeConcern" value="FSYNC_SAFE"/>
+		<property name="writeConcern" value="SAFE"/>
   	</bean>
 
     <!-- Mongo read/write converters -->
