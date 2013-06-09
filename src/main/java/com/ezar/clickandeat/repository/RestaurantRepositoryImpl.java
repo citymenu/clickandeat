@@ -371,6 +371,7 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
     private void updateRecommendations() {
         LOGGER.info("Loading recommended restaurants");
         Query query = new Query(where("listOnSite").is(true).and("recommended").is(true).and("deleted").ne(true)
+                .and("address.town").in("Madrid","Barcelona")
                 .norOperator(where("testMode").is(true).and("phoneOrdersOnly").ne(true)));
         query.fields().exclude("menu").exclude("openingTimes");
         List<Restaurant> restaurants = operations.find(query,Restaurant.class);

@@ -5,6 +5,7 @@ import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
 import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
 import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
+import com.ezar.clickandeat.util.DistributedLock;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ScrapedNumberProvider;
 import com.ezar.clickandeat.util.Triple;
@@ -227,7 +228,7 @@ public class RestaurantScraper implements InitializingBean {
                             ByteArrayInputStream bis = new ByteArrayInputStream(baos.toByteArray());
                             object.setDataInputStream(bis);
                             object.setContentLength(baos.size());
-                            object.setContentType("image/"+imageType);
+                            object.setContentType("image/" + imageType);
                             S3Bucket bucket = s3Service.getBucket(bucketName);
                             s3Service.putObject(bucket, object);
                             LOGGER.info("Uploaded image for restaurant id: " + restaurantId);
