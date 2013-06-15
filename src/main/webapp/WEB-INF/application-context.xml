@@ -5,18 +5,20 @@
        xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="
           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
           http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd
           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
-	<!-- Placeholder for annotated configuration classes -->
-	<context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
+    <!-- Placeholder for annotated configuration classes -->
+    <context:property-placeholder location="classpath:/clickandeat.properties" system-properties-mode="OVERRIDE"/>
 
-	<!-- Read annotation based configuration classes -->
-	<context:component-scan base-package="com.ezar"/>
+    <!-- Read annotation based configuration classes -->
+    <context:component-scan base-package="com.ezar"/>
 
     <!-- Enable annotation-based task scheduling -->
     <task:scheduler id="scheduler" pool-size="1"/>
@@ -24,8 +26,12 @@
 
     <!-- Configure log4j email logging -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="targetObject"><bean factory-method="getRootLogger" class="org.apache.log4j.Logger"/></property>
-        <property name="targetMethod"><value>addAppender</value></property>
+        <property name="targetObject">
+            <bean factory-method="getRootLogger" class="org.apache.log4j.Logger"/>
+        </property>
+        <property name="targetMethod">
+            <value>addAppender</value>
+        </property>
         <property name="arguments">
             <list>
                 <bean init-method="activateOptions" class="org.apache.log4j.net.SMTPAppender">
@@ -38,7 +44,9 @@
                     <property name="subject" value="Application Error"/>
                     <property name="layout">
                         <bean class="org.apache.log4j.PatternLayout">
-                            <constructor-arg><value>%-5p [%t] | %d{ISO8601} | %F | %L | %m%n</value></constructor-arg>
+                            <constructor-arg>
+                                <value>%-5p [%t] | %d{ISO8601} | %F | %L | %m%n</value>
+                            </constructor-arg>
                         </bean>
                     </property>
                     <property name="threshold">
@@ -76,31 +84,33 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-	<!-- Load the MONGO HQ url -->
-	<bean class="java.net.URI" id="dbUrl">
-    	<constructor-arg value="${MONGOHQ_URL}"/>
-	</bean>
+    <!-- Load the MONGO HQ url -->
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="${MONGOHQ_URL}"/>
+    </bean>
 
-	<!-- Default bean name is 'mongo' -->
-  	<mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
-          <mongo:options connections-per-host="250"
-                         auto-connect-retry="true"
-                         socket-timeout="60000"
-                         socket-keep-alive="true"
-                         max-wait-time="20000"
-                         connect-timeout="5000"/>
+    <!-- Default bean name is 'mongo' -->
+    <mongo:mongo host="#{@dbUrl.getHost()}" port="#{@dbUrl.getPort()}">
+        <mongo:options connections-per-host="200"
+                       auto-connect-retry="true"
+                       connect-timeout="20000"
+                       socket-timeout="60000"
+                       socket-keep-alive="true"/>
     </mongo:mongo>
 
-	<!-- Mongo db factory -->
-  	<mongo:db-factory dbname="#{@dbUrl.getPath().substring(1)}" mongo-ref="mongo" username="#{@dbUrl.getUserInfo().split(':')[0]}" password="#{@dbUrl.getUserInfo().split(':')[1]}"/>
+    <!-- Mongo db factory -->
+    <mongo:db-factory dbname="#{@dbUrl.getPath().substring(1)}" mongo-ref="mongo"
+                      username="#{@dbUrl.getUserInfo().split(':')[0]}"
+                      password="#{@dbUrl.getUserInfo().split(':')[1]}"/>
 
-	<!-- set the mapping converter to be used by the MongoTemplate -->
-  	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-    	<constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    <!-- set the mapping converter to be used by the MongoTemplate -->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
         <constructor-arg name="mongoConverter" ref="mappingConverter"/>
-    	<property name="writeResultChecking" value="EXCEPTION"/>
-		<property name="writeConcern" value="SAFE"/>
-  	</bean>
+        <property name="writeResultChecking" value="EXCEPTION"/>
+        <property name="writeConcern" value="SAFE"/>
+
+    </bean>
 
     <!-- Mongo read/write converters -->
     <bean id="localDateReadConverter" class="com.ezar.clickandeat.converter.LocalDateReadConverter"/>
@@ -112,23 +122,34 @@
 
     <mongo:mapping-converter id="mappingConverter">
         <mongo:custom-converters>
-            <mongo:converter ref="localDateReadConverter" />
-            <mongo:converter ref="localDateWriteConverter" />
-            <mongo:converter ref="localTimeReadConverter" />
-            <mongo:converter ref="localTimeWriteConverter" />
-            <mongo:converter ref="dateTimeReadConverter" />
-            <mongo:converter ref="dateTimeWriteConverter" />
+            <mongo:converter ref="localDateReadConverter"/>
+            <mongo:converter ref="localDateWriteConverter"/>
+            <mongo:converter ref="localTimeReadConverter"/>
+            <mongo:converter ref="localTimeWriteConverter"/>
+            <mongo:converter ref="dateTimeReadConverter"/>
+            <mongo:converter ref="dateTimeWriteConverter"/>
         </mongo:custom-converters>
     </mongo:mapping-converter>
 
     <!-- Proxy mongo repositories -->
-    <mongo:repositories base-package="com.ezar.clickandeat.repository" />
+    <mongo:repositories base-package="com.ezar.clickandeat.repository"/>
+
+    <!-- Socket timeout exception retry interceptor config -->
+    <aop:config>
+        <aop:pointcut id="retryPointcut" expression="execution(* com.ezar.clickandeat.repository.*.*(..))"/>
+        <aop:aspect id="retryAspect" ref="socketTimeoutExceptionInterceptor">
+            <aop:around method="retryOnSocketTimeoutException" pointcut-ref="retryPointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!-- AOP interceptor to handle socket timeout exception -->
+    <bean id="socketTimeoutExceptionInterceptor" class="com.ezar.clickandeat.aop.RetryOnSocketTimeoutExceptionInterceptor"/>
 
     <!-- Message resolver -->
     <bean id="messageResolver" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basename" value="messages"/>
     </bean>
-    
+
     <!-- Load the REDISTOGO HQ url -->
     <bean class="java.net.URI" id="redisUrl">
         <constructor-arg value="${REDISTOGO_URL}"/>

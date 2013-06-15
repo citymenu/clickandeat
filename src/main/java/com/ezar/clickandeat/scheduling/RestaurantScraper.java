@@ -3,8 +3,8 @@ package com.ezar.clickandeat.scheduling;
 
 import com.ezar.clickandeat.maps.GeoLocationService;
 import com.ezar.clickandeat.model.*;
-import com.ezar.clickandeat.repository.GeoLocationRepositoryImpl;
-import com.ezar.clickandeat.repository.RestaurantRepositoryImpl;
+import com.ezar.clickandeat.repository.GeoLocationRepository;
+import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.DistributedLock;
 import com.ezar.clickandeat.util.Pair;
 import com.ezar.clickandeat.util.ScrapedNumberProvider;
@@ -47,10 +47,10 @@ public class RestaurantScraper implements InitializingBean {
     private GeoLocationService geoLocationService;
 
     @Autowired
-    private RestaurantRepositoryImpl restaurantRepository;
+    private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private GeoLocationRepositoryImpl geoLocationRepository;
+    private GeoLocationRepository geoLocationRepository;
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -122,8 +122,6 @@ public class RestaurantScraper implements InitializingBean {
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
         
         geoLocationService.setLocale("es_ES");
-        restaurantRepository.setUsecache(false);
-        geoLocationRepository.setUsecache(false);
 
         Properties props = new Properties();
         props.load(new ClassPathResource("/aws.s3.synchronize.properties").getInputStream());

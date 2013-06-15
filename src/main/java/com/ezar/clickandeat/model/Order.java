@@ -88,6 +88,7 @@ public class Order extends PersistentObject {
     private boolean canCheckout;
     private boolean canSubmitPayment;
     private boolean restaurantIsOpen;
+    private boolean callInProgress;
     private String orderStatus;
     private String orderNotificationStatus;
     private String additionalRequestDetails;
@@ -652,6 +653,14 @@ public class Order extends PersistentObject {
 
     public void setOrderNotificationCallCount(Integer orderNotificationCallCount) {
         this.orderNotificationCallCount = orderNotificationCallCount;
+    }
+
+    public boolean isCallInProgress() {
+        return callInProgress;
+    }
+
+    public void setCallInProgress(boolean callInProgress) {
+        this.callInProgress = callInProgress;
     }
 
     public DateTime getOrderPlacedTime() {

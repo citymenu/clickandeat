@@ -1,14 +1,11 @@
 package com.ezar.clickandeat.workflow.handler;
 
 import com.ezar.clickandeat.model.Order;
-import com.ezar.clickandeat.model.Voucher;
 import com.ezar.clickandeat.notification.NotificationService;
-import com.ezar.clickandeat.repository.VoucherRepositoryImpl;
+import com.ezar.clickandeat.repository.VoucherRepository;
 import com.ezar.clickandeat.workflow.WorkflowException;
-import com.ezar.clickandeat.workflow.WorkflowStatusException;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +24,7 @@ public class OrderPlacedHandler implements IWorkflowHandler {
     private NotificationService notificationService;
 
     @Autowired
-    private VoucherRepositoryImpl voucherRepository;
+    private VoucherRepository voucherRepository;
     
     private String timeZone;
     

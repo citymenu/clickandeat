@@ -129,6 +129,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
 
     @Override
+    public void setCallInProgress(String orderId, boolean callInProgress) {
+        Update update = new BasicUpdate(new BasicDBObject()).set("callInProgress",callInProgress);
+        operations.updateFirst(query(where("orderId").is(orderId)),update, Order.class);
+    }
+
+
+    @Override
     public List<Order> findByOrderStatus(String orderStatus) {
         List<Order> orders = operations.find(new Query(where("orderStatus").is(ORDER_STATUS_AWAITING_RESTAURANT)),Order.class);
         for( Order order: orders ) {

@@ -122,7 +122,14 @@ public class OpenOrderProcessingTask implements InitializingBean {
                         }
                     }
 
-                    if( NOTIFICATION_STATUS_CALL_IN_PROGRESS.equals(notificationStatus) || NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus)) {
+                    // If there is a call in progress then do not call again 
+                    if(order.isCallInProgress()) {
+                        LOGGER.info("There is already a call in progress for order id: " + orderId + ", not placing another call");
+                        continue;
+                    }
+                    
+                    // If restaurant did not respond at all, do not call again
+                    if( NOTIFICATION_STATUS_RESTAURANT_FAILED_TO_RESPOND.equals(notificationStatus)) {
                         LOGGER.info("Not attempting another call for order id:" + orderId + " as notification status is; " + notificationStatus);
                         continue;
                     }

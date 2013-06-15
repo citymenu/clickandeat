@@ -3,7 +3,6 @@ package com.ezar.clickandeat.workflow.handler;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
 import com.ezar.clickandeat.notification.NotificationService;
-import com.ezar.clickandeat.util.DistributedLockFactory;
 import com.ezar.clickandeat.util.MapUtil;
 import com.ezar.clickandeat.workflow.WorkflowException;
 import org.apache.log4j.Logger;
@@ -25,9 +24,6 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     @Autowired
     private NotificationService notificationService;
     
-    @Autowired
-    private DistributedLockFactory lockFactory;
-    
     private String timeZone;
     
     
@@ -44,12 +40,6 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
 
     @Override
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
-
-        if(!lockFactory.acquire(order.getOrderId())) {
-            LOGGER.warn("Call already in progress for order id: " + order.getOrderId() + ", not calling.");
-            order.addOrderUpdate("Not placing another call at this time as call already in progress");
-            return order;
-        }
 
         Restaurant restaurant = order.getRestaurant();
         
@@ -70,6 +60,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
 
         try {
             notificationService.placeOrderNotificationCallToRestaurant(order);
+            order.setCallInProgress(true);
             order.addOrderUpdate("Placed order notification call to restaurant");
             order.setOrderNotificationCallCount(order.getOrderNotificationCallCount() + 1 );
             order.setLastCallPlacedTime(new DateTime());

@@ -26,5 +26,7 @@ public interface OrderRepositoryCustom {
 
     List<Order> findAllAcceptedOrders();
 
+    void setCallInProgress(String orderId, boolean callInProgress);
+    
     long count(String orderId, List<Filter> filters);
 }

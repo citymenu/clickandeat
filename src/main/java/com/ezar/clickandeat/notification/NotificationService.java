@@ -4,8 +4,6 @@ import com.ezar.clickandeat.exception.ExceptionHandler;
 import com.ezar.clickandeat.model.NotificationOptions;
 import com.ezar.clickandeat.model.Order;
 import com.ezar.clickandeat.model.Restaurant;
-import com.ezar.clickandeat.util.DistributedLock;
-import com.ezar.clickandeat.util.DistributedLockFactory;
 import com.ezar.clickandeat.util.PhoneNumberUtils;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.apache.log4j.Logger;
@@ -29,11 +27,7 @@ public class NotificationService {
 
     @Autowired
     private ExceptionHandler exceptionHandler;
-    
-    @Autowired
-    private DistributedLockFactory lockFactory;
 
-    
     /**
      * @param order
      */
@@ -67,10 +61,6 @@ public class NotificationService {
      */
     
     public void placeOrderNotificationCallToRestaurant(Order order) throws Exception {
-        if(!lockFactory.acquire(order.getOrderId())) {
-            LOGGER.warn("Could not acquire lock for order: " + order.getOrderId() + ", call in progress?");
-            return;
-        }
         LOGGER.info("Placing order notification call to restauarant for orderId [" + order.getOrderId() + "]");
         twilioService.makeOrderNotificationCall(order);
     }
