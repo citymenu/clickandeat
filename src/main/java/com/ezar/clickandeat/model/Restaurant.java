@@ -505,13 +505,6 @@ public class Restaurant extends PersistentObject {
         if( deliveryOptions.isCollectionOnly()) {
             return false;
         }
-        if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
-            double distance = LocationUtils.getDistance(address.getLocation(), deliveryAddress.getLocation());
-            double locationRadius = deliveryAddress.getRadius();
-            if( distance - locationRadius <= deliveryOptions.getDeliveryRadiusInKilometres()) {
-                return true;
-            }
-        }
         String postCode = deliveryAddress.getPostCode();
         if( StringUtils.hasText(postCode)) {
             String postCodeMatcher = postCode.toUpperCase().replace(" ","");
@@ -520,6 +513,13 @@ public class Restaurant extends PersistentObject {
                 if( postCodeMatcher.equals(postCodeCandidate)) {
                     return true;
                 }
+            }
+        }
+        if( deliveryOptions.getDeliveryRadiusInKilometres() != null ) {
+            double distance = LocationUtils.getDistance(address.getLocation(), deliveryAddress.getLocation());
+            double locationRadius = deliveryAddress.getRadius();
+            if( distance - locationRadius <= deliveryOptions.getDeliveryRadiusInKilometres()) {
+                return true;
             }
         }
         return false;
