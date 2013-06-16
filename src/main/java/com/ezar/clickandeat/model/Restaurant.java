@@ -526,6 +526,9 @@ public class Restaurant extends PersistentObject {
                 LOGGER.debug(name + " will delivery to address: " + deliveryAddress.getDisplaySummary() + " -> distance is: " + distance + "km");
                 return true;
             }
+            else {
+                LOGGER.debug("Restaurant will not deliver to address: " + deliveryAddress.getDisplaySummary() + " -> distance is: " + distance + "km");
+            }
         }
         return false;
     }
