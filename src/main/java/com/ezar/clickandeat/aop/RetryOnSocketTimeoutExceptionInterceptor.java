@@ -24,22 +24,20 @@ public class RetryOnSocketTimeoutExceptionInterceptor {
     public Object retryOnSocketTimeoutException(ProceedingJoinPoint pjp) throws Throwable {
 
         int retryAttempts = 0;
-        Exception thrownException = null;
+        SocketTimeoutException thrownException = null;
 
         while(retryAttempts < MAX_RETRIES ) {
             try {
                 return pjp.proceed();
             }
+            catch(SocketTimeoutException ex) {
+                retryAttempts++;
+                thrownException = ex;
+                LOGGER.info("Caught SocketTimeoutException, retry attempt: " + retryAttempts);
+            }
             catch(Exception ex) {
-                Object rootCause = ExceptionUtils.getRootCause(ex);
-                if(rootCause instanceof SocketTimeoutException) {
-                    retryAttempts++;
-                    thrownException = ex;
-                    LOGGER.info("Caught SocketTimeoutException, retry attempt: " + retryAttempts);
-                }
-                else {
-                    throw ex;
-                }
+                LOGGER.info("Caught Exception: " + ex.getClass().getName());
+                throw ex;
             }
         }
         throw thrownException;
