@@ -4,6 +4,7 @@ import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.DateUtil;
 import com.ezar.clickandeat.util.LocationUtils;
 import com.ezar.clickandeat.util.NumberUtil;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDate;
@@ -23,6 +24,8 @@ import java.util.UUID;
 @Document(collection="restaurants")
 public class Restaurant extends PersistentObject {
 
+    private static final Logger LOGGER = Logger.getLogger(Restaurant.class);
+    
     private static final DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
 
     private static final Double DEFAULT_COMMISSION_PERCENT = 10d;
@@ -511,6 +514,7 @@ public class Restaurant extends PersistentObject {
             for( String deliverToPostCode: deliveryOptions.getAreasDeliveredTo()) {
                 String postCodeCandidate = deliverToPostCode.toUpperCase().replace(" ","");
                 if( postCodeMatcher.equals(postCodeCandidate)) {
+                    LOGGER.debug(name + " will delivery to postcode: " + postCode);
                     return true;
                 }
             }
@@ -519,6 +523,7 @@ public class Restaurant extends PersistentObject {
             double distance = LocationUtils.getDistance(address.getLocation(), deliveryAddress.getLocation());
             double locationRadius = deliveryAddress.getRadius();
             if( distance - locationRadius <= deliveryOptions.getDeliveryRadiusInKilometres()) {
+                LOGGER.debug(name + " will delivery to address: " + deliveryAddress.getDisplaySummary() + " -> distance is: " + distance + "km");
                 return true;
             }
         }
