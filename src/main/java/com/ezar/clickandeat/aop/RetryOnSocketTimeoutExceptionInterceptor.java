@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.dao.DataAccessResourceFailureException;
 
 import java.net.SocketTimeoutException;
 
@@ -24,20 +25,16 @@ public class RetryOnSocketTimeoutExceptionInterceptor {
     public Object retryOnSocketTimeoutException(ProceedingJoinPoint pjp) throws Throwable {
 
         int retryAttempts = 0;
-        SocketTimeoutException thrownException = null;
+        DataAccessResourceFailureException thrownException = null;
 
         while(retryAttempts < MAX_RETRIES ) {
             try {
                 return pjp.proceed();
             }
-            catch(SocketTimeoutException ex) {
+            catch(DataAccessResourceFailureException ex) {
                 retryAttempts++;
                 thrownException = ex;
-                LOGGER.info("Caught SocketTimeoutException, retry attempt: " + retryAttempts);
-            }
-            catch(Exception ex) {
-                LOGGER.info("Caught Exception: " + ex.getClass().getName());
-                throw ex;
+                LOGGER.info("Caught DataAccessResourceFailureException, retry attempt: " + retryAttempts);
             }
         }
         throw thrownException;
