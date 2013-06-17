@@ -94,4 +94,14 @@ public class PageController {
         return new ResponseEntity<byte[]>(validation.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/fsg3c821.txt", method = RequestMethod.GET )
+    @ResponseBody
+    public ResponseEntity<byte[]> validateSiteMapper() throws Exception {
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setCacheControl("no-cache");
+        String validation = "";
+        return new ResponseEntity<byte[]>(validation.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
 }
