@@ -19,6 +19,7 @@
     <meta name="robots" content="all">
     <meta http-equiv="expires" content="0">
     <meta name="viewport" content="width=1050">
+    <meta name="msvalidate.01" content="E8BE16F48A3E0082D5E22AE7D8B38032" />
     <%@ include file="/WEB-INF/jsp/taglibs_js.jsp" %>
 	<link rel="shortcut icon" href="${resources}/images/favicon.png">
 
