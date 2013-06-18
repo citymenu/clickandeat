@@ -27,7 +27,7 @@ public class SequenceGenerator implements InitializingBean {
 
     private static final Logger LOGGER = Logger.getLogger(SequenceGenerator.class);
 
-    private static final int DEFAULT_BATCH_SIZE = 10;
+    private static final int DEFAULT_BATCH_SIZE = 100;
     
     private static final String COLLECTION_NAME = "sequence";
 
