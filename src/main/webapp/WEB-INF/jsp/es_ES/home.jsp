@@ -32,7 +32,7 @@
     <!-- SEO entry point -->
     <div style="display:none">
         <c:forEach var="location" items="${locationprimary}" varStatus="status">
-            <div><a href="${ctx}/app/comida-domicilio-${location.first}/loc/${location.first}">seo${status.count}</a></div>
+            <div><a href="${ctx}/app/comida-a-domicilio-en-${location.first}/loc/${location.first}">seo${status.count}</a></div>
         </c:forEach>
     </div>
 
