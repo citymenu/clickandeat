@@ -30,6 +30,11 @@
 
     <servlet-mapping>
         <servlet-name>action</servlet-name>
+        <url-pattern>*.xml</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>action</servlet-name>
         <url-pattern>/app/*</url-pattern>
     </servlet-mapping>
 

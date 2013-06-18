@@ -3,6 +3,7 @@ package com.ezar.clickandeat.web.controller;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.repository.RestaurantRepository;
 import com.ezar.clickandeat.util.CuisineProvider;
+import com.ezar.clickandeat.util.SitemapProvider;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +28,10 @@ public class PageController {
 
     @Autowired
     private CuisineProvider cuisineProvider;
+    
+    @Autowired
+    private SitemapProvider sitemapProvider;
+    
     
 	@RequestMapping(value="/home.html", method=RequestMethod.GET)
 	public ModelAndView home() {
@@ -84,6 +89,15 @@ public class PageController {
         return "admin/reporting";
     }
 
+    @RequestMapping(value="/sitemap.xml", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> sitemap() throws Exception {
+        String sitemap = sitemapProvider.getSitemap();
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_XML);
+        headers.setCacheControl("no-cache");
+        return new ResponseEntity<byte[]>(sitemap.getBytes("utf-8"), headers, HttpStatus.OK);
+    }
+
     @RequestMapping(value="/google1794732305a7d580.html", method = RequestMethod.GET )
     @ResponseBody
     public ResponseEntity<byte[]> validateGoogle() throws Exception {
@@ -91,16 +105,6 @@ public class PageController {
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.setCacheControl("no-cache");
         String validation = "google-site-verification: google1794732305a7d580.html";
-        return new ResponseEntity<byte[]>(validation.getBytes("utf-8"), headers, HttpStatus.OK);
-    }
-
-    @RequestMapping(value="/fsg3c821.txt", method = RequestMethod.GET )
-    @ResponseBody
-    public ResponseEntity<byte[]> validateSiteMapper() throws Exception {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.setCacheControl("no-cache");
-        String validation = "";
         return new ResponseEntity<byte[]>(validation.getBytes("utf-8"), headers, HttpStatus.OK);
     }
 

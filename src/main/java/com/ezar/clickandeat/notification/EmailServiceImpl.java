@@ -252,7 +252,7 @@ public class EmailServiceImpl implements IEmailService {
         String subject = MessageFormat.format(subjectFormat,order.getOrderId());
 
         // Create a voucher to try to keep this customer for the next order
-        Voucher voucher = voucherRepository.createVoucher(Voucher.DEFAULT_VOUCHER_DISCOUNT);
+        Voucher voucher = voucherRepository.createVoucher(20d);
         Map<String,Object> templateMap = new HashMap<String, Object>();
         templateMap.put("order",order);
         templateMap.put("voucherId",voucher.getVoucherId());

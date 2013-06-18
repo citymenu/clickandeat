@@ -126,7 +126,9 @@ public class CuisineProvider implements InitializingBean {
     }
 
     public String getMappedLocation(String escapedLocation) {
-        return locationMap.containsKey(escapedLocation)? locationMap.get(escapedLocation): escapedLocation;
+        return locationMap.containsKey(escapedLocation)
+
+                ? locationMap.get(escapedLocation): escapedLocation;
     }
 
     public String getMappedCuisine(String escapedCuisine) {

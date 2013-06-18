@@ -12,6 +12,8 @@ public class DateTimeUtil {
 
     private static DateTimeFormatter timeFormat = DateTimeFormat.forPattern("HH:mm");
 
+    private static DateTimeFormatter localDateFormat = DateTimeFormat.forPattern("yyyy-MM-dd");
+
     private static Locale locale;
 
     static {
@@ -41,6 +43,15 @@ public class DateTimeUtil {
         sb.append(timeFormat.print(orderDateTime));
         return sb.toString();
     }
-    
+
+
+    /**
+     * @param date
+     * @return
+     */
+
+    public static String formatLocalDate(LocalDate date) {
+        return localDateFormat.print(date);
+    }
     
 }
