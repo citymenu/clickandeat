@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
 public class CuisineProvider implements InitializingBean {
@@ -21,80 +22,90 @@ public class CuisineProvider implements InitializingBean {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    private SortedSet<String> cuisineList = new TreeSet<String>();
+    private static SortedSet<String> cuisineList = new TreeSet<String>();
 
-    private List<Pair<String,String>> locations = new ArrayList<Pair<String, String>>();
+    private static List<Pair<String,String>> locations = new ArrayList<Pair<String, String>>();
     
-    private Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocations = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
+    private static Map<Pair<String,String>,List<Pair<String,String>>> cuisineLocations = new HashMap<Pair<String, String>, List<Pair<String, String>>>();
 
-    private SortedSet<Pair<String,String>> locationPrimary = new TreeSet<Pair<String,String>>(new LocationNameComparator());
+    private static SortedSet<Pair<String,String>> locationPrimary = new TreeSet<Pair<String,String>>(new LocationNameComparator());
     
-    private Map<Pair<String,String>,List<Pair<String,String>>> locationSecondary = new HashMap<Pair<String,String>, List<Pair<String,String>>>();
+    private static Map<Pair<String,String>,List<Pair<String,String>>> locationSecondary = new HashMap<Pair<String,String>, List<Pair<String,String>>>();
     
-    private Map<String,String> cuisineMap = new HashMap<String,String>();
+    private static Map<String,String> cuisineMap = new HashMap<String,String>();
 
-    private Map<String,String> locationMap = new HashMap<String,String>();
+    private static Map<String,String> locationMap = new HashMap<String,String>();
     
+    private static AtomicBoolean initialized = new AtomicBoolean(false);
     
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
-        Collections.addAll(cuisineList, cuisines);
-
-        Map<String,List<String>> cuisinesByLocation = restaurantRepository.getCuisinesByLocation();
-        SortedSet<Pair<String,String>> locationNames = new TreeSet<Pair<String,String>>(new LocationNameComparator());
-
-        // Extract top locations for footer list
-        Map<String,Integer> locationCount = restaurantRepository.getRestaurantLocationCount();
-        SortedSet<Pair<String,Integer>> locationsByCount = new TreeSet<Pair<String, Integer>>(new LocationCountComparator());
-        for( Map.Entry<String,Integer> entry: locationCount.entrySet()) {
-            locationsByCount.add(new Pair<String, Integer>(entry.getKey(), entry.getValue()));
-        }
-        int locationIndex = 0;
-        for(Pair<String,Integer> count: locationsByCount) {
-            if(locationIndex >= LOCATION_LINK_SIZE) {
-                break;
-            }
-            String location = count.first;
-            String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
-            locations.add(new Pair<String, String>(escapedLocation,location));
-            locationIndex++;
-        }
-
-        // Extract all cuisines for major links
-        for( Map.Entry<String,List<String>> entry: cuisinesByLocation.entrySet()) {
-            String location = entry.getKey();
-            List<String> cuisineList = entry.getValue();
-            String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
-            locationMap.put(escapedLocation, location );
-            locationNames.add(new Pair<String, String>(escapedLocation,location));
-            Pair<String,String> locationPair = new Pair<String, String>(escapedLocation,location);
-            List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
-            for( String cuisine: cuisineList ) {
-                String escapedCuisine = StringUtil.normalise(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
-                cuisineMap.put(escapedCuisine, cuisine);
-                Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
-                cuisinesPairList.add(cuisinePair);
-            }
-            cuisineLocations.put(locationPair,cuisinesPairList);
+        if(initialized.getAndSet(true)) {
+            return; // Already loading
         }
         
-        // Push all cuisines into the secondary links table
-        List<Pair<String,String>> locationNamesList = new ArrayList<Pair<String, String>>();
-        locationNamesList.addAll(locationNames);
-        int index = 0;
-        while(index < locationNamesList.size()) {
-            List<Pair<String,String>> sublist = locationNamesList.subList(index,Math.min(index + LOCATION_LINK_SIZE, locationNames.size() -1 ));
-            locationSecondary.put(sublist.get(0),sublist);
-            index += LOCATION_LINK_SIZE;
-        }
-        
-        // Now consolidate into the primary links table
-        locationPrimary.clear();
-        locationPrimary.addAll(locationSecondary.keySet());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
+                Collections.addAll(cuisineList, cuisines);
 
-        LOGGER.info("Loaded all cuisines into memory");
+                Map<String,List<String>> cuisinesByLocation = restaurantRepository.getCuisinesByLocation();
+                SortedSet<Pair<String,String>> locationNames = new TreeSet<Pair<String,String>>(new LocationNameComparator());
+
+                // Extract top locations for footer list
+                Map<String,Integer> locationCount = restaurantRepository.getRestaurantLocationCount();
+                SortedSet<Pair<String,Integer>> locationsByCount = new TreeSet<Pair<String, Integer>>(new LocationCountComparator());
+                for( Map.Entry<String,Integer> entry: locationCount.entrySet()) {
+                    locationsByCount.add(new Pair<String, Integer>(entry.getKey(), entry.getValue()));
+                }
+                int locationIndex = 0;
+                for(Pair<String,Integer> count: locationsByCount) {
+                    if(locationIndex >= LOCATION_LINK_SIZE) {
+                        break;
+                    }
+                    String location = count.first;
+                    String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+                    locations.add(new Pair<String, String>(escapedLocation,location));
+                    locationIndex++;
+                }
+
+                // Extract all cuisines for major links
+                for( Map.Entry<String,List<String>> entry: cuisinesByLocation.entrySet()) {
+                    String location = entry.getKey();
+                    List<String> cuisineList = entry.getValue();
+                    String escapedLocation = StringUtil.normalise(location).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+                    locationMap.put(escapedLocation, location );
+                    locationNames.add(new Pair<String, String>(escapedLocation,location));
+                    Pair<String,String> locationPair = new Pair<String, String>(escapedLocation,location);
+                    List<Pair<String,String>> cuisinesPairList = new ArrayList<Pair<String, String>>();
+                    for( String cuisine: cuisineList ) {
+                        String escapedCuisine = StringUtil.normalise(cuisine).replace("\\","-").replaceAll(" ","-").toLowerCase(MessageFactory.getLocale());
+                        cuisineMap.put(escapedCuisine, cuisine);
+                        Pair<String,String> cuisinePair = new Pair<String, String>(escapedCuisine, cuisine);
+                        cuisinesPairList.add(cuisinePair);
+                    }
+                    cuisineLocations.put(locationPair,cuisinesPairList);
+                }
+
+                // Push all cuisines into the secondary links table
+                List<Pair<String,String>> locationNamesList = new ArrayList<Pair<String, String>>();
+                locationNamesList.addAll(locationNames);
+                int index = 0;
+                while(index < locationNamesList.size()) {
+                    List<Pair<String,String>> sublist = locationNamesList.subList(index,Math.min(index + LOCATION_LINK_SIZE, locationNames.size() -1 ));
+                    locationSecondary.put(sublist.get(0),sublist);
+                    index += LOCATION_LINK_SIZE;
+                }
+
+                // Now consolidate into the primary links table
+                locationPrimary.clear();
+                locationPrimary.addAll(locationSecondary.keySet());
+
+                LOGGER.info("Loaded all cuisines into memory");
+            }
+        }).start();
     }
 
 
