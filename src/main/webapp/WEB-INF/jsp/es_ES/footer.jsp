@@ -65,7 +65,7 @@
                 <td width="250" style="padding-right:10px">
                     <h2 class="footer">Locations</h2>
                     <c:forEach var="location" items="${locations}">
-                        <p class="locationlink"><a class="direct" href="${ctx}/app/comida-a-domicilio-en-${location.first}/loc/${location.first}">${location.second} comida a domicilio</a></p>
+                        <p class="locationlink"><a class="direct" href="${ctx}/app/comida-a-domicilio-${location.first}/loc/${location.first}">${location.second} comida a domicilio</a></p>
                     </c:forEach>
                 </td>
             </tr>

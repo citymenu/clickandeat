@@ -29,14 +29,14 @@
     <!-- SEO secondary entry point -->
     <div style="display:none">
         <c:forEach var="location" items="${secondarylinks}" varStatus="status">
-            <div><a href="${ctx}/app/comida-a-domicilio-en-${location.first}/loc/${location.first}">seo${status.count}</a></div>
+            <div><a href="${ctx}/app/comida-a-domicilio-${location.first}/loc/${location.first}">seo${status.count}</a></div>
         </c:forEach>
     </div>
 
     <!-- Cuisines -->
     <div style="display:none">
         <c:forEach var="cuisine" items="${cuisineLinks}" varStatus="status">
-            <div><a href="${ctx}/app/comida-${cuisine.first}-a-domicilio-en-${locationLinks.first}/csn/${cuisine.first}/${locationLinks.first}">csn${status.count}</a></div>
+            <div><a href="${ctx}/app/comida-${cuisine.first}-a-domicilio-${locationLinks.first}/csn/${cuisine.first}/${locationLinks.first}">csn${status.count}</a></div>
         </c:forEach>
     </div>
 

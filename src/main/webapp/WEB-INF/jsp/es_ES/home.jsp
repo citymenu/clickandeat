@@ -32,7 +32,7 @@
     <!-- SEO entry point -->
     <div style="display:none">
         <c:forEach var="location" items="${locationprimary}" varStatus="status">
-            <div><a href="${ctx}/app/comida-a-domicilio-en-${location.first}/loc/${location.first}">seo${status.count}</a></div>
+            <div><a href="${ctx}/app/comida-a-domicilio-${location.first}/loc/${location.first}">seo${status.count}</a></div>
         </c:forEach>
     </div>
 
@@ -137,7 +137,7 @@
                                 </table>
                             </div>
                             <div class="searchbartext">
-                                O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-en-madrid/loc/madrid">Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-en-barcelona/loc/barcelona">Barcelona</a>
+                                O entra directamente en: <a class="location" href="${ctx}/app/comida-a-domicilio-madrid/loc/madrid">Madrid</a> / <a class="location" href="${ctx}/app/comida-a-domicilio-barcelona/loc/barcelona">Barcelona</a>
                             </div>
                         </div>
                         <div id="searchbarright">
