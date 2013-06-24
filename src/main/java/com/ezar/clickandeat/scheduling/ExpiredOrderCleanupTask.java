@@ -50,6 +50,9 @@ public class ExpiredOrderCleanupTask implements InitializingBean {
 
                 // Get all expired orders
                 for(Order order: orders ) {
+                    if(order.getCustomer() != null && order.getCustomer().getEmail() != null ) {
+                        continue; // Don't delete if we have contact information for the customer
+                    }
                     DateTime orderCreatedTime = order.getOrderCreatedTime();
                     String orderId = order.getOrderId();
                     if( orderCreatedTime.isBefore(cutoff)) {

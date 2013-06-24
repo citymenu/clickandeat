@@ -22,6 +22,9 @@ public class CuisineProvider implements InitializingBean {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private SitemapProvider sitemapProvider;
+    
     private static SortedSet<String> cuisineList = new TreeSet<String>();
 
     private static List<Pair<String,String>> locations = new ArrayList<Pair<String, String>>();
@@ -38,6 +41,7 @@ public class CuisineProvider implements InitializingBean {
     
     private static AtomicBoolean initialized = new AtomicBoolean(false);
     
+    
     @Override
     public void afterPropertiesSet() throws Exception {
 
@@ -45,9 +49,12 @@ public class CuisineProvider implements InitializingBean {
             return; // Already loading
         }
         
+        final CuisineProvider provider = this;
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
+
                 String[] cuisines = StringUtils.commaDelimitedListToStringArray(MessageFactory.getMessage("restaurants.cuisines", false));
                 Collections.addAll(cuisineList, cuisines);
 
@@ -102,8 +109,8 @@ public class CuisineProvider implements InitializingBean {
                 // Now consolidate into the primary links table
                 locationPrimary.clear();
                 locationPrimary.addAll(locationSecondary.keySet());
-
                 LOGGER.info("Loaded all cuisines into memory");
+                sitemapProvider.onCuisinesUpdated(provider);
             }
         }).start();
     }

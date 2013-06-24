@@ -220,11 +220,29 @@ public class Restaurant extends PersistentObject {
     }
 
 
+    /**
+     * @param now
+     * @return
+     */
+
     public DateTime getEarlyOpeningTime(DateTime now) {
         DateTime[] times = getOpeningAndClosingTimes(now);
         DateTime earlyOpeningTime = times[0];
         DateTime lateOpeningTime = times[2];
         return earlyOpeningTime == null? lateOpeningTime: earlyOpeningTime;
+    }
+
+
+    /**
+     * @param now
+     * @return
+     */
+
+    public DateTime getLateClosingTime(DateTime now) {
+        DateTime[] times = getOpeningAndClosingTimes(now);
+        DateTime earlyClosingTime = times[1];
+        DateTime lateClosingTime = times[3];
+        return lateClosingTime == null? earlyClosingTime: lateClosingTime;
     }
 
 

@@ -23,9 +23,8 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
 
     @Autowired
     private NotificationService notificationService;
-    
-    private String timeZone;
-    
+
+    private int minutesAfterClosingTimeBuffer;
     
     
     @Override
@@ -33,6 +32,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
         return ACTION_CALL_RESTAURANT;
     }
 
+    
     @Override
     public boolean isActionValidForOrder(Order order) {
         return ORDER_STATUS_AWAITING_RESTAURANT.equals(order.getOrderStatus());
@@ -42,6 +42,7 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     public Order handle(Order order, Map<String, Object> context) throws WorkflowException {
 
         Restaurant restaurant = order.getRestaurant();
+        DateTime now = new DateTime();
         
         if( !restaurant.getNotificationOptions().isReceiveNotificationCall()) {
             if( LOGGER.isDebugEnabled()) {
@@ -49,15 +50,19 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
             }
             return order;
         }
-                   
+             
         boolean ignoreOpen = MapUtil.getBooleanMapValue(context,"ignoreOpen");
-        if( !ignoreOpen && !restaurant.isOpen(new DateTime())) {
-            if( LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open, not placing call");
+        
+        boolean restaurantOpen = restaurant.isOpen(now);
+        if(!ignoreOpen && !restaurantOpen) { 
+            DateTime closingTime = restaurant.getLateClosingTime(now);
+            if(!closingTime.plusMillis(minutesAfterClosingTimeBuffer).isBefore(now)) {
+                LOGGER.debug("Restaurant " + restaurant.getName() + " is not currently open and closed more than "
+                        + minutesAfterClosingTimeBuffer + " minutes ago, not placing call");
+                return order;
             }
-            return order;
         }
-
+        
         try {
             notificationService.placeOrderNotificationCallToRestaurant(order);
             order.setCallInProgress(true);
@@ -75,10 +80,12 @@ public class RestaurantNotificationCallHandler implements IWorkflowHandler {
     }
 
 
+
     @Required
-    @Value(value="${timezone}")
-    public void setTimeZone(String timeZone) {
-        this.timeZone = timeZone;
+    @Value(value="${twilio.minutesAfterClosingTimeBuffer}")
+    public void setMinutesAfterClosingTimeBuffer(int minutesAfterClosingTimeBuffer) {
+        this.minutesAfterClosingTimeBuffer = minutesAfterClosingTimeBuffer;
     }
+    
 
 }

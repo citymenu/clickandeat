@@ -22,7 +22,7 @@ import javax.mail.internet.MimeMessage;
 import java.text.MessageFormat;
 import java.util.*;
 
-@Component(value="telephoneNumberScraper")
+//@Component(value="telephoneNumberScraper")
 public class TelephoneNumberScraper implements InitializingBean {
     
     private static final Logger LOGGER = Logger.getLogger(TelephoneNumberScraper.class);

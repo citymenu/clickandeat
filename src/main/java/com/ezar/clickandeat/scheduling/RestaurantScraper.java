@@ -38,7 +38,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-@Component(value="restaurantScraper")
+//@Component(value="restaurantScraper")
 public class RestaurantScraper implements InitializingBean {
     
     private static final Logger LOGGER = Logger.getLogger(RestaurantScraper.class);
@@ -120,7 +120,7 @@ public class RestaurantScraper implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
 
         this.lock = new DistributedLock(redisTemplate, getClass().getSimpleName());
-        
+
         geoLocationService.setLocale("es_ES");
 
         Properties props = new Properties();

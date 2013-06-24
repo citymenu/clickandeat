@@ -6,50 +6,26 @@ import com.ezar.clickandeat.repository.RestaurantRepository;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
-public class SitemapProvider implements ApplicationListener<ContextRefreshedEvent> {
+public class SitemapProvider {
     
     private static final Logger LOGGER = Logger.getLogger(SitemapProvider.class);
 
     private static String sitemap;
 
     @Autowired
-    private CuisineProvider cuisineProvider;
-    
-    @Autowired
     private RestaurantRepository restaurantRepository;
 
     private final Object lock = new Object();
     
-    private final Timer timer = new Timer();
-
     private final String rootUrl = "http://www.llamarycomer.com";
     
     private final String lastModDate = DateTimeUtil.formatLocalDate(new LocalDate());
-
-    private static AtomicBoolean initialized = new AtomicBoolean(false);
-    
-    
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        if(!initialized.getAndSet(true)) {
-            timer.schedule(new TimerTask() {
-                public void run() {
-                    updateSitemap();
-                }
-            },0,1000 * 60 * 60 * 24);
-        }
-    }
 
 
     /**
@@ -76,7 +52,9 @@ public class SitemapProvider implements ApplicationListener<ContextRefreshedEven
      * Builds the sitemap
      */
 
-    private void updateSitemap() {
+    public void onCuisinesUpdated(CuisineProvider cuisineProvider ) {
+        
+
         LOGGER.info("Updating sitemap xml");
         StringBuilder sb = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
         sb.append("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n");
