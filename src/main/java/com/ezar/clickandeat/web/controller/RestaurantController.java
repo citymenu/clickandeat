@@ -80,6 +80,9 @@ public class RestaurantController {
         Map<String,Object> model = getModel();
         HttpSession session = request.getSession(true);
         Restaurant restaurant = repository.findByRestaurantId(restaurantId);
+        if(!restaurant.getListOnSite()) {
+            return new ModelAndView("redirect:/home.html",null);
+        }
         model.put("restaurant",restaurant);
 
         String restaurantSessionId = (String)session.getAttribute("restaurantid");
