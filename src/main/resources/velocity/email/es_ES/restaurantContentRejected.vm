@@ -503,7 +503,7 @@
                                                 El contenido de la p&#225;gina del restaurante ${restaurant.name} ha sido rechazado.
                                                 <br />
                                                 <br />
-                                                El dueÃƒÂ±o del restaurante a indicado los siguientes motivos por los que ha rechazado el contenido:
+                                                El due&#241;o del restaurante a indicado los siguientes motivos por los que ha rechazado el contenido:
                                                 <br />
                                                 <br />
                                                 ${restaurant.rejectionReasons}
