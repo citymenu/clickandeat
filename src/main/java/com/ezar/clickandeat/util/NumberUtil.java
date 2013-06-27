@@ -1,5 +1,7 @@
 package com.ezar.clickandeat.util;
 
+import com.ezar.clickandeat.config.MessageFactory;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
@@ -12,20 +14,20 @@ public class NumberUtil {
 
     static {
 
-        generalFormatter = DecimalFormat.getInstance();
+        generalFormatter = DecimalFormat.getInstance(MessageFactory.getLocale());
         generalFormatter.setMinimumFractionDigits(0);
         generalFormatter.setMaximumFractionDigits(2);
 
-        formatter = DecimalFormat.getInstance();
+        formatter = DecimalFormat.getInstance(MessageFactory.getLocale());
         formatter.setMinimumFractionDigits(2);
         formatter.setMaximumFractionDigits(2);
 
-        strictFormatter = DecimalFormat.getInstance();
+        strictFormatter = DecimalFormat.getInstance(MessageFactory.getLocale());
         strictFormatter.setMinimumFractionDigits(0);
         strictFormatter.setMaximumFractionDigits(0);
         strictFormatter.setGroupingUsed(false);
 
-        paymentFormatter = DecimalFormat.getInstance();
+        paymentFormatter = DecimalFormat.getInstance(MessageFactory.getLocale());
         paymentFormatter.setMinimumFractionDigits(0);
         paymentFormatter.setMaximumFractionDigits(0);
         paymentFormatter.setGroupingUsed(false);

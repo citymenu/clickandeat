@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.NumberUtil;
 import org.springframework.util.StringUtils;
 
@@ -127,6 +128,10 @@ public class OrderItem {
         return cost;
     }
 
+    public Double getTotalCost() {
+        return cost * quantity;
+    }
+    
     public void setCost(Double cost) {
         this.cost = cost;
     }
@@ -143,10 +148,24 @@ public class OrderItem {
         return NumberUtil.format(cost * quantity);
     }
 
+
     public String getSummary() {
         return this.toString();
     }
 
+    public String getDescription() {
+        StringBuilder sb = new StringBuilder(menuItemTitle);
+        if( StringUtils.hasText(menuItemTypeName)) {
+            sb.append(" (").append(menuItemTypeName).append(")");
+        }
+        if( StringUtils.hasText(menuItemSubTypeName)) {
+            sb.append(" (").append(menuItemSubTypeName).append(")");
+        }
+        for( String additionalItem: additionalItems) {
+            sb.append("\n  ").append(additionalItem);
+        }
+        return sb.toString();
+    }
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -157,6 +176,7 @@ public class OrderItem {
         if( StringUtils.hasText(menuItemSubTypeName)) {
             sb.append(" (").append(menuItemSubTypeName).append(")");
         }
+        sb.append(": ").append(getFormattedCost()).append(" ").append(MessageFactory.getMessage("vm-currency",false));
         for( String additionalItem: additionalItems) {
             sb.append("\n  ").append(additionalItem);
         }

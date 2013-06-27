@@ -61,8 +61,8 @@ a.location-button {
 .restaurant-title-wrapper {
 }
 
-.restaurant-header-center {
-    padding:0 40px 0 40px;
+.restaurant-header-right {
+    padding:0 0 0 40px;
 }
 
 .restaurant-logo {
@@ -113,7 +113,7 @@ img.restaurant-image {
 
 .restaurant-details {
     font: 12px/14px prenton-n4,prenton;
-    margin-top: 6px;
+    margin-top: 0px;
     color:#444444;
 }
 
@@ -156,7 +156,7 @@ img.restaurant-image {
     border: 1px dashed #AAAAAA;
     background-color:#FFFFFF;
     padding: 3px;
-    margin: 15px 0 0 0;
+    margin: 10px 0 0 0;
     position:relative;
     display:inline-block;
     text-align:left;
@@ -203,8 +203,8 @@ img.restaurant-image {
 .restaurant-delivery-details {
     font:500 12px/16px prenton-n5,prenton;
     color:#444444;
-    margin-top:10px;
-    padding: 5px 0;
+    margin-top:5px;
+    padding:0;
 }
 
 .menu-left {

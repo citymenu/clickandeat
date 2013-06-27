@@ -10,18 +10,21 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import javax.mail.internet.MimeMessage;
+import java.util.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/application-context.xml"})
@@ -41,6 +44,9 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     @Autowired
     private SecurityUtils securityUtils;
 
+    @Autowired
+    private JavaMailSender javaMailSender;
+    
     private String locale;
 
     private Locale systemLocale;
@@ -121,11 +127,22 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
     }
 
     @Test
-    public void testBuildRestaurantOrderNotificationEmail() throws Exception {
+    @Ignore
+    public void testAllNotificationEmails() throws Exception {
 
         Order order = orderRepository.create();
         order.setDeliveryType(Order.DELIVERY);
 
+        Address deliveryAddress = new Address();
+        deliveryAddress.setAddress1("80 Peel Road");
+        deliveryAddress.setTown("South Woodford");
+        deliveryAddress.setPostCode("E18 2LG");
+        order.setDeliveryAddress(deliveryAddress);
+        
+        order.getCustomer().setFirstName("Joe");
+        order.getCustomer().setLastName("Pugh");
+        order.getCustomer().setTelephone("02085057191");
+        
         // Add two items to the order
         OrderItem item1 = new OrderItem();
         item1.setMenuItemId("ITEM1");
@@ -166,17 +183,30 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         
         // Build a restaurant for the order
         Restaurant restaurant = new Restaurant();
+        restaurant.setName("Han-na");
+
+        Address address = new Address();
+        address.setAddress1("80 Peel Road");
+        address.setTown("South Woodford");
+        address.setPostCode("E18 2LG");
+        restaurant.setAddress(address);
+        
         NotificationOptions notificationOptions = new NotificationOptions();
         notificationOptions.setNotificationEmailAddress("mishimaltd@gmail.com");
         restaurant.setNotificationOptions(notificationOptions);
+        restaurant.setContactTelephone("02085057191");
         
         order.setRestaurant(restaurant);
+        order.setRestaurantConfirmedTime(new DateTime().plusHours(2));
         
         order.setOrderItemCost(1.355d);
-        order.setDeliveryCost(0d);
+        order.setDeliveryCost(10.5d);
         order.setTotalDiscount(2.8);
         order.setTotalCost(35.403);
         order.setRestaurantCost(35.403);
+
+        order.setVoucherId("EDGFLX");
+        order.setVoucherDiscount(2.5d);
         
         Map<String,Object> templateModel = new HashMap<String, Object>();
         templateModel.put("order",order);
@@ -186,9 +216,48 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         templateModel.put("acceptCurl", acceptCurl);
         templateModel.put("declineCurl", declineCurl);
         
-        String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE);
-        Assert.assertNotNull(text);
-        LOGGER.info("Generated text:\n" + text );
+        templateModel.put("voucherId","FRGHCD");
+        templateModel.put("discount","10");
+
+        templateModel.put("today",new LocalDate());
+        templateModel.put("allowCancel", true);
+        DateTime cancelExpiryTime = new DateTime().plusMinutes(10);
+        templateModel.put("cancelCutoffTime", cancelExpiryTime);
+        String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
+        templateModel.put("cancelCurl", cancelCurl);
+
+        List<String> templateLocations = Arrays.asList(
+            VelocityTemplatingService.CUSTOMER_ORDER_CONFIRMATION_EMAIL_TEMPLATE,
+            VelocityTemplatingService.RESTAURANT_ORDER_NOTIFICATION_EMAIL_TEMPLATE,
+            VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.RESTAURANT_DECLINED_ORDER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.CUSTOMER_CANCELLED_ORDER_CONFIRMATION_EMAIL_TEMPLATE,
+            VelocityTemplatingService.SYSTEM_CANCELLED_ORDER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.AUTO_CANCELLED_RESTAURANT_EMAIL_TEMPLATE,
+            VelocityTemplatingService.AUTO_CANCELLED_CUSTOMER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.CUSTOMER_CANCELLATION_OFFER_EMAIL_TEMPLATE,
+            VelocityTemplatingService.RESTAURANT_DELISTED_EMAIL_TEMPLATE,
+            VelocityTemplatingService.RESTAURANT_RELISTED_EMAIL_TEMPLATE,
+            VelocityTemplatingService.OWNER_CONTENT_APPROVAL_EMAIL_TEMPLATE,
+            VelocityTemplatingService.OWNER_CONTENT_APPROVED_EMAIL_TEMPLATE,
+            VelocityTemplatingService.OWNER_CONTENT_REJECTED_EMAIL_TEMPLATE,
+            VelocityTemplatingService.CUSTOMER_VOUCHER_EMAIL_TEMPLATE
+        );
+        
+        for(final String templateLocation: templateLocations ) {
+            final String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, templateLocation);
+            MimeMessagePreparator preparator = new MimeMessagePreparator() {
+                public void prepare(MimeMessage mimeMessage) throws Exception {
+                    MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                    message.setTo("mishimaltd@gmail.com");
+                    message.setFrom("mishimaltd@gmail.com");
+                    message.getMimeMessage().setSubject(templateLocation.substring(templateLocation.lastIndexOf("/")+1), "utf-8");
+                    message.setText(text,true);
+                }
+            };
+            javaMailSender.send(preparator);
+        }
     }
 
     
@@ -212,9 +281,20 @@ public class VelocityTemplatingServiceTest implements InitializingBean {
         String cancelCurl = securityUtils.encrypt("orderId=" + order.getOrderId() + "#action=" + OrderWorkflowEngine.ACTION_CUSTOMER_CANCELS);
         templateModel.put("cancelCurl", cancelCurl);
 
-        String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
+        final String text = velocityTemplatingService.mergeContentIntoTemplate(templateModel, VelocityTemplatingService.RESTAURANT_ACCEPTED_ORDER_EMAIL_TEMPLATE);
         Assert.assertNotNull(text);
         LOGGER.info("Generated text:\n" + text );
+
+        MimeMessagePreparator preparator = new MimeMessagePreparator() {
+            public void prepare(MimeMessage mimeMessage) throws Exception {
+                MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+                message.setTo("mishimaltd@gmail.com");
+                message.setFrom("mishimaltd@gmail.com");
+                message.getMimeMessage().setSubject("Example of order confirmation", "utf-8");
+                message.setText(text,true);
+            }
+        };
+        javaMailSender.send(preparator);
 
     }
 
