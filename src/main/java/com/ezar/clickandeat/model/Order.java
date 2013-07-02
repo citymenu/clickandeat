@@ -88,6 +88,7 @@ public class Order extends PersistentObject {
     private boolean canCheckout;
     private boolean canSubmitPayment;
     private boolean restaurantIsOpen;
+    private boolean hasDeliveryWarning;
     private boolean callInProgress;
     private String orderStatus;
     private String orderNotificationStatus;
@@ -178,10 +179,16 @@ public class Order extends PersistentObject {
         this.deliveryCost = 0d;
         this.extraSpendNeededForDelivery = 0d;
         this.restaurantWillDeliver = true;
+        this.hasDeliveryWarning = false;
 
         // Update whether or not the restaurant will deliver to this order
         if( DELIVERY.equals(this.getDeliveryType())) {
             this.restaurantWillDeliver = this.restaurant.willDeliverToLocation(this);
+            
+            // Update delivery warning
+            if(this.deliveryAddress != null && this.restaurantWillDeliver && this.deliveryAddress.isRadiusWarning()) {
+                this.hasDeliveryWarning = true;
+            }
         }
 
         if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
@@ -344,7 +351,7 @@ public class Order extends PersistentObject {
         canSubmitPayment = true;
 
         if(DELIVERY.equals(deliveryType)) {
-            if( this.deliveryAddress == null || !this.deliveryAddress.isValid() || !restaurantWillDeliver ) {
+            if( deliveryAddress == null || !deliveryAddress.isValid() || !deliveryAddress.isValidForCheckout() || !restaurantWillDeliver ) {
                 canSubmitPayment = false;
             }
         }
@@ -573,6 +580,14 @@ public class Order extends PersistentObject {
 
     public void setCanCheckout(boolean canCheckout) {
         this.canCheckout = canCheckout;
+    }
+
+    public boolean getHasDeliveryWarning() {
+        return hasDeliveryWarning;
+    }
+
+    public void setHasDeliveryWarning(boolean hasDeliveryWarning) {
+        this.hasDeliveryWarning = hasDeliveryWarning;
     }
 
     public boolean getCanSubmitPayment() {

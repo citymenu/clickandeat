@@ -99,6 +99,10 @@ public class RestaurantController {
                 // If there is no order restaurant session id present then the order is empty and we can update it
                 if( session.getAttribute("orderrestaurantid") == null ) {
                     Order order = orderRepository.findByOrderId(orderId);
+                    if( order == null ) {
+                        order = buildAndRegister(session, restaurant);
+                        session.setAttribute("orderid",order.getOrderId());
+                    }
                     order.setRestaurant(restaurant);
                     orderRepository.save(order);
                 }

@@ -92,7 +92,11 @@ public class GeoLocation extends PersistentObject implements Serializable {
     public void setLocation(double[] location) {
         this.location = location;
     }
-    
+
+    public boolean hasStreetAddress() {
+        return locationComponents.containsKey("route") || locationComponents.containsKey("street_number");
+    }
+
     public String toString() {
         StringBuilder sb = new StringBuilder("GeoLocation:{");
         sb.append("address:'").append(address).append("',");

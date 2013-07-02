@@ -23,8 +23,8 @@
         </div>
         <div id="order-item-contents"></div>
     </div>
-    <div id="checkoutcontainer"></div>
     <div id="deliverycheck"></div>
+    <div id="checkoutcontainer"></div>
     <div id="additionalinstructions"></div>
     <div id="discounts"></div>
 </div>

@@ -125,13 +125,19 @@ function doBuildOrder(order,config) {
 
         var currentLocation = order.deliveryAddress.displaySummary? order.deliveryAddress.displaySummary: getLabel('location.not-set');
         var locationLink = config.allowChangeLocation? ('<a id=\'changelocation\' class=\'delivery-button unselectable\'>{0}</a>').format(getLabel('button.change')): '';
-        var locationContainer = ('<div class=\'order-location-wrapper\'><div class=\'order-location-header\'><span class=\'order-location-title\'>{0}</span><span class=\'order-location-link\'>{1}</span><div class=\'order-location-summary\'>{2}</div></div>')
+        var locationContainer = ('<div class=\'order-location-wrapper\' id=\'deliverylocation\'><div class=\'order-location-header\'><span class=\'order-location-title\'>{0}</span><span class=\'order-location-link\'>{1}</span><div class=\'order-location-summary\'>{2}</div></div>')
             .format(getLabel('location.your-location'), locationLink, currentLocation );
         $('#location-wrapper').append(locationContainer);
         if( config.allowChangeLocation ) {
             $('#changelocation').click(function(){
                 locationEdit();
             });
+
+            // Show radius warning if applicable
+            if( order.hasDeliveryWarning && order.restaurantWillDeliver ) {
+                var warning = ('<div class=\'location-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(getLabel('order.delivery-radius-warning'));
+                $('#deliverylocation').append(warning);
+            }
         }
     }
 
@@ -278,6 +284,12 @@ function doBuildOrder(order,config) {
             var warningMessage = getLabel('order.restaurant-wont-deliver-warning');
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(unescapeQuotes(order.restaurantName)));
             $('#deliverycheck').append(warning);
+            if (config.enablePaymentButton) {
+                $('#checkoutcontainer').append(('<div class="checkout-container"><div class="checkout-button-container"><div class="button-green" id="checkoutbutton"><div class="button-text">{0}</div></div></div></div>').format(getLabel('button.payment')));
+                $('#checkoutbutton').click(function(){
+                    payment();
+                });
+            }
         } else if( advancedDisplay && !order.restaurantIsOpen && config.showDeliveryOptions ) {
             var warningMessage = (order.deliveryType == 'DELIVERY'? getLabel('order.restaurant-delivery-closed-warning'): getLabel('order.restaurant-collection-closed-warning'));
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>{0}</div></div>').format(warningMessage.format(order.restaurantName));
@@ -286,6 +298,7 @@ function doBuildOrder(order,config) {
             var warning = ('<div class=\'delivery-warning-wrapper\'><div class=\'delivery-warning\'>' + getLabel('order.delivery-warning') + '</div></div>' ).format(order.formattedExtraSpendNeededForDelivery,ccy);
             $('#deliverycheck').append(warning);
         } else {
+
             // Show checkout button if enabled
             if(order.canCheckout ) {
                 if( config.enableCheckoutButton ) {

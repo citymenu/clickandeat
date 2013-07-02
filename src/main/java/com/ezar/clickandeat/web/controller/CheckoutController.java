@@ -213,17 +213,26 @@ public class CheckoutController {
             // Update order delivery address details
             Address deliveryAddress = buildDeliveryAddress(params);
             GeoLocation deliveryLocation = locationService.getLocation(deliveryAddress);
-            if( deliveryLocation == null ) {
+            if( deliveryLocation == null || !deliveryLocation.hasStreetAddress()) {
                 success = false;
                 reason = "checkout-location-not-found";
             }
             else {
+                String locationPostCode = deliveryLocation.getLocationComponents().get("postal_code");
+                if(locationPostCode != null && !locationPostCode.equals(deliveryAddress.getPostCode())) {
+                    success = false;
+                    reason = "checkout-location-postcode-nomatch";
+                }
+            }
+            
+            if( deliveryLocation != null ) {
                 deliveryAddress.setLocation(deliveryLocation.getLocation());
                 deliveryAddress.setRadius(deliveryLocation.getRadius());
                 deliveryAddress.setRadiusWarning(deliveryLocation.getRadiusWarning());
+                deliveryAddress.setValidForCheckout(deliveryLocation.hasStreetAddress());
                 order.setDeliveryAddress(deliveryAddress);
             }
-            
+
             // If the restaurant is not open, return an error
             if( !order.getRestaurantIsOpen()) {
                 success = false;

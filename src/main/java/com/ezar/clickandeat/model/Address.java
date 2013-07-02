@@ -27,6 +27,8 @@ public class Address extends PersistentObject {
 
     private boolean radiusWarning;
 
+    private boolean validForCheckout = false;
+
     public Address() {
     }
 
@@ -93,7 +95,15 @@ public class Address extends PersistentObject {
         }
         return true;
     }
-    
+
+    public boolean isValidForCheckout() {
+        return validForCheckout;
+    }
+
+    public void setValidForCheckout(boolean validForCheckout) {
+        this.validForCheckout = validForCheckout;
+    }
+
     public String getPostCode() {
         return postCode;
     }

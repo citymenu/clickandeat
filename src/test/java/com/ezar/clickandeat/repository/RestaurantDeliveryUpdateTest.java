@@ -26,7 +26,7 @@ public class RestaurantDeliveryUpdateTest {
     public void testUpdateDeliveryRadius() throws Exception {
         List<Restaurant> scrapedRestaurants = mongoOperations.find(new Query(where("externalId").ne(null)),Restaurant.class);
         for(Restaurant restaurant:scrapedRestaurants) {
-            restaurant.getDeliveryOptions().setDeliveryRadiusInKilometres(2d);
+            restaurant.setListOnSite(false);
             mongoOperations.save(restaurant);
         }
     }
