@@ -89,7 +89,7 @@ public class SitemapProvider {
         }
         
         // Add direct links to restaurants priority .7
-        for(Restaurant restaurant: restaurantRepository.quickLaunch()) {
+        for(Restaurant restaurant: restaurantRepository.listAllActive()) {
             appendUrl(restaurant.getUrl(),"daily",0.7,sb);
         }
         

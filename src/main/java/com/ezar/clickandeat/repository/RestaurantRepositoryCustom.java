@@ -36,6 +36,8 @@ public interface RestaurantRepositoryCustom {
 
     List<Restaurant> quickLaunch();
 
+    List<Restaurant> listAllActive();
+
     long count(String restaurantName, List<Filter> filters);
 
     long countActive();

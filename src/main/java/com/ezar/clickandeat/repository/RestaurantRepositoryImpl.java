@@ -210,6 +210,12 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom, Ini
         return operations.find(query, Restaurant.class);
     }
 
+    @Override
+    public List<Restaurant> listAllActive() {
+        Query query = new Query(where("deleted").ne(true).and("listOnSite").ne(false).and("testMode").ne(true));
+        return operations.find(query, Restaurant.class);
+    }
+
 
     @Override
     @SuppressWarnings("unchecked")
