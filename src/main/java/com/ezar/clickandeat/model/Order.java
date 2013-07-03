@@ -3,6 +3,7 @@ package com.ezar.clickandeat.model;
 import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.CommissionUtils;
 import com.ezar.clickandeat.util.DateTimeUtil;
+import com.ezar.clickandeat.util.LocationUtils;
 import com.ezar.clickandeat.util.NumberUtil;
 import com.ezar.clickandeat.workflow.OrderWorkflowEngine;
 import org.joda.time.DateTime;
@@ -165,64 +166,81 @@ public class Order extends PersistentObject {
         for( OrderItem item: orderItems ) {
             orderItemCost += item.getCost() * item.getQuantity();
         }
-        this.orderItemCost = orderItemCost;
 
         // Update all discount costs
         updateOrderDiscounts();
 
-        this.totalDiscount = 0d;
+        totalDiscount = 0d;
         for( OrderDiscount discount: orderDiscounts ) {
-            this.totalDiscount += discount.getDiscountAmount();
+            totalDiscount += discount.getDiscountAmount();
         }
 
         // Reset and update delivery costs
-        this.deliveryCost = 0d;
-        this.extraSpendNeededForDelivery = 0d;
-        this.restaurantWillDeliver = true;
-        this.hasDeliveryWarning = false;
+        deliveryCost = 0d;
+        extraSpendNeededForDelivery = 0d;
+        restaurantWillDeliver = true;
+        hasDeliveryWarning = false;
+
+        DeliveryOptions deliveryOptions = restaurant.getDeliveryOptions();
 
         // Update whether or not the restaurant will deliver to this order
-        if( DELIVERY.equals(this.getDeliveryType())) {
-            this.restaurantWillDeliver = this.restaurant.willDeliverToLocation(this);
+        if( DELIVERY.equals(getDeliveryType())) {
+            restaurantWillDeliver = restaurant.willDeliverToLocation(this);
             
             // Update delivery warning
-            if(this.deliveryAddress != null && this.restaurantWillDeliver && this.deliveryAddress.isRadiusWarning()) {
-                this.hasDeliveryWarning = true;
+            if(deliveryAddress != null && restaurantWillDeliver && deliveryAddress.isRadiusWarning()) {
+
+                // Check if there is a match on postcode
+                boolean foundPostcodeMatch = false;
+                for(String postcodeDeliveredTo: deliveryOptions.getAreasDeliveredTo()) {
+                    if(postcodeDeliveredTo.equalsIgnoreCase(deliveryAddress.getPostCode())) {
+                        foundPostcodeMatch = true;
+                    }
+                }
+
+                // Check the exact distance between the restaurant and delivery address
+                if( !foundPostcodeMatch ) {
+                    double distance = LocationUtils.getDistance(deliveryAddress.getLocation(), restaurant.getAddress().getLocation());
+                    double maxPossibleDistance = distance + deliveryAddress.getRadius() + restaurant.getAddress().getRadius(); 
+                    double deliveryDistance = deliveryOptions.getDeliveryRadiusInKilometres() == null? 0d: deliveryOptions.getDeliveryRadiusInKilometres();
+                    if(maxPossibleDistance > deliveryDistance ) {
+                        hasDeliveryWarning = true;
+                    }
+                }
             }
         }
 
-        if( DELIVERY.equals(this.getDeliveryType()) && this.orderItems.size() > 0 ) {
-            DeliveryOptions deliveryOptions = this.restaurant.getDeliveryOptions();
-            
-            Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery(this.deliveryAddress);
+        if( DELIVERY.equals(getDeliveryType()) && orderItems.size() > 0 ) {
+
+            Double minimumOrderForDelivery = deliveryOptions.getMinimumOrderForDelivery(deliveryAddress);
             Double minimumOrderForFreeDelivery = deliveryOptions.getMinimumOrderForFreeDelivery();
-            Double deliveryCharge = deliveryOptions.getDeliveryCharge(this.deliveryAddress, this.orderItemCost);
+            Double deliveryCharge = deliveryOptions.getDeliveryCharge(deliveryAddress, orderItemCost);
             boolean allowFreeDelivery = deliveryOptions.isAllowFreeDelivery();
             boolean allowDeliveryBelowMinimumForFreeDelivery = deliveryOptions.isAllowDeliveryBelowMinimumForFreeDelivery();
 
             if( !restaurantWillDeliver ) {
-                this.deliveryCost = 0d;
-                this.extraSpendNeededForDelivery = 0d;
+                deliveryCost = 0d;
+                extraSpendNeededForDelivery = 0d;
             }
             else if( !allowFreeDelivery ) {
                 if( deliveryCharge != null ) {
-                    this.deliveryCost = deliveryCharge;
+                    deliveryCost = deliveryCharge;
                 }
-                if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
-                    this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
+                if(minimumOrderForDelivery != null && orderItemCost  < minimumOrderForDelivery ) {
+                    extraSpendNeededForDelivery = minimumOrderForDelivery - orderItemCost;
                 }
             }
             else {
-                if(minimumOrderForDelivery != null && this.orderItemCost  < minimumOrderForDelivery ) {
-                    this.extraSpendNeededForDelivery = minimumOrderForDelivery - this.orderItemCost;
+                if(minimumOrderForDelivery != null && orderItemCost  < minimumOrderForDelivery ) {
+                    extraSpendNeededForDelivery = minimumOrderForDelivery - orderItemCost;
                 }
-                if( minimumOrderForFreeDelivery != null && this.orderItemCost < minimumOrderForFreeDelivery ) {
+                if( minimumOrderForFreeDelivery != null && orderItemCost < minimumOrderForFreeDelivery ) {
                     if( allowDeliveryBelowMinimumForFreeDelivery && deliveryCharge != null ) {
-                        this.deliveryCost = deliveryCharge;
+                        deliveryCost = deliveryCharge;
                     }
                     else {
-                        if( this.extraSpendNeededForDelivery == 0 ) {
-                            this.extraSpendNeededForDelivery = minimumOrderForFreeDelivery - this.orderItemCost;
+                        if( extraSpendNeededForDelivery == 0 ) {
+                            extraSpendNeededForDelivery = minimumOrderForFreeDelivery - orderItemCost;
                         }
                     }
                 }
@@ -230,19 +248,19 @@ public class Order extends PersistentObject {
         }
         
         // Set the restaurant cost
-        this.restaurantCost = this.orderItemCost + this.deliveryCost - this.totalDiscount;
+        restaurantCost = orderItemCost + deliveryCost - totalDiscount;
         
         // Set the commission on this order
-        this.commission = CommissionUtils.calculateCommission(this);
+        commission = CommissionUtils.calculateCommission(this);
         
         // Apply any vouchers to the overall cost
-        this.voucherDiscount = 0d;
+        voucherDiscount = 0d;
         if( voucher != null ) {
-            this.voucherDiscount = this.restaurantCost * voucher.getDiscount() / 100d;
+            voucherDiscount = restaurantCost * voucher.getDiscount() / 100d;
         }           
 
         // Set the total cost
-        this.totalCost = this.orderItemCost + this.deliveryCost - this.totalDiscount - this.voucherDiscount;
+        totalCost = orderItemCost + deliveryCost - totalDiscount - voucherDiscount;
         
         // Update whether or not the restaurant is currently open
         updateRestaurantIsOpen();
