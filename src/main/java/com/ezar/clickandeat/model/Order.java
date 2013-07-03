@@ -162,7 +162,7 @@ public class Order extends PersistentObject {
         orderItems.removeAll(toRemove);
 
         // Update order item costs
-        double orderItemCost = 0d;
+        orderItemCost = 0d;
         for( OrderItem item: orderItems ) {
             orderItemCost += item.getCost() * item.getQuantity();
         }
