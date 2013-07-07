@@ -27,6 +27,30 @@
     <script type="text/javascript" src="//use.typekit.net/iwp4tpg.js"></script>
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
+    <!-- Front-load images -->
+    <script type="text/javascript">
+
+    for( var i = 1; i < 6; i++ ) {
+        var navImg = new Image();
+        navImg.src = '${ctx}/images/topnav/topnav' + i + ".png";
+    }
+
+    var bodyBg = new Image();
+    bodyBg.src = '${ctx}/images/body-bg.png';
+    var headerBgRed = new Image();
+    headerBgRed.src = '${ctx}/images/header-bg-red.jpg';
+    var footerWrapRed = new Image();
+    footerWrapRed.src = '${ctx}/images/footer-wrap-red.png';
+
+    var bannerBackKitchen = new Image();
+    bannerBackKitchen.src = '${ctx}/images/food/banner-back-kitchen.jpg';
+    var butler = new Image();
+    butler.src = '${ctx}/images/food/butler.png';
+    var ribbon = new Image();
+    ribbon.src = '${ctx}/images/food/ribbon.png';
+
+    </script>
+
     <!-- Stylesheets -->
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/MyFontsWebfontsKit.css">
     <link rel="stylesheet" type="text/css" media="all" charset="utf-8" href="${resources}/css/main.css">
