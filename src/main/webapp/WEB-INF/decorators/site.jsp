@@ -32,22 +32,22 @@
 
     for( var i = 1; i < 6; i++ ) {
         var navImg = new Image();
-        navImg.src = '${ctx}/images/topnav/topnav' + i + ".png";
+        navImg.src = '${resources}/images/topnav/topnav' + i + ".png";
     }
 
     var bodyBg = new Image();
-    bodyBg.src = '${ctx}/images/body-bg.png';
+    bodyBg.src = '${resources}/images/body-bg.png';
     var headerBgRed = new Image();
-    headerBgRed.src = '${ctx}/images/header-bg-red.jpg';
+    headerBgRed.src = '${resources}/images/header-bg-red.jpg';
     var footerWrapRed = new Image();
-    footerWrapRed.src = '${ctx}/images/footer-wrap-red.png';
+    footerWrapRed.src = '${resources}/images/footer-wrap-red.png';
 
     var bannerBackKitchen = new Image();
-    bannerBackKitchen.src = '${ctx}/images/food/banner-back-kitchen.jpg';
+    bannerBackKitchen.src = '${resources}/images/food/banner-back-kitchen.jpg';
     var butler = new Image();
-    butler.src = '${ctx}/images/food/butler.png';
+    butler.src = '${resources}/images/food/butler.png';
     var ribbon = new Image();
-    ribbon.src = '${ctx}/images/food/ribbon.png';
+    ribbon.src = '${resources}/images/food/ribbon.png';
 
     </script>
 
