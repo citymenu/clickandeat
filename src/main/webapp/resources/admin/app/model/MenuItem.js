@@ -14,7 +14,8 @@ Ext.define('AD.model.MenuItem', {
         {name:'iconClass', type:'string'},
         {name:'cost', type:'double'},
         {name:'additionalItemCost', type:'double'},
-        {name:'additionalItemChoiceLimit', type:'double'}
+        {name:'additionalItemChoiceLimit', type:'double'},
+        {name:'forceAdditionalItemChoiceLimit', type:'boolean'}
     ],
     hasMany:{
         model:'AD.model.MenuItemTypeCost',

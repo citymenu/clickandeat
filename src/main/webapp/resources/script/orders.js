@@ -381,7 +381,7 @@ function buildStaticDisplay(orderItem) {
 }
 
 // Add multiple items based on the select value
-function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost ) {
+function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, forceAdditionalItemLimit, additionalItemCost, itemCost ) {
 
     // If no location set, break
     if( !currentOrder.deliveryAddress.displaySummary ) {
@@ -391,7 +391,7 @@ function addMultipleToOrder(restaurantId, itemId, itemType, itemSubType, additio
 
     // Check restaurant with callback on restaurant id
     restaurantCheck(restaurantId, function(){
-        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, 1);
+        doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, forceAdditionalItemLimit, additionalItemCost, itemCost, 1);
     });
 }
 
@@ -802,24 +802,29 @@ function onAfterLocationUpdate() {
 }
 
 // Add item to order, check if need to display additional item dialog
-function doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity ) {
+function doAddToOrderCheck(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, forceAdditionalItemLimit, additionalItemCost, itemCost, quantity ) {
     if( additionalItemArray.length > 0 ) {
-        buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity );
+        buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, forceAdditionalItemLimit, additionalItemCost, itemCost, quantity );
     } else {
         doAddToOrder(restaurantId, itemId, itemType, itemSubType, [], quantity )
     }
 }
 
 // Build dialog to show additional choices for a menu item
-function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, additionalItemCost, itemCost, quantity ) {
+function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, additionalItemArray, additionalItemLimit, forceAdditionalItemLimit, additionalItemCost, itemCost, quantity ) {
 
     var selectedItems = new HashTable();
     var itemCosts = new HashTable();
 
     var html = '';
     var itemLimit = additionalItemLimit? additionalItemLimit: 0;
+    var forceItemLimit = forceAdditionalItemLimit;
     var defaultItemCost = additionalItemCost? additionalItemCost: 0;
     var canAddToOrder = true;
+
+    if( itemLimit > 0 && forceItemLimit ) {
+        canAddToOrder = false;
+    }
 
     var currentQuantity = quantity;
     var currentCost = itemCost;
@@ -831,7 +836,8 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
     var tableWidth = (itemCount <= defaultBreak)? 300:200;
 
     // Build the total cost item and quantity
-    var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel('order.additional-item-limit-description').format(itemLimit)): '');
+    var descriptionLabel = forceItemLimit? 'order.additional-item-exact-description': 'order.additional-item-limit-description';
+    var itemLimitDescription = (itemLimit > 0? ('<div class=\'additional-item-description\'>{0}</div>').format(getLabel(descriptionLabel).format(itemLimit)): '');
     var itemDefaultCostDescription = (defaultItemCost > 0? ('<div class=\'additional-item-description\'>{0} <b>{1}</b></div>').format(getLabel('order.additional-item-cost-description'), defaultItemCost.toFixed(2) + ' ' + ccy): '');
     var itemDescriptionContainer = '';
     if( itemLimitDescription != '' || itemDefaultCostDescription != '' ) {
@@ -933,6 +939,11 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
             }
             $.fancybox.close(true);
         }
+        else {
+            if( itemLimit > 0 && forceItemLimit && selectedItems.size() < itemLimit ) {
+                $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(getLabel('order.additional-item-exact-limit')).format(itemLimit));
+            }
+        }
     });
 
     // Handler to maintain the selected additional items
@@ -954,6 +965,9 @@ function buildAdditionalItemDialog(restaurantId, itemId, itemType, itemSubType, 
         if( itemLimit > 0 && selectedItems.size() > itemLimit ) {
             canAddToOrder = false;
             $('#itemcountwarning').append(('<div class=\'itemcountwarning\'>{0}</div>').format(getLabel('order.additional-item-limit')).format(itemLimit));
+        }
+        else if( itemLimit > 0 && forceItemLimit && selectedItems.size() < itemLimit ) {
+            canAddToOrder = false;
         }
     });
 }

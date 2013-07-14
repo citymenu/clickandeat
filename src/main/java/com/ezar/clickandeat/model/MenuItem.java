@@ -37,6 +37,8 @@ public class MenuItem {
     
     private Integer additionalItemChoiceLimit;
 
+    private boolean forceAdditionalItemChoiceLimit; // Force exactly this number of additional choices
+
 
     public MenuItem() {
         this.menuItemSubTypes = new ArrayList<MenuItemSubType>();
@@ -221,7 +223,16 @@ public class MenuItem {
     public void setAdditionalItemChoiceLimit(Integer additionalItemChoiceLimit) {
         this.additionalItemChoiceLimit = additionalItemChoiceLimit;
     }
-    
+
+    public boolean isForceAdditionalItemChoiceLimit() {
+        return forceAdditionalItemChoiceLimit;
+    }
+
+    public void setForceAdditionalItemChoiceLimit(boolean forceAdditionalItemChoiceLimit) {
+        this.forceAdditionalItemChoiceLimit = forceAdditionalItemChoiceLimit;
+    }
+
+
     public Integer getNullSafeChoiceLimit() {
         return additionalItemChoiceLimit == null? 0: additionalItemChoiceLimit;
     }

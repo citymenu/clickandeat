@@ -895,7 +895,8 @@ Ext.define('AD.controller.RestaurantEdit', {
                     iconClass: item.get('iconClass'),
                     cost: item.get('cost'),
                     additionalItemCost: item.get('additionalItemCost'),
-                    additionalItemChoiceLimit: item.get('additionalItemChoiceLimit')
+                    additionalItemChoiceLimit: item.get('additionalItemChoiceLimit'),
+                    forceAdditionalItemChoiceLimit: item.get('forceAdditionalItemChoiceLimit')
                 });
 
                 var menuItemTypeCosts = [];
@@ -1362,6 +1363,10 @@ Ext.define('AD.controller.RestaurantEdit', {
             }
             record.set('additionalItemChoices',additionalItemChoices);
 
+            // Populate if we force the customer to select the maximum number of additional choices
+            var forceAdditionalItemChoiceLimit = menuItemEditForm.getValues()['forceAdditionalItemChoiceLimit'] == 'on';
+            record.set('forceAdditionalItemChoiceLimit',forceAdditionalItemChoiceLimit);
+
             // Update menu items on menu category
             this.updateMenuCategoryItems();
 
@@ -1519,6 +1524,8 @@ Ext.define('AD.controller.RestaurantEdit', {
         // Populate additional item choice and costs
         var additionalItemChoiceNames = [];
         var additionalItemChoiceCosts = [];
+        menuItemEditForm.getForm().findField('forceAdditionalItemChoiceLimit').setValue(selectedMenuItem.get('forceAdditionalItemChoiceLimit'));
+
         selectedMenuItem.get('additionalItemChoices').forEach(function(additionalItemChoice) {
             additionalItemChoiceNames.push(additionalItemChoice.get('name'));
             if( additionalItemChoice.get('cost')) {

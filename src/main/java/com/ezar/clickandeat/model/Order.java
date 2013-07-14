@@ -12,10 +12,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Document(collection = "orders")
 public class Order extends PersistentObject {
@@ -78,6 +75,9 @@ public class Order extends PersistentObject {
     private Double restaurantCost; // Cost to restaurant (without any vouchers applied)
     private Double commission; // Commission to be retained by LlamaryComer
 
+    // Order next discount details
+    private String nextDiscountTitle;
+    
     // Order payment details
     private String transactionId;
     private String transactionStatus;
@@ -279,20 +279,39 @@ public class Order extends PersistentObject {
     
     private void updateOrderDiscounts() {
 
+        // Reset next discount details
+        double extraSpendForNextDiscount = 0d;
+        nextDiscountTitle = null;
+
         // Get all discounts applicable to this order
         Map<String,Discount> applicableDiscounts = new HashMap<String,Discount>();
         Discount nonCombinableDiscount = null; // Only include at most one discount which cannot be combined with others
         for( Discount discount: this.getRestaurant().getDiscounts()) {
-            if( discount.isApplicableTo(this)) {
-                if( discount.isCanCombineWithOtherDiscounts()) {
-                    applicableDiscounts.put(discount.getDiscountId(), discount);
-                }
-                else {
-                    if( nonCombinableDiscount == null ) {
-                        nonCombinableDiscount = discount;                        
+            if(discount.couldApplyTo(this)) {
+
+                // Work out the next discount and how much needed to spend to get it
+                if( orderItemCost > 0 ) {
+                    Double extraSpendNeeded = discount.getMinimumOrderValue() - orderItemCost;
+                    if( extraSpendNeeded > 0 ) {
+                        if( extraSpendForNextDiscount == 0 || extraSpendNeeded < extraSpendForNextDiscount ) {
+                            extraSpendForNextDiscount = extraSpendNeeded;
+                            nextDiscountTitle = discount.getExtraSpendTitle(extraSpendNeeded);
+                        }
                     }
-                    else if( discount.getMinimumOrderValue() > nonCombinableDiscount.getMinimumOrderValue()) {
-                        nonCombinableDiscount = discount; // Keep the discount with the maximum minimum order value
+                }
+
+                // Work out what discounts are already applicable to order
+                if( discount.meetsMinimumValue(this)) {
+                    if( discount.isCanCombineWithOtherDiscounts()) {
+                        applicableDiscounts.put(discount.getDiscountId(), discount);
+                    }
+                    else {
+                        if( nonCombinableDiscount == null ) {
+                            nonCombinableDiscount = discount;
+                        }
+                        else if( discount.getMinimumOrderValue() > nonCombinableDiscount.getMinimumOrderValue()) {
+                            nonCombinableDiscount = discount; // Keep the discount with the maximum minimum order value
+                        }
                     }
                 }
             }
@@ -323,7 +342,6 @@ public class Order extends PersistentObject {
                 applicableDiscount.updateOrderDiscount(this,existingDiscount);
             }
         }
-        
     }
     
     
@@ -886,6 +904,14 @@ public class Order extends PersistentObject {
 
     public void setCommission(Double commission) {
         this.commission = commission;
+    }
+
+    public String getNextDiscountTitle() {
+        return nextDiscountTitle;
+    }
+
+    public void setNextDiscountTitle(String nextDiscountTitle) {
+        this.nextDiscountTitle = nextDiscountTitle;
     }
 
     public List<OrderUpdate> getOrderUpdates() {

@@ -116,6 +116,11 @@ Ext.define('AD.view.restaurant.MenuItemEdit' ,{
         labelAlign:'top',
         xtype:'numberfield',
         name:'additionalItemChoiceLimit'
+    },{
+        fieldLabel:'Force customer to choose the maximum number of additional items',
+        labelAlign:'top',
+        xtype:'checkbox',
+        name:'forceAdditionalItemChoiceLimit'
     }]
 
 });

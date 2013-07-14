@@ -1,5 +1,6 @@
 package com.ezar.clickandeat.model;
 
+import com.ezar.clickandeat.config.MessageFactory;
 import com.ezar.clickandeat.util.NumberUtil;
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -47,16 +48,7 @@ public class Discount {
      * @return
      */
 
-    public boolean isApplicableTo(Order order) {
-
-        if( order.getOrderItems().size() == 0 ) {
-            return false;
-        }
-        
-        if( minimumOrderValue != null && order.getOrderItemCost() < minimumOrderValue ) {
-            return false;
-        }
-
+    public boolean couldApplyTo(Order order) {
         if( Order.DELIVERY.equals(order.getDeliveryType())) {
             if( !delivery ) {
                 return false;
@@ -87,6 +79,33 @@ public class Discount {
             LocalTime time = expectedCollectionTime.toLocalTime();
             return !time.isBefore(applicableTime.getApplicableFrom()) && !time.isAfter(applicableTime.getApplicableTo());
         }
+    }
+
+
+    /**
+     * @return
+     */
+
+    public String getExtraSpendTitle(Double amount) {
+        if(DISCOUNT_FREE_ITEM.equals(discountType)) {
+            return null;
+        }
+        else if( DISCOUNT_PERCENTAGE.equals(discountType)) {
+            return MessageFactory.formatMessage("order.discount-extra-percentage",false,NumberUtil.format(amount),discountAmount);
+        }
+        else {
+            return MessageFactory.formatMessage("order.discount-extra-cash",false,NumberUtil.format(amount),discountAmount);
+        }
+    }
+    
+    
+    /**
+     * @param order
+     * @return
+     */
+
+    public boolean meetsMinimumValue(Order order) {
+        return !(minimumOrderValue != null && order.getOrderItemCost() < minimumOrderValue);
     }
 
 
